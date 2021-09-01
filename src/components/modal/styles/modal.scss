@@ -1,0 +1,36 @@
+.modal {
+  background: rgba(38, 55, 104, 0.5);
+  backdrop-filter: blur(6px);
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  &__inner {
+    padding: 54px;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.2);
+    border-radius: 4px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+  }
+}
+
+.cancel-button {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 18px;
+  border-bottom: 2px dotted rgba(61, 83, 102, 0.5);
+  color: rgba(61, 83, 102, 0.5);
+  cursor: pointer;
+  margin-top: 18px;
+  &:hover {
+    border-bottom-color: #fff;
+  }
+}

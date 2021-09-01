@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import "./styles/table.scss"
 import {IRow} from "../../types/table/types";
+import {Modal} from "../modal";
 
 
 interface ITable {
@@ -9,14 +10,9 @@ interface ITable {
 
 export const Table: React.FunctionComponent<ITable> = (props) => {
     const { rows } = props;
-    const threeDots = () => (
-        <div className='dots-container'>
-            <div className="dot"/>
-            <div className="dot"/>
-            <div className="dot"/>
 
-        </div>
-    )
+    const [showModal, setShowModal] = useState<number | null>(null)
+
     return(
         <div className="table">
             <div className="table-head">
@@ -33,8 +29,8 @@ export const Table: React.FunctionComponent<ITable> = (props) => {
                 </div>
             </div>
             <div className="table-body">
-                {rows.map(row => (
-                    <div className="table-body-row">
+                {rows.map((row, index) => (
+                    <div className="table-body-row" key={index}>
                         <div className="table-body-item">
                             {row.organization}
                         </div>
@@ -44,11 +40,19 @@ export const Table: React.FunctionComponent<ITable> = (props) => {
                         <div className="table-body-item">
                             {row.comments}
                         </div>
-                        {threeDots()}
+                        <div className='dots-container' onClick={() => setShowModal(index + 1)}>
+                            <div className="dot"/>
+                            <div className="dot"/>
+                            <div className="dot"/>
+                        </div>
                     </div>
                 ))}
-
             </div>
+            {!!showModal &&
+                <Modal onClose={() => setShowModal(null)}>
+                    test
+                </Modal>
+            }
         </div>
     )
 }
