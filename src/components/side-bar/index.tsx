@@ -2,7 +2,7 @@ import React from "react";
 import "./styles/side-bar.scss"
 const classNames = require('classnames');
 
-import {SideBarItem} from "./service/side-bar-service";
+import {SideBarItem} from "../../types/side-bar/side-bar";
 
 
 interface ISideBar {
