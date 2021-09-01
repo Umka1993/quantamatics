@@ -1,0 +1,84 @@
+.table {
+  margin-top: 40px;
+
+  &-head {
+    &-row {
+      display: flex;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid rgba(113, 130, 166, 0.3);
+    }
+    &-item {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(113, 130, 166, 0.5);
+
+      &:first-child {
+        max-width: 305px;
+        width: 100%;
+      }
+
+      &:nth-child(2) {
+        max-width: 225px;
+        width: 100%;
+      }
+    }
+  }
+
+  &-body {
+    max-height: 355px;
+    overflow-y: auto;
+    &-row {
+      display: flex;
+      padding-bottom: 26px;
+      padding-top: 26px;
+      border-bottom: 1px solid rgba(113, 130, 166, 0.15);
+      padding-right: 53px;
+      position: relative;
+
+      .dots-container {
+        position: absolute;
+        display: flex;
+        right: 25px;
+        top: 50%;
+        cursor: pointer;
+        .dot {
+          width: 4px;
+          height: 4px;
+          background: rgba(113, 130, 166, 0.3);
+          margin-right: 2px;
+          border-radius: 50%;
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+    &-item {
+      font-size: 16px;
+      font-weight: normal;
+      line-height: 18px;
+      color: #7182A6;
+
+      &:first-child {
+        max-width: 305px;
+        width: 100%;
+      }
+
+      &:nth-child(2) {
+        max-width: 225px;
+        width: 100%;
+        span {
+          border-bottom: 1px solid #7182A6;
+        }
+      }
+
+      &:nth-child(3) {
+        font-style: italic;
+      }
+    }
+  }
+}
