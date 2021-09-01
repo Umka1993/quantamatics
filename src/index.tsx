@@ -1,8 +1,15 @@
 import React from 'react';
-import styles from './index.scss';
-
+require('./global.scss')
+import {BrowserRouter} from "react-router-dom"
+import {App} from "./app"
 import ReactDOM from 'react-dom';
-const App = () => {
-    return <h1 className={styles.title}>Hello Wepack!</h1>;
-};
-ReactDOM.render(<App />, document.getElementById('root'));
+import {Header} from "./components/header";
+
+
+ReactDOM.render(
+    <BrowserRouter>
+        <Header/>
+        <App/>
+    </BrowserRouter>,
+    document.getElementById("root")
+);

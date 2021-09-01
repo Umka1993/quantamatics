@@ -2,8 +2,10 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+    watch: true,
     devServer: {
         static: path.resolve(__dirname, 'dist'),
+        historyApiFallback: true,
         port: 8888
     },
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -17,6 +19,14 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.(png|jp(e*)g|svg|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                    },
+                ],
+            },
             {
                 test: /\.tsx?$/,
                 use: ['ts-loader']
