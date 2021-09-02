@@ -73,12 +73,38 @@
         width: 100%;
         span {
           border-bottom: 1px solid #7182A6;
+          a {
+            text-decoration: none;
+            color: #7182A6;
+          }
         }
       }
 
       &:nth-child(3) {
         font-style: italic;
       }
+    }
+  }
+
+  .table-edit-organization-modal {
+    &__title {
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 28px;
+      text-align: center;
+      color: #003C71;
+    }
+
+    &__submit {
+      cursor: pointer;
+      text-transform: capitalize;
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      padding: 11px 0;
+      color: #fff;
+      background: #017AEE;
+      border-radius: 2px;
     }
   }
 }

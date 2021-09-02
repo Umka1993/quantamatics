@@ -36,21 +36,25 @@ export const TABLE_ITEMS = [
     {
         organization: 'Dudka Agency',
         customerId: '1231232',
+        customerLink: '#',
         comments: 'temporary company for internal needs'
     },
     {
         organization: 'General Motors',
         customerId: '6542678',
+        customerLink: '#',
         comments: 'temporary company for internal needs'
     },
     {
         organization: 'General Electric',
         customerId: '9873422',
+        customerLink: '#',
         comments: 'temporary company for internal needs'
     },
     {
         organization: 'The Walt Disney Company',
         customerId: '5647444',
+        customerLink: '#',
         comments: 'temporary company for internal needs'
     },
 ]

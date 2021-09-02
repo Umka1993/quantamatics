@@ -26,11 +26,15 @@
   font-weight: normal;
   font-size: 16px;
   line-height: 18px;
-  border-bottom: 2px dotted rgba(61, 83, 102, 0.5);
   color: rgba(61, 83, 102, 0.5);
   cursor: pointer;
   margin-top: 18px;
-  &:hover {
-    border-bottom-color: #fff;
+  display: flex;
+  justify-content: center;
+  span {
+    border-bottom: 2px dotted rgba(61, 83, 102, 0.5);
+    &:hover {
+      border-bottom-color: #fff;
+    }
   }
 }
