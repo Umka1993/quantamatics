@@ -12,7 +12,7 @@ export const OrganizationsPage: React.FunctionComponent = (props) => {
                  <SideBar items={SIDE_BAR_ITEMS}/>
             </div>
             <div className="organization__content-container">
-                <h1>Organizations Page</h1>
+                <h1>List of Organizations</h1>
                 <p>Create and customize organizations for future owners</p>
                 <Table rows={TABLE_ITEMS} />
             </div>
