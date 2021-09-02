@@ -16,4 +16,19 @@
       color: rgba(113, 130, 166, 0.5);
     }
   }
+
+  &.error {
+    input {
+      border-bottom: 1px solid #e23737;
+      &::placeholder {
+        color: rgba(226, 55, 55, 0.5);
+      }
+    }
+  }
+
+  .error-container {
+    color: #e23737;
+    font-size: 12px;
+    margin-top: 5px;
+  }
 }

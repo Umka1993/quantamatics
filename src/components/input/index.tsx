@@ -9,11 +9,12 @@ interface IInput {
     onChangeInput: (value: string) => void
     value?: string
     required?: boolean
+    errors?: boolean
 }
 
 export const Input: React.FunctionComponent<IInput> = (props) => {
-    const {className, placeholder, value, onChangeInput, required} = props;
-    const inputClassNames = classNames('input', className)
+    const {className, placeholder, value, onChangeInput, required, errors} = props;
+    const inputClassNames = classNames('input', className, {'error': errors})
 
     return(
         <div className={inputClassNames}>
@@ -24,6 +25,7 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 onChange={(event) => onChangeInput(event.target.value)}
                 required={required}
             />
+            {errors && (<div className='error-container'>Is Required*</div>)}
         </div>
     )
 }
