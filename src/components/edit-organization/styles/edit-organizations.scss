@@ -1,0 +1,92 @@
+.edit-organization {
+
+  &__header {
+    background: #FFFFFF;
+    box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
+    border-radius: 4px 4px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 102px;
+  }
+
+  &__title {
+    color: #003C71;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  &__body{
+    padding: 40px;
+  }
+
+  &__info{
+    margin-bottom: 60px;
+  }
+
+  &__info-title{
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    color: #003C71;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    width: 229px;
+    justify-content: space-between;
+  }
+
+  &__save-btn{
+    width: 140px;
+    height: 40px;
+  }
+
+  &__inputs{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  &__input{
+    width: 317px;
+  }
+
+  &__comments{
+    width: 100%;
+  }
+
+  &__user-list-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__user-list-title{
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    color: #003C71;
+  }
+
+  &__user-list-add{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    img{
+      width: 16px;
+      height: 16px;
+      margin-right: 9px;
+    }
+    span{
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: 0.02em;
+      color: #017AEE;
+    }
+  }
+}
