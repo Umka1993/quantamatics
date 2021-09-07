@@ -1,31 +1,74 @@
-import React, {useState, useCallback} from "react";
+import React, {useState, useCallback, useEffect} from "react";
 import "./styles/table.scss"
+import {useHistory} from "react-router-dom";
 import {IRow} from "../../types/table/types";
 import {Modal} from "../modal";
 import {Input} from "../input";
+import {SVG} from "../SVG";
+
+import editSVG from './assets/edit-row-icon.svg'
+import deleteSVG from './assets/delete-row-icon.svg'
+import sortNoneSVG from './assets/sort-none.svg'
+import sortActiveSVG from './assets/sort-active.svg'
+import classNames from "classnames";
 
 
 interface ITable {
-   rows: IRow[]
+    rows: IRow[]
+    inEdit?: boolean
 }
 
 export const Table: React.FunctionComponent<ITable> = (props) => {
-    const { rows } = props;
-
+    const { rows, inEdit } = props;
+    const history = useHistory();
     const [localRows, setLocalRows] = useState<IRow[]>(rows)
     const [showModal, setShowModal] = useState<number | null>(null)
     const [organizationName, setOrganizationName] = useState<string>('')
     const [customerID, setCustomerID] = useState<string>('')
     const [customerLink, setCustomerLink] = useState<string>('')
     const [comment, setComment] = useState<string | undefined>('')
+    const [sort, setSort] = useState<any>({name: '', direction: 'none'})
+    useEffect(()=> {
+        localStorage.setItem('rows', JSON.stringify(props.rows))
+    }, [props.rows])
+    const sortTable = useCallback((name: string)=>{
+        let newSort = sort
+        if (name === sort.name) {
+            if(sort.direction === 'none') {
+                newSort.direction = 'asc'
+            }
+            else if(sort.direction === 'asc') {
+                newSort.direction = 'desc'
+            }
+            else if(sort.direction === 'desc') {
+                newSort.direction = 'none'
+                newSort.name = ''
+            }
+        } else {
+            newSort.direction = 'asc'
+            newSort.name = name
+        }
+
+        let newRows = localRows
+        if(newSort.direction === 'asc') {
+            newRows.sort((a:any,b:any) => (a.row[name] > b.row[name]) ? 1 : ((b.row[name] > a.row[name]) ? -1 : 0))
+        }else if (newSort.direction === 'desc') {
+            newRows.sort((a:any,b:any) => (b.row[name] > a.row[name]) ? 1 : ((a.row[name] > b.row[name]) ? -1 : 0))
+        } else if (newSort.direction === 'none') {
+            newRows = localStorage.getItem('rows') ? JSON.parse(localStorage.getItem('rows') as string) : props.rows
+        }
+
+        setSort({name: newSort.name, direction: newSort.direction})
+        setLocalRows(newRows)
+    }, [sort, localRows])
 
     const editOrganization = useCallback((index: number) => {
         let row = localRows[index]
-        row.organization = organizationName || row.organization
-        row.customerId = customerID || row.customerId
-        row.customerLink = customerLink || row.customerLink
-        row.comments = comment || row.comments
-        console.log(organizationName)
+        row.row.organization = organizationName || row.row.organization
+        row.row.customerId = customerID || row.row.customerId
+        row.row.customerLink = customerLink || row.row.customerLink
+        row.row.comments = comment || row.row.comments
+
         localRows[index] = row
         setLocalRows(localRows)
         setOrganizationName('')
@@ -37,10 +80,10 @@ export const Table: React.FunctionComponent<ITable> = (props) => {
 
     const openModal = useCallback((index: number) => {
         setLocalRows(localRows)
-        setOrganizationName(localRows[index].organization)
-        setCustomerID(localRows[index].customerId)
-        setCustomerLink(localRows[index].customerLink)
-        setComment(localRows[index].comments)
+        setOrganizationName(localRows[index].row.organization)
+        setCustomerID(localRows[index].row.customerId)
+        setCustomerLink(localRows[index].row.customerLink)
+        setComment(localRows[index].row.comments)
         setShowModal(index + 1)
     }, [])
 
@@ -48,14 +91,14 @@ export const Table: React.FunctionComponent<ITable> = (props) => {
         <div className="table">
             <div className="table-head">
                 <div className="table-head-row">
-                    <div className="table-head-item">
-                        ORGANIZATION Name
+                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})} onClick={() => sortTable('organization') }>
+                        ORGANIZATION Name <SVG icon={sort.name === 'organization' ? sortActiveSVG : sortNoneSVG} />
                     </div>
-                    <div className="table-head-item">
-                        CRM Customer ID
+                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})} onClick={() => sortTable('customerId') }>
+                        CRM Customer ID <SVG icon={sort.name === 'customerId' ? sortActiveSVG : sortNoneSVG} />
                     </div>
-                    <div className="table-head-item">
-                        comments
+                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})} onClick={() => sortTable('comments')}>
+                        comments <SVG icon={sort.name === 'comments' ? sortActiveSVG : sortNoneSVG} />
                     </div>
                 </div>
             </div>
@@ -63,19 +106,28 @@ export const Table: React.FunctionComponent<ITable> = (props) => {
                 {localRows.map((row, index) => (
                     <div className="table-body-row" key={index}>
                         <div className="table-body-item">
-                            {row.organization}
+                            {row.row.organization}
                         </div>
                         <div className="table-body-item">
-                            <span><a href={row.customerLink}>{row.customerId}</a></span>
+                            <span><a href={row.row.customerLink}>{row.row.customerId}</a></span>
                         </div>
                         <div className="table-body-item">
-                            {row.comments}
+                            {row.row.comments}
                         </div>
-                        <div className='dots-container' onClick={() => openModal(index)}>
-                            <div className="dot"/>
-                            <div className="dot"/>
-                            <div className="dot"/>
-                        </div>
+                        {inEdit ? (
+                            <div className='dots-container' onClick={() => openModal(index)}>
+                                <div className="dot"/>
+                                <div className="dot"/>
+                                <div className="dot"/>
+                            </div>
+                        ) : (
+                            row.editable && (
+                                <div className='table-body-row__actions'>
+                                    <SVG icon={editSVG} onClick={() => history.push("/organization-edit")}/>
+                                    <SVG icon={deleteSVG} />
+                                </div>
+                            )
+                        )}
                     </div>
                 ))}
             </div>

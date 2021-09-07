@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import {OrganizationsPage} from "../pages/organizations";
-import {CreateOrganizationPage} from "../pages/createOrganization";
+import {CreateOrganizationPage} from "../pages/create-organization";
 import {NotFoundPage} from "../pages/404"
 import {EditOrganizationPage} from "../pages/edit-orgranization-page/edit-organization-page";
 

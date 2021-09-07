@@ -4,6 +4,7 @@ import addIcon from "./assets/human-add.svg"
 import {Button} from "../button/button";
 import {Table} from "../table";
 import {Input} from "../input";
+import {SVG} from "../SVG";
 import {TABLE_ITEMS} from "../../contstans/constans";
 
 export const EditOrganization: React.FunctionComponent = (props) => {
@@ -64,11 +65,11 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                             User List
                         </div>
                         <div className="edit-organization__user-list-add">
-                             <img src={addIcon}/>
+                             <SVG icon={addIcon}/>
                              <span>Add New</span>
                         </div>
                     </div>
-                    <Table rows={TABLE_ITEMS}/>
+                    <Table inEdit rows={TABLE_ITEMS}/>
                 </div>
             </div>
         </div>

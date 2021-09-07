@@ -1,7 +1,11 @@
 
 export interface IRow {
-    organization: string
-    customerId: string
-    customerLink: string
-    comments?: string
+    editable: boolean
+    row: {
+        organization: string
+        customerId: string
+        customerLink: string
+        comments?: string
+    }
+
 }
