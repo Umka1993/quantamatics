@@ -8,7 +8,7 @@ module.exports = {
         historyApiFallback: true,
         port: 8888
     },
-    entry: path.resolve(__dirname, 'src', 'index.tsx'),
+    entry: path.resolve(__dirname, './src', 'index.tsx'),
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
