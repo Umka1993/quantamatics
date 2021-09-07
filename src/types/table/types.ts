@@ -7,5 +7,14 @@ export interface IRow {
         customerLink: string
         comments?: string
     }
+}
 
+export interface IUserRow {
+    editable: boolean
+    row: {
+        firstName: string
+        lastName: string
+        email: string
+        expirationDate: string
+    }
 }

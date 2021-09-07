@@ -1,7 +1,7 @@
 import React from 'react';
 import "./styles/organiations.scss"
 import {SideBar} from "../../components/side-bar";
-import {Table} from "../../components/table";
+import {OrganizationTable} from "../../components/table/OrganizationTable";
 import {SIDE_BAR_ITEMS} from "../../contstans/constans";
 import {TABLE_ITEMS} from "../../contstans/constans";
 
@@ -14,7 +14,7 @@ export const OrganizationsPage: React.FunctionComponent = (props) => {
             <div className="organization__content-container">
                 <h1>List of Organizations</h1>
                 <p>Create and customize organizations for future owners</p>
-                <Table rows={TABLE_ITEMS} />
+                <OrganizationTable rows={TABLE_ITEMS} />
             </div>
         </div>
     )

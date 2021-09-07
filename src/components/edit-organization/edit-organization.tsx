@@ -2,10 +2,10 @@ import React, {useState} from "react";
 import "./styles/edit-organizations.scss"
 import addIcon from "./assets/human-add.svg"
 import {Button} from "../button/button";
-import {Table} from "../table";
+import {UserTable} from "../table/UserTable";
 import {Input} from "../input";
 import {SVG} from "../SVG";
-import {TABLE_ITEMS} from "../../contstans/constans";
+import {USER_TABLE_ITEMS} from "../../contstans/constans";
 
 export const EditOrganization: React.FunctionComponent = (props) => {
     const [organizationName, setOrganizationName] = useState<string>('')
@@ -69,7 +69,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                              <span>Add New</span>
                         </div>
                     </div>
-                    <Table inEdit rows={TABLE_ITEMS}/>
+                    <UserTable inEdit rows={USER_TABLE_ITEMS}/>
                 </div>
             </div>
         </div>

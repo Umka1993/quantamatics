@@ -71,3 +71,41 @@ export const TABLE_ITEMS = [
         }
     },
 ]
+export const USER_TABLE_ITEMS = [
+    {
+        editable: true,
+        row: {
+            firstName: 'Alma',
+            lastName: 'Robertson',
+            email: 'tanya.hill@example.com',
+            expirationDate: '18/08/2021',
+        }
+    },
+    {
+        editable: true,
+        row: {
+            firstName: 'Darlene',
+            lastName: 'Lawson',
+            email: 'sara.cruz@example.com',
+            expirationDate: '19/08/2021',
+        }
+    },
+    {
+        editable: true,
+        row: {
+            firstName: 'Alma',
+            lastName: 'Robertson',
+            email: 'tanya.hill@example.com',
+            expirationDate: '18/08/2021',
+        }
+    },
+    {
+        editable: true,
+        row: {
+            firstName: 'Darlene',
+            lastName: 'Lawson',
+            email: 'sara.cruz@example.com',
+            expirationDate: '19/08/2021',
+        }
+    },
+]
