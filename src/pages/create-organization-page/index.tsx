@@ -1,7 +1,7 @@
 import React from 'react';
 import "./styles/organiations.scss"
 import {SideBar} from "../../components/side-bar";
-import {CreateOrganization} from "../../components/createOrganization";
+import {CreateOrganization} from "../../components/create-organization";
 import {SIDE_BAR_ITEMS} from "../../contstans/constans";
 
 export const CreateOrganizationPage: React.FunctionComponent = (props) => {
