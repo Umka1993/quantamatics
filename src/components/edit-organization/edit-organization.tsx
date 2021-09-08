@@ -2,9 +2,10 @@ import React, {useState} from "react";
 import "./styles/edit-organizations.scss"
 import addIcon from "./assets/human-add.svg"
 import {Button} from "../button/button";
-import {Table} from "../table";
+import {UserTable} from "../table/UserTable";
 import {Input} from "../input";
-import {TABLE_ITEMS} from "../../contstans/constans";
+import {SVG} from "../SVG";
+import {USER_TABLE_ITEMS} from "../../contstans/constans";
 
 interface IEditOrganization {
     onAddNewUser: () => void
@@ -68,12 +69,13 @@ export const EditOrganization: React.FunctionComponent<IEditOrganization> = (pro
                             User List
                         </div>
                         <div className="edit-organization__user-list-add"
-                             onClick={() => props.onAddNewUser()}>
-                             <img src={addIcon}/>
-                             <span>Add New</span>
+                             onClick={() => props.onAddNewUser()}
+                        >
+                            <SVG icon={addIcon}/>
+                            <span>Add New</span>
                         </div>
                     </div>
-                    <Table rows={TABLE_ITEMS}/>
+                    <UserTable inEdit rows={USER_TABLE_ITEMS}/>
                 </div>
             </div>
         </div>

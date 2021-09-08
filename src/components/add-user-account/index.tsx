@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import "./styles/add-user-account.scss"
-import arrowIcon from "./assets/arrow.svg"
 import {Input} from "../input";
 import {Button} from "../button/button";
+import arrowIcon from "./assets/arrow.svg"
+import SVG from "../SVG";
 
 interface IAddUserAccount {
     onBack: () => void
@@ -20,7 +21,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
             <div className="add-user-account__header">
                 <div className="add-user-account__button"
                      onClick={() => props.onBack()}>
-                    <img src={arrowIcon} alt="arrow"/>
+                    <SVG icon={arrowIcon}/>
                     <span>Back</span>
                 </div>
             </div>

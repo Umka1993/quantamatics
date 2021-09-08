@@ -3,6 +3,7 @@ import "./styles/side-bar.scss"
 const classNames = require('classnames');
 
 import {SideBarItem} from "../../types/side-bar/side-bar";
+import {SVG} from "../SVG";
 
 
 interface ISideBar {
@@ -17,7 +18,7 @@ export const SideBar: React.FunctionComponent<ISideBar> = (props) => {
         })
         return (
             <div className={itemClasses}>
-                <img src={item.image} className={"side-bar__item-img"}/>
+                <SVG icon={item.image} className={"side-bar__item-img"}/>
                 <div className="side-bar__item-name">
                     {item.name}
                 </div>
