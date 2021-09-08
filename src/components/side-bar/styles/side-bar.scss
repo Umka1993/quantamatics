@@ -26,8 +26,11 @@
       .side-bar__item-name{
         color: #017AEE;
       }
-      &__item-img{
-        fill: #DA4567;
+      .side-bar__item-img{
+        path {
+          fill: #017AEE;
+          opacity: 1;
+        }
       }
     }
 
