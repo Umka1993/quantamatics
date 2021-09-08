@@ -6,7 +6,11 @@ import {Table} from "../table";
 import {Input} from "../input";
 import {TABLE_ITEMS} from "../../contstans/constans";
 
-export const EditOrganization: React.FunctionComponent = (props) => {
+interface IEditOrganization {
+    onAddNewUser: () => void
+}
+
+export const EditOrganization: React.FunctionComponent<IEditOrganization> = (props) => {
     const [organizationName, setOrganizationName] = useState<string>('')
     const [customerID, setCustomerID] = useState<string>('')
     const [customerLink, setCustomerLink] = useState<string>('')
@@ -63,7 +67,8 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                         <div className="edit-organization__user-list-title">
                             User List
                         </div>
-                        <div className="edit-organization__user-list-add">
+                        <div className="edit-organization__user-list-add"
+                             onClick={() => props.onAddNewUser()}>
                              <img src={addIcon}/>
                              <span>Add New</span>
                         </div>
