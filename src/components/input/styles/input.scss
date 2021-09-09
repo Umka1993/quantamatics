@@ -1,11 +1,12 @@
 .input {
   width: 100%;
   margin-top: 32px;
+  position: relative;
   input {
     width: 100%;
     border: none;
     border-bottom: 1px solid rgba(113, 130, 166, 0.3);
-    padding: 10px 0;
+    padding: 10px 25px 10px 0;
     font-size: 16px;
     line-height: 18px;
     color: #7182A6;
@@ -30,5 +31,28 @@
     color: #e23737;
     font-size: 12px;
     margin-top: 5px;
+  }
+
+  &.password {
+    input {
+      color: #017AEE;
+    }
+  }
+  
+  .show-password {
+    cursor: pointer;
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translate(0, -50%);
+
+    &.active {
+      svg {
+        path {
+          fill: #017AEE;
+        }
+      }
+    }
+
   }
 }
