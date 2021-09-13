@@ -6,10 +6,13 @@ import ringImg from "./assets/ring.svg"
 import avatar from "./assets/avatar.svg"
 import arrowImg from "./assets/arrow.svg"
 import SVG from '../SVG'
-
+import {useSelector} from "react-redux";
+import {UserState} from "../../store/user/reducer";
 
 
 export const Header: React.FunctionComponent = (props) => {
+    const user = useSelector<UserState, UserState["user"]>((state) => state.user)
+
     return(
         <div className="header">
            <div className="header__logo">

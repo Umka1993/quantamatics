@@ -40,6 +40,7 @@
 .profile{
   display: flex;
   cursor: pointer;
+  align-items: center;
   &__avatar{
     border: 1px solid #C5C7CD;
     width: 44px;

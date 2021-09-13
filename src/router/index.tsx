@@ -9,6 +9,7 @@ import {CreateOrganizationPage} from "../pages/create-organization-page";
 import {NotFoundPage} from "../pages/404"
 import {EditOrganizationPage} from "../pages/edit-orgranization-page/edit-organization-page";
 import {SignUpPage} from "../pages/sign-up-page";
+import {SignInPage} from "../pages/login-page"
 
 const AppRouter = () => (
     <Switch>
@@ -17,6 +18,7 @@ const AppRouter = () => (
         <Route path={'/create'} component={CreateOrganizationPage}/>
         <Route path={'/organization-edit'} component={EditOrganizationPage}/>
         <Route path={'/sign-up'} component={SignUpPage}/>
+        <Route path={'/login'} component={SignInPage}/>
         <Route component={NotFoundPage} />
     </Switch>
 );
