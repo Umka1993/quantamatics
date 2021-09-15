@@ -34,7 +34,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
         <div className="login-page">
             <div className="login-page__container">
                 <div className="login-page__title">
-                    <h2>Sign In at <span>Dudka.agency</span></h2>
+                    <h2>Sign In to <span>Dudka.agency</span></h2>
                     <p>Enter your email and password to log in</p>
                 </div>
                 <div className="login-page__inputs">
