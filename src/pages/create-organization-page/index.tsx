@@ -8,7 +8,7 @@ export const CreateOrganizationPage: React.FunctionComponent = (props) => {
     return(
         <div className="create-organization-page">
             <div className="create-organization-page__side-bar-container">
-                 <SideBar items={SIDE_BAR_ITEMS}/>
+   {/*              <SideBar items={SIDE_BAR_ITEMS}/>*/}
             </div>
             <div className="create-organization-page__content-container">
                 <CreateOrganization />

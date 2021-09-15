@@ -18,12 +18,13 @@ export const SignInPage: React.FunctionComponent = (props) => {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }
             network.post('oauth/token', body, options)
-                .then((r) => {
+                .then((r: any) => {
                     dispatch({
                         type: "LOGIN", payload: {
                             username: userName
                         }
                     })
+                    localStorage.setItem('id_token', r.data.access_token);
                 })
                 .catch((e) => console.log(e))
         }

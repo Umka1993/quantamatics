@@ -4,21 +4,21 @@ import {
     Route
 } from "react-router-dom";
 
-import {OrganizationsPage} from "../pages/organizations";
+import {LayoutSideBarPage} from "../pages/layout-side-bar-page";
 import {CreateOrganizationPage} from "../pages/create-organization-page";
 import {NotFoundPage} from "../pages/404"
-import {EditOrganizationPage} from "../pages/edit-orgranization-page/edit-organization-page";
 import {SignUpPage} from "../pages/sign-up-page";
 import {SignInPage} from "../pages/login-page"
+import {ReSearchPage} from "../pages/research-page";
 
 const AppRouter = () => (
     <Switch>
-        <Route exact path={'/'} component={OrganizationsPage}/>
-        <Route path={'/organization'} component={OrganizationsPage}/>
+        <Route exact path={'/'} component={LayoutSideBarPage}/>
         <Route path={'/create'} component={CreateOrganizationPage}/>
-        <Route path={'/organization-edit'} component={EditOrganizationPage}/>
+        <Route path={'/organization-edit'} component={LayoutSideBarPage}/>
         <Route path={'/sign-up'} component={SignUpPage}/>
         <Route path={'/login'} component={SignInPage}/>
+        <Route path={'/research'} component={ReSearchPage}/>
         <Route component={NotFoundPage} />
     </Switch>
 );

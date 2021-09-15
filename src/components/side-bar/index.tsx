@@ -8,6 +8,7 @@ import {SVG} from "../SVG";
 
 interface ISideBar {
     items: Array<SideBarItem>
+    onSwitch: (name: string) => void
 }
 
 export const SideBar: React.FunctionComponent<ISideBar> = (props) => {
@@ -17,7 +18,7 @@ export const SideBar: React.FunctionComponent<ISideBar> = (props) => {
             'side-bar__item_active': item.active
         })
         return (
-            <div className={itemClasses}>
+            <div className={itemClasses} key={item.name} onClick={() => props.onSwitch(item.name)}>
                 <SVG icon={item.image} className={"side-bar__item-img"}/>
                 <div className="side-bar__item-name">
                     {item.name}
