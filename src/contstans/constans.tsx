@@ -8,11 +8,11 @@ import shareImg from "../components/side-bar/assets/share.svg"
 import favoritesImg from "../components/side-bar/assets/favorites.svg"
 
 export const SIDE_BAR_ITEMS = [
-    {
-        name: 'Overview',
-        image: pieImg,
-        active: false,
-    },
+    // {
+    //     name: 'Overview',
+    //     image: pieImg,
+    //     active: false,
+    // },
     {
         name: 'Research',
         image: docImg,
@@ -21,13 +21,13 @@ export const SIDE_BAR_ITEMS = [
             {
                 name: 'My Files',
                 image: filesImg,
-                active: false,
+                active: true,
                 opened: false,
             },
             {
                 name: 'Shared With Me',
                 image: shareImg,
-                active: true,
+                active: false,
                 opened: false,
             },
             {
@@ -38,16 +38,16 @@ export const SIDE_BAR_ITEMS = [
             },
         ]
     },
-    {
-        name: 'Organizations',
-        image: orgImg,
-        active: false,
-    },
-    {
-        name: 'Accounts list',
-        image: humanImg,
-        active: false,
-    },
+    // {
+    //     name: 'Organizations',
+    //     image: orgImg,
+    //     active: false,
+    // },
+    // {
+    //     name: 'Accounts list',
+    //     image: humanImg,
+    //     active: false,
+    // },
     {
         name: 'Settings',
         image: cogsImg,

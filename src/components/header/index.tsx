@@ -33,13 +33,31 @@ export const Header: React.FunctionComponent = (props) => {
         }, [ref]);
     }
     useOutsideClick(profileRef, setShowMenu)
+    const bread = [
+        'Apps',
+        'Research',
+        'My Files',
+    ]
+    const breadcrumbsList = bread.map((crumb: any, index) => {
+        const listLength = bread.length -1
+        return (
+            <div className={classNames('header__breadcrumbs-item', {'last': index === listLength})}>
+                {crumb}
+                {index !== listLength ? <span className='breadcrumb-divider'>/</span> : ''}
+            </div>
+        )
+    })
 
     return(
         <div className="header">
-           <div className="header__logo">
+            <div className="header__logo">
                <SVG icon={logoImg} name="logo"/>
                <span>Quantamatics</span>
-           </div>
+                <div className="header__breadcrumbs">
+                    {breadcrumbsList}
+                </div>
+            </div>
+
             <div className="header__nav">
                 <div className="header__nav-item">
                    <SVG icon={searchImg} name="search"/>

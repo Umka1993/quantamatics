@@ -10,12 +10,39 @@
   box-sizing: border-box;
   padding: 0 35px;
 
+  &__breadcrumbs {
+    margin-left: 70px;
+    display: flex;
+    align-items: center;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+    color: #7182A6;
+    &-item {
+      cursor: not-allowed;
+      span.breadcrumb-divider {
+        font-weight: 300;
+        font-size: 14px;
+        line-height: 16px;
+        margin-right: 10px;
+        margin-left: 10px;
+        cursor: not-allowed;
+      }
+      &.last {
+        font-weight: 500;
+        color: #017AEE;
+      }
+    }
+
+  }
+
   &__logo{
     display: flex;
     align-items: center;
-    cursor: pointer;
     svg{
       margin-right: 8.5px;
+      cursor: pointer;
+
     }
     span{
       font-style: normal;
@@ -23,6 +50,7 @@
       font-size: 25px;
       line-height: 32px;
       color: #014182;
+      cursor: pointer;
     }
   }
 
