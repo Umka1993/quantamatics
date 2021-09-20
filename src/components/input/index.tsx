@@ -46,7 +46,6 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                     <SVG icon={eyeSVG} onClick={() => togglePasswordShow()}/>
                 </div>
             )}
-            {errors && (<div className='error-container'>Is Required*</div>)}
         </div>
     )
 }

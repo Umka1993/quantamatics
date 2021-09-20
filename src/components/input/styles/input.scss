@@ -10,20 +10,32 @@
     padding: 10px 25px 10px 0;
     font-size: 16px;
     line-height: 18px;
-    color: #7182A6;
+    color: #003C71;
     outline: none;
     &::placeholder {
       font-size: 16px;
       line-height: 18px;
       color: rgba(113, 130, 166, 0.5);
     }
+    &:hover {
+      border-bottom: 1px solid #017AEE;
+    }
+    &:active {
+      color: #017AEE;
+      border-bottom: 1px solid #017AEE;
+    }
+    &:focus {
+      color: #017AEE;
+      border-bottom: 1px solid #017AEE;
+    }
   }
 
   &.error {
     input {
-      border-bottom: 1px solid #e23737;
+      border-bottom: 1px solid #FF5757;
+      color: #FF5757;
       &::placeholder {
-        color: rgba(226, 55, 55, 0.5);
+        color: #FF5757;
       }
     }
   }
