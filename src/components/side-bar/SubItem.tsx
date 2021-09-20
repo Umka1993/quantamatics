@@ -19,7 +19,7 @@ export const BarItem: React.FunctionComponent<ISideBar> = (props) => {
     const [opened, setOpened] = useState<boolean>(false)
     const itemClasses: any = classNames({
         'side-bar__item': true,
-        'side-bar__item_active': item.active || opened || subItemActive,
+        'side-bar__item_active': item.active ,
         'side-bar__item_opened': opened,
     }, props.classNames)
 

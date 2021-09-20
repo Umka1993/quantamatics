@@ -29,9 +29,26 @@
     &_opened {
       .side-bar__item-toggle-img{
         transform: rotate(0deg);
-
         path {
           fill: #017AEE;
+        }
+      }
+      .side-bar__item-name{
+        color: #017AEE;
+      }
+      &:before{
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        background: #017AEE;
+      }
+      .side-bar__item-img{
+        path {
+          fill: #017AEE;
+          opacity: 1;
         }
       }
     }
@@ -53,8 +70,14 @@
     }
 
     &:hover{
-      .side-bar__item-name{
-        color: #017AEE;
+      &:before{
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        background: #017AEE;
       }
       .side-bar__item-img{
         path {
