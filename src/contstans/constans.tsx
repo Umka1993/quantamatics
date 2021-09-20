@@ -3,32 +3,55 @@ import docImg from "../components/side-bar/assets/doc.svg"
 import orgImg from "../components/side-bar/assets/org.svg"
 import humanImg from "../components/side-bar/assets/human.svg"
 import cogsImg from "../components/side-bar/assets/cogs.svg"
+import filesImg from "../components/side-bar/assets/my-files.svg"
+import shareImg from "../components/side-bar/assets/share.svg"
+import favoritesImg from "../components/side-bar/assets/favorites.svg"
 
 export const SIDE_BAR_ITEMS = [
     {
         name: 'Overview',
         image: pieImg,
-        active: false
+        active: false,
     },
     {
         name: 'Research',
         image: docImg,
-        active: false
+        active: false,
+        subItems: [
+            {
+                name: 'My Files',
+                image: filesImg,
+                active: false,
+                opened: false,
+            },
+            {
+                name: 'Shared With Me',
+                image: shareImg,
+                active: true,
+                opened: false,
+            },
+            {
+                name: 'Favorites',
+                image: favoritesImg,
+                active: false,
+                opened: false,
+            },
+        ]
     },
     {
         name: 'Organizations',
         image: orgImg,
-        active: true
+        active: false,
     },
     {
         name: 'Accounts list',
         image: humanImg,
-        active: false
+        active: false,
     },
     {
         name: 'Settings',
         image: cogsImg,
-        active: false
+        active: false,
     }
 ]
 

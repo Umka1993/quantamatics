@@ -22,6 +22,36 @@
     cursor: pointer;
     position: relative;
 
+    &-sub {
+      padding-left: 44px;
+    }
+
+    &_opened {
+      .side-bar__item-toggle-img{
+        transform: rotate(0deg);
+
+        path {
+          fill: #017AEE;
+        }
+      }
+    }
+
+    &-img{
+      path {
+        fill: #C9CDE6;
+      }
+    }
+
+    &-toggle-img{
+      transform: rotate(180deg);
+      position: absolute;
+      right: 19px;
+
+      path {
+        fill: #C9CDE6;
+      }
+    }
+
     &:hover{
       .side-bar__item-name{
         color: #017AEE;
@@ -44,8 +74,21 @@
         width: 3px;
         background: #017AEE;
       }
+
+      &-sub {
+        &:before {
+          display: none;
+        }
+      }
+
       .side-bar__item-name{
         color: #017AEE;
+      }
+      .side-bar__item-img{
+        path {
+          fill: #017AEE;
+          opacity: 1;
+        }
       }
     }
   }

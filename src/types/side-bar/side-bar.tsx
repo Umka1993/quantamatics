@@ -8,4 +8,11 @@ export interface SideBarItem {
     image: ReactSVGComponent,
     name: string,
     active: Boolean
+    subItems?: SideBarSubItem[]
+}
+
+export interface SideBarSubItem {
+    image: ReactSVGComponent,
+    name: string,
+    active: Boolean
 }
