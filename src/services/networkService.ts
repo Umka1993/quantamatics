@@ -38,7 +38,7 @@ export const network = {
                     resolve(data)
                 })
                 .catch((err) => {
-                    reject(err)
+                    url.includes('oauth/token') ? reject(err.response.data.error_description) : reject(err)
                 })
         })
     },

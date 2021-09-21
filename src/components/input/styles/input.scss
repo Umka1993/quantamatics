@@ -30,16 +30,6 @@
     }
   }
 
-  &.error {
-    input {
-      border-bottom: 1px solid #FF5757;
-      color: #FF5757;
-      &::placeholder {
-        color: #FF5757;
-      }
-    }
-  }
-
   .error-container {
     color: #e23737;
     font-size: 12px;
@@ -50,6 +40,20 @@
     input {
       color: #017AEE;
     }
+  }
+  &.error {
+    input {
+      border-bottom: 1px solid #FF5757;
+      color: #FF5757;
+      &::placeholder {
+        color: #FF5757;
+      }
+    }
+    svg {
+        path {
+          fill: #FF5757;
+        }
+      }
   }
 
   .show-password {

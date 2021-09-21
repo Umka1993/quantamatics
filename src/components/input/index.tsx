@@ -18,7 +18,6 @@ interface IInput {
 export const Input: React.FunctionComponent<IInput> = (props) => {
     const {className, placeholder, value, onChangeInput, required, errors, type} = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
-    const [hiddenValue, setHiddenValue] = useState<string>('')
     const inputClassNames = classNames('input', className, {'error': errors}, {password: inputType === 'password'})
     const [showPassword, setShowPassword] = useState<boolean>(false)
 

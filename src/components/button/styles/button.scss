@@ -29,4 +29,14 @@
     border-bottom: 1.5px dashed rgba(61, 83, 102, 0.5);
     padding-bottom: 3px;
   }
+
+  &__disabled {
+    cursor: not-allowed;
+    color: #BCC5D8;
+    border-color: #BCC5D8;
+    &:hover{
+      background: #fff;
+      color: #BCC5D8;
+    }
+  }
 }

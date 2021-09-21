@@ -28,7 +28,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                 />
             </div>
             <div className="layout-page__content-container">
-                    <Organizations currentPage={currentRoute}/>
+                    {/*<Organizations currentPage={currentRoute}/>*/}
             </div>
         </div>
     )

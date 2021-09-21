@@ -9,13 +9,14 @@ import profileImg from "./assets/profile.svg"
 import settingsImg from "./assets/settings.svg"
 import logoutImg from "./assets/logout.svg"
 import SVG from '../SVG'
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import classNames from "classnames";
 import {RootState} from "../../store";
+import {useHistory} from "react-router-dom";
 
 
 export const Header: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.user.user)
+    const user = useSelector<RootState>((state) => state.user.user.username)
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
         'Apps',
@@ -26,6 +27,8 @@ export const Header: React.FunctionComponent = (props) => {
         (state) => state.currentPage.currentPage.pageName
     )
     const profileRef = useRef(null)
+    const dispatch = useDispatch()
+    const history = useHistory()
 
     const useOutsideClick = (ref: any, callback: any) => {
         useEffect(() => {
@@ -41,6 +44,16 @@ export const Header: React.FunctionComponent = (props) => {
         }, [ref]);
     }
     useOutsideClick(profileRef, setShowMenu)
+
+    const handleLogOut = () => {
+        dispatch({
+            type: "LOGOUT", payload: {
+                username: ''
+            }
+        })
+        localStorage.removeItem('id_token')
+        history.push('/login')
+    }
 
     useEffect(() => {
         let researchValues = ['My Files', 'Shared With Me', 'Favorites']
@@ -76,14 +89,14 @@ export const Header: React.FunctionComponent = (props) => {
             <div className="header__logo">
                <SVG icon={logoImg} name="logo"/>
                <span>Quantamatics</span>
-                <div className="header__breadcrumbs">
+                {user && (<div className="header__breadcrumbs">
                     {breadcrumbsList}
-                </div>
+                </div>)}
             </div>
 
-            <div className="header__nav">
+            {user && (<div className="header__nav">
                 <div className="header__nav-item">
-                   <SVG icon={searchImg} name="search"/>
+                    <SVG icon={searchImg} name="search"/>
                 </div>
                 <div className="header__nav-item">
                     <SVG icon={ringImg} name="ring"/>
@@ -103,14 +116,14 @@ export const Header: React.FunctionComponent = (props) => {
                                 <div className="profile__dropdown-item">
                                     <SVG icon={settingsImg} name="settingsImg"/> Settings
                                 </div>
-                                <div className="profile__dropdown-item">
+                                <div className="profile__dropdown-item" onClick={() => handleLogOut()}>
                                     <SVG icon={logoutImg} name="logoutImg"/> Log Out
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
-            </div>
+            </div>)}
         </div>
     )
 }
