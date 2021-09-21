@@ -6,6 +6,22 @@
   width: 100%;
   padding-top: 32px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__footer {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 140%;
+    text-align: center;
+    color: #C6CCDB;
+    padding: 27px 30px;
+    a {
+      text-decoration: none;
+      color: #017AEE;
+    }
+  }
 
   &__block{
     width: 100%;

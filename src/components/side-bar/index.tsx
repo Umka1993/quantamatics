@@ -16,7 +16,13 @@ export const SideBar: React.FunctionComponent<ISideBar> = (props) => {
     })
     return(
         <div className="side-bar">
-            {itemsList}
+            <div className="side-bar__items">
+                {itemsList}
+            </div>
+            <div className="side-bar__footer">
+                © Copyright 2021 Facteus. <br/>
+                All rights reserved. <a href="#">Privacy Policy</a>
+            </div>
         </div>
     )
 }
