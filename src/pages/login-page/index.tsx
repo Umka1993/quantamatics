@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import "./styles/login-page.scss"
 import {Input} from "../../components/input";
+import {Loader} from "../../components/loader";
 import {Button} from "../../components/button/button";
 import {CheckBox} from "../../components/checkbox";
 import {network} from "../../services/networkService";
@@ -9,9 +10,11 @@ import {useDispatch} from "react-redux";
 export const SignInPage: React.FunctionComponent = (props) => {
     const [userName, setUserName] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [loginProcess, setLoginProcess] = useState<boolean>(false)
     const dispatch = useDispatch()
     const handleLogin = () => {
         console.log(userName)
+        setLoginProcess(true)
         if (userName && password) {
             const body = "grant_type=password&username=" + userName + "&password=" + password
             const options = {
@@ -28,6 +31,9 @@ export const SignInPage: React.FunctionComponent = (props) => {
                 })
                 .catch((e) => console.log(e))
         }
+        setTimeout(() => {
+            setLoginProcess(false)
+        }, 3000)
     }
 
     return (
@@ -61,6 +67,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     <Button type={'simple'} text={'Enter the platform'}/>
                 </div>
             </div>
+            {loginProcess && <Loader />}
         </div>
     )
 }
