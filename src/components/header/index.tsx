@@ -56,6 +56,10 @@ export const Header: React.FunctionComponent = (props) => {
     }
 
     useEffect(() => {
+        if (!user) history.push('/login')
+    }, [user])
+
+    useEffect(() => {
         let researchValues = ['My Files', 'Shared With Me', 'Favorites']
         const url: any = !!storeCurrentPage ? storeCurrentPage : ''
         if (researchValues.includes(url)) {
