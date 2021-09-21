@@ -6,6 +6,7 @@ import cogsImg from "../components/side-bar/assets/cogs.svg"
 import filesImg from "../components/side-bar/assets/my-files.svg"
 import shareImg from "../components/side-bar/assets/share.svg"
 import favoritesImg from "../components/side-bar/assets/favorites.svg"
+import CoherenceImg from "../components/side-bar/assets/Coherence.svg"
 
 export const SIDE_BAR_ITEMS = [
     // {
@@ -37,6 +38,11 @@ export const SIDE_BAR_ITEMS = [
                 opened: false,
             },
         ]
+    },
+    {
+        name: 'Coherence',
+        image: CoherenceImg,
+        active: false,
     },
     // {
     //     name: 'Organizations',
