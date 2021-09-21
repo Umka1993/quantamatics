@@ -10,13 +10,21 @@ import settingsImg from "./assets/settings.svg"
 import logoutImg from "./assets/logout.svg"
 import SVG from '../SVG'
 import {useSelector} from "react-redux";
-import {UserState} from "../../store/user/reducer";
 import classNames from "classnames";
+import {RootState} from "../../store";
 
 
 export const Header: React.FunctionComponent = (props) => {
-    const user = useSelector<UserState, UserState["user"]>((state) => state.user)
+    const user = useSelector<RootState>((state) => state.user.user)
     const [showMenu, setShowMenu] = useState<boolean>(false)
+    const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
+        'Apps',
+        'Research',
+        'My Files',
+    ])
+    const storeCurrentPage = useSelector<RootState>(
+        (state) => state.currentPage.currentPage.pageName
+    )
     const profileRef = useRef(null)
 
     const useOutsideClick = (ref: any, callback: any) => {
@@ -33,15 +41,30 @@ export const Header: React.FunctionComponent = (props) => {
         }, [ref]);
     }
     useOutsideClick(profileRef, setShowMenu)
-    const bread = [
-        'Apps',
-        'Research',
-        'My Files',
-    ]
-    const breadcrumbsList = bread.map((crumb: any, index) => {
-        const listLength = bread.length -1
+
+    useEffect(() => {
+        let researchValues = ['My Files', 'Shared With Me', 'Favorites']
+        const url: any = !!storeCurrentPage ? storeCurrentPage : ''
+        if (researchValues.includes(url)) {
+            setBreadcrumbs([
+                'Apps',
+                'Research',
+                url,
+            ])
+        }
+        if (url === 'Settings') setBreadcrumbs([
+                                    'Apps',
+                                    'Admin',
+                                    'Organizations',
+                                ])
+
+
+    }, [storeCurrentPage])
+
+    const breadcrumbsList = breadcrumbs.map((crumb: any, index) => {
+        const listLength = breadcrumbs.length -1
         return (
-            <div className={classNames('header__breadcrumbs-item', {'last': index === listLength})}>
+            <div key={index} className={classNames('header__breadcrumbs-item', {'last': index === listLength})}>
                 {crumb}
                 {index !== listLength ? <span className='breadcrumb-divider'>/</span> : ''}
             </div>
