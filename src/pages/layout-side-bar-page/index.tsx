@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
 import {SideBar} from "../../components/side-bar";
 import {Organizations} from "../organizations";
+import {JupyterFrame} from "../../components/jupyter-frame";
 import {SIDE_BAR_ITEMS} from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
 import {useLocation} from 'react-router-dom'
@@ -28,7 +29,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                 />
             </div>
             <div className="layout-page__content-container">
-                    {/*<Organizations currentPage={currentRoute}/>*/}
+                  <JupyterFrame/>
             </div>
         </div>
     )
