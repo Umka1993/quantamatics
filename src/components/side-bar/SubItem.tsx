@@ -16,7 +16,7 @@ interface ISideBar {
 export const BarItem: React.FunctionComponent<ISideBar> = (props) => {
     const {item} = props;
     const subItemActive = !!item.subItems && item.subItems.filter(obj => obj.active)[0]
-    const [opened, setOpened] = useState<boolean>(false)
+    const [opened, setOpened] = useState<boolean>(!!subItemActive)
     const itemClasses: any = classNames({
         'side-bar__item': true,
         'side-bar__item_active': item.active ,

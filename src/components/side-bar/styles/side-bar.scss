@@ -51,6 +51,7 @@
       }
       .side-bar__item-name{
         color: #017AEE;
+        font-weight: 500;
       }
       &:before{
         content: "";
@@ -78,7 +79,7 @@
     &-toggle-img{
       transform: rotate(180deg);
       position: absolute;
-      right: 19px;
+      right: 30px;
 
       path {
         fill: #C9CDE6;
@@ -122,6 +123,7 @@
 
       .side-bar__item-name{
         color: #017AEE;
+        font-weight: 500;
       }
       .side-bar__item-img{
         path {
@@ -141,6 +143,6 @@
     font-weight: 300;
     font-size: 16px;
     line-height: 18px;
-    color: #545B85;
+    color: #003C71;
   }
 }
