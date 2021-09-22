@@ -44,14 +44,10 @@
   &.error {
     input {
       border-bottom: 1px solid #FF5757;
-      color: #FF5757;
-      &::placeholder {
-        color: #FF5757;
-      }
     }
     svg {
         path {
-          fill: #FF5757;
+          fill: #FF5757!important;
         }
       }
   }

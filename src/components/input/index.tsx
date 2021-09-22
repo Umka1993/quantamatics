@@ -3,12 +3,14 @@ import "./styles/input.scss"
 import classNames from "classnames";
 import SVG from '../SVG'
 import eyeSVG from './assets/eye.svg'
+import closedEyeSVG from './assets/closed-eye.svg'
 
 
 interface IInput {
     className?: string,
     placeholder?: string,
     onChangeInput: (value: string) => void
+    onEnterPress?: () => void
     value?: string
     required?: boolean
     errors?: boolean
@@ -16,7 +18,7 @@ interface IInput {
 }
 
 export const Input: React.FunctionComponent<IInput> = (props) => {
-    const {className, placeholder, value, onChangeInput, required, errors, type} = props;
+    const {className, placeholder, value, onChangeInput, required, errors, type, onEnterPress} = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
     const inputClassNames = classNames('input', className, {'error': errors}, {password: inputType === 'password'})
     const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -31,6 +33,10 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
         }
     }, [showPassword, inputType])
 
+    const handleEnterPress = (event: any) => {
+        if(!!onEnterPress && event.keyCode === 13) onEnterPress()
+    }
+
     return(
         <div className={inputClassNames}>
             <input
@@ -39,10 +45,11 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 value={value || ''}
                 onChange={(event) => onChangeInput(event.target.value)}
                 required={required}
+                onKeyUp={(event) => handleEnterPress(event)}
             />
             {!!type && type === 'password' &&(
                 <div className={classNames('show-password', {active: showPassword})}>
-                    <SVG icon={eyeSVG} onClick={() => togglePasswordShow()}/>
+                    {showPassword ? <SVG icon={closedEyeSVG} onClick={() => togglePasswordShow()}/> : <SVG icon={eyeSVG} onClick={() => togglePasswordShow()}/> }
                 </div>
             )}
         </div>
