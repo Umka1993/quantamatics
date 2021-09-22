@@ -5,10 +5,16 @@
   background: #FFFFFF;
   box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.1);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-  padding: 0 35px;
+  justify-content: center;
+
+  &__content {
+    max-width: 1392px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 100%;
+  }
 
   &__breadcrumbs {
     margin-left: 70px;
@@ -49,7 +55,7 @@
       font-weight: 600;
       font-size: 25px;
       line-height: 32px;
-      color: #014182;
+      color: #003C71;
       cursor: pointer;
     }
   }
@@ -58,10 +64,18 @@
     display: flex;
     align-items: center;
     width: 144px;
-    justify-content: space-between;
+    justify-content: flex-end;
   }
   &__nav-item{
     cursor: pointer;
+    .username {
+      display: inline-block;
+      margin-left: 9px;
+      font-size: 16px;
+      line-height: 18px;
+      color: #7182A6;
+    }
+
   }
 }
 
@@ -76,6 +90,9 @@
     height: 44px;
     border-radius: 50%;
     position: relative;
+    &.opened {
+      border: 1px solid #017AEE;
+    }
     svg{
       border-radius: 50%;
       object-fit: cover;

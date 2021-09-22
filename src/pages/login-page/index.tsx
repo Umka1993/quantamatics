@@ -15,7 +15,6 @@ export const SignInPage: React.FunctionComponent = (props) => {
     const [password, setPassword] = useState<string>('')
     const [loginProcess, setLoginProcess] = useState<boolean>(false)
     const [errors, setErrors] = useState<string>('')
-    if (!!user) return <div/>
 
     useEffect(() => {
         if(!!user) history.push('/')
@@ -55,6 +54,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     })
                     setErrors('false')
                     localStorage.setItem('id_token', r.data.access_token);
+                    localStorage.setItem('username', userName);
                     setLoginProcess(false)
                     history.push('/')
                 })
@@ -67,6 +67,8 @@ export const SignInPage: React.FunctionComponent = (props) => {
             setErrors('Enter user name and password')
         }
     }
+    if (!!user) return <div/>
+
     return (
         <div className="login-page">
             <div className="login-page__container">

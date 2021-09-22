@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import "./styles/header.scss"
 import logoImg from "./assets/logo.svg"
+import logoTextImg from "./assets/Quantamatics.svg"
 import searchImg from "./assets/search.svg"
 import ringImg from "./assets/ring.svg"
 import avatar from "./assets/avatar.svg"
@@ -52,6 +53,7 @@ export const Header: React.FunctionComponent = (props) => {
             }
         })
         localStorage.removeItem('id_token')
+        localStorage.removeItem('username')
         history.push('/login')
     }
 
@@ -64,15 +66,17 @@ export const Header: React.FunctionComponent = (props) => {
         const url: any = !!storeCurrentPage ? storeCurrentPage : ''
         if (researchValues.includes(url)) {
             setBreadcrumbs([
-                'Apps',
                 'Research',
                 url,
             ])
         }
         if (url === 'Settings') setBreadcrumbs([
-                                    'Apps',
                                     'Admin',
                                     'Organizations',
+                                ])
+        if (url === 'Coherence') setBreadcrumbs([
+                                    'Admin',
+                                    'Coherence',
                                 ])
 
 
@@ -87,47 +91,50 @@ export const Header: React.FunctionComponent = (props) => {
             </div>
         )
     })
-
+    const username: any = !!user ? user : ''
     return(
         <div className="header">
-            <div className="header__logo">
-               <SVG icon={logoImg} name="logo"/>
-               <span>Quantamatics</span>
-                {user && (<div className="header__breadcrumbs">
-                    {breadcrumbsList}
+            <div className="header__content">
+                <div className="header__logo">
+                   <SVG icon={logoImg} name="logo"/>
+                   <SVG icon={logoTextImg} name="text"/>
+                    {user && (<div className="header__breadcrumbs">
+                        {breadcrumbsList}
+                    </div>)}
+                </div>
+
+                {user && (<div className="header__nav">
+                    {/*<div className="header__nav-item">*/}
+                    {/*    <SVG icon={searchImg} name="search"/>*/}
+                    {/*</div>*/}
+                    {/*<div className="header__nav-item">*/}
+                    {/*    <SVG icon={ringImg} name="ring"/>*/}
+                    {/*</div>*/}
+                    <div className="header__nav-item">
+                        <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
+                            <div className={classNames("profile__avatar", {'opened': showMenu})}>
+                                <SVG icon={avatar} name="avatar"/>
+                            </div>
+                            <span className='username'>{username}</span>
+                            <SVG icon={arrowImg} className={classNames("profile__arrow", {'opened': showMenu})}/>
+                            {showMenu && (
+                                <div className='profile__dropdown'>
+                                    <div className="profile__dropdown-triangle"/>
+                                    <div className="profile__dropdown-item">
+                                        <SVG icon={profileImg} name="profileImg"/> Profile
+                                    </div>
+                                    <div className="profile__dropdown-item">
+                                        <SVG icon={settingsImg} name="settingsImg"/> Settings
+                                    </div>
+                                    <div className="profile__dropdown-item" onClick={() => handleLogOut()}>
+                                        <SVG icon={logoutImg} name="logoutImg"/> Log Out
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>)}
             </div>
-
-            {user && (<div className="header__nav">
-                <div className="header__nav-item">
-                    <SVG icon={searchImg} name="search"/>
-                </div>
-                <div className="header__nav-item">
-                    <SVG icon={ringImg} name="ring"/>
-                </div>
-                <div className="header__nav-item">
-                    <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
-                        <div className="profile__avatar">
-                            <SVG icon={avatar} name="avatar"/>
-                        </div>
-                        <SVG icon={arrowImg} className={classNames("profile__arrow", {'opened': showMenu})}/>
-                        {showMenu && (
-                            <div className='profile__dropdown'>
-                                <div className="profile__dropdown-triangle"/>
-                                <div className="profile__dropdown-item">
-                                    <SVG icon={profileImg} name="profileImg"/> Profile
-                                </div>
-                                <div className="profile__dropdown-item">
-                                    <SVG icon={settingsImg} name="settingsImg"/> Settings
-                                </div>
-                                <div className="profile__dropdown-item" onClick={() => handleLogOut()}>
-                                    <SVG icon={logoutImg} name="logoutImg"/> Log Out
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>)}
         </div>
     )
 }

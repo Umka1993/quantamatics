@@ -8,7 +8,7 @@ export interface UserState {
 
 const initialState = {
     user: {
-        username: ''
+        username: localStorage.getItem('username') || ''
     }
 }
 
