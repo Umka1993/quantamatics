@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
 import {SideBar} from "../../components/side-bar";
@@ -9,13 +9,20 @@ import "./styles/layout-side-bar-page.scss"
 import {useHistory, useLocation} from 'react-router-dom'
 
 export const LayoutSideBarPage: React.FunctionComponent = (props) => {
-    const [currentPage, setCurrentPage] = useState<string>(window.location.pathname.substring(1))
+    const [currentPage, setCurrentPage] = useState<string>('')
     const history = useHistory()
     const dispatch = useDispatch();
 
+    useEffect(()=> {
+        if (window.location.pathname.substring(1) === '') {
+            history.push('/research/my-files')
+            dispatch(changeRoute('research/my-files'))
+        }
+        setCurrentPage(window.location.pathname.substring(1))
+    }, [window.location.pathname])
+
     const changeRoutePath = (route: string) => {
         dispatch(changeRoute(route))
-        setCurrentPage(route)
         history.push('/')
         history.push('/' + route)
     }
