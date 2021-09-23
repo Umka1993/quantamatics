@@ -20,6 +20,10 @@
     a {
       text-decoration: none;
       color: #017AEE;
+      transition: .3s ease-in-out;
+      &:hover {
+        color: #55a7f1;
+      }
     }
   }
 
