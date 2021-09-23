@@ -15,11 +15,12 @@ interface ISideBar {
 
 export const BarItem: React.FunctionComponent<ISideBar> = (props) => {
     const {item} = props;
-    const subItemActive = !!item.subItems && item.subItems.filter(obj => obj.active)[0]
+    const itemActive = window.location.pathname.substring(1) === item.route
+    const subItemActive = !!item.subItems && item.subItems.filter(obj => obj.route === window.location.pathname.substring(1))[0]
     const [opened, setOpened] = useState<boolean>(!!subItemActive)
     const itemClasses: any = classNames({
         'side-bar__item': true,
-        'side-bar__item_active': item.active ,
+        'side-bar__item_active': itemActive ,
         'side-bar__item_opened': opened,
     }, props.classNames)
 

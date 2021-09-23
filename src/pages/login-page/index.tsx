@@ -17,7 +17,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
     const [errors, setErrors] = useState<string>('')
 
     useEffect(() => {
-        if(!!user) history.push('/')
+        if(!!user) history.push('/research/my-files')
     }, [user])
 
     useEffect(() => {

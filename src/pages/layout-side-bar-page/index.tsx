@@ -9,15 +9,13 @@ import "./styles/layout-side-bar-page.scss"
 import {useHistory, useLocation} from 'react-router-dom'
 
 export const LayoutSideBarPage: React.FunctionComponent = (props) => {
-    const [currentPage, setCurrentPage] = useState<string>('')
+    const [currentPage, setCurrentPage] = useState<string>(window.location.pathname.substring(1))
     const history = useHistory()
     const dispatch = useDispatch();
-    const currentRoute = useLocation().pathname
 
     const changeRoutePath = (route: string) => {
         dispatch(changeRoute(route))
         setCurrentPage(route)
-        console.log(history)
         history.push('/')
         history.push('/' + route)
     }
@@ -30,7 +28,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                 />
             </div>
             <div className="layout-page__content-container">
-                  <JupyterFrame/>
+                {(currentPage === 'research/my-files' || currentPage === 'coherence') && (<JupyterFrame/>)}
             </div>
         </div>
     )
