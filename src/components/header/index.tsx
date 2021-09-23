@@ -71,11 +71,9 @@ export const Header: React.FunctionComponent = (props) => {
             ])
         }
         if (url === 'Settings') setBreadcrumbs([
-                                    'Admin',
-                                    'Organizations',
+                                    'Settings',
                                 ])
         if (url === 'Coherence') setBreadcrumbs([
-                                    'Admin',
                                     'Coherence',
                                 ])
 
@@ -113,7 +111,9 @@ export const Header: React.FunctionComponent = (props) => {
                     <div className="header__nav-item">
                         <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
                             <div className={classNames("profile__avatar", {'opened': showMenu})}>
-                                <SVG icon={avatar} name="avatar"/>
+                                {/*<SVG icon={avatar} name="avatar"/>*/}
+                                <div className="img-wrapper"><img src={require("./assets/avatar-img.jpeg").default} alt="ava"/></div>
+
                             </div>
                             <span className='username'>{username}</span>
                             <SVG icon={arrowImg} className={classNames("profile__arrow", {'opened': showMenu})}/>
