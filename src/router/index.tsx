@@ -13,6 +13,11 @@ import {SignInPage} from "../pages/login-page"
 const AppRouter = () => (
     <Switch>
         <Route exact path={'/'} component={LayoutSideBarPage}/>
+        <Route exact path={'/research/my-files'} component={LayoutSideBarPage}/>
+        <Route exact path={'/research/shared-with-me'} component={LayoutSideBarPage}/>
+        <Route exact path={'/research/favorites'} component={LayoutSideBarPage}/>
+        <Route exact path={'/coherence'} component={LayoutSideBarPage}/>
+        <Route exact path={'/settings'} component={LayoutSideBarPage}/>
         <Route path={'/create'} component={CreateOrganizationPage}/>
         <Route path={'/organization-edit'} component={LayoutSideBarPage}/>
         <Route path={'/sign-up'} component={SignUpPage}/>

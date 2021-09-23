@@ -28,6 +28,7 @@
     color: #7182A6;
     &-item {
       cursor: not-allowed;
+      text-transform: capitalize;
       span.breadcrumb-divider {
         font-weight: 300;
         font-size: 14px;

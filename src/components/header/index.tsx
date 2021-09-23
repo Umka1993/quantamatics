@@ -14,13 +14,13 @@ import {useDispatch, useSelector} from "react-redux";
 import classNames from "classnames";
 import {RootState} from "../../store";
 import {useHistory} from "react-router-dom";
+import {changeRoute} from "../../store/currentPage/actions";
 
 
 export const Header: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.user.user.username)
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
-        'Apps',
         'Research',
         'My Files',
     ])
@@ -46,15 +46,19 @@ export const Header: React.FunctionComponent = (props) => {
     }
     useOutsideClick(profileRef, setShowMenu)
 
-    const handleLogOut = () => {
-        dispatch({
-            type: "LOGOUT", payload: {
-                username: ''
-            }
-        })
-        localStorage.removeItem('id_token')
-        localStorage.removeItem('username')
-        history.push('/login')
+    const handleChangeRoute = (route: string) => {
+        dispatch(changeRoute(route))
+        if(route === 'login') {
+            dispatch({
+                type: "LOGOUT", payload: {
+                    username: ''
+                }
+            })
+            localStorage.removeItem('id_token')
+            localStorage.removeItem('username')
+        }
+        history.push(route)
+
     }
 
     useEffect(() => {
@@ -62,22 +66,12 @@ export const Header: React.FunctionComponent = (props) => {
     }, [user])
 
     useEffect(() => {
-        let researchValues = ['My Files', 'Shared With Me', 'Favorites']
         const url: any = !!storeCurrentPage ? storeCurrentPage : ''
-        if (researchValues.includes(url)) {
-            setBreadcrumbs([
-                'Research',
-                url,
-            ])
-        }
-        if (url === 'Settings') setBreadcrumbs([
-                                    'Settings',
-                                ])
-        if (url === 'Coherence') setBreadcrumbs([
-                                    'Coherence',
-                                ])
-
-
+        const urlArray = url.split('/')
+        const refactoredArray = urlArray.map((item: string) => {
+            return item.replace('-', ' ')
+        })
+        setBreadcrumbs(refactoredArray)
     }, [storeCurrentPage])
 
     const breadcrumbsList = breadcrumbs.map((crumb: any, index) => {
@@ -94,8 +88,8 @@ export const Header: React.FunctionComponent = (props) => {
         <div className="header">
             <div className="header__content">
                 <div className="header__logo">
-                   <SVG icon={logoImg} name="logo"/>
-                   <SVG icon={logoTextImg} name="text"/>
+                   <SVG icon={logoImg} name="logo" onClick={() => history.push('/')}/>
+                   <SVG icon={logoTextImg} name="text" onClick={() => history.push('/')}/>
                     {user && (<div className="header__breadcrumbs">
                         {breadcrumbsList}
                     </div>)}
@@ -120,13 +114,13 @@ export const Header: React.FunctionComponent = (props) => {
                             {showMenu && (
                                 <div className='profile__dropdown'>
                                     <div className="profile__dropdown-triangle"/>
-                                    <div className="profile__dropdown-item">
+                                    <div className="profile__dropdown-item" onClick={() => handleChangeRoute('profile')}>
                                         <SVG icon={profileImg} name="profileImg"/> Profile
                                     </div>
-                                    <div className="profile__dropdown-item">
+                                    <div className="profile__dropdown-item" onClick={() => handleChangeRoute('profile/settings')}>
                                         <SVG icon={settingsImg} name="settingsImg"/> Settings
                                     </div>
-                                    <div className="profile__dropdown-item" onClick={() => handleLogOut()}>
+                                    <div className="profile__dropdown-item" onClick={() => handleChangeRoute('login')}>
                                         <SVG icon={logoutImg} name="logoutImg"/> Log Out
                                     </div>
                                 </div>

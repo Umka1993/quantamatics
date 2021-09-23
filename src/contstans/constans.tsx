@@ -24,18 +24,21 @@ export const SIDE_BAR_ITEMS = [
                 image: filesImg,
                 active: true,
                 opened: false,
+                route: 'research/my-files'
             },
             {
                 name: 'Shared With Me',
                 image: shareImg,
                 active: false,
                 opened: false,
+                route: 'research/shared-with-me'
             },
             {
                 name: 'Favorites',
                 image: favoritesImg,
                 active: false,
                 opened: false,
+                route: 'research/favorites'
             },
         ]
     },
@@ -43,6 +46,7 @@ export const SIDE_BAR_ITEMS = [
         name: 'Coherence',
         image: CoherenceImg,
         active: false,
+        route: 'coherence'
     },
     // {
     //     name: 'Organizations',
@@ -58,6 +62,7 @@ export const SIDE_BAR_ITEMS = [
         name: 'Settings',
         image: cogsImg,
         active: false,
+        route: 'settings'
     }
 ]
 

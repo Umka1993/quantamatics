@@ -8,7 +8,7 @@ export interface CurrentPageState {
 
 const initialState = {
     currentPage: {
-        pageName: 'My Files'
+        pageName: window.location.pathname.substring(1)
     }
 }
 

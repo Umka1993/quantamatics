@@ -6,19 +6,20 @@ import {Organizations} from "../organizations";
 import {JupyterFrame} from "../../components/jupyter-frame";
 import {SIDE_BAR_ITEMS} from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
-import {useLocation} from 'react-router-dom'
+import {useHistory, useLocation} from 'react-router-dom'
 
 export const LayoutSideBarPage: React.FunctionComponent = (props) => {
     const [currentPage, setCurrentPage] = useState<string>('')
-
+    const history = useHistory()
     const dispatch = useDispatch();
     const currentRoute = useLocation().pathname
-
-    console.log(currentRoute)
 
     const changeRoutePath = (route: string) => {
         dispatch(changeRoute(route))
         setCurrentPage(route)
+        console.log(history)
+        history.push('/')
+        history.push('/' + route)
     }
     return (
         <div className="layout-page">

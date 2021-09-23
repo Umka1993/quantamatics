@@ -9,10 +9,12 @@ export interface SideBarItem {
     name: string,
     active: Boolean
     subItems?: SideBarSubItem[]
+    route?: string
 }
 
 export interface SideBarSubItem {
     image: ReactSVGComponent,
     name: string,
     active: Boolean
+    route?: string
 }
