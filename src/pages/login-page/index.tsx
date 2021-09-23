@@ -64,7 +64,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     setErrors(e)
                 })
         } else {
-            setErrors('Enter user name and password')
+            setErrors('Enter username and password')
         }
     }
     if (!!user) return <div/>
@@ -74,12 +74,12 @@ export const SignInPage: React.FunctionComponent = (props) => {
             <div className="login-page__container">
                 <div className="login-page__title">
                     <h2>Sign in to your account</h2>
-                    <p>Enter your email and password to sign in</p>
+                    <p>Enter your username and password to sign in</p>
                 </div>
                 <div className="login-page__inputs">
                     <Input
                         onChangeInput={(value) => setUserName(value)}
-                        placeholder={'Enter the login'}
+                        placeholder={'Enter the username'}
                         type={'text'}
                         value={userName}
                         errors={!!errors}
