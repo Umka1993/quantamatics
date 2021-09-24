@@ -68,8 +68,8 @@ export const Header: React.FunctionComponent = (props) => {
     useEffect(() => {
         const url: any = !!storeCurrentPage ? storeCurrentPage : ''
         const urlArray = url.split('/')
-        const refactoredArray = urlArray.map((item: string) => {
-            return item.replace('-', ' ')
+        const refactoredArray = urlArray.length === 1 ? [] : urlArray.map((item: string) => {
+            return item.replace(/-/g, ' ')
         })
         setBreadcrumbs(refactoredArray)
     }, [storeCurrentPage])
@@ -114,10 +114,10 @@ export const Header: React.FunctionComponent = (props) => {
                             {showMenu && (
                                 <div className='profile__dropdown'>
                                     <div className="profile__dropdown-triangle"/>
-                                    <div className="profile__dropdown-item" onClick={() => handleChangeRoute('profile')}>
+                                    <div className="profile__dropdown-item" onClick={() => {}}>
                                         <SVG icon={profileImg} name="profileImg"/> Profile
                                     </div>
-                                    <div className="profile__dropdown-item" onClick={() => handleChangeRoute('profile/settings')}>
+                                    <div className="profile__dropdown-item" onClick={() => {}}>
                                         <SVG icon={settingsImg} name="settingsImg"/> Settings
                                     </div>
                                     <div className="profile__dropdown-item" onClick={() => handleChangeRoute('login')}>
