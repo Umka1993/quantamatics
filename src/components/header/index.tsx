@@ -88,7 +88,7 @@ export const Header: React.FunctionComponent = (props) => {
         <div className="header">
             <div className="header__content">
                 <div className="header__logo">
-                   <SVG icon={logoImg} name="logo" onClick={() => history.push('/')}/>
+                   <SVG icon={logoImg} name="logo" onClick={() => !!user ? history.push('/') : null}/>
                     {user && (<div className="header__breadcrumbs">
                         {breadcrumbsList}
                     </div>)}
