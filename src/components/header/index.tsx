@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import "./styles/header.scss"
-import logoImg from "./assets/logo.svg"
+import logoImg from "./assets/new-logo.svg"
 import logoTextImg from "./assets/Quantamatics.svg"
 import searchImg from "./assets/search.svg"
 import ringImg from "./assets/ring.svg"
@@ -89,7 +89,6 @@ export const Header: React.FunctionComponent = (props) => {
             <div className="header__content">
                 <div className="header__logo">
                    <SVG icon={logoImg} name="logo" onClick={() => history.push('/')}/>
-                   <SVG icon={logoTextImg} name="text" onClick={() => history.push('/')}/>
                     {user && (<div className="header__breadcrumbs">
                         {breadcrumbsList}
                     </div>)}
