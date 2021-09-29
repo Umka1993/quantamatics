@@ -20,14 +20,13 @@ export const BarItem: React.FunctionComponent<ISideBar> = (props) => {
     const [opened, setOpened] = useState<boolean>(!!subItemActive)
     const itemClasses: any = classNames({
         'side-bar__item': true,
-        'side-bar__item_active': itemActive ,
+        'side-bar__item_active': itemActive,
         'side-bar__item_opened': opened,
     }, props.classNames)
 
     const subItemsList = !!item.subItems && item.subItems.map((subItem: SideBarSubItem, index) => {
         const subItemClasses: any = classNames({
-            'side-bar__item side-bar__item-sub': true,
-            'side-bar__item_active-sub': itemActive
+            'side-bar__item side-bar__item-sub': true
         })
 
         return <BarItem key={index} classNames={subItemClasses} item={subItem} onSwitch={props.onSwitch} />
@@ -42,7 +41,10 @@ export const BarItem: React.FunctionComponent<ISideBar> = (props) => {
                 </div>
                 {!!item.subItems && <SVG icon={toggleArrow} className={"side-bar__item-toggle-img"}/>}
             </div>
-            {opened && subItemsList}
+            <div className={classNames('sub-items-list', {opened: opened})}>
+                {subItemsList}
+            </div>
+
         </div>
 
     )

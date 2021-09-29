@@ -124,8 +124,12 @@
   }
   &__arrow{
    margin-left: 6px;
+    transform: rotate(180deg);
+      path {
+        fill: #C5C7CD;
+      }
     &.opened {
-      transform: rotate(180deg);
+      transform: rotate(0);
       path {
         fill: #017AEE;
       }

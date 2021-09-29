@@ -91,6 +91,7 @@
     }
 
     &:hover{
+      background-color: #F2F8FE;
       &:before{
         content: "";
         position: absolute;
@@ -99,6 +100,11 @@
         height: 100%;
         width: 3px;
         background: #017AEE;
+      }
+      &.side-bar__item-sub {
+        &:before {
+          display: none;
+        }
       }
       .side-bar__item-img{
         path {
@@ -119,7 +125,7 @@
         background: #017AEE;
       }
 
-      &-sub {
+      &.side-bar__item-sub {
         &:before {
           display: none;
         }
@@ -148,5 +154,15 @@
     font-size: 16px;
     line-height: 18px;
     color: #003C71;
+  }
+
+  .sub-items-list {
+    height: 0;
+    overflow-y: hidden;
+    transition: .3s ease-in-out;
+
+    &.opened {
+      height: 168px;
+    }
   }
 }
