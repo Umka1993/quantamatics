@@ -108,6 +108,7 @@
       transform: rotate(180deg);
       position: absolute;
       right: 30px;
+      transition: .3s ease-in-out;
 
       path {
         fill: #C9CDE6;

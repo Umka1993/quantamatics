@@ -95,12 +95,6 @@ export const Header: React.FunctionComponent = (props) => {
                 </div>
 
                 {user && (<div className="header__nav">
-                    {/*<div className="header__nav-item">*/}
-                    {/*    <SVG icon={searchImg} name="search"/>*/}
-                    {/*</div>*/}
-                    {/*<div className="header__nav-item">*/}
-                    {/*    <SVG icon={ringImg} name="ring"/>*/}
-                    {/*</div>*/}
                     <div className="header__nav-item">
                         <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
                             <div className={classNames("profile__avatar", {'opened': showMenu})}>
