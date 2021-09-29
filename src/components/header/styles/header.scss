@@ -88,6 +88,7 @@
   cursor: pointer;
   align-items: center;
   position: relative;
+  margin-right: 10px;
   &__avatar{
     border: 1px solid #C5C7CD;
     width: 44px;
@@ -124,6 +125,7 @@
   }
   &__arrow{
    margin-left: 6px;
+    margin-top: 3px;
     transform: rotate(180deg);
       path {
         fill: #C5C7CD;
@@ -137,8 +139,10 @@
   }
 
   &__dropdown {
+    opacity: 0;
+    z-index: -1;
     position: absolute;
-    background-color: #fff;
+    background: linear-gradient(149.05deg, rgba(255, 255, 255, 0.8) 3.23%, rgba(255, 255, 255, 0.7) 98.66%);
     padding: 40px 34px;
     right: -10px;
     top: 57px;
@@ -146,6 +150,12 @@
     box-shadow: 0px 1px 18px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
     border-radius: 4px;
+    transition: .3s ease-in-out;
+
+    &.showMenu {
+      opacity: 1;
+      z-index: 4;
+    }
 
     &-item {
       margin-bottom: 24px;

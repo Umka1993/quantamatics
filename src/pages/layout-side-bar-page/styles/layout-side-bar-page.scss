@@ -4,6 +4,7 @@
   width: 100%;
   max-width: 1392px;
   margin: 0 auto;
+  height: calc(100vh - 128px);
   &__side-bar-container{
     width: 250px;
     margin-right: 24px;

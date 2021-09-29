@@ -110,20 +110,18 @@ export const Header: React.FunctionComponent = (props) => {
                             </div>
                             <span className='username'>{username}</span>
                             <SVG icon={arrowImg} className={classNames("profile__arrow", {'opened': showMenu})}/>
-                            {showMenu && (
-                                <div className='profile__dropdown'>
-                                    <div className="profile__dropdown-triangle"/>
-                                    <div className="profile__dropdown-item" onClick={() => {}}>
-                                        <SVG icon={profileImg} name="profileImg"/> Profile
-                                    </div>
-                                    <div className="profile__dropdown-item" onClick={() => {}}>
-                                        <SVG icon={settingsImg} name="settingsImg"/> Settings
-                                    </div>
-                                    <div className="profile__dropdown-item" onClick={() => handleChangeRoute('login')}>
-                                        <SVG icon={logoutImg} name="logoutImg"/> Log Out
-                                    </div>
+                            <div className={classNames('profile__dropdown', {showMenu: showMenu})}>
+                                <div className="profile__dropdown-triangle"/>
+                                <div className="profile__dropdown-item" onClick={() => {}}>
+                                    <SVG icon={profileImg} name="profileImg"/> Profile
                                 </div>
-                            )}
+                                <div className="profile__dropdown-item" onClick={() => {}}>
+                                    <SVG icon={settingsImg} name="settingsImg"/> Settings
+                                </div>
+                                <div className="profile__dropdown-item" onClick={() => handleChangeRoute('login')}>
+                                    <SVG icon={logoutImg} name="logoutImg"/> Log Out
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>)}
