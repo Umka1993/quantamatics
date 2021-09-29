@@ -26,7 +26,8 @@ export const BarItem: React.FunctionComponent<ISideBar> = (props) => {
 
     const subItemsList = !!item.subItems && item.subItems.map((subItem: SideBarSubItem, index) => {
         const subItemClasses: any = classNames({
-            'side-bar__item side-bar__item-sub': true
+            'side-bar__item side-bar__item-sub': true,
+            'side-bar__item-sub-stroke': subItem.active,
         })
 
         return <BarItem key={index} classNames={subItemClasses} item={subItem} onSwitch={props.onSwitch} />
