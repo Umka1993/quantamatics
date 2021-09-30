@@ -35,7 +35,9 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                 />
             </div>
             <div className="layout-page__content-container">
-                {(currentPage === 'research/my-files' || currentPage === 'coherence') && (<JupyterFrame/>)}
+                {(currentPage === 'research/my-files' || currentPage === 'coherence') && (
+                    <JupyterFrame type={currentPage === 'research/my-files' ? 'files' : 'coherence'} />
+                )}
             </div>
         </div>
     )

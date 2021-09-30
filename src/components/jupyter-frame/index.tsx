@@ -1,8 +1,19 @@
 import React, {useRef, useEffect, useState} from "react";
 import "./styles/jupyter-frame.scss"
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
-export const JupyterFrame: React.FunctionComponent = (props) => {
-    const HUB_URL = 'https://hub-k8s.dev.quantamatics.net/user/alavrenov/tree?'
+interface JupyterFrameProps {
+    type: string
+}
+
+export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) => {
+    const {type} = props;
+    const user = useSelector<RootState>((state) => state.user.user.username)
+    const username: any = !!user ? user : ''
+    const filesUrl = 'https://hub-k8s.dev.quantamatics.net/user/' + username +'/tree?'
+    const coherenceUrl = 'https://coherence-k8s.dev.quantamatics.net/user/' + username +'/'
+    const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
     const frame: any = useRef(null)
     const formAction = 'https://hub-k8s.dev.quantamatics.net/hub/login'
     const token = localStorage.getItem('id_token')
