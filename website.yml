@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Creates the S3 bucket and distribution for deploying the static files for Quantamatics UI.
+
+Parameters:
+  DistributionAlias:
+    Description: Alias for the website.
+    Type: String
+  CertificateArn:
+    Description: ARN of the certificate to utilize.
+    Type: String
+
+Resources:
+  UiFilesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: !Sub ${AWS::StackName}
+      WebsiteConfiguration:
+        ErrorDocument: "index.html"
+        IndexDocument: "index.html"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+        
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        PriceClass: PriceClass_All
+        Origins:
+        - DomainName: !Select [1, !Split ["://", !GetAtt UiFilesBucket.WebsiteURL]]
+          Id: !Sub S3-Website-${!GetAtt UiFilesBucket.RegionalDomainName}       
+          CustomOriginConfig:
+            OriginProtocolPolicy: http-only
+        Aliases:
+          - !Ref DistributionAlias
+        DefaultCacheBehavior:
+          ViewerProtocolPolicy: redirect-to-https
+          TargetOriginId: !Sub S3-Website-${!GetAtt UiFilesBucket.RegionalDomainName}
+          Compress: true
+          ForwardedValues:
+            QueryString: false
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2019
+      
