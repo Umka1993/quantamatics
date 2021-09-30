@@ -1,5 +1,5 @@
 export const sortTable = (name: string, sort:any, localRows:any, setSort:any, setLocalRows:any ) => {
-    let newSort = sort
+    const newSort = sort
     if (name === sort.name) {
         if(sort.direction === 'none') {
             newSort.direction = 'asc'

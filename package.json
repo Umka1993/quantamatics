@@ -1,7 +1,8 @@
 {
   "scripts": {
     "clean": "rimraf publish",
-    "build": "npm run clean && webpack --config config/webpack.dev.js",
+    "lint": "eslint --ext .tsx,.ts . --quiet",
+    "build": "npm run clean && npm run lint && webpack --config config/webpack.dev.js",
     "dev": "webpack-dev-server --config config/webpack.dev.js --open --https --env dev"
   },
   "devDependencies": {
@@ -14,9 +15,13 @@
     "@types/react-redux": "^7.1.18",
     "@types/react-router": "^5.1.16",
     "@types/react-router-dom": "^5.1.8",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
     "babel-loader": "^8.2.2",
     "css-loader": "^6.2.0",
     "dotenv-webpack": "^7.0.3",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.26.1",
     "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.2",

@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles/button.scss"
-const classNames = require('classnames');
+import classNames from 'classnames';
 
 
 interface IButton {

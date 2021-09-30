@@ -5,7 +5,7 @@ export const network = {
         return 'https://oauth.dev.quantamatics.net/'
     },
     headers() {
-        let headers = { Accept: 'application/json', 'Content-Type': 'application/json' }
+        const headers = { Accept: 'application/json', 'Content-Type': 'application/json' }
         /*if (store.state.authentication.isAuthenticated) headers['Authorization'] = `Bearer ${this.token()}`*/
 
         return headers
