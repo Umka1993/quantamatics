@@ -16,6 +16,7 @@ const AppRouter = () => (
         <Route exact path={'/research/my-files'} component={LayoutSideBarPage}/>
         <Route exact path={'/research/shared-with-me'} component={LayoutSideBarPage}/>
         <Route exact path={'/research/favorites'} component={LayoutSideBarPage}/>
+        <Route exact path={'/add-user'} component={LayoutSideBarPage}/>
         <Route exact path={'/coherence'} component={LayoutSideBarPage}/>
         <Route exact path={'/settings'} component={LayoutSideBarPage}/>
         <Route path={'/create'} component={CreateOrganizationPage}/>

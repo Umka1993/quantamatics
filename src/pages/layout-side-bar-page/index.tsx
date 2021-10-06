@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
 import {SideBar} from "../../components/side-bar";
 import {Organizations} from "../organizations";
+import {AddUserPage} from "../add-user-page";
 import {JupyterFrame} from "../../components/jupyter-frame";
 import {SIDE_BAR_ITEMS} from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
@@ -38,6 +39,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                 {(currentPage === 'research/my-files' || currentPage === 'coherence') && (
                     <JupyterFrame type={currentPage === 'research/my-files' ? 'files' : 'coherence'} />
                 )}
+                {currentPage === 'add-user' && <AddUserPage />}
             </div>
         </div>
     )
