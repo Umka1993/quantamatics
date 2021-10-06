@@ -8,12 +8,24 @@ import {network} from "../../services/networkService";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
 import {RootState} from "../../store";
+import SVG from "../../components/SVG";
+import successIcon from "../add-user-page/assets/sucess-icon.svg";
 
 export const SignInPage: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.user.user.username)
-    const [userName, setUserName] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
+    const localUserName = localStorage.getItem('savedUsername') || ''
+    const localPassword = localStorage.getItem('savedPassword') || ''
+
+    const [userName, setUserName] = useState<string>(localUserName)
+    const [password, setPassword] = useState<string>(localPassword)
+    const [forgotEmail, setForgotEmail] = useState<string>('')
+
     const [loginProcess, setLoginProcess] = useState<boolean>(false)
+
+    const [rememberMe, setRememberMe] = useState<boolean>(false)
+    const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false)
+    const [showSuccessForgot, setShowSuccessForgot] = useState<boolean>(false)
+
     const [errors, setErrors] = useState<string>('')
 
     useEffect(() => {
@@ -55,6 +67,11 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     setErrors('false')
                     localStorage.setItem('id_token', r.data.access_token);
                     localStorage.setItem('username', userName);
+                    if (rememberMe) {
+                        localStorage.setItem('savedUsername', userName);
+                        localStorage.setItem('savedPassword', password);
+                    }
+
                     setLoginProcess(false)
                     history.push('/')
                 })
@@ -95,16 +112,53 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     />
                     {!!errors && (<div className="login-page__inputs-errors">{errors}</div>)}
                 </div>
-                {/*<div className="login-page__wrap">*/}
-                {/*    <CheckBox label={'Remember Me'}/>*/}
-                {/*    <div className="login-page__forgot">*/}
-                {/*        Forgot Password?*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+                <div className="login-page__wrap">
+                    <CheckBox checked={rememberMe} onClick={(value) => setRememberMe(value)} label={'Remember Me'}/>
+                    <div className="login-page__forgot" onClick={() => setShowForgotPassword(true)}>
+                        Forgot Password?
+                    </div>
+                </div>
                 <div className="login-page__btn">
                     <Button onClick={() => handleLogin()} type={'simple'} text={'Sign In'} disabled={!userName || !password}/>
                 </div>
             </div>
+            {showForgotPassword && (<div className="login-page__forgot-password">
+                <div className="login-page__container">
+                    <div className="login-page__title">
+                        <h2>Forgot your password?</h2>
+                        <p>To restore the password, enter your email</p>
+                    </div>
+                    <div className="login-page__inputs">
+                        <Input
+                            onChangeInput={(value) => setForgotEmail(value)}
+                            placeholder={'Enter the email'}
+                            type={'text'}
+                            value={forgotEmail}
+                            onEnterPress={() => console.log(forgotEmail)}
+                        />
+                    </div>
+                    <div className="login-page__btn">
+                        <Button onClick={() => setShowSuccessForgot(true)} type={'simple'} text={'Save'}
+                                disabled={!forgotEmail}/>
+                        <div className="login-page__btn-cancel" onClick={() => setShowForgotPassword(false)}>
+                            <Button type={'dotted'} text={'Cancel'}/>
+                        </div>
+                    </div>
+                </div>
+            </div>)}
+            {showSuccessForgot && (<div className="login-page__forgot-password success">
+                <div className="login-page__container">
+                    <div className='login-page__forgot-password-success-text'>
+                        <SVG icon={successIcon}/>A reset password email was sent to the email entered
+                    </div>
+                    <div className="login-page__btn">
+                        <Button onClick={() => {
+                            setShowSuccessForgot(false)
+                            setShowForgotPassword(false)
+                        }} type={'simple'} text={'Go to Log in Page'}/>
+                    </div>
+                </div>
+            </div>)}
             {loginProcess && <Loader />}
         </div>
     )

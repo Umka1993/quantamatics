@@ -34,6 +34,10 @@
     line-height: 18px;
     color: rgba(113, 130, 166, 0.5);
     font-weight: 400;
+    transition: .3s ease-in-out;
+    &:hover {
+      color: #017AEE;
+    }
   }
 
   &__container {
@@ -79,5 +83,41 @@
     height: 40px;
     width: 100%;
     margin: 40px auto 0;
+    &-cancel {
+      width: 49px;
+      margin: 16px auto 0 auto;
+    }
+  }
+
+  &__forgot-password {
+    position: absolute;
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &.success {
+      .login-page__container {
+        max-width: 656px;
+      }
+      .login-page__btn {
+        max-width: 210px;
+      }
+    }
+
+    &-success-text {
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 28px;
+      letter-spacing: 0.2px;
+      color: #00CD52;
+      margin-bottom: 32px;
+      svg {
+        margin-right: 8px;
+      }
+    }
   }
 }

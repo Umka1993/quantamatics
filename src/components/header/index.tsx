@@ -62,7 +62,8 @@ export const Header: React.FunctionComponent = (props) => {
     }
 
     useEffect(() => {
-        if (!user) history.push('/login')
+        const resetPassword = window.location.pathname.substring(1) === 'reset-password'
+        if (!user) history.push(resetPassword ? '/reset-password' : '/login')
     }, [user])
 
     useEffect(() => {

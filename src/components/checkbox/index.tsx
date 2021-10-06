@@ -3,6 +3,8 @@ import "./styles/checkbox.scss"
 
 interface ICheckBox {
     label?: string
+    onClick: (value: boolean) => void
+    checked: boolean
 }
 
 export const CheckBox: React.FunctionComponent<ICheckBox> = (props) => {
@@ -10,8 +12,8 @@ export const CheckBox: React.FunctionComponent<ICheckBox> = (props) => {
         <div>
             <label className="b-contain">
                 <span>{props.label}</span>
-                <input type="checkbox"/>
-                <div className="b-input"></div>
+                <input type="checkbox" checked={props.checked}/>
+                <div className="b-input" onClick={() => props.onClick(!props.checked)}/>
             </label>
         </div>
     )

@@ -22,6 +22,7 @@ const AppRouter = () => (
         <Route path={'/create'} component={CreateOrganizationPage}/>
         <Route path={'/organization-edit'} component={LayoutSideBarPage}/>
         <Route path={'/sign-up'} component={SignUpPage}/>
+        <Route path={'/reset-password'} component={SignUpPage}/>
         <Route path={'/login'} component={SignInPage}/>
         <Route component={NotFoundPage} />
     </Switch>
