@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "./styles/add-user.scss"
 import {Input} from "../../components/input";
+import {DateInput} from "../../components/date-input";
 import {Button} from "../../components/button/button";
 import successIcon from "./assets/sucess-icon.svg";
 import SVG from "../../components/SVG";
@@ -9,7 +12,7 @@ export const AddUserPage: React.FunctionComponent = (props) => {
     const [firstName, setFirstName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('')
     const [email, setEmail] = useState<string>('')
-    const [date, setDate] = useState<string | undefined>('')
+    const [date, setDate] = useState<any>(null)
     const [showSuccess, setShowSuccess] = useState<boolean>(false)
     return(
         <div className="add-user-page">
@@ -32,11 +35,12 @@ export const AddUserPage: React.FunctionComponent = (props) => {
                     placeholder='Email Address'
                     value={email}
                 />
-                <Input
+                <DateInput
                     onChangeInput={(value)=>setDate(value)}
                     placeholder='Expiration Date'
                     value={date}
                 />
+
                 <div className='add-user-page__submit' onClick={() => setShowSuccess(true)}><Button type={'simple'} text={'Save'}/></div>
                 <div className='add-user-page__cancel'><Button type={'dotted'} text={'Cancel'}/></div>
             </div>
