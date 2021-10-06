@@ -17,16 +17,18 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                     <Input
                         onChangeInput={(value) => setPassword(value)}
                         type={'password'}
+                        placeholder='New Password'
                         value={password}
                     />
                     <Input
                         onChangeInput={(value) => setPasswordConfirm(value)}
                         type={'password'}
+                        placeholder='Confirm New Password'
                         value={passwordConfirm}
                     />
                 </div>
                 <div className="sign-up__btn">
-                    <Button type={'simple'} text={'Save'}/>
+                    <Button disabled={!password || !passwordConfirm} type={'simple'} text={'Save'}/>
                 </div>
             </div>
         </div>
