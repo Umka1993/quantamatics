@@ -15,11 +15,13 @@ import classNames from "classnames";
 import {RootState} from "../../store";
 import {useHistory} from "react-router-dom";
 import {changeRoute} from "../../store/currentPage/actions";
+import {EditProfile} from "../edit-profile";
 
 
 export const Header: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.user.user.username)
     const [showMenu, setShowMenu] = useState<boolean>(false)
+    const [showProfile, setShowProfile] = useState<boolean>(false)
     const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
         'Research',
         'My Files',
@@ -107,7 +109,7 @@ export const Header: React.FunctionComponent = (props) => {
                             <SVG icon={arrowImg} className={classNames("profile__arrow", {'opened': showMenu})}/>
                             <div className={classNames('profile__dropdown', {showMenu: showMenu})}>
                                 <div className="profile__dropdown-triangle"/>
-                                <div className="profile__dropdown-item" onClick={() => {}}>
+                                <div className="profile__dropdown-item" onClick={() => {setShowProfile(true)}}>
                                     <SVG icon={profileImg} name="profileImg"/> Profile
                                 </div>
                                 <div className="profile__dropdown-item" onClick={() => {}}>
@@ -120,6 +122,10 @@ export const Header: React.FunctionComponent = (props) => {
                         </div>
                     </div>
                 </div>)}
+                {
+                    showProfile &&
+                    <EditProfile onClose={() => setShowProfile(false)}/>
+                }
             </div>
         </div>
     )
