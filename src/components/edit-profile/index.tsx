@@ -8,11 +8,13 @@ import SVG from "../SVG";
 import {Button} from "../button/button";
 import {Input} from "../input";
 import {User} from "../../types/edit-profile/types"
+import {DateInput} from "../date-input";
+import {SelectorInput} from "../selector-input";
 
 interface IEditProfile{
     onClose: () => void
     type_edit?: Boolean
-    user?: User
+    user: User
 }
 
 export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
@@ -43,23 +45,23 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
                             <div className="details">
                                 <div className="details__item">
                                     <span>Name</span>
-                                    <span>Alma</span>
+                                    <span>{props.user.name}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Surname</span>
-                                    <span>Lawson</span>
+                                    <span>{props.user.surname}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Organization</span>
-                                    <span>Dudka.Agency</span>
+                                    <span>{props.user.organization}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Email</span>
-                                    <span>alma@dudka.agency</span>
+                                    <span>{props.user.email}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Expiration Date</span>
-                                    <span>08.18.2022</span>
+                                    <span>{props.user.exp_date}</span>
                                 </div>
                             </div>
                         </div>
@@ -70,18 +72,42 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
                                 <SVG icon={closeIcon}/>
                             </div>
                             <div className="edit-profile__title">Change Password</div>
-                            <Input onChangeInput={(value) => setCurrentPassword(value)}
-                                   value={currentPassword}
-                                   placeholder={'Current Password'}
-                                   type={'password'}/>
-                            <Input onChangeInput={(value) => setNewPassword(value)}
-                                   value={newPassword}
-                                   placeholder={'New Password'}
-                                   type={'password'}/>
-                            <Input onChangeInput={(value) => setConfirmPassword(value)}
-                                   value={confirmPassword}
-                                   placeholder={'Confirm New Password'}
-                                   type={'password'}/>
+                            {
+                                props.type_edit ?
+                                    <div>
+                                         <Input onChangeInput={(value => {})}
+                                                value={props.user.name}
+                                                icon={editIcon}
+                                         />
+                                        <Input onChangeInput={(value => {})}
+                                               value={props.user.surname}
+                                               icon={editIcon}
+                                        />
+                                        <SelectorInput onChangeInput={(value => {})}
+                                                       value={props.user.organization}
+                                        />
+                                        <Input onChangeInput={(value => {})}
+                                               value={props.user.email}
+                                               icon={editIcon}
+                                        />
+                                        <DateInput onChangeInput={(value => {})}/>
+                                    </div>
+                                    :
+                                    <div>
+                                        <Input onChangeInput={(value) => setCurrentPassword(value)}
+                                               value={currentPassword}
+                                               placeholder={'Current Password'}
+                                               type={'password'}/>
+                                        <Input onChangeInput={(value) => setNewPassword(value)}
+                                               value={newPassword}
+                                               placeholder={'New Password'}
+                                               type={'password'}/>
+                                        <Input onChangeInput={(value) => setConfirmPassword(value)}
+                                               value={confirmPassword}
+                                               placeholder={'Confirm New Password'}
+                                               type={'password'}/>
+                                    </div>
+                            }
                             <div className="edit-profile__buttons">
                                 <div className="edit-profile__cancel-btn" onClick={() => handleModalClose()}>
                                     <Button type={'dotted'} text={'Cancel'}/>

@@ -13,7 +13,7 @@
     border: 1px solid #017AEE;
     border-radius: 2px;
     color: #017AEE;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 18px;
 
@@ -25,12 +25,6 @@
     }
 
     &:hover{
-      svg{
-        path {
-          color: #FFFFFF;
-        }
-      }
-
       background: #017AEE;
       color: #FFFFFF;
     }

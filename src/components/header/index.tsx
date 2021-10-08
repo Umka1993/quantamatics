@@ -16,6 +16,7 @@ import {RootState} from "../../store";
 import {useHistory} from "react-router-dom";
 import {changeRoute} from "../../store/currentPage/actions";
 import {EditProfile} from "../edit-profile";
+import {USER} from "../../contstans/constans";
 
 
 export const Header: React.FunctionComponent = (props) => {
@@ -124,7 +125,7 @@ export const Header: React.FunctionComponent = (props) => {
                 </div>)}
                 {
                     showProfile &&
-                    <EditProfile onClose={() => setShowProfile(false)}/>
+                    <EditProfile user={USER} onClose={() => setShowProfile(false)}/>
                 }
             </div>
         </div>

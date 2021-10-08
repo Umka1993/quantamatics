@@ -5,5 +5,5 @@ export interface User {
     surname: string,
     organization: string,
     email: string,
-    exp_date: Date
+    exp_date: string
 }

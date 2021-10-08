@@ -12,6 +12,7 @@ import editSVG from "./assets/edit-row-icon.svg";
 import deleteSVG from "./assets/delete-row-icon.svg";
 import {EditProfile} from "../edit-profile";
 
+import {USER} from "../../contstans/constans";
 
 interface ITable {
     rows: IUserRow[]
@@ -80,7 +81,7 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                     </div>
                 ))}
             </div>
-            {showModal && <EditProfile onClose={() => handleEditUser(false)}/>}
+            {showModal && <EditProfile user={USER} type_edit={true} onClose={() => handleEditUser(false)}/>}
         </div>
     )
 }
