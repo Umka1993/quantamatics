@@ -48,11 +48,12 @@ export const SIDE_BAR_ITEMS = [
         active: false,
         route: 'coherence'
     },
-    // {
-    //     name: 'Organizations',
-    //     image: orgImg,
-    //     active: false,
-    // },
+    {
+        name: 'Organizations',
+        image: orgImg,
+        active: false,
+        route: 'apps/organizations/list'
+    },
     // {
     //     name: 'Accounts list',
     //     image: humanImg,

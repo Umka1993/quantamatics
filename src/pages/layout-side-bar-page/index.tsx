@@ -8,6 +8,8 @@ import {JupyterFrame} from "../../components/jupyter-frame";
 import {SIDE_BAR_ITEMS} from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
 import {useHistory, useLocation} from 'react-router-dom'
+import {EditOrganization} from "../../components/edit-organization/edit-organization";
+import {CreateOrganization} from "../../components/create-organization";
 
 export const LayoutSideBarPage: React.FunctionComponent = (props) => {
     const [currentPage, setCurrentPage] = useState<string>('')
@@ -40,6 +42,9 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                     <JupyterFrame type={currentPage === 'research/my-files' ? 'files' : 'coherence'} />
                 )}
                 {currentPage === 'add-user' && <AddUserPage />}
+                {currentPage === 'apps/organizations/list' && <Organizations/>}
+                {currentPage === 'apps/organizations/new-organization' && <CreateOrganization/>}
+                {currentPage === 'apps/organizations/dudka-agency' && <EditOrganization/>}
             </div>
         </div>
     )

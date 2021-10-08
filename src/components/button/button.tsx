@@ -1,5 +1,7 @@
 import React from "react";
 import "./styles/button.scss"
+import {ReactSVGComponent} from "../input";
+import SVG from "../SVG";
 const classNames = require('classnames');
 
 
@@ -8,6 +10,7 @@ interface IButton {
     text: string
     disabled?: boolean
     onClick?: () => void
+    icon?: ReactSVGComponent
 }
 
 export const Button: React.FunctionComponent<IButton> = (props) => {
@@ -18,6 +21,7 @@ export const Button: React.FunctionComponent<IButton> = (props) => {
     })
     return (
         <div className={buttonClasses} onClick={props.disabled ? () => {} : props.onClick}>
+            {props.icon && <SVG icon={props.icon}/>}
             {props.text}
         </div>
     )

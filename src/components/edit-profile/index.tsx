@@ -11,6 +11,7 @@ import {User} from "../../types/edit-profile/types"
 
 interface IEditProfile{
     onClose: () => void
+    type_edit?: Boolean
     user?: User
 }
 

@@ -10,6 +10,8 @@ import deleteSVG from './assets/delete-row-icon.svg'
 import sortNoneSVG from './assets/sort-none.svg'
 import sortActiveSVG from './assets/sort-active.svg'
 import classNames from "classnames";
+import {useDispatch} from "react-redux";
+import {changeRoute} from "../../store/currentPage/actions";
 
 
 interface ITable {
@@ -19,9 +21,17 @@ interface ITable {
 
 export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
     const { rows } = props;
-    const history = useHistory();
+    const history = useHistory()
+    const dispatch = useDispatch();
+
     const [localRows, setLocalRows] = useState<IRow[]>(rows)
     const [sort, setSort] = useState<any>({name: '', direction: 'none'})
+
+    const handleEditRoute = (route: string) => {
+        dispatch(changeRoute(route))
+        history.push('/')
+        history.push('/' + route)
+    }
 
     useEffect(()=> {
         localStorage.setItem('rows', JSON.stringify(props.rows))
@@ -61,7 +71,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                             {row.row.comments}
                         </div>
                         <div className='table-body-row__actions'>
-                            <SVG icon={editSVG} onClick={() => history.push("/organization-edit")}/>
+                            <SVG icon={editSVG} onClick={() => handleEditRoute("apps/organizations/dudka-agency")}/>
                             <SVG icon={deleteSVG} />
                         </div>
                     </div>

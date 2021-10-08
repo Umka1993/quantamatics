@@ -8,6 +8,9 @@ import sortNoneSVG from './assets/sort-none.svg'
 import sortActiveSVG from './assets/sort-active.svg'
 import classNames from "classnames";
 import {sortTable} from "../../services/baseService";
+import editSVG from "./assets/edit-row-icon.svg";
+import deleteSVG from "./assets/delete-row-icon.svg";
+import {EditProfile} from "../edit-profile";
 
 
 interface ITable {
@@ -18,20 +21,16 @@ interface ITable {
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const { rows } = props;
     const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
-    const [showModal, setShowModal] = useState<number | null>(null)
+    const [showModal, setShowModal] = useState<Boolean>(false)
     const [sort, setSort] = useState<any>({name: '', direction: 'none'})
 
     useEffect(()=> {
         localStorage.setItem('rows', JSON.stringify(props.rows))
     }, [props.rows])
 
-    const edit = useCallback((index: number) => {
-        setShowModal(null)
-    }, [])
-
-    const openModal = useCallback((index: number) => {
-        setShowModal(index + 1)
-    }, [])
+    const handleEditUser = (modal: Boolean) => {
+        setShowModal(modal)
+    }
 
     return(
         <div className="table user">
@@ -74,40 +73,14 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                         <div className="table-body-item user">
                             {row.row.expirationDate}
                         </div>
-                        <div className='user dots-container' onClick={() => openModal(index)}>
-                            <div className="dot"/>
-                            <div className="dot"/>
-                            <div className="dot"/>
+                        <div className='table-body-row__actions'>
+                            <SVG icon={editSVG} onClick={() => {handleEditUser(true)}}/>
+                            <SVG icon={deleteSVG} />
                         </div>
                     </div>
                 ))}
             </div>
-            {!!showModal &&
-                <Modal className='table-edit-organization-modal' onClose={() => setShowModal(null)} width={468}>
-                    <div className='table-edit-organization-modal__title'>Edit Organization</div>
-                    <Input
-                      onChangeInput={(value)=>console.log(value)}
-                      placeholder='Name of The Organization'
-                      value=''
-                    />
-                    <Input
-                      onChangeInput={(value)=>console.log(value)}
-                      placeholder='CRM Customer ID'
-                      value=''
-                    />
-                    <Input
-                      onChangeInput={(value)=>console.log(value)}
-                      placeholder='CRM Customer ID Link'
-                      value=''
-                    />
-                    <Input
-                      onChangeInput={(value)=>console.log(value)}
-                      placeholder='Comments'
-                      value=''
-                    />
-                    <div className='table-edit-organization-modal__submit' onClick={() => edit(showModal-1)}>save</div>
-                </Modal>
-            }
+            {showModal && <EditProfile onClose={() => handleEditUser(false)}/>}
         </div>
     )
 }

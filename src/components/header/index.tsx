@@ -110,7 +110,7 @@ export const Header: React.FunctionComponent = (props) => {
                             <div className={classNames('profile__dropdown', {showMenu: showMenu})}>
                                 <div className="profile__dropdown-triangle"/>
                                 <div className="profile__dropdown-item" onClick={() => {setShowProfile(true)}}>
-                                    <SVG icon={profileImg} name="profileImg"/> Profile
+                                    <SVG icon={profileImg} name="profileImg"/> My Account
                                 </div>
                                 <div className="profile__dropdown-item" onClick={() => {}}>
                                     <SVG icon={settingsImg} name="settingsImg"/> Settings
