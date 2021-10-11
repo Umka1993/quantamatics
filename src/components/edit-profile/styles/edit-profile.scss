@@ -47,16 +47,22 @@
   &__summary{
     width: 100%;
     max-width: 334px;
+    height: 100%;
+    box-sizing: border-box;
     border-right: 1px solid rgba(188, 196, 216, 0.35);
   }
 
   &__summary-container{
     padding: 24px;
+    height: 100%;
+    box-sizing: border-box;
   }
 
   &__fields{
     width: 100%;
     max-width: 440px;
+    height: 100%;
+    box-sizing: border-box;
   }
 
   &__fields-container{
@@ -67,7 +73,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 235px;
+    margin-top: 171px;
   }
   &__save-btn{
     width: 140px;

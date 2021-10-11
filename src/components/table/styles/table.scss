@@ -30,12 +30,16 @@
       }
 
       &:first-child {
-        max-width: 305px;
+        max-width: 220px;
         width: 100%;
       }
 
       &:nth-child(2) {
-        max-width: 225px;
+        max-width: 192px;
+        width: 100%;
+      }
+      &:nth-child(3) {
+        max-width: 261px;
         width: 100%;
       }
 
@@ -100,6 +104,8 @@
         svg {
           margin-left: 12px;
           cursor: pointer;
+          width: 16px;
+          height: 16px;
           path {
             fill: #9EACC2
           }
@@ -113,18 +119,23 @@
       }
     }
     &-item {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: normal;
-      line-height: 18px;
+      line-height: 16px;
       color: #7182A6;
 
       &:first-child {
-        max-width: 305px;
+        max-width: 220px;
         width: 100%;
       }
 
-      &:nth-child(2) {
-        max-width: 225px;
+      &:nth-child(2){
+        max-width: 192px;
+        width: 100%;
+      }
+
+      &:nth-child(3) {
+        max-width: 261px;
         width: 100%;
         span {
           border-bottom: 1px solid #7182A6;

@@ -52,6 +52,11 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                         CRM Customer ID <SVG icon={sort.name === 'customerId' ? sortActiveSVG : sortNoneSVG} />
                     </div>
                     <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
+                         onClick={() => sortTable('customerLink', sort, localRows, setSort, setLocalRows) }
+                    >
+                        CRM Customer link <SVG icon={sort.name === 'customerLink' ? sortActiveSVG : sortNoneSVG} />
+                    </div>
+                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
                          onClick={() => sortTable('comments', sort, localRows, setSort, setLocalRows)}
                     >
                         comments <SVG icon={sort.name === 'comments' ? sortActiveSVG : sortNoneSVG} />
@@ -65,13 +70,17 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                             {row.row.organization}
                         </div>
                         <div className="table-body-item">
-                            <span><a href={row.row.customerLink}>{row.row.customerId}</a></span>
+                            {row.row.customerId}
+                        </div>
+                        <div className="table-body-item">
+                            <span><a href={row.row.customerLink}>{row.row.customerLink}</a></span>
                         </div>
                         <div className="table-body-item">
                             {row.row.comments}
                         </div>
                         <div className='table-body-row__actions'>
-                            <SVG icon={editSVG} onClick={() => handleEditRoute("apps/organizations/dudka-agency")}/>
+                            <SVG icon={editSVG}
+                                 onClick={() => handleEditRoute("apps/organizations/dudka-agency")}/>
                             <SVG icon={deleteSVG} />
                         </div>
                     </div>

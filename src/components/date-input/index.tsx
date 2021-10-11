@@ -1,6 +1,7 @@
 import React, {useState, useCallback} from "react";
 import "./styles/input.scss"
 import classNames from "classnames";
+import calendarIcon from "./assets/calendar.svg"
 import SVG from '../SVG'
 import DatePicker from "react-datepicker";
 
@@ -21,6 +22,7 @@ export const DateInput: React.FunctionComponent<IInput> = (props) => {
     return(
         <div className={inputClassNames}>
             <DatePicker selected={value} onChange={(date) => onChangeInput(date)} />
+            <SVG icon={calendarIcon}/>
         </div>
     )
 }

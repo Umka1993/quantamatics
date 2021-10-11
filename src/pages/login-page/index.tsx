@@ -74,6 +74,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
 
                     setLoginProcess(false)
                     history.push('/')
+                    history.push('/apps/organizations/list')
                 })
                 .catch((e) => {
                     console.log(e)
@@ -91,7 +92,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
             <div className="login-page__container">
                 <div className="login-page__title">
                     <h2>Sign in to your account</h2>
-                    <p>Enter your username and password to sign in</p>
+                    <p>Enter your email and password</p>
                 </div>
                 <div className="login-page__inputs">
                     <Input

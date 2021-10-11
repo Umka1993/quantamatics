@@ -16,7 +16,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 32px;
+    margin-top: 24px;
     margin-bottom: 40px;
   }
 
@@ -63,7 +63,8 @@
       line-height: 28px;
       letter-spacing: 0.2px;
       color: #003C71;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      font-weight: 500;
     }
     span{
       font-weight: 500;
@@ -76,6 +77,7 @@
       font-size: 16px;
       line-height: 18px;
       color: #7182A6;
+      margin-bottom: 50px;
     }
   }
 

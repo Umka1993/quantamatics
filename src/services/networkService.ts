@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const network = {
     apiUrl() {
-        return 'https://auth.api.dev.quantamatics.net'
+        return 'https://oauth.dev.quantamatics.net'
     },
     headers() {
         let headers = { Accept: 'application/json', 'Content-Type': 'application/json' }

@@ -9,29 +9,27 @@ interface ISelectorInput {
     placeholder?: string,
     onChangeInput: (value: any) => void
     value?: any
+    options: Array<string>
     required?: boolean
     errors?: boolean
 }
 
 export const SelectorInput: React.FunctionComponent<ISelectorInput> = (props) => {
-    const {className, placeholder, value, onChangeInput, required, errors} = props;
-    const [selecting, setSelecting] = useState(false)
-    const inputClassNames = classNames('selector-input', className, {'error': errors})
+    const {className, placeholder, value, onChangeInput, required, errors, options} = props;
+    const [selecting, setSelecting] = useState<boolean>(false)
+    const inputClassNames = classNames('selector-input', className, {'error': errors, 'selector-input__active': selecting})
+
+    const optionsMap = options.map((item) =>
+        <div className="selector-input__item" onClick={() => setSelecting(false)}>{item}</div>
+    )
 
     return (
-        <div className={inputClassNames}>
+        <div className={inputClassNames} onClick={() => setSelecting(true)}>
             <div className="selector-input__value">{value}</div>
             <SVG icon={arrowIcon}/>
             {selecting &&
             <div className="selector-input__list">
-                <div className="selector-input__item">General Electric</div>
-                <div className="selector-input__item">General Electric</div>
-                <div className="selector-input__item">General Electric</div>
-                <div className="selector-input__item">General Electric</div>
-                <div className="selector-input__item">General Electric</div>
-                <div className="selector-input__item">General Electric</div>
-                <div className="selector-input__item">General Electric</div>
-                <div className="selector-input__item">General Electric</div>
+                {optionsMap}
             </div>
             }
         </div>

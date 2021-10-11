@@ -54,6 +54,7 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
                 />
                 <Input
                     onChangeInput={(value)=>setComment(value)}
+                    limit={'200'}
                     placeholder='Comments'
                     value={comment}
                 />

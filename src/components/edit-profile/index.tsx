@@ -10,6 +10,7 @@ import {Input} from "../input";
 import {User} from "../../types/edit-profile/types"
 import {DateInput} from "../date-input";
 import {SelectorInput} from "../selector-input";
+import {USER_ORGS} from "../../contstans/constans";
 
 interface IEditProfile{
     onClose: () => void
@@ -84,6 +85,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
                                                icon={editIcon}
                                         />
                                         <SelectorInput onChangeInput={(value => {})}
+                                                       options={USER_ORGS}
                                                        value={props.user.organization}
                                         />
                                         <Input onChangeInput={(value => {})}
