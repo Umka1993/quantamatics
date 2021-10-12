@@ -95,6 +95,28 @@ export const SignInPage: React.FunctionComponent = (props) => {
             setErrors('Enter username and password')
         }
     }
+
+    const sendPasswordResetRequest = () => {
+        console.log(forgotEmail)
+        if (forgotEmail) {
+            setLoginProcess(true)
+            network.post('api/Account/sendPasswordReset', {
+                email: forgotEmail,
+            })
+                .then((r: any) => {
+                    console.log(r)
+                    setLoginProcess(false)
+                    setShowSuccessForgot(true)
+                })
+                .catch((e) => {
+                    console.log(e)
+                    setLoginProcess(false)
+                })
+        } else {
+        }
+    }
+
+
     if (!!user) return <div/>
 
     return (
@@ -145,11 +167,11 @@ export const SignInPage: React.FunctionComponent = (props) => {
                             placeholder={'Enter the email'}
                             type={'text'}
                             value={forgotEmail}
-                            onEnterPress={() => console.log(forgotEmail)}
+                            onEnterPress={() => sendPasswordResetRequest()}
                         />
                     </div>
                     <div className="login-page__btn">
-                        <Button onClick={() => setShowSuccessForgot(true)} type={'simple'} text={'Save'}
+                        <Button onClick={() => sendPasswordResetRequest()} type={'simple'} text={'Save'}
                                 disabled={!forgotEmail}/>
                         <div className="login-page__btn-cancel" onClick={() => setShowForgotPassword(false)}>
                             <Button type={'dotted'} text={'Cancel'}/>
