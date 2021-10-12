@@ -58,19 +58,20 @@ export const SignInPage: React.FunctionComponent = (props) => {
                 password: password
             })
                 .then((r: any) => {
+                    console.log(r)
                     dispatch({
                         type: "LOGIN", payload: {
-                            id: r.id,
-                            email: r.email,
-                            firstName: r.firstName,
-                            lastName: r.lastName,
-                            companyName: r.companyName,
-                            companyRole: r.companyRole,
-                            location: r.location,
-                            subscriptionType: r.subscriptionType,
-                            subscriptionEndDate: r.subscriptionEndDate,
+                            id: r.data.user.id,
+                            email: r.data.user.email,
+                            firstName: r.data.user.firstName,
+                            lastName: r.data.user.lastName,
+                            companyName: r.data.user.companyName,
+                            companyRole: r.data.user.companyRole,
+                            location: r.data.user.location,
+                            subscriptionType: r.data.user.subscriptionType,
+                            subscriptionEndDate: r.data.user.subscriptionEndDate,
                             reportPanel: null,
-                            expirationDate: r.expirationDate,
+                            expirationDate: r.data.user.expirationDate,
                             avatar: "",
                         }
                     })
@@ -102,6 +103,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
             setLoginProcess(true)
             network.post('api/Account/sendPasswordReset', {
                 email: forgotEmail,
+                password: forgotEmail,
             })
                 .then((r: any) => {
                     console.log(r)

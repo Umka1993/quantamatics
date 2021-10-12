@@ -3,6 +3,7 @@ import "./styles/createOrganization.scss"
 import {Input} from "../input";
 import { useHistory } from "react-router-dom";
 import {Button} from "../button/button";
+import {network} from "../../services/networkService";
 
 interface ICreateOrganization {
 }
@@ -16,11 +17,27 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
     const [comment, setComment] = useState<string | undefined>('')
 
     const createOrganization = useCallback(() => {
-        setOrganizationName('')
-        setCustomerID('')
-        setCustomerLink('')
-        setComment('')
-        history.push("/organization");
+        if (organizationName && customerID && customerLink) {
+            network.post('api/Organization/create', {
+                name: organizationName,
+                customerCrmId: customerID,
+                customerCrmLink: customerLink,
+                comments: comment,
+            })
+                .then((r: any) => {
+                    console.log(r)
+                    setOrganizationName('')
+                    setCustomerID('')
+                    setCustomerLink('')
+                    setComment('')
+                    history.push("/organization");
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        } else {
+        }
+
     }, [organizationName, customerID, customerLink, comment])
 
     const cancelCreate = useCallback(() => {
@@ -62,7 +79,7 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
                     <Button type={'simple'} text={'Save'}/>
                 </div>
                 <div className='create-organization__cancel'>
-                    <Button type={'dotted'} text={'Cancel'} />
+                    <Button type={'dotted'} text={'Cancel'} onClick={() => cancelCreate()}/>
                 </div>
             </div>
         </div>
