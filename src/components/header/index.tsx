@@ -20,7 +20,7 @@ import {USER} from "../../contstans/constans";
 
 
 export const Header: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.user.user.username)
+    const user = useSelector<RootState>((state) => state.user.user.firstName)
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [showProfile, setShowProfile] = useState<boolean>(false)
     const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([

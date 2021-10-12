@@ -9,7 +9,7 @@ interface JupyterFrameProps {
 
 export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) => {
     const {type} = props;
-    const user = useSelector<RootState>((state) => state.user.user.username)
+    const user = useSelector<RootState>((state) => state.user.user.firstName)
     const username: any = !!user ? user : ''
     const filesUrl = 'https://hub-k8s.dev.quantamatics.net/user/' + username +'/tree?'
     const coherenceUrl = 'https://coherence-k8s.dev.quantamatics.net/user/' + username +'/'

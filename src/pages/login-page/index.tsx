@@ -12,7 +12,7 @@ import SVG from "../../components/SVG";
 import successIcon from "../add-user-page/assets/sucess-icon.svg";
 
 export const SignInPage: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.user.user.username)
+    const user = useSelector<RootState>((state) => state.user.user.firstName)
     const localUserName = localStorage.getItem('savedUsername') || ''
     const localPassword = localStorage.getItem('savedPassword') || ''
 
@@ -53,20 +53,30 @@ export const SignInPage: React.FunctionComponent = (props) => {
         console.log(userName)
         if (userName && password) {
             setLoginProcess(true)
-            const body = "grant_type=password&username=" + userName + "&password=" + password
-            const options = {
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            }
-            network.post('oauth/token', body, options)
+            network.post('api/Account/login', {
+                email: userName,
+                password: password
+            })
                 .then((r: any) => {
                     dispatch({
                         type: "LOGIN", payload: {
-                            username: userName
+                            id: r.id,
+                            email: r.email,
+                            firstName: r.firstName,
+                            lastName: r.lastName,
+                            companyName: r.companyName,
+                            companyRole: r.companyRole,
+                            location: r.location,
+                            subscriptionType: r.subscriptionType,
+                            subscriptionEndDate: r.subscriptionEndDate,
+                            reportPanel: null,
+                            expirationDate: r.expirationDate,
+                            avatar: "",
                         }
                     })
                     setErrors('false')
-                    localStorage.setItem('id_token', r.data.access_token);
-                    localStorage.setItem('username', userName);
+                    localStorage.setItem('id_token', r.data.token);
+                    localStorage.setItem('firstName', userName);
                     if (rememberMe) {
                         localStorage.setItem('savedUsername', userName);
                         localStorage.setItem('savedPassword', password);
