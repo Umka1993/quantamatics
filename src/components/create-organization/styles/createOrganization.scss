@@ -1,5 +1,14 @@
 .create-organization {
-  min-width: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  &__form {
+    max-width: 360px;
+    width: 100%;
+    margin: 0 auto;
+  }
 
   &__title {
     font-weight: 500;
@@ -22,15 +31,14 @@
   }
 
   &__submit {
-    cursor: pointer;
-    text-transform: capitalize;
     margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    padding: 11px 0;
-    color: #017AEE;
-    background: #fff;
-    border: 1px solid #017AEE;
-    border-radius: 2px;
+    width: 360px;
+    height: 40px;
+  }
+  &__cancel{
+    width: 100%;
+    max-width: 49px;
+    margin: 16px auto 0;
+    height: 21px;
   }
 }

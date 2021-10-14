@@ -1,5 +1,17 @@
 interface User {
-    username: string
+    id: number,
+    email: string,
+    firstName: string,
+    lastName: string,
+    companyName: string,
+    companyRole: string,
+    location: string,
+    subscriptionType:string,
+    subscriptionEndDate: string,
+    reportPanel: null,
+    expirationDate: string,
+    avatar: string,
+    //"userRoles": []
 }
 
 export interface UserState {
@@ -8,7 +20,19 @@ export interface UserState {
 
 const initialState = {
     user: {
-        username: localStorage.getItem('username') || ''
+        id: 0,
+        email: '',
+        lastName: '',
+        firstName: localStorage.getItem('firstName') || '',
+        companyName: '',
+        companyRole: '',
+        location: '',
+        subscriptionType: '',
+        subscriptionEndDate: '',
+        reportPanel: null,
+        expirationDate: '',
+        avatar: ''
+
     }
 }
 

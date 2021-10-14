@@ -48,11 +48,12 @@ export const SIDE_BAR_ITEMS = [
         active: false,
         route: 'coherence'
     },
-    // {
-    //     name: 'Organizations',
-    //     image: orgImg,
-    //     active: false,
-    // },
+    {
+        name: 'Organizations',
+        image: orgImg,
+        active: false,
+        route: 'apps/organizations/list'
+    },
     // {
     //     name: 'Accounts list',
     //     image: humanImg,
@@ -72,7 +73,7 @@ export const TABLE_ITEMS = [
         row: {
             organization: 'Dudka Agency',
             customerId: '1231232',
-            customerLink: '#',
+            customerLink: 'http://www.zotware.com',
             comments: 'temporary company for internal needs'
         }
 
@@ -82,7 +83,7 @@ export const TABLE_ITEMS = [
         row: {
             organization: 'General Motors',
             customerId: '6542678',
-            customerLink: '#',
+            customerLink: 'http://www.zotware.com',
             comments: 'temporary company for internal needs'
         }
     },
@@ -91,7 +92,7 @@ export const TABLE_ITEMS = [
         row: {
             organization: 'General Electric',
             customerId: '9873422',
-            customerLink: '#',
+            customerLink: 'http://www.zotware.com',
             comments: 'temporary company for internal needs'
         }
     },
@@ -100,10 +101,17 @@ export const TABLE_ITEMS = [
         row: {
             organization: 'The Walt Disney Company',
             customerId: '5647444',
-            customerLink: '#',
+            customerLink: 'http://www.zotware.com',
             comments: 'temporary company for internal needs'
         }
     },
+]
+export const USER_ORGS = [
+    'General Electric',
+    'Sony',
+    'Starbucks',
+    'IBM',
+    'The Walt Disney Company'
 ]
 export const USER_TABLE_ITEMS = [
     {
@@ -143,3 +151,12 @@ export const USER_TABLE_ITEMS = [
         }
     },
 ]
+export const USER = {
+    avatar: '',
+    type: '',
+    name: 'Lorn',
+    surname: 'Davis',
+    organization: 'Facteus',
+    email: 'lorn@facteus.com',
+    exp_date: '12.18.2023'
+}

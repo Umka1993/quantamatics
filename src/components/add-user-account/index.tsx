@@ -4,6 +4,7 @@ import {Input} from "../input";
 import {Button} from "../button/button";
 import arrowIcon from "./assets/arrow.svg"
 import SVG from "../SVG";
+import {DateInput} from "../date-input";
 
 interface IAddUserAccount {
     onBack: () => void
@@ -14,17 +15,11 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
     const [userName, setUserName] = useState<string>('')
     const [userLastName, setUserLastName] = useState<string>('')
     const [userEmail, setUserEmail] = useState<string>('')
+    const [userExpiration, setUserExpiration] = useState<any>(null)
 
 
     return (
         <div className="add-user-account">
-            <div className="add-user-account__header">
-                <div className="add-user-account__button"
-                     onClick={() => props.onBack()}>
-                    <SVG icon={arrowIcon}/>
-                    <span>Back</span>
-                </div>
-            </div>
             <div className="add-user-account__form">
                 <h2>Add User Accounts</h2>
                 <Input onChangeInput={(value) => setUserName(value)}
@@ -38,6 +33,11 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                 <Input onChangeInput={(value) => setUserEmail(value)}
                        placeholder="Email Address"
                        value={userEmail}
+                />
+                <DateInput
+                    onChangeInput={(value)=>setUserExpiration(value)}
+                    placeholder='Expiration Date'
+                    value={userExpiration}
                 />
 
                 <div className="add-user-account__form-btn-save">

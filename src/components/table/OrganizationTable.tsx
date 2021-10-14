@@ -10,6 +10,8 @@ import deleteSVG from './assets/delete-row-icon.svg'
 import sortNoneSVG from './assets/sort-none.svg'
 import sortActiveSVG from './assets/sort-active.svg'
 import classNames from "classnames";
+import {useDispatch} from "react-redux";
+import {changeRoute} from "../../store/currentPage/actions";
 
 
 interface ITable {
@@ -19,9 +21,17 @@ interface ITable {
 
 export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
     const { rows } = props;
-    const history = useHistory();
+    const history = useHistory()
+    const dispatch = useDispatch();
+
     const [localRows, setLocalRows] = useState<IRow[]>(rows)
     const [sort, setSort] = useState<any>({name: '', direction: 'none'})
+
+    const handleEditRoute = (route: string) => {
+        dispatch(changeRoute(route))
+        history.push('/')
+        history.push('/' + route)
+    }
 
     useEffect(()=> {
         localStorage.setItem('rows', JSON.stringify(props.rows))
@@ -42,6 +52,11 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                         CRM Customer ID <SVG icon={sort.name === 'customerId' ? sortActiveSVG : sortNoneSVG} />
                     </div>
                     <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
+                         onClick={() => sortTable('customerLink', sort, localRows, setSort, setLocalRows) }
+                    >
+                        CRM Customer link <SVG icon={sort.name === 'customerLink' ? sortActiveSVG : sortNoneSVG} />
+                    </div>
+                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
                          onClick={() => sortTable('comments', sort, localRows, setSort, setLocalRows)}
                     >
                         comments <SVG icon={sort.name === 'comments' ? sortActiveSVG : sortNoneSVG} />
@@ -55,13 +70,17 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                             {row.row.organization}
                         </div>
                         <div className="table-body-item">
-                            <span><a href={row.row.customerLink}>{row.row.customerId}</a></span>
+                            {row.row.customerId}
+                        </div>
+                        <div className="table-body-item">
+                            <span><a href={row.row.customerLink}>{row.row.customerLink}</a></span>
                         </div>
                         <div className="table-body-item">
                             {row.row.comments}
                         </div>
                         <div className='table-body-row__actions'>
-                            <SVG icon={editSVG} onClick={() => history.push("/organization-edit")}/>
+                            <SVG icon={editSVG}
+                                 onClick={() => handleEditRoute("apps/organizations/dudka-agency")}/>
                             <SVG icon={deleteSVG} />
                         </div>
                     </div>

@@ -5,7 +5,6 @@ import {Button} from "../button/button";
 import {UserTable} from "../table/UserTable";
 import {AddUserAccount} from "../add-user-account";
 import {Input} from "../input";
-import {SVG} from "../SVG";
 import {USER_TABLE_ITEMS} from "../../contstans/constans";
 import {useHistory} from "react-router-dom";
 
@@ -20,7 +19,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const [addUserActive, setAddUserActive] = useState<boolean>(false)
 
     return (
-       <div>
+       <div className="h-100">
            {
                addUserActive ?
                    <AddUserAccount onBack={() => setAddUserActive(false)}/>
@@ -31,7 +30,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                Edit Organization
                            </div>
                            <div className="edit-organization__buttons">
-                               <div className="edit-organization__cancel-btn" onClick={() => history.push("/")}>
+                               <div className="edit-organization__cancel-btn" onClick={() => history.push("/organizations")}>
                                    <Button type={'dotted'} text={'Cancel'}/>
                                </div>
                                <div className="edit-organization__save-btn">
@@ -68,6 +67,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                    <Input onChangeInput={(value) => setComment(value)}
                                           value={comment}
                                           placeholder='Comments'
+                                          limit={'200'}
                                    />
                                </div>
                            </div>
@@ -79,8 +79,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                    <div className="edit-organization__user-list-add"
                                         onClick={() => setAddUserActive(true)}
                                    >
-                                       <SVG icon={addIcon}/>
-                                       <span>Add New</span>
+                                    <Button type={'simple'} text={'Add New'} icon={addIcon}/>
                                    </div>
                                </div>
                                <UserTable inEdit rows={USER_TABLE_ITEMS}/>

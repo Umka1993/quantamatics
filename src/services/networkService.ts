@@ -2,21 +2,21 @@ import axios from 'axios'
 
 export const network = {
     apiUrl() {
-        return 'https://oauth.dev.quantamatics.net/'
+        return 'https://auth.api.dev.quantamatics.net'
     },
     headers() {
-        const headers = { Accept: 'application/json', 'Content-Type': 'application/json' }
-        /*if (store.state.authentication.isAuthenticated) headers['Authorization'] = `Bearer ${this.token()}`*/
+        let headers: any = { Accept: 'application/json', 'Content-Type': 'application/json' }
+        if (!!localStorage.getItem('id_token')) headers['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`
 
         return headers
     },
-    get(url: string) {
+    get(url: string, params?: any) {
         if (!url.startsWith('/')) {
             url = `/${url}`
         }
         return new Promise((resolve, reject) => {
             axios
-                .get(`${this.apiUrl()}${url}`, { headers: this.headers() })
+                .get(`${this.apiUrl()}${url}`, {params: params, headers: this.headers() })
                 .then(this.handleStatusCode)
                 .then((data) => {
                     resolve(data)

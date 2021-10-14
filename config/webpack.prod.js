@@ -29,7 +29,7 @@ module.exports = {
                 use: ['ts-loader']
             },
             {
-                test: /\.s(a|c)ss$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
                     'style-loader',
                     {

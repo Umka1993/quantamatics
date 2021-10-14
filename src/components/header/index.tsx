@@ -15,11 +15,16 @@ import classNames from "classnames";
 import {RootState} from "../../store";
 import {useHistory} from "react-router-dom";
 import {changeRoute} from "../../store/currentPage/actions";
+import {EditProfile} from "../edit-profile";
+import {USER} from "../../contstans/constans";
+import {network} from "../../services/networkService";
 
 
 export const Header: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.user.user.username)
+    const user = useSelector<RootState>((state) => state.user.user.firstName)
+    const userId = useSelector<RootState>((state) => state.user.user.id)
     const [showMenu, setShowMenu] = useState<boolean>(false)
+    const [showProfile, setShowProfile] = useState<boolean>(false)
     const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
         'Research',
         'My Files',
@@ -30,6 +35,19 @@ export const Header: React.FunctionComponent = (props) => {
     const profileRef = useRef(null)
     const dispatch = useDispatch()
     const history = useHistory()
+
+    useEffect(()=> {
+        console.log('userId', userId)
+        if(userId !== '') {
+            network.get('api/Users/getUser', {id: userId})
+            .then((r: any) => {
+                console.log(r.data)
+            })
+            .catch((e: any) => {
+                console.log(e.data)
+            })
+        }
+    }, [userId])
 
     const useOutsideClick = (ref: any, callback: any) => {
         useEffect(() => {
@@ -51,18 +69,19 @@ export const Header: React.FunctionComponent = (props) => {
         if(route === 'login') {
             dispatch({
                 type: "LOGOUT", payload: {
-                    username: ''
+                    firstName: ''
                 }
             })
             localStorage.removeItem('id_token')
-            localStorage.removeItem('username')
+            localStorage.removeItem('firstName')
         }
         history.push(route)
 
     }
 
     useEffect(() => {
-        if (!user) history.push('/login')
+        const resetPassword = window.location.pathname.substring(1) === 'reset-password'
+        if (!user) history.push(resetPassword ? '/reset-password' : '/login')
     }, [user])
 
     useEffect(() => {
@@ -94,7 +113,7 @@ export const Header: React.FunctionComponent = (props) => {
                     </div>)}
                 </div>
 
-                {user && (<div className="header__nav">
+                {username && (<div className="header__nav">
                     <div className="header__nav-item">
                         <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
                             <div className={classNames("profile__avatar", {'opened': showMenu})}>
@@ -106,8 +125,8 @@ export const Header: React.FunctionComponent = (props) => {
                             <SVG icon={arrowImg} className={classNames("profile__arrow", {'opened': showMenu})}/>
                             <div className={classNames('profile__dropdown', {showMenu: showMenu})}>
                                 <div className="profile__dropdown-triangle"/>
-                                <div className="profile__dropdown-item" onClick={() => {}}>
-                                    <SVG icon={profileImg} name="profileImg"/> Profile
+                                <div className="profile__dropdown-item" onClick={() => {setShowProfile(true)}}>
+                                    <SVG icon={profileImg} name="profileImg"/> My Account
                                 </div>
                                 <div className="profile__dropdown-item" onClick={() => {}}>
                                     <SVG icon={settingsImg} name="settingsImg"/> Settings
@@ -119,6 +138,10 @@ export const Header: React.FunctionComponent = (props) => {
                         </div>
                     </div>
                 </div>)}
+                {
+                    showProfile &&
+                    <EditProfile user={USER} onClose={() => setShowProfile(false)}/>
+                }
             </div>
         </div>
     )

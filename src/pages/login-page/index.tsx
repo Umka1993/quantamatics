@@ -8,12 +8,24 @@ import {network} from "../../services/networkService";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
 import {RootState} from "../../store";
+import SVG from "../../components/SVG";
+import successIcon from "../add-user-page/assets/sucess-icon.svg";
 
 export const SignInPage: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.user.user.username)
-    const [userName, setUserName] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
+    const user = useSelector<RootState>((state) => state.user.user.firstName)
+    const localUserName = localStorage.getItem('savedUsername') || ''
+    const localPassword = localStorage.getItem('savedPassword') || ''
+
+    const [userName, setUserName] = useState<string>(localUserName)
+    const [password, setPassword] = useState<string>(localPassword)
+    const [forgotEmail, setForgotEmail] = useState<string>('')
+
     const [loginProcess, setLoginProcess] = useState<boolean>(false)
+
+    const [rememberMe, setRememberMe] = useState<boolean>(false)
+    const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false)
+    const [showSuccessForgot, setShowSuccessForgot] = useState<boolean>(false)
+
     const [errors, setErrors] = useState<string>('')
 
     useEffect(() => {
@@ -41,22 +53,39 @@ export const SignInPage: React.FunctionComponent = (props) => {
         console.log(userName)
         if (userName && password) {
             setLoginProcess(true)
-            const body = "grant_type=password&username=" + userName + "&password=" + password
-            const options = {
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            }
-            network.post('oauth/token', body, options)
+            network.post('api/Account/login', {
+                email: userName,
+                password: password
+            })
                 .then((r: any) => {
+                    console.log(r)
                     dispatch({
                         type: "LOGIN", payload: {
-                            username: userName
+                            id: r.data.user.id,
+                            email: r.data.user.email,
+                            firstName: r.data.user.firstName,
+                            lastName: r.data.user.lastName,
+                            companyName: r.data.user.companyName,
+                            companyRole: r.data.user.companyRole,
+                            location: r.data.user.location,
+                            subscriptionType: r.data.user.subscriptionType,
+                            subscriptionEndDate: r.data.user.subscriptionEndDate,
+                            reportPanel: null,
+                            expirationDate: r.data.user.expirationDate,
+                            avatar: "",
                         }
                     })
                     setErrors('false')
-                    localStorage.setItem('id_token', r.data.access_token);
-                    localStorage.setItem('username', userName);
+                    localStorage.setItem('id_token', r.data.token);
+                    localStorage.setItem('firstName', userName);
+                    if (rememberMe) {
+                        localStorage.setItem('savedUsername', userName);
+                        localStorage.setItem('savedPassword', password);
+                    }
+
                     setLoginProcess(false)
                     history.push('/')
+                    history.push('/apps/organizations/list')
                 })
                 .catch((e) => {
                     console.log(e)
@@ -67,6 +96,29 @@ export const SignInPage: React.FunctionComponent = (props) => {
             setErrors('Enter username and password')
         }
     }
+
+    const sendPasswordResetRequest = () => {
+        console.log(forgotEmail)
+        if (forgotEmail) {
+            setLoginProcess(true)
+            network.post('api/Account/sendPasswordReset', {
+                email: forgotEmail,
+                password: forgotEmail,
+            })
+                .then((r: any) => {
+                    console.log(r)
+                    setLoginProcess(false)
+                    setShowSuccessForgot(true)
+                })
+                .catch((e) => {
+                    console.log(e)
+                    setLoginProcess(false)
+                })
+        } else {
+        }
+    }
+
+
     if (!!user) return <div/>
 
     return (
@@ -74,7 +126,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
             <div className="login-page__container">
                 <div className="login-page__title">
                     <h2>Sign in to your account</h2>
-                    <p>Enter your username and password to sign in</p>
+                    <p>Enter your email and password</p>
                 </div>
                 <div className="login-page__inputs">
                     <Input
@@ -95,16 +147,53 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     />
                     {!!errors && (<div className="login-page__inputs-errors">{errors}</div>)}
                 </div>
-                {/*<div className="login-page__wrap">*/}
-                {/*    <CheckBox label={'Remember Me'}/>*/}
-                {/*    <div className="login-page__forgot">*/}
-                {/*        Forgot Password?*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+                <div className="login-page__wrap">
+                    <CheckBox checked={rememberMe} onClick={(value) => setRememberMe(value)} label={'Remember Me'}/>
+                    <div className="login-page__forgot" onClick={() => setShowForgotPassword(true)}>
+                        Forgot Password?
+                    </div>
+                </div>
                 <div className="login-page__btn">
                     <Button onClick={() => handleLogin()} type={'simple'} text={'Sign In'} disabled={!userName || !password}/>
                 </div>
             </div>
+            {showForgotPassword && (<div className="login-page__forgot-password">
+                <div className="login-page__container">
+                    <div className="login-page__title">
+                        <h2>Forgot your password?</h2>
+                        <p>To restore the password, enter your email</p>
+                    </div>
+                    <div className="login-page__inputs">
+                        <Input
+                            onChangeInput={(value) => setForgotEmail(value)}
+                            placeholder={'Enter the email'}
+                            type={'text'}
+                            value={forgotEmail}
+                            onEnterPress={() => sendPasswordResetRequest()}
+                        />
+                    </div>
+                    <div className="login-page__btn">
+                        <Button onClick={() => sendPasswordResetRequest()} type={'simple'} text={'Save'}
+                                disabled={!forgotEmail}/>
+                        <div className="login-page__btn-cancel" onClick={() => setShowForgotPassword(false)}>
+                            <Button type={'dotted'} text={'Cancel'}/>
+                        </div>
+                    </div>
+                </div>
+            </div>)}
+            {showSuccessForgot && (<div className="login-page__forgot-password success">
+                <div className="login-page__container">
+                    <div className='login-page__forgot-password-success-text'>
+                        <SVG icon={successIcon}/>A reset password email was sent to the email entered
+                    </div>
+                    <div className="login-page__btn">
+                        <Button onClick={() => {
+                            setShowSuccessForgot(false)
+                            setShowForgotPassword(false)
+                        }} type={'simple'} text={'Go to Log in Page'}/>
+                    </div>
+                </div>
+            </div>)}
             {loginProcess && <Loader />}
         </div>
     )
