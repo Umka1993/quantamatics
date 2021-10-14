@@ -8,7 +8,7 @@
     "module": "commonjs",
     "allowJs": true,
     "jsx": "react",
-    "outDir": "./dist",
+    "outDir": "../publish",
     "rootDir": "./",
     "isolatedModules": true,
     "strict": true,

@@ -16,7 +16,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const [comment, setComment] = useState<string | undefined>('')
     const history = useHistory();
 
-    const [addUserActive, setAddUserActive] = useState<Boolean>(false)
+    const [addUserActive, setAddUserActive] = useState<boolean>(false)
 
     return (
        <div className="h-100">

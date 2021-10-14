@@ -3,14 +3,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     devServer: {
-        static: path.resolve(__dirname, 'dist'),
+        static: path.resolve(__dirname, '../publish'),
         historyApiFallback: true,
         port: 8888
     },
     entry: path.resolve(__dirname, '../src', 'index.tsx'),
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '../publish'),
         publicPath: '/'
     },
     mode: "development",

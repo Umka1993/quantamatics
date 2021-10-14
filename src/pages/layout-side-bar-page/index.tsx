@@ -5,6 +5,7 @@ import {SideBar} from "../../components/side-bar";
 import {Organizations} from "../organizations";
 import {AddUserPage} from "../add-user-page";
 import {JupyterFrame} from "../../components/jupyter-frame";
+import {CoherenceFrame} from "../../components/coherence-frame";
 import {SIDE_BAR_ITEMS} from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
 import {useHistory, useLocation} from 'react-router-dom'

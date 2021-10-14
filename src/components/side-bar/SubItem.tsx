@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import "./styles/side-bar.scss"
-const classNames = require('classnames');
+import classNames from 'classnames';
 
 import toggleArrow from "./assets/toggle-arrow.svg";
 import {SideBarItem, SideBarSubItem} from "../../types/side-bar/side-bar";
