@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {network} from "../../services/networkService";
 import "./styles/organiations.scss"
 import addIcon from "./assets/add.svg"
@@ -8,16 +8,25 @@ import {Button} from "../../components/button/button";
 import {changeRoute} from "../../store/currentPage/actions";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router-dom";
-
+import {Loader} from "../../components/loader";
 
 export const Organizations: React.FunctionComponent = (props) => {
+    const [organizations, setOrganizations] = useState<any>()
     const dispatch = useDispatch();
     const history = useHistory()
 
     const fetchOrganizations = () => {
         network.get('api/Organization/getAll')
             .then((r: any) => {
-                console.log(r.data)
+
+                let result = r.data.map((row: any) => {
+                    return {
+                        editable: true,
+                        row
+                    }
+                })
+                console.log('result', result)
+                setOrganizations(result)
             })
             .catch((e: any) => {
                 console.log(e.data)
@@ -30,8 +39,8 @@ export const Organizations: React.FunctionComponent = (props) => {
     }
 
     useEffect(() => {
-        fetchOrganizations()
-    })
+        if(!organizations) fetchOrganizations()
+    }, [organizations])
 
     return(
         <div className="organization">
@@ -45,7 +54,7 @@ export const Organizations: React.FunctionComponent = (props) => {
                         <Button type={'simple'} text={'Add New'} icon={addIcon}/>
                     </div>
                 </div>
-                <OrganizationTable rows={TABLE_ITEMS} />
+                {!!organizations ? <OrganizationTable rows={organizations}/> : (<div className='organization-table-loader'><Loader /></div>)}
             </div>
         </div>
     )

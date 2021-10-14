@@ -43,7 +43,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                 <div className="add-user-account__form-btn-save">
                     <Button type={'simple'} text={'Save'}/>
                 </div>
-                <div className="add-user-account__form-btn-cancel">
+                <div className="add-user-account__form-btn-cancel" onClick={props.onBack}>
                     <Button type={'dotted'} text={'Cancel'}/>
                 </div>
             </div>

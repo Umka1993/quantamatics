@@ -117,6 +117,19 @@
           }
         }
       }
+      &.deleting {
+        &:before {
+          position: absolute;
+          content: '';
+          right: 0;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          background-color: rgba(113, 130, 166, 0.2);
+        }
+      }
     }
     &-item {
       font-size: 14px;

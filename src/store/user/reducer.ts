@@ -17,23 +17,25 @@ interface User {
 export interface UserState {
     user: User
 }
+const userDefault = {
+    id: 0,
+    email: '',
+    lastName: '',
+    firstName: '',
+    companyName: '',
+    companyRole: '',
+    location: '',
+    subscriptionType: '',
+    subscriptionEndDate: '',
+    reportPanel: null,
+    expirationDate: '',
+    avatar: ''
+}
+
+const user: User = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : userDefault
 
 const initialState = {
-    user: {
-        id: 0,
-        email: '',
-        lastName: '',
-        firstName: localStorage.getItem('firstName') || '',
-        companyName: '',
-        companyRole: '',
-        location: '',
-        subscriptionType: '',
-        subscriptionEndDate: '',
-        reportPanel: null,
-        expirationDate: '',
-        avatar: ''
-
-    }
+    user
 }
 
 type Action = { type: "LOGIN" | "LOGOUT", payload: User }

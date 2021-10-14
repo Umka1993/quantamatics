@@ -4,12 +4,15 @@ import {Input} from "../input";
 import { useHistory } from "react-router-dom";
 import {Button} from "../button/button";
 import {network} from "../../services/networkService";
+import {useDispatch} from "react-redux";
+import {changeRoute} from "../../store/currentPage/actions";
 
 interface ICreateOrganization {
 }
 
 export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props) => {
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const [organizationName, setOrganizationName] = useState<string>('')
     const [customerID, setCustomerID] = useState<string>('')
@@ -30,7 +33,8 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
                     setCustomerID('')
                     setCustomerLink('')
                     setComment('')
-                    history.push("/organization");
+                    dispatch(changeRoute("/apps/organizations/list"))
+                    history.push("/apps/organizations/list");
                 })
                 .catch((e) => {
                     console.log(e)

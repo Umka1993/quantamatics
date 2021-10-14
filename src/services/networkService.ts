@@ -58,6 +58,22 @@ export const network = {
                 })
         })
     },
+    delete(url: string, params?: any) {
+        if (!url.startsWith('/')) {
+            url = `/${url}`
+        }
+        return new Promise((resolve, reject) => {
+            axios
+                .delete(`${this.apiUrl()}${url}`, {params: params, headers: this.headers() })
+                .then(this.handleStatusCode)
+                .then((data) => {
+                    resolve(data)
+                })
+                .catch((err) => {
+                    reject(err)
+                })
+        })
+    },
     handleStatusCode(res: any) {
         switch (res.status) {
             case 400:

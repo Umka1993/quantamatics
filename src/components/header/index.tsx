@@ -22,7 +22,6 @@ import {network} from "../../services/networkService";
 
 export const Header: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.user.user.firstName)
-    const userId = useSelector<RootState>((state) => state.user.user.id)
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [showProfile, setShowProfile] = useState<boolean>(false)
     const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
@@ -35,19 +34,6 @@ export const Header: React.FunctionComponent = (props) => {
     const profileRef = useRef(null)
     const dispatch = useDispatch()
     const history = useHistory()
-
-    useEffect(()=> {
-        console.log('userId', userId)
-        if(userId !== '') {
-            network.get('api/Users/getUser', {id: userId})
-            .then((r: any) => {
-                console.log(r.data)
-            })
-            .catch((e: any) => {
-                console.log(e.data)
-            })
-        }
-    }, [userId])
 
     const useOutsideClick = (ref: any, callback: any) => {
         useEffect(() => {
@@ -73,7 +59,7 @@ export const Header: React.FunctionComponent = (props) => {
                 }
             })
             localStorage.removeItem('id_token')
-            localStorage.removeItem('firstName')
+            localStorage.removeItem('user')
         }
         history.push(route)
 

@@ -77,7 +77,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     })
                     setErrors('false')
                     localStorage.setItem('id_token', r.data.token);
-                    localStorage.setItem('firstName', userName);
+                    localStorage.setItem('user', JSON.stringify(r.data.user));
                     if (rememberMe) {
                         localStorage.setItem('savedUsername', userName);
                         localStorage.setItem('savedPassword', password);
@@ -103,7 +103,6 @@ export const SignInPage: React.FunctionComponent = (props) => {
             setLoginProcess(true)
             network.post('api/Account/sendPasswordReset', {
                 email: forgotEmail,
-                password: forgotEmail,
             })
                 .then((r: any) => {
                     console.log(r)
