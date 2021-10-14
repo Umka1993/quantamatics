@@ -35,8 +35,9 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
                 .catch((e) => {
                     console.log(e)
                 })
-        } else {
         }
+        // else {
+        // }
 
     }, [organizationName, customerID, customerLink, comment])
 
