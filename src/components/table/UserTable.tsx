@@ -22,14 +22,14 @@ interface ITable {
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const { rows } = props;
     const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
-    const [showModal, setShowModal] = useState<Boolean>(false)
+    const [showModal, setShowModal] = useState<boolean>(false)
     const [sort, setSort] = useState<any>({name: '', direction: 'none'})
 
     useEffect(()=> {
         localStorage.setItem('rows', JSON.stringify(props.rows))
     }, [props.rows])
 
-    const handleEditUser = (modal: Boolean) => {
+    const handleEditUser = (modal: boolean) => {
         setShowModal(modal)
     }
 

@@ -14,7 +14,7 @@ import {USER_ORGS} from "../../contstans/constans";
 
 interface IEditProfile{
     onClose: () => void
-    type_edit?: Boolean
+    type_edit?: boolean
     user: User
 }
 
