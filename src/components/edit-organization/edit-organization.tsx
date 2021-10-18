@@ -93,7 +93,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
        <div className="h-100">
            {
                addUserActive ?
-                   <AddUserAccount onBack={() => setAddUserActive(false)}/>
+                   <AddUserAccount orgId={orgId} onBack={() => setAddUserActive(false)}/>
                    :
                    <div className="edit-organization">
                        <div className="edit-organization__header">
@@ -156,7 +156,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                     <Button type={'simple'} text={'Add New'} icon={addIcon}/>
                                    </div>
                                </div>
-                               <UserTable inEdit rows={USER_TABLE_ITEMS}/>
+                               {/*<UserTable inEdit rows={USER_TABLE_ITEMS}/>*/}
                            </div>
                        </div>
                    </div>

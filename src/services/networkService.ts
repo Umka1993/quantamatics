@@ -32,7 +32,7 @@ export const network = {
         }
         return new Promise((resolve, reject) => {
             axios
-                .post(`${this.apiUrl()}${url}`, body, options? options : { headers: this.headers() })
+                .post(`${this.apiUrl()}${url}`, body, options? Object.assign(options, { headers: this.headers() }) : { headers: this.headers() })
                 .then(this.handleStatusCode)
                 .then((data) => {
                     resolve(data)
