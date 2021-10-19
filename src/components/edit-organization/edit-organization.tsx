@@ -25,7 +25,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const [addUserActive, setAddUserActive] = useState<Boolean>(false)
 
     const fetchUsers = () => {
-        network.get('api/Users/list', {orgId})
+        network.get('api/User/list', {orgId})
             .then((r: any) => {
 
                 let result = r.data.map((row: any) => {
@@ -34,7 +34,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                         row
                     }
                 })
-                console.log('result', result)
+                console.log('users result', result)
                 // setUsers(result)
             })
             .catch((e: any) => {

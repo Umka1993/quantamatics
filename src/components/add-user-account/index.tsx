@@ -31,7 +31,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                 email: userEmail,
             })
                 .then((r: any) => {
-                    console.log(r)
+                    console.log('response add user', r)
                     // dispatch(changeRoute("/apps/organizations/list"))
                     // history.push("/apps/organizations/list");
                 })
@@ -44,7 +44,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
         //     network.post('/api/Admin/updateUserOrg', {
         //     }, {
         //         params: {
-        //             userId: 9,
+        //             userId: 0,
         //             orgId: props.orgId,
         //         }})
         //         .then((r: any) => {

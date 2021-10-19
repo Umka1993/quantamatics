@@ -102,8 +102,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
         if (forgotEmail) {
             setLoginProcess(true)
             network.post('api/Account/sendPasswordReset', {
-                email: forgotEmail,
-            })
+            }, {params: {email: forgotEmail,}})
                 .then((r: any) => {
                     console.log(r)
                     setLoginProcess(false)
