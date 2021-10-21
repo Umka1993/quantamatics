@@ -9,6 +9,8 @@ import {network} from "../../services/networkService";
 import {changeRoute} from "../../store/currentPage/actions";
 import {useDispatch} from "react-redux";
 import {useHistory} from "react-router-dom";
+import {Loader} from "../loader";
+import successIcon from "../../pages/add-user-page/assets/sucess-icon.svg";
 
 interface IAddUserAccount {
     onBack: () => void
@@ -18,45 +20,32 @@ interface IAddUserAccount {
 export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const [loginProcess, setLoginProcess] = useState<boolean>(false)
     const [userName, setUserName] = useState<string>('')
     const [userLastName, setUserLastName] = useState<string>('')
     const [userEmail, setUserEmail] = useState<string>('')
     const [userExpiration, setUserExpiration] = useState<any>(null)
+    const [showSuccessAdd, setShowSuccessAdd] = useState<boolean>(false)
 
     const addUserToOrg = useCallback(() => {
         if (userName && userLastName && userEmail && userExpiration) {
+            setLoginProcess(true)
             network.post('/api/Account/register', {
                 firstName: userName,
                 lastName: userLastName,
                 email: userEmail,
+                organizationId: props.orgId,
+                subscriptionEndDate: new Date(userExpiration)
             })
                 .then((r: any) => {
-                    console.log('response add user', r)
-                    // dispatch(changeRoute("/apps/organizations/list"))
-                    // history.push("/apps/organizations/list");
+                    setLoginProcess(false)
+                    setShowSuccessAdd(true)
                 })
                 .catch((e) => {
                     console.log(e)
                 })
         } else {
         }
-        // if (props.orgId) {
-        //     network.post('/api/Admin/updateUserOrg', {
-        //     }, {
-        //         params: {
-        //             userId: 0,
-        //             orgId: props.orgId,
-        //         }})
-        //         .then((r: any) => {
-        //             console.log(r)
-        //             // dispatch(changeRoute("/apps/organizations/list"))
-        //             // history.push("/apps/organizations/list");
-        //         })
-        //         .catch((e) => {
-        //             console.log(e)
-        //         })
-        // } else {
-        // }
 
     }, [userName, userLastName, userEmail, userExpiration])
 
@@ -67,19 +56,23 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                 <h2>Add User Accounts</h2>
                 <Input onChangeInput={(value) => setUserName(value)}
                        placeholder="Name"
+                       required
                        value={userName}
                 />
                 <Input onChangeInput={(value) => setUserLastName(value)}
                        placeholder="Last name"
+                       required
                        value={userLastName}
                 />
                 <Input onChangeInput={(value) => setUserEmail(value)}
                        placeholder="Email Address"
+                       required
                        value={userEmail}
                 />
                 <DateInput
                     onChangeInput={(value)=>setUserExpiration(value)}
                     placeholder='Expiration Date'
+                    required
                     value={userExpiration}
                 />
 
@@ -90,6 +83,21 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                     <Button type={'dotted'} text={'Cancel'}/>
                 </div>
             </div>
+            {showSuccessAdd && (<div className="add-user-account__forgot-password success">
+                <div className="add-user-account__container">
+                    <div className='add-user-account__forgot-password-success-text'>
+                        <SVG icon={successIcon}/>An invitation email has been sent to the user
+                    </div>
+                    <div className="add-user-account__btn">
+                        <Button onClick={() => {
+                            setShowSuccessAdd(false)
+                            dispatch(changeRoute("/apps/organizations/list"))
+                            history.push("/apps/organizations/list");
+                        }} type={'simple'} text={'Go Back'}/>
+                    </div>
+                </div>
+            </div>)}
+            {loginProcess && <Loader />}
         </div>
     )
 }

@@ -35,7 +35,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                     }
                 })
                 console.log('users result', result)
-                // setUsers(result)
+                setUsers(result)
             })
             .catch((e: any) => {
                 console.log(e.data)
@@ -156,7 +156,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                     <Button type={'simple'} text={'Add New'} icon={addIcon}/>
                                    </div>
                                </div>
-                               {/*<UserTable inEdit rows={USER_TABLE_ITEMS}/>*/}
+                               {!!users && <UserTable inEdit rows={users}/>}
                            </div>
                        </div>
                    </div>
