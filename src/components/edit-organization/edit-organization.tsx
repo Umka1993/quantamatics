@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import "./styles/edit-organizations.scss"
 import addIcon from "./assets/human-add.svg"
 import {Button} from "../button/button";
@@ -7,6 +7,9 @@ import {AddUserAccount} from "../add-user-account";
 import {Input} from "../input";
 import {USER_TABLE_ITEMS} from "../../contstans/constans";
 import {useHistory} from "react-router-dom";
+import {network} from "../../services/networkService";
+import {changeRoute} from "../../store/currentPage/actions";
+import {useDispatch} from "react-redux";
 
 
 export const EditOrganization: React.FunctionComponent = (props) => {
@@ -14,15 +17,84 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const [customerID, setCustomerID] = useState<string>('')
     const [customerLink, setCustomerLink] = useState<string>('')
     const [comment, setComment] = useState<string | undefined>('')
+    const [users, setUsers] = useState<any>(null)
+    const [organization, setOrganization] = useState<any>(null)
+    const [orgId, setOrgId] = useState<string>(window.location.pathname.replace('/apps/organizations/dudka-agency/', ''))
+    const dispatch = useDispatch();
     const history = useHistory();
-
     const [addUserActive, setAddUserActive] = useState<boolean>(false)
+
+    const fetchUsers = () => {
+        network.get('api/User/list', {orgId})
+            .then((r: any) => {
+
+                const result = r.data.map((row: any) => {
+                    return {
+                        editable: true,
+                        row
+                    }
+                })
+                console.log('users result', result)
+                setUsers(result)
+            })
+            .catch((e: any) => {
+                console.log(e.data)
+            })
+    }
+
+    const fetchOrganization = () => {
+        network.get('api/Organization/get', {id: orgId})
+            .then((r: any) => {
+
+                console.log('org', r)
+                setOrganization(r.data)
+                setOrganizationName(r.data.name)
+                setCustomerID(r.data.customerCrmId)
+                setCustomerLink(r.data.customerCrmLink)
+                setComment(r.data.comments)
+                // setUsers(result)
+            })
+            .catch((e: any) => {
+                console.log(e.data)
+            })
+    }
+
+    const updateOrganization = useCallback(() => {
+        if (organizationName && customerID && customerLink) {
+            network.put('api/Organization/update', {
+                id: orgId,
+                name: organizationName,
+                customerCrmId: customerID,
+                customerCrmLink: customerLink,
+                comments: comment,
+            })
+                .then((r: any) => {
+                    console.log(r)
+                    dispatch(changeRoute("/apps/organizations/list"))
+                    history.push("/apps/organizations/list");
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
+        // else {
+        // }
+
+    }, [organizationName, customerID, customerLink, comment])
+
+    useEffect(() => {
+        if(!users && orgId) fetchUsers()
+    }, [!users])
+
+    useEffect(() => {
+        if(!organization) fetchOrganization()
+    }, [!organization])
 
     return (
        <div className="h-100">
            {
                addUserActive ?
-                   <AddUserAccount onBack={() => setAddUserActive(false)}/>
+                   <AddUserAccount orgId={orgId} onBack={() => setAddUserActive(false)}/>
                    :
                    <div className="edit-organization">
                        <div className="edit-organization__header">
@@ -30,10 +102,13 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                Edit Organization
                            </div>
                            <div className="edit-organization__buttons">
-                               <div className="edit-organization__cancel-btn" onClick={() => history.push("/organizations")}>
+                               <div className="edit-organization__cancel-btn" onClick={() => {
+                                   dispatch(changeRoute('apps/organizations/list'))
+                                   history.push("/apps/organizations/list")
+                               }}>
                                    <Button type={'dotted'} text={'Cancel'}/>
                                </div>
-                               <div className="edit-organization__save-btn">
+                               <div className="edit-organization__save-btn" onClick={() => updateOrganization()}>
                                    <Button type={'simple'} text={'Save'}/>
                                </div>
                            </div>
@@ -82,7 +157,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                     <Button type={'simple'} text={'Add New'} icon={addIcon}/>
                                    </div>
                                </div>
-                               <UserTable inEdit rows={USER_TABLE_ITEMS}/>
+                               {!!users && <UserTable inEdit rows={users}/>}
                            </div>
                        </div>
                    </div>

@@ -32,7 +32,7 @@ export const network = {
         }
         return new Promise((resolve, reject) => {
             axios
-                .post(`${this.apiUrl()}${url}`, body, options? options : { headers: this.headers() })
+                .post(`${this.apiUrl()}${url}`, body, options? Object.assign(options, { headers: this.headers() }) : { headers: this.headers() })
                 .then(this.handleStatusCode)
                 .then((data) => {
                     resolve(data)
@@ -49,6 +49,22 @@ export const network = {
         return new Promise((resolve, reject) => {
             axios
                 .put(`${this.apiUrl()}${url}`, body, { headers: this.headers() })
+                .then(this.handleStatusCode)
+                .then((data) => {
+                    resolve(data)
+                })
+                .catch((err) => {
+                    reject(err)
+                })
+        })
+    },
+    delete(url: string, params?: any) {
+        if (!url.startsWith('/')) {
+            url = `/${url}`
+        }
+        return new Promise((resolve, reject) => {
+            axios
+                .delete(`${this.apiUrl()}${url}`, {params: params, headers: this.headers() })
                 .then(this.handleStatusCode)
                 .then((data) => {
                     resolve(data)

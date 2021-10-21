@@ -45,7 +45,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                 {currentPage === 'add-user' && <AddUserPage />}
                 {currentPage === 'apps/organizations/list' && <Organizations/>}
                 {currentPage === 'apps/organizations/new-organization' && <CreateOrganization/>}
-                {currentPage === 'apps/organizations/dudka-agency' && <EditOrganization/>}
+                {currentPage.includes('apps/organizations/dudka-agency') && <EditOrganization/>}
             </div>
         </div>
     )

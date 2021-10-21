@@ -8,7 +8,8 @@ export interface CurrentPageState {
 
 const initialState = {
     currentPage: {
-        pageName: window.location.pathname.substring(1)
+        pageName: window.location.pathname.substring(1).includes('apps/organizations/dudka-agency') ?
+            'apps/organizations/dudka-agency' : window.location.pathname.substring(1)
     }
 }
 

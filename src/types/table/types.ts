@@ -2,10 +2,12 @@
 export interface IRow {
     editable: boolean
     row: {
-        organization: string
-        customerId: string
-        customerLink: string
+        id: string
+        name: string
+        customerCrmId: string
+        customerCrmLink: string
         comments?: string
+        assets?: string
     }
 }
 
