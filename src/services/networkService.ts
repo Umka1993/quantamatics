@@ -5,7 +5,7 @@ export const network = {
         return 'https://auth.api.dev.quantamatics.net'
     },
     headers() {
-        let headers: any = { Accept: 'application/json', 'Content-Type': 'application/json' }
+        const headers: any = { Accept: 'application/json', 'Content-Type': 'application/json' }
         if (!!localStorage.getItem('id_token')) headers['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`
 
         return headers

@@ -112,8 +112,9 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     console.log(e)
                     setLoginProcess(false)
                 })
-        } else {
         }
+        // else {
+        // }
     }
 
 

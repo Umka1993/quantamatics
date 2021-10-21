@@ -7,7 +7,7 @@ export type ReactSVGComponent = React.FunctionComponent<
 export interface SideBarItem {
     image: ReactSVGComponent,
     name: string,
-    active: Boolean
+    active: boolean
     subItems?: SideBarSubItem[]
     route?: string
 }
@@ -15,6 +15,6 @@ export interface SideBarItem {
 export interface SideBarSubItem {
     image: ReactSVGComponent,
     name: string,
-    active: Boolean
+    active: boolean
     route?: string
 }

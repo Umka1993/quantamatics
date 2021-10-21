@@ -21,7 +21,7 @@ export const SideBar: React.FunctionComponent<ISideBar> = (props) => {
             </div>
             <div className="side-bar__footer">
                 © Copyright 2021 Facteus. <br/>
-                All rights reserved. <a target='_blank' href="https://www.facteus.com/privacy-policy/">Privacy Policy</a>
+                All rights reserved. <a target='_blank' href="https://www.facteus.com/privacy-policy/" rel="noreferrer">Privacy Policy</a>
             </div>
         </div>
     )

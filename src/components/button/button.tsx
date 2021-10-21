@@ -2,7 +2,7 @@ import React from "react";
 import "./styles/button.scss"
 import {ReactSVGComponent} from "../input";
 import SVG from "../SVG";
-const classNames = require('classnames');
+import classNames from 'classnames';
 
 
 interface IButton {

@@ -20,7 +20,7 @@ export const SelectorInput: React.FunctionComponent<ISelectorInput> = (props) =>
     const inputClassNames = classNames('selector-input', className, {'error': errors, 'selector-input__active': selecting})
 
     const optionsMap = options.map((item) =>
-        <div className="selector-input__item" onClick={() => setSelecting(false)}>{item}</div>
+        <div className="selector-input__item" key={item} onClick={() => setSelecting(false)}>{item}</div>
     )
 
     return (
