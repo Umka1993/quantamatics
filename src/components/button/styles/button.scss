@@ -7,6 +7,8 @@
   outline: none;
   cursor: pointer;
   box-sizing: border-box;
+  border: none;
+  background-color: transparent;
 
   &__simple{
     transition: .5s ease all;
@@ -24,7 +26,8 @@
       }
     }
 
-    &:hover{
+    &:hover,
+    &:focus-visible {
       background: #017AEE;
       color: #FFFFFF;
     }
@@ -38,7 +41,8 @@
     padding-bottom: 3px;
   }
 
-  &__disabled {
+  &__disabled,
+  &[disabled] {
     cursor: not-allowed;
     color: #BCC5D8;
     border-color: #BCC5D8;
