@@ -20,7 +20,7 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
     const [comment, setComment] = useState<string | undefined>('')
 
     const createOrganization = useCallback(() => {
-        if (organizationName && customerID && customerLink) {
+        if (organizationName) {
             network.post('api/Organization/create', {
                 name: organizationName,
                 customerCrmId: customerID,
@@ -54,7 +54,7 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
 
     return(
         <div className="create-organization">
-            <div className="create-organization__form">
+            <form className="create-organization__form" onSubmit={(e) => {e.preventDefault(); createOrganization()}}>
                 <div className='create-organization__title'>Creating an Organization</div>
                 <div className='create-organization__subtitle'>Create an organization for the future admin</div>
                 <Input
@@ -62,6 +62,7 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
                     onChangeInput={(value)=>setOrganizationName(value)}
                     placeholder='Organization Name'
                     value={organizationName}
+                    required
                 />
                 <Input
                     onChangeInput={(value)=>setCustomerID(value)}
@@ -79,13 +80,13 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
                     placeholder='Comments'
                     value={comment}
                 />
-                <div className='create-organization__submit' onClick={() => createOrganization()}>
-                    <Button type={'simple'} text={'Save'}/>
+                <div className='create-organization__submit' >
+                    <Button type={'simple'} text={'Save'} htmlType='submit' />
                 </div>
                 <div className='create-organization__cancel'>
                     <Button type={'dotted'} text={'Cancel'} onClick={() => cancelCreate()}/>
                 </div>
-            </div>
+            </form>
         </div>
     )
 }
