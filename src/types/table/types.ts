@@ -17,6 +17,6 @@ export interface IUserRow {
         firstName: string
         lastName: string
         email: string
-        expirationDate: string
+        subscriptionEndDate: string
     }
 }

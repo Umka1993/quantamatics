@@ -1,18 +1,16 @@
-import React, {useState, useCallback, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/table.scss"
-import {IUserRow} from "../../types/table/types";
-import {Modal} from "../modal";
-import {Input} from "../input";
-import {SVG} from "../SVG";
+import { IUserRow } from "../../types/table/types";
+import { SVG } from "../SVG";
 import sortNoneSVG from './assets/sort-none.svg'
 import sortActiveSVG from './assets/sort-active.svg'
 import classNames from "classnames";
-import {sortTable} from "../../services/baseService";
+import { sortTable } from "../../services/baseService";
 import editSVG from "./assets/edit-row-icon.svg";
 import deleteSVG from "./assets/delete-row-icon.svg";
-import {EditProfile} from "../edit-profile";
+import { EditProfile } from "../edit-profile";
 
-import {USER} from "../../contstans/constans";
+import { USER } from "../../contstans/constans";
 
 interface ITable {
     rows: IUserRow[]
@@ -23,9 +21,9 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const { rows } = props;
     const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
     const [showModal, setShowModal] = useState<Boolean>(false)
-    const [sort, setSort] = useState<any>({name: '', direction: 'none'})
+    const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
 
-    useEffect(()=> {
+    useEffect(() => {
         localStorage.setItem('rows', JSON.stringify(props.rows))
     }, [props.rows])
 
@@ -33,27 +31,27 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
         setShowModal(modal)
     }
 
-    return(
+    return (
         <div className="table user">
             <div className="table-head">
                 <div className="table-head-row">
-                    <div className={classNames("table-head-item user", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('firstName', sort, localRows, setSort, setLocalRows) }
+                    <div className={classNames("table-head-item user", { desc: sort.direction === 'desc' })}
+                        onClick={() => sortTable('firstName', sort, localRows, setSort, setLocalRows)}
                     >
                         First Name <SVG icon={sort.name === 'firstName' ? sortActiveSVG : sortNoneSVG} />
                     </div>
-                    <div className={classNames("table-head-item user", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('lastName', sort, localRows, setSort, setLocalRows) }
+                    <div className={classNames("table-head-item user", { desc: sort.direction === 'desc' })}
+                        onClick={() => sortTable('lastName', sort, localRows, setSort, setLocalRows)}
                     >
                         Last Name <SVG icon={sort.name === 'lastName' ? sortActiveSVG : sortNoneSVG} />
                     </div>
-                    <div className={classNames("table-head-item user", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('email', sort, localRows, setSort, setLocalRows)}
+                    <div className={classNames("table-head-item user", { desc: sort.direction === 'desc' })}
+                        onClick={() => sortTable('email', sort, localRows, setSort, setLocalRows)}
                     >
                         Email <SVG icon={sort.name === 'email' ? sortActiveSVG : sortNoneSVG} />
                     </div>
-                    <div className={classNames("table-head-item user", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('expirationDate', sort, localRows, setSort, setLocalRows)}
+                    <div className={classNames("table-head-item user", { desc: sort.direction === 'desc' })}
+                        onClick={() => sortTable('expirationDate', sort, localRows, setSort, setLocalRows)}
                     >
                         Expiration Date <SVG icon={sort.name === 'expirationDate' ? sortActiveSVG : sortNoneSVG} />
                     </div>
@@ -72,16 +70,22 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                             {row.row.email}
                         </div>
                         <div className="table-body-item user">
-                            {row.row.expirationDate}
+                            {formatDate(row.row.subscriptionEndDate)}
                         </div>
                         <div className='table-body-row__actions'>
-                            <SVG icon={editSVG} onClick={() => {handleEditUser(true)}}/>
+                            <SVG icon={editSVG} onClick={() => { handleEditUser(true) }} />
                             <SVG icon={deleteSVG} />
                         </div>
                     </div>
                 ))}
             </div>
-            {showModal && <EditProfile user={USER} type_edit={true} onClose={() => handleEditUser(false)}/>}
+            {showModal && <EditProfile user={USER} type_edit={true} onClose={() => handleEditUser(false)} />}
         </div>
     )
+}
+
+
+function formatDate(date: string): string {
+    let result = date.split(' ')[0];
+    return result.replace(/[/]/g, '.');
 }
