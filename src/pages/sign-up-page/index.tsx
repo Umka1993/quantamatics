@@ -14,6 +14,7 @@ export const SignUpPage: React.FunctionComponent = (props) => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token')
     const email = urlParams.get('email')
+    const organizationName = urlParams.get('orgName')
 
     const history = useHistory()
 
@@ -60,7 +61,7 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                     <p>Create a password to complete recovery</p>
                 </div>)}
                 {resetPassword || (<div className="sign-up__title">
-                    <h2>Sign Up to <span>Dudka.agency</span></h2>
+                    <h2>Sign Up to <span>{organizationName}</span></h2>
                     <p>Create a password to complete the sign up</p>
                 </div>)}
                 <div className="sign-up__inputs">
