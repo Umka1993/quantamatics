@@ -67,8 +67,8 @@
     overflow-y: auto;
     &-row {
       display: flex;
-      padding-bottom: 26px;
-      padding-top: 26px;
+      padding-bottom: 25px;
+      padding-top: 25px;
       border-bottom: 1px solid rgba(113, 130, 166, 0.15);
       padding-right: 53px;
       position: relative;
@@ -136,6 +136,10 @@
       font-weight: normal;
       line-height: 16px;
       color: #7182A6;
+      padding: 1px 1.2em 1px 0;
+      box-sizing: border-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &:first-child {
         max-width: 220px;
@@ -150,12 +154,9 @@
       &:nth-child(3) {
         max-width: 261px;
         width: 100%;
-        span {
-          border-bottom: 1px solid #7182A6;
-          a {
-            text-decoration: none;
-            color: #7182A6;
-          }
+        a {
+          color: inherit;
+          text-underline-offset: 2px;
         }
       }
 

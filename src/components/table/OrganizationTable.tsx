@@ -60,22 +60,22 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
             <div className="table-head">
                 <div className="table-head-row">
                     <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('organization', sort, localRows, setSort, setLocalRows) }
+                        onClick={() => sortTable('organization', sort, localRows, setSort, setLocalRows) }
                     >
                         ORGANIZATION Name <SVG icon={sort.name === 'organization' ? sortActiveSVG : sortNoneSVG} />
                     </div>
                     <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('customerId', sort, localRows, setSort, setLocalRows) }
+                        onClick={() => sortTable('customerId', sort, localRows, setSort, setLocalRows) }
                     >
                         CRM Customer ID <SVG icon={sort.name === 'customerId' ? sortActiveSVG : sortNoneSVG} />
                     </div>
                     <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('customerLink', sort, localRows, setSort, setLocalRows) }
+                        onClick={() => sortTable('customerLink', sort, localRows, setSort, setLocalRows) }
                     >
                         CRM Customer link <SVG icon={sort.name === 'customerLink' ? sortActiveSVG : sortNoneSVG} />
                     </div>
                     <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('comments', sort, localRows, setSort, setLocalRows)}
+                        onClick={() => sortTable('comments', sort, localRows, setSort, setLocalRows)}
                     >
                         comments <SVG icon={sort.name === 'comments' ? sortActiveSVG : sortNoneSVG} />
                     </div>
@@ -91,14 +91,14 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                             {row.row.customerCrmId}
                         </div>
                         <div className="table-body-item">
-                            <span><a href={row.row.customerCrmLink}>{row.row.customerCrmLink}</a></span>
+                            <a href={row.row.customerCrmLink}>{row.row.customerCrmLink}</a>
                         </div>
                         <div className="table-body-item">
                             {row.row.comments}
                         </div>
                         <div className='table-body-row__actions'>
                             <SVG icon={editSVG}
-                                 onClick={() => handleEditRoute("apps/organizations/dudka-agency", row.row.id)}/>
+                                onClick={() => handleEditRoute("apps/organizations/dudka-agency", row.row.id)}/>
                             <SVG icon={deleteSVG} onClick={() => handleDeleteOrganization(row.row.id, index)}/>
                         </div>
                     </div>
