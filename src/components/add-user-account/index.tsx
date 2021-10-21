@@ -44,8 +44,9 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                 .catch((e) => {
                     console.log(e)
                 })
-        } else {
         }
+        // else {
+        // }
 
     }, [userName, userLastName, userEmail, userExpiration])
 
