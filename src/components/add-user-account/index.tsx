@@ -79,6 +79,8 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                     placeholder='Expiration Date'
                     required
                     value={userExpiration}
+                    minDate={new Date()}
+                    disablePastDate
                 />
 
                 <div className="add-user-account__form-btn-save">

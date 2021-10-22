@@ -13,15 +13,22 @@ interface IInput {
     value?: any
     required?: boolean
     errors?: boolean
+    minDate?: Date,
+    disablePastDate?: boolean;
 }
 
 export const DateInput: React.FunctionComponent<IInput> = (props) => {
-    const {className, placeholder, value, onChangeInput, required, errors} = props;
+    const {className, placeholder, value, onChangeInput, required, errors, disablePastDate, minDate } = props;
     const inputClassNames = classNames('date-input', className, {'error': errors})
 
     return(
         <div className={inputClassNames}>
-            <DatePicker placeholderText={placeholder} selected={value} onChange={(date) => onChangeInput(date)} />
+            <DatePicker 
+                placeholderText={placeholder} selected={value} 
+                onChange={(date) => onChangeInput(date)} 
+                minDate={minDate}
+                showDisabledMonthNavigation={disablePastDate}
+            />
             <SVG icon={calendarIcon} />
         </div>
     )
