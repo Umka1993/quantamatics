@@ -5,7 +5,6 @@ import { Button } from "../button/button";
 import SVG from "../SVG";
 import { DateInput } from "../date-input";
 import { network } from "../../services/networkService";
-import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Loader } from "../loader";
@@ -90,7 +89,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                     <Button type={'dotted'} text={'Cancel'} />
                 </div>
             </form>
-            {showSuccessAdd && (<div className="add-user-account__forgot-password success">
+            {true && (<div className="add-user-account__forgot-password success">
                 <div className="add-user-account__container">
                     <div className='add-user-account__forgot-password-success-text'>
                         <SVG icon={successIcon} />An invitation email has been sent to the user
@@ -98,8 +97,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                     <div className="add-user-account__btn">
                         <Button onClick={() => {
                             setShowSuccessAdd(false)
-                            dispatch(changeRoute("/apps/organizations/list"))
-                            history.push("/apps/organizations/list");
+                            history.go(0)
                         }} type={'simple'} text={'Go Back'} />
                     </div>
                 </div>

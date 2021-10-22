@@ -58,15 +58,18 @@
   }
 
   &__forgot-password {
-    position: absolute;
+    position: fixed;
     background-color: #fff;
-    height: 100%;
-    width: calc(100% + 274px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    left: -274px;
+    display: grid;
+    place-items: center;
+
+    width: 100%;
+    max-width: 1392px;
+    margin: 0 auto;
+    height: calc(100vh - 128px);
+
+    left: 0;
+    right: 0;
 
     &.success {
       .login-page__container {
@@ -88,15 +91,15 @@
         margin-right: 8px;
       }
     }
+  }
 
-    &__btn {
-      display: flex;
-      justify-content: center;
-      .button {
-        width: 100%;
-        padding: 10px 40px;
-        max-width: 140px;
-      }
+  &__forgot-password &__btn {
+    display: flex;
+    justify-content: center;
+    .button {
+      width: 100%;
+      padding: 10px 40px;
+      max-width: 140px;
     }
   }
 }
