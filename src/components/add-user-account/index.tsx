@@ -89,7 +89,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                     <Button type={'dotted'} text={'Cancel'} />
                 </div>
             </form>
-            {true && (<div className="add-user-account__forgot-password success">
+            {showSuccessAdd && (<div className="add-user-account__forgot-password success">
                 <div className="add-user-account__container">
                     <div className='add-user-account__forgot-password-success-text'>
                         <SVG icon={successIcon} />An invitation email has been sent to the user
