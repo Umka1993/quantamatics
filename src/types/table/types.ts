@@ -14,6 +14,7 @@ export interface IRow {
 export interface IUserRow {
     editable: boolean
     row: {
+        id: number,
         firstName: string
         lastName: string
         email: string

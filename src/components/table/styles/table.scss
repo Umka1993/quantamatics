@@ -101,21 +101,27 @@
         top: 50%;
         transform: translate(-50%, -50%);
         align-items: center;
+        color: #9EACC2;
         svg {
           margin-left: 12px;
           cursor: pointer;
           width: 16px;
           height: 16px;
           path {
-            fill: #9EACC2
+            fill: currentColor;
           }
 
           &:hover {
-            path {
-              fill: #017AEE
-            }
+            color: #017AEE
+          }
+
+          &.disabled {
+            color: transparentize(#9EACC2, 0.6);
+            cursor: default;
           }
         }
+
+        
       }
       &.deleting {
         &:before {

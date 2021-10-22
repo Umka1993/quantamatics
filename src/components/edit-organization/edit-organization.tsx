@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import { network } from "../../services/networkService";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
+import type { IUserRow } from "types/table/types";
 
 
 export const EditOrganization: React.FunctionComponent = (props) => {
@@ -39,6 +40,29 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             .catch((e: any) => {
                 console.log(e.data)
             })
+    }
+
+    const deleteUser = (id: number) => {
+        // TODO: Delete user
+
+        console.log(`Guy #${id} bust be deleted`)
+        // console.table(users.filter(({row}: IUserRow) => row.id !== id ))
+        /* network.post('api/Admin/updateUserOrg', { userId: id })
+            .then((r: any) => {
+
+                // let result = r.data.map((row: any) => {
+                //     return {
+                //         editable: true,
+                //         row
+                //     }
+                // })
+                console.log('users result', r)
+                // setUsers(result)
+            })
+            .catch((e: any) => {
+                console.log(e)
+                console.log(e.data)
+            }) */
     }
 
     const fetchOrganization = () => {
@@ -155,7 +179,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                         <Button type={'simple'} text={'Add New'} icon={addIcon} />
                                     </div>
                                 </div>
-                                {!!users && <UserTable inEdit rows={users} />}
+                                {!!users && <UserTable inEdit rows={users} deleteUser={deleteUser} />}
                             </div>
                         </div>
                     </div>

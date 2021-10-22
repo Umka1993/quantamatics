@@ -14,21 +14,26 @@ import { USER } from "../../contstans/constans";
 
 interface ITable {
     rows: IUserRow[]
-    inEdit?: boolean
+    inEdit?: boolean,
+    deleteUser: Function,
 }
 
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
-    const { rows } = props;
+    const { rows, deleteUser } = props;
     const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
     const [showModal, setShowModal] = useState<Boolean>(false)
     const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
 
     useEffect(() => {
-        localStorage.setItem('rows', JSON.stringify(props.rows))
-    }, [props.rows])
+        localStorage.setItem('rows', JSON.stringify(rows))
+    }, [rows])
 
     const handleEditUser = (modal: Boolean) => {
         setShowModal(modal)
+    }
+
+    const handleDeleteUser = (data : IUserRow) => {
+        deleteUser(data.row.id);
     }
 
     return (
@@ -58,8 +63,8 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                 </div>
             </div>
             <div className="table-body">
-                {localRows.map((row, index) => (
-                    <div className="table-body-row" key={index}>
+                {localRows.map((row) => (
+                    <div className="table-body-row" key={row.row.id}>
                         <div className="table-body-item user">
                             {row.row.firstName}
                         </div>
@@ -74,7 +79,7 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                         </div>
                         <div className='table-body-row__actions'>
                             <SVG icon={editSVG} onClick={() => { handleEditUser(true) }} />
-                            <SVG icon={deleteSVG} />
+                            <SVG icon={deleteSVG} onClick={() => {handleDeleteUser(row)}} className='disabled' />
                         </div>
                     </div>
                 ))}
