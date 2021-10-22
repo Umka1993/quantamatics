@@ -1,14 +1,23 @@
 import React, {useRef, useEffect, useState} from "react";
 import "./styles/jupyter-frame.scss"
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
+import { changeRoute } from "../../store/currentPage/actions";
 
 interface JupyterFrameProps {
     type: string
 }
 
 export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) => {
-    const {type} = props;
+    const dispatch = useDispatch();
+
+    const {type} = props;    
+
+    if (type === 'files') {        
+        dispatch(changeRoute('research/my-files'))
+    }
+
+
     const user = useSelector<RootState>((state) => state.user.user.firstName)
     const username: any = !!user ? user : ''
     const filesUrl = 'https://hub-k8s.dev.quantamatics.net/user/' + username +'/tree?'
