@@ -43,6 +43,10 @@
       color: #017AEE;
       border-bottom: 1px solid #017AEE;
     }
+
+    &:not(:placeholder-shown):invalid {
+      border-bottom: 1px solid #FF5757;
+    }
   }
   &--limited input {
     padding-right: 4em;

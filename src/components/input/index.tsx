@@ -21,23 +21,17 @@ interface IInput {
 }
 
 export const Input: React.FunctionComponent<IInput> = (props) => {
-    const { className, placeholder, value, onChangeInput, required,type, onEnterPress, icon, limit } = props;
-    let {  errors } = props;
+    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit } = props;
+    let { errors } = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
 
-    if (value && limit) {
-        if (value.length > limit) {
-            errors = true;
-        }
-    }
-    
     const inputClassNames = classNames(
-            'input',
-            className,
-            { 'error': errors },
-            { password: inputType === 'password' },
-            {'input--limited': limit}
-        )
+        'input',
+        className,
+        { 'error': errors },
+        { password: inputType === 'password' },
+        { 'input--limited': limit }
+    )
     const [showPassword, setShowPassword] = useState<boolean>(false)
 
     const togglePasswordShow = useCallback(() => {
@@ -63,7 +57,8 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 onChange={(event) => onChangeInput(event.target.value)}
                 required={required}
                 onKeyUp={(event) => handleEnterPress(event)}
-                max={limit}
+                maxLength={limit as number}
+                minLength={0}
             />
             {!!type && type === 'password' && (
                 <div className={classNames('show-password', { active: showPassword })}>

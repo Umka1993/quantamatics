@@ -63,16 +63,19 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
                     placeholder='Organization Name'
                     value={organizationName}
                     required
+                    limit={32}
                 />
                 <Input
                     onChangeInput={(value)=>setCustomerID(value)}
                     placeholder='CRM Customer ID'
                     value={customerID}
+                    limit={32}
                 />
                 <Input
                     onChangeInput={(value)=>setCustomerLink(value)}
                     placeholder='CRM Customer ID Link'
                     value={customerLink}
+                    limit={32}
                 />
                 <Input
                     onChangeInput={(value)=>setComment(value)}
