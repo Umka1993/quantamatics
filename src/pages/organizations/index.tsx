@@ -43,9 +43,9 @@ export const Organizations: React.FunctionComponent = (props) => {
     }, [organizations])
 
     return(
-        <div className="organization">
+        <section className="organization">
             <div className="organization__list">
-                <div className="organization__header">
+                <header className="organization__header">
                     <div className="organization__titles">
                         <h1>List of Organizations</h1>
                         <p>Create and customize organizations for future owners</p>
@@ -53,9 +53,9 @@ export const Organizations: React.FunctionComponent = (props) => {
                     <div className="organization__btn" onClick={() => createNew()}>
                         <Button type={'simple'} text={'Add New'} icon={addIcon}/>
                     </div>
-                </div>
+                </header>
                 {!!organizations ? <OrganizationTable rows={organizations}/> : (<div className='organization-table-loader'><Loader /></div>)}
             </div>
-        </div>
+        </section>
     )
 }
