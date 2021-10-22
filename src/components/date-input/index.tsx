@@ -21,8 +21,8 @@ export const DateInput: React.FunctionComponent<IInput> = (props) => {
 
     return(
         <div className={inputClassNames}>
-            <DatePicker selected={value} onChange={(date) => onChangeInput(date)} />
-            <SVG icon={calendarIcon}/>
+            <DatePicker placeholderText={placeholder} selected={value} onChange={(date) => onChangeInput(date)} />
+            <SVG icon={calendarIcon} />
         </div>
     )
 }

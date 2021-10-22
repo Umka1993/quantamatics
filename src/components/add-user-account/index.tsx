@@ -2,7 +2,6 @@ import React, { useCallback, useState } from "react";
 import "./styles/add-user-account.scss"
 import { Input } from "../input";
 import { Button } from "../button/button";
-import arrowIcon from "./assets/arrow.svg"
 import SVG from "../SVG";
 import { DateInput } from "../date-input";
 import { network } from "../../services/networkService";
