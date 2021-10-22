@@ -35,12 +35,12 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             .then((r: any) => {
 
                 let result = r.data.map((row: any) => {
+                    
                     return {
                         editable: true,
                         row
                     }
                 })
-                console.log('users result', result)
                 setUsers(result)
             })
             .catch((e: any) => {
@@ -75,7 +75,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
         network.get('api/Organization/get', { id: orgId })
             .then((r: any) => {
 
-                console.log('org', r)
+                dispatch(changeRoute(`apps/organizations/${r.data.name}`))
                 setOrganization(r.data)
                 setOrganizationName(r.data.name)
                 setCustomerID(r.data.customerCrmId)

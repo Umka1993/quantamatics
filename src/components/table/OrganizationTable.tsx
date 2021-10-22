@@ -111,7 +111,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                         </div>
                         <div className='table-body-row__actions'>
                             <SVG icon={editSVG}
-                                onClick={() => handleEditRoute("apps/organizations/dudka-agency", row.row.id)}/>
+                                onClick={() => handleEditRoute("apps/organizations", row.row.id)}/>
                             <SVG icon={deleteSVG} onClick={() => handleDeleteOrganization(row.row.id, index)}/>
                         </div>
                     </div>

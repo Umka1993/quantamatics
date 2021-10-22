@@ -16,8 +16,6 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
 
-
-
     const changeRoutePath = (route: string) => {
         dispatch(changeRoute(route))
         history.push('/')
