@@ -15,13 +15,13 @@ interface IButton {
 
 export const Button: React.FunctionComponent<IButton> = ({type, disabled, onClick, htmlType='button', icon, text}) => {
     const buttonClasses: any = classNames({
-        'button button__simple': type == 'simple',
-        'button button__dotted': type == 'dotted',
-        'button button__disabled': disabled,
+        'button button--simple': type == 'simple',
+        'button button--dotted': type == 'dotted',
+        'button button--disabled': disabled,
     })
     return (
         <button className={buttonClasses} onClick={disabled ? () => {} : onClick} type={htmlType} disabled={disabled}>
-            {icon && <SVG icon={icon}/>}
+            {icon && <SVG icon={icon} className='button__prepend'/>}
             {text}
         </button>
     )

@@ -11,7 +11,14 @@
   background-color: transparent;
   padding: 0;
 
-  &__simple{
+  &__prepend {
+    margin-right: 7px;
+    path {
+      fill: currentColor;
+    }
+  }
+
+  &--simple{
     transition: .5s ease all;
     border: 1px solid #017AEE;
     border-radius: 2px;
@@ -20,13 +27,6 @@
     font-weight: 500;
     line-height: 18px;
 
-    svg{
-      margin-right: 7px;
-      path {
-        fill: #017AEE;
-      }
-    }
-
     &:hover,
     &:focus-visible {
       background: #017AEE;
@@ -34,7 +34,7 @@
     }
   }
 
-  &__dotted{
+  &--dotted{
     color: rgba(61, 83, 102, 0.5);
     font-size: 16px;
     line-height: 18px;
@@ -42,7 +42,7 @@
     padding-bottom: 3px;
   }
 
-  &__disabled,
+  &--disabled,
   &[disabled] {
     cursor: not-allowed;
     color: #BCC5D8;
