@@ -46,7 +46,7 @@ export const SignUpPage: React.FunctionComponent = (props) => {
             })
                 .then((r: any) => {
                     setLoginProcess(false)
-                    history.push("/login");
+                    history.push("/");
                 })
                 .catch((e) => {
                     console.log(e)
