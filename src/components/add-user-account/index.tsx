@@ -1,15 +1,15 @@
-import React, {useCallback, useState} from "react";
+import React, { useCallback, useState } from "react";
 import "./styles/add-user-account.scss"
-import {Input} from "../input";
-import {Button} from "../button/button";
+import { Input } from "../input";
+import { Button } from "../button/button";
 import arrowIcon from "./assets/arrow.svg"
 import SVG from "../SVG";
-import {DateInput} from "../date-input";
-import {network} from "../../services/networkService";
-import {changeRoute} from "../../store/currentPage/actions";
-import {useDispatch} from "react-redux";
-import {useHistory} from "react-router-dom";
-import {Loader} from "../loader";
+import { DateInput } from "../date-input";
+import { network } from "../../services/networkService";
+import { changeRoute } from "../../store/currentPage/actions";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { Loader } from "../loader";
 import successIcon from "../../pages/add-user-page/assets/sucess-icon.svg";
 
 interface IAddUserAccount {
@@ -52,48 +52,54 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
 
     return (
         <div className="add-user-account">
-            <div className="add-user-account__form">
-                <h2>Add User Accounts</h2>
+            <form className="add-user-account__form" 
+                onSubmit={(e) => { e.preventDefault(); addUserToOrg(); }}
+            >
+                <header className="add-user-account__header">
+                    <h2>Add User Accounts</h2>
+                    <p>Add users to your organization and manage them</p>
+                </header>
+
                 <Input onChangeInput={(value) => setUserName(value)}
-                       placeholder="Name"
-                       required
-                       value={userName}
+                    placeholder="Name"
+                    required
+                    value={userName}
                 />
                 <Input onChangeInput={(value) => setUserLastName(value)}
-                       placeholder="Last name"
-                       required
-                       value={userLastName}
+                    placeholder="Last name"
+                    required
+                    value={userLastName}
                 />
                 <Input onChangeInput={(value) => setUserEmail(value)}
-                       placeholder="Email Address"
-                       required
-                       value={userEmail}
+                    placeholder="Email Address"
+                    required
+                    value={userEmail}
                 />
                 <DateInput
-                    onChangeInput={(value)=>setUserExpiration(value)}
+                    onChangeInput={(value) => setUserExpiration(value)}
                     placeholder='Expiration Date'
                     required
                     value={userExpiration}
                 />
 
-                <div className="add-user-account__form-btn-save" onClick={() => addUserToOrg()}>
-                    <Button type={'simple'} text={'Save'}/>
+                <div className="add-user-account__form-btn-save">
+                    <Button type={'simple'} text={'Save'} htmlType={"submit"} />
                 </div>
                 <div className="add-user-account__form-btn-cancel" onClick={props.onBack}>
-                    <Button type={'dotted'} text={'Cancel'}/>
+                    <Button type={'dotted'} text={'Cancel'} />
                 </div>
-            </div>
+            </form>
             {showSuccessAdd && (<div className="add-user-account__forgot-password success">
                 <div className="add-user-account__container">
                     <div className='add-user-account__forgot-password-success-text'>
-                        <SVG icon={successIcon}/>An invitation email has been sent to the user
+                        <SVG icon={successIcon} />An invitation email has been sent to the user
                     </div>
                     <div className="add-user-account__btn">
                         <Button onClick={() => {
                             setShowSuccessAdd(false)
                             dispatch(changeRoute("/apps/organizations/list"))
                             history.push("/apps/organizations/list");
-                        }} type={'simple'} text={'Go Back'}/>
+                        }} type={'simple'} text={'Go Back'} />
                     </div>
                 </div>
             </div>)}
