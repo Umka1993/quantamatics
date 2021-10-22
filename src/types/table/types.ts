@@ -1,4 +1,3 @@
-
 export interface IRow {
     editable: boolean
     row: {
