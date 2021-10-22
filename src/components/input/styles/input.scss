@@ -44,6 +44,9 @@
       border-bottom: 1px solid #017AEE;
     }
   }
+  &--limited input {
+    padding-right: 4em;
+  }
 
   .error-container {
     color: #e23737;

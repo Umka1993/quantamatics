@@ -164,7 +164,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                     <Input onChangeInput={(value) => setComment(value)}
                                         value={comment}
                                         placeholder='Comments'
-                                        limit={'200'}
+                                        limit={200}
                                     />
                                 </div>
                             </div>
