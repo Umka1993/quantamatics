@@ -5,12 +5,16 @@ import { Button } from "../button/button";
 import { UserTable } from "../table/UserTable";
 import { AddUserAccount } from "../add-user-account";
 import { Input } from "../input";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { network } from "../../services/networkService";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import type { IUserRow } from "types/table/types";
 
+
+type RouteParams = {
+    id: string;
+}
 
 export const EditOrganization: React.FunctionComponent = (props) => {
     const [organizationName, setOrganizationName] = useState<string>('')
@@ -19,7 +23,9 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const [comment, setComment] = useState<string | undefined>('')
     const [users, setUsers] = useState<any>(null)
     const [organization, setOrganization] = useState<any>(null)
-    const [orgId, setOrgId] = useState<string>(window.location.pathname.replace('/apps/organizations/dudka-agency/', ''))
+
+    const { id: orgId } = useParams<RouteParams>();
+
     const dispatch = useDispatch();
     const history = useHistory();
     const [addUserActive, setAddUserActive] = useState<Boolean>(false)
