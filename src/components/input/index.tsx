@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, KeyboardEventHandler } from "react";
 import "./styles/input.scss"
 import classNames from "classnames";
 import SVG from '../SVG'
@@ -7,7 +7,7 @@ import closedEyeSVG from './assets/closed-eye.svg'
 
 export type ReactSVGComponent = React.FunctionComponent<React.SVGAttributes<SVGElement>>
 
-const PASSWORD_REGEXP : RegExp = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\[\]"\';:_\-<>\., =\+\/\\]).{8,}/
+const PATTERN_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*\\[\\]\\\\\"';:<_>., =+/-]).*$"
 
 interface IInput {
     className?: string,
@@ -19,15 +19,18 @@ interface IInput {
     errors?: boolean
     type?: string
     limit?: string | number
-    icon?: ReactSVGComponent
+    icon?: ReactSVGComponent,
+    errorText?: string
 }
 
 export const Input: React.FunctionComponent<IInput> = (props) => {
-    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit } = props;
+    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit, errorText } = props;
     let { errors } = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
 
-    const [errorMessage, setErrorMessage] = useState<string | boolean>(false)
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(errorText)
+
+    const pattern = type === 'password' ? PATTERN_PASSWORD : undefined;
 
     const minLength = type === 'password' ? 8 : 0;
 
@@ -50,13 +53,25 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
         }
     }, [showPassword, inputType])
 
-    const handleEnterPress = (event: any) => {
-        if (type === 'password') {
-            const passFormatMessage = 'The password must contain at least 8 characters, 1 uppercase letter, 1 digit and 1 special character.';
-            const passwordCheck = PASSWORD_REGEXP.test(value as string);
-            setErrorMessage(passwordCheck ? !passwordCheck : passFormatMessage);
+    const passwordValidation = (element: HTMLInputElement) => {
+        const {tooShort, patternMismatch} = element.validity;
+
+        let text = 'The password must contain at least '
+        if (tooShort) {
+            text += '8 characters';
+        } 
+        if (patternMismatch) {
+            text += ', 1 uppercase letter, 1 digit and 1 special character.';
         }
-        if (!!onEnterPress && event.keyCode === 13) onEnterPress()
+
+        setErrorMessage(tooShort || patternMismatch  ? text : undefined);
+    }
+
+
+    const handleKeyUp : KeyboardEventHandler<HTMLInputElement> = (evt)  => {
+        if (type === 'password') passwordValidation(evt.target as HTMLInputElement)
+        
+        if (!!onEnterPress && evt.key === 'Enter') onEnterPress()
     }
 
     return (
@@ -67,9 +82,10 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 value={value || ''}
                 onChange={(event) => onChangeInput(event.target.value)}
                 required={required}
-                onKeyUp={(event) => handleEnterPress(event)}
+                onKeyUp={handleKeyUp}
                 maxLength={limit as number}
                 minLength={minLength}
+                pattern={pattern}
             />
             {errorMessage && <p className='input__error'>{errorMessage}</p>}
             {!!type && type === 'password' && (
