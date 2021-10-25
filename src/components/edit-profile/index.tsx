@@ -1,18 +1,18 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./styles/edit-profile.scss"
 import photoIcon from "./assets/photos.svg"
 import closeIcon from "./assets/close.svg"
 import editIcon from "./assets/edit.svg"
 import avatar from "./assets/avatar.svg"
 import SVG from "../SVG";
-import {Button} from "../button/button";
-import {Input} from "../input";
-import {User} from "../../types/edit-profile/types"
-import {DateInput} from "../date-input";
-import {SelectorInput} from "../selector-input";
-import {USER_ORGS} from "../../contstans/constans";
+import { Button } from "../button/button";
+import { Input } from "../input";
+import { User } from "../../types/edit-profile/types"
+import { DateInput } from "../date-input";
+import { SelectorInput } from "../selector-input";
+import { USER_ORGS } from "../../contstans/constans";
 
-interface IEditProfile{
+interface IEditProfile {
     onClose: () => void
     type_edit?: Boolean
     user: User
@@ -27,7 +27,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
     }
 
     return (
-        <div>
+        <>
             <div className="modal-profile">
             </div>
             <div className="edit-profile">
@@ -36,11 +36,11 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
                         <div className="edit-profile__summary-container">
                             <div className="avatar">
                                 <div className="avatar__img">
-                                    <SVG icon={avatar}/>
+                                    <SVG icon={avatar} />
                                 </div>
                                 <div className="avatar__upload">
                                     <div className="avatar__upload-text">Upload New</div>
-                                    <SVG icon={photoIcon}/>
+                                    <SVG icon={photoIcon} />
                                 </div>
                             </div>
                             <div className="details">
@@ -70,58 +70,58 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
                     <div className="edit-profile__fields">
                         <div className="edit-profile__fields-container">
                             <div className="edit-profile__close" onClick={() => handleModalClose()}>
-                                <SVG icon={closeIcon}/>
+                                <SVG icon={closeIcon} />
                             </div>
                             <div className="edit-profile__title">Change Password</div>
                             {
                                 props.type_edit ?
                                     <div>
-                                         <Input onChangeInput={(value => {})}
-                                                value={props.user.name}
-                                                icon={editIcon}
-                                         />
-                                        <Input onChangeInput={(value => {})}
-                                               value={props.user.surname}
-                                               icon={editIcon}
+                                        <Input onChangeInput={(value => { })}
+                                            value={props.user.name}
+                                            icon={editIcon}
                                         />
-                                        <SelectorInput onChangeInput={(value => {})}
-                                                       options={USER_ORGS}
-                                                       value={props.user.organization}
+                                        <Input onChangeInput={(value => { })}
+                                            value={props.user.surname}
+                                            icon={editIcon}
                                         />
-                                        <Input onChangeInput={(value => {})}
-                                               value={props.user.email}
-                                               icon={editIcon}
+                                        <SelectorInput onChangeInput={(value => { })}
+                                            options={USER_ORGS}
+                                            value={props.user.organization}
                                         />
-                                        <DateInput onChangeInput={(value => {})}/>
+                                        <Input onChangeInput={(value => { })}
+                                            value={props.user.email}
+                                            icon={editIcon}
+                                        />
+                                        <DateInput onChangeInput={(value => { })} />
                                     </div>
                                     :
                                     <div>
                                         <Input onChangeInput={(value) => setCurrentPassword(value)}
-                                               value={currentPassword}
-                                               placeholder={'Current Password'}
-                                               type={'password'}/>
+                                            value={currentPassword}
+                                            placeholder={'Current Password'}
+                                            type={'password'} />
                                         <Input onChangeInput={(value) => setNewPassword(value)}
-                                               value={newPassword}
-                                               placeholder={'New Password'}
-                                               type={'password'}/>
+                                            value={newPassword}
+                                            placeholder={'New Password'}
+                                            type={'password'} />
                                         <Input onChangeInput={(value) => setConfirmPassword(value)}
-                                               value={confirmPassword}
-                                               placeholder={'Confirm New Password'}
-                                               type={'password'}/>
+                                            value={confirmPassword}
+                                            placeholder={'Confirm New Password'}
+                                            type={'password'} />
                                     </div>
                             }
                             <div className="edit-profile__buttons">
                                 <div className="edit-profile__cancel-btn" onClick={() => handleModalClose()}>
-                                    <Button type={'dotted'} text={'Cancel'}/>
+                                    <Button type={'dotted'} text={'Cancel'} />
                                 </div>
                                 <div className="edit-profile__save-btn">
-                                    <Button type={'simple'} text={'Save'}/>
+                                    <Button type={'simple'} text={'Save'} />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

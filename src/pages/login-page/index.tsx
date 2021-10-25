@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/login-page.scss"
-import {Input} from "../../components/input";
-import {Loader} from "../../components/loader";
-import {Button} from "../../components/button/button";
-import {CheckBox} from "../../components/checkbox";
-import {network} from "../../services/networkService";
-import {useDispatch, useSelector} from "react-redux";
-import {useHistory} from "react-router-dom";
-import {RootState} from "../../store";
+import { Input } from "../../components/input";
+import { Loader } from "../../components/loader";
+import { Button } from "../../components/button/button";
+import { CheckBox } from "../../components/checkbox";
+import { network } from "../../services/networkService";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { RootState } from "../../store";
 import SVG from "../../components/SVG";
 import successIcon from "../add-user-page/assets/sucess-icon.svg";
 
@@ -29,28 +29,32 @@ export const SignInPage: React.FunctionComponent = (props) => {
     const [errors, setErrors] = useState<string>('')
 
     useEffect(() => {
-        if(!!user) history.push('/research/my-files')
+        if (!!user) history.push('/research/my-files')
     }, [user])
 
     useEffect(() => {
-      const handleKeyUp = (e: any) => {
-        if (e.keyCode === 13) {
-          handleLogin()
+        console.log(errors);
+
+    }, [errors])
+
+    useEffect(() => {
+        const handleKeyUp = (e: any) => {
+            if (e.keyCode === 13) {
+                handleLogin()
+            }
         }
-      }
 
-      window.document.addEventListener('keyup', handleKeyUp);
+        window.document.addEventListener('keyup', handleKeyUp);
 
-      return () => {
-        window.document.removeEventListener('keyup', handleKeyUp);
-      }
+        return () => {
+            window.document.removeEventListener('keyup', handleKeyUp);
+        }
     }, []);
 
     const history = useHistory()
     const dispatch = useDispatch()
 
     const handleLogin = () => {
-        console.log(userName)
         if (userName && password) {
             setLoginProcess(true)
             network.post('api/Account/login', {
@@ -88,7 +92,9 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     history.push('/apps/organizations/list')
                 })
                 .catch((e) => {
-                    console.log(e)
+                    if (e.response.status >= 400) {
+                        setErrors('Incorrect username or password.')
+                    }
                     setLoginProcess(false)
                     setErrors('Incorrect username or password. ')
                 })
@@ -102,7 +108,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
         if (forgotEmail) {
             setLoginProcess(true)
             network.post('api/Account/sendPasswordReset', {
-            }, {params: {email: forgotEmail,}})
+            }, { params: { email: forgotEmail, } })
                 .then((r: any) => {
                     console.log(r)
                     setLoginProcess(false)
@@ -117,7 +123,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
     }
 
 
-    if (!!user) return <div/>
+    if (!!user) return <div />
 
     return (
         <div className="login-page">
@@ -146,19 +152,19 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     {!!errors && (<div className="login-page__inputs-errors">{errors}</div>)}
                 </div>
                 <div className="login-page__wrap">
-                    <CheckBox checked={rememberMe} onClick={(value) => setRememberMe(value)} label={'Remember Me'}/>
+                    <CheckBox checked={rememberMe} onClick={(value) => setRememberMe(value)} label={'Remember Me'} />
                     <div className="login-page__forgot" onClick={() => setShowForgotPassword(true)}>
                         Forgot Password?
                     </div>
                 </div>
                 <div className="login-page__btn">
-                    <Button onClick={() => handleLogin()} type={'simple'} text={'Sign In'} disabled={!userName || !password}/>
+                    <Button onClick={() => handleLogin()} type={'simple'} text={'Sign In'} disabled={!userName || !password} />
                 </div>
             </div>
             {showForgotPassword && (<div className="login-page__forgot-password">
                 <div className="login-page__container">
                     <div className="login-page__title">
-                        <h2>Forgot your password?</h2>
+                        <h2>Forgot Your Password?</h2>
                         <p>To restore the password, enter your email</p>
                     </div>
                     <div className="login-page__inputs">
@@ -171,10 +177,10 @@ export const SignInPage: React.FunctionComponent = (props) => {
                         />
                     </div>
                     <div className="login-page__btn">
-                        <Button onClick={() => sendPasswordResetRequest()} type={'simple'} text={'Save'}
-                                disabled={!forgotEmail}/>
+                        <Button onClick={() => sendPasswordResetRequest()} type={'simple'} text={'Send'}
+                            disabled={!forgotEmail} />
                         <div className="login-page__btn-cancel" onClick={() => setShowForgotPassword(false)}>
-                            <Button type={'dotted'} text={'Cancel'}/>
+                            <Button type={'dotted'} text={'Cancel'} />
                         </div>
                     </div>
                 </div>
@@ -182,13 +188,13 @@ export const SignInPage: React.FunctionComponent = (props) => {
             {showSuccessForgot && (<div className="login-page__forgot-password success">
                 <div className="login-page__container">
                     <div className='login-page__forgot-password-success-text'>
-                        <SVG icon={successIcon}/>A reset password email was sent to the email entered
+                        <SVG icon={successIcon} />A reset password email was sent to the email entered
                     </div>
                     <div className="login-page__btn">
                         <Button onClick={() => {
                             setShowSuccessForgot(false)
                             setShowForgotPassword(false)
-                        }} type={'simple'} text={'Go to Log in Page'}/>
+                        }} type={'simple'} text={'Go to Log in Page'} />
                     </div>
                 </div>
             </div>)}

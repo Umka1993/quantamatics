@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 1392px;
   margin: 0 auto;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.1);
   border-radius: 4px;
   min-height: 602px;
@@ -18,28 +18,30 @@
   }
 
   &__title {
-    h2{
+    h2 {
       font-size: 24px;
       line-height: 28px;
       letter-spacing: 0.2px;
-      color: #003C71;
+      color: #003c71;
       margin-bottom: 16px;
     }
-    span{
+    span {
       font-weight: 500;
       font-size: 24px;
       line-height: 28px;
       letter-spacing: 0.2px;
-      color: #017AEE;
+      color: #017aee;
     }
-    p{
-      font-size: 18px;
-      line-height: 21px;
-      color: rgba(61, 83, 102, 0.7);
+    p {
+      font-size: 16px;
+      line-height: 1.125;
+      text-align: center;
+
+      color: #7182a6;
     }
   }
 
-  &__btn{
+  &__btn {
     height: 40px;
     width: 100%;
     margin: 40px auto 0;

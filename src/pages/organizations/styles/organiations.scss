@@ -1,34 +1,37 @@
-.organization{
-
-  &__header{
+.organization {
+  &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  &__btn{
+  &__btn {
     width: 140px;
     height: 40px;
   }
-  h1{
-    font-style: normal;
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 28px;
-    color: #003C71;
-  }
-  p{
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 18px;
 
-    color: rgba(61, 83, 102, 0.7);
+  &__titles {
+    h1 {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 28px;
+      color: #003c71;
+    }
+
+    p {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 18px;
+
+      color: #7182a6;
+    }
   }
 
-  &__list{
+  &__list {
     padding: 40px;
   }
-  
+
   &-table-loader {
     position: relative;
     height: 400px;

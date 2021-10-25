@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from "react";
+import React, { useState, useCallback } from "react";
 import "./styles/input.scss"
 import classNames from "classnames";
 import SVG from '../SVG'
@@ -16,14 +16,22 @@ interface IInput {
     required?: boolean
     errors?: boolean
     type?: string
-    limit?: string
+    limit?: string | number
     icon?: ReactSVGComponent
 }
 
 export const Input: React.FunctionComponent<IInput> = (props) => {
-    const {className, placeholder, value, onChangeInput, required, errors, type, onEnterPress, icon, limit} = props;
+    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit } = props;
+    let { errors } = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
-    const inputClassNames = classNames('input', className, {'error': errors}, {password: inputType === 'password'})
+
+    const inputClassNames = classNames(
+        'input',
+        className,
+        { 'error': errors },
+        { password: inputType === 'password' },
+        { 'input--limited': limit }
+    )
     const [showPassword, setShowPassword] = useState<boolean>(false)
 
     const togglePasswordShow = useCallback(() => {
@@ -49,23 +57,25 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 onChange={(event) => onChangeInput(event.target.value)}
                 required={required}
                 onKeyUp={(event) => handleEnterPress(event)}
+                maxLength={limit as number}
+                minLength={0}
             />
             {!!type && type === 'password' && (
-                <div className={classNames('show-password', {active: showPassword})}>
-                    {showPassword ? <SVG icon={closedEyeSVG} onClick={() => togglePasswordShow()}/> :
-                        <SVG icon={eyeSVG} onClick={() => togglePasswordShow()}/>}
+                <div className={classNames('show-password', { active: showPassword })}>
+                    {showPassword ? <SVG icon={eyeSVG} onClick={() => togglePasswordShow()} /> :
+                        <SVG icon={closedEyeSVG} onClick={() => togglePasswordShow()} />}
                 </div>
 
             )}
             {!!icon &&
-            <div className="input__icon">
-                <SVG icon={icon}/>
-            </div>
+                <div className="input__icon">
+                    <SVG icon={icon} />
+                </div>
             }
             {
                 !!limit &&
                 <div className="input__limit">
-                    {'0/' + limit}
+                    {value?.length} / {limit}
                 </div>
             }
         </div>

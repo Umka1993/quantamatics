@@ -1,3 +1,7 @@
+$accent: #017AEE;
+$inactive: #BCC4D8;
+$disabled: #BCC5D8;
+
 .button{
   display: flex;
   align-items: center;
@@ -7,44 +11,55 @@
   outline: none;
   cursor: pointer;
   box-sizing: border-box;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  font-size: 16px;
 
-  &__simple{
+  &__prepend {
+    margin-right: 7px;
+    path {
+      fill: currentColor;
+    }
+  }
+
+  &--simple{
     transition: .5s ease all;
-    border: 1px solid #017AEE;
+    border: 1px solid $accent; 
     border-radius: 2px;
-    color: #017AEE;
-    font-size: 14px;
+    color: $accent;
     font-weight: 500;
     line-height: 18px;
 
-    svg{
-      margin-right: 7px;
-      path {
-        fill: #017AEE;
-      }
-    }
-
-    &:hover{
+    &:hover,
+    &:focus-visible {
       background: #017AEE;
       color: #FFFFFF;
     }
   }
 
-  &__dotted{
-    color: rgba(61, 83, 102, 0.5);
-    font-size: 16px;
+  &--dotted{
+    color: $inactive;
     line-height: 18px;
-    border-bottom: 1.5px dashed rgba(61, 83, 102, 0.5);
+    border-bottom: 1.5px dashed currentColor;
     padding-bottom: 3px;
+
+    &:hover, 
+    &:active, 
+    &:focus-visible {
+      color: $accent;
+      border-color: transparent;
+    }
   }
 
-  &__disabled {
+  &--disabled,
+  &[disabled] {
     cursor: not-allowed;
-    color: #BCC5D8;
-    border-color: #BCC5D8;
+    color: $disabled;
+    border-color: $disabled;
     &:hover{
       background: #fff;
-      color: #BCC5D8;
+      color: $disabled;
     }
   }
 }

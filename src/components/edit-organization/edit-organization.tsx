@@ -1,16 +1,20 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./styles/edit-organizations.scss"
 import addIcon from "./assets/human-add.svg"
-import {Button} from "../button/button";
-import {UserTable} from "../table/UserTable";
-import {AddUserAccount} from "../add-user-account";
-import {Input} from "../input";
-import {USER_TABLE_ITEMS} from "../../contstans/constans";
-import {useHistory} from "react-router-dom";
-import {network} from "../../services/networkService";
-import {changeRoute} from "../../store/currentPage/actions";
-import {useDispatch} from "react-redux";
+import { Button } from "../button/button";
+import { UserTable } from "../table/UserTable";
+import { AddUserAccount } from "../add-user-account";
+import { Input } from "../input";
+import { useHistory, useParams } from "react-router-dom";
+import { network } from "../../services/networkService";
+import { changeRoute } from "../../store/currentPage/actions";
+import { useDispatch } from "react-redux";
+import type { IUserRow } from "types/table/types";
 
+
+type RouteParams = {
+    id: string;
+}
 
 export const EditOrganization: React.FunctionComponent = (props) => {
     const [organizationName, setOrganizationName] = useState<string>('')
@@ -19,22 +23,24 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const [comment, setComment] = useState<string | undefined>('')
     const [users, setUsers] = useState<any>(null)
     const [organization, setOrganization] = useState<any>(null)
-    const [orgId, setOrgId] = useState<string>(window.location.pathname.replace('/apps/organizations/dudka-agency/', ''))
+
+    const { id: orgId } = useParams<RouteParams>();
+
     const dispatch = useDispatch();
     const history = useHistory();
     const [addUserActive, setAddUserActive] = useState<Boolean>(false)
 
     const fetchUsers = () => {
-        network.get('api/User/list', {orgId})
+        network.get('api/User/list', { orgId })
             .then((r: any) => {
 
                 let result = r.data.map((row: any) => {
+                    
                     return {
                         editable: true,
                         row
                     }
                 })
-                console.log('users result', result)
                 setUsers(result)
             })
             .catch((e: any) => {
@@ -42,11 +48,34 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             })
     }
 
-    const fetchOrganization = () => {
-        network.get('api/Organization/get', {id: orgId})
+    const deleteUser = (id: number) => {
+        // TODO: Delete user
+
+        console.log(`Guy #${id} bust be deleted`)
+        // console.table(users.filter(({row}: IUserRow) => row.id !== id ))
+        /* network.post('api/Admin/updateUserOrg', { userId: id })
             .then((r: any) => {
 
-                console.log('org', r)
+                // let result = r.data.map((row: any) => {
+                //     return {
+                //         editable: true,
+                //         row
+                //     }
+                // })
+                console.log('users result', r)
+                // setUsers(result)
+            })
+            .catch((e: any) => {
+                console.log(e)
+                console.log(e.data)
+            }) */
+    }
+
+    const fetchOrganization = () => {
+        network.get('api/Organization/get', { id: orgId })
+            .then((r: any) => {
+
+                dispatch(changeRoute(`apps/organizations/${r.data.name}`))
                 setOrganization(r.data)
                 setOrganizationName(r.data.name)
                 setCustomerID(r.data.customerCrmId)
@@ -82,85 +111,85 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     }, [organizationName, customerID, customerLink, comment])
 
     useEffect(() => {
-        if(!users && orgId) fetchUsers()
+        if (!users && orgId) fetchUsers()
     }, [!users])
 
     useEffect(() => {
-        if(!organization) fetchOrganization()
+        if (!organization) fetchOrganization()
     }, [!organization])
 
     return (
-       <div className="h-100">
-           {
-               addUserActive ?
-                   <AddUserAccount orgId={orgId} onBack={() => setAddUserActive(false)}/>
-                   :
-                   <div className="edit-organization">
-                       <div className="edit-organization__header">
-                           <div className="edit-organization__title">
-                               Edit Organization
-                           </div>
-                           <div className="edit-organization__buttons">
-                               <div className="edit-organization__cancel-btn" onClick={() => {
-                                   dispatch(changeRoute('apps/organizations/list'))
-                                   history.push("/apps/organizations/list")
-                               }}>
-                                   <Button type={'dotted'} text={'Cancel'}/>
-                               </div>
-                               <div className="edit-organization__save-btn" onClick={() => updateOrganization()}>
-                                   <Button type={'simple'} text={'Save'}/>
-                               </div>
-                           </div>
-                       </div>
-                       <div className="edit-organization__body">
-                           <div className="edit-organization__info">
-                               <div className="edit-organization__info-title">
-                                   Ogranization info
-                               </div>
-                               <div className="edit-organization__inputs">
-                                   <div className="edit-organization__input">
-                                       <Input onChangeInput={(value) => setOrganizationName(value)}
-                                              value={organizationName}
-                                              placeholder='Name of The Organization'
-                                       />
-                                   </div>
-                                   <div className="edit-organization__input">
-                                       <Input onChangeInput={(value) => setCustomerID(value)}
-                                              value={customerID}
-                                              placeholder='CRM Customer ID'
-                                       />
-                                   </div>
-                                   <div className="edit-organization__input">
-                                       <Input onChangeInput={(value) => setCustomerLink(value)}
-                                              value={customerLink}
-                                              placeholder='CRM Customer ID Link'
-                                       />
-                                   </div>
-                               </div>
-                               <div className="edit-organization__comments">
-                                   <Input onChangeInput={(value) => setComment(value)}
-                                          value={comment}
-                                          placeholder='Comments'
-                                          limit={'200'}
-                                   />
-                               </div>
-                           </div>
-                           <div className="edit-organization__user-list">
-                               <div className="edit-organization__user-list-header">
-                                   <div className="edit-organization__user-list-title">
-                                       User List
-                                   </div>
-                                   <div className="edit-organization__user-list-add"
+        <div className="content-wrapper">
+            {
+                addUserActive ?
+                    <AddUserAccount orgId={orgId} onBack={() => setAddUserActive(false)} />
+                    :
+                    <div className="edit-organization">
+                        <div className="edit-organization__header">
+                            <div className="edit-organization__title">
+                                Edit Organization
+                            </div>
+                            <div className="edit-organization__buttons">
+                                <div className="edit-organization__cancel-btn" onClick={() => {
+                                    dispatch(changeRoute('apps/organizations/list'))
+                                    history.push("/apps/organizations/list")
+                                }}>
+                                    <Button type={'dotted'} text={'Cancel'} />
+                                </div>
+                                <div className="edit-organization__save-btn" onClick={() => updateOrganization()}>
+                                    <Button type={'simple'} text={'Save'} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="edit-organization__body">
+                            <div className="edit-organization__info">
+                                <div className="edit-organization__info-title">
+                                    Ogranization info
+                                </div>
+                                <div className="edit-organization__inputs">
+                                    <div className="edit-organization__input">
+                                        <Input onChangeInput={(value) => setOrganizationName(value)}
+                                            value={organizationName}
+                                            placeholder='Name of The Organization'
+                                        />
+                                    </div>
+                                    <div className="edit-organization__input">
+                                        <Input onChangeInput={(value) => setCustomerID(value)}
+                                            value={customerID}
+                                            placeholder='CRM Customer ID'
+                                        />
+                                    </div>
+                                    <div className="edit-organization__input">
+                                        <Input onChangeInput={(value) => setCustomerLink(value)}
+                                            value={customerLink}
+                                            placeholder='CRM Customer ID Link'
+                                        />
+                                    </div>
+                                </div>
+                                <div className="edit-organization__comments">
+                                    <Input onChangeInput={(value) => setComment(value)}
+                                        value={comment}
+                                        placeholder='Comments'
+                                        limit={200}
+                                    />
+                                </div>
+                            </div>
+                            <div className="edit-organization__user-list">
+                                <div className="edit-organization__user-list-header">
+                                    <div className="edit-organization__user-list-title">
+                                        User List
+                                    </div>
+                                    <div className="edit-organization__user-list-add"
                                         onClick={() => setAddUserActive(true)}
-                                   >
-                                    <Button type={'simple'} text={'Add New'} icon={addIcon}/>
-                                   </div>
-                               </div>
-                               {!!users && <UserTable inEdit rows={users}/>}
-                           </div>
-                       </div>
-                   </div>
-           }
-       </div>
+                                    >
+                                        <Button type={'simple'} text={'Add New'} icon={addIcon} />
+                                    </div>
+                                </div>
+                                {!!users && <UserTable inEdit rows={users} deleteUser={deleteUser} />}
+                            </div>
+                        </div>
+                    </div>
+            }
+        </div>
     )
 }

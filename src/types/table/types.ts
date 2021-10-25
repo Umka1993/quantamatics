@@ -1,4 +1,3 @@
-
 export interface IRow {
     editable: boolean
     row: {
@@ -14,9 +13,10 @@ export interface IRow {
 export interface IUserRow {
     editable: boolean
     row: {
+        id: number,
         firstName: string
         lastName: string
         email: string
-        expirationDate: string
+        subscriptionEndDate: string
     }
 }

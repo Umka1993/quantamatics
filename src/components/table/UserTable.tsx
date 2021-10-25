@@ -1,67 +1,71 @@
-import React, {useState, useCallback, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/table.scss"
-import {IUserRow} from "../../types/table/types";
-import {Modal} from "../modal";
-import {Input} from "../input";
-import {SVG} from "../SVG";
-import sortNoneSVG from './assets/sort-none.svg'
-import sortActiveSVG from './assets/sort-active.svg'
-import classNames from "classnames";
-import {sortTable} from "../../services/baseService";
+import { IUserRow } from "../../types/table/types";
+import { SVG } from "../SVG";
 import editSVG from "./assets/edit-row-icon.svg";
 import deleteSVG from "./assets/delete-row-icon.svg";
-import {EditProfile} from "../edit-profile";
+import { EditProfile } from "../edit-profile";
+import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
-import {USER} from "../../contstans/constans";
+import { USER } from "../../contstans/constans";
 
 interface ITable {
     rows: IUserRow[]
-    inEdit?: boolean
+    inEdit?: boolean,
+    deleteUser: Function,
 }
 
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
-    const { rows } = props;
+    const { rows, deleteUser } = props;
     const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
     const [showModal, setShowModal] = useState<Boolean>(false)
-    const [sort, setSort] = useState<any>({name: '', direction: 'none'})
+    const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
 
-    useEffect(()=> {
-        localStorage.setItem('rows', JSON.stringify(props.rows))
-    }, [props.rows])
+    useEffect(() => {
+        localStorage.setItem('rows', JSON.stringify(rows))
+    }, [rows])
 
     const handleEditUser = (modal: Boolean) => {
         setShowModal(modal)
     }
 
-    return(
+    const handleDeleteUser = (data : IUserRow) => {
+        deleteUser(data.row.id);
+    }
+
+    return (
         <div className="table user">
             <div className="table-head">
                 <div className="table-head-row">
-                    <div className={classNames("table-head-item user", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('firstName', sort, localRows, setSort, setLocalRows) }
-                    >
-                        First Name <SVG icon={sort.name === 'firstName' ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                    <div className={classNames("table-head-item user", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('lastName', sort, localRows, setSort, setLocalRows) }
-                    >
-                        Last Name <SVG icon={sort.name === 'lastName' ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                    <div className={classNames("table-head-item user", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('email', sort, localRows, setSort, setLocalRows)}
-                    >
-                        Email <SVG icon={sort.name === 'email' ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                    <div className={classNames("table-head-item user", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('expirationDate', sort, localRows, setSort, setLocalRows)}
-                    >
-                        Expiration Date <SVG icon={sort.name === 'expirationDate' ? sortActiveSVG : sortNoneSVG} />
-                    </div>
+                    <SortTableHeader 
+                        name="firstName" text="First Name"  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                        className="user"
+                    />
+
+                    <SortTableHeader 
+                        name="lastName" text="Last Name"  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                        className="user"
+                    />
+
+                    <SortTableHeader 
+                        name="email" text="Email"  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                        className="user"
+                    />
+
+                    <SortTableHeader 
+                        name="expirationDate" text="Expiration Date"  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                        className="user"
+                    />
+
                 </div>
             </div>
             <div className="table-body">
-                {localRows.map((row, index) => (
-                    <div className="table-body-row" key={index}>
+                {localRows.map((row) => (
+                    <div className="table-body-row" key={row.row.id}>
                         <div className="table-body-item user">
                             {row.row.firstName}
                         </div>
@@ -72,16 +76,22 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                             {row.row.email}
                         </div>
                         <div className="table-body-item user">
-                            {row.row.expirationDate}
+                            {formatDate(row.row.subscriptionEndDate)}
                         </div>
                         <div className='table-body-row__actions'>
-                            <SVG icon={editSVG} onClick={() => {handleEditUser(true)}}/>
-                            <SVG icon={deleteSVG} />
+                            <SVG icon={editSVG} onClick={() => { handleEditUser(true) }} />
+                            <SVG icon={deleteSVG} onClick={() => {handleDeleteUser(row)}} className='disabled' />
                         </div>
                     </div>
                 ))}
             </div>
-            {showModal && <EditProfile user={USER} type_edit={true} onClose={() => handleEditUser(false)}/>}
+            {showModal && <EditProfile user={USER} type_edit={true} onClose={() => handleEditUser(false)} />}
         </div>
     )
+}
+
+
+function formatDate(date: string): string {
+    let result = date.split(' ')[0];
+    return result.replace(/[/]/g, '.');
 }

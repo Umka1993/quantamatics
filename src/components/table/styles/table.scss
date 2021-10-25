@@ -8,27 +8,6 @@
       border-bottom: 1.5px solid rgba(113, 130, 166, 0.3);
     }
     &-item {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 12px;
-      line-height: 14px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: rgba(113, 130, 166, 0.5);
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-
-      &.desc {
-        svg {
-          transform: rotate(180deg);
-        }
-      }
-      svg {
-        margin-left: 5px;
-        cursor: pointer;
-      }
-
       &:first-child {
         max-width: 220px;
         width: 100%;
@@ -67,8 +46,8 @@
     overflow-y: auto;
     &-row {
       display: flex;
-      padding-bottom: 26px;
-      padding-top: 26px;
+      padding-bottom: 25px;
+      padding-top: 25px;
       border-bottom: 1px solid rgba(113, 130, 166, 0.15);
       padding-right: 53px;
       position: relative;
@@ -101,21 +80,27 @@
         top: 50%;
         transform: translate(-50%, -50%);
         align-items: center;
+        color: #9EACC2;
         svg {
           margin-left: 12px;
           cursor: pointer;
           width: 16px;
           height: 16px;
           path {
-            fill: #9EACC2
+            fill: currentColor;
           }
 
           &:hover {
-            path {
-              fill: #017AEE
-            }
+            color: #017AEE
+          }
+
+          &.disabled {
+            color: transparentize(#9EACC2, 0.6);
+            cursor: default;
           }
         }
+
+        
       }
       &.deleting {
         &:before {
@@ -136,6 +121,10 @@
       font-weight: normal;
       line-height: 16px;
       color: #7182A6;
+      padding: 1px 1.2em 1px 0;
+      box-sizing: border-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &:first-child {
         max-width: 220px;
@@ -150,16 +139,13 @@
       &:nth-child(3) {
         max-width: 261px;
         width: 100%;
-        span {
-          border-bottom: 1px solid #7182A6;
-          a {
-            text-decoration: none;
-            color: #7182A6;
-          }
+        a {
+          color: inherit;
+          text-underline-offset: 2px;
         }
       }
 
-      &:nth-child(3) {
+      &:nth-child(4) {
         font-style: italic;
       }
 
@@ -175,9 +161,12 @@
         }
 
         &:nth-child(3) {
-          font-style: normal;
           max-width: 300px;
           width: 100%;
+        }
+
+        &:nth-child(4) {
+          font-style: normal;
         }
       }
     }

@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {network} from "../../services/networkService";
+import React, { useEffect, useState } from 'react';
+import { network } from "../../services/networkService";
 import "./styles/organiations.scss"
 import addIcon from "./assets/add.svg"
-import {OrganizationTable} from "../../components/table/OrganizationTable";
-import {TABLE_ITEMS} from "../../contstans/constans";
-import {Button} from "../../components/button/button";
-import {changeRoute} from "../../store/currentPage/actions";
-import {useDispatch} from "react-redux";
-import {useHistory} from "react-router-dom";
-import {Loader} from "../../components/loader";
+import { OrganizationTable } from "../../components/table/OrganizationTable";
+import { Button } from "../../components/button/button";
+import { changeRoute } from "../../store/currentPage/actions";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { Loader } from "../../components/loader";
 
 export const Organizations: React.FunctionComponent = (props) => {
     const [organizations, setOrganizations] = useState<any>()
@@ -39,23 +38,23 @@ export const Organizations: React.FunctionComponent = (props) => {
     }
 
     useEffect(() => {
-        if(!organizations) fetchOrganizations()
+        if (!organizations) fetchOrganizations()
     }, [organizations])
 
-    return(
-        <div className="organization">
+    return (
+        <section className="organization">
             <div className="organization__list">
-                <div className="organization__header">
+                <header className="organization__header">
                     <div className="organization__titles">
                         <h1>List of Organizations</h1>
                         <p>Create and customize organizations for future owners</p>
                     </div>
                     <div className="organization__btn" onClick={() => createNew()}>
-                        <Button type={'simple'} text={'Add New'} icon={addIcon}/>
+                        <Button type={'simple'} text={'Add New'} icon={addIcon} />
                     </div>
-                </div>
-                {!!organizations ? <OrganizationTable rows={organizations}/> : (<div className='organization-table-loader'><Loader /></div>)}
+                </header>
+                {!!organizations ? <OrganizationTable rows={organizations} /> : (<div className='organization-table-loader'><Loader /></div>)}
             </div>
-        </div>
+        </section>
     )
 }
