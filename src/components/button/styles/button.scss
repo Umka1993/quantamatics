@@ -10,6 +10,7 @@
   border: none;
   background-color: transparent;
   padding: 0;
+  font-size: 16px;
 
   &__prepend {
     margin-right: 7px;
@@ -23,7 +24,6 @@
     border: 1px solid #017AEE;
     border-radius: 2px;
     color: #017AEE;
-    font-size: 14px;
     font-weight: 500;
     line-height: 18px;
 
@@ -36,8 +36,6 @@
 
   &--dotted{
     color: #BCC4D8;
-
-    font-size: 16px;
     line-height: 18px;
     border-bottom: 1.5px dashed currentColor;
     padding-bottom: 3px;
