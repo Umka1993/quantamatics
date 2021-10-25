@@ -145,7 +145,7 @@
         }
       }
 
-      &:nth-child(3) {
+      &:nth-child(4) {
         font-style: italic;
       }
 
@@ -161,9 +161,12 @@
         }
 
         &:nth-child(3) {
-          font-style: normal;
           max-width: 300px;
           width: 100%;
+        }
+
+        &:nth-child(4) {
+          font-style: normal;
         }
       }
     }
