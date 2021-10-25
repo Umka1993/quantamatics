@@ -17,6 +17,7 @@ interface IAddUserAccount {
     orgId: string
 }
 
+
 export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -26,6 +27,8 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
     const [userEmail, setUserEmail] = useState<string>('')
     const [userExpiration, setUserExpiration] = useState<any>(null)
     const [showSuccessAdd, setShowSuccessAdd] = useState<boolean>(false)
+
+    const [errors, setErrors] = useState<string | boolean>(false);
 
     const addUserToOrg = useCallback(() => {
         if (userName && userLastName && userEmail && userExpiration) {
@@ -41,8 +44,12 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                     setLoginProcess(false)
                     setShowSuccessAdd(true)
                 })
-                .catch((e) => {
-                    console.log(e)
+                .catch(({response : {data}}) => {
+                    const {code} = data[0]
+                    setLoginProcess(false)
+                    if (code === 'DuplicateUserName') {
+                        setErrors('The user with such email already exists')
+                    }
                 })
         } else {
         }
@@ -68,7 +75,9 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                        placeholder="Email Address"
                        required
                        value={userEmail}
+                       errors={errors as boolean}
                 />
+                {errors && (<p className='login-page__inputs-errors'>{errors}</p>)}
                 <DateInput
                     onChangeInput={(value)=>setUserExpiration(value)}
                     placeholder='Expiration Date'
