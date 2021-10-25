@@ -84,7 +84,7 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
                     value={comment}
                 />
                 <div className='create-organization__submit' >
-                    <Button type={'simple'} text={'Save'} htmlType='submit' />
+                    <Button type={'simple'} text={'Save'} htmlType='submit' disabled={!organizationName}/>
                 </div>
                 <div className='create-organization__cancel'>
                     <Button type={'dotted'} text={'Cancel'} onClick={() => cancelCreate()}/>
