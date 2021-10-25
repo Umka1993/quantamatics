@@ -1,3 +1,7 @@
+$accent: #017AEE;
+$inactive: #BCC4D8;
+$disabled: #BCC5D8;
+
 .button{
   display: flex;
   align-items: center;
@@ -21,9 +25,9 @@
 
   &--simple{
     transition: .5s ease all;
-    border: 1px solid #017AEE;
+    border: 1px solid $accent; 
     border-radius: 2px;
-    color: #017AEE;
+    color: $accent;
     font-weight: 500;
     line-height: 18px;
 
@@ -35,20 +39,27 @@
   }
 
   &--dotted{
-    color: #BCC4D8;
+    color: $inactive;
     line-height: 18px;
     border-bottom: 1.5px dashed currentColor;
     padding-bottom: 3px;
+
+    &:hover, 
+    &:active, 
+    &:focus-visible {
+      color: $accent;
+      border-color: transparent;
+    }
   }
 
   &--disabled,
   &[disabled] {
     cursor: not-allowed;
-    color: #BCC5D8;
-    border-color: #BCC5D8;
+    color: $disabled;
+    border-color: $disabled;
     &:hover{
       background: #fff;
-      color: #BCC5D8;
+      color: $disabled;
     }
   }
 }
