@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import "./styles/edit-profile.scss"
 import photoIcon from "./assets/photos.svg"
 import closeIcon from "./assets/close.svg"
@@ -12,6 +12,7 @@ import { DateInput } from "../date-input";
 import { SelectorInput } from "../selector-input";
 import { USER_ORGS } from "../../contstans/constans";
 import { NewPassword } from '../input/new-password';
+import { network } from "../../services/networkService";
 
 interface IEditProfile {
     onClose: () => void
@@ -19,12 +20,35 @@ interface IEditProfile {
     user: User
 }
 
-export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
+export const EditProfile: React.FunctionComponent<IEditProfile> = ({onClose, type_edit, user }) => {
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const handleModalClose = () => {
-        props.onClose()
+        onClose()
+    }
+
+    const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
+
+        onClose()
+
+        // TODO: Need API update
+        /* evt.preventDefault();
+
+        if (!type_edit) {
+            network.post('/api/Account/resetPassword', {
+                password: newPassword,
+                token: localStorage.getItem('id_token'),
+                email: user.email
+            })
+                .then((r: any) => {
+                    onClose()
+                })
+                .catch(({response : {data}}) => {
+                    console.log(data)
+                })
+        } */
+
     }
 
     return (
@@ -47,52 +71,52 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
                             <div className="details">
                                 <div className="details__item">
                                     <span>Name</span>
-                                    <span>{props.user.name}</span>
+                                    <span>{user.name}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Surname</span>
-                                    <span>{props.user.surname}</span>
+                                    <span>{user.surname}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Organization</span>
-                                    <span>{props.user.organization}</span>
+                                    <span>{user.organization}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Email</span>
-                                    <span>{props.user.email}</span>
+                                    <span>{user.email}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Expiration Date</span>
-                                    <span>{props.user.exp_date}</span>
+                                    <span>{user.exp_date}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="edit-profile__fields">
+                    <form className="edit-profile__fields" onSubmit={handlerSubmit}>
                         <div className="edit-profile__fields-container">
                             <div className="edit-profile__close" onClick={() => handleModalClose()}>
                                 <SVG icon={closeIcon} />
                             </div>
                             {
-                                props.type_edit ?
+                                type_edit ?
                                     <>
                                         <div className="edit-profile__title">Edit Profile</div>
 
                                         <div>
                                             <Input onChangeInput={(value => { })}
-                                                value={props.user.name}
+                                                value={user.name}
                                                 icon={editIcon}
                                             />
                                             <Input onChangeInput={(value => { })}
-                                                value={props.user.surname}
+                                                value={user.surname}
                                                 icon={editIcon}
                                             />
                                             <SelectorInput onChangeInput={(value => { })}
                                                 options={USER_ORGS}
-                                                value={props.user.organization}
+                                                value={user.organization}
                                             />
                                             <Input onChangeInput={(value => { })}
-                                                value={props.user.email}
+                                                value={user.email}
                                                 icon={editIcon}
                                             />
                                             <DateInput onChangeInput={(value => { })} />
@@ -111,6 +135,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
                                             <NewPassword 
                                                 password={newPassword} confirm={confirmPassword}
                                                 setters={[setNewPassword, setConfirmPassword]}
+                                                validateBoth
                                             />
                                         </div>
                                     </>
@@ -121,11 +146,11 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
                                     <Button type={'dotted'} text={'Cancel'} />
                                 </div>
                                 <div className="edit-profile__save-btn">
-                                    <Button type={'simple'} text={'Save'} />
+                                    <Button type={'simple'} text={'Save'} htmlType='submit' />
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </>

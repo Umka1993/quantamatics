@@ -20,19 +20,21 @@ interface IInput {
     type?: string
     limit?: string | number
     icon?: ReactSVGComponent,
-    disableValidation?: boolean;
+    enableValidation?: boolean;
 }
 
 export const Input: React.FunctionComponent<IInput> = (props) => {
-    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit, disableValidation } = props;
+    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit, enableValidation } = props;
     let { errors } = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
 
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
-    const pattern = type === 'password' ? PATTERN_PASSWORD : undefined;
+    const validatingPass = type === 'password' && enableValidation;
 
-    const minLength = type === 'password' ? 8 : 0;
+    const pattern = validatingPass ? PATTERN_PASSWORD : undefined;
+
+    const minLength = validatingPass ? 8 : 0;
 
     const inputClassNames = classNames(
         'input',
@@ -69,7 +71,7 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
 
 
     const handleKeyUp : KeyboardEventHandler<HTMLInputElement> = (evt)  => {
-        if (type === 'password' && !disableValidation) passwordValidation(evt.target as HTMLInputElement)
+        if (validatingPass) passwordValidation(evt.target as HTMLInputElement)
         
         if (!!onEnterPress && evt.key === 'Enter') onEnterPress()
     }

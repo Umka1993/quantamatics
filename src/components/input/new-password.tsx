@@ -5,9 +5,10 @@ interface INewPassword {
     password: string;
     confirm: string;
     setters: any;
+    validateBoth?: boolean;
 }
 
-export const NewPassword: React.FunctionComponent<INewPassword> = ({password, confirm, setters }) => {
+export const NewPassword: React.FunctionComponent<INewPassword> = ({password, confirm, setters, validateBoth }) => {
 
     let error = ''
 
@@ -23,13 +24,14 @@ export const NewPassword: React.FunctionComponent<INewPassword> = ({password, co
                 type={"password"}
                 placeholder="New Password"
                 value={password}
+                enableValidation
             />
             <Input
                 onChangeInput={(value) => setters[1](value)}
                 type={"password"}
                 placeholder="Confirm New Password"
                 value={confirm}
-                disableValidation
+                enableValidation={validateBoth}
             />
             {!!error && <div className="login-page__inputs-errors">{error}</div>}
         </>
