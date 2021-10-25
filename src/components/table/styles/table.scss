@@ -8,28 +8,6 @@
       border-bottom: 1.5px solid rgba(113, 130, 166, 0.3);
     }
     &-item {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 12px;
-      line-height: 14px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: #bcc4d8;
-      
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-
-      &.desc {
-        svg {
-          transform: rotate(180deg);
-        }
-      }
-      svg {
-        margin-left: 5px;
-        cursor: pointer;
-      }
-
       &:first-child {
         max-width: 220px;
         width: 100%;

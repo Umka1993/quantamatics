@@ -3,17 +3,15 @@ import "./styles/table.scss"
 import {useHistory} from "react-router-dom";
 import {IRow} from "../../types/table/types";
 import {SVG} from "../SVG";
-import {sortTable} from "../../services/baseService";
+import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import editSVG from './assets/edit-row-icon.svg'
 import deleteSVG from './assets/delete-row-icon.svg'
-import sortNoneSVG from './assets/sort-none.svg'
-import sortActiveSVG from './assets/sort-active.svg'
+
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
 import {network} from "../../services/networkService";
-
 
 interface ITable {
     rows: IRow[]
@@ -68,30 +66,25 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
         <div className="table">
             <div className="table-head">
                 <div className="table-head-row">
-                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                        onClick={() => sortTable(OrganizationKey.name, sort, localRows, setSort, setLocalRows) }
-                    >
-                        Organization Name 
-                        <SVG icon={sort.name === OrganizationKey.name ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                        onClick={() => sortTable(OrganizationKey.idCRM, sort, localRows, setSort, setLocalRows) }
-                    >
-                        CRM Customer ID 
-                        <SVG icon={sort.name === OrganizationKey.idCRM ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                        onClick={() => sortTable(OrganizationKey.linkCRM, sort, localRows, setSort, setLocalRows) }
-                    >
-                        CRM Customer link 
-                        <SVG icon={sort.name === OrganizationKey.linkCRM ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                        onClick={() => sortTable(OrganizationKey.comments, sort, localRows, setSort, setLocalRows)}
-                    >
-                        comments 
-                        <SVG icon={sort.name === OrganizationKey.comments ? sortActiveSVG : sortNoneSVG} />
-                    </div>
+                    <SortTableHeader 
+                        name={OrganizationKey.name} text='Organization Name'  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    />
+
+                    <SortTableHeader 
+                        name={OrganizationKey.idCRM} text='CRM Customer ID '  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    />
+
+                    <SortTableHeader 
+                        name={OrganizationKey.linkCRM} text='CRM Customer link'  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    />
+
+                    <SortTableHeader 
+                        name={OrganizationKey.comments} text='Comments'  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    />
                 </div>
             </div>
             <div className="table-body">
