@@ -20,15 +20,15 @@ interface IInput {
     type?: string
     limit?: string | number
     icon?: ReactSVGComponent,
-    errorText?: string
+    disableValidation?: boolean;
 }
 
 export const Input: React.FunctionComponent<IInput> = (props) => {
-    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit, errorText } = props;
+    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit, disableValidation } = props;
     let { errors } = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
 
-    const [errorMessage, setErrorMessage] = useState<string | undefined>(errorText)
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
     const pattern = type === 'password' ? PATTERN_PASSWORD : undefined;
 
@@ -69,7 +69,7 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
 
 
     const handleKeyUp : KeyboardEventHandler<HTMLInputElement> = (evt)  => {
-        if (type === 'password') passwordValidation(evt.target as HTMLInputElement)
+        if (type === 'password' && !disableValidation) passwordValidation(evt.target as HTMLInputElement)
         
         if (!!onEnterPress && evt.key === 'Enter') onEnterPress()
     }

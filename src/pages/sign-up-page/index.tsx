@@ -20,8 +20,7 @@ export const SignUpPage: React.FunctionComponent = (props) => {
     const history = useHistory()
 
     useEffect(() => {
-        console.log(password, passwordConfirm)
-        if (password !== passwordConfirm) {
+        if (password !== passwordConfirm && password.length && passwordConfirm.length ) {
             setError('The passwords do not match')
         }
         else setError(undefined)
@@ -88,7 +87,7 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                         type={'password'}
                         placeholder='Confirm New Password'
                         value={passwordConfirm}
-                        errorText={error}
+                        disableValidation
                     />
                     {!!error && (<div className="login-page__inputs-errors">{error}</div>)}
                 </div>
