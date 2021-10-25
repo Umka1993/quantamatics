@@ -7,6 +7,8 @@ import closedEyeSVG from './assets/closed-eye.svg'
 
 export type ReactSVGComponent = React.FunctionComponent<React.SVGAttributes<SVGElement>>
 
+const PASSWORD_REGEXP : RegExp = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\[\]"\';:_\-<>\., =\+\/\\]).{8,}/
+
 interface IInput {
     className?: string,
     placeholder?: string,
@@ -25,10 +27,14 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
     let { errors } = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
 
+    const [errorMessage, setErrorMessage] = useState<string | boolean>(false)
+
+    const minLength = type === 'password' ? 8 : 0;
+
     const inputClassNames = classNames(
         'input',
         className,
-        { 'error': errors },
+        { 'error': errors || errorMessage},
         { password: inputType === 'password' },
         { 'input--limited': limit }
     )
@@ -45,6 +51,11 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
     }, [showPassword, inputType])
 
     const handleEnterPress = (event: any) => {
+        if (type === 'password') {
+            const passFormatMessage = 'The password must contain at least 8 characters, 1 uppercase letter, 1 digit and 1 special character.';
+            const passwordCheck = PASSWORD_REGEXP.test(value as string);
+            setErrorMessage(passwordCheck ? !passwordCheck : passFormatMessage);
+        }
         if (!!onEnterPress && event.keyCode === 13) onEnterPress()
     }
 
@@ -58,8 +69,9 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 required={required}
                 onKeyUp={(event) => handleEnterPress(event)}
                 maxLength={limit as number}
-                minLength={0}
+                minLength={minLength}
             />
+            {errorMessage && <p className='input__error'>{errorMessage}</p>}
             {!!type && type === 'password' && (
                 <div className={classNames('show-password', { active: showPassword })}>
                     {showPassword ? <SVG icon={eyeSVG} onClick={() => togglePasswordShow()} /> :
