@@ -90,7 +90,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
                 .catch((e) => {
                     console.log(e)
                     setLoginProcess(false)
-                    setErrors(e)
+                    setErrors('Incorrect username or password. ')
                 })
         } else {
             setErrors('Enter username and password')
