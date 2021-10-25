@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Button} from "../../components/button/button";
 import "./styles/sign-up.scss"
 import {Input} from "../../components/input";
@@ -11,12 +11,23 @@ export const SignUpPage: React.FunctionComponent = (props) => {
     const [password, setPassword] = useState<string>('')
     const [passwordConfirm, setPasswordConfirm] = useState<string>('')
     const [loginProcess, setLoginProcess] = useState<boolean>(false)
+    const [error, setError] = useState<string | undefined>(undefined)
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token')
     const email = urlParams.get('email')
     const organizationName = urlParams.get('orgName')
 
     const history = useHistory()
+
+    useEffect(() => {
+        console.log(password, passwordConfirm)
+        if (password !== passwordConfirm) {
+            setError('The passwords do not match')
+        }
+        else setError(undefined)
+
+        
+    }, [password, passwordConfirm, error])
 
     const handleResetPassword = useCallback(() => {
         if (password && passwordConfirm && email) {
@@ -53,6 +64,7 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                 })
         }
     }, [password, passwordConfirm])
+
     return (
         <div className="sign-up">
             <div className="sign-up__container">
@@ -76,8 +88,11 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                         type={'password'}
                         placeholder='Confirm New Password'
                         value={passwordConfirm}
+                        errorText={error}
                     />
+                    {!!error && (<div className="login-page__inputs-errors">{error}</div>)}
                 </div>
+                
                 <div className="sign-up__btn" onClick={() => resetPassword ? handleResetPassword() : handleConfirmUser()}>
                     <Button disabled={!password || !passwordConfirm} type={'simple'} text={'Save'}/>
                 </div>
