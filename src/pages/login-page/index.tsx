@@ -178,7 +178,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
                         />
                     </div>
                     <div className="login-page__btn">
-                        <Button onClick={() => sendPasswordResetRequest()} type={'simple'} text={'Save'}
+                        <Button onClick={() => sendPasswordResetRequest()} type={'simple'} text={'Send'}
                             disabled={!forgotEmail} />
                         <div className="login-page__btn-cancel" onClick={() => setShowForgotPassword(false)}>
                             <Button type={'dotted'} text={'Cancel'} />
