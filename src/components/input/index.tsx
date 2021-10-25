@@ -62,8 +62,8 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
             />
             {!!type && type === 'password' && (
                 <div className={classNames('show-password', { active: showPassword })}>
-                    {showPassword ? <SVG icon={closedEyeSVG} onClick={() => togglePasswordShow()} /> :
-                        <SVG icon={eyeSVG} onClick={() => togglePasswordShow()} />}
+                    {showPassword ? <SVG icon={eyeSVG} onClick={() => togglePasswordShow()} /> :
+                        <SVG icon={closedEyeSVG} onClick={() => togglePasswordShow()} />}
                 </div>
 
             )}
