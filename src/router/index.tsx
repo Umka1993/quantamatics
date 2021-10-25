@@ -18,8 +18,6 @@ const AppRouter = () => (
         <Route exact path={'/add-user'} component={LayoutSideBarPage}/>
         <Route exact path={'/coherence'} component={LayoutSideBarPage}/>
         <Route exact path={'/settings'} component={LayoutSideBarPage}/>
-        <Route path={'/apps/organizations/list'} component={LayoutSideBarPage}/>
-        <Route path={'/apps/organizations/new-organization'} component={LayoutSideBarPage}/>
         <Route path={'/apps/organizations'} component={LayoutSideBarPage}/>
         <Route path={'/sign-up'} component={SignUpPage}/>
         <Route path={'/reset-password'} component={SignUpPage}/>
