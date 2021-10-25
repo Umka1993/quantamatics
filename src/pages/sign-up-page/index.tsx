@@ -5,6 +5,7 @@ import {Input} from "../../components/input";
 import {network} from "../../services/networkService";
 import {useHistory} from "react-router-dom";
 import {Loader} from "../../components/loader";
+import { NewPassword } from "../../components/input/new-password";
 
 export const SignUpPage: React.FunctionComponent = (props) => {
     const resetPassword = window.location.pathname.substring(1).includes('reset-password')
@@ -76,20 +77,9 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                     <p>Create a password to complete the sign up</p>
                 </div>)}
                 <div className="sign-up__inputs">
-                    <Input
-                        onChangeInput={(value) => setPassword(value)}
-                        type={'password'}
-                        placeholder='New Password'
-                        value={password}
+                    <NewPassword password={password} confirm={passwordConfirm} 
+                        setters={[setPassword, setPasswordConfirm]} 
                     />
-                    <Input
-                        onChangeInput={(value) => setPasswordConfirm(value)}
-                        type={'password'}
-                        placeholder='Confirm New Password'
-                        value={passwordConfirm}
-                        disableValidation
-                    />
-                    {!!error && (<div className="login-page__inputs-errors">{error}</div>)}
                 </div>
                 
                 <div className="sign-up__btn" onClick={() => resetPassword ? handleResetPassword() : handleConfirmUser()}>

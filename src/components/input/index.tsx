@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, KeyboardEventHandler } from "react";
+import React, { useState, useCallback, KeyboardEventHandler } from "react";
 import "./styles/input.scss"
 import classNames from "classnames";
 import SVG from '../SVG'

@@ -11,6 +11,7 @@ import { User } from "../../types/edit-profile/types"
 import { DateInput } from "../date-input";
 import { SelectorInput } from "../selector-input";
 import { USER_ORGS } from "../../contstans/constans";
+import { NewPassword } from '../input/new-password';
 
 interface IEditProfile {
     onClose: () => void
@@ -72,43 +73,48 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = (props) => {
                             <div className="edit-profile__close" onClick={() => handleModalClose()}>
                                 <SVG icon={closeIcon} />
                             </div>
-                            <div className="edit-profile__title">Change Password</div>
                             {
                                 props.type_edit ?
-                                    <div>
-                                        <Input onChangeInput={(value => { })}
-                                            value={props.user.name}
-                                            icon={editIcon}
-                                        />
-                                        <Input onChangeInput={(value => { })}
-                                            value={props.user.surname}
-                                            icon={editIcon}
-                                        />
-                                        <SelectorInput onChangeInput={(value => { })}
-                                            options={USER_ORGS}
-                                            value={props.user.organization}
-                                        />
-                                        <Input onChangeInput={(value => { })}
-                                            value={props.user.email}
-                                            icon={editIcon}
-                                        />
-                                        <DateInput onChangeInput={(value => { })} />
-                                    </div>
+                                    <>
+                                        <div className="edit-profile__title">Edit Profile</div>
+
+                                        <div>
+                                            <Input onChangeInput={(value => { })}
+                                                value={props.user.name}
+                                                icon={editIcon}
+                                            />
+                                            <Input onChangeInput={(value => { })}
+                                                value={props.user.surname}
+                                                icon={editIcon}
+                                            />
+                                            <SelectorInput onChangeInput={(value => { })}
+                                                options={USER_ORGS}
+                                                value={props.user.organization}
+                                            />
+                                            <Input onChangeInput={(value => { })}
+                                                value={props.user.email}
+                                                icon={editIcon}
+                                            />
+                                            <DateInput onChangeInput={(value => { })} />
+                                        </div>
+                                    </>
                                     :
-                                    <div>
-                                        <Input onChangeInput={(value) => setCurrentPassword(value)}
-                                            value={currentPassword}
-                                            placeholder={'Current Password'}
-                                            type={'password'} />
-                                        <Input onChangeInput={(value) => setNewPassword(value)}
-                                            value={newPassword}
-                                            placeholder={'New Password'}
-                                            type={'password'} />
-                                        <Input onChangeInput={(value) => setConfirmPassword(value)}
-                                            value={confirmPassword}
-                                            placeholder={'Confirm New Password'}
-                                            type={'password'} />
-                                    </div>
+                                    <>
+                                        <div className="edit-profile__title">Change Password</div>
+
+                                        <div>
+                                            <Input onChangeInput={(value) => setCurrentPassword(value)}
+                                                value={currentPassword}
+                                                placeholder={'Current Password'}
+                                                type={'password'} />
+
+                                            <NewPassword 
+                                                password={newPassword} confirm={confirmPassword}
+                                                setters={[setNewPassword, setConfirmPassword]}
+                                            />
+                                        </div>
+                                    </>
+
                             }
                             <div className="edit-profile__buttons">
                                 <div className="edit-profile__cancel-btn" onClick={() => handleModalClose()}>
