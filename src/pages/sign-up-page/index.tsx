@@ -1,7 +1,6 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import {Button} from "../../components/button/button";
 import "./styles/sign-up.scss"
-import {Input} from "../../components/input";
 import {network} from "../../services/networkService";
 import {useHistory} from "react-router-dom";
 import {Loader} from "../../components/loader";
@@ -12,22 +11,12 @@ export const SignUpPage: React.FunctionComponent = (props) => {
     const [password, setPassword] = useState<string>('')
     const [passwordConfirm, setPasswordConfirm] = useState<string>('')
     const [loginProcess, setLoginProcess] = useState<boolean>(false)
-    const [error, setError] = useState<string | undefined>(undefined)
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token')
     const email = urlParams.get('email')
     const organizationName = urlParams.get('orgName')
 
     const history = useHistory()
-
-    useEffect(() => {
-        if (password !== passwordConfirm && password.length && passwordConfirm.length ) {
-            setError('The passwords do not match')
-        }
-        else setError(undefined)
-
-        
-    }, [password, passwordConfirm, error])
 
     const handleResetPassword = useCallback(() => {
         if (password && passwordConfirm && email) {
