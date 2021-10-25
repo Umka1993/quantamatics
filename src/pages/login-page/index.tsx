@@ -165,7 +165,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
             {showForgotPassword && (<div className="login-page__forgot-password">
                 <div className="login-page__container">
                     <div className="login-page__title">
-                        <h2>Forgot your password?</h2>
+                        <h2>Forgot Your Password?</h2>
                         <p>To restore the password, enter your email</p>
                     </div>
                     <div className="login-page__inputs">
