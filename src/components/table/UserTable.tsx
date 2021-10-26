@@ -88,7 +88,7 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                     </div>
                 ))}
             </div>
-            {showModal && <EditProfile user={user} type_edit={true} onClose={() => handleEditUser(false)} />}
+            {showModal && <EditProfile user={user} type_edit={true} onClose={() => setShowModal(false)} />}
         </div>
     )
 }

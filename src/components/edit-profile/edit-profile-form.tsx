@@ -8,6 +8,7 @@ import { USER_ORGS } from "../../contstans/constans";
 import editIcon from "./assets/edit.svg"
 import "./styles/edit-profile-form.scss"
 import { network } from "../../services/networkService";
+import { useHistory } from "react-router";
 
 interface IEditProfileForm {
     user: IUser,
@@ -15,6 +16,7 @@ interface IEditProfileForm {
 }
 
 export const EditProfileForm: React.FunctionComponent<IEditProfileForm> = ({ user, resetFunction }) => {
+    const history = useHistory();
 
     const initialExp = user.subscriptionEndDate ? new Date(user.subscriptionEndDate.split('.').join('/')) : new Date();
 
@@ -39,7 +41,8 @@ export const EditProfileForm: React.FunctionComponent<IEditProfileForm> = ({ use
 
         }).then((r: any) => {
             console.log('complete');
-
+            // resetFunction();
+            history.go(0)
         })
             .catch(({ response: { data } }) => {
                 console.log(data);

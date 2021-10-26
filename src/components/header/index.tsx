@@ -23,7 +23,7 @@ import { IUser } from 'types/edit-profile/types';
 export const Header: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.user.user)
 
-    console.log(user)
+    // console.log(user)
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [showProfile, setShowProfile] = useState<boolean>(false)
     const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
