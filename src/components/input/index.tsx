@@ -4,6 +4,7 @@ import classNames from "classnames";
 import SVG from '../SVG'
 import eyeSVG from './assets/eye.svg'
 import closedEyeSVG from './assets/closed-eye.svg'
+import useDebounce from "../../services/useDebounce";
 
 export type ReactSVGComponent = React.FunctionComponent<React.SVGAttributes<SVGElement>>
 
@@ -30,6 +31,8 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
 
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+
+    const debounceError = useDebounce(errorMessage, 2000);
 
     const validatingPass = type === 'password' && enableValidation;
 
@@ -59,15 +62,18 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
     const passwordValidation = (element: HTMLInputElement) => {
         const {tooShort, patternMismatch} = element.validity;
 
-        let text = 'The password must contain at least '
+        const textStart = 'The password must contain at least ';
+        let requirements = [];
         if (tooShort) {
-            text += '8 characters';
+            requirements.push('8 characters');
         } 
         if (patternMismatch) {
-            text += ', 1 uppercase letter, 1 digit and 1 special character.';
+            requirements.push('1 uppercase letter, 1 digit and 1 special character.');
         }
 
-        setErrorMessage(tooShort || patternMismatch  ? text : undefined);
+        const result = `${textStart} ${requirements.join(', ')}`
+
+        setErrorMessage(tooShort || patternMismatch  ? result : undefined);
     }
 
 
@@ -91,7 +97,7 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 pattern={pattern}
                 name={name}
             />
-            {errorMessage && <p className='input__error'>{errorMessage}</p>}
+            {debounceError && <p className='input__error'>{debounceError}</p>}
             {!!type && type === 'password' && (
                 <div className={classNames('show-password', { active: showPassword })}>
                     {showPassword ? <SVG icon={eyeSVG} onClick={() => togglePasswordShow()} /> :
