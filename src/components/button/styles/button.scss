@@ -3,6 +3,7 @@ $inactive: #BCC4D8;
 $disabled: #BCC5D8;
 
 .button{
+  all: unset;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,8 +12,6 @@ $disabled: #BCC5D8;
   outline: none;
   cursor: pointer;
   box-sizing: border-box;
-  border: none;
-  background-color: transparent;
   padding: 0;
   font-size: 16px;
 
