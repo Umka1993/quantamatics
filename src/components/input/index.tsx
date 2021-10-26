@@ -1,4 +1,4 @@
-import React, { useState, useCallback, KeyboardEventHandler } from "react";
+import React, { useState, useCallback, KeyboardEventHandler, useEffect, useRef } from "react";
 import "./styles/input.scss"
 import classNames from "classnames";
 import SVG from '../SVG'
@@ -23,16 +23,18 @@ interface IInput {
     icon?: ReactSVGComponent,
     enableValidation?: boolean;
     name?: string;
+    errorText?: string;
+    onInvalid?: any;
 }
 
 export const Input: React.FunctionComponent<IInput> = (props) => {
-    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit, enableValidation, name = '' } = props;
+    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit, enableValidation, name = '', errorText, onInvalid } = props;
     let { errors } = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
 
-    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const debounceError = useDebounce(errorMessage, 2000);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
     const validatingPass = type === 'password' && enableValidation;
 
@@ -43,7 +45,7 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
     const inputClassNames = classNames(
         'input',
         className,
-        { 'error': errors || errorMessage},
+        { 'error': errors || errorMessage },
         { password: inputType === 'password' },
         { 'input--limited': limit }
     )
@@ -58,28 +60,43 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
             setShowPassword(true)
         }
     }, [showPassword, inputType])
+    
+    useEffect(() => {
+        setErrorMessage(errorText);
+        errorText && onInvalid();
+    }, [errorText]) 
 
-    const passwordValidation = (element: HTMLInputElement) => {
-        const {tooShort, patternMismatch} = element.validity;
+    useEffect(() => {
+        enableValidation && validatePassword();
+    }, [enableValidation]) 
 
-        const textStart = 'The password must contain at least ';
-        let requirements = [];
-        if (tooShort) {
-            requirements.push('8 characters');
-        } 
-        if (patternMismatch) {
-            requirements.push('1 uppercase letter, 1 digit and 1 special character.');
+    const validatePassword = () => {
+        if (inputRef.current) {
+            const { tooShort, patternMismatch } = inputRef.current.validity
+
+            if (tooShort || patternMismatch) {
+
+                const textStart = 'The password must contain at least ';
+                let requirements = [];
+    
+                tooShort && requirements.push('8 characters');
+                patternMismatch && requirements.push('1 uppercase letter, 1 digit and 1 special character.');
+    
+                const result = `${textStart} ${requirements.join(', ')}`
+    
+                setErrorMessage(result);
+                onInvalid();
+    
+            } else {
+                setErrorMessage(undefined);
+            }
         }
 
-        const result = `${textStart} ${requirements.join(', ')}`
-
-        setErrorMessage(tooShort || patternMismatch  ? result : undefined);
     }
 
 
-    const handleKeyUp : KeyboardEventHandler<HTMLInputElement> = (evt)  => {
-        if (validatingPass) passwordValidation(evt.target as HTMLInputElement)
-        
+    const handleKeyUp: KeyboardEventHandler<HTMLInputElement> = (evt) => {
+        enableValidation && validatePassword();
         if (!!onEnterPress && evt.key === 'Enter') onEnterPress()
     }
 
@@ -96,8 +113,9 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 minLength={minLength}
                 pattern={pattern}
                 name={name}
+                ref={inputRef}
             />
-            {debounceError && <p className='input__error'>{debounceError}</p>}
+            {errorMessage && <p className='input__error'>{errorMessage}</p>}
             {!!type && type === 'password' && (
                 <div className={classNames('show-password', { active: showPassword })}>
                     {showPassword ? <SVG icon={eyeSVG} onClick={() => togglePasswordShow()} /> :

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "./index";
 
 interface INewPassword {
@@ -6,17 +6,27 @@ interface INewPassword {
     confirm: string;
     setters: any;
     validateBoth?: boolean;
+    validate?: boolean;
+    onInvalid?: any;
 }
 
-export const NewPassword: React.FunctionComponent<INewPassword> = ({password, confirm, setters, validateBoth }) => {
+export const NewPassword: React.FunctionComponent<INewPassword> = ({
+    password,
+    confirm,
+    setters,
+    validateBoth,
+    validate = false,
+    onInvalid
+}) => {
+    const [passwordCompare, setPasswordCompare] = useState<string | undefined>(
+        undefined
+    );
 
-    let error = ''
-
-    if (password !== confirm && password.length && confirm.length ) {
-        error = 'The passwords do not match';
-    }
-
-
+    useEffect(() => {
+        if (password.length && confirm.length && password !== confirm) {
+            setPasswordCompare("The passwords do not match");
+        } else setPasswordCompare(undefined);
+    }, [password, confirm, passwordCompare]);
     return (
         <>
             <Input
@@ -24,16 +34,18 @@ export const NewPassword: React.FunctionComponent<INewPassword> = ({password, co
                 type={"password"}
                 placeholder="New Password"
                 value={password}
-                enableValidation
+                enableValidation={validate}
+                onInvalid={onInvalid}
             />
             <Input
                 onChangeInput={(value) => setters[1](value)}
                 type={"password"}
                 placeholder="Confirm New Password"
                 value={confirm}
-                enableValidation={validateBoth}
+                enableValidation={validate && validateBoth}
+                errorText={validate ? passwordCompare : undefined}
+                onInvalid={onInvalid}
             />
-            {!!error && <div className="login-page__inputs-errors">{error}</div>}
         </>
     );
 };

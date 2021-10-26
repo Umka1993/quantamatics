@@ -1,9 +1,9 @@
-import React, {useCallback, useState} from "react";
-import {Button} from "../../components/button/button";
+import React, { FormEvent, useCallback, useEffect, useState } from "react";
+import { Button } from "../../components/button/button";
 import "./styles/sign-up.scss"
-import {network} from "../../services/networkService";
-import {useHistory} from "react-router-dom";
-import {Loader} from "../../components/loader";
+import { network } from "../../services/networkService";
+import { useHistory } from "react-router-dom";
+import { Loader } from "../../components/loader";
 import { NewPassword } from "../../components/input/new-password";
 
 export const SignUpPage: React.FunctionComponent = (props) => {
@@ -11,6 +11,9 @@ export const SignUpPage: React.FunctionComponent = (props) => {
     const [password, setPassword] = useState<string>('')
     const [passwordConfirm, setPasswordConfirm] = useState<string>('')
     const [loginProcess, setLoginProcess] = useState<boolean>(false)
+    const [validate, setValidate] = useState<boolean>(false)
+    const [enableSubmit, setEnableSubmit] = useState<boolean>(false)
+
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token')
     const email = urlParams.get('email')
@@ -54,8 +57,24 @@ export const SignUpPage: React.FunctionComponent = (props) => {
         }
     }, [password, passwordConfirm])
 
+    const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+        evt.preventDefault();
+        setValidate(true);
+
+        resetPassword ? handleResetPassword() : handleConfirmUser();
+    }
+
+    useEffect(()=> {
+
+        setEnableSubmit(password.length >= 8 && passwordConfirm.length >= 8)
+
+    }, [password, passwordConfirm])
+
+    
+
     return (
-        <div className="sign-up">
+        <form className="sign-up" onSubmit={handleSubmit} onInvalid={() => console.log('test')
+        }>
             <div className="sign-up__container">
                 {resetPassword && (<div className="sign-up__title">
                     <h2>Reset Password</h2>
@@ -66,16 +85,18 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                     <p>Create a password to complete the sign up</p>
                 </div>)}
                 <div className="sign-up__inputs">
-                    <NewPassword password={password} confirm={passwordConfirm} 
-                        setters={[setPassword, setPasswordConfirm]} 
+                    <NewPassword password={password} confirm={passwordConfirm}
+                        setters={[setPassword, setPasswordConfirm]}
+                        validate={validate}
+                        onInvalid={() => setEnableSubmit(false)}
                     />
                 </div>
-                
-                <div className="sign-up__btn" onClick={() => resetPassword ? handleResetPassword() : handleConfirmUser()}>
-                    <Button disabled={!password || !passwordConfirm} type={'simple'} text={'Save'}/>
+
+                <div className="sign-up__btn">
+                    <Button disabled={!enableSubmit} type={'simple'} text={'Save'} htmlType='submit' />
                 </div>
             </div>
             {loginProcess && <Loader />}
-        </div>
+        </form>
     )
 }
