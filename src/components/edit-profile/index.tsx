@@ -15,9 +15,10 @@ interface IEditProfile {
     onClose: () => void
     type_edit?: Boolean
     user: IUser
+    onSubmit?: any
 }
 
-export const EditProfile: React.FunctionComponent<IEditProfile> = ({ onClose, type_edit, user }) => {
+export const EditProfile: React.FunctionComponent<IEditProfile> = ({ onClose, type_edit, user, onSubmit }) => {
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -96,7 +97,9 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({ onClose, ty
 
                     {
                         type_edit ?
-                            <EditProfileForm user={user} resetFunction={handleModalClose} />
+                            <EditProfileForm user={user} resetFunction={handleModalClose} 
+                                submitFunction={onSubmit} 
+                            />
                             :
                             <form className="edit-profile__fields" onSubmit={handlerSubmit}>
                                 <div className="edit-profile__fields-container">

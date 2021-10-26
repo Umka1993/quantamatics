@@ -13,9 +13,10 @@ import { useHistory } from "react-router";
 interface IEditProfileForm {
     user: IUser,
     resetFunction: () => void;
+    submitFunction?: any
 }
 
-export const EditProfileForm: React.FunctionComponent<IEditProfileForm> = ({ user, resetFunction }) => {
+export const EditProfileForm: React.FunctionComponent<IEditProfileForm> = ({ user, resetFunction, submitFunction }) => {
     const history = useHistory();
 
     const initialExp = user.subscriptionEndDate ? new Date(user.subscriptionEndDate.split('.').join('/')) : new Date();
@@ -28,8 +29,7 @@ export const EditProfileForm: React.FunctionComponent<IEditProfileForm> = ({ use
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-
-        network.post('/api/Admin/updateUser', {
+        const newUserData = {
             email: email,
             firstName: name,
             lastName: surname,
@@ -38,11 +38,15 @@ export const EditProfileForm: React.FunctionComponent<IEditProfileForm> = ({ use
             // location: string,
             subscriptionType: 0,
             subscriptionEndDate: new Date(expiration)
-
-        }).then((r: any) => {
+        }
+        network.post('/api/Admin/updateUser', newUserData).then((r: any) => {
             console.log('complete');
-            // resetFunction();
-            history.go(0)
+
+            const newUser = {...user, ...newUserData}
+
+            submitFunction(newUser)
+
+            resetFunction();
         })
             .catch(({ response: { data } }) => {
                 console.log(data);
