@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from "react";
 import { Button } from "../button/button";
 import { Input } from "../input";
-import { User } from "../../types/edit-profile/types"
+import { IUser } from "../../types/edit-profile/types"
 import { DateInput } from "../date-input";
 import { SelectorInput } from "../selector-input";
 import { USER_ORGS } from "../../contstans/constans";
@@ -10,17 +10,19 @@ import "./styles/edit-profile-form.scss"
 import { network } from "../../services/networkService";
 
 interface IEditProfileForm {
-    user: User,
+    user: IUser,
     resetFunction: () => void;
 }
 
 export const EditProfileForm: React.FunctionComponent<IEditProfileForm> = ({ user, resetFunction }) => {
 
-    const [name, setName] = useState<string>(user.name)
-    const [surname, setSurname] = useState<string>(user.surname)
-    const [organization, setOrganization] = useState<string>(user.organization)
+    const initialExp = user.subscriptionEndDate ? new Date(user.subscriptionEndDate.split('.').join('/')) : new Date();
+
+    const [name, setName] = useState<string>(user.firstName)
+    const [surname, setSurname] = useState<string>(user.lastName)
+    const [organization, setOrganization] = useState<string>(user.companyName)
     const [email, setEmail] = useState<string>(user.email)
-    const [expiration, setExpiration] = useState<Date>(new Date(user.exp_date.split('.').join('/')))
+    const [expiration, setExpiration] = useState<Date>(initialExp)
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();

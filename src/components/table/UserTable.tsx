@@ -21,12 +21,15 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const [showModal, setShowModal] = useState<Boolean>(false)
     const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
 
+    const [user, setUser] = useState<any>(USER)
+
     useEffect(() => {
         localStorage.setItem('rows', JSON.stringify(rows))
     }, [rows])
 
-    const handleEditUser = (modal: Boolean) => {
-        setShowModal(modal)
+    const handleEditUser = (user: any) => {
+        setUser(user.row)
+        setShowModal(true)
     }
 
     const handleDeleteUser = (data : IUserRow) => {
@@ -79,13 +82,13 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                             {formatDate(row.row.subscriptionEndDate)}
                         </div>
                         <div className='table-body-row__actions'>
-                            <SVG icon={editSVG} onClick={() => { handleEditUser(true) }} />
+                            <SVG icon={editSVG} onClick={() => { handleEditUser(row) }} />
                             <SVG icon={deleteSVG} onClick={() => {handleDeleteUser(row)}} className='disabled' />
                         </div>
                     </div>
                 ))}
             </div>
-            {showModal && <EditProfile user={USER} type_edit={true} onClose={() => handleEditUser(false)} />}
+            {showModal && <EditProfile user={user} type_edit={true} onClose={() => handleEditUser(false)} />}
         </div>
     )
 }

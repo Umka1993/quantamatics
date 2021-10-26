@@ -6,7 +6,7 @@ import avatar from "./assets/avatar.svg"
 import SVG from "../SVG";
 import { Button } from "../button/button";
 import { Input } from "../input";
-import { User } from "../../types/edit-profile/types"
+import { IUser } from "../../types/edit-profile/types"
 import { NewPassword } from '../input/new-password';
 import { network } from "../../services/networkService";
 import { EditProfileForm } from './edit-profile-form';
@@ -14,7 +14,7 @@ import { EditProfileForm } from './edit-profile-form';
 interface IEditProfile {
     onClose: () => void
     type_edit?: Boolean
-    user: User
+    user: IUser
 }
 
 export const EditProfile: React.FunctionComponent<IEditProfile> = ({ onClose, type_edit, user }) => {
@@ -71,15 +71,15 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({ onClose, ty
                             <div className="details">
                                 <div className="details__item">
                                     <span>Name</span>
-                                    <span>{user.name}</span>
+                                    <span>{user.firstName}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Surname</span>
-                                    <span>{user.surname}</span>
+                                    <span>{user.lastName}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Organization</span>
-                                    <span>{user.organization}</span>
+                                    <span>{user.companyName}</span>
                                 </div>
                                 <div className="details__item">
                                     <span>Email</span>
@@ -87,7 +87,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({ onClose, ty
                                 </div>
                                 <div className="details__item">
                                     <span>Expiration Date</span>
-                                    <span>{user.exp_date}</span>
+                                    <span>{user.subscriptionEndDate}</span>
                                 </div>
                             </div>
                         </div>

@@ -1,3 +1,5 @@
+import { IUser } from "../edit-profile/types";
+
 export interface IRow {
     editable: boolean
     row: {

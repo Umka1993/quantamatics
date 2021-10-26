@@ -125,10 +125,10 @@ export const Header: React.FunctionComponent = (props) => {
                         </div>
                     </div>
                 </div>)}
-                {
+               {/*  {
                     showProfile &&
                     <EditProfile user={USER} onClose={() => setShowProfile(false)}/>
-                }
+                } */}
             </div>
         </div>
     )
