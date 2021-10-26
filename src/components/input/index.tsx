@@ -21,10 +21,11 @@ interface IInput {
     limit?: string | number
     icon?: ReactSVGComponent,
     enableValidation?: boolean;
+    name?: string;
 }
 
 export const Input: React.FunctionComponent<IInput> = (props) => {
-    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit, enableValidation } = props;
+    const { className, placeholder, value, onChangeInput, required, type, onEnterPress, icon, limit, enableValidation, name = '' } = props;
     let { errors } = props;
     const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
 
@@ -88,6 +89,7 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 maxLength={limit as number}
                 minLength={minLength}
                 pattern={pattern}
+                name={name}
             />
             {errorMessage && <p className='input__error'>{errorMessage}</p>}
             {!!type && type === 'password' && (

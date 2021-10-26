@@ -1,18 +1,15 @@
 import React, { FormEvent, useState } from "react";
 import "./styles/edit-profile.scss"
 import photoIcon from "./assets/photos.svg"
-import closeIcon from "./assets/close.svg"
-import editIcon from "./assets/edit.svg"
+import CloseIcon from "./assets/close.svg"
 import avatar from "./assets/avatar.svg"
 import SVG from "../SVG";
 import { Button } from "../button/button";
 import { Input } from "../input";
 import { User } from "../../types/edit-profile/types"
-import { DateInput } from "../date-input";
-import { SelectorInput } from "../selector-input";
-import { USER_ORGS } from "../../contstans/constans";
 import { NewPassword } from '../input/new-password';
 import { network } from "../../services/networkService";
+import { EditProfileForm } from './edit-profile-form';
 
 interface IEditProfile {
     onClose: () => void
@@ -20,7 +17,7 @@ interface IEditProfile {
     user: User
 }
 
-export const EditProfile: React.FunctionComponent<IEditProfile> = ({onClose, type_edit, user }) => {
+export const EditProfile: React.FunctionComponent<IEditProfile> = ({ onClose, type_edit, user }) => {
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -55,7 +52,10 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({onClose, typ
         <>
             <div className="modal-profile">
             </div>
-            <div className="edit-profile">
+            <div className="edit-profile modal">
+                <button className="modal__close" onClick={() => handleModalClose()}>
+                    <CloseIcon aria-hidden />
+                </button>
                 <div className="edit-profile__wrapper">
                     <div className="edit-profile__summary">
                         <div className="edit-profile__summary-container">
@@ -92,65 +92,39 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({onClose, typ
                             </div>
                         </div>
                     </div>
-                    <form className="edit-profile__fields" onSubmit={handlerSubmit}>
-                        <div className="edit-profile__fields-container">
-                            <div className="edit-profile__close" onClick={() => handleModalClose()}>
-                                <SVG icon={closeIcon} />
-                            </div>
-                            {
-                                type_edit ?
-                                    <>
-                                        <div className="edit-profile__title">Edit Profile</div>
 
-                                        <div>
-                                            <Input onChangeInput={(value => { })}
-                                                value={user.name}
-                                                icon={editIcon}
-                                            />
-                                            <Input onChangeInput={(value => { })}
-                                                value={user.surname}
-                                                icon={editIcon}
-                                            />
-                                            <SelectorInput onChangeInput={(value => { })}
-                                                options={USER_ORGS}
-                                                value={user.organization}
-                                            />
-                                            <Input onChangeInput={(value => { })}
-                                                value={user.email}
-                                                icon={editIcon}
-                                            />
-                                            <DateInput onChangeInput={(value => { })} />
+
+                    {
+                        type_edit ?
+                            <EditProfileForm user={user} resetFunction={handleModalClose} />
+                            :
+                            <form className="edit-profile__fields" onSubmit={handlerSubmit}>
+                                <div className="edit-profile__fields-container">
+                                    <div className="edit-profile__title">Change Password</div>
+
+                                    <div>
+                                        <Input onChangeInput={(value) => setCurrentPassword(value)}
+                                            value={currentPassword}
+                                            placeholder={'Current Password'}
+                                            type={'password'} />
+
+                                        <NewPassword
+                                            password={newPassword} confirm={confirmPassword}
+                                            setters={[setNewPassword, setConfirmPassword]}
+                                            validateBoth
+                                        />
+                                    </div>
+                                    <div className="edit-profile__buttons">
+                                        <div className="edit-profile__cancel-btn" onClick={() => handleModalClose()}>
+                                            <Button type={'dotted'} text={'Cancel'} />
                                         </div>
-                                    </>
-                                    :
-                                    <>
-                                        <div className="edit-profile__title">Change Password</div>
-
-                                        <div>
-                                            <Input onChangeInput={(value) => setCurrentPassword(value)}
-                                                value={currentPassword}
-                                                placeholder={'Current Password'}
-                                                type={'password'} />
-
-                                            <NewPassword 
-                                                password={newPassword} confirm={confirmPassword}
-                                                setters={[setNewPassword, setConfirmPassword]}
-                                                validateBoth
-                                            />
+                                        <div className="edit-profile__save-btn">
+                                            <Button type={'simple'} text={'Save'} htmlType='submit' />
                                         </div>
-                                    </>
-
-                            }
-                            <div className="edit-profile__buttons">
-                                <div className="edit-profile__cancel-btn" onClick={() => handleModalClose()}>
-                                    <Button type={'dotted'} text={'Cancel'} />
+                                    </div>
                                 </div>
-                                <div className="edit-profile__save-btn">
-                                    <Button type={'simple'} text={'Save'} htmlType='submit' />
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                            </form>
+                    }
                 </div>
             </div>
         </>

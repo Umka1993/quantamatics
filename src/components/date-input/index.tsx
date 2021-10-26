@@ -28,6 +28,7 @@ export const DateInput: React.FunctionComponent<IInput> = (props) => {
                 onChange={(date) => onChangeInput(date)} 
                 minDate={minDate}
                 showDisabledMonthNavigation={disablePastDate}
+                dateFormat="MM.dd.yyyy"
             />
             <SVG icon={calendarIcon} />
         </div>

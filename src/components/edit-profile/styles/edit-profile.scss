@@ -1,3 +1,5 @@
+$accent: #017AEE;
+
 .modal-profile{
   background: #263768;
   opacity: 0.8;
@@ -9,6 +11,28 @@
   top: 0;
   bottom: 0;
   z-index: 100;
+}
+
+.modal {
+  &__close {
+    all: unset;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    color: #BCC4D8;
+    
+    padding: 24px;
+    cursor: pointer;
+
+    &:hover, &:focus-visible {
+      color: $accent;
+    }
+
+    &:active {
+      color: darken($accent, 20)
+    }
+  }
 }
 
 .edit-profile{
@@ -24,14 +48,6 @@
   z-index: 9999;
   opacity: 1;
 
-  &__close{
-    width: 100%;
-    text-align: right;
-    svg{
-      cursor: pointer;
-    }
-  }
-
   &__title{
     color: #003C71;
     font-weight: 500;
@@ -42,6 +58,7 @@
 
   &__wrapper{
    display: flex;
+   height: 100%;
   }
 
   &__summary{
