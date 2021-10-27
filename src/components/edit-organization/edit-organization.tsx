@@ -122,7 +122,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
         <div className="content-wrapper">
             {
                 addUserActive ?
-                    <AddUserAccount organization={organizationName} orgId={orgId} onBack={() => setAddUserActive(false)} />
+                    <AddUserAccount organization={organizationName} orgId={orgId} onBack={() => {setUsers(null); setAddUserActive(false)}} />
                     :
                     <div className="edit-organization">
                         <div className="edit-organization__header">
