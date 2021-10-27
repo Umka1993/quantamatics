@@ -46,7 +46,9 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
         localStorage.setItem('rows', JSON.stringify(props.rows))
     }, [props.rows])
 
-    const handleDeleteOrganization = (id: string, index: number) => {
+    // ? For the future use
+
+    /* const handleDeleteOrganization = (id: string, index: number) => {
         console.log('delete', id)
         setItemDeleting(index)
         network.delete('api/Organization/delete', {id})
@@ -58,7 +60,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
             .catch((e: any) => {
                 console.log(e.data)
             })
-    }
+    } */
 
     if(!localRows) return null
 
@@ -105,7 +107,10 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                         <div className='table-body-row__actions'>
                             <SVG icon={editSVG}
                                 onClick={() => handleEditRoute("apps/organizations", row.row.id)}/>
-                            <SVG icon={deleteSVG} onClick={() => handleDeleteOrganization(row.row.id, index)}/>
+                            <SVG icon={deleteSVG} 
+                                // onClick={() => handleDeleteOrganization(row.row.id, index)}
+                                className='disabled'
+                            />
                         </div>
                     </div>
                 ))}
