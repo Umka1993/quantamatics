@@ -13,6 +13,7 @@ import successIcon from "../../pages/add-user-page/assets/sucess-icon.svg";
 interface IAddUserAccount {
     onBack: () => void
     orgId: string
+    organization: string
 }
 
 
@@ -36,6 +37,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                 lastName: userLastName,
                 email: userEmail,
                 organizationId: props.orgId,
+                companyName: props.organization,
                 subscriptionEndDate: new Date(userExpiration)
             })
                 .then((r: any) => {
