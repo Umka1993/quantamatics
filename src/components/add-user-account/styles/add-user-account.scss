@@ -98,8 +98,10 @@
     justify-content: center;
     .button {
       width: 100%;
-      padding: 10px 40px;
+      padding: 10px;
       max-width: 140px;
+      min-height: 40px;
     }
   }
+
 }
