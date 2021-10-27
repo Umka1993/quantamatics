@@ -10,13 +10,14 @@ import profileImg from "./assets/profile.svg"
 import settingsImg from "./assets/settings.svg"
 import logoutImg from "./assets/logout.svg"
 import SVG from '../SVG'
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
-import {RootState} from "../../store";
-import {useHistory} from "react-router-dom";
-import {changeRoute} from "../../store/currentPage/actions";
-import {EditProfile} from "../edit-profile";
-import {network} from "../../services/networkService";
+import { RootState } from "../../store";
+import { useHistory } from "react-router-dom";
+import { changeRoute } from "../../store/currentPage/actions";
+import { EditPassword } from '../edit-modal/edit-password';
+// import {EditProfile} from "../edit-profile";
+import { network } from "../../services/networkService";
 import { IUser } from 'types/edit-profile/types';
 
 
@@ -54,7 +55,7 @@ export const Header: React.FunctionComponent = (props) => {
 
     const handleChangeRoute = (route: string) => {
         dispatch(changeRoute(route))
-        if(route === 'login') {
+        if (route === 'login') {
             dispatch({
                 type: "LOGOUT", payload: {
                     firstName: ''
@@ -83,20 +84,20 @@ export const Header: React.FunctionComponent = (props) => {
     }, [storeCurrentPage])
 
     const breadcrumbsList = breadcrumbs.map((crumb: any, index) => {
-        const listLength = breadcrumbs.length -1
+        const listLength = breadcrumbs.length - 1
         return (
-            <div key={index} className={classNames('header__breadcrumbs-item', {'last': index === listLength})}>
+            <div key={index} className={classNames('header__breadcrumbs-item', { 'last': index === listLength })}>
                 {crumb}
                 {index !== listLength ? <span className='breadcrumb-divider'>/</span> : ''}
             </div>
         )
     })
     const username: any = !!user ? user : ''
-    return(
+    return (
         <div className="header">
             <div className="header__content">
                 <div className="header__logo">
-                   <SVG icon={logoImg} name="logo" onClick={() => !!user ? history.push('/') : null}/>
+                    <SVG icon={logoImg} name="logo" onClick={() => !!user ? history.push('/') : null} />
                     {user && (<div className="header__breadcrumbs">
                         {breadcrumbsList}
                     </div>)}
@@ -105,22 +106,22 @@ export const Header: React.FunctionComponent = (props) => {
                 {username && (<div className="header__nav">
                     <div className="header__nav-item">
                         <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
-                            <div className={classNames("profile__avatar", {'opened': showMenu})}>
+                            <div className={classNames("profile__avatar", { 'opened': showMenu })}>
                                 {/*<SVG icon={avatar} name="avatar"/>*/}
-                                <div className="img-wrapper"><img src={require("./assets/avatar-img.jpeg").default} alt="ava"/></div>
+                                <div className="img-wrapper"><img src={require("./assets/avatar-img.jpeg").default} alt="ava" /></div>
 
                             </div>
-                            <SVG icon={arrowImg} className={classNames("profile__arrow", {'opened': showMenu})}/>
-                            <div className={classNames('profile__dropdown', {showMenu: showMenu})}>
-                                <div className="profile__dropdown-triangle"/>
-                                <div className="profile__dropdown-item" onClick={() => {setShowProfile(true)}}>
-                                    <SVG icon={profileImg} name="profileImg"/> My Account
+                            <SVG icon={arrowImg} className={classNames("profile__arrow", { 'opened': showMenu })} />
+                            <div className={classNames('profile__dropdown', { showMenu: showMenu })}>
+                                <div className="profile__dropdown-triangle" />
+                                <div className="profile__dropdown-item" onClick={() => { setShowProfile(true) }}>
+                                    <SVG icon={profileImg} name="profileImg" /> My Account
                                 </div>
-                                <div className="profile__dropdown-item" onClick={() => {}}>
-                                    <SVG icon={settingsImg} name="settingsImg"/> Settings
+                                <div className="profile__dropdown-item" onClick={() => { }}>
+                                    <SVG icon={settingsImg} name="settingsImg" /> Settings
                                 </div>
                                 <div className="profile__dropdown-item" onClick={() => handleChangeRoute('login')}>
-                                    <SVG icon={logoutImg} name="logoutImg"/> Log Out
+                                    <SVG icon={logoutImg} name="logoutImg" /> Log Out
                                 </div>
                             </div>
                         </div>
@@ -128,7 +129,7 @@ export const Header: React.FunctionComponent = (props) => {
                 </div>)}
                 {
                     showProfile &&
-                    <EditProfile user={user as IUser} onClose={() => setShowProfile(false)}/>
+                    <EditPassword user={user as IUser} onClose={() => setShowProfile(false)}/>
                 }
             </div>
         </div>

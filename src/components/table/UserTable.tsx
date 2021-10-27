@@ -4,7 +4,7 @@ import { IUserRow } from "../../types/table/types";
 import { SVG } from "../SVG";
 import editSVG from "./assets/edit-row-icon.svg";
 import deleteSVG from "./assets/delete-row-icon.svg";
-import { EditProfile } from "../edit-profile";
+import { EditProfile } from "../edit-modal/edit-profile";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import { USER } from "../../contstans/constans";
@@ -38,18 +38,18 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
         setShowModal(true)
     }
 
-    const updateUsers  = (user: IUser) => {
+    const updateUsers = (user: IUser) => {
 
         let newRows = localRows;
-        
 
-        user.subscriptionEndDate = new Date(user.subscriptionEndDate).toLocaleDateString('en-US', {month: '2-digit', day: '2-digit', year: 'numeric' })
 
-        newRows[editIndex].row = user        
+        user.subscriptionEndDate = new Date(user.subscriptionEndDate).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
+
+        newRows[editIndex].row = user
         setLocalRows(newRows)
     }
 
-    const handleDeleteUser = (data : IUserRow) => {
+    const handleDeleteUser = (data: IUserRow) => {
         deleteUser(data.row.id);
     }
 
@@ -57,27 +57,27 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
         <div className="table user">
             <div className="table-head">
                 <div className="table-head-row">
-                    <SortTableHeader 
-                        name="firstName" text="First Name"  
-                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    <SortTableHeader
+                        name="firstName" text="First Name"
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                         className="user"
                     />
 
-                    <SortTableHeader 
-                        name="lastName" text="Last Name"  
-                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    <SortTableHeader
+                        name="lastName" text="Last Name"
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                         className="user"
                     />
 
-                    <SortTableHeader 
-                        name="email" text="Email"  
-                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    <SortTableHeader
+                        name="email" text="Email"
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                         className="user"
                     />
 
-                    <SortTableHeader 
-                        name="expirationDate" text="Expiration Date"  
-                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    <SortTableHeader
+                        name="expirationDate" text="Expiration Date"
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                         className="user"
                     />
 
@@ -100,13 +100,15 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                         </div>
                         <div className='table-body-row__actions'>
                             <SVG icon={editSVG} onClick={() => { handleEditUser(row, index) }} />
-                            <SVG icon={deleteSVG} onClick={() => {handleDeleteUser(row)}} className='disabled' />
+                            <SVG icon={deleteSVG} onClick={() => { handleDeleteUser(row) }} className='disabled' />
                         </div>
                     </div>
                 ))}
             </div>
-            {showModal && 
-                <EditProfile user={user} type_edit={true} onClose={() => setShowModal(false)} onSubmit={updateUsers} />
+            
+            {showModal &&
+                // <Modal onClose={() => setShowModal(false)}><p>Test</p></Modal>
+                <EditProfile user={user} onClose={() => setShowModal(false)} onSubmit={updateUsers} />
             }
         </div>
     )
