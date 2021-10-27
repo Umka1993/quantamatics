@@ -4,7 +4,6 @@ import "./styles/sign-up.scss"
 import { network } from "../../services/networkService";
 import { useHistory } from "react-router-dom";
 import { Loader } from "../../components/loader";
-import { NewPassword } from "../../components/input/new-password";
 import Password from "../../components/app-input/password";
 
 export const SignUpPage: React.FunctionComponent = (props) => {
@@ -12,7 +11,6 @@ export const SignUpPage: React.FunctionComponent = (props) => {
     const [password, setPassword] = useState<string>('')
     const [passwordConfirm, setPasswordConfirm] = useState<string>('')
     const [loginProcess, setLoginProcess] = useState<boolean>(false)
-    const [validate, setValidate] = useState<boolean>(false)
     const [enableSubmit, setEnableSubmit] = useState<boolean>(false)
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -74,9 +72,7 @@ export const SignUpPage: React.FunctionComponent = (props) => {
             setEnableSubmit(true)
             
             setCompare(password !== passwordConfirm ? 'The passwords do not match' : undefined) 
-        }
-
-        
+        }        
         
     }, [password, passwordConfirm])
 
