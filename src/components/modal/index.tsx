@@ -49,7 +49,6 @@ export const Modal: React.FunctionComponent<IModal> = ({
         <div
             className="modal-overlay"
             aria-label={Hint.close}
-            title={Hint.close}
             tabIndex={0}
             onFocusCapture={focusLock}
             onClick={closeOnClick}
