@@ -93,10 +93,10 @@ export const SignInPage: React.FunctionComponent = (props) => {
                 })
                 .catch((e) => {
                     if (e.response.status >= 400) {
-                        setErrors('Incorrect username or password.')
+                        setErrors('Incorrect username or password')
                     }
                     setLoginProcess(false)
-                    setErrors('Incorrect username or password. ')
+                    setErrors('Incorrect username or password')
                 })
         } else {
             setErrors('Enter username and password')
