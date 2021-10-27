@@ -61,22 +61,19 @@ export const SignUpPage: React.FunctionComponent = (props) => {
     const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
-        if (compare === undefined) {
-            resetPassword ? handleResetPassword() : handleConfirmUser();
-        }
-        
+        resetPassword ? handleResetPassword() : handleConfirmUser();
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         if (!!password.length && !!passwordConfirm.length) {
             setEnableSubmit(true)
-            
-            setCompare(password !== passwordConfirm ? 'The passwords do not match' : undefined) 
-        }        
-        
+
+            setCompare(password !== passwordConfirm ? 'The passwords do not match' : undefined)
+        }
+
     }, [password, passwordConfirm])
 
-    
+
 
     return (
         <form className="sign-up" onSubmit={handleSubmit}>
@@ -90,14 +87,14 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                     <p>Create a password to complete the sign up</p>
                 </div>)}
                 <div className="sign-up__inputs">
-                    <Password 
-                        autoComplete="new-password" value={password} 
-                        onChange={({target}) => setPassword(target.value)}
+                    <Password
+                        autoComplete="new-password" value={password}
+                        onChange={({ target }) => setPassword(target.value)}
                         placeholder="New Password"
                     />
-                    <Password 
-                        autoComplete="new-password" value={passwordConfirm} 
-                        onChange={({target}) => setPasswordConfirm(target.value)}
+                    <Password
+                        autoComplete="new-password" value={passwordConfirm}
+                        onChange={({ target }) => setPasswordConfirm(target.value)}
                         placeholder="Confirm New Password"
                         error={compare}
                     />

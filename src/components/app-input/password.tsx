@@ -35,17 +35,24 @@ const Password: React.FunctionComponent<IPassword> = ({
     value,
     onChange,
     onInvalid,
+    autoComplete,
     error,
     ...other
 }) => {
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [dummy, setDummy] = useState<string>("");
+    const [validate, setValidate] = useState<boolean>(false);
+    const [innerValue, setInnerValue] = useState<string>(value as string);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(
+        undefined
+    );
+
     // check if any label is provided
     let labelText = label ? label : placeholder;
     labelText = labelText ? labelText : "Password input";
 
-    const inputRef = useRef<HTMLInputElement>(null);
-
     // Show/hide pass
-    const [showPassword, setShowPassword] = useState<boolean>(false);
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.type = showPassword ? "text" : "password";
@@ -53,27 +60,26 @@ const Password: React.FunctionComponent<IPassword> = ({
     }, [showPassword]);
 
     // Change dots to ******
-    const [dummy, setDummy] = useState<string>("");
-    const [innerValue, setInnerValue] = useState<string>(value as string);
     useEffect(() => {
         setInnerValue(value as string);
     }, [value]);
-
     useEffect(() => {
         setDummy(Array(inputRef.current?.value.length).fill("*").join(""));
     }, [innerValue]);
-
-
-    const [validate, setValidate] = useState<boolean>(false);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         setInnerValue(evt.target.value);
         onChange && onChange(evt);
     };
 
-    const validatePass = () => {
+    // Validate
+    const getValidationMessage = (validity: ValidityState): string => {
+        if (error) {
+            return error;
+        }
+
         if (inputRef.current) {
-            const { tooShort, patternMismatch } = inputRef.current.validity;
+            const { tooShort, patternMismatch } = validity;
 
             if (tooShort || patternMismatch) {
                 const textStart = "The password must contain at least ";
@@ -85,35 +91,32 @@ const Password: React.FunctionComponent<IPassword> = ({
                         "1 uppercase letter, 1 digit and 1 special character"
                     );
 
-                const result = `${textStart} ${requirements.join(", ")}.`;
-
-                return setErrorMessage(result);
+                return `${textStart} ${requirements.join(", ")}.`;
             }
-
-            return setErrorMessage(undefined);
         }
+
+        return "";
     };
 
     useEffect(() => {
-        if (error) {
-            validate && setErrorMessage(error)
-        } else {
-            validate && Boolean(innerValue.length) && validatePass();
+        if (inputRef.current) {            
+            const { validity } = inputRef.current;
+            inputRef.current.setCustomValidity(getValidationMessage(validity));
+
+            if (validate && Boolean(innerValue.length)) {
+                inputRef.current.validationMessage.length
+                ? inputRef.current.checkValidity()
+                : setErrorMessage(undefined);
+            }
         }
-        
-    }, [inputRef.current?.validity, validate , error, innerValue]);
+    }, [inputRef.current?.validity, error, validate, innerValue]);
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
-
-        setValidate(true)
-
+        setErrorMessage(inputRef.current?.validationMessage);
+        setValidate(true);
         onInvalid && onInvalid(evt);
     };
-
-    const [errorMessage, setErrorMessage] = useState<string | undefined>(
-        undefined
-    );
 
     return (
         <div
@@ -130,6 +133,7 @@ const Password: React.FunctionComponent<IPassword> = ({
                     aria-invalid={!!errorMessage}
                     aria-label={showPassword ? "Password is open" : labelText}
                     // TODO: uniq ID aria-describedby="error_pw desc_pw"
+                    autoComplete={autoComplete}
                     placeholder={placeholder}
                     required={required}
                     aria-required={required}
