@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./styles/add-user-account.scss"
 import { Input } from "../input";
 import { Button } from "../button/button";
@@ -92,7 +92,9 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (props) 
                 />
 
                 <div className="add-user-account__form-btn-save">
-                    <Button type={'simple'} text={'Save'} htmlType={"submit"} />
+                    <Button type={'simple'} text={'Save'} htmlType={"submit"} 
+                        disabled={!Boolean(userName && userLastName && userEmail && userExpiration)} 
+                    />
                 </div>
                 <div className="add-user-account__form-btn-cancel" onClick={props.onBack}>
                     <Button type={'dotted'} text={'Cancel'} />
