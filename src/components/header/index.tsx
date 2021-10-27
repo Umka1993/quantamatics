@@ -62,9 +62,9 @@ export const Header: React.FunctionComponent = (props) => {
             })
             localStorage.removeItem('id_token')
             localStorage.removeItem('user')
+            window.location.href = route;
         }
         history.push(route)
-
     }
 
     useEffect(() => {
