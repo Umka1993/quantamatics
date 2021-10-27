@@ -63,7 +63,7 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
     
     useEffect(() => {
         setErrorMessage(errorText);
-        errorText && onInvalid();
+        errorText && onInvalid && onInvalid();
     }, [errorText]) 
 
     useEffect(() => {
@@ -85,7 +85,7 @@ export const Input: React.FunctionComponent<IInput> = (props) => {
                 const result = `${textStart} ${requirements.join(', ')}`
     
                 setErrorMessage(result);
-                onInvalid();
+                onInvalid && onInvalid();
     
             } else {
                 setErrorMessage(undefined);

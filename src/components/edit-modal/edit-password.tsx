@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 
 import { Button } from "../button/button";
 import { Input } from "../input";
@@ -9,6 +9,7 @@ import { NewPassword } from "../input/new-password";
 import ProfileSummary from "../profile-summary";
 import Modal from "../modal";
 import "./styles/edit-modal.scss";
+import { AxiosError, AxiosResponse } from "axios";
 
 interface IEditProfile {
     onClose: () => void;
@@ -23,11 +24,32 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const handleModalClose = () => {
-        onClose();
-    };
+    const [wrongCurrent, setWrongCurrent] = useState<boolean>(false)
+    const [validateNew, setValidateNew] = useState<boolean>(false)
+
+    useEffect(() => {
+        wrongCurrent && setWrongCurrent(false)
+    }, [currentPassword])
+
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
-        onClose();
+        evt.preventDefault();
+
+        network.post('api/Account/login', {
+            email: user.email,
+            password: currentPassword
+        }).then((r: any) => {
+            console.log(r)
+            setValidateNew(true)
+        }).catch(({response}: AxiosError) => {
+            // console.log(response);
+            // debugger;
+            setWrongCurrent(true)
+            setValidateNew(true)
+        })
+
+
+        
+        // onClose();
 
         // TODO: Need API update
         /* evt.preventDefault();
@@ -65,6 +87,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         value={currentPassword}
                         placeholder={"Current Password"}
                         type={"password"}
+                        errorText={wrongCurrent ? 'Current password is incorrect' : undefined}
                     />
 
                     <NewPassword
@@ -72,6 +95,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         confirm={confirmPassword}
                         setters={[setNewPassword, setConfirmPassword]}
                         validateBoth
+                        validate={validateNew}
                     />
                 </div>
 

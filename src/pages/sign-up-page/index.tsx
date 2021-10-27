@@ -5,6 +5,7 @@ import { network } from "../../services/networkService";
 import { useHistory } from "react-router-dom";
 import { Loader } from "../../components/loader";
 import { NewPassword } from "../../components/input/new-password";
+import Password from "../../components/app-input/password";
 
 export const SignUpPage: React.FunctionComponent = (props) => {
     const resetPassword = window.location.pathname.substring(1).includes('reset-password')
@@ -20,6 +21,8 @@ export const SignUpPage: React.FunctionComponent = (props) => {
     const organizationName = urlParams.get('orgName')
 
     const history = useHistory()
+
+    const [compare, setCompare] = useState<string | undefined>(undefined);
 
     const handleResetPassword = useCallback(() => {
         if (password && passwordConfirm && email) {
@@ -59,22 +62,28 @@ export const SignUpPage: React.FunctionComponent = (props) => {
 
     const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-        setValidate(true);
 
-        resetPassword ? handleResetPassword() : handleConfirmUser();
+        if (compare === undefined) {
+            resetPassword ? handleResetPassword() : handleConfirmUser();
+        }
+        
     }
 
     useEffect(()=> {
+        if (!!password.length && !!passwordConfirm.length) {
+            setEnableSubmit(true)
+            
+            setCompare(password !== passwordConfirm ? 'The passwords do not match' : undefined) 
+        }
 
-        setEnableSubmit(password.length >= 8 && passwordConfirm.length >= 8)
-
+        
+        
     }, [password, passwordConfirm])
 
     
 
     return (
-        <form className="sign-up" onSubmit={handleSubmit} onInvalid={() => console.log('test')
-        }>
+        <form className="sign-up" onSubmit={handleSubmit}>
             <div className="sign-up__container">
                 {resetPassword && (<div className="sign-up__title">
                     <h2>Reset Password</h2>
@@ -85,10 +94,16 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                     <p>Create a password to complete the sign up</p>
                 </div>)}
                 <div className="sign-up__inputs">
-                    <NewPassword password={password} confirm={passwordConfirm}
-                        setters={[setPassword, setPasswordConfirm]}
-                        validate={validate}
-                        onInvalid={() => setEnableSubmit(false)}
+                    <Password 
+                        autoComplete="new-password" value={password} 
+                        onChange={({target}) => setPassword(target.value)}
+                        placeholder="New Password"
+                    />
+                    <Password 
+                        autoComplete="new-password" value={passwordConfirm} 
+                        onChange={({target}) => setPasswordConfirm(target.value)}
+                        placeholder="Confirm New Password"
+                        error={compare}
                     />
                 </div>
 

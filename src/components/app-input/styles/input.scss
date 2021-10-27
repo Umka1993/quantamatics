@@ -1,0 +1,106 @@
+@import "../../../variables.scss";
+
+$text: #bcc4d8;
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: $accent;
+  }
+}
+
+.app-input {
+  width: 100%;
+
+  &__wrapper {
+    position: relative;
+    font-size: 16px;
+    line-height: 18px;
+    color: #003c71;
+  }
+
+  &__field {
+    font: inherit;
+    color: inherit;
+    width: 100%;
+    border: none;
+    box-sizing: border-box;
+    min-height: 40px;
+    border-bottom: 1px solid rgba(113, 130, 166, 0.3);
+    padding: 10px 20px 10px 0;
+    outline: none;
+    caret-color: $accent;
+
+    &::placeholder {
+      font-size: 16px;
+      line-height: 18px;
+      color: $text;
+    }
+    &:hover {
+      border-color: $accent;
+    }
+    &:active,
+    &:focus {
+      color: $accent;
+      border-color: currentColor;
+    }
+
+    &[type="password"] {
+      font-size: 0;
+      // color: transparent;
+      // text-indent: -0.2em;
+    }
+  }
+
+  &--validate &__field:not(:placeholder-shown):invalid {
+    border-bottom: 1px solid #ff5757;
+  }
+
+  &__toggle {
+    all: unset;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    color: $text;
+    cursor: pointer;
+    svg {
+      fill: currentColor;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: $accent;
+    }
+
+    &:active {
+      color: darken($accent, 10);
+    }
+  }
+
+  &__dummy {
+    position: absolute;
+    top: 10px;
+    left: 0;
+  }
+
+  &__field:focus ~ &__dummy {
+    color: $accent;
+    display: inline-block;
+    // width: min-content;
+    border-right: 1px solid transparent;
+    animation: blink-caret 1.2s step-end infinite;
+  }
+
+  &__error {
+    font-size: 16px;
+    line-height: 18px;
+    margin: 16px 0 0;
+
+    color: #ff5757;
+    text-align: left;
+  }
+}

@@ -17,6 +17,11 @@
     text-align: center;
   }
 
+  &__inputs {
+    display: grid;
+    gap: 22px;
+  }
+
   &__title {
     h2 {
       font-size: 24px;
