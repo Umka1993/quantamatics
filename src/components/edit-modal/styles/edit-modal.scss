@@ -20,6 +20,15 @@
     margin: 0 0 (40px - 24px);
   }
 
+  &__temp {
+    margin-top: 24px;
+  }
+
+  &__inputs {
+    display: grid;
+    gap: 32px - 10px;
+  }
+
   &__buttons {
     display: grid;
     grid-template-columns: auto 140px;

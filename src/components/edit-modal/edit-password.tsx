@@ -1,11 +1,10 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 
 import { Button } from "../button/button";
-import { Input } from "../input";
+import Password from "../app-input/password";
 import { IUser } from "../../types/edit-profile/types";
 import { network } from "../../services/networkService";
 
-import { NewPassword } from "../input/new-password";
 import ProfileSummary from "../profile-summary";
 import Modal from "../modal";
 import "./styles/edit-modal.scss";
@@ -24,49 +23,61 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const [wrongCurrent, setWrongCurrent] = useState<boolean>(false)
-    const [validateNew, setValidateNew] = useState<boolean>(false)
+    const [wrongCurrent, setWrongCurrent] = useState<string | undefined>(
+        undefined
+    );
+    const [compare, setCompare] = useState<string | undefined>(undefined);
+    // const [token, setToken] = useState<string | undefined>(undefined);
+
+    const formRef = useRef<HTMLFormElement>(null)
+
 
     useEffect(() => {
-        wrongCurrent && setWrongCurrent(false)
-    }, [currentPassword])
+        wrongCurrent && setWrongCurrent(undefined);
+    }, [currentPassword]);
+
+    useEffect(() => {
+        if (!!newPassword.length && !!confirmPassword.length) {
+            setCompare(
+                newPassword !== confirmPassword ? "The passwords do not match" : undefined
+            );
+        }
+    }, [newPassword, confirmPassword])
+
+    const resetPassword = (token : string) => {
+        network.post('/api/Account/resetPassword', {
+            password: newPassword,
+            token: token,
+            email: user.email
+        })
+            .then((r: any) => {
+                onClose()
+            })
+            .catch(({response } : AxiosError) => {                
+                setCompare(response?.data as string)
+                formRef.current?.reportValidity();
+            })
+    }
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
-        network.post('api/Account/login', {
-            email: user.email,
-            password: currentPassword
-        }).then((r: any) => {
-            console.log(r)
-            setValidateNew(true)
-        }).catch(({response}: AxiosError) => {
-            // console.log(response);
-            // debugger;
-            setWrongCurrent(true)
-            setValidateNew(true)
-        })
+        network
+            .post("api/Account/login", {
+                email: user.email,
+                password: currentPassword,
+            })
+            .then(({data: { token} } : any) => {
+                if (formRef.current?.reportValidity()) {
+                    localStorage.setItem('id_token', token),
+                    resetPassword(token);                    
+                }
+            })
+            .catch(({ response }: AxiosError) => {
+                console.log(response);
+                setWrongCurrent("Current password is incorrect");
 
-
-        
-        // onClose();
-
-        // TODO: Need API update
-        /* evt.preventDefault();
-     
-            if (!type_edit) {
-                network.post('/api/Account/resetPassword', {
-                    password: newPassword,
-                    token: localStorage.getItem('id_token'),
-                    email: user.email
-                })
-                    .then((r: any) => {
-                        onClose()
-                    })
-                    .catch(({response : {data}}) => {
-                        console.log(data)
-                    })
-            } */
+            }); 
     };
 
     return (
@@ -77,32 +88,42 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                 className="edit-profile__form"
                 onSubmit={handlerSubmit}
                 onReset={onClose}
+                ref={formRef}
             >
                 <h2 id="modal-label" className="modal__title edit-profile__title">
                     Change Password
                 </h2>
-                <div>
-                    <Input
-                        onChangeInput={(value) => setCurrentPassword(value)}
+                <div className="edit-profile__temp edit-profile__inputs">
+                    <Password
+                        placeholder="Current Password"
                         value={currentPassword}
-                        placeholder={"Current Password"}
-                        type={"password"}
-                        errorText={wrongCurrent ? 'Current password is incorrect' : undefined}
+                        externalSetter={setCurrentPassword}
+                        name="password"
+                        autoComplete="current-password"
+                        error={wrongCurrent}
+                        formNoValidate={Boolean(wrongCurrent)}
                     />
 
-                    <NewPassword
-                        password={newPassword}
-                        confirm={confirmPassword}
-                        setters={[setNewPassword, setConfirmPassword]}
-                        validateBoth
-                        validate={validateNew}
+                    <Password
+                        autoComplete="new-password"
+                        value={newPassword}
+                        externalSetter={setNewPassword}
+                        placeholder="New Password"
+                    />
+                    <Password
+                        autoComplete="new-password"
+                        value={confirmPassword}
+                        externalSetter={setConfirmPassword}
+                        placeholder="Confirm New Password"
+                        error={compare}
                     />
                 </div>
 
                 <div className="edit-profile__buttons">
                     <Button type={"dotted"} text={"Cancel"} htmlType="reset" />
 
-                    <Button type={"simple"} text={"Save"} htmlType="submit" />
+                    <Button type={"simple"} text={"Save"} htmlType="submit" 
+                    />
                 </div>
             </form>
         </Modal>
