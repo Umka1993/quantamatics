@@ -126,7 +126,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
     if (!!user) return <div />
 
     return (
-        <div className="login-page">
+        <div className="login-page app__main">
             <div className="login-page__container">
                 <div className="login-page__title">
                     <h2>Sign in to your account</h2>

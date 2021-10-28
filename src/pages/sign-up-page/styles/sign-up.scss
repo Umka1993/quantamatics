@@ -1,19 +1,15 @@
 .sign-up {
-  width: 100%;
   max-width: 1392px;
   margin: 0 auto;
   background: #ffffff;
   box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.1);
   border-radius: 4px;
   min-height: 602px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-content: center;
+  grid-auto-rows: 360px;
 
   &__container {
-    width: 100%;
-    max-width: 360px;
-    margin: 0 auto;
     text-align: center;
   }
 

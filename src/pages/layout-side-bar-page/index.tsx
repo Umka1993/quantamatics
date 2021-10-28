@@ -22,7 +22,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
         history.push('/' + route)
     }
     return (
-        <div className="layout-page">
+        <div className="layout-page app__main">
             <div className="layout-page__side-bar-container">
                 <SideBar
                     items={SIDE_BAR_ITEMS}
