@@ -29,12 +29,22 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
     const [compare, setCompare] = useState<string | undefined>(undefined);
     // const [token, setToken] = useState<string | undefined>(undefined);
 
+    const [enableSubmit, setEnableSubmit] = useState<boolean>(false);
+    const [validateNew, setValidateNew] = useState<boolean>(false);
+
     const formRef = useRef<HTMLFormElement>(null)
 
 
     useEffect(() => {
         wrongCurrent && setWrongCurrent(undefined);
     }, [currentPassword]);
+
+    useEffect(() => {
+        if (!!currentPassword.length && !!newPassword.length && confirmPassword) {
+            setEnableSubmit(true);
+        }
+    }, [currentPassword, newPassword, confirmPassword]);
+
 
     useEffect(() => {
         if (!!newPassword.length && !!confirmPassword.length) {
@@ -68,6 +78,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                 password: currentPassword,
             })
             .then(({data: { token} } : any) => {
+                setValidateNew(true)
                 if (formRef.current?.reportValidity()) {
                     localStorage.setItem('id_token', token),
                     resetPassword(token);                    
@@ -76,7 +87,6 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
             .catch(({ response }: AxiosError) => {
                 console.log(response);
                 setWrongCurrent("Current password is incorrect");
-
             }); 
     };
 
@@ -89,6 +99,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                 onSubmit={handlerSubmit}
                 onReset={onClose}
                 ref={formRef}
+                noValidate={!validateNew}
             >
                 <h2 id="modal-label" className="modal__title edit-profile__title">
                     Change Password
@@ -101,7 +112,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         name="password"
                         autoComplete="current-password"
                         error={wrongCurrent}
-                        formNoValidate={Boolean(wrongCurrent)}
+                        triggerValidity={Boolean(wrongCurrent)}
                     />
 
                     <Password
@@ -109,12 +120,14 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         value={newPassword}
                         externalSetter={setNewPassword}
                         placeholder="New Password"
+                        // formNoValidate={Boolean(wrongCurrent)}
                     />
                     <Password
                         autoComplete="new-password"
                         value={confirmPassword}
                         externalSetter={setConfirmPassword}
                         placeholder="Confirm New Password"
+                        // formNoValidate={Boolean(wrongCurrent)}
                         error={compare}
                     />
                 </div>
@@ -122,7 +135,9 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                 <div className="edit-profile__buttons">
                     <Button type={"dotted"} text={"Cancel"} htmlType="reset" />
 
-                    <Button type={"simple"} text={"Save"} htmlType="submit" 
+                    <Button 
+                        type={"simple"} text={"Save"} htmlType="submit" 
+                        disabled={!enableSubmit}
                     />
                 </div>
             </form>
