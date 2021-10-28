@@ -47,12 +47,6 @@ $text: #bcc4d8;
       color: $accent;
       border-color: currentColor;
     }
-
-    &[type="password"] {
-      font-size: 0;
-      // color: transparent;
-      // text-indent: -0.2em;
-    }
   }
 
   &--validate &__field:not(:placeholder-shown):invalid {
@@ -81,7 +75,8 @@ $text: #bcc4d8;
     }
   }
 
-  &__dummy {
+  // ? Maybe will be in use, don't delete
+  /* &__dummy {
     position: absolute;
     top: 10px;
     left: 0;
@@ -94,7 +89,7 @@ $text: #bcc4d8;
     border-right: 1px solid transparent;
     animation: blink-caret 1.2s step-end infinite;
   }
-
+ */
   &__error {
     font-size: 16px;
     line-height: 18px;

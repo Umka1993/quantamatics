@@ -45,7 +45,6 @@ const Password: React.FunctionComponent<IPassword> = ({
     ...other
 }) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [dummy, setDummy] = useState<string>("");
     const [validate, setValidate] = useState<boolean>(false);
     const [innerValue, setInnerValue] = useState<string>(value as string);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -68,14 +67,6 @@ const Password: React.FunctionComponent<IPassword> = ({
             inputRef.current.type = showPassword ? "text" : "password";
         }
     }, [showPassword]);
-
-    // Change dots to ******
-    useEffect(() => {
-        setInnerValue(value as string);
-    }, [value]);
-    useEffect(() => {
-        setDummy(Array(inputRef.current?.value.length).fill("*").join(""));
-    }, [innerValue]);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         const { value } = evt.target;
@@ -163,8 +154,6 @@ const Password: React.FunctionComponent<IPassword> = ({
                     ref={inputRef}
                     onInvalid={invalidHandler}
                 />
-
-                {!showPassword && <span className="app-input__dummy">{dummy}</span>}
 
                 <button
                     type="button"
