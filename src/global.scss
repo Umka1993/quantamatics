@@ -1,24 +1,35 @@
 @import "variables";
-@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  line-height: 1.15; /* Correct the line height in all browsers. */
+  -webkit-text-size-adjust: 100%; /* Prevent adjustments of font size after orientation changes in iOS. */
+
+  /* Smooth scrolling IF user doesn't have a preference due to motion sensitivities */
+  @media screen and (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
 
 
-html, body {
+body {
   margin: 0;
   padding: 0;
   width: 100%;
-  //font-family: 'Mulish', sans-serif;
-  font-family: 'Ubuntu', sans-serif;
-  background: #F6F8FC;
+  font-family: "Ubuntu", system-ui, sans-serif;
+  background: #f6f8fc;
 
   /* Firefox scrollbar */
   scrollbar-color: $accent transparent;
   scrollbar-width: thin;
-}
-
-p, h1, h2, h3, h4, h5, h6{
-  //font-family: 'Mulish', sans-serif;
-  font-family: 'Ubuntu', sans-serif;
 }
 
 /* Blink/Webkit scrollbar */
@@ -42,6 +53,8 @@ p, h1, h2, h3, h4, h5, h6{
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+
