@@ -37,6 +37,9 @@ export const Header: React.FunctionComponent = (props) => {
     const dispatch = useDispatch()
     const history = useHistory()
 
+    // TODO: Kludge! Need to rework
+    const hideUser = history.location.pathname === '/sign-up' || history.location.pathname === '/reset-password'  
+
     const useOutsideClick = (ref: any, callback: any) => {
         useEffect(() => {
             const handleClickOutside = (event: any) => {
@@ -106,7 +109,7 @@ export const Header: React.FunctionComponent = (props) => {
                     </div>)}
                 </div>
 
-                {username && logged && (<div className="header__nav">
+                {username && logged && !hideUser && (<div className="header__nav">
                     <div className="header__nav-item">
                         <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
                             <div className={classNames("profile__avatar", { 'opened': showMenu })}>
