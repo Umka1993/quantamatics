@@ -39,15 +39,27 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                     subscriptionEndDate: new Date(userExpiration),
                 })
                 .then((r: any) => {
+                    console.log("is right");
+                    
                     setLoginProcess(false);
                     setShowSuccessAdd(true);
                 })
                 .catch(({ response: { data } }) => {
-                    const { code } = data[0];
-                    setLoginProcess(false);
-                    if (code === "DuplicateUserName") {
-                        setErrors("The user with such email already exists");
+                    console.log("is wrong", data);
+
+                    if (data.errors) {
+                        data.errors.Email && setErrors('This is not a valid e-mail address.') 
+                        setLoginProcess(false);           
                     }
+
+                    if (data[0]) {
+                        const { code } = data[0];
+                        setLoginProcess(false);
+                        if (code === "DuplicateUserName") {
+                            setErrors("The user with such email already exists");
+                        }
+                    }
+
                 });
         } else {
         }
