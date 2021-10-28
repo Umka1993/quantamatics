@@ -23,8 +23,9 @@ const PATTERN_PASSWORD =
 interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
-    autoComplete?: 'current-password' | 'new-password';
-    externalSetter?: (value: string) => void
+    autoComplete?: "current-password" | "new-password";
+    externalSetter?: (value: string) => void;
+    triggerValidity?: boolean;
 }
 
 const Password: React.FunctionComponent<IPassword> = ({
@@ -40,6 +41,7 @@ const Password: React.FunctionComponent<IPassword> = ({
     autoComplete,
     externalSetter,
     error,
+    triggerValidity,
     ...other
 }) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -56,7 +58,8 @@ const Password: React.FunctionComponent<IPassword> = ({
     labelText = labelText ? labelText : "Password input";
 
     // check regexp
-    let regularExp = autoComplete === 'new-password' ? PATTERN_PASSWORD : undefined;
+    let regularExp =
+        autoComplete === "new-password" ? PATTERN_PASSWORD : undefined;
     regularExp = pattern ? pattern : regularExp;
 
     // Show/hide pass
@@ -75,7 +78,7 @@ const Password: React.FunctionComponent<IPassword> = ({
     }, [innerValue]);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        const {value} = evt.target;
+        const { value } = evt.target;
         setInnerValue(value);
         externalSetter && externalSetter(value);
         onChange && onChange(evt);
@@ -108,14 +111,14 @@ const Password: React.FunctionComponent<IPassword> = ({
     };
 
     useEffect(() => {
-        if (inputRef.current) {            
+        if (inputRef.current) {
             const { validity } = inputRef.current;
             inputRef.current.setCustomValidity(getValidationMessage(validity));
 
             if (validate && Boolean(innerValue.length)) {
                 inputRef.current.validationMessage.length
-                ? inputRef.current.checkValidity()
-                : setErrorMessage(undefined);
+                    ? inputRef.current.checkValidity()
+                    : setErrorMessage(undefined);
             }
         }
     }, [inputRef.current?.validity, error, validate, innerValue]);
@@ -126,6 +129,13 @@ const Password: React.FunctionComponent<IPassword> = ({
         setValidate(true);
         onInvalid && onInvalid(evt);
     };
+
+    useEffect(() => {
+        if (triggerValidity && inputRef.current) {
+            setValidate(true);
+            inputRef.current.checkValidity();
+        }
+    }, [triggerValidity]);
 
     return (
         <div
