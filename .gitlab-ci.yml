@@ -35,7 +35,7 @@ build:
     # - npm run buildFacteus && mv publish dist-development-facteus
     # - npm run buildLive && mv publish dist-development-live
     # - npm run buildResearch && mv publish dist-development-research
-    # - npm run buildStaging && mv publish dist-staging
+    - npm run buildStaging && mv publish dist-staging
     # - npm run buildStagingCoherence && mv publish dist-staging-coherence
     # - npm run buildStagingFacteus && mv publish dist-staging-facteus
     # - npm run buildStagingLive && mv publish dist-staging-live
@@ -52,7 +52,7 @@ build:
       # - dist-development-facteus/
       # - dist-development-live/
       # - dist-development-research/
-      # - dist-staging/
+      - dist-staging/
       # - dist-staging-coherence/
       # - dist-staging-facteus/
       # - dist-staging-live/
@@ -79,6 +79,20 @@ deploy dev:
   extends: .deploy
   only:
     - develop
+
+deploy staging:
+  stage: deploy-staging
+  extends: .deploy
+  variables:
+    AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_STAG
+    AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_STAG
+    AWS_DEFAULT_REGION: us-east-1
+    ENV_SUFFIX: staging
+    STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+    CERTIFICATE_ARN: arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526
+    DISTRIBUTION_ALIAS: stag.quantamatics.net    
+  only:
+    - master
 
 # deploy dev-coherence:
 #   stage: deploy-develop

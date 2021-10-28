@@ -3,6 +3,7 @@
     "clean": "rimraf publish",
     "lint": "eslint --ext .tsx,.ts . --quiet",
     "build": "npm run clean && npm run lint && webpack --config config/webpack.dev.js",
+    "buildStaging": "npm run clean && npm run lint && webpack --config config/webpack.stag.js",
     "dev": "webpack-dev-server --config config/webpack.dev.js --open --https --env dev"
   },
   "devDependencies": {
