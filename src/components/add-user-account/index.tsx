@@ -92,7 +92,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                     value={userLastName}
                 />
                 <Input
-                    onChangeInput={(value) => setUserEmail(value)}
+                    onChangeInput={(value) =>{ errors && setErrors(false);  setUserEmail(value)}}
                     placeholder="Email Address"
                     required
                     value={userEmail}

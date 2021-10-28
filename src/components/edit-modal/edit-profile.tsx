@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 
 import { Button } from "../button/button";
 import { Input } from "../input";
@@ -34,6 +34,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const [email, setEmail] = useState<string>(user.email);
     const [expiration, setExpiration] = useState<Date>(initialExp);
 
+    const [emailError, setEmailError] = useState<string | undefined>(undefined); 
+
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
         const newUserData = {
@@ -57,6 +59,10 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             })
             .catch(({ response: { data } }) => {
                 console.log(data);
+
+                if (data.errors) {
+                    data.errors.Email && setEmailError('This is not a valid e-mail address.') 
+                }
             });
     };
 
@@ -92,9 +98,10 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                         disabled
                     />
                     <Input
-                        onChangeInput={(value) => setEmail(value)}
+                        onChangeInput={(value) =>{ emailError && setEmailError(undefined); setEmail(value)}}
                         value={email}
                         icon={editIcon}
+                        errorText={emailError}
                     />
                     <DateInput
                         onChangeInput={(value) => setExpiration(value)}
