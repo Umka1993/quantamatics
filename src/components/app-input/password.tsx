@@ -23,6 +23,8 @@ const PATTERN_PASSWORD =
 interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
+    autoComplete?: 'current-password' | 'new-password';
+    externalSetter?: (value: string) => void
 }
 
 const Password: React.FunctionComponent<IPassword> = ({
@@ -36,6 +38,7 @@ const Password: React.FunctionComponent<IPassword> = ({
     onChange,
     onInvalid,
     autoComplete,
+    externalSetter,
     error,
     ...other
 }) => {
@@ -51,6 +54,10 @@ const Password: React.FunctionComponent<IPassword> = ({
     // check if any label is provided
     let labelText = label ? label : placeholder;
     labelText = labelText ? labelText : "Password input";
+
+    // check regexp
+    let regularExp = autoComplete === 'new-password' ? PATTERN_PASSWORD : undefined;
+    regularExp = pattern ? pattern : regularExp;
 
     // Show/hide pass
     useEffect(() => {
@@ -68,7 +75,9 @@ const Password: React.FunctionComponent<IPassword> = ({
     }, [innerValue]);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        setInnerValue(evt.target.value);
+        const {value} = evt.target;
+        setInnerValue(value);
+        externalSetter && externalSetter(value);
         onChange && onChange(evt);
     };
 
@@ -137,7 +146,7 @@ const Password: React.FunctionComponent<IPassword> = ({
                     placeholder={placeholder}
                     required={required}
                     aria-required={required}
-                    pattern={pattern ? pattern : PATTERN_PASSWORD}
+                    pattern={regularExp}
                     minLength={8}
                     value={innerValue}
                     {...other}

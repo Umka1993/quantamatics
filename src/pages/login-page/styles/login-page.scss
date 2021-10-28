@@ -45,6 +45,8 @@
   }
 
   &__inputs {
+    display: grid;
+    gap: 22px;
     &-errors {
       margin-top: 16px;
       font-size: 16px;

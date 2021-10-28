@@ -98,13 +98,13 @@ export const SignUpPage: React.FunctionComponent = (props) => {
                     <Password
                         autoComplete="new-password"
                         value={password}
-                        onChange={({ target }) => setPassword(target.value)}
+                        externalSetter={setPassword}
                         placeholder="New Password"
                     />
                     <Password
                         autoComplete="new-password"
                         value={passwordConfirm}
-                        onChange={({ target }) => setPasswordConfirm(target.value)}
+                        externalSetter={setPasswordConfirm}
                         placeholder="Confirm New Password"
                         error={compare}
                     />

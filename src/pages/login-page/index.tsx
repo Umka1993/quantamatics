@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import "./styles/login-page.scss"
 import { Input } from "../../components/input";
 import { Loader } from "../../components/loader";
@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import { RootState } from "../../store";
 import SVG from "../../components/SVG";
 import successIcon from "../add-user-page/assets/sucess-icon.svg";
+import Password from "../../components/app-input/password";
 
 export const SignInPage: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.user.user.firstName)
@@ -40,7 +41,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
     useEffect(() => {
         const handleKeyUp = (e: any) => {
             if (e.keyCode === 13) {
-                handleLogin()
+                // handleLogin(evt)
             }
         }
 
@@ -54,7 +55,14 @@ export const SignInPage: React.FunctionComponent = (props) => {
     const history = useHistory()
     const dispatch = useDispatch()
 
-    const handleLogin = () => {
+    const handleLogin = (evt: FormEvent<HTMLFormElement>) => {
+        evt.preventDefault()
+
+        // TODO: Find the reason why not working 😡
+        // const {target: form} = evt
+        // const data = new FormData(form as HTMLFormElement)
+        // console.log(data)
+
         if (userName && password) {
             setLoginProcess(true)
             network.post('api/Account/login', {
@@ -96,7 +104,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
                         setErrors('Incorrect username or password')
                     }
                     setLoginProcess(false)
-                    setErrors('Incorrect username or password')
+                    setErrors('Test')
                 })
         } else {
             setErrors('Enter username and password')
@@ -127,7 +135,7 @@ export const SignInPage: React.FunctionComponent = (props) => {
 
     return (
         <div className="login-page app__main">
-            <div className="login-page__container">
+            <form className="login-page__container" onSubmit={handleLogin}>
                 <div className="login-page__title">
                     <h2>Sign in to your account</h2>
                     <p>Enter your email and password</p>
@@ -139,17 +147,19 @@ export const SignInPage: React.FunctionComponent = (props) => {
                         type={'text'}
                         value={userName}
                         errors={!!errors}
-                        onEnterPress={() => handleLogin()}
+                        // onEnterPress={() => handleLogin()}
+                        name='email'
                     />
-                    <Input
-                        onChangeInput={(value) => setPassword(value)}
+
+                    <Password 
                         placeholder={'Enter the password'}
-                        type={'password'}
                         value={password}
-                        errors={!!errors}
-                        onEnterPress={() => handleLogin()}
+                        externalSetter={setPassword}
+                        name='password'
+                        autoComplete='current-password'
+                        error={errors}
                     />
-                    {!!errors && (<div className="login-page__inputs-errors">{errors}</div>)}
+                    {/* {!!errors && (<div className="login-page__inputs-errors">{errors}</div>)} */}
                 </div>
                 <div className="login-page__wrap">
                     <CheckBox checked={rememberMe} onClick={(value) => setRememberMe(value)} label={'Remember Me'} />
@@ -158,9 +168,9 @@ export const SignInPage: React.FunctionComponent = (props) => {
                     </div>
                 </div>
                 <div className="login-page__btn">
-                    <Button onClick={() => handleLogin()} type={'simple'} text={'Sign In'} disabled={!userName || !password} />
+                    <Button type={'simple'} text={'Sign In'} disabled={!userName || !password} htmlType='submit' />
                 </div>
-            </div>
+            </form>
             {showForgotPassword && (<div className="login-page__forgot-password">
                 <div className="login-page__container">
                     <div className="login-page__title">
