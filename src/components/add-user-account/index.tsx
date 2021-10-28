@@ -3,7 +3,7 @@ import "./styles/add-user-account.scss";
 import { Input } from "../input";
 import { Button } from "../button/button";
 import SVG from "../SVG";
-import { DateInput } from "../date-input";
+import DatePick from "../app-input/datepick";
 import { network } from "../../services/networkService";
 import { Loader } from "../loader";
 import successIcon from "../../pages/add-user-page/assets/sucess-icon.svg";
@@ -40,7 +40,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                 })
                 .then((r: any) => {
                     console.log("is right");
-                    
+
                     setLoginProcess(false);
                     setShowSuccessAdd(true);
                 })
@@ -48,8 +48,8 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                     console.log("is wrong", data);
 
                     if (data.errors) {
-                        data.errors.Email && setErrors('This is not a valid e-mail address.') 
-                        setLoginProcess(false);           
+                        data.errors.Email && setErrors('This is not a valid e-mail address.')
+                        setLoginProcess(false);
                     }
 
                     if (data[0]) {
@@ -92,22 +92,20 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                     value={userLastName}
                 />
                 <Input
-                    onChangeInput={(value) =>{ errors && setErrors(false);  setUserEmail(value)}}
+                    onChangeInput={(value) => { errors && setErrors(false); setUserEmail(value) }}
                     placeholder="Email Address"
                     required
                     value={userEmail}
                     errors={errors as boolean}
                 />
                 {errors && <p className="login-page__inputs-errors">{errors}</p>}
-                <DateInput
-                    onChangeInput={(value) => setUserExpiration(value)}
-                    placeholder="Expiration Date"
+                <DatePick
+                    className='edit-profile__temp-input'
+                    externalSetter={setUserExpiration}
+                    valueAsDate={userExpiration}
+                    minDate={new Date}
                     required
-                    value={userExpiration}
-                    minDate={new Date()}
-                    disablePastDate
                 />
-
                 <div className="add-user-account__form-btn-save">
                     <Button
                         type={"simple"}

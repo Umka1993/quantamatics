@@ -22,6 +22,9 @@
 
   &__temp {
     margin-top: 24px;
+    &-input {
+      margin-top: 24px - 10px;
+    }
   }
 
   &__inputs {

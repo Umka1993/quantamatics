@@ -22,15 +22,17 @@ $text: #bcc4d8;
     color: #003c71;
   }
 
-  &__field {
-    font: inherit;
-    color: inherit;
+  &__field, &__dummy {
+    accent-color: $accent;
+
     width: 100%;
-    border: none;
-    box-sizing: border-box;
     min-height: 40px;
+    border: none;
     border-bottom: 1px solid rgba(113, 130, 166, 0.3);
     padding: 10px 20px 10px 0;
+    font: inherit;
+    color: inherit;
+
     outline: none;
     caret-color: $accent;
 
@@ -46,6 +48,26 @@ $text: #bcc4d8;
     &:focus {
       color: $accent;
       border-color: currentColor;
+    }
+
+    &[type="date"] {
+      position: relative;
+      cursor: pointer;
+      &::-webkit-calendar-picker-indicator {
+        position: absolute;
+        inset: 0;
+        width: auto;
+        height: auto;
+        color: transparent;
+        // background: #fff;
+        cursor: pointer;
+      }
+      &::-webkit-inner-spin-button {
+        z-index: 1;
+      }
+      &::-webkit-clear-button {
+        z-index: 1;
+      }
     }
   }
 
@@ -75,6 +97,33 @@ $text: #bcc4d8;
     }
   }
 
+  &__icon {
+    fill: $inactive;
+    position: absolute;
+    right: 0;
+    top: 10px;
+  }
+
+  &__dummy {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    pointer-events: none;
+  }
+
+  &__field:active ~ &__dummy,
+  &__field:focus ~ &__dummy {
+    color: $accent;
+    svg {
+      fill: currentColor
+    }
+  }
+
+  &__field:hover ~ &__icon {
+    border-color: $accent;
+  }
+
   // ? Maybe will be in use, don't delete
   /* &__dummy {
     position: absolute;
@@ -99,3 +148,16 @@ $text: #bcc4d8;
     text-align: left;
   }
 }
+
+/* create a new arrow, because we are going to mess up the native one
+see "List of symbols" below if you want another, you could also try to add a font-awesome icon.. */
+// input[type="date"]:after {
+//   content: "\25BC";
+//   color: #555;
+//   padding: 0 5px;
+// }
+
+/* change color of symbol on hover */
+// input[type="date"]:hover:after {
+//   color: #bf1400;
+// }

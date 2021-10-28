@@ -6,6 +6,7 @@ import { IUser } from "../../types/edit-profile/types";
 import { network } from "../../services/networkService";
 
 import { DateInput } from "../date-input";
+import DatePick from "../app-input/datepick";
 import { SelectorInput } from "../selector-input";
 import { USER_ORGS } from "../../contstans/constans";
 import editIcon from "./assets/edit.svg";
@@ -103,11 +104,11 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                         icon={editIcon}
                         errorText={emailError}
                     />
-                    <DateInput
-                        onChangeInput={(value) => setExpiration(value)}
-                        minDate={new Date()}
-                        disablePastDate
-                        value={expiration}
+                    <DatePick 
+                        className='edit-profile__temp-input' 
+                        externalSetter={setExpiration} 
+                        valueAsDate={expiration}
+                        minDate={new Date}
                     />
                 </div>
 

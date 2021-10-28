@@ -11,12 +11,6 @@ import classNames from "classnames";
 import EyeSVG from "./assets/eye.svg";
 import ClosedEyeSVG from "./assets/closed-eye.svg";
 
-// import useDebounce from "../../services/useDebounce";
-
-export type ReactSVGComponent = React.FunctionComponent<
-    React.SVGAttributes<SVGElement>
->;
-
 const PATTERN_PASSWORD =
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*\\[\\]\\\\\"';:<_>., =+/-]).*$";
 
