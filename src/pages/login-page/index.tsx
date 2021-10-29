@@ -97,7 +97,8 @@ export const SignInPage: React.FunctionComponent = (props) => {
             });
     };
 
-    const sendPasswordResetRequest = () => {
+    const sendPasswordResetRequest = (evt: any) => {
+        evt.preventDefault();
         console.log(forgotEmail);
         if (forgotEmail) {
             setLoginProcess(true);
@@ -177,7 +178,11 @@ export const SignInPage: React.FunctionComponent = (props) => {
                 </form>
             )}
             {showForgotPassword && !showSuccessForgot && (
-                <form className="login-page__container">
+                <form 
+                    className="login-page__container" 
+                    onSubmit={sendPasswordResetRequest}
+                    onReset={() => setShowForgotPassword(false)}
+                >
                     <div className="login-page__title">
                         <h2>Forgot Your Password?</h2>
                         <p>To restore the password, enter your email</p>
@@ -188,21 +193,19 @@ export const SignInPage: React.FunctionComponent = (props) => {
                             placeholder={"Enter the email"}
                             type={"text"}
                             value={forgotEmail}
-                            onEnterPress={() => sendPasswordResetRequest()}
                         />
                     </div>
                     <div className="login-page__btn">
                         <Button
-                            onClick={() => sendPasswordResetRequest()}
                             type={"simple"}
                             text={"Send"}
                             disabled={!forgotEmail}
+                            htmlType='submit'
                         />
                         <div
                             className="login-page__btn-cancel"
-                            onClick={() => setShowForgotPassword(false)}
                         >
-                            <Button type={"dotted"} text={"Cancel"} htmlType="submit" />
+                            <Button type={"dotted"} text={"Cancel"} htmlType='reset' />
                         </div>
                     </div>
                 </form>
