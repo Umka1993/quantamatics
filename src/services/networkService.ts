@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const network = {
     apiUrl() {
-        return 'https://qmc-api.k8s.dev.quantamatics.net'
+        return process.env.DATA_API_URL
     },
     headers() {
         const headers: any = { Accept: 'application/json', 'Content-Type': 'application/json' }
