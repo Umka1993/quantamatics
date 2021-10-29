@@ -2,6 +2,7 @@ import React, { ButtonHTMLAttributes, FunctionComponent } from "react";
 import "./styles/button.scss";
 import SVG, { ReactSVGComponent } from "../SVG";
 import { Link } from "react-router-dom";
+import classNames from "classnames";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
     href?: string;
@@ -16,7 +17,7 @@ const Button: FunctionComponent<IButton> = ({
     children,
     ...other
 }) => {
-    const buttonClasses = ["button", className].join(" ");
+    const buttonClasses = classNames("button", className);
 
 
 
