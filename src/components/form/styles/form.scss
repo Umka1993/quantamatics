@@ -1,18 +1,34 @@
 @import "../../../variables.scss";
 
-.login-page {
-  // max-width: 1392px;
-  // justify-self: center;
-  // background: #FFFFFF;
-  // box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.1);
-  // border-radius: 4px;
-  // min-height: 602px;
-  // display: grid;
-  // place-content: center;
-  // grid-auto-columns: $form-width;
-  // position: relative;
+.form {
+  width: $form-width;
+  margin: auto;
 
-  &__wrap{
+  &__header {
+    text-align: center;
+    margin-bottom: 50px - 24px;
+  }
+  
+
+  &__title {
+    font-size: 24px;
+    line-height: 1.167;
+    color: $headlines;
+    margin: 0 0 12px;
+    font-weight: 500;
+  }
+
+  &__subtitle {
+    font-size: 16px;
+    line-height: 1.125;
+    color: $main-text;
+    margin: 0;
+  }
+}
+
+.login-page {
+
+  &__wrap {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -20,21 +36,21 @@
     margin-bottom: 40px;
   }
 
-  &__remember{
+  &__remember {
     cursor: pointer;
     font-size: 16px;
-    line-height: 18px;
-    color: rgba(113, 130, 166, 0.5);
+    line-height: 1.125;
+    color: $inactive;
     font-weight: 400;
   }
 
-  &__forgot{
-    cursor: pointer;
+  &__forgot {
     font-size: 16px;
-    line-height: 18px;
-    color: rgba(113, 130, 166, 0.5);
+    line-height: 1.125;
+    color: $inactive;
     font-weight: 400;
-    transition: .3s ease-in-out;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
     &:hover {
       color: $accent;
     }
@@ -51,36 +67,12 @@
       margin-top: 16px;
       font-size: 16px;
       line-height: 18px;
-      color: #FF5757;
+      color: #ff5757;
       text-align: left;
     }
   }
 
-  &__title {
-    h2{
-      font-size: 24px;
-      line-height: 28px;
-      letter-spacing: 0.2px;
-      color: $headlines;
-      margin-bottom: 12px;
-      font-weight: 500;
-    }
-    span{
-      font-weight: 500;
-      font-size: 24px;
-      line-height: 28px;
-      letter-spacing: 0.2px;
-      color: $accent;
-    }
-    p{
-      font-size: 16px;
-      line-height: 18px;
-      color: $main-text;
-      margin-bottom: 50px - 24px;
-    }
-  }
-
-  &__btn{
+  &__btn {
     height: 40px;
     width: 100%;
     margin: 40px auto 0;

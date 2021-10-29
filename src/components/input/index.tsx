@@ -27,6 +27,7 @@ interface IInput {
     name?: string;
     errorText?: string;
     onInvalid?: any;
+    pattern?: string;
 }
 
 export const Input: React.FunctionComponent<IInput> = ({
@@ -82,6 +83,7 @@ export const Input: React.FunctionComponent<IInput> = ({
                 maxLength={limit as number}
                 name={name}
                 ref={inputRef}
+                {...props}
             />
             {errorMessage && <p className="input__error">{errorMessage}</p>}
 
