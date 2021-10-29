@@ -7,7 +7,6 @@ import {
 import {LayoutSideBarPage} from "../pages/layout-side-bar-page";
 import {NotFoundPage} from "../pages/404"
 import {SignUpPage} from "../pages/sign-up-page";
-// import {SignInPage} from "../pages/login-page"
 import FullWidthLayout from "../pages/full-width-layout"
 
 import {AppRoute} from "../data/enum"
