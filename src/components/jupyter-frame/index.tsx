@@ -11,11 +11,11 @@ export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) 
     const {type} = props;
     const user = useSelector<RootState>((state) => state.user.user.firstName)
     const username: any = !!user ? user : ''
-    const filesUrl = 'https://hub-k8s.dev.quantamatics.net/user/' + username +'/tree?'
-    const coherenceUrl = 'https://coherence-k8s.dev.quantamatics.net/user/' + username +'/'
+    const filesUrl = process.env.HUB_URL + '/user/' + username +'/tree?'
+    const coherenceUrl = process.env.HUB_URL +'user/' + username +'/'
     const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
     const frame: any = useRef(null)
-    const formAction = 'https://hub-k8s.dev.quantamatics.net/hub/login'
+    const formAction = process.env.HUB_URL + 'hub/login'
     const token = localStorage.getItem('id_token')
 
     const submit: any = useRef(null);
