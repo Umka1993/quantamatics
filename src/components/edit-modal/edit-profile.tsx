@@ -37,8 +37,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     const [emailError, setEmailError] = useState<string | undefined>(undefined); 
 
-    const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
-        evt.preventDefault();
+    const updateUser = () => {
+
         const newUserData = {
             email: email,
             firstName: name,
@@ -49,22 +49,52 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             subscriptionType: 0,
             subscriptionEndDate: new Date(expiration),
         };
+
         network
-            .post("/api/Admin/updateUser", newUserData)
-            .then((r: any) => {
-                const newUser = { ...user, ...newUserData };
+        .post("/api/Admin/updateUser", newUserData)
+        .then((r: any) => {
+            const newUser = { ...user, ...newUserData };
 
-                onSubmit(newUser);
+            onSubmit(newUser);
 
-                onClose();
-            })
-            .catch(({ response: { data } }) => {
-                console.log(data);
+            onClose();
+        })
+        .catch(({ response: { data } }) => {
+            console.log(data);
 
-                if (data.errors) {
-                    data.errors.Email && setEmailError('This is not a valid e-mail address.') 
+            if (data.errors) {
+                data.errors.Email && setEmailError('This is not a valid e-mail address.') 
+            }
+        });
+    }
+
+    const checkEmailToExist = () => {
+        network
+        .post("/api/Account/register", {
+            firstName: name,
+            lastName: surname,
+            email: email,
+        })
+        .then((r: any) => {
+            // console.log("is new");
+            updateUser()
+        })
+        .catch(({ response: { data } }) => {
+            // console.log("is wrong", data);
+            if (data[0]) {
+                const { code } = data[0];
+                if (code === "DuplicateUserName") {
+                    // console.log('exist');
+                    setEmailError("The user with such email already exists");
                 }
-            });
+            }
+
+        });
+    }
+
+    const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
+        evt.preventDefault();
+        email === user.email ? updateUser() : checkEmailToExist()
     };
 
     const handlerReset = (evt: FormEvent<HTMLFormElement>)=> {
