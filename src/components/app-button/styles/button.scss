@@ -1,0 +1,48 @@
+@import "../../../variables.scss";
+
+.button {
+  font: inherit;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.125;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid $accent;
+  transition: 0.3s ease all;
+  padding: 11px;
+
+  border-radius: 2px;
+  color: $accent;
+  text-decoration: none;
+
+  svg:first-of-type {
+    margin-right: 7px;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background: #017aee;
+    color: #ffffff;
+  }
+
+  &[disabled] {
+    cursor: default;
+    color: $inactive;
+    border-color: $inactive;
+    &:hover {
+      background: #fff;
+      color: $inactive;
+    }
+  }
+}
