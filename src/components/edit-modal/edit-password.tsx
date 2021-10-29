@@ -27,9 +27,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
         undefined
     );
     const [compare, setCompare] = useState<string | undefined>(undefined);
-    // const [token, setToken] = useState<string | undefined>(undefined);
 
-    const [enableSubmit, setEnableSubmit] = useState<boolean>(false);
     const [validateNew, setValidateNew] = useState<boolean>(false);
 
     const formRef = useRef<HTMLFormElement>(null)
@@ -39,11 +37,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
         wrongCurrent && setWrongCurrent(undefined);
     }, [currentPassword]);
 
-    useEffect(() => {
-        if (!!currentPassword.length && !!newPassword.length && confirmPassword) {
-            setEnableSubmit(true);
-        }
-    }, [currentPassword, newPassword, confirmPassword]);
+    
 
 
     useEffect(() => {
@@ -54,40 +48,25 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
         }
     }, [newPassword, confirmPassword])
 
-    const resetPassword = (token : string) => {
-        network.post('/api/Account/resetPassword', {
-            password: newPassword,
-            token: token,
-            email: user.email
-        })
-            .then((r: any) => {
-                onClose()
-            })
-            .catch(({response } : AxiosError) => {                
-                setCompare(response?.data as string)
-                formRef.current?.reportValidity();
-            })
-    }
-
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
-        network
-            .post("api/Account/login", {
-                email: user.email,
-                password: currentPassword,
-            })
-            .then(({data: { token} } : any) => {
-                setValidateNew(true)
-                if (formRef.current?.reportValidity()) {
-                    localStorage.setItem('id_token', token),
-                    resetPassword(token);                    
-                }
-            })
-            .catch(({ response }: AxiosError) => {
+        setValidateNew(true)
+        if (formRef.current?.checkValidity()) {
+            network
+            .put("api/Account/changePassword", {
+                currentPassword: currentPassword,
+                newPassword: newPassword
+            }).then(({data} : any) => {
+                console.log(data);
+
+                onClose()
+                
+            }).catch(({ response }: AxiosError) => {
                 console.log(response);
                 setWrongCurrent("Current password is incorrect");
-            }); 
+            })
+        }
     };
 
     return (
@@ -99,7 +78,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                 onSubmit={handlerSubmit}
                 onReset={onClose}
                 ref={formRef}
-                noValidate={!validateNew}
+                // noValidate={!validateNew}
             >
                 <h2 id="modal-label" className="modal__title edit-profile__title">
                     Change Password
@@ -120,14 +99,14 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         value={newPassword}
                         externalSetter={setNewPassword}
                         placeholder="New Password"
-                        // formNoValidate={Boolean(wrongCurrent)}
+                        formNoValidate={validateNew}
                     />
                     <Password
                         autoComplete="new-password"
                         value={confirmPassword}
                         externalSetter={setConfirmPassword}
                         placeholder="Confirm New Password"
-                        // formNoValidate={Boolean(wrongCurrent)}
+                        formNoValidate={validateNew}
                         error={compare}
                     />
                 </div>
@@ -137,7 +116,10 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 
                     <Button 
                         type={"simple"} text={"Save"} htmlType="submit" 
-                        disabled={!enableSubmit}
+
+                        disabled={
+                            !Boolean(currentPassword && newPassword && confirmPassword)
+                        }
                     />
                 </div>
             </form>
