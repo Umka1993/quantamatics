@@ -39,9 +39,10 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                 />
             </div>
             <div className="layout-page__content-container">
-                {(currentPage === 'research/my-files' || currentPage === 'coherence') && (
-                    <JupyterFrame type={currentPage === 'research/my-files' ? 'files' : 'coherence'} />
+                {(currentPage === 'research/my-files') && (
+                    <JupyterFrame type={'files'} />
                 )}
+                {currentPage === 'coherence' && <CoherenceFrame />}
                 {currentPage === 'add-user' && <AddUserPage />}
                 {currentPage === 'apps/organizations/list' && <Organizations/>}
                 {currentPage === 'apps/organizations/new-organization' && <CreateOrganization/>}
