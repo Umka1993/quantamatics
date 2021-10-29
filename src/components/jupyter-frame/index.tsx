@@ -11,7 +11,7 @@ export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) 
     const {type} = props;
     const user = useSelector<RootState>((state) => state.user.user.email)
     const username: any = !!user ? user : ''
-    const filesUrl = process.env.HUB_URL + '/user/' + username +'/tree?'
+    const filesUrl = process.env.HUB_URL + 'user/' + username +'/tree?'
     const coherenceUrl = process.env.HUB_URL +'user/' + username +'/'
     const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
     const frame: any = useRef(null)
