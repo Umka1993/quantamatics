@@ -110,6 +110,8 @@ $text: #bcc4d8;
     left: 0;
     background-color: #fff;
     pointer-events: none;
+    text-align: left;
+    
   }
 
   &__field:active ~ &__dummy,
@@ -124,21 +126,6 @@ $text: #bcc4d8;
     border-color: $accent;
   }
 
-  // ? Maybe will be in use, don't delete
-  /* &__dummy {
-    position: absolute;
-    top: 10px;
-    left: 0;
-  }
-
-  &__field:focus ~ &__dummy {
-    color: $accent;
-    display: inline-block;
-    // width: min-content;
-    border-right: 1px solid transparent;
-    animation: blink-caret 1.2s step-end infinite;
-  }
- */
   &__error {
     font-size: 16px;
     line-height: 18px;
@@ -148,16 +135,3 @@ $text: #bcc4d8;
     text-align: left;
   }
 }
-
-/* create a new arrow, because we are going to mess up the native one
-see "List of symbols" below if you want another, you could also try to add a font-awesome icon.. */
-// input[type="date"]:after {
-//   content: "\25BC";
-//   color: #555;
-//   padding: 0 5px;
-// }
-
-/* change color of symbol on hover */
-// input[type="date"]:hover:after {
-//   color: #bf1400;
-// }

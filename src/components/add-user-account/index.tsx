@@ -21,7 +21,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
     const [userName, setUserName] = useState<string>("");
     const [userLastName, setUserLastName] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
-    const [userExpiration, setUserExpiration] = useState<any>(null);
+    const [userExpiration, setUserExpiration] = useState<Date>(new Date());
     const [showSuccessAdd, setShowSuccessAdd] = useState<boolean>(false);
 
     const [errors, setErrors] = useState<string | boolean>(false);
@@ -36,7 +36,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                     email: userEmail,
                     organizationId: props.orgId,
                     companyName: props.organization,
-                    subscriptionEndDate: new Date(userExpiration),
+                    subscriptionEndDate: userExpiration,
                 })
                 .then((r: any) => {
                     console.log("is right");

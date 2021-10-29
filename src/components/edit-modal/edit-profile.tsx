@@ -108,7 +108,6 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                         className='edit-profile__temp-input' 
                         externalSetter={setExpiration} 
                         valueAsDate={expiration}
-                        minDate={new Date}
                     />
                 </div>
 
