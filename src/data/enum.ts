@@ -12,4 +12,6 @@ export const enum AppRoute {
     ResetPassword = '/reset-password',
     Login = '/login',
     ForgoPassword = '/forgot-password',
+
+    Success = '/success:success'
 }

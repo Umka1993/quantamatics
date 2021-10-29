@@ -26,6 +26,7 @@ const AppRouter = () => (
         <Route path={AppRoute.ResetPassword} component={SignUpPage}/>
         <Route path={AppRoute.Login} component={FullWidthLayout}/>
         <Route path={AppRoute.ForgoPassword} component={FullWidthLayout}/>
+        <Route path={AppRoute.Success} component={FullWidthLayout}/>
         <Route component={NotFoundPage}/>
     </Switch>
 );

@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import "./styles/form.scss";
 import { Input } from "../../components/input";
 import { Loader } from "../../components/loader";
-import { Button } from "../../components/button/button";
+import Button  from "../../components/app-button";
 import { CheckBox } from "../../components/checkbox";
 import { network } from "../../services/networkService";
 import { useDispatch, useSelector } from "react-redux";
@@ -130,12 +130,9 @@ const LoginForm: React.FunctionComponent = (props) => {
                 </Link>
             </div>
             <div className="login-page__btn">
-                <Button
-                    type={"simple"}
-                    text={"Sign In"}
-                    disabled={!userName || !password}
-                    htmlType="submit"
-                />
+                <Button disabled={!userName || !password} type="submit">
+                    Sign In
+                </Button>
             </div>
 
             {loginProcess && <Loader />}
