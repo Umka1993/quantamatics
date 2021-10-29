@@ -2,23 +2,20 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import "./styles/form.scss";
 import { Input } from "../../components/input";
 import { Loader } from "../../components/loader";
-import { Button } from "../../components/button/button";
-import { CheckBox } from "../../components/checkbox";
+import Button, { ResetButton } from "../../components/app-button/";
 import { network } from "../../services/networkService";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { RootState } from "../../store";
-import Password from "../../components/app-input/password";
 import { AppRoute } from "../../data/enum";
 
 const ForgoPassword: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.user.user.firstName);
     const localUserName = localStorage.getItem("savedUsername") || "";
-    const [userName, setUserName] = useState<string>(localUserName);
 
     const [loginProcess, setLoginProcess] = useState<boolean>(false);
 
-    const [forgotEmail, setForgotEmail] = useState<string>("");
+    const [forgotEmail, setForgotEmail] = useState<string>(localUserName);
 
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
@@ -30,11 +27,6 @@ const ForgoPassword: React.FunctionComponent = (props) => {
 
     const history = useHistory();
     const dispatch = useDispatch();
-
-    // hide errors on any input
-    useEffect(() => {
-        errors && setErrors(undefined);
-    }, [userName]);
 
     useEffect(() => {
         formRef.current?.reportValidity();
@@ -54,7 +46,7 @@ const ForgoPassword: React.FunctionComponent = (props) => {
                 .then((r: any) => {
                     console.log(r);
                     setLoginProcess(false);
-                    setShowSuccessForgot(true);
+                    history.push("/success-restore-password");
                 })
                 .catch((e) => {
                     console.log(e);
@@ -64,38 +56,31 @@ const ForgoPassword: React.FunctionComponent = (props) => {
         }
     };
 
-
     return (
-        <form 
-                    className="login-page__container" 
-                    onSubmit={sendPasswordResetRequest}
-                    onReset={() => history.push(AppRoute.Login)}
-                >
-                    <div className="login-page__title">
-                        <h2>Forgot Your Password?</h2>
-                        <p>To restore the password, enter your email</p>
-                    </div>
-                    <div className="login-page__inputs">
-                        <Input
-                            onChangeInput={(value) => setForgotEmail(value)}
-                            placeholder={"Enter the email"}
-                            type={"text"}
-                            value={forgotEmail}
-                        />
-                    </div>
-                    <div className="login-page__btn">
-                        <Button
-                            type={"simple"}
-                            text={"Send"}
-                            disabled={!forgotEmail}
-                            htmlType='submit'
-                        />
-                        <div
-                            className="login-page__btn-cancel"
-                        >
-                            <Button type={"dotted"} text={"Cancel"} htmlType='reset' />
-                        </div>
-                    </div>
+        <form className="form" onSubmit={sendPasswordResetRequest}>
+            <header className="form__header">
+                <h1 className="form__title">Forgot Your Password?</h1>
+                <p className="form__subtitle">
+                    To restore the password, enter your email
+                </p>
+            </header>
+
+            <div className="login-page__inputs">
+                <Input
+                    onChangeInput={(value) => setForgotEmail(value)}
+                    placeholder={"Enter the email"}
+                    type={"text"}
+                    value={forgotEmail}
+                />
+            </div>
+            <div className="login-page__btn">
+                <Button type="submit" disabled={!forgotEmail}>
+                    Send
+                </Button>
+                <div className="login-page__btn-cancel">
+                    <ResetButton href={AppRoute.Login}>Cancel</ResetButton>
+                </div>
+            </div>
             {loginProcess && <Loader />}
         </form>
     );

@@ -1,23 +1,21 @@
 import React, { ButtonHTMLAttributes, FunctionComponent } from "react";
-import "./styles/button.scss";
-import SVG, { ReactSVGComponent } from "../SVG";
+import "./styles/reset.scss";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
     href?: string;
     mod?: string;
-    // children: React.ReactNode
 }
 
-const Button: FunctionComponent<IButton> = ({
+const Cancel: FunctionComponent<IButton> = ({
     type = "button",
     className,
     href,
     children,
     ...other
 }) => {
-    const buttonClasses = classNames("button", className);
+    const buttonClasses = classNames("reset", className);
 
 
 
@@ -32,4 +30,4 @@ const Button: FunctionComponent<IButton> = ({
     );
 };
 
-export default Button;
+export default Cancel;
