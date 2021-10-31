@@ -128,7 +128,7 @@ const Password: React.FunctionComponent<IPassword> = ({
     return (
         <div
             className={classNames("app-input", className, {
-                "app-input--validate": true,
+                "app-input--validate": errorMessage,
             })}
             ref={itemRef}
         >
