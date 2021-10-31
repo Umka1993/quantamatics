@@ -26,7 +26,7 @@ export type AuthorizationActions =
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, RootState, AxiosInstance, AuthorizationActions>;
 
 export const loginAction =
-    ([ email, password, onFinish, onError ]: any): ThunkActionResult =>
+    ({ email, password, onFinish, onError }: any): ThunkActionResult =>
         async (dispatch, _getState, api) => {
             api
             .post<LoginResponse>(ApiRoute.Login, {

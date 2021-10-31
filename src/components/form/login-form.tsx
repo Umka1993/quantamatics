@@ -21,7 +21,7 @@ const LoginForm: React.FunctionComponent = () => {
     const localUserName = localStorage.getItem("savedUsername") || "";
     const localPassword = localStorage.getItem("savedPassword") || "";
 
-    const [userName, setUserName] = useState<string>(localUserName);
+    const [email, setEmail] = useState<string>(localUserName);
     const [password, setPassword] = useState<string>(localPassword);
 
     const [finish, setFinish] = useState<boolean | undefined>(undefined);
@@ -40,12 +40,12 @@ const LoginForm: React.FunctionComponent = () => {
     // hide errors on any input
     useEffect(() => {
         errors && setErrors(undefined);
-    }, [userName, password]);
+    }, [email, password]);
 
     const onFinish = () => {
         setErrors(undefined);  
         if (rememberMe) {
-            localStorage.setItem("savedUsername", userName);
+            localStorage.setItem("savedUsername", email);
             localStorage.setItem("savedPassword", password);
         }
         setFinish(true);
@@ -62,7 +62,7 @@ const LoginForm: React.FunctionComponent = () => {
     }
 
     const handleLogin = (evt: FormEvent<HTMLFormElement>) => {        
-        dispatch(loginAction([userName, password, onFinish, onError]))
+        dispatch(loginAction({email, password, onFinish, onError}))
     };
 
     return (
@@ -74,10 +74,10 @@ const LoginForm: React.FunctionComponent = () => {
         >
             <div className="login-page__inputs">
                 <Input
-                    onChangeInput={(value) => setUserName(value)}
+                    onChangeInput={(value) => setEmail(value)}
                     placeholder={"Enter the username"}
                     type={"text"}
-                    value={userName}
+                    value={email}
                     errors={!!errors}
                     name="email"
                 />
@@ -102,7 +102,7 @@ const LoginForm: React.FunctionComponent = () => {
                 </Link>
             </div>
             <div className="login-page__btn">
-                <Button disabled={!userName || !password} type="submit">
+                <Button disabled={!email || !password} type="submit">
                     Sign In
                 </Button>
             </div>
