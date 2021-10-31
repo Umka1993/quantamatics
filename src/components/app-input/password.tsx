@@ -39,7 +39,7 @@ const Password: React.FunctionComponent<IPassword> = ({
     ...other
 }) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [validate, setValidate] = useState<boolean>(false);
+    // const [validate, setValidate] = useState<boolean>(false);
     const [innerValue, setInnerValue] = useState<string>(value as string);
     const inputRef = useRef<HTMLInputElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -100,32 +100,35 @@ const Password: React.FunctionComponent<IPassword> = ({
             const { validity } = inputRef.current;
             inputRef.current.setCustomValidity(getValidationMessage(validity));
 
-            if (validate && Boolean(innerValue.length)) {
-                inputRef.current.validationMessage.length
-                    ? inputRef.current.checkValidity()
-                    : setErrorMessage(undefined);
+            if (Boolean(innerValue.length)) {
+
+                !inputRef.current.validationMessage.length && setErrorMessage(undefined)
+                
+                // inputRef.current.validationMessage.length
+                //     ? inputRef.current.checkValidity()
+                //     : setErrorMessage(undefined);
             }
         }
-    }, [inputRef.current?.validity, error, validate, innerValue]);
+    }, [inputRef.current?.validity, error, innerValue]);
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
         setErrorMessage(inputRef.current?.validationMessage);
-        setValidate(true);
+        // setValidate(true);
         onInvalid && onInvalid(evt);
     };
 
-    useEffect(() => {
-        if (triggerValidity && inputRef.current) {
-            setValidate(true);
-            inputRef.current.checkValidity();
-        }
-    }, [triggerValidity]);
+    // useEffect(() => {
+    //     if (triggerValidity && inputRef.current) {
+    //         setValidate(true);
+    //         inputRef.current.checkValidity();
+    //     }
+    // }, [triggerValidity]);
 
     return (
         <div
             className={classNames("app-input", className, {
-                "app-input--validate": validate,
+                "app-input--validate": true,
             })}
             ref={itemRef}
         >
