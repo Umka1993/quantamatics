@@ -91,7 +91,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         name="password"
                         autoComplete="current-password"
                         error={wrongCurrent}
-                        triggerValidity={Boolean(wrongCurrent)}
+                        // triggerValidity={Boolean(wrongCurrent)}
                     />
 
                     <Password

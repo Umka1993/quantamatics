@@ -13,13 +13,11 @@ import ClosedEyeSVG from "./assets/closed-eye.svg";
 
 const PATTERN_PASSWORD =
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*\\[\\]\\\\\"';:<_>., =+/-]).*$";
-
 interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
     autoComplete?: "current-password" | "new-password";
     externalSetter?: (value: string) => void;
-    triggerValidity?: boolean;
 }
 
 const Password: React.FunctionComponent<IPassword> = ({
@@ -28,18 +26,16 @@ const Password: React.FunctionComponent<IPassword> = ({
     placeholder,
     required,
     pattern,
-    itemRef,
+    name,
     value,
     onChange,
     onInvalid,
     autoComplete,
     externalSetter,
     error,
-    triggerValidity,
     ...other
 }) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    // const [validate, setValidate] = useState<boolean>(false);
     const [innerValue, setInnerValue] = useState<string>(value as string);
     const inputRef = useRef<HTMLInputElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -101,12 +97,7 @@ const Password: React.FunctionComponent<IPassword> = ({
             inputRef.current.setCustomValidity(getValidationMessage(validity));
 
             if (Boolean(innerValue.length)) {
-
                 !inputRef.current.validationMessage.length && setErrorMessage(undefined)
-                
-                // inputRef.current.validationMessage.length
-                //     ? inputRef.current.checkValidity()
-                //     : setErrorMessage(undefined);
             }
         }
     }, [inputRef.current?.validity, error, innerValue]);
@@ -114,23 +105,15 @@ const Password: React.FunctionComponent<IPassword> = ({
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
         setErrorMessage(inputRef.current?.validationMessage);
-        // setValidate(true);
         onInvalid && onInvalid(evt);
     };
 
-    // useEffect(() => {
-    //     if (triggerValidity && inputRef.current) {
-    //         setValidate(true);
-    //         inputRef.current.checkValidity();
-    //     }
-    // }, [triggerValidity]);
 
     return (
         <div
             className={classNames("app-input", className, {
                 "app-input--validate": errorMessage,
             })}
-            ref={itemRef}
         >
             <div className="app-input__wrapper">
                 <input
@@ -139,7 +122,8 @@ const Password: React.FunctionComponent<IPassword> = ({
                     onChange={changeHandler}
                     aria-invalid={!!errorMessage}
                     aria-label={showPassword ? "Password is open" : labelText}
-                    // TODO: uniq ID aria-describedby="error_pw desc_pw"
+                    name={name}
+                    aria-describedby={name && errorMessage ? name + '_error' : undefined}
                     autoComplete={autoComplete}
                     placeholder={placeholder}
                     required={required}
@@ -164,7 +148,14 @@ const Password: React.FunctionComponent<IPassword> = ({
                 </button>
             </div>
 
-            {errorMessage && <p className="app-input__error">{errorMessage}</p>}
+            {errorMessage && errorMessage !== ' ' && 
+                <p 
+                    id={name ? name + '_error' : undefined} 
+                    className="app-input__error"
+                >
+                    {errorMessage}
+                </p>
+            }
         </div>
     );
 };

@@ -6,7 +6,7 @@ import { RootState } from "../../store";
 import { Input } from "../../components/input";
 import Button from "../../components/app-button";
 import { CheckBox } from "../../components/checkbox";
-import Password from "../../components/app-input/password";
+import { Password, Email } from "../../components/app-input/index";
 import Form from './form';
 
 import { AppRoute, AuthorizationStatus } from "../../data/enum";
@@ -73,17 +73,17 @@ const LoginForm: React.FunctionComponent = () => {
             stopLoading={finish}
         >
             <div className="login-page__inputs">
-                <Input
-                    onChangeInput={(value) => setEmail(value)}
-                    placeholder={"Enter the username"}
-                    type={"text"}
-                    value={email}
-                    errors={!!errors}
+                <Email 
+                    externalSetter={setEmail}
+                    placeholder='Email'
                     name="email"
+                    value={email}
+                    error={errors}
+                    hideError={true}
                 />
 
                 <Password
-                    placeholder={"Enter the password"}
+                    placeholder="Password"
                     value={password}
                     externalSetter={setPassword}
                     name="password"

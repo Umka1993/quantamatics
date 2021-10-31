@@ -1,0 +1,96 @@
+import React, {
+    useState,
+    useEffect,
+    useRef,
+    InputHTMLAttributes,
+    ChangeEventHandler,
+    FormEventHandler,
+} from "react";
+import "./styles/input.scss";
+import classNames from "classnames";
+
+
+interface IInput extends InputHTMLAttributes<HTMLInputElement> {
+    error?: string;
+    label?: string;
+    externalSetter?: (value: string) => void;
+}
+
+const Input: React.FunctionComponent<IInput> = ({
+    className,
+    label,
+    placeholder,
+    required,
+    value,
+    onChange,
+    onInvalid,
+    autoComplete,
+    externalSetter,
+    error,
+    ...other
+}) => {
+    // const [innerValue, setInnerValue] = useState<string>(value as string);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(
+        undefined
+    );
+
+    // check if any label is provided
+    let labelText = label ? label : placeholder;
+    labelText = labelText ? labelText : "Enter text";
+
+
+    const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
+        const { value } = evt.target;
+        externalSetter && externalSetter(value);
+        onChange && onChange(evt);
+    };
+
+
+
+    useEffect(() => {
+        if (inputRef.current) {
+            error && inputRef.current.setCustomValidity(error);
+
+            if (value && Boolean(String(value).length)) {
+                !inputRef.current.validationMessage.length && setErrorMessage(undefined)
+            }
+        }
+    }, [inputRef.current?.validity, error, value]);
+
+    const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
+        evt.preventDefault();
+        setErrorMessage(inputRef.current?.validationMessage);
+        onInvalid && onInvalid(evt);
+    };
+
+
+    return (
+        <div
+            className={classNames("app-input", className, {
+                "app-input--validate": errorMessage,
+            })}
+        >
+            <div className="app-input__wrapper">
+                <input
+                    className="app-input__field"
+                    onChange={changeHandler}
+                    aria-invalid={!!errorMessage}
+                    aria-label={labelText}
+                    autoComplete={autoComplete}
+                    placeholder={`${placeholder}${required && '*'}`}
+                    required={required}
+                    aria-required={required}
+                    value={value || ""}
+                    {...other}
+                    ref={inputRef}
+                    onInvalid={invalidHandler}
+                />
+            </div>
+
+            {errorMessage && errorMessage.length && <p className="app-input__error">{errorMessage}</p>}
+        </div>
+    );
+};
+
+export default Input;
