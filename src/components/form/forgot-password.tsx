@@ -1,6 +1,5 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
-import { Input } from "../../components/input";
-import { Loader } from "../../components/loader";
+import { Email } from "../../components/app-input/index";
 import Button, { ResetButton } from "../../components/app-button/";
 import { network } from "../../services/networkService";
 import { useSelector } from "react-redux";
@@ -31,29 +30,29 @@ const ForgoPassword: React.FunctionComponent = (props) => {
 
     const history = useHistory();
 
-    // useEffect(() => {
-    //     formRef.current?.reportValidity();
-    // }, [errors]);
-
     const sendPasswordResetRequest = (evt: any) => {
-        if (forgotEmail) {
-            network
-                .post(
-                    "api/Account/sendPasswordReset",
-                    {},
-                    { params: { email: forgotEmail } }
-                )
-                .then((r: any) => {
-                    console.log(r);
-                    setFinish(true);
-                    history.push("/success-restore-password");
-                })
-                .catch((e) => {
-                    console.log(e);
-                    setFinish(true);
-                });
-        } else {
-        }
+        // const isValid = evt.target.reportValidity()
+
+        // isValid
+        
+        // if (forgotEmail) {
+        //     network
+        //         .post(
+        //             "api/Account/sendPasswordReset",
+        //             {},
+        //             { params: { email: forgotEmail } }
+        //         )
+        //         .then((r: any) => {
+        //             console.log(r);
+        //             setFinish(true);
+        //             history.push("/success-restore-password");
+        //         })
+        //         .catch((e) => {
+        //             console.log(e);
+        //             setFinish(true);
+        //         });
+        // } else {
+        // }
     };
 
     return (
@@ -64,11 +63,11 @@ const ForgoPassword: React.FunctionComponent = (props) => {
             stopLoading={finish}
         >
             <div className="login-page__inputs">
-                <Input
-                    onChangeInput={(value) => setForgotEmail(value)}
-                    placeholder={"Enter the email"}
-                    type='email'
+                <Email
+                    externalSetter={setForgotEmail}
                     value={forgotEmail}
+                    name='email'
+                    placeholder={"Enter the email"}
                 />
             </div>
             <div className="login-page__btn">

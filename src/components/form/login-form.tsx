@@ -1,9 +1,8 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { RootState } from "../../store";
 
-import { Input } from "../../components/input";
 import Button from "../../components/app-button";
 import { CheckBox } from "../../components/checkbox";
 import { Password, Email } from "../../components/app-input/index";

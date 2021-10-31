@@ -60,7 +60,7 @@ const Email: React.FunctionComponent<IEmail> = ({
 
     useEffect(() => {
         if (inputRef.current) {
-            error !== undefined && inputRef.current.setCustomValidity(error);
+            inputRef.current.setCustomValidity(error === undefined ? '' : error);
 
             if (value && Boolean(String(value).length)) {
                 !inputRef.current.validationMessage.length &&
@@ -74,8 +74,6 @@ const Email: React.FunctionComponent<IEmail> = ({
         setErrorMessage(inputRef.current?.validationMessage);
         onInvalid && onInvalid(evt);
     };
-
-    console.log("errorMessage", errorMessage);
 
     return (
         <div

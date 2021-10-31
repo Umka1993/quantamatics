@@ -22,8 +22,13 @@ const Form: FunctionComponent<IForm> = ({ title, subtitle, children, onSubmit, s
     function handleSubmit(evt: FormEvent<HTMLFormElement>) {
         if (onSubmit) {
             evt.preventDefault();
-            setLoading(true);
-            onSubmit(evt)
+            const isValid = (evt.target as HTMLFormElement).reportValidity()
+
+            if (isValid) {
+                setLoading(true);
+                onSubmit(evt)
+            }
+            
         }
     }
 

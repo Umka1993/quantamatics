@@ -15,8 +15,6 @@ const FullWidthLayout: React.FunctionComponent = (props) => {
     } = useHistory();
     const { success } = useParams<Param>();
 
-    console.log(success);
-
     let child;
 
     switch (pathname) {
@@ -36,8 +34,7 @@ const FullWidthLayout: React.FunctionComponent = (props) => {
         case "-restore-password":
             child = (
                 <SuccessMessage
-                    title="A reset password email was sent to the email
-            entered"
+                    title="A reset password email was sent to the email entered"
                     linkText="Go to Log in Page"
                     path={AppRoute.Login}
                 />
