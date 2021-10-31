@@ -15,3 +15,14 @@ export const enum AppRoute {
 
     Success = '/success:success'
 }
+
+export const enum ApiRoute {
+    Base = 'https://qmc-api.k8s.dev.quantamatics.net',
+    Login = '/api/Account/login',
+}
+
+export const enum AuthorizationStatus {
+    Auth = 'AUTH',
+    NoAuth = 'NO_AUTH',
+    Unknown = 'UNKNOWN',
+}

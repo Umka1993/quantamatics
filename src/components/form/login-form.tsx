@@ -1,5 +1,4 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
-import { network } from "../../services/networkService";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { RootState } from "../../store";
@@ -14,6 +13,7 @@ import { AppRoute } from "../../data/enum";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
+import { loginAction } from "../../store/authorization/actions";
 
 const LoginForm: React.FunctionComponent = () => {
     const user = useSelector<RootState>((state) => state.user.user.firstName);
@@ -42,52 +42,27 @@ const LoginForm: React.FunctionComponent = () => {
         errors && setErrors(undefined);
     }, [userName, password]);
 
+    const onFinish = () => {
+        setErrors(undefined);  
+        if (rememberMe) {
+            localStorage.setItem("savedUsername", userName);
+            localStorage.setItem("savedPassword", password);
+        }
+        setFinish(true);
+        history.push(AppRoute.Home);
+    }
+
+    const onError = (status: number) => {
+        if (status >= 400) {
+            setErrors("Incorrect username or password");
+        } else {
+            setErrors("Something went wrong");
+        }                
+        setFinish(true);
+    }
+
     const handleLogin = (evt: FormEvent<HTMLFormElement>) => {        
-        network
-            .post("api/Account/login", {
-                email: userName,
-                password: password,
-            })
-            .then((r: any) => {
-                console.log(r);
-                dispatch({
-                    type: "LOGIN",
-                    payload: {
-                        id: r.data.user.id,
-                        email: r.data.user.email,
-                        firstName: r.data.user.firstName,
-                        lastName: r.data.user.lastName,
-                        companyName: r.data.user.companyName,
-                        companyRole: r.data.user.companyRole,
-                        location: r.data.user.location,
-                        subscriptionType: r.data.user.subscriptionType,
-                        subscriptionEndDate: r.data.user.subscriptionEndDate,
-                        reportPanel: null,
-                        expirationDate: r.data.user.expirationDate,
-                        avatar: "",
-                    },
-                });
-                setErrors(undefined);
-                localStorage.setItem("id_token", r.data.token);
-                localStorage.setItem("user", JSON.stringify(r.data.user));
-                if (rememberMe) {
-                    localStorage.setItem("savedUsername", userName);
-                    localStorage.setItem("savedPassword", password);
-                }
-
-                setFinish(true);
-
-                history.push(AppRoute.Home);
-                //? history.push("/apps/organizations/list");
-            })
-            .catch((e) => {
-                if (e.response.status >= 400) {
-                    setErrors("Incorrect username or password");
-                } else {
-                    setErrors("Something went wrong");
-                }                
-                setFinish(true);
-            });
+        dispatch(loginAction([userName, password, onFinish, onError]))
     };
 
     return (
