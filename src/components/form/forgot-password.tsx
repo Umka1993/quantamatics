@@ -1,23 +1,27 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
-import "./styles/form.scss";
 import { Input } from "../../components/input";
 import { Loader } from "../../components/loader";
 import Button, { ResetButton } from "../../components/app-button/";
 import { network } from "../../services/networkService";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { RootState } from "../../store";
 import { AppRoute } from "../../data/enum";
+import Form from './form';
+
+
+import "./styles/form.scss";
+import "./styles/login-page.scss";
 
 const ForgoPassword: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.user.user.firstName);
     const localUserName = localStorage.getItem("savedUsername") || "";
 
-    const [loginProcess, setLoginProcess] = useState<boolean>(false);
+    const [finish, setFinish] = useState<boolean>(false);
 
     const [forgotEmail, setForgotEmail] = useState<string>(localUserName);
 
-    const [errors, setErrors] = useState<string | undefined>(undefined);
+    // const [errors, setErrors] = useState<string | undefined>(undefined);
 
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -26,17 +30,13 @@ const ForgoPassword: React.FunctionComponent = (props) => {
     }, [user]);
 
     const history = useHistory();
-    const dispatch = useDispatch();
 
-    useEffect(() => {
-        formRef.current?.reportValidity();
-    }, [errors]);
+    // useEffect(() => {
+    //     formRef.current?.reportValidity();
+    // }, [errors]);
 
     const sendPasswordResetRequest = (evt: any) => {
-        evt.preventDefault();
-        console.log(forgotEmail);
         if (forgotEmail) {
-            setLoginProcess(true);
             network
                 .post(
                     "api/Account/sendPasswordReset",
@@ -45,31 +45,29 @@ const ForgoPassword: React.FunctionComponent = (props) => {
                 )
                 .then((r: any) => {
                     console.log(r);
-                    setLoginProcess(false);
+                    setFinish(true);
                     history.push("/success-restore-password");
                 })
                 .catch((e) => {
                     console.log(e);
-                    setLoginProcess(false);
+                    setFinish(true);
                 });
         } else {
         }
     };
 
     return (
-        <form className="form" onSubmit={sendPasswordResetRequest}>
-            <header className="form__header">
-                <h1 className="form__title">Forgot Your Password?</h1>
-                <p className="form__subtitle">
-                    To restore the password, enter your email
-                </p>
-            </header>
-
+        <Form 
+            title='Forgot Your Password?' 
+            subtitle='To restore the password, enter your email' 
+            onSubmit={sendPasswordResetRequest}
+            stopLoading={finish}
+        >
             <div className="login-page__inputs">
                 <Input
                     onChangeInput={(value) => setForgotEmail(value)}
                     placeholder={"Enter the email"}
-                    type={"text"}
+                    type='email'
                     value={forgotEmail}
                 />
             </div>
@@ -81,8 +79,7 @@ const ForgoPassword: React.FunctionComponent = (props) => {
                     <ResetButton href={AppRoute.Login}>Cancel</ResetButton>
                 </div>
             </div>
-            {loginProcess && <Loader />}
-        </form>
+        </Form>
     );
 };
 

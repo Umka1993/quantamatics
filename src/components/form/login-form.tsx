@@ -1,17 +1,21 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
-import "./styles/form.scss";
-import { Input } from "../../components/input";
-import { Loader } from "../../components/loader";
-import Button  from "../../components/app-button";
-import { CheckBox } from "../../components/checkbox";
 import { network } from "../../services/networkService";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { RootState } from "../../store";
+
+import { Input } from "../../components/input";
+import Button from "../../components/app-button";
+import { CheckBox } from "../../components/checkbox";
 import Password from "../../components/app-input/password";
+import Form from './form';
+
 import { AppRoute } from "../../data/enum";
 
-const LoginForm: React.FunctionComponent = (props) => {
+import "./styles/form.scss";
+import "./styles/login-page.scss";
+
+const LoginForm: React.FunctionComponent = () => {
     const user = useSelector<RootState>((state) => state.user.user.firstName);
 
     const localUserName = localStorage.getItem("savedUsername") || "";
@@ -20,7 +24,7 @@ const LoginForm: React.FunctionComponent = (props) => {
     const [userName, setUserName] = useState<string>(localUserName);
     const [password, setPassword] = useState<string>(localPassword);
 
-    const [loginProcess, setLoginProcess] = useState<boolean>(false);
+    const [finish, setFinish] = useState<boolean | undefined>(undefined);
 
     const [rememberMe, setRememberMe] = useState<boolean>(false);
 
@@ -40,14 +44,11 @@ const LoginForm: React.FunctionComponent = (props) => {
         errors && setErrors(undefined);
     }, [userName, password]);
 
-    useEffect(() => {
+    useEffect(() => {        
         formRef.current?.reportValidity();
     }, [errors]);
 
-    const handleLogin = (evt: FormEvent<HTMLFormElement>) => {
-        evt.preventDefault();
-
-        setLoginProcess(true);
+    const handleLogin = (evt: FormEvent<HTMLFormElement>) => {        
         network
             .post("api/Account/login", {
                 email: userName,
@@ -80,26 +81,29 @@ const LoginForm: React.FunctionComponent = (props) => {
                     localStorage.setItem("savedPassword", password);
                 }
 
-                setLoginProcess(false);
-                history.push("/");
-                history.push("/apps/organizations/list");
+                setFinish(true);
+
+                history.push(AppRoute.Home);
+                //? history.push("/apps/organizations/list");
             })
             .catch((e) => {
                 if (e.response.status >= 400) {
                     setErrors("Incorrect username or password");
                 } else {
                     setErrors("Something went wrong");
-                }
-                setLoginProcess(false);
+                }                
+                setFinish(true);
             });
     };
 
     return (
-        <form className="form" onSubmit={handleLogin} ref={formRef}>
-            <header className="form__header">
-                <h1 className="form__title">Sign in to your account</h1>
-                <p className="form__subtitle">Enter your email and password</p>
-            </header>
+        <Form 
+            onSubmit={handleLogin} 
+            title='Sign in to your account' 
+            subtitle='Enter your email and password'
+            stopLoading={finish}
+            ref={formRef}
+        >
             <div className="login-page__inputs">
                 <Input
                     onChangeInput={(value) => setUserName(value)}
@@ -134,9 +138,7 @@ const LoginForm: React.FunctionComponent = (props) => {
                     Sign In
                 </Button>
             </div>
-
-            {loginProcess && <Loader />}
-        </form>
+        </Form>
     );
 };
 
