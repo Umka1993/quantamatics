@@ -13,8 +13,13 @@ export interface AuthState {
     user?: IUser;
 }
 
+// ! I think this is not how it should word. Ask @nickreznichuk about it
+
+const user: IUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : undefined
+
 const InitialState: AuthState = {
-    status: AuthorizationStatus.Unknown,
+    status: user ? AuthorizationStatus.Auth :  AuthorizationStatus.Unknown,
+    user: user,
 };
 
 function authorizationReducer(state = InitialState, action: AuthorizationActions): AuthState {

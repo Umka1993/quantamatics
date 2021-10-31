@@ -9,14 +9,14 @@ import { CheckBox } from "../../components/checkbox";
 import Password from "../../components/app-input/password";
 import Form from './form';
 
-import { AppRoute } from "../../data/enum";
+import { AppRoute, AuthorizationStatus } from "../../data/enum";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
 import { loginAction } from "../../store/authorization/actions";
 
 const LoginForm: React.FunctionComponent = () => {
-    const user = useSelector<RootState>((state) => state.user.user.firstName);
+    const status = useSelector((state: RootState) => state.auth.status);
 
     const localUserName = localStorage.getItem("savedUsername") || "";
     const localPassword = localStorage.getItem("savedPassword") || "";
@@ -31,8 +31,8 @@ const LoginForm: React.FunctionComponent = () => {
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
     useEffect(() => {
-        if (!!user) history.push("/research/my-files");
-    }, [user]);
+        if (status === AuthorizationStatus.Auth) history.push("/research/my-files");
+    }, [status]);
 
     const history = useHistory();
     const dispatch = useDispatch();

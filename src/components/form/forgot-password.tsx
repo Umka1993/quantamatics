@@ -14,7 +14,7 @@ import "./styles/form.scss";
 import "./styles/login-page.scss";
 
 const ForgoPassword: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.user.user.firstName);
+    const user = useSelector<RootState>((state) => state.auth.user?.firstName);
     const localUserName = localStorage.getItem("savedUsername") || "";
 
     const [finish, setFinish] = useState<boolean>(false);

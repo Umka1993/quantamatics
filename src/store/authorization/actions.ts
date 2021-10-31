@@ -6,7 +6,8 @@ import { RootState } from '../../store';
 import { AuthorizationActionType } from './reducer';
 import { IUser } from '../../types/user';
 import { saveToken } from '../../services/token';
-import { ApiRoute } from '../../data/enum';
+import { ApiRoute, AppRoute } from '../../data/enum';
+import { Dispatch } from 'redux';
 
 export const requireAuthorization = (authData: IUser) => ({
     type: AuthorizationActionType.Login,
@@ -25,6 +26,14 @@ export type AuthorizationActions =
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, RootState, AxiosInstance, AuthorizationActions>;
 
+
+export const logoutAction = () => (dispatch: Dispatch<AuthorizationActions>) => {
+    localStorage.removeItem('id_token')
+    localStorage.removeItem('user')
+    dispatch(requireLogout())
+    window.location.href = AppRoute.Login;
+}
+
 export const loginAction =
     ({ email, password, onFinish, onError }: any): ThunkActionResult =>
         async (dispatch, _getState, api) => {
@@ -33,33 +42,18 @@ export const loginAction =
                 email: email,
                 password: password,
             })
-            .then((r: any) => {
-                console.log(r);
+            .then(({ data }: any) => {
+                console.log(data);
 
-                dispatch(requireAuthorization({
-                    id: r.data.user.id,
-                    email: r.data.user.email,
-                    firstName: r.data.user.firstName,
-                    lastName: r.data.user.lastName,
-                    companyName: r.data.user.companyName,
-                    companyRole: r.data.user.companyRole,
-                    location: r.data.user.location,
-                    subscriptionType: r.data.user.subscriptionType,
-                    subscriptionEndDate: r.data.user.subscriptionEndDate,
-                    reportPanel: r.data.user.reportPanel,
-                    expirationDate: r.data.user.expirationDate,
-                    avatar: r.data.user.avatar,
-                    userRoles: r.data.user.userRoles,
-                    organizationId: r.data.user.organizationId,
-                }));
+                dispatch(requireAuthorization(data.user));
 
-                saveToken(r.data.token);
-                localStorage.setItem("user", JSON.stringify(r.data.user));
+                saveToken(data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
                 onFinish()
             })
-            .catch((e) => {
-                console.log(e);
-                onError(e.response.status)
+            .catch(({response}) => {
+                console.log(response);
+                onError(response.status)
             });
 
         }; 

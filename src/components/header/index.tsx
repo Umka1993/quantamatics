@@ -19,10 +19,12 @@ import { EditPassword } from '../edit-modal/edit-password';
 // import {EditProfile} from "../edit-profile";
 import { network } from "../../services/networkService";
 import { IUser, User } from 'types/edit-profile/types';
+import { AppRoute } from '../../data/enum';
+import { logoutAction } from '../../store/authorization/actions';
 
 
 export const Header: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.user.user)
+    const user = useSelector<RootState>((state) => state.auth.user)
 
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [showProfile, setShowProfile] = useState<boolean>(false)
@@ -57,23 +59,14 @@ export const Header: React.FunctionComponent = (props) => {
 
     const handleChangeRoute = (route: string) => {
         dispatch(changeRoute(route))
-        if (route === '/login') {
-            dispatch({
-                type: "LOGOUT", payload: {
-                    firstName: ''
-                }
-            })
-            localStorage.removeItem('id_token')
-            localStorage.removeItem('user')
-            window.location.href = route;
-        }
+        route === AppRoute.Login && dispatch(logoutAction())
         history.push(route)
     }
 
     useEffect(() => {
         const resetPassword = window.location.pathname.substring(1).includes('reset-password')
         const signUp = window.location.pathname.substring(1).includes('sign-up')
-        if (!user) history.push((resetPassword || signUp) ? window.location.href.replace(window.location.origin, '') : '/login')
+        if (!user) history.push((resetPassword || signUp) ? window.location.href.replace(window.location.origin, '') : AppRoute.Login)
     }, [user])
 
     useEffect(() => {
@@ -126,7 +119,7 @@ export const Header: React.FunctionComponent = (props) => {
                                 <div className="profile__dropdown-item" onClick={() => { }}>
                                     <SVG icon={settingsImg} name="settingsImg" /> Settings
                                 </div>
-                                <div className="profile__dropdown-item" onClick={() => handleChangeRoute('/login')}>
+                                <div className="profile__dropdown-item" onClick={() => handleChangeRoute(AppRoute.Login)}>
                                     <SVG icon={logoutImg} name="logoutImg" /> Log Out
                                 </div>
                             </div>

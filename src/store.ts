@@ -10,10 +10,11 @@ import authorizationReducer, { AuthState } from "./store/authorization/reducer";
 
 
 const api = createAPI();
+
+// export type RootState = ReturnType<typeof rootReducer>
 export interface RootState {
-  currentPage: CurrentPageState;
-  user: UserState;
-  auth: AuthState;
+  currentPage: CurrentPageState,
+  auth: AuthState,
 }
 
 const rootReducer = combineReducers({

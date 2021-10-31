@@ -18,7 +18,7 @@ export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) 
     }
 
 
-    const user = useSelector<RootState>((state) => state.user.user.firstName)
+    const user = useSelector<RootState>((state) => state.auth.user?.firstName)
     const username: any = !!user ? user : ''
     const filesUrl = 'https://hub-k8s.dev.quantamatics.net/user/' + username +'/tree?'
     const coherenceUrl = 'https://coherence-k8s.dev.quantamatics.net/user/' + username +'/'
