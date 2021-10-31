@@ -30,8 +30,6 @@ const LoginForm: React.FunctionComponent = () => {
 
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
-    const formRef = useRef<HTMLFormElement>(null);
-
     useEffect(() => {
         if (!!user) history.push("/research/my-files");
     }, [user]);
@@ -43,10 +41,6 @@ const LoginForm: React.FunctionComponent = () => {
     useEffect(() => {
         errors && setErrors(undefined);
     }, [userName, password]);
-
-    useEffect(() => {        
-        formRef.current?.reportValidity();
-    }, [errors]);
 
     const handleLogin = (evt: FormEvent<HTMLFormElement>) => {        
         network
@@ -102,7 +96,6 @@ const LoginForm: React.FunctionComponent = () => {
             title='Sign in to your account' 
             subtitle='Enter your email and password'
             stopLoading={finish}
-            ref={formRef}
         >
             <div className="login-page__inputs">
                 <Input
