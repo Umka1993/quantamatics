@@ -1,4 +1,5 @@
 .organization {
+  height: 100%;
   &__header {
     display: flex;
     align-items: center;
@@ -30,6 +31,15 @@
 
   &__list {
     padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .table {
+      flex-grow: 1;
+      &-body {
+        max-height: none;
+      }
+    }
   }
 
   &-table-loader {
