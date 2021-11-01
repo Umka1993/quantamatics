@@ -31,34 +31,29 @@ const ForgoPassword: React.FunctionComponent = (props) => {
     const history = useHistory();
 
     const sendPasswordResetRequest = (evt: any) => {
-        // const isValid = evt.target.reportValidity()
 
-        // isValid
-        
-        // if (forgotEmail) {
-        //     network
-        //         .post(
-        //             "api/Account/sendPasswordReset",
-        //             {},
-        //             { params: { email: forgotEmail } }
-        //         )
-        //         .then((r: any) => {
-        //             console.log(r);
-        //             setFinish(true);
-        //             history.push("/success-restore-password");
-        //         })
-        //         .catch((e) => {
-        //             console.log(e);
-        //             setFinish(true);
-        //         });
-        // } else {
-        // }
-    };
+        network
+            .post(
+                "api/Account/sendPasswordReset",
+                {},
+                { params: { email: forgotEmail } }
+            )
+            .then((r: any) => {
+                console.log(r);
+                setFinish(true);
+                history.push("/success-restore-password");
+            })
+            .catch((e) => {
+                console.log(e);
+                setFinish(true);
+            });
+
+    }
 
     return (
-        <Form 
-            title='Forgot Your Password?' 
-            subtitle='To restore the password, enter your email' 
+        <Form
+            title='Forgot Your Password?'
+            subtitle='To restore the password, enter your email'
             onSubmit={sendPasswordResetRequest}
             stopLoading={finish}
         >
