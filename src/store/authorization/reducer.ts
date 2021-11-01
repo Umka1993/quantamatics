@@ -15,7 +15,10 @@ export interface AuthState {
 
 // ! I think this is not how it should word. Ask @nickreznichuk about it
 
-const user: IUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : undefined
+let user: IUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : undefined
+
+user = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user') as string) : undefined
+
 
 const InitialState: AuthState = {
     status: user ? AuthorizationStatus.Auth :  AuthorizationStatus.Unknown,

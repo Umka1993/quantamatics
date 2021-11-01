@@ -41,13 +41,18 @@ const LoginForm: React.FunctionComponent = () => {
         errors && setErrors(undefined);
     }, [email, password]);
 
-    const onFinish = (data : any) => {
+    const onFinish = (user : any) => {
         setErrors(undefined);
         if (rememberMe) {
             localStorage.setItem("savedUsername", email);
             localStorage.setItem("savedPassword", password);
-            localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("user", JSON.stringify(user));
+        } else {
+            sessionStorage.setItem("savedUsername", email);
+            sessionStorage.setItem("savedPassword", password);
+            sessionStorage.setItem("user", JSON.stringify(user));
         }
+        
         setFinish(true);
         history.push(AppRoute.Home);
     }

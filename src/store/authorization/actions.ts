@@ -30,6 +30,9 @@ export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, RootState, Axi
 export const logoutAction = () => (dispatch: Dispatch<AuthorizationActions>) => {
     localStorage.removeItem('id_token')
     localStorage.removeItem('user')
+
+    sessionStorage.removeItem('id_token')
+    sessionStorage.removeItem('user')
     dispatch(requireLogout())
     window.location.href = AppRoute.Login;
 }
@@ -46,7 +49,7 @@ export const loginAction =
                 console.log(data);
                 dispatch(requireAuthorization(data.user));
                 saveToken(data.token);
-                onFinish()
+                onFinish(data.user)
             })
             .catch(({response}) => {
                 console.log(response);
