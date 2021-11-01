@@ -5,8 +5,7 @@ import { Input } from "../input";
 import { IUser } from "../../types/edit-profile/types";
 import { network } from "../../services/networkService";
 
-import { DateInput } from "../date-input";
-import DatePick from "../app-input/datepick";
+import { DatePick } from "../app-input";
 import { SelectorInput } from "../selector-input";
 import { USER_ORGS } from "../../contstans/constans";
 import editIcon from "./assets/edit.svg";
@@ -110,8 +109,20 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     return (
         <Modal onClose={onClose} className="edit-profile">
-            <ProfileSummary user={user} className="edit-profile__summary" />
-
+            <ProfileSummary
+                user={{
+                    id: user.id,
+                    firstName: name,
+                    lastName: surname,
+                    companyName: organization,
+                    email,
+                    subscriptionEndDate: expiration.toLocaleDateString(),
+                    companyRole: user.companyRole,
+                    location: user.location,
+                    subscriptionType: user.subscriptionType,
+                }}
+                className="edit-profile__summary"
+            />
             <form
                 action=""
                 className="edit-profile__form"
