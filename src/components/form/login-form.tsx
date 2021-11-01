@@ -42,7 +42,7 @@ const LoginForm: React.FunctionComponent = () => {
     }, [email, password]);
 
     const onFinish = (user : any) => {
-        setErrors(undefined);
+        setErrors(undefined);                
         if (rememberMe) {
             localStorage.setItem("savedUsername", email);
             localStorage.setItem("savedPassword", password);
@@ -99,7 +99,7 @@ const LoginForm: React.FunctionComponent = () => {
             <div className="login-page__wrap">
                 <CheckBox
                     checked={rememberMe}
-                    onClick={(value) => setRememberMe(value)}
+                    externalSetter={setRememberMe}
                     label={"Remember Me"}
                 />
                 <Link to={AppRoute.ForgoPassword} className="login-page__forgot">
