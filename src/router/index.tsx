@@ -9,11 +9,14 @@ import {NotFoundPage} from "../pages/404"
 import {SignUpPage} from "../pages/sign-up-page";
 import FullWidthLayout from "../pages/full-width-layout"
 
+import PrivateRoute from "./private-route";
+
 import {AppRoute} from "../data/enum"
 
 const AppRouter = () => (
     <Switch>
-        <Route exact path={AppRoute.Home} component={LayoutSideBarPage}/>
+        <PrivateRoute exact path={AppRoute.Home} component={LayoutSideBarPage} />
+        {/* <Route exact path={AppRoute.Home} component={LayoutSideBarPage}/> */}
         <Route exact path={AppRoute.Files} component={LayoutSideBarPage}/>
         <Route exact path={AppRoute.Shared} component={LayoutSideBarPage}/>
         <Route exact path={AppRoute.Favorites} component={LayoutSideBarPage}/>

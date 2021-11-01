@@ -63,12 +63,6 @@ export const Header: React.FunctionComponent = (props) => {
         history.push(route)
     }
 
-    // useEffect(() => {
-    //     const resetPassword = window.location.pathname.substring(1).includes('reset-password')
-    //     const signUp = window.location.pathname.substring(1).includes('sign-up')
-    //     if (!user) history.push((resetPassword || signUp) ? window.location.href.replace(window.location.origin, '') : AppRoute.Login)
-    // }, [user])
-
     useEffect(() => {
         const url: any = !!storeCurrentPage ? storeCurrentPage : ''
         const urlArray = url.split('/')
