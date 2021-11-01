@@ -16,14 +16,13 @@ import {AppRoute} from "../data/enum"
 const AppRouter = () => (
     <Switch>
         <PrivateRoute exact path={AppRoute.Home} component={LayoutSideBarPage} />
-        {/* <Route exact path={AppRoute.Home} component={LayoutSideBarPage}/> */}
-        <Route exact path={AppRoute.Files} component={LayoutSideBarPage}/>
-        <Route exact path={AppRoute.Shared} component={LayoutSideBarPage}/>
-        <Route exact path={AppRoute.Favorites} component={LayoutSideBarPage}/>
-        <Route exact path={AppRoute.AddUser} component={LayoutSideBarPage}/>
-        <Route exact path={AppRoute.Coherence} component={LayoutSideBarPage}/>
-        <Route exact path={AppRoute.Settings} component={LayoutSideBarPage}/>
-        <Route path={AppRoute.Organizations} component={LayoutSideBarPage}/>
+        <PrivateRoute path={AppRoute.Files} component={LayoutSideBarPage} />
+        <PrivateRoute path={AppRoute.Shared} component={LayoutSideBarPage}/>
+        <PrivateRoute path={AppRoute.Favorites} component={LayoutSideBarPage}/>
+        <PrivateRoute exact path={AppRoute.AddUser} component={LayoutSideBarPage}/>
+        <PrivateRoute exact path={AppRoute.Coherence} component={LayoutSideBarPage}/>
+        <PrivateRoute exact path={AppRoute.Settings} component={LayoutSideBarPage}/>
+        <PrivateRoute path={AppRoute.Organizations} component={LayoutSideBarPage}/>
         <Route path={AppRoute.SignUp} component={SignUpPage}/>
         <Route path={AppRoute.ResetPassword} component={SignUpPage}/>
         <Route path={AppRoute.Login} component={FullWidthLayout}/>
