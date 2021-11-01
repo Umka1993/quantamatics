@@ -5,7 +5,7 @@ import { RootState } from "../../store";
 
 import Button from "../../components/app-button";
 import { CheckBox } from "../../components/checkbox";
-import { Password, Email } from "../../components/app-input/index";
+import { Password, Email } from "../../components/app-input";
 import Form from './form';
 
 import { AppRoute, AuthorizationStatus } from "../../data/enum";
@@ -41,11 +41,12 @@ const LoginForm: React.FunctionComponent = () => {
         errors && setErrors(undefined);
     }, [email, password]);
 
-    const onFinish = () => {
+    const onFinish = (data : any) => {
         setErrors(undefined);
         if (rememberMe) {
             localStorage.setItem("savedUsername", email);
             localStorage.setItem("savedPassword", password);
+            localStorage.setItem("user", JSON.stringify(data.user));
         }
         setFinish(true);
         history.push(AppRoute.Home);

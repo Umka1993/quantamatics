@@ -44,11 +44,8 @@ export const loginAction =
             })
             .then(({ data }: any) => {
                 console.log(data);
-
                 dispatch(requireAuthorization(data.user));
-
                 saveToken(data.token);
-                localStorage.setItem("user", JSON.stringify(data.user));
                 onFinish()
             })
             .catch(({response}) => {
