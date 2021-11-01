@@ -5,6 +5,7 @@ import photoIcon from "./assets/photos.svg";
 import { IUser } from "../../types/edit-profile/types";
 import './style/profile-summary.scss';
 import classNames from "classnames";
+import { formatDate } from "../../services/baseService";
 
 interface IProfileSummary {
     user: IUser;
@@ -42,7 +43,7 @@ const ProfileSummary: FunctionComponent<IProfileSummary> = ({ user, className })
                     </div>
                     <div className="details__item">
                         <span>Expiration Date</span>
-                        <span>{user.subscriptionEndDate}</span>
+                        <span>{formatDate(user.subscriptionEndDate)}</span>
                     </div>
                 </div>
         </div>

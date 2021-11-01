@@ -50,3 +50,23 @@ export const sortTable = (name: string, sort: any, localRows: any, setSort: any,
     setSort({ name: newSort.name, direction: newSort.direction })
     setLocalRows(newRows)
 }
+
+
+/**
+ * A function to format server date to dot separated
+
+ * @param date string in format 'mm/dd/yyy hh:mm:ss'
+ *
+ * @returns string date in format 'mm.dd.yyyy'
+ *
+ * @example
+ *
+ * const testDate = '10/11/2023 10:01:17';
+ *
+ * console.log(formatDate(testDate)) // 10.11.2023
+ */
+
+export function formatDate(date: string): string {
+    let result =  date.split(' ')[0];
+    return result.replace(/[/]/g, '.');
+}

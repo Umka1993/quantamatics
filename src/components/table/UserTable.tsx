@@ -9,7 +9,7 @@ import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import { USER } from "../../contstans/constans";
 
-import formatDate from "./utils/date-format"
+import { formatDate } from "../../services/baseService"
 import { IUser } from "types/edit-profile/types";
 
 interface ITable {
