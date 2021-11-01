@@ -111,15 +111,12 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
         <Modal onClose={onClose} className="edit-profile">
             <ProfileSummary
                 user={{
-                    id: user.id,
+                    ...user,
                     firstName: name,
                     lastName: surname,
                     companyName: organization,
                     email,
                     subscriptionEndDate: expiration.toLocaleDateString(),
-                    companyRole: user.companyRole,
-                    location: user.location,
-                    subscriptionType: user.subscriptionType,
                 }}
                 className="edit-profile__summary"
             />
