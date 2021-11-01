@@ -99,7 +99,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                             {row.row.customerCrmId}
                         </div>
                         <div className="table-body-item">
-                            <a href={row.row.customerCrmLink}>{row.row.customerCrmLink}</a>
+                            <a href={row.row.customerCrmLink} target="_blank" rel="noopener noreferrer">{row.row.customerCrmLink}</a>
                         </div>
                         <div className="table-body-item">
                             {row.row.comments}
