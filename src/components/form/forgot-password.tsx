@@ -6,8 +6,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { RootState } from "../../store";
 import { AppRoute } from "../../data/enum";
-import Form from './form';
-
+import Form from "./form";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
@@ -31,7 +30,6 @@ const ForgoPassword: React.FunctionComponent = (props) => {
     const history = useHistory();
 
     const sendPasswordResetRequest = (evt: any) => {
-
         network
             .post(
                 "api/Account/sendPasswordReset",
@@ -47,13 +45,12 @@ const ForgoPassword: React.FunctionComponent = (props) => {
                 console.log(e);
                 setFinish(true);
             });
-
-    }
+    };
 
     return (
         <Form
-            title='Forgot Your Password?'
-            subtitle='To restore the password, enter your email'
+            title="Forgot Your Password?"
+            subtitle="To restore the password, enter your email"
             onSubmit={sendPasswordResetRequest}
             stopLoading={finish}
         >
@@ -61,18 +58,18 @@ const ForgoPassword: React.FunctionComponent = (props) => {
                 <Email
                     externalSetter={setForgotEmail}
                     value={forgotEmail}
-                    name='email'
+                    name="email"
                     placeholder={"Enter the email"}
                 />
             </div>
-            <div className="login-page__btn">
-                <Button type="submit" disabled={!forgotEmail}>
-                    Send
-                </Button>
-                <div className="login-page__btn-cancel">
-                    <ResetButton href={AppRoute.Login}>Cancel</ResetButton>
-                </div>
-            </div>
+
+            <Button className="login-page__btn" type="submit" disabled={!forgotEmail}>
+                Send
+            </Button>
+
+            <ResetButton className="login-page__btn-cancel" href={AppRoute.Login}>
+                Cancel
+            </ResetButton>
         </Form>
     );
 };

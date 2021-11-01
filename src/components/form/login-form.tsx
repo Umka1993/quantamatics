@@ -42,7 +42,7 @@ const LoginForm: React.FunctionComponent = () => {
     }, [email, password]);
 
     const onFinish = () => {
-        setErrors(undefined);  
+        setErrors(undefined);
         if (rememberMe) {
             localStorage.setItem("savedUsername", email);
             localStorage.setItem("savedPassword", password);
@@ -56,23 +56,23 @@ const LoginForm: React.FunctionComponent = () => {
             setErrors("Incorrect username or password");
         } else {
             setErrors("Something went wrong");
-        }                
+        }
         setFinish(true);
     }
 
-    const handleLogin = (evt: FormEvent<HTMLFormElement>) => {        
-        dispatch(loginAction({email, password, onFinish, onError}))
+    const handleLogin = (evt: FormEvent<HTMLFormElement>) => {
+        dispatch(loginAction({ email, password, onFinish, onError }))
     };
 
     return (
-        <Form 
-            onSubmit={handleLogin} 
-            title='Sign in to your account' 
+        <Form
+            onSubmit={handleLogin}
+            title='Sign in to your account'
             subtitle='Enter your email and password'
             stopLoading={finish}
         >
             <div className="login-page__inputs">
-                <Email 
+                <Email
                     externalSetter={setEmail}
                     placeholder='Email'
                     name="email"
@@ -100,11 +100,10 @@ const LoginForm: React.FunctionComponent = () => {
                     Forgot Password?
                 </Link>
             </div>
-            <div className="login-page__btn">
-                <Button disabled={!email || !password} type="submit">
-                    Sign In
-                </Button>
-            </div>
+            <Button className="login-page__btn" disabled={!email || !password} type="submit">
+                Sign In
+            </Button>
+
         </Form>
     );
 };
