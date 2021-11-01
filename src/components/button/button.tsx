@@ -15,9 +15,9 @@ interface IButton {
 
 export const Button: React.FunctionComponent<IButton> = ({type, disabled, onClick, htmlType='button', icon, text}) => {
     const buttonClasses: any = classNames({
-        'button button--simple': type == 'simple',
-        'button button--dotted': type == 'dotted',
-        'button button--disabled': disabled,
+        'old-button old-button--simple': type == 'simple',
+        'old-button old-button--dotted': type == 'dotted',
+        'old-button old-button--disabled': disabled,
     })
     return (
         <button className={buttonClasses} onClick={disabled ? () => {} : onClick} type={htmlType} disabled={disabled}>

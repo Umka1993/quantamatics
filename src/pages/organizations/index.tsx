@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { network } from "../../services/networkService";
 import "./styles/organiations.scss"
-import addIcon from "./assets/add.svg"
+import AddIcon from "./assets/add.svg"
 import { OrganizationTable } from "../../components/table/OrganizationTable";
-import { Button } from "../../components/button/button";
+import ButtonComponent from "../../components/app-button";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -49,9 +49,13 @@ export const Organizations: React.FunctionComponent = (props) => {
                         <h1>List of Organizations</h1>
                         <p>Create and customize organizations for future owners</p>
                     </div>
-                    <div className="organization__btn" onClick={() => createNew()}>
-                        <Button type={'simple'} text={'Add New'} icon={addIcon} />
-                    </div>
+
+
+                    <ButtonComponent className="organization__btn" onClick={() => createNew()}>
+                        <AddIcon aria-hidden='true' />
+                        Add New
+                    </ButtonComponent>
+
                 </header>
                 {!!organizations ? <OrganizationTable rows={organizations} /> : (<div className='organization-table-loader'><Loader /></div>)}
             </div>
