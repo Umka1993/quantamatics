@@ -76,7 +76,7 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                     />
 
                     <SortTableHeader
-                        name="expirationDate" text="Expiration Date"
+                        name="subscriptionEndDate" text="Expiration Date"
                         sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                         className="user"
                     />

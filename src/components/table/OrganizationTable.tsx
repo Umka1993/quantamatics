@@ -11,7 +11,7 @@ import deleteSVG from './assets/delete-row-icon.svg'
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
-import {network} from "../../services/networkService";
+// import {network} from "../../services/networkService";
 
 interface ITable {
     rows: IRow[]
