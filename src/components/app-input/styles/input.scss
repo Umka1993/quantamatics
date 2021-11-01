@@ -50,6 +50,11 @@ $text: #bcc4d8;
       border-color: currentColor;
     }
 
+    &:disabled {
+      color: $inactive;
+      border-color: $inactive;
+    }
+
     &[type="date"] {
       position: relative;
       cursor: pointer;

@@ -21,7 +21,7 @@ export const Button: React.FunctionComponent<IButton> = ({type, disabled, onClic
     })
     return (
         <button className={buttonClasses} onClick={disabled ? () => {} : onClick} type={htmlType} disabled={disabled}>
-            {icon && <SVG icon={icon} className='button__prepend'/>}
+            {icon && <SVG icon={icon} className='old-button__prepend'/>}
             {text}
         </button>
     )

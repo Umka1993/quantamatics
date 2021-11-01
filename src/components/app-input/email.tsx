@@ -8,12 +8,14 @@ import React, {
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
+import EditIcon from './assets/edit.svg';
 
 interface IEmail extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
     externalSetter?: (value: string) => void;
     hideError?: boolean;
+    icon?: string;
 }
 
 const EMAIL_REG_EXP = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
@@ -29,6 +31,7 @@ const Email: React.FunctionComponent<IEmail> = ({
     externalSetter,
     hideError = false,
     error,
+    icon,
     name,
     ...other
 }) => {
@@ -47,7 +50,7 @@ const Email: React.FunctionComponent<IEmail> = ({
         onChange && onChange(evt);
     };
 
-    const blurHandler: ChangeEventHandler<HTMLInputElement> = ({target : {value}}) => {
+    const blurHandler: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
         if (!value.includes('@')) {
             setInnerValue(`${value}@gmail.com`);
             externalSetter && externalSetter(`${value}@gmail.com`);
@@ -58,12 +61,12 @@ const Email: React.FunctionComponent<IEmail> = ({
         setInnerValue(value as string);
     }, [value]);
 
-    const getValidationMessage = (validity: ValidityState, error?: undefined | string) => {   
+    const getValidationMessage = (validity: ValidityState, error?: undefined | string) => {
         if (error) {
             return error;
         }
 
-        const {patternMismatch} = validity;
+        const { patternMismatch } = validity;
 
         if (patternMismatch) {
             return 'This is not a valid email';
@@ -73,7 +76,7 @@ const Email: React.FunctionComponent<IEmail> = ({
     };
 
     useEffect(() => {
-        if (inputRef.current) {            
+        if (inputRef.current) {
             const { validity } = inputRef.current;
             inputRef.current.setCustomValidity(getValidationMessage(validity, error));
 
@@ -116,6 +119,10 @@ const Email: React.FunctionComponent<IEmail> = ({
                     onInvalid={invalidHandler}
                     pattern={EMAIL_REG_EXP}
                 />
+
+                {icon === 'edit' && (
+                    <EditIcon className="app-input__icon" />
+                )}
             </div>
 
             {errorMessage && !hideError && (

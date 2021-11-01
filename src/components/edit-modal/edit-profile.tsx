@@ -158,6 +158,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                         externalSetter={setEmail}
                         value={email}
                         error={emailError}
+                        // icon='edit'
+                        disabled
                     />
                     <DatePick
                         className="edit-profile__temp-input"
