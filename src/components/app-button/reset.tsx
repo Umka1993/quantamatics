@@ -24,7 +24,7 @@ const Cancel: FunctionComponent<IButton> = ({
             {children}
         </Link>
     ) : (
-        <button className={buttonClasses} {...other}>
+        <button className={buttonClasses} type='reset' {...other}>
             {children}
         </button>
     );

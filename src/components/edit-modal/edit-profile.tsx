@@ -1,11 +1,11 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 
-import { Button } from "../button/button";
+import Button, { ResetButton } from "../app-button/index"
 import { Input } from "../input";
 import { IUser } from "../../types/edit-profile/types";
 import { network } from "../../services/networkService";
 
-import { DatePick } from "../app-input";
+import { DatePick, Email } from "../app-input";
 import { SelectorInput } from "../selector-input";
 import { USER_ORGS } from "../../contstans/constans";
 import editIcon from "./assets/edit.svg";
@@ -34,6 +34,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const [expiration, setExpiration] = useState<Date>(initialExp);
 
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
+    const [validate, setValidate] = useState<boolean>(false);
 
     const updateUser = () => {
         const newUserData = {
@@ -66,46 +67,48 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             });
     };
 
-    const checkEmailToExist = () => {
-        network
-            .post("/api/Account/register", {
-                firstName: name,
-                lastName: surname,
-                email: email,
-            })
-            .then((r: any) => {
-                // console.log("is new");
-                updateUser();
-            })
-            .catch(({ response: { data } }) => {
-                // console.log("is wrong", data);
-                if (data[0]) {
-                    const { code } = data[0];
-                    if (code === "DuplicateUserName") {
-                        // console.log('exist');
-                        setEmailError("The user with such email already exists");
+    /*     const checkEmailToExist = () => {
+            network
+                .post("/api/Account/register", {
+                    firstName: name,
+                    lastName: surname,
+                    email: email,
+                })
+                .then((r: any) => {
+                    // console.log("is new");
+                    updateUser();
+                })
+                .catch(({ response: { data } }) => {
+                    // console.log("is wrong", data);
+                    if (data[0]) {
+                        const { code } = data[0];
+                        if (code === "DuplicateUserName") {
+                            // console.log('exist');
+                            setEmailError("The user with such email already exists");
+                        }
                     }
-                }
-            });
-    };
-
+                });
+        };
+         */
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
-        if (email === user.email) {
-            updateUser();
-        } else {
-            console.log(/[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$/.test(email));
+        setValidate(true)
 
-            /[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$/.test(email)
-                ? checkEmailToExist()
-                : setEmailError("This is not a valid e-mail address.");
+        const isValid = (evt.target as HTMLFormElement).reportValidity();
+
+        if (isValid) {
+            updateUser();
         }
     };
 
     const handlerReset = (evt: FormEvent<HTMLFormElement>) => {
         onClose();
     };
+
+    useEffect(() => {
+        emailError && setEmailError(undefined)
+    }, [emailError])
 
     return (
         <Modal onClose={onClose} className="edit-profile">
@@ -125,6 +128,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                 className="edit-profile__form"
                 onSubmit={handlerSubmit}
                 onReset={handlerReset}
+                noValidate={validate ? true : undefined}
             >
                 <h2 id="modal-label" className="modal__title edit-profile__title">
                     Edit Profile
@@ -149,14 +153,11 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                         value={organization}
                         disabled
                     />
-                    <Input
-                        onChangeInput={(value) => {
-                            emailError && setEmailError(undefined);
-                            setEmail(value);
-                        }}
+                    <Email
+                        className="edit-profile__temp-input"
+                        externalSetter={setEmail}
                         value={email}
-                        icon={editIcon}
-                        errorText={emailError}
+                        error={emailError}
                     />
                     <DatePick
                         className="edit-profile__temp-input"
@@ -166,9 +167,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                 </div>
 
                 <div className="edit-profile__buttons">
-                    <Button type={"dotted"} text={"Cancel"} htmlType="reset" />
-
-                    <Button type={"simple"} text={"Save"} htmlType="submit" />
+                    <ResetButton>Cancel</ResetButton>
+                    <Button type="submit">Save</Button>
                 </div>
             </form>
         </Modal>

@@ -58,13 +58,27 @@ const Email: React.FunctionComponent<IEmail> = ({
         setInnerValue(value as string);
     }, [value]);
 
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.setCustomValidity(error === undefined ? '' : error);
+    const getValidationMessage = (validity: ValidityState, error?: undefined | string) => {   
+        if (error) {
+            return error;
+        }
 
-            if (value && Boolean(String(value).length)) {
-                !inputRef.current.validationMessage.length &&
-                    setErrorMessage(undefined);
+        const {patternMismatch} = validity;
+
+        if (patternMismatch) {
+            return 'This is not a valid email';
+        }
+
+        return "";
+    };
+
+    useEffect(() => {
+        if (inputRef.current) {            
+            const { validity } = inputRef.current;
+            inputRef.current.setCustomValidity(getValidationMessage(validity, error));
+
+            if (Boolean(innerValue.length)) {
+                !inputRef.current.validationMessage.length && setErrorMessage(undefined)
             }
         }
     }, [inputRef.current?.validity, error, innerValue]);
