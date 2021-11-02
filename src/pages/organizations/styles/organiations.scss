@@ -1,6 +1,17 @@
 .organization {
   height: 100%;
+  height: calc(100vh - #{80 + 24 * 2}px);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 40px;
+
+  --offset: clamp(10px, 40 / 1440 * 100vw, 40px);
+  padding: var(--offset) 0;
+  gap: var(--offset);
+
   &__header {
+    padding-left: var(--offset);
+    padding-right: var(--offset);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -24,16 +35,11 @@
   }
 
   &__list {
-    padding: 40px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    // .table {
-    //   // flex-grow: 1;
-    //   // &-body {
-    //   //   max-height: none;
-    //   // }
-    // }
+    max-height: 100%;
+    overflow: auto;
+    scrollbar-width: thin;
+    padding-left: var(--offset);
+    padding-right: var(--offset);
   }
 
   &-table-loader {

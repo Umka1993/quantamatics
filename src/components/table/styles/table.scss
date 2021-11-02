@@ -3,9 +3,15 @@
 $design-table-w: 1038;
 
 .table {
-  margin-top: 40px - 11px;
+  // margin-top: 40px - 11px;
   width: 100%;
   border-collapse: collapse;
+
+  &__head {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+  }
 
   &__header {
     font-style: normal;
@@ -17,11 +23,13 @@ $design-table-w: 1038;
     color: $inactive;
     border-bottom: 1.5px solid transparentize($main-text, 0.7);
 
+    
+
     th,
     td {
       font: inherit;
       text-align: left;
-      padding: 11px 20px 11px 0;
+      padding: 0 20px 11px 0;
       vertical-align: top;
     }
   }
@@ -44,6 +52,7 @@ $design-table-w: 1038;
   }
 
   &--user {
+    margin-top: 40px - 11px;
     tr {
       display: grid;
       grid-template-columns:

@@ -44,20 +44,21 @@ export const Organizations: React.FunctionComponent = (props) => {
 
     return (
         <section className="organization">
+            <header className="organization__header">
+                <div className="organization__titles">
+                    <Headline>List of Organizations</Headline>
+                    <p>Create and customize organizations for future owners</p>
+                </div>
+
+
+                <ButtonComponent className="organization__btn" onClick={() => createNew()}>
+                    <AddIcon aria-hidden='true' />
+                    Add New
+                </ButtonComponent>
+
+            </header>
             <div className="organization__list">
-                <header className="organization__header">
-                    <div className="organization__titles">
-                        <Headline>List of Organizations</Headline>
-                        <p>Create and customize organizations for future owners</p>
-                    </div>
 
-
-                    <ButtonComponent className="organization__btn" onClick={() => createNew()}>
-                        <AddIcon aria-hidden='true' />
-                        Add New
-                    </ButtonComponent>
-
-                </header>
                 {!!organizations ? <OrganizationTable rows={organizations} /> : (<div className='organization-table-loader'><Loader /></div>)}
             </div>
         </section>
