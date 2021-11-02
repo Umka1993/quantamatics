@@ -2,7 +2,7 @@ import React, { FormEvent, useCallback, useEffect, useRef, useState } from "reac
 import { Password } from "../../components/app-input/index";
 import Button from "../../components/app-button/";
 import { network } from "../../services/networkService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { RootState } from "../../store";
 import { AppRoute } from "../../data/enum";
@@ -10,6 +10,7 @@ import Form from "./form";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
+import { resetPassword } from "../../store/reset-password/actions";
 
 const ResetPassword: React.FunctionComponent = (props) => {
     const [password, setPassword] = useState<string>("");
@@ -18,34 +19,20 @@ const ResetPassword: React.FunctionComponent = (props) => {
 
     const [finish, setFinish] = useState<boolean>(false);
 
-    // const [errors, setErrors] = useState<string | undefined>(undefined);
-
-    // const formRef = useRef<HTMLFormElement>(null);
-
-    // const history = useHistory();
+    const history = useHistory();
+    const dispatch = useDispatch();
 
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const email = urlParams.get("email");
 
+    const onFinish = () => history.push("/login");
+    const onError = () => setFinish(true);
+
     const handleResetPassword = useCallback(() => {
-        if (password && passwordConfirm && email) {
-            // setLoginProcess(true);
-            // network
-            //     .post("/api/Account/resetPassword", {
-            //         password,
-            //         token,
-            //         email,
-            //     })
-            //     .then((r: any) => {
-            //         setLoginProcess(false);
-            //         history.push("/login");
-            //     })
-            //     .catch((e) => {
-            //         console.log(e);
-            //     });
-        }
-    }, [password, passwordConfirm, ]); //email
+        dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError))
+
+    }, [password, passwordConfirm,]);
 
     useEffect(() => {
         setCompare(

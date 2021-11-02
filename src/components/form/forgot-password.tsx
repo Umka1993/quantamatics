@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { RootState } from "../../store";
 import { AppRoute } from "../../data/enum";
-import sendResetPasswordMail from "../../store/send-reset-password/actions";
+import { sendResetPasswordMail } from "../../store/reset-password/actions";
 import Form from "./form";
 
 import "./styles/form.scss";

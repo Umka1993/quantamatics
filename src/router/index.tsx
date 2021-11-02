@@ -24,8 +24,7 @@ const AppRouter = () => (
         <PrivateRoute exact path={AppRoute.Settings} component={LayoutSideBarPage}/>
         <PrivateRoute path={AppRoute.Organizations} component={LayoutSideBarPage}/>
         <Route path={AppRoute.SignUp} component={SignUpPage}/>
-        {/* <Route path={AppRoute.ResetPassword} component={FullWidthLayout}/> */}
-        <Route path={AppRoute.ResetPassword} component={SignUpPage}/>
+        <Route path={AppRoute.ResetPassword} component={FullWidthLayout}/>
         <Route path={AppRoute.Login} component={FullWidthLayout}/>
         <Route path={AppRoute.ForgotPassword} component={FullWidthLayout}/>
         <Route path={AppRoute.Success} component={FullWidthLayout}/>

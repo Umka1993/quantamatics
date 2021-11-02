@@ -10,6 +10,7 @@ import "./styles/input.scss";
 import classNames from "classnames";
 import EyeSVG from "./assets/eye.svg";
 import ClosedEyeSVG from "./assets/closed-eye.svg";
+import getValidationMessage from './utils/passwordValidation'
 
 const PATTERN_PASSWORD =
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*\\[\\]\\\\\"';:<_>., =+/-]).*$";
@@ -65,43 +66,19 @@ const Password: React.FunctionComponent<IPassword> = ({
         onChange && onChange(evt);
     };
 
-    // Validate
-    const getValidationMessage = (validity: ValidityState, error? : string): string => {
-        if (error) {
-            return error;
-        }
-
-        const { tooShort, patternMismatch } = validity;
-
-        if (tooShort || patternMismatch) {
-            const textStart = "The password must contain at least ";
-            let requirements = [];
-
-            tooShort && requirements.push("8 characters");
-            patternMismatch &&
-                requirements.push(
-                    "1 uppercase letter, 1 digit and 1 special character"
-                );
-
-            return `${textStart} ${requirements.join(", ")}.`;
-        }
-        
-
-        return "";
-    };
-
     useEffect(() => {
         if (inputRef.current) {
-            
+
             const { validity } = inputRef.current;
-            console.log(validity);
-            console.log(error, innerValue);
-            
             inputRef.current.setCustomValidity(getValidationMessage(validity, error));
 
-            if (Boolean(innerValue.length)) {
-                !inputRef.current.validationMessage.length && setErrorMessage(undefined)
-            }
+            const { validationMessage } = inputRef.current;
+
+            errorMessage && errorMessage !== validationMessage && setErrorMessage(validationMessage);
+
+            !validationMessage.length && setErrorMessage(undefined);
+
+
         }
     }, [inputRef.current?.validity, error, innerValue]);
 
@@ -151,9 +128,9 @@ const Password: React.FunctionComponent<IPassword> = ({
                 </button>
             </div>
 
-            {errorMessage && errorMessage !== ' ' && 
-                <p 
-                    id={name ? name + '_error' : undefined} 
+            {errorMessage && errorMessage !== ' ' &&
+                <p
+                    id={name ? name + '_error' : undefined}
                     className="app-input__error"
                 >
                     {errorMessage}

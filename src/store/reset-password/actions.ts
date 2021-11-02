@@ -10,11 +10,11 @@ type ThunkActionResult<R = Promise<void>> = ThunkAction<
     any
 >;
 
-const sendResetPasswordMail =
+export const sendResetPasswordMail =
     (email: string, onFinish: any, onError: any): ThunkActionResult =>
         async (_dispatch, _getState, api) => {
             api
-                .post(ApiRoute.ResetPassword, {}, { params: { email } })
+                .post(ApiRoute.ResetPasswordMail, {}, { params: { email } })
                 .then((r: any) => {
                     console.log(r);
                     onFinish();
@@ -25,4 +25,19 @@ const sendResetPasswordMail =
                 });
         };
 
-export default sendResetPasswordMail;
+
+export const resetPassword =
+    (password: string, token: string, email: string,  onFinish: any, onError: any): ThunkActionResult =>
+        async (_dispatch, _getState, api) => {
+            api
+                .post(ApiRoute.ResetPassword, {password, token, email})
+                .then((r: any) => {
+                    console.log(r);
+                    onFinish();
+                })
+                .catch((e) => {
+                    console.log(e);
+                    onError();
+                });
+
+        };
