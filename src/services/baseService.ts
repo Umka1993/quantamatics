@@ -40,10 +40,13 @@ export const sortTable = (
         case SortDirection.Up:
             newRows.sort((a: any, b: any) => {
                 const first =
-                    name === "subscriptionEndDate" ? new Date(a.row[name]) : a.row[name];
+                    name === "subscriptionEndDate" ? new Date(a.row[name]) : a.row[name].toUpperCase();
 
                 const second =
-                    name === "subscriptionEndDate" ? new Date(b.row[name]) : b.row[name];
+                    name === "subscriptionEndDate" ? new Date(b.row[name]) : b.row[name].toUpperCase();
+
+                // console.log(`${first} > ${second} = ${first > second}`);
+                
 
                 return first > second ? 1 : second > first ? -1 : 0;
             });
@@ -52,10 +55,10 @@ export const sortTable = (
         case SortDirection.Down:
             newRows.sort((a: any, b: any) => {
                 const first =
-                    name === "subscriptionEndDate" ? new Date(a.row[name]) : a.row[name];
+                    name === "subscriptionEndDate" ? new Date(a.row[name]) : a.row[name].toUpperCase();
 
                 const second =
-                    name === "subscriptionEndDate" ? new Date(b.row[name]) : b.row[name];
+                    name === "subscriptionEndDate" ? new Date(b.row[name]) : b.row[name].toUpperCase();
                 return second > first
                     ? 1
                     : first > second
