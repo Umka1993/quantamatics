@@ -44,6 +44,7 @@ const SignUp: React.FunctionComponent = (props) => {
     return (
         <Form
             headline={title}
+            headlineText={`Sign Up ${organizationName}`}
             subtitle="Create a password to complete recovery"
             onSubmit={handleResetPassword}
             stopLoading={finish}

@@ -1,19 +1,21 @@
 import React, { FormEvent, FormHTMLAttributes, FunctionComponent, useEffect, useRef, useState } from "react";
 import "./styles/form.scss";
 import { Loader } from "../../components/loader";
+import Headline from '../page-title/index'
 // import Button  from "../../components/app-button";
 
 
 interface IForm extends FormHTMLAttributes<HTMLFormElement> {
     stopLoading?: boolean;
     headline?: string | JSX.Element;
+    headlineText?: string;
     subtitle?: string;
     ref?: React.Ref<HTMLFormElement>;
 }
 
 
 
-const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit, stopLoading, onInput, ...other }) => {
+const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit, stopLoading, onInput, headlineText, ...other }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [validate, setValidate] = useState<true | undefined>(undefined);
 
@@ -55,7 +57,7 @@ const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit
             onInput={handleInput}
         >
             <header className="form__header">
-                <h1 className="form__title">{headline}</h1>
+                <Headline className="form__title" pageTitle={headlineText}>{headline}</Headline>
                 <p className="form__subtitle">{subtitle}</p>
             </header>
 
