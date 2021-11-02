@@ -8,6 +8,7 @@ import React, {
 import "./styles/modal.scss";
 import classNames from "classnames";
 import CloseIcon from "./assets/close.svg";
+import Headline from "../page-title/index";
 
 interface IModal {
     className?: string;
@@ -41,7 +42,7 @@ export const Modal: React.FunctionComponent<IModal> = ({
         (key === "Escape" || key === "Esc") && onClose();
     };
 
-    const closeOnClick = ({target}: any) => {
+    const closeOnClick = ({ target }: any) => {
         target === overlayRef.current && onClose()
     }
 
@@ -64,9 +65,9 @@ export const Modal: React.FunctionComponent<IModal> = ({
                 onKeyUp={closeOnEsc}
             >
                 {headline && (
-                    <h1 id="modal-label" className="modal__title">
+                    <Headline id="modal-label" className="modal__title">
                         {headline}
-                    </h1>
+                    </Headline>
                 )}
                 <button
                     aria-label={Hint.close}

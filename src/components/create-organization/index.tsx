@@ -6,6 +6,7 @@ import {Button} from "../button/button";
 import {network} from "../../services/networkService";
 import {useDispatch} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
+import Headline from "../page-title/index";
 
 interface ICreateOrganization {
 }
@@ -55,7 +56,9 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
     return(
         <div className="create-organization">
             <form className="create-organization__form" onSubmit={(e) => {e.preventDefault(); createOrganization()}}>
-                <div className='create-organization__title'>Creating an Organization</div>
+                <Headline className='create-organization__title'>
+                    Creating an Organization
+                </Headline>
                 <div className='create-organization__subtitle'>Create an organization for the future admin</div>
                 <Input
                     className='create-organization__first-input'

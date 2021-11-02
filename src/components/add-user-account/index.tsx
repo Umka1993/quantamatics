@@ -2,12 +2,11 @@ import React, { useCallback, useState } from "react";
 import "./styles/add-user-account.scss";
 import { Input } from "../input";
 import { Button } from "../button/button";
-import SVG from "../SVG";
 import DatePick from "../app-input/datepick";
 import { network } from "../../services/networkService";
 import { Loader } from "../loader";
-import successIcon from "../../pages/add-user-page/assets/sucess-icon.svg";
 import { useHistory } from "react-router";
+import Headline from "../page-title/index";
 
 interface IAddUserAccount {
     onBack: () => void;
@@ -77,7 +76,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                 }}
             >
                 <header className="add-user-account__header">
-                    <h2>Add User Accounts</h2>
+                    <Headline>Add User Accounts</Headline>
                     <p>Add users to your organization and manage them</p>
                 </header>
 

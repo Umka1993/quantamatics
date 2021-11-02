@@ -8,6 +8,7 @@ import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Loader } from "../../components/loader";
+import Headline from "../../components/page-title/index";
 
 export const Organizations: React.FunctionComponent = (props) => {
     const [organizations, setOrganizations] = useState<any>()
@@ -46,7 +47,7 @@ export const Organizations: React.FunctionComponent = (props) => {
             <div className="organization__list">
                 <header className="organization__header">
                     <div className="organization__titles">
-                        <h1>List of Organizations</h1>
+                        <Headline>List of Organizations</Headline>
                         <p>Create and customize organizations for future owners</p>
                     </div>
 

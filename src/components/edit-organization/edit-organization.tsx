@@ -9,6 +9,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { network } from "../../services/networkService";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
+import Headline from "../page-title/index";
 import type { IUserRow } from "types/table/types";
 
 
@@ -126,9 +127,9 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                     :
                     <div className="edit-organization">
                         <div className="edit-organization__header">
-                            <div className="edit-organization__title">
+                            <Headline className="edit-organization__title">
                                 Edit Organization
-                            </div>
+                            </Headline>
                             <div className="edit-organization__buttons">
                                 <div className="edit-organization__cancel-btn" onClick={() => {
                                     dispatch(changeRoute('apps/organizations/list'))

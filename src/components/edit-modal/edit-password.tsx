@@ -9,6 +9,7 @@ import ProfileSummary from "../profile-summary";
 import Modal from "../modal";
 import "./styles/edit-modal.scss";
 import { AxiosError, AxiosResponse } from "axios";
+import Headline from "../page-title/index";
 
 interface IEditProfile {
     onClose: () => void;
@@ -80,9 +81,10 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                 ref={formRef}
             // noValidate={!validateNew}
             >
-                <h2 id="modal-label" className="modal__title edit-profile__title">
+                <Headline id="modal-label" className="edit-profile__title">
                     Change Password
-                </h2>
+                </Headline>
+                
                 <div className="edit-profile__temp edit-profile__inputs">
                     <Password
                         placeholder="Current Password"
