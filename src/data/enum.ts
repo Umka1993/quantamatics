@@ -19,6 +19,7 @@ export const enum AppRoute {
 export const enum ApiRoute {
     Base = 'https://qmc-api.k8s.dev.quantamatics.net',
     Login = '/api/Account/login',
+    ResetPassword = 'api/Account/sendPasswordReset',
 }
 
 export const enum AuthorizationStatus {
