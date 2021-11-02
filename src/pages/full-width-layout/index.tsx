@@ -36,12 +36,21 @@ const FullWidthLayout: React.FunctionComponent = (props) => {
     }
 
     switch (success) {
-        case "-restore-password":
+        case "restore-password":
             child = (
                 <SuccessMessage
                     title="A reset password email was sent to the email entered"
                     linkText="Go to Log in Page"
                     path={AppRoute.Login}
+                />
+            );
+            break;
+        case "invitation":
+            child = (
+                <SuccessMessage
+                    title="An invitation email has been sent to the user"
+                    linkText="Go Back"
+                    go={-1}
                 />
             );
             break;

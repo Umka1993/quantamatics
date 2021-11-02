@@ -13,7 +13,7 @@ export const enum AppRoute {
     Login = '/login',
     ForgotPassword = '/forgot-password',
 
-    Success = '/success:success'
+    Success = '/success-:success'
 }
 
 export const enum ApiRoute {

@@ -7,6 +7,7 @@ import DatePick from "../app-input/datepick";
 import { network } from "../../services/networkService";
 import { Loader } from "../loader";
 import successIcon from "../../pages/add-user-page/assets/sucess-icon.svg";
+import { useHistory } from "react-router";
 
 interface IAddUserAccount {
     onBack: () => void;
@@ -22,9 +23,10 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
     const [userLastName, setUserLastName] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
     const [userExpiration, setUserExpiration] = useState<Date>(new Date());
-    const [showSuccessAdd, setShowSuccessAdd] = useState<boolean>(false);
 
     const [errors, setErrors] = useState<string | boolean>(false);
+
+    const history = useHistory();
 
     const addUserToOrg = useCallback(() => {
         if (userName && userLastName && userEmail && userExpiration) {
@@ -42,7 +44,7 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                     console.log("is right");
 
                     setLoginProcess(false);
-                    setShowSuccessAdd(true);
+                    history.push('/success-invitation')
                 })
                 .catch(({ response: { data } }) => {
                     console.log("is wrong", data);
@@ -123,25 +125,6 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                     <Button type={"dotted"} text={"Cancel"} />
                 </div>
             </form>
-            {showSuccessAdd && (
-                <div className="add-user-account__forgot-password success">
-                    <div className="add-user-account__container">
-                        <div className="add-user-account__forgot-password-success-text">
-                            <SVG icon={successIcon} />
-                            An invitation email has been sent to the user
-                        </div>
-                        <div className="add-user-account__btn">
-                            <Button
-                                onClick={() => {
-                                    props.onBack();
-                                }}
-                                type={"simple"}
-                                text={"Go Back"}
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
             {loginProcess && <Loader />}
         </div>
     );
