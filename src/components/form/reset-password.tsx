@@ -30,20 +30,20 @@ const ResetPassword: React.FunctionComponent = (props) => {
 
     const handleResetPassword = useCallback(() => {
         if (password && passwordConfirm && email) {
-        //     setLoginProcess(true);
-        //     network
-        //         .post("/api/Account/resetPassword", {
-        //             password,
-        //             token,
-        //             email,
-        //         })
-        //         .then((r: any) => {
-        //             setLoginProcess(false);
-        //             history.push("/login");
-        //         })
-        //         .catch((e) => {
-        //             console.log(e);
-        //         });
+            // setLoginProcess(true);
+            // network
+            //     .post("/api/Account/resetPassword", {
+            //         password,
+            //         token,
+            //         email,
+            //     })
+            //     .then((r: any) => {
+            //         setLoginProcess(false);
+            //         history.push("/login");
+            //     })
+            //     .catch((e) => {
+            //         console.log(e);
+            //     });
         }
     }, [password, passwordConfirm, ]); //email
 
