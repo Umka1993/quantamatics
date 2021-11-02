@@ -1,16 +1,16 @@
-.table-head-item {
-    all: unset;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 14px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #bcc4d8;
+@import '../../../variables.scss';
 
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+.sort-table-header {
+    &__button {
+        all: unset;
+        font: inherit;
+        display: flex;
+        align-items: baseline;
+
+        &:hover, &:focus-visible {
+            color: $accent;
+        }
+    }
 
     &[aria-sort="ascending"] .sort-icon_svg__up {
         color: #017aee;
@@ -23,7 +23,10 @@
     }
 
     svg {
+        color: $inactive;
         margin-left: 5px;
+        position: relative;
+        top: 0.3em;
         cursor: pointer;
     }
 }

@@ -5,8 +5,8 @@ import {IRow} from "../../types/table/types";
 import {SVG} from "../SVG";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
-import editSVG from './assets/edit-row-icon.svg'
-import deleteSVG from './assets/delete-row-icon.svg'
+import EditSVG from './assets/edit-row-icon.svg'
+import DeleteSVG from './assets/delete-row-icon.svg'
 
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
@@ -65,9 +65,9 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
     if(!localRows) return null
 
     return(
-        <div className="table">
-            <div className="table-head">
-                <div className="table-head-row">
+        <table className="table table--organization">
+            <thead className="table__head">
+                <tr className="table__header">
                     <SortTableHeader 
                         name={OrganizationKey.name} text='Organization Name'  
                         sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
@@ -87,34 +87,43 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                         name={OrganizationKey.comments} text='Comments'  
                         sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
                     />
-                </div>
-            </div>
-            <div className="table-body">
+
+                    <th className='table__headline table__headline--hidden'>Actions</th>
+                </tr>
+            </thead>
+            <tbody className="table__body">
                 {localRows.map((row, index) => (
-                    <div className={classNames("table-body-row", {deleting: index === itemDeleting})} key={index}>
-                        <div className="table-body-item">
+                    <tr className={classNames("table__row", {deleting: index === itemDeleting})} key={index}>
+                        <td className="table__cell">
                             {row.row.name}
-                        </div>
-                        <div className="table-body-item">
+                        </td>
+                        <td className="table__cell">
                             {row.row.customerCrmId}
-                        </div>
-                        <div className="table-body-item">
+                        </td>
+                        <td className="table__cell">
                             <a href={row.row.customerCrmLink} target="_blank" rel="noopener noreferrer">{row.row.customerCrmLink}</a>
-                        </div>
-                        <div className="table-body-item">
+                        </td>
+                        <td className="table__cell table__cell--comment">
                             {row.row.comments}
-                        </div>
-                        <div className='table-body-row__actions'>
-                            <SVG icon={editSVG}
-                                onClick={() => handleEditRoute("apps/organizations", row.row.id)}/>
-                            <SVG icon={deleteSVG} 
+                        </td>
+                        <td className='table__cell table__cell--actions'>
+                            <button 
+                                className='table__action'
+                                onClick={() => handleEditRoute("apps/organizations", row.row.id)}
+                            >
+                                <EditSVG role="img" aria-label="edit" fill="currentColor" />
+                            </button>
+                            <button 
+                                className='table__action'
                                 // onClick={() => handleDeleteOrganization(row.row.id, index)}
-                                className='disabled'
-                            />
-                        </div>
-                    </div>
+                                disabled
+                            >
+                                <DeleteSVG role="img" aria-label="delete" fill="currentColor" />
+                            </button>
+                        </td>
+                    </tr>
                 ))}
-            </div>
-        </div>
+            </tbody>
+        </table>
     )
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { SortDirection, sortTable } from "../../services/baseService";
-import SortIcon from './assets/sort-icon.svg';
+import SortIcon from "./assets/sort-icon.svg";
 import "./styles/sort-th.scss";
 
 interface ISortTableHeader {
@@ -13,21 +13,27 @@ interface ISortTableHeader {
     className?: string;
 }
 
-export const SortTableHeader: React.FunctionComponent<ISortTableHeader> = ({name, sort, localRows, setSort, setLocalRows, text, className}) => {
+export const SortTableHeader: React.FunctionComponent<ISortTableHeader> = ({
+    name,
+    sort,
+    localRows,
+    setSort,
+    setLocalRows,
+    text,
+    className,
+}) => {
     return (
-        <button
-            className={["table-head-item", className].join(' ')}
-            onClick={() =>
-                sortTable(name, sort, localRows, setSort, setLocalRows)
-            }
-            aria-sort={
-                sort.name === name
-                    ? sort.direction
-                    : SortDirection.Default
-            }
+        <th
+            className={["sort-table-header", className].join(" ")}
+            aria-sort={sort.name === name ? sort.direction : SortDirection.Default}
         >
-            {text}
-            <SortIcon aria-hidden/>
-        </button>
+            <button
+                onClick={() => sortTable(name, sort, localRows, setSort, setLocalRows)}
+                className='sort-table-header__button'
+            >
+                {text}
+                <SortIcon aria-hidden />
+            </button>
+        </th>
     );
 };

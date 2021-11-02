@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./styles/table.scss"
 import { IUserRow } from "../../types/table/types";
 import { SVG } from "../SVG";
-import editSVG from "./assets/edit-row-icon.svg";
-import deleteSVG from "./assets/delete-row-icon.svg";
+import EditSVG from "./assets/edit-row-icon.svg";
+import DeleteSVG from "./assets/delete-row-icon.svg";
 import { EditProfile } from "../edit-modal/edit-profile";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
@@ -53,9 +53,9 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
     }
 
     return (
-        <div className="table user">
-            <div className="table-head">
-                <div className="table-head-row">
+        <table className="table table--user">
+            <thead className="table__head">
+                <tr className="table__header">
                     <SortTableHeader
                         name="firstName" text="First Name"
                         sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
@@ -79,37 +79,48 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                         sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                         className="user"
                     />
-
-                </div>
-            </div>
-            <div className="table-body">
+                    <th className='table__headline table__headline--hidden'>Actions</th>
+                </tr>
+            </thead>
+            <tbody className="table__body">
                 {localRows.map((row, index) => (
-                    <div className="table-body-row" key={row.row.id}>
-                        <div className="table-body-item user">
+                    <tr className="table__row" key={row.row.id}>
+                        <div className="table__cell">
                             {row.row.firstName}
                         </div>
-                        <div className="table-body-item user">
+                        <div className="table__cell">
                             {row.row.lastName}
                         </div>
-                        <div className="table-body-item user">
+                        <div className="table__cell">
                             {row.row.email}
                         </div>
-                        <div className="table-body-item user">
+                        <div className="table__cell">
                             {formatDate(row.row.subscriptionEndDate)}
                         </div>
-                        <div className='table-body-row__actions'>
-                            <SVG icon={editSVG} onClick={() => { handleEditUser(row, index) }} />
-                            <SVG icon={deleteSVG} onClick={() => { handleDeleteUser(row) }} className='disabled' />
-                        </div>
-                    </div>
+                        <td className='table__cell table__cell--actions'>
+                            <button 
+                                className='table__action'
+                                onClick={() => { handleEditUser(row, index) }}
+                            >
+                                <EditSVG role="img" aria-label="edit" fill="currentColor" />
+                            </button>
+                            <button 
+                                className='table__action'
+                                // onClick={() => { handleDeleteUser(row) }}
+                                disabled
+                            >
+                                <DeleteSVG role="img" aria-label="delete" fill="currentColor" />
+                            </button>
+                        </td>
+                    </tr>
                 ))}
-            </div>
+            </tbody>
             
             {showModal &&
                 // <Modal onClose={() => setShowModal(false)}><p>Test</p></Modal>
                 <EditProfile user={user} onClose={() => setShowModal(false)} onSubmit={updateUsers} />
             }
-        </div>
+        </table>
     )
 }
 
