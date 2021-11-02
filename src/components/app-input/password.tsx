@@ -66,35 +66,38 @@ const Password: React.FunctionComponent<IPassword> = ({
     };
 
     // Validate
-    const getValidationMessage = (validity: ValidityState): string => {
+    const getValidationMessage = (validity: ValidityState, error? : string): string => {
         if (error) {
             return error;
         }
 
-        if (inputRef.current) {
-            const { tooShort, patternMismatch } = validity;
+        const { tooShort, patternMismatch } = validity;
 
-            if (tooShort || patternMismatch) {
-                const textStart = "The password must contain at least ";
-                let requirements = [];
+        if (tooShort || patternMismatch) {
+            const textStart = "The password must contain at least ";
+            let requirements = [];
 
-                tooShort && requirements.push("8 characters");
-                patternMismatch &&
-                    requirements.push(
-                        "1 uppercase letter, 1 digit and 1 special character"
-                    );
+            tooShort && requirements.push("8 characters");
+            patternMismatch &&
+                requirements.push(
+                    "1 uppercase letter, 1 digit and 1 special character"
+                );
 
-                return `${textStart} ${requirements.join(", ")}.`;
-            }
+            return `${textStart} ${requirements.join(", ")}.`;
         }
+        
 
         return "";
     };
 
     useEffect(() => {
         if (inputRef.current) {
+            
             const { validity } = inputRef.current;
-            inputRef.current.setCustomValidity(getValidationMessage(validity));
+            console.log(validity);
+            console.log(error, innerValue);
+            
+            inputRef.current.setCustomValidity(getValidationMessage(validity, error));
 
             if (Boolean(innerValue.length)) {
                 !inputRef.current.validationMessage.length && setErrorMessage(undefined)

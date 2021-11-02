@@ -1,6 +1,6 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
-import { Email } from "../../components/app-input/index";
-import Button, { ResetButton } from "../../components/app-button/";
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { Password } from "../../components/app-input/index";
+import Button from "../../components/app-button/";
 import { network } from "../../services/networkService";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -11,67 +11,76 @@ import Form from "./form";
 import "./styles/form.scss";
 import "./styles/login-page.scss";
 
-const ForgoPassword: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.auth.user?.firstName);
-    const localUserName = localStorage.getItem("savedUsername") || "";
+const ResetPassword: React.FunctionComponent = (props) => {
+    const [password, setPassword] = useState<string>("");
+    const [passwordConfirm, setPasswordConfirm] = useState<string>("");
+    const [compare, setCompare] = useState<string | undefined>(undefined);
 
     const [finish, setFinish] = useState<boolean>(false);
 
-    const [forgotEmail, setForgotEmail] = useState<string>(localUserName);
-
     // const [errors, setErrors] = useState<string | undefined>(undefined);
 
-    const formRef = useRef<HTMLFormElement>(null);
+    // const formRef = useRef<HTMLFormElement>(null);
+
+    // const history = useHistory();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    const email = urlParams.get("email");
+
+    const handleResetPassword = useCallback(() => {
+        if (password && passwordConfirm && email) {
+        //     setLoginProcess(true);
+        //     network
+        //         .post("/api/Account/resetPassword", {
+        //             password,
+        //             token,
+        //             email,
+        //         })
+        //         .then((r: any) => {
+        //             setLoginProcess(false);
+        //             history.push("/login");
+        //         })
+        //         .catch((e) => {
+        //             console.log(e);
+        //         });
+        }
+    }, [password, passwordConfirm, ]); //email
 
     useEffect(() => {
-        if (!!user) history.push("/research/my-files");
-    }, [user]);
-
-    const history = useHistory();
-
-    const sendPasswordResetRequest = (evt: any) => {
-        network
-            .post(
-                "api/Account/sendPasswordReset",
-                {},
-                { params: { email: forgotEmail } }
-            )
-            .then((r: any) => {
-                console.log(r);
-                setFinish(true);
-                history.push("/success-restore-password");
-            })
-            .catch((e) => {
-                console.log(e);
-                setFinish(true);
-            });
-    };
+        setCompare(
+            password !== passwordConfirm ? "The passwords do not match" : undefined
+        );
+    }, [password, passwordConfirm]);
 
     return (
         <Form
             title="Reset Password"
             subtitle="Create a password to complete recovery"
-            onSubmit={sendPasswordResetRequest}
+            onSubmit={handleResetPassword}
             stopLoading={finish}
         >
             <div className="login-page__inputs">
-                <Email
-                    externalSetter={setForgotEmail}
-                    value={forgotEmail}
-                    name="email"
-                    placeholder={"Enter the email"}
+                <Password
+                    autoComplete="new-password"
+                    value={password}
+                    externalSetter={setPassword}
+                    placeholder="New Password"
+                />
+                <Password
+                    autoComplete="new-password"
+                    value={passwordConfirm}
+                    externalSetter={setPasswordConfirm}
+                    placeholder="Confirm New Password"
+                    error={compare}
                 />
             </div>
 
-            <Button className="login-page__btn" type="submit" disabled={!forgotEmail}>
+            <Button className="login-page__btn" type="submit" disabled={!password || !passwordConfirm}>
                 Save
             </Button>
-
-            <ResetButton className="login-page__btn-cancel" href={AppRoute.Login}>
-                Cancel
-            </ResetButton>
         </Form>
     );
 };
 
-export default ForgoPassword;
+export default ResetPassword;
