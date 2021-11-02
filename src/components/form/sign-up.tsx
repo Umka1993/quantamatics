@@ -27,7 +27,7 @@ const SignUp: React.FunctionComponent = (props) => {
 
     const title = (<>Sign Up to <b>{organizationName}</b></>)
 
-    const onFinish = () => history.push(AppRoute.Login);
+    const onFinish = () => history.push(AppRoute.Home);
     const onError = () => setFinish(true);
 
     const handleResetPassword = useCallback(() => {
