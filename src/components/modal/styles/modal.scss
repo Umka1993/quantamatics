@@ -26,6 +26,10 @@
   margin: auto;
   position: relative;
 
+  &:focus {
+    outline: none;
+  }
+
   &__close {
     all: unset;
     position: absolute;
