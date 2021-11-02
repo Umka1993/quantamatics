@@ -1,3 +1,7 @@
+export const enum AppInfo {
+    Name = 'Quantamatics',
+}
+
 export const enum AppRoute {
     Home = '/',
     Files = '/research/my-files',

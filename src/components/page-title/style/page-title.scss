@@ -5,4 +5,8 @@
     line-height: 1.167;
     color: $headlines;
     font-weight: 500;
+
+    &:focus {
+        outline: none;
+    }
 }
