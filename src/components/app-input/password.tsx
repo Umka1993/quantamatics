@@ -10,7 +10,7 @@ import "./styles/input.scss";
 import classNames from "classnames";
 import EyeSVG from "./assets/eye.svg";
 import ClosedEyeSVG from "./assets/closed-eye.svg";
-import getValidationMessage from './utils/passwordValidation'
+import getValidationMessage from "./utils/passwordValidation";
 
 const PATTERN_PASSWORD =
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*\\[\\]\\\\\"';:<_>., =+/-]).*$";
@@ -68,17 +68,16 @@ const Password: React.FunctionComponent<IPassword> = ({
 
     useEffect(() => {
         if (inputRef.current) {
-
             const { validity } = inputRef.current;
             inputRef.current.setCustomValidity(getValidationMessage(validity, error));
 
             const { validationMessage } = inputRef.current;
 
-            errorMessage && errorMessage !== validationMessage && setErrorMessage(validationMessage);
+            errorMessage &&
+                errorMessage !== validationMessage &&
+                setErrorMessage(validationMessage);
 
             !validationMessage.length && setErrorMessage(undefined);
-
-
         }
     }, [inputRef.current?.validity, error, innerValue]);
 
@@ -87,7 +86,6 @@ const Password: React.FunctionComponent<IPassword> = ({
         setErrorMessage(inputRef.current?.validationMessage);
         onInvalid && onInvalid(evt);
     };
-
 
     return (
         <div
@@ -103,7 +101,7 @@ const Password: React.FunctionComponent<IPassword> = ({
                     aria-invalid={!!errorMessage}
                     aria-label={showPassword ? "Password is open" : labelText}
                     name={name}
-                    aria-describedby={name && errorMessage ? name + '_error' : undefined}
+                    aria-describedby={name && errorMessage ? name + "_error" : undefined}
                     autoComplete={autoComplete}
                     placeholder={placeholder}
                     required={required}
@@ -119,23 +117,25 @@ const Password: React.FunctionComponent<IPassword> = ({
                 <button
                     type="button"
                     role="switch"
-                    aria-pressed={showPassword}
+                    aria-checked={showPassword}
+                    aria-label="Show password"
                     onClick={() => setShowPassword(!showPassword)}
                     title="Show/hide password"
                     className="app-input__toggle"
                 >
-                    {showPassword ? <EyeSVG /> : <ClosedEyeSVG />}
+                    {showPassword ? (
+                        <EyeSVG aria-hidden="true" />
+                    ) : (
+                        <ClosedEyeSVG aria-hidden="true" />
+                    )}
                 </button>
             </div>
 
-            {errorMessage && errorMessage !== ' ' &&
-                <p
-                    id={name ? name + '_error' : undefined}
-                    className="app-input__error"
-                >
+            {errorMessage && errorMessage !== " " && (
+                <p id={name ? name + "_error" : undefined} className="app-input__error">
                     {errorMessage}
                 </p>
-            }
+            )}
         </div>
     );
 };
