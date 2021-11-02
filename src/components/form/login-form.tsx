@@ -73,7 +73,7 @@ const LoginForm: React.FunctionComponent = () => {
     return (
         <Form
             onSubmit={handleLogin}
-            title='Sign in to your account'
+            headline='Sign in to your account'
             subtitle='Enter your email and password'
             stopLoading={finish}
         >

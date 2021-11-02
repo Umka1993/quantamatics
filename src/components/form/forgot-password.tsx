@@ -36,7 +36,7 @@ const ForgotPassword: React.FunctionComponent = (props) => {
 
     return (
         <Form
-            title="Forgot Your Password?"
+            headline="Forgot Your Password?"
             subtitle="To restore the password, enter your email"
             onSubmit={sendPasswordResetRequest}
             stopLoading={finish}

@@ -10,7 +10,7 @@ import "./styles/form.scss";
 import "./styles/login-page.scss";
 import { resetPassword } from "../../store/reset-password/actions";
 
-const ResetPassword: React.FunctionComponent = (props) => {
+const SignUp: React.FunctionComponent = (props) => {
     const [password, setPassword] = useState<string>("");
     const [passwordConfirm, setPasswordConfirm] = useState<string>("");
     const [compare, setCompare] = useState<string | undefined>(undefined);
@@ -23,6 +23,9 @@ const ResetPassword: React.FunctionComponent = (props) => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const email = urlParams.get("email");
+    const organizationName = urlParams.get("orgName");
+
+    const title = (<>Sign Up to <b>{organizationName}</b></>)
 
     const onFinish = () => history.push(AppRoute.Login);
     const onError = () => setFinish(true);
@@ -40,7 +43,7 @@ const ResetPassword: React.FunctionComponent = (props) => {
 
     return (
         <Form
-            headline="Reset Password"
+            headline={title}
             subtitle="Create a password to complete recovery"
             onSubmit={handleResetPassword}
             stopLoading={finish}
@@ -68,4 +71,4 @@ const ResetPassword: React.FunctionComponent = (props) => {
     );
 };
 
-export default ResetPassword;
+export default SignUp;

@@ -6,14 +6,14 @@ import { Loader } from "../../components/loader";
 
 interface IForm extends FormHTMLAttributes<HTMLFormElement> {
     stopLoading?: boolean;
-    title?: string;
+    headline?: string | JSX.Element;
     subtitle?: string;
     ref?: React.Ref<HTMLFormElement>;
 }
 
 
 
-const Form: FunctionComponent<IForm> = ({ title, subtitle, children, onSubmit, stopLoading, onInput, ...other }) => {
+const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit, stopLoading, onInput, ...other }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [validate, setValidate] = useState<true | undefined>(undefined);
 
@@ -55,7 +55,7 @@ const Form: FunctionComponent<IForm> = ({ title, subtitle, children, onSubmit, s
             onInput={handleInput}
         >
             <header className="form__header">
-                <h1 className="form__title">{title}</h1>
+                <h1 className="form__title">{headline}</h1>
                 <p className="form__subtitle">{subtitle}</p>
             </header>
 

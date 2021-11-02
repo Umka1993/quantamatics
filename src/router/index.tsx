@@ -6,7 +6,7 @@ import {
 
 import {LayoutSideBarPage} from "../pages/layout-side-bar-page";
 import {NotFoundPage} from "../pages/404"
-import {SignUpPage} from "../pages/sign-up-page";
+// import {SignUpPage} from "../pages/sign-up-page";
 import FullWidthLayout from "../pages/full-width-layout"
 
 import PrivateRoute from "./private-route";
@@ -23,7 +23,7 @@ const AppRouter = () => (
         <PrivateRoute exact path={AppRoute.Coherence} component={LayoutSideBarPage}/>
         <PrivateRoute exact path={AppRoute.Settings} component={LayoutSideBarPage}/>
         <PrivateRoute path={AppRoute.Organizations} component={LayoutSideBarPage}/>
-        <Route path={AppRoute.SignUp} component={SignUpPage}/>
+        <Route path={AppRoute.SignUp} component={FullWidthLayout}/>
         <Route path={AppRoute.ResetPassword} component={FullWidthLayout}/>
         <Route path={AppRoute.Login} component={FullWidthLayout}/>
         <Route path={AppRoute.ForgotPassword} component={FullWidthLayout}/>
