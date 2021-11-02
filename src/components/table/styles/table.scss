@@ -85,7 +85,10 @@ $design-table-w: 1038;
     }
 
     &--actions {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      justify-items: end;
       gap: 14px;
       padding-right: 6px;
     }
@@ -105,6 +108,7 @@ $design-table-w: 1038;
 
   &__action {
     all: unset;
+    color: $inactive;
     cursor: pointer;
     outline-color: currentColor;
     outline-offset: 0.4em;
@@ -121,7 +125,7 @@ $design-table-w: 1038;
 
     &:disabled {
       cursor: default;
-      opacity: 0.6;
+      color: transparentize($inactive, 0.6);
     }
   }
   /*  

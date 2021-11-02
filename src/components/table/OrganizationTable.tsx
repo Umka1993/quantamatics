@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import "./styles/table.scss"
 import {useHistory} from "react-router-dom";
 import {IRow} from "../../types/table/types";
-import {SVG} from "../SVG";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import EditSVG from './assets/edit-row-icon.svg'
@@ -107,13 +106,15 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                             {row.row.comments}
                         </td>
                         <td className='table__cell table__cell--actions'>
-                            <button 
+                            <button
+                                type='button'
                                 className='table__action'
                                 onClick={() => handleEditRoute("apps/organizations", row.row.id)}
                             >
                                 <EditSVG role="img" aria-label="edit" fill="currentColor" />
                             </button>
                             <button 
+                                type='button'
                                 className='table__action'
                                 // onClick={() => handleDeleteOrganization(row.row.id, index)}
                                 disabled
