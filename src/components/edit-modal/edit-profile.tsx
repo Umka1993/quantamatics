@@ -38,22 +38,19 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     const updateUser = () => {
         const newUserData = {
-            email: email,
+            ...user,
+            newEmail: email,
             firstName: name,
             lastName: surname,
             companyName: organization,
-            // companyRole: string,
-            // location: string,
-            subscriptionType: 0,
             subscriptionEndDate: new Date(expiration),
         };
 
         network
             .post("/api/Admin/updateUser", newUserData)
-            .then((r: any) => {
-                const newUser = { ...user, ...newUserData };
+            .then((r: any) => {               
 
-                onSubmit(newUser);
+                onSubmit(newUserData);
 
                 onClose();
             })
@@ -158,8 +155,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                         externalSetter={setEmail}
                         value={email}
                         error={emailError}
-                        // icon='edit'
-                        disabled
+                        icon='edit'
+                        // disabled
                     />
                     <DatePick
                         className="edit-profile__temp-input"
