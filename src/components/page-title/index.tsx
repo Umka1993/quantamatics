@@ -8,8 +8,9 @@ interface HeadlineProps extends HTMLAttributes<HTMLHeadingElement> {
 
 const Headline: FunctionComponent<HeadlineProps> = ({ pageTitle, children, className, ...other }) => {
     useEffect(() => {
+        const oldTitle = document.title
         document.title = pageTitle ? pageTitle : `${String(children)} | Quantamatics`;
-        return console.log('as')
+        return () => {document.title = oldTitle}
     }, [])
     return (<h1 className={['page-title', className].join(' ')} {...other}>{children}</h1>);
 }
