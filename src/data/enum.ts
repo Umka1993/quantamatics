@@ -11,7 +11,7 @@ export const enum AppRoute {
     SignUp = '/sign-up',
     ResetPassword = '/reset-password',
     Login = '/login',
-    ForgoPassword = '/forgot-password',
+    ForgotPassword = '/forgot-password',
 
     Success = '/success:success'
 }

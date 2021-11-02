@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory, useParams } from "react-router";
 import LoginForm from "../../components/form/login-form";
-import ForgoPassword from "../../components/form/forgot-password";
+import ForgotPassword from "../../components/form/forgot-password";
 
 import "./style/full-width.scss";
 import { AppRoute } from "../../data/enum";
@@ -22,8 +22,12 @@ const FullWidthLayout: React.FunctionComponent = (props) => {
             child = <LoginForm />;
             break;
 
-        case AppRoute.ForgoPassword:
-            child = <ForgoPassword />;
+        case AppRoute.ForgotPassword:
+            child = <ForgotPassword />;
+            break;
+
+        case AppRoute.ResetPassword:
+            child = <ForgotPassword />;
             break;
 
         default:

@@ -102,7 +102,7 @@ const LoginForm: React.FunctionComponent = () => {
                     externalSetter={setRememberMe}
                     label={"Remember Me"}
                 />
-                <Link to={AppRoute.ForgoPassword} className="login-page__forgot">
+                <Link to={AppRoute.ForgotPassword} className="login-page__forgot">
                     Forgot Password?
                 </Link>
             </div>

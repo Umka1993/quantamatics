@@ -11,7 +11,7 @@ import Form from "./form";
 import "./styles/form.scss";
 import "./styles/login-page.scss";
 
-const ForgoPassword: React.FunctionComponent = (props) => {
+const ForgotPassword: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.auth.user?.firstName);
     const localUserName = localStorage.getItem("savedUsername") || "";
 
@@ -74,4 +74,4 @@ const ForgoPassword: React.FunctionComponent = (props) => {
     );
 };
 
-export default ForgoPassword;
+export default ForgotPassword;
