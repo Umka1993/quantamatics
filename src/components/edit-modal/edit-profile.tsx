@@ -63,7 +63,10 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                 onClose();
             })
             .catch(({ response: { data } }) => {
-                setEmailError(data)
+
+                if (data.includes(' already taken')) {
+                    setEmailError('The user with such email already exists')
+                }                
             });
     };
 
