@@ -2,7 +2,7 @@ import React, {useState, useCallback} from "react";
 import "./styles/createOrganization.scss"
 import {Input} from "../input";
 import { useHistory } from "react-router-dom";
-import Button, { ResetButton } from "../../components/app-button";
+import Button, { ResetButton } from "../button";
 import {network} from "../../services/networkService";
 import {useDispatch} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";

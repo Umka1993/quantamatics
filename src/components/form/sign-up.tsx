@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Password } from "../../components/app-input/index";
-import Button from "../../components/app-button/";
+import Button from "../button";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRoute } from "../../data/enum";

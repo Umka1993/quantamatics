@@ -2,7 +2,7 @@ import React, { FormEvent, FormHTMLAttributes, FunctionComponent, useEffect, use
 import "./styles/form.scss";
 import { Loader } from "../../components/loader";
 import Headline from '../page-title/index'
-// import Button  from "../../components/app-button";
+// import Button  from "../../components/button";
 
 
 interface IForm extends FormHTMLAttributes<HTMLFormElement> {

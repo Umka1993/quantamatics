@@ -3,7 +3,7 @@ import { network } from "../../services/networkService";
 import "./styles/organiations.scss"
 import AddIcon from "./assets/add.svg"
 import { OrganizationTable } from "../../components/table/OrganizationTable";
-import Button from "../../components/app-button";
+import Button from "../../components/button";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";

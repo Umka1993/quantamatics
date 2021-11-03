@@ -1,28 +1,33 @@
-import React from "react";
-import "./styles/button.scss"
-import {ReactSVGComponent} from "../input";
-import SVG from "../SVG";
-import classNames from 'classnames';
+import React, { ButtonHTMLAttributes, FunctionComponent } from "react";
+import "./styles/button.scss";
+import { Link } from "react-router-dom";
+import classNames from "classnames";
 
-interface IButton {
-    type: string,
-    text: string,
-    disabled?: boolean,
-    onClick?: () => void,
-    icon?: ReactSVGComponent,
-    htmlType?: 'button' | 'reset' | 'submit'
+interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
+    href?: string;
+    mod?: string;
 }
 
-export const Button: React.FunctionComponent<IButton> = ({type, disabled, onClick, htmlType='button', icon, text}) => {
-    const buttonClasses: any = classNames({
-        'old-button old-button--simple': type == 'simple',
-        'old-button old-button--dotted': type == 'dotted',
-        'old-button old-button--disabled': disabled,
-    })
-    return (
-        <button className={buttonClasses} onClick={disabled ? () => {} : onClick} type={htmlType} disabled={disabled}>
-            {icon && <SVG icon={icon} className='old-button__prepend'/>}
-            {text}
+const Button: FunctionComponent<IButton> = ({
+    type = "button",
+    className,
+    href,
+    children,
+    ...other
+}) => {
+    const buttonClasses = classNames("button", className);
+
+
+
+    return href ? (
+        <Link to={href} className={buttonClasses}>
+            {children}
+        </Link>
+    ) : (
+        <button className={buttonClasses} {...other}>
+            {children}
         </button>
-    )
-}
+    );
+};
+
+export default Button;

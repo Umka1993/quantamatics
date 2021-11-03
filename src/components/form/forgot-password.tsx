@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { Email } from "../../components/app-input/index";
-import Button, { ResetButton } from "../../components/app-button/";
+import Button, { ResetButton } from "../button";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { RootState } from "../../store";

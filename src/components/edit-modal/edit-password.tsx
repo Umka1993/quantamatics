@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 
-import Button, { ResetButton } from "../app-button/index"
+import Button, { ResetButton } from "../button"
 import Password from "../app-input/password";
 import { IUser } from "../../types/edit-profile/types";
 import { network } from "../../services/networkService";

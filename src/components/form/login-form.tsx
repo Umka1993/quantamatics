@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { RootState } from "../../store";
 
-import Button from "../../components/app-button";
+import Button from "../button";
 import { CheckBox } from "../../components/checkbox";
 import { Password, Email } from "../../components/app-input";
 import Form from './form';

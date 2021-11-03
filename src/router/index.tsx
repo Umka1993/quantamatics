@@ -18,7 +18,7 @@ const AppRouter = () => (
         <PrivateRoute path={AppRoute.Files} component={LayoutSideBarPage} />
         <PrivateRoute path={AppRoute.Shared} component={LayoutSideBarPage} />
         <PrivateRoute path={AppRoute.Favorites} component={LayoutSideBarPage} />
-        <PrivateRoute exact path={AppRoute.AddUser} component={LayoutSideBarPage} />
+        {/* <PrivateRoute exact path={AppRoute.AddUser} component={LayoutSideBarPage} /> */}
         <PrivateRoute exact path={AppRoute.Coherence} component={LayoutSideBarPage} />
         <PrivateRoute exact path={AppRoute.Settings} component={LayoutSideBarPage} />
         <PrivateRoute path={AppRoute.Organizations} component={LayoutSideBarPage} />

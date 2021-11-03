@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import "./styles/add-user-account.scss";
 import { Input } from "../input";
-import Button, { ResetButton } from "../../components/app-button";
+import Button, { ResetButton } from "../button";
 import DatePick from "../app-input/datepick";
 import { network } from "../../services/networkService";
 import { Loader } from "../loader";

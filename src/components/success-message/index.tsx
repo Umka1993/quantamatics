@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useHistory } from "react-router";
-import Button from "../app-button";
+import Button from "../button";
 import CheckIcon from "./assets/check.svg";
 import './style/success.scss'
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./styles/edit-organizations.scss"
 import AddIcon from "./assets/human-add.svg"
-import Button, { ResetButton } from "../app-button";
+import Button, { ResetButton } from "../button";
 import { UserTable } from "../table/UserTable";
 import { AddUserAccount } from "../add-user-account";
 import { Input } from "../input";
