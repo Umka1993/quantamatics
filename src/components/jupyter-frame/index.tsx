@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeRoute } from "../../store/currentPage/actions";
 import Headline from "../../components/page-title/index";
+import { getToken } from "../../services/token";
 
 interface JupyterFrameProps {
     type: string
@@ -26,7 +27,7 @@ export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) 
     const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
     const frame: any = useRef(null)
     const formAction = 'https://hub-k8s.dev.quantamatics.net/hub/login'
-    const token = localStorage.getItem('id_token')
+    const token = getToken()
 
     const submit: any = useRef(null);
 

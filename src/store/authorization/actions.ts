@@ -5,7 +5,7 @@ import { LoginResponse } from '../../types/loginResponse';
 import { RootState } from '../../store';
 import { AuthorizationActionType } from './reducer';
 import { IUser } from '../../types/user';
-import { saveToken } from '../../services/token';
+import { saveToken, dropToken } from '../../services/token';
 import { ApiRoute, AppRoute } from '../../data/enum';
 import { Dispatch } from 'redux';
 
@@ -28,10 +28,8 @@ export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, RootState, Axi
 
 
 export const logoutAction = () => (dispatch: Dispatch<AuthorizationActions>) => {
-    localStorage.removeItem('id_token')
+    dropToken()
     localStorage.removeItem('user')
-
-    sessionStorage.removeItem('id_token')
     sessionStorage.removeItem('user')
     dispatch(requireLogout())
     window.location.href = AppRoute.Login;
