@@ -55,8 +55,6 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             };
         }
 
-        console.log(newUserData);
-
         network
             .post("/api/Admin/updateUser", newUserData)
             .then((r: any) => {
