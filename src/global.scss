@@ -53,17 +53,26 @@ body {
 
 /* Blink/Webkit scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 12px;
   height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: #ffffff;
+  box-shadow: inset 0px 4px 3px rgba(14, 53, 91, 0.15);
+  border-radius: 100px; 
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: $accent;
-  border-radius: 63px;
+  border: 3px solid transparent;
+  border-radius: 100px;
+
+  background-color: transparentize($accent, 0.2);
+  background-clip: content-box;
+
+  &:hover {
+    background-color: $accent;
+  }
 }
 
 .sr-only {
