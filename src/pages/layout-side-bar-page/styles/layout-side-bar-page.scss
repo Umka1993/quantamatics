@@ -4,12 +4,21 @@
   display: grid;
   grid-template-columns: 250px 1fr;
   gap: $element-gap;
-  // max-width: 1392px; 
-  margin: 0 auto;
+  padding-left: $element-gap;
+  padding-right: 6px;
+  width: 100%;
+
+  &__scroll {
+    padding-right: 6px;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    max-height: 100%;
+    overflow-y: auto;
+  }
   &__content-container{
     background: #FFFFFF;
     box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.1);
     border-radius: 4px;
-    height: 100%;
+    min-height: 100%;
   }
 }

@@ -22,7 +22,7 @@ html {
 
 html {
   /* Firefox scrollbar */
-  scrollbar-color: $accent transparent;
+  scrollbar-color: $accent #fff;
   scrollbar-width: thin;
 }
 
@@ -46,7 +46,10 @@ body {
   padding-bottom: $element-gap;
 
   &__main {
-    width: calc(100% - #{$element-gap * 2});
+    --min-height: calc(100vh - #{80px + $element-gap * 2});
+    height: var(--min-height);
+    scrollbar-width: thin;
+    overflow-y: auto;
     justify-self: center;
   }
 }

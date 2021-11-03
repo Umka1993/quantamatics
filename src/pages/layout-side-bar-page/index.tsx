@@ -22,32 +22,33 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
     }
     return (
         <div className="layout-page app__main">
-            <div className="layout-page__side-bar-container">
-                <SideBar
-                    items={SIDE_BAR_ITEMS}
-                    onSwitch={(value) => changeRoutePath(value)}
-                />
-            </div>
-            <div className="layout-page__content-container">
-                <Switch>
-                    <Route exact path='/'>
-                        <Redirect push to='/research/my-files' />
-                    </Route>
+            <SideBar
+                items={SIDE_BAR_ITEMS}
+                onSwitch={(value) => changeRoutePath(value)}
+            />
 
-                    {/* <Route path='/add-user' component={AddUserPage} /> */}
+            <div className="layout-page__scroll">
+                <div className="layout-page__content-container">
+                    <Switch>
+                        <Route exact path='/'>
+                            <Redirect push to='/research/my-files' />
+                        </Route>
 
-                    <Route path='/research/my-files'>
-                        <JupyterFrame type='files' />
-                    </Route>
+                        {/* <Route path='/add-user' component={AddUserPage} /> */}
 
-                    <Route path='/coherence'>
-                        <JupyterFrame type='coherence' />
-                    </Route>
+                        <Route path='/research/my-files'>
+                            <JupyterFrame type='files' />
+                        </Route>
 
-                    <Route path='/apps/organizations/list' component={Organizations} />
-                    <Route path='/apps/organizations/new-organization' component={CreateOrganization} />
-                    <Route path='/apps/organizations/:id' component={EditOrganization} />
-                </Switch>
+                        <Route path='/coherence'>
+                            <JupyterFrame type='coherence' />
+                        </Route>
+
+                        <Route path='/apps/organizations/list' component={Organizations} />
+                        <Route path='/apps/organizations/new-organization' component={CreateOrganization} />
+                        <Route path='/apps/organizations/:id' component={EditOrganization} />
+                    </Switch>
+                </div>
             </div>
         </div>
     )

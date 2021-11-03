@@ -1,6 +1,7 @@
 .jupyter-frame {
-  height: 100%;
-  max-height: calc(100vh - #{80 + 24 * 2}px);
+  min-height: 600px;
+  min-height: var(--min-height);
+  // max-height: calc(100vh - #{80 + 24 * 2}px);
 
   display: grid;
   grid-template-rows: auto 1fr;

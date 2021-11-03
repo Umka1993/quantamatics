@@ -1,8 +1,8 @@
 .create-organization {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+  display: grid;
+  place-items: center;
+  min-height: 600px;
+  min-height: var(--min-height);
 
   &__form {
     max-width: 360px;
