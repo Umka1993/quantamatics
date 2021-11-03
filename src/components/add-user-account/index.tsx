@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import "./styles/add-user-account.scss";
 import { Input } from "../input";
-import { Button } from "../button/button";
+import Button, { ResetButton } from "../../components/app-button";
 import DatePick from "../app-input/datepick";
 import { network } from "../../services/networkService";
 import { Loader } from "../loader";
@@ -107,22 +107,21 @@ export const AddUserAccount: React.FunctionComponent<IAddUserAccount> = (
                     minDate={new Date}
                     required
                 />
-                <div className="add-user-account__form-btn-save">
-                    <Button
-                        type={"simple"}
-                        text={"Save"}
-                        htmlType={"submit"}
-                        disabled={
-                            !Boolean(userName && userLastName && userEmail && userExpiration)
-                        }
-                    />
-                </div>
-                <div
+                <Button
+                    className="add-user-account__form-btn-save"
+                    disabled={
+                        !Boolean(userName && userLastName && userEmail && userExpiration)
+                    }
+                    type='submit'
+                >
+                    Save
+                </Button>
+                <ResetButton
                     className="add-user-account__form-btn-cancel"
                     onClick={props.onBack}
                 >
-                    <Button type={"dotted"} text={"Cancel"} />
-                </div>
+                    Cancel
+                </ResetButton>
             </form>
             {loginProcess && <Loader />}
         </div>

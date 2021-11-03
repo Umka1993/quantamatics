@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./styles/edit-organizations.scss"
-import addIcon from "./assets/human-add.svg"
-import { Button } from "../button/button";
+import AddIcon from "./assets/human-add.svg"
+import Button, { ResetButton } from "../app-button";
 import { UserTable } from "../table/UserTable";
 import { AddUserAccount } from "../add-user-account";
 import { Input } from "../input";
@@ -36,7 +36,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             .then((r: any) => {
 
                 let result = r.data.map((row: any) => {
-                    
+
                     return {
                         editable: true,
                         row
@@ -123,7 +123,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
         <div className="content-wrapper">
             {
                 addUserActive ?
-                    <AddUserAccount organization={organizationName} orgId={orgId} onBack={() => {setUsers(null); setAddUserActive(false)}} />
+                    <AddUserAccount organization={organizationName} orgId={orgId} onBack={() => { setUsers(null); setAddUserActive(false) }} />
                     :
                     <div className="edit-organization">
                         <div className="edit-organization__header">
@@ -131,15 +131,23 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                 Edit Organization
                             </Headline>
                             <div className="edit-organization__buttons">
-                                <div className="edit-organization__cancel-btn" onClick={() => {
-                                    dispatch(changeRoute('apps/organizations/list'))
-                                    history.push("/apps/organizations/list")
-                                }}>
-                                    <Button type={'dotted'} text={'Cancel'} />
-                                </div>
-                                <div className="edit-organization__save-btn" onClick={() => updateOrganization()}>
-                                    <Button type={'simple'} text={'Save'} />
-                                </div>
+                                <ResetButton
+                                    // href='/apps/organizations/list'
+                                    className="edit-organization__cancel-btn"
+                                    onClick={() => {
+                                        dispatch(changeRoute('apps/organizations/list'))
+                                        history.push("/apps/organizations/list")
+                                    }}
+                                >
+                                    Cancel
+                                </ResetButton>
+
+                                <Button
+                                    className="edit-organization__save-btn"
+                                    onClick={() => updateOrganization()}
+                                >
+                                    Save
+                                </Button>
                             </div>
                         </div>
                         <div className="edit-organization__body">
@@ -180,11 +188,15 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                     <div className="edit-organization__user-list-title">
                                         User List
                                     </div>
-                                    <div className="edit-organization__user-list-add"
+
+                                    <Button 
+                                        className="edit-organization__user-list-add"
                                         onClick={() => setAddUserActive(true)}
                                     >
-                                        <Button type={'simple'} text={'Add New'} icon={addIcon} />
-                                    </div>
+                                        <AddIcon />
+                                        Add New
+                                    </Button>
+
                                 </div>
                                 {!!users && <UserTable inEdit rows={users} deleteUser={deleteUser} />}
                             </div>

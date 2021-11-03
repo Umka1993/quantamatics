@@ -2,7 +2,7 @@ import React, {useState, useCallback} from "react";
 import "./styles/createOrganization.scss"
 import {Input} from "../input";
 import { useHistory } from "react-router-dom";
-import {Button} from "../button/button";
+import Button, { ResetButton } from "../../components/app-button";
 import {network} from "../../services/networkService";
 import {useDispatch} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
@@ -86,12 +86,19 @@ export const CreateOrganization: React.FunctionComponent<ICreateOrganization> = 
                     placeholder='Comments'
                     value={comment}
                 />
-                <div className='create-organization__submit' >
-                    <Button type={'simple'} text={'Save'} htmlType='submit' disabled={!organizationName}/>
-                </div>
-                <div className='create-organization__cancel'>
-                    <Button type={'dotted'} text={'Cancel'} onClick={() => cancelCreate()}/>
-                </div>
+                <Button 
+                    className='create-organization__submit' 
+                    type='submit' 
+                    disabled={!organizationName}
+                >
+                    Save
+                </Button>
+                <ResetButton
+                    className='create-organization__cancel'
+                    onClick={() => cancelCreate()}
+                >
+                    Cancel
+                </ResetButton>
             </form>
         </div>
     )

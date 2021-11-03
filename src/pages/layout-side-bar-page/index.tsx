@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import { SideBar } from "../../components/side-bar";
 import { Organizations } from "../organizations";
-import { AddUserPage } from "../add-user-page";
 import { JupyterFrame } from "../../components/jupyter-frame";
 import { SIDE_BAR_ITEMS } from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
@@ -35,7 +34,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                         <Redirect push to='/research/my-files' />
                     </Route>
 
-                    <Route path='/add-user' component={AddUserPage} />
+                    {/* <Route path='/add-user' component={AddUserPage} /> */}
 
                     <Route path='/research/my-files'>
                         <JupyterFrame type='files' />

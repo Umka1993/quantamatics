@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./styles/add-user.scss"
 import {Input} from "../../components/input";
 import {DateInput} from "../../components/date-input";
+import AppButton, { ResetButton } from "../../components/app-button";
 import {Button} from "../../components/button/button";
 import successIcon from "./assets/sucess-icon.svg";
 import SVG from "../../components/SVG";

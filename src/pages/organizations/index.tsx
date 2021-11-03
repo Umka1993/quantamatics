@@ -3,7 +3,7 @@ import { network } from "../../services/networkService";
 import "./styles/organiations.scss"
 import AddIcon from "./assets/add.svg"
 import { OrganizationTable } from "../../components/table/OrganizationTable";
-import ButtonComponent from "../../components/app-button";
+import Button from "../../components/app-button";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -51,10 +51,10 @@ export const Organizations: React.FunctionComponent = (props) => {
                 </div>
 
 
-                <ButtonComponent className="organization__btn" onClick={() => createNew()}>
+                <Button className="organization__btn" onClick={() => createNew()}>
                     <AddIcon aria-hidden='true' />
                     Add New
-                </ButtonComponent>
+                </Button>
 
             </header>
             <div className="organization__list">
