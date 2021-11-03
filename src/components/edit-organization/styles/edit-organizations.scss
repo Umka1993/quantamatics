@@ -50,14 +50,16 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    gap: 0 40px;
   }
 
   &__input{
-    width: 317px;
+    flex: 1 0 317px;
+    // width: 317px;
   }
 
   &__comments{
-    width: 100%;
+    flex-basis: 100%;
   }
 
   &__user-list-header{

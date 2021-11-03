@@ -126,35 +126,43 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                     <AddUserAccount organization={organizationName} orgId={orgId} onBack={() => { setUsers(null); setAddUserActive(false) }} />
                     :
                     <div className="edit-organization">
-                        <div className="edit-organization__header">
+                        <header className="edit-organization__header">
                             <Headline className="edit-organization__title">
                                 Edit Organization
                             </Headline>
                             <div className="edit-organization__buttons">
                                 <ResetButton
                                     // href='/apps/organizations/list'
+                                    form="edit-organization"
                                     className="edit-organization__cancel-btn"
                                     onClick={() => {
-                                        dispatch(changeRoute('apps/organizations/list'))
-                                        history.push("/apps/organizations/list")
+
                                     }}
                                 >
                                     Cancel
                                 </ResetButton>
 
                                 <Button
+                                    type='submit'
+                                    form="edit-organization"
                                     className="edit-organization__save-btn"
-                                    onClick={() => updateOrganization()}
                                 >
                                     Save
                                 </Button>
                             </div>
-                        </div>
-                        <div className="edit-organization__body">
+                        </header>
+                        <form
+                            className="edit-organization__body" id="edit-organization"
+                            onSubmit={(evt) => { evt.preventDefault(); updateOrganization() }}
+                            onReset={(evt) => {
+                                evt.preventDefault(); dispatch(changeRoute('apps/organizations/list'));
+                                history.push("/apps/organizations/list");
+                            }}
+                        >
                             <div className="edit-organization__info">
-                                <div className="edit-organization__info-title">
+                                <h2 className="subheadline edit-organization__info-title">
                                     Ogranization info
-                                </div>
+                                </h2>
                                 <div className="edit-organization__inputs">
                                     <div className="edit-organization__input">
                                         <Input onChangeInput={(value) => setOrganizationName(value)}
@@ -185,11 +193,11 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                             </div>
                             <div className="edit-organization__user-list">
                                 <div className="edit-organization__user-list-header">
-                                    <div className="edit-organization__user-list-title">
+                                    <h2 className="subheadline edit-organization__user-list-title">
                                         User List
-                                    </div>
+                                    </h2>
 
-                                    <Button 
+                                    <Button
                                         className="edit-organization__user-list-add"
                                         onClick={() => setAddUserActive(true)}
                                     >
@@ -200,7 +208,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                 </div>
                                 {!!users && <UserTable inEdit rows={users} deleteUser={deleteUser} />}
                             </div>
-                        </div>
+                        </form>
                     </div>
             }
         </div>
