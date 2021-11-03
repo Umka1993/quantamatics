@@ -1,18 +1,90 @@
 @import "variables";
-@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-html, body {
+html {
+  height: 100%;
+  line-height: 1.15; /* Correct the line height in all browsers. */
+  -webkit-text-size-adjust: 100%; /* Prevent adjustments of font size after orientation changes in iOS. */
+
+  /* Smooth scrolling IF user doesn't have a preference due to motion sensitivities */
+  @media screen and (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+html {
+  /* Firefox scrollbar */
+  scrollbar-color: $accent #fff;
+  scrollbar-width: thin;
+}
+
+body {
   margin: 0;
   padding: 0;
   width: 100%;
-  //font-family: 'Mulish', sans-serif;
-  font-family: 'Ubuntu', sans-serif;
-  background: #F6F8FC;
+  height: 100%;
+  font-family: "Ubuntu", system-ui, sans-serif;
+  background: #f6f8fc;
+  font-size: 16px;
+  line-height: 1.125;
+  color: $main-text;
 }
 
-p, h1, h2, h3, h4, h5, h6{
-  //font-family: 'Mulish', sans-serif;
-  font-family: 'Ubuntu', sans-serif;
+.app {
+  display: grid;
+  grid-template-rows: 80px 1fr;
+  min-height: 100%;
+  gap: $element-gap;
+  padding-bottom: $element-gap;
+
+  &__main {
+    --min-height: calc(100vh - #{80px + $element-gap * 2});
+    height: var(--min-height);
+    scrollbar-width: thin;
+    overflow-y: auto;
+    justify-self: center;
+  }
+}
+
+/* Blink/Webkit scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ffffff;
+  box-shadow: inset 0px 4px 3px rgba(14, 53, 91, 0.15);
+  border-radius: 100px; 
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 100px;
+
+  background-color: transparentize($accent, 0.2);
+  background-clip: content-box;
+
+  &:hover {
+    background-color: $accent;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

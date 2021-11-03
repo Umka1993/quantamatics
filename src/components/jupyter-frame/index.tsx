@@ -1,18 +1,28 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "./styles/jupyter-frame.scss"
-import {useSelector} from "react-redux";
-import {RootState} from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { changeRoute } from "../../store/currentPage/actions";
+import Headline from "../../components/page-title/index";
 
 interface JupyterFrameProps {
     type: string
 }
 
 export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) => {
-    const {type} = props;
-    const user = useSelector<RootState>((state) => state.user.user.firstName)
+    const dispatch = useDispatch();
+
+    const { type } = props;
+
+    if (type === 'files') {
+        dispatch(changeRoute('research/my-files'))
+    }
+
+
+    const user = useSelector<RootState>((state) => state.auth.user?.firstName)
     const username: any = !!user ? user : ''
-    const filesUrl = 'https://hub-k8s.dev.quantamatics.net/user/' + username +'/tree?'
-    const coherenceUrl = 'https://coherence-k8s.dev.quantamatics.net/user/' + username +'/'
+    const filesUrl = 'https://hub-k8s.dev.quantamatics.net/user/' + username + '/tree?'
+    const coherenceUrl = 'https://coherence-k8s.dev.quantamatics.net/user/' + username + '/'
     const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
     const frame: any = useRef(null)
     const formAction = 'https://hub-k8s.dev.quantamatics.net/hub/login'
@@ -21,16 +31,20 @@ export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) 
     const submit: any = useRef(null);
 
     useEffect(() => {
-        if (submit){
+        if (submit) {
             submit.current.click()
         }
     });
 
-    return(
+    return (
         <div className="jupyter-frame">
+            <header className='jupyter-frame__header'>
+                <Headline>{type === 'files' ? 'My Files' : 'Coherence'}</Headline>
+                {type === 'files' && (<p>Manage and edit your files</p>) }
+            </header>
             <form method={'post'} target="jupyter-iframe" action={formAction}>
                 {
-                    token ? <input name={'token'} value={token}/> : ''
+                    token ? <input name={'token'} value={token} /> : ''
                 }
                 <button type={"submit"} ref={submit}>Click</button>
             </form>

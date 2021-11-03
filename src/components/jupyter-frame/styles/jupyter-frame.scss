@@ -1,5 +1,10 @@
 .jupyter-frame {
-  height: 100%;
+  min-height: 600px;
+  min-height: var(--min-height);
+  // max-height: calc(100vh - #{80 + 24 * 2}px);
+
+  display: grid;
+  grid-template-rows: auto 1fr;
 
   iframe {
     border: none;
@@ -17,5 +22,9 @@
 
   form {
     display: none;
+  }
+
+  &__header {
+    padding: 40px 40px 0;
   }
 }

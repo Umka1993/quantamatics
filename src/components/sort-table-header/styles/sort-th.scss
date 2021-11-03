@@ -1,0 +1,32 @@
+@import '../../../variables.scss';
+
+.sort-table-header {
+    &__button {
+        all: unset;
+        font: inherit;
+        display: flex;
+        align-items: baseline;
+
+        &:hover, &:focus-visible {
+            color: $accent;
+        }
+    }
+
+    &[aria-sort="ascending"] .sort-icon_svg__up {
+        color: #017aee;
+        transition: color 0.2s;
+    }
+
+    &[aria-sort="descending"] .sort-icon_svg__down {
+        color: #017aee;
+        transition: color 0.2s;
+    }
+
+    svg {
+        color: $inactive;
+        margin-left: 5px;
+        position: relative;
+        top: 0.3em;
+        cursor: pointer;
+    }
+}

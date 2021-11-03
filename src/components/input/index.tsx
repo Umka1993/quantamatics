@@ -1,73 +1,102 @@
-import React, {useState, useCallback} from "react";
-import "./styles/input.scss"
+import React, {
+    useState,
+    KeyboardEventHandler,
+    useEffect,
+    useRef,
+} from "react";
+import "./styles/input.scss";
 import classNames from "classnames";
-import SVG from '../SVG'
-import eyeSVG from './assets/eye.svg'
-import closedEyeSVG from './assets/closed-eye.svg'
+import SVG from "../SVG";
 
-export type ReactSVGComponent = React.FunctionComponent<React.SVGAttributes<SVGElement>>
+export type ReactSVGComponent = React.FunctionComponent<
+    React.SVGAttributes<SVGElement>
+>;
 
 interface IInput {
-    className?: string,
-    placeholder?: string,
-    onChangeInput: (value: string) => void
-    onEnterPress?: () => void
-    value?: string
-    required?: boolean
-    errors?: boolean
-    type?: string
-    limit?: string
-    icon?: ReactSVGComponent
+    className?: string;
+    placeholder?: string;
+    onChangeInput: (value: string) => void;
+    onEnterPress?: () => void;
+    value?: string;
+    required?: boolean;
+    errors?: boolean;
+    type?: string;
+    limit?: string | number;
+    icon?: ReactSVGComponent;
+    enableValidation?: boolean;
+    name?: string;
+    errorText?: string;
+    onInvalid?: any;
+    pattern?: string;
 }
 
-export const Input: React.FunctionComponent<IInput> = (props) => {
-    const {className, placeholder, value, onChangeInput, required, errors, type, onEnterPress, icon, limit} = props;
-    const [inputType, setInputType] = useState<string>(!!type ? type : 'text')
-    const inputClassNames = classNames('input', className, {'error': errors}, {password: inputType === 'password'})
-    const [showPassword, setShowPassword] = useState<boolean>(false)
+export const Input: React.FunctionComponent<IInput> = ({
+    className,
+    placeholder,
+    value,
+    onChangeInput,
+    required,
+    type,
+    onEnterPress,
+    icon,
+    limit,
+    name = "",
+    errorText,
+    onInvalid,
+    ...props
+}) => {
+    let { errors } = props;
 
-    const togglePasswordShow = useCallback(() => {
-        if (showPassword) {
-            setInputType('password')
-            setShowPassword(false)
-        } else {
-            setInputType('text')
-            setShowPassword(true)
-        }
-    }, [showPassword, inputType])
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleEnterPress = (event: any) => {
-        if (!!onEnterPress && event.keyCode === 13) onEnterPress()
-    }
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(
+        undefined
+    );
+
+    const inputClassNames = classNames(
+        "input",
+        className,
+        { error: errors || errorMessage },
+        { "input--limited": limit }
+    );
+
+    useEffect(() => {
+        setErrorMessage(errorText);
+        errorText && onInvalid && onInvalid();
+    }, [errorText]);
+
+    const handleKeyUp: KeyboardEventHandler<HTMLInputElement> = (evt) => {
+        if (!!onEnterPress && evt.key === "Enter") onEnterPress();
+    };
 
     return (
         <div className={inputClassNames}>
             <input
-                type={inputType}
-                placeholder={placeholder ? required ? `${placeholder}*` : placeholder : ''}
-                value={value || ''}
+                type={type}
+                placeholder={
+                    placeholder ? (required ? `${placeholder}*` : placeholder) : ""
+                }
+                value={value || ""}
                 onChange={(event) => onChangeInput(event.target.value)}
                 required={required}
-                onKeyUp={(event) => handleEnterPress(event)}
+                onKeyUp={handleKeyUp}
+                maxLength={limit as number}
+                name={name}
+                ref={inputRef}
+                {...props}
             />
-            {!!type && type === 'password' && (
-                <div className={classNames('show-password', {active: showPassword})}>
-                    {showPassword ? <SVG icon={closedEyeSVG} onClick={() => togglePasswordShow()}/> :
-                        <SVG icon={eyeSVG} onClick={() => togglePasswordShow()}/>}
-                </div>
+            {errorMessage && <p className="input__error">{errorMessage}</p>}
 
-            )}
-            {!!icon &&
-            <div className="input__icon">
-                <SVG icon={icon}/>
-            </div>
-            }
-            {
-                !!limit &&
-                <div className="input__limit">
-                    {'0/' + limit}
+            {!!icon && (
+                <div className="input__icon">
+                    <SVG icon={icon} />
                 </div>
-            }
+            )}
+            {!!limit && (
+                <div className="input__limit">
+                    {value?.length} / {limit}
+                </div>
+            )}
         </div>
-    )
-}
+    );
+};
