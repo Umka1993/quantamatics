@@ -9,6 +9,7 @@ import React, {
 import "./styles/input.scss";
 import classNames from "classnames";
 import EditIcon from './assets/edit.svg';
+import getValidationMessage from './utils/emailValidation';
 
 interface IEmail extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
@@ -61,28 +62,18 @@ const Email: React.FunctionComponent<IEmail> = ({
         setInnerValue(value as string);
     }, [value]);
 
-    const getValidationMessage = (validity: ValidityState, error?: undefined | string) => {
-        if (error) {
-            return error;
-        }
-
-        const { patternMismatch } = validity;
-
-        if (patternMismatch) {
-            return 'This is not a valid email';
-        }
-
-        return "";
-    };
-
     useEffect(() => {
         if (inputRef.current) {
             const { validity } = inputRef.current;
             inputRef.current.setCustomValidity(getValidationMessage(validity, error));
 
-            if (Boolean(innerValue.length)) {
-                !inputRef.current.validationMessage.length && setErrorMessage(undefined)
-            }
+            const { validationMessage } = inputRef.current;
+
+            errorMessage &&
+                errorMessage !== validationMessage &&
+                setErrorMessage(validationMessage);
+
+            !validationMessage.length && setErrorMessage(undefined);
         }
     }, [inputRef.current?.validity, error, innerValue]);
 

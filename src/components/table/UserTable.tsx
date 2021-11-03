@@ -42,7 +42,11 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
         const newRows = localRows;
 
         user.subscriptionEndDate = new Date(user.subscriptionEndDate).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
-        user.email = user.newEmail
+
+        if (user.newEmail) {
+            user.email = user.newEmail
+        }
+        
 
         newRows[editIndex].row = user
         setLocalRows(newRows)

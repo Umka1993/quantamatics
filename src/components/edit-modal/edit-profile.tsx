@@ -37,16 +37,25 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
+    const formRef = useRef<HTMLFormElement>(null)
 
-    const updateUser = () => {
-        const newUserData = {
+    const updateUser = (validate: any) => {
+        let newUserData: any = {
             ...user,
-            newEmail: email,
             firstName: name,
             lastName: surname,
             companyName: organization,
             subscriptionEndDate: new Date(expiration),
         };
+
+        if (email !== user.email) {
+            newUserData = {
+                ...newUserData,
+                newEmail: email
+            };
+        }
+
+        console.log(newUserData);
 
         network
             .post("/api/Admin/updateUser", newUserData)
@@ -56,47 +65,21 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                 onClose();
             })
             .catch(({ response: { data } }) => {
-                console.log(data);
-
-                if (data.errors) {
-                    data.errors.Email &&
-                        setEmailError("This is not a valid e-mail address.");
-                }
+                setEmailError(data)
             });
     };
 
-    /*     const checkEmailToExist = () => {
-              network
-                  .post("/api/Account/register", {
-                      firstName: name,
-                      lastName: surname,
-                      email: email,
-                  })
-                  .then((r: any) => {
-                      // console.log("is new");
-                      updateUser();
-                  })
-                  .catch(({ response: { data } }) => {
-                      // console.log("is wrong", data);
-                      if (data[0]) {
-                          const { code } = data[0];
-                          if (code === "DuplicateUserName") {
-                              // console.log('exist');
-                              setEmailError("The user with such email already exists");
-                          }
-                      }
-                  });
-          };
-           */
+
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
         setValidate(true);
 
-        const isValid = (evt.target as HTMLFormElement).reportValidity();
+        const isValid = formRef.current?.reportValidity();
 
         if (isValid) {
-            updateUser();
+
+            updateUser(validate);
         }
     };
 
@@ -106,6 +89,10 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     useEffect(() => {
         emailError && setEmailError(undefined);
+    }, [email]);
+
+    useEffect(() => {
+        emailError && formRef.current?.reportValidity();
     }, [emailError]);
 
     return (
@@ -126,7 +113,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                 className="edit-profile__form"
                 onSubmit={handlerSubmit}
                 onReset={handlerReset}
-                noValidate={validate ? true : undefined}
+                noValidate={validate ? undefined : true}
+                ref={formRef}
             >
                 <Headline id="modal-label" className="edit-profile__title">
                     Edit Profile
@@ -157,7 +145,6 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                         value={email}
                         error={emailError}
                         icon="edit"
-                    // disabled
                     />
                     <DatePick
                         className="edit-profile__temp-input"
