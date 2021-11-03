@@ -1,7 +1,5 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { userReducer } from "./store/user/reducer";
-import { UserState } from "./store/user/reducer";
 import { currentPageReducer } from "./store/currentPage/reducer";
 import { CurrentPageState } from "./store/currentPage/reducer";
 import thunk from "redux-thunk";
@@ -18,7 +16,6 @@ export interface RootState {
 }
 
 const rootReducer = combineReducers({
-  user: userReducer,
   currentPage: currentPageReducer,
   auth: authorizationReducer
 });
