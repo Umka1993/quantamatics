@@ -16,7 +16,7 @@ interface BreadcrumbsProps extends OlHTMLAttributes<HTMLOListElement> {
 //     href: string;
 // }
 
-const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = ({className}) => {
+const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = ({ className }) => {
 
     const { location: { pathname } } = useHistory();
     const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
@@ -30,6 +30,7 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = ({className}) => {
     useEffect(() => {
         const url: any = !!storeCurrentPage ? storeCurrentPage : ''
         const urlArray = url.split('/')
+
         const refactoredArray = urlArray.length === 1 ? [] : urlArray.map((item: string) => {
             return transformFromKebabToSentenceCase(item)
         })
@@ -40,14 +41,9 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = ({className}) => {
 
     function transformFromKebabToSentenceCase(kebab: string): string {
         const words = kebab.split('-');
-        console.log(words);
+        const sentenceWords = words.map((word) => word[0].toUpperCase() + word.substr(1))
+        return sentenceWords.join(' ')
 
-        if (words.length >= 1) {
-            const sentenceWords = words.map((word) => word[0].toUpperCase() + word.substr(1))
-            return sentenceWords.join(' ')
-        }
-
-        return kebab
     }
     /* 
     const dispatch = useDispatch();

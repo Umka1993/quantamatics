@@ -15,7 +15,7 @@ interface IForm extends FormHTMLAttributes<HTMLFormElement> {
 
 
 
-const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit, stopLoading, onInput, headlineText, ...other }) => {
+const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit, stopLoading, onInput, headlineText, className, ...other }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [validate, setValidate] = useState<true | undefined>(undefined);
 
@@ -52,7 +52,7 @@ const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit
     }, [stopLoading])
 
     return (
-        <form className="form" onSubmit={handleSubmit} ref={formRef} 
+        <form className={["form", className].join(' ')} onSubmit={handleSubmit} ref={formRef} 
             noValidate={validate ? undefined : true} {...other}
             onInput={handleInput}
         >

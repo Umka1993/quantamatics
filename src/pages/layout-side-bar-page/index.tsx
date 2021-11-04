@@ -8,7 +8,7 @@ import { SIDE_BAR_ITEMS } from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
 import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
 import { EditOrganization } from "../../components/edit-organization/edit-organization";
-import { CreateOrganization } from "../../components/create-organization";
+import { CreateOrganizationForm } from "../../components/form";
 
 export const LayoutSideBarPage: React.FunctionComponent = (props) => {
 
@@ -45,7 +45,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                         </Route>
 
                         <Route path='/apps/organizations/list' component={Organizations} />
-                        <Route path='/apps/organizations/new-organization' component={CreateOrganization} />
+                        <Route path='/apps/organizations/new-organization' component={CreateOrganizationForm} />
                         <Route path='/apps/organizations/:id' component={EditOrganization} />
                     </Switch>
                 </div>
