@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, OlHTMLAttributes, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { RootState, store } from '../../store';
@@ -7,16 +7,16 @@ import { Link } from 'react-router-dom';
 import './style/breadcrumbs.scss'
 import { changeAllNavLinks } from '../../store/breadcrumbs/actions';
 
-interface BreadcrumbsProps {
+interface BreadcrumbsProps extends OlHTMLAttributes<HTMLOListElement> {
 
 }
 
-interface LinkData {
-    text: string
-    href: string;
-}
+// interface LinkData {
+//     text: string
+//     href: string;
+// }
 
-const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = () => {
+const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = ({className}) => {
 
     const { location: { pathname } } = useHistory();
     const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
@@ -33,6 +33,7 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = () => {
         const refactoredArray = urlArray.length === 1 ? [] : urlArray.map((item: string) => {
             return transformFromKebabToSentenceCase(item)
         })
+
         setBreadcrumbs(refactoredArray)
     }, [storeCurrentPage])
 
@@ -42,7 +43,7 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = () => {
         const sentenceWords = words.map((word) => word[0].toUpperCase() + word.substr(1))
         return sentenceWords.join(' ')
     }
-    /* const storeBreadcrumbs = useSelector((state: RootState) => state.breadcrumbs)
+    /* 
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -70,23 +71,20 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = () => {
     }
     */
 
-    return (<ol className='breadcrumbs'>
-        {breadcrumbs.map((crumb) => {
+    console.log(breadcrumbs);
+
+
+    return (<ol className={['breadcrumbs', className].join(' ')}>
+        {breadcrumbs && breadcrumbs.map((crumb, index, array) =>
             <li className='breadcrumbs__item'>
-                {crumb}
-            </li>
-        })}
-        {/* {storeBreadcrumbs && storeBreadcrumbs.map((breadcrumb, index, array) =>
-            <li className='breadcrumbs__item'>
-                <a
+                <span
                     className='breadcrumbs__link'
-                    // to={breadcrumb.href}
                     aria-current={index === (array.length - 1) ? 'location' : undefined}
                 >
-                    {breadcrumb.text}
-                </a>
-            </li>)
-        } */}
+                    {crumb}
+                </span>
+            </li>
+        )}
     </ol>);
 }
 

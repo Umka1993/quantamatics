@@ -27,13 +27,7 @@ export const Header: React.FunctionComponent = (props) => {
 
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [showProfile, setShowProfile] = useState<boolean>(false)
-    const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
-        'Research',
-        'My Files',
-    ])
-    const storeCurrentPage = useSelector<RootState>(
-        (state) => state.currentPage.currentPage.pageName
-    )
+
     const profileRef = useRef(null)
     const dispatch = useDispatch()
     const history = useHistory()
@@ -62,24 +56,6 @@ export const Header: React.FunctionComponent = (props) => {
         history.push(route)
     }
 
-    useEffect(() => {
-        const url: any = !!storeCurrentPage ? storeCurrentPage : ''
-        const urlArray = url.split('/')
-        const refactoredArray = urlArray.length === 1 ? [] : urlArray.map((item: string) => {
-            return item.replace(/-/g, ' ')
-        })
-        setBreadcrumbs(refactoredArray)
-    }, [storeCurrentPage])
-
-    const breadcrumbsList = breadcrumbs.map((crumb: any, index) => {
-        const listLength = breadcrumbs.length - 1
-        return (
-            <div key={index} className={classNames('header__breadcrumbs-item', { 'last': index === listLength })}>
-                {crumb}
-                {index !== listLength ? <span className='breadcrumb-divider'>/</span> : ''}
-            </div>
-        )
-    })
     const username: any = !!user ? user : ''
 
     // TODO: Rework login process
@@ -90,9 +66,7 @@ export const Header: React.FunctionComponent = (props) => {
             <div className="header__content">
                 <div className="header__logo">
                     <SVG icon={logoImg} name="logo" onClick={() => !!user ? history.push('/') : null} />
-                    {user && logged && (<div className="header__breadcrumbs">
-                        {breadcrumbsList}
-                    </div>)}
+                    {user && logged && (<Breadcrumbs className="header__breadcrumbs" />)}
                 </div>
 
                 {username && logged && !hideUser && (<div className="header__nav">
