@@ -52,7 +52,7 @@ const FullWidthLayout: React.FunctionComponent = (props) => {
                 <SuccessMessage
                     title="An invitation email has been sent to the user"
                     linkText="Go Back"
-                    go={-1}
+                    go={-2}
                 />
             );
             break;

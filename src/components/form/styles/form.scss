@@ -3,6 +3,7 @@
 .form {
   width: $form-width;
   margin: auto;
+  position: relative;
 
   &__header {
     text-align: center;

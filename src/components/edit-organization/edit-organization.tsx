@@ -3,7 +3,6 @@ import "./styles/edit-organizations.scss"
 import AddIcon from "./assets/human-add.svg"
 import Button, { ResetButton } from "../button";
 import { UserTable } from "../table/UserTable";
-import { AddUserAccount } from "../add-user-account";
 import { Input } from "../input";
 import { useHistory, useParams } from "react-router-dom";
 import { network } from "../../services/networkService";
@@ -30,7 +29,6 @@ export const EditOrganization: React.FunctionComponent = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const [addUserActive, setAddUserActive] = useState<Boolean>(false)
 
     const fetchUsers = () => {
         network.get('api/User/list', { orgId })
@@ -74,12 +72,10 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             }) */
     }
 
-const fetchOrganization = () => {
+
+    const fetchOrganization = () => {
         network.get('api/Organization/get', { id: orgId })
             .then((r: any) => {
-
-                // dispatch(changeAllNavLinks())
-
                 dispatch(changeRoute(`apps/organizations/${r.data.name}`))
                 setOrganization(r.data)
                 setOrganizationName(r.data.name)
@@ -125,96 +121,94 @@ const fetchOrganization = () => {
 
     return (
         <div className="content-wrapper">
-            {
-                addUserActive ?
-                    <AddUserAccount organization={organizationName} orgId={orgId} onBack={() => { setUsers(null); setAddUserActive(false) }} />
-                    :
-                    <div className="edit-organization">
-                        <header className="edit-organization__header">
-                            <Headline className="edit-organization__title">
-                                Edit Organization
-                            </Headline>
-                            <div className="edit-organization__buttons">
-                                <ResetButton
-                                    // href='/apps/organizations/list'
-                                    form="edit-organization"
-                                    className="edit-organization__cancel-btn"
-                                    onClick={() => {
 
-                                    }}
-                                >
-                                    Cancel
-                                </ResetButton>
+            <div className="edit-organization">
+                <header className="edit-organization__header">
+                    <Headline className="edit-organization__title">
+                        Edit Organization
+                    </Headline>
+                    <div className="edit-organization__buttons">
+                        <ResetButton
+                            // href='/apps/organizations/list'
+                            form="edit-organization"
+                            className="edit-organization__cancel-btn"
+                            onClick={() => {
 
-                                <Button
-                                    type='submit'
-                                    form="edit-organization"
-                                    className="edit-organization__save-btn"
-                                >
-                                    Save
-                                </Button>
-                            </div>
-                        </header>
-                        <form
-                            className="edit-organization__body" id="edit-organization"
-                            onSubmit={(evt) => { evt.preventDefault(); updateOrganization() }}
-                            onReset={(evt) => {
-                                evt.preventDefault(); dispatch(changeRoute('apps/organizations/list'));
-                                history.push("/apps/organizations/list");
                             }}
                         >
-                            <div className="edit-organization__info">
-                                <h2 className="subheadline edit-organization__info-title">
-                                    Ogranization info
-                                </h2>
-                                <div className="edit-organization__inputs">
-                                    <div className="edit-organization__input">
-                                        <Input onChangeInput={(value) => setOrganizationName(value)}
-                                            value={organizationName}
-                                            placeholder='Name of The Organization'
-                                        />
-                                    </div>
-                                    <div className="edit-organization__input">
-                                        <Input onChangeInput={(value) => setCustomerID(value)}
-                                            value={customerID}
-                                            placeholder='CRM Customer ID'
-                                        />
-                                    </div>
-                                    <div className="edit-organization__input">
-                                        <Input onChangeInput={(value) => setCustomerLink(value)}
-                                            value={customerLink}
-                                            placeholder='CRM Customer ID Link'
-                                        />
-                                    </div>
-                                </div>
-                                <div className="edit-organization__comments">
-                                    <Input onChangeInput={(value) => setComment(value)}
-                                        value={comment}
-                                        placeholder='Comments'
-                                        limit={200}
-                                    />
-                                </div>
-                            </div>
-                            <div className="edit-organization__user-list">
-                                <div className="edit-organization__user-list-header">
-                                    <h2 className="subheadline edit-organization__user-list-title">
-                                        User List
-                                    </h2>
+                            Cancel
+                        </ResetButton>
 
-                                    <Button
-                                        className="edit-organization__user-list-add"
-                                        onClick={() => setAddUserActive(true)}
-                                    >
-                                        <AddIcon />
-                                        Add New
-                                    </Button>
-
-                                </div>
-                                {!!users && <UserTable inEdit rows={users} deleteUser={deleteUser} />}
-                            </div>
-                        </form>
+                        <Button
+                            type='submit'
+                            form="edit-organization"
+                            className="edit-organization__save-btn"
+                        >
+                            Save
+                        </Button>
                     </div>
-            }
+                </header>
+                <form
+                    className="edit-organization__body" id="edit-organization"
+                    onSubmit={(evt) => { evt.preventDefault(); updateOrganization() }}
+                    onReset={(evt) => {
+                        evt.preventDefault(); dispatch(changeRoute('apps/organizations/list'));
+                        history.push("/apps/organizations/list");
+                    }}
+                >
+                    <div className="edit-organization__info">
+                        <h2 className="subheadline edit-organization__info-title">
+                            Ogranization info
+                        </h2>
+                        <div className="edit-organization__inputs">
+                            <div className="edit-organization__input">
+                                <Input onChangeInput={(value) => setOrganizationName(value)}
+                                    value={organizationName}
+                                    placeholder='Name of The Organization'
+                                />
+                            </div>
+                            <div className="edit-organization__input">
+                                <Input onChangeInput={(value) => setCustomerID(value)}
+                                    value={customerID}
+                                    placeholder='CRM Customer ID'
+                                />
+                            </div>
+                            <div className="edit-organization__input">
+                                <Input onChangeInput={(value) => setCustomerLink(value)}
+                                    value={customerLink}
+                                    placeholder='CRM Customer ID Link'
+                                />
+                            </div>
+                        </div>
+                        <div className="edit-organization__comments">
+                            <Input onChangeInput={(value) => setComment(value)}
+                                value={comment}
+                                placeholder='Comments'
+                                limit={200}
+                            />
+                        </div>
+                    </div>
+                    <div className="edit-organization__user-list">
+                        <div className="edit-organization__user-list-header">
+                            <h2 className="subheadline edit-organization__user-list-title">
+                                User List
+                            </h2>
+
+                            <Button
+                                className="edit-organization__user-list-add"
+                                href={`/apps/organizations/${orgId}/add-user`}
+                            // onClick={() => setAddUserActive(true)}
+                            >
+                                <AddIcon />
+                                Add New
+                            </Button>
+
+                        </div>
+                        {!!users && <UserTable inEdit rows={users} deleteUser={deleteUser} />}
+                    </div>
+                </form>
+            </div>
+
         </div>
     )
 }
