@@ -1,15 +1,6 @@
-import { AxiosInstance } from "axios";
 import { ApiRoute } from "../../data/enum";
-import { ThunkAction } from "redux-thunk";
-import { RootState } from "store";
 import { loginAction } from '../authorization/actions';
-
-type ThunkActionResult<R = Promise<void>> = ThunkAction<
-    R,
-    RootState,
-    AxiosInstance,
-    any
->;
+import { ThunkActionResult } from "../../types/thunk-actions";
 
 export const sendResetPasswordMail =
     (email: string, onFinish: any, onError: any): ThunkActionResult =>

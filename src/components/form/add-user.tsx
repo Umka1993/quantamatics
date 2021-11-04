@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "./styles/create-organization.scss"
 import { Input } from "../input";
 import { useHistory, useParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import { DatePick, Email } from "../app-input/";
 import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import Form from './form';
+import { fetchOrganization } from "../../store/organization/actions";
 
 interface ICreateOrganization {
 }
@@ -29,16 +30,16 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
     const history = useHistory();
     const dispatch = useDispatch();
 
+    const getOrgName = (data: any) => {
+        dispatch(changeRoute(`organizations/${data.name}/add-user`))
+        setOrganizationName(data.name)
+    }
 
-    network.get('api/Organization/get', { id })
-        .then((r: any) => {
-            dispatch(changeRoute(`organizations/${r.data.name}/add-user`))
-            setOrganizationName(r.data.name)
-        })
-        .catch((e: any) => {
-            console.log(e.data)
-        })
+    useEffect(() => {
+        dispatch(fetchOrganization(id, getOrgName))
+    }, [id])
 
+    
 
     const addUserToOrg = useCallback(() => {
         network
