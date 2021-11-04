@@ -43,3 +43,15 @@ export const createOrganization = (organization: any, onFinish : any, onError: a
             onError()
         })
     }; 
+
+export const deleteOrganization = (id: string, onFinish : any): ThunkActionResult =>
+    async (_dispatch, _getState, api) => {
+        api.delete(ApiRoute.OrganizationDelete, {params: {id}})
+        .then(({ data }: any) => {
+            console.log(data);
+            onFinish(data)
+        })
+        .catch(({response}) => {
+            console.log(response);
+        })
+    }; 

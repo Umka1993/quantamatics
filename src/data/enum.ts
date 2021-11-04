@@ -30,6 +30,7 @@ export const enum ApiRoute {
 
     OrganizationInfo = 'api/Organization/get',
     OrganizationCreate = 'api/Organization/create',
+    OrganizationDelete = 'api/Organization/delete',
 
     RegisterUser = '/api/Account/register'
 }
