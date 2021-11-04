@@ -10,7 +10,7 @@ import DeleteSVG from './assets/delete-row-icon.svg'
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
-// import {network} from "../../services/networkService";
+import {network} from "../../services/networkService";
 
 interface ITable {
     rows: IRow[]
@@ -47,7 +47,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
 
     // ? For the future use
 
-    /* const handleDeleteOrganization = (id: string, index: number) => {
+    const handleDeleteOrganization = (id: string, index: number) => {
         console.log('delete', id)
         setItemDeleting(index)
         network.delete('api/Organization/delete', {id})
@@ -59,7 +59,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
             .catch((e: any) => {
                 console.log(e.data)
             })
-    } */
+    }
 
     if(!localRows) return null
 
@@ -116,8 +116,8 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                             <button 
                                 type='button'
                                 className='table__action'
-                                // onClick={() => handleDeleteOrganization(row.row.id, index)}
-                                disabled
+                                onClick={() => handleDeleteOrganization(row.row.id, index)}
+                                // disabled
                             >
                                 <DeleteSVG role="img" aria-label="delete" fill="currentColor" />
                             </button>

@@ -14,14 +14,14 @@ interface ICreateOrganization {
 }
 
 const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props) => {
-    const { id } = useParams<{ id: string }>();
+    const { id : organizationId } = useParams<{ id: string }>();
 
-    const [organizationName, setOrganizationName] = useState<string>('')
+    const [companyName, setCompanyName] = useState<string>('')
 
-    const [userName, setUserName] = useState<string>("");
-    const [userLastName, setUserLastName] = useState<string>("");
-    const [userEmail, setUserEmail] = useState<string>("");
-    const [userExpiration, setUserExpiration] = useState<Date>(new Date());
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [subscriptionEndDate, setSubscriptionEndDate] = useState<Date>(new Date());
 
     const [errors, setErrors] = useState<string | boolean>(false);
 
@@ -32,12 +32,12 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
 
     const getOrgName = (data: any) => {
         dispatch(changeRoute(`organizations/${data.name}/add-user`))
-        setOrganizationName(data.name)
+        setCompanyName(data.name)
     }
 
     useEffect(() => {
-        dispatch(fetchOrganization(id, getOrgName))
-    }, [id])
+        dispatch(fetchOrganization(organizationId, getOrgName))
+    }, [organizationId])
 
     const onFinish = () => history.push('/success-invitation')
 
@@ -53,7 +53,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
         if (data[0]) {
             const { code } = data[0];
 
-            if (code === "DuplicateUserName") {
+            if (code === "DuplicatefirstName") {
                 setErrors("The user with such email already exists");
             }
         }
@@ -61,16 +61,10 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
 
 
     const addUserToOrg = useCallback(() => {
-        dispatch(registerUser({
-            firstName: userName,
-            lastName: userLastName,
-            email: userEmail,
-            organizationId: id,
-            companyName: organizationName,
-            subscriptionEndDate: userExpiration,
+        dispatch(registerUser({firstName, lastName, email, organizationId, companyName, subscriptionEndDate,
         }, onFinish, onError))
 
-    }, [userName, userLastName, userEmail, userExpiration]);
+    }, [firstName, lastName, email, subscriptionEndDate]);
 
     return (
         <Form
@@ -81,29 +75,29 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
             stopLoading={finish}
         >
             <Input
-                onChangeInput={(value) => setUserName(value)}
+                onChangeInput={(value) => setFirstName(value)}
                 placeholder="Name"
                 required
-                value={userName}
+                value={firstName}
             />
             <Input
-                onChangeInput={(value) => setUserLastName(value)}
+                onChangeInput={(value) => setLastName(value)}
                 placeholder="Last name"
                 required
-                value={userLastName}
+                value={lastName}
             />
             <Input
-                onChangeInput={(value) => { errors && setErrors(false); setUserEmail(value) }}
+                onChangeInput={(value) => { errors && setErrors(false); setEmail(value) }}
                 placeholder="Email Address"
                 required
-                value={userEmail}
+                value={email}
                 errors={errors as boolean}
             />
             {errors && <p className="login-page__inputs-errors">{errors}</p>}
             <DatePick
                 className='edit-profile__temp-input'
-                externalSetter={setUserExpiration}
-                valueAsDate={userExpiration}
+                externalSetter={setSubscriptionEndDate}
+                valueAsDate={subscriptionEndDate}
                 minDate={new Date}
                 required
             />
@@ -111,7 +105,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
                 className='create-organization__submit'
                 type='submit'
                 disabled={
-                    !Boolean(userName && userLastName && userEmail && userExpiration)
+                    !Boolean(firstName && lastName && email && subscriptionEndDate)
                 }
             >
                 Save
@@ -119,7 +113,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
 
             <ResetButton
                 className='create-organization__cancel'
-                href={`/apps/organizations/${id}`}
+                href={`/apps/organizations/${organizationId}`}
             >
                 Cancel
             </ResetButton>
