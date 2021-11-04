@@ -76,7 +76,7 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = ({ className }) => {
 
     return (<ol className={['breadcrumbs', className].join(' ')}>
         {breadcrumbs && breadcrumbs.map((crumb, index, array) =>
-            <li className='breadcrumbs__item'>
+            <li className='breadcrumbs__item' key={crumb}>
                 <span
                     className='breadcrumbs__link'
                     aria-current={index === (array.length - 1) ? 'location' : undefined}
