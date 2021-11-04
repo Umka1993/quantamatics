@@ -3,12 +3,12 @@ import "./styles/create-organization.scss"
 import { Input } from "../input";
 import { useHistory, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
-import { network } from "../../services/networkService";
 import { DatePick, Email } from "../app-input/";
 import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import Form from './form';
 import { fetchOrganization } from "../../store/organization/actions";
+import { registerUser } from "../../store/account/actions";
 
 interface ICreateOrganization {
 }
@@ -39,40 +39,36 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
         dispatch(fetchOrganization(id, getOrgName))
     }, [id])
 
-    
+    const onFinish = () => history.push('/success-invitation')
+
+    const onError = (data: any) => {
+        setFinish(true)
+        console.log("is wrong", data);
+
+        if (data.errors) {
+            data.errors.Email && setErrors('This is not a valid e-mail address.')
+
+        }
+
+        if (data[0]) {
+            const { code } = data[0];
+
+            if (code === "DuplicateUserName") {
+                setErrors("The user with such email already exists");
+            }
+        }
+    }
+
 
     const addUserToOrg = useCallback(() => {
-        network
-            .post("/api/Account/register", {
-                firstName: userName,
-                lastName: userLastName,
-                email: userEmail,
-                organizationId: id,
-                companyName: organizationName,
-                subscriptionEndDate: userExpiration,
-            })
-            .then((r: any) => {
-                history.push('/success-invitation')
-                setFinish(true)
-            })
-            .catch(({ response: { data } }) => {
-                setFinish(true)
-                console.log("is wrong", data);
-
-                if (data.errors) {
-                    data.errors.Email && setErrors('This is not a valid e-mail address.')
-
-                }
-
-                if (data[0]) {
-                    const { code } = data[0];
-
-                    if (code === "DuplicateUserName") {
-                        setErrors("The user with such email already exists");
-                    }
-                }
-
-            });
+        dispatch(registerUser({
+            firstName: userName,
+            lastName: userLastName,
+            email: userEmail,
+            organizationId: id,
+            companyName: organizationName,
+            subscriptionEndDate: userExpiration,
+        }, onFinish, onError))
 
     }, [userName, userLastName, userEmail, userExpiration]);
 
