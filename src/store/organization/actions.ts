@@ -23,10 +23,23 @@ export const fetchOrganization = (id: string, onFinish : any): ThunkActionResult
         async (_dispatch, _getState, api) => {
             api.get<OrganizationInfoResponse>(ApiRoute.OrganizationInfo, {params: {id}})
             .then(({ data }: any) => {
-                console.log(data);
                 onFinish(data)
             })
             .catch(({response}) => {
                 console.log(response);
             })
         }; 
+
+
+export const createOrganization = (organization: any, onFinish : any, onError: any): ThunkActionResult =>
+    async (_dispatch, _getState, api) => {
+        api.post(ApiRoute.OrganizationCreate, {...organization})
+        .then(({ data }: any) => {
+            console.log(data);
+            onFinish(data)
+        })
+        .catch(({response}) => {
+            console.log(response);
+            onError()
+        })
+    }; 

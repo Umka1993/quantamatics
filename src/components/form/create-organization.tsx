@@ -7,6 +7,7 @@ import { network } from "../../services/networkService";
 import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import Form from './form';
+import { createOrganization } from "../../store/organization/actions";
 
 interface ICreateOrganization {
 }
@@ -15,81 +16,64 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const [organizationName, setOrganizationName] = useState<string>('')
-    const [customerID, setCustomerID] = useState<string>('')
-    const [customerLink, setCustomerLink] = useState<string>('')
-    const [comment, setComment] = useState<string | undefined>('')
+    const [name, setName] = useState<string>('')
+    const [customerCrmId, setCustomerCrmId] = useState<string>('')
+    const [customerCrmLink, setCustomerCrmLink] = useState<string>('')
+    const [comments, setComments] = useState<string | undefined>('')
 
-    const createOrganization = useCallback(() => {
+    const [finish, setFinish] = useState<boolean | undefined>(undefined)
 
-        network.post('api/Organization/create', {
-            name: organizationName,
-            customerCrmId: customerID,
-            customerCrmLink: customerLink,
-            comments: comment,
-        })
-            .then((r: any) => {
-                console.log(r)
-                setOrganizationName('')
-                setCustomerID('')
-                setCustomerLink('')
-                setComment('')
-                dispatch(changeRoute("apps/organizations/list"))
-                history.push("/apps/organizations/list");
-            })
-            .catch((e) => {
-                console.log(e)
-            })
-
-
-    }, [organizationName, customerID, customerLink, comment])
-
-    const cancelCreate = useCallback(() => {
-        setOrganizationName('')
-        setCustomerID('')
-        setCustomerLink('')
-        setComment('')
+    const returnBack = () => {
+        dispatch(changeRoute("apps/organizations/list"))
         history.push('/apps/organizations/list')
-    }, [organizationName, customerID, customerLink, comment])
+    }
+
+
+    const registerOrganization = () => dispatch(createOrganization(
+        { name, customerCrmId, customerCrmLink, comments, },
+        returnBack,
+        () => setFinish(true)
+    ))
 
     return (
         <Form
             className="create-organization"
             headline='Creating an Organization'
             subtitle='Create an organization for the future admin'
-            onSubmit={createOrganization}
-            onReset={cancelCreate}
+            onSubmit={registerOrganization}
+            onReset={returnBack}
+            stopLoading={finish}
         >
             <Input
                 className='create-organization__first-input'
-                onChangeInput={(value) => setOrganizationName(value)}
+                onChangeInput={(value) => setName(value)}
                 placeholder='Organization Name'
-                value={organizationName}
+                value={name}
                 required
                 limit={32}
             />
             <Input
-                onChangeInput={(value) => setCustomerID(value)}
+                onChangeInput={(value) => setCustomerCrmId(value)}
                 placeholder='CRM Customer ID'
-                value={customerID}
+                value={customerCrmId}
                 limit={32}
             />
             <Input
-                onChangeInput={(value) => setCustomerLink(value)}
+                onChangeInput={(value) => setCustomerCrmLink(value)}
                 placeholder='CRM Customer ID Link'
-                value={customerLink}
+                value={customerCrmLink}
                 limit={32}
             />
             <Input
-                onChangeInput={(value) => setComment(value)}
+                onChangeInput={(value) => setComments(value)}
                 limit={200}
-                placeholder='Comments'
-                value={comment}
+                placeholder='commentss'
+                value={comments}
             />
             <Button
                 className='create-organization__submit'
                 type='submit'
-                disabled={!organizationName}
+                disabled={!name}
             >
                 Save
             </Button>
