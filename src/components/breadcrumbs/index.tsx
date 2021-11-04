@@ -40,8 +40,14 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = ({className}) => {
 
     function transformFromKebabToSentenceCase(kebab: string): string {
         const words = kebab.split('-');
-        const sentenceWords = words.map((word) => word[0].toUpperCase() + word.substr(1))
-        return sentenceWords.join(' ')
+        console.log(words);
+
+        if (words.length >= 1) {
+            const sentenceWords = words.map((word) => word[0].toUpperCase() + word.substr(1))
+            return sentenceWords.join(' ')
+        }
+
+        return kebab
     }
     /* 
     const dispatch = useDispatch();
@@ -70,8 +76,6 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = ({className}) => {
         return result;
     }
     */
-
-    console.log(breadcrumbs);
 
 
     return (<ol className={['breadcrumbs', className].join(' ')}>

@@ -11,7 +11,7 @@
     color: $main-text;
 
     &__item {
-        &:not(:last-child)::after {
+        &:not(:only-child):not(:last-child)::after {
             content: '/';
             margin: 0 10px;
         }

@@ -74,7 +74,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             }) */
     }
 
-    const fetchOrganization = () => {
+const fetchOrganization = () => {
         network.get('api/Organization/get', { id: orgId })
             .then((r: any) => {
 
@@ -104,7 +104,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             })
                 .then((r: any) => {
                     console.log(r)
-                    dispatch(changeRoute("/apps/organizations/list"))
+                    dispatch(changeRoute("apps/organizations/list"))
                     history.push("/apps/organizations/list");
                 })
                 .catch((e) => {
