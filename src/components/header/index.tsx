@@ -17,11 +17,10 @@ import { useHistory } from "react-router-dom";
 import { changeRoute } from "../../store/currentPage/actions";
 import { EditPassword } from '../edit-modal/edit-password';
 // import {EditProfile} from "../edit-profile";
-import { network } from "../../services/networkService";
 import { IUser, User } from 'types/edit-profile/types';
 import { AppRoute } from '../../data/enum';
 import { logoutAction } from '../../store/authorization/actions';
-
+import Breadcrumbs from '../breadcrumbs';
 
 export const Header: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.auth.user)

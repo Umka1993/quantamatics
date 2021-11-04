@@ -1,11 +1,11 @@
-import classNames from 'classnames';
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { RootState } from '../../store';
+import { RootState, store } from '../../store';
 import { Link } from 'react-router-dom';
 
 import './style/breadcrumbs.scss'
+import { changeAllNavLinks } from '../../store/breadcrumbs/actions';
 
 interface BreadcrumbsProps {
 
@@ -19,8 +19,35 @@ interface LinkData {
 const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = () => {
 
     const { location: { pathname } } = useHistory();
+    const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
+        'Research',
+        'My Files',
+    ])
+    const storeCurrentPage = useSelector<RootState>(
+        (state) => state.currentPage.currentPage.pageName
+    )
 
-    const breadcrumbs = detectBreadcrumbs()
+    useEffect(() => {
+        const url: any = !!storeCurrentPage ? storeCurrentPage : ''
+        const urlArray = url.split('/')
+        const refactoredArray = urlArray.length === 1 ? [] : urlArray.map((item: string) => {
+            return transformFromKebabToSentenceCase(item)
+        })
+        setBreadcrumbs(refactoredArray)
+    }, [storeCurrentPage])
+
+
+    function transformFromKebabToSentenceCase(kebab: string): string {
+        const words = kebab.split('-');
+        const sentenceWords = words.map((word) => word[0].toUpperCase() + word.substr(1))
+        return sentenceWords.join(' ')
+    }
+    /* const storeBreadcrumbs = useSelector((state: RootState) => state.breadcrumbs)
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        !storeBreadcrumbs && dispatch(changeAllNavLinks(detectBreadcrumbs()))
+    }, []) 
 
     function transformFromKebabToSentenceCase(kebab: string): string {
         const words = kebab.split('-');
@@ -28,9 +55,9 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = () => {
         return sentenceWords.join(' ')
     }
 
-    function detectBreadcrumbs() : Array<LinkData> {
+    function detectBreadcrumbs(): Array<LinkData> {
         const array = pathname.substring(1).split('/');
-        const result : Array<LinkData> = [];
+        const result: Array<LinkData> = [];
 
         array.forEach((breadcrumb, index, array) => {
             result.push({
@@ -41,49 +68,25 @@ const Breadcrumbs: FunctionComponent<BreadcrumbsProps> = () => {
 
         return result;
     }
-
-
-
-    /* const [breadcrumbs, setBreadcrumbs] = useState<Array<string>>([
-        'Research',
-        'My Files',
-    ])
-
-    const storeCurrentPage = useSelector<RootState>(
-        (state) => state.currentPage.currentPage.pageName
-    )
-
-    useEffect(() => {
-        const url: any = !!storeCurrentPage ? storeCurrentPage : ''
-        const urlArray = url.split('/')
-        const refactoredArray = urlArray.length === 1 ? [] : urlArray.map((item: string) => {
-            return item.replace(/-/g, ' ')
-        })
-        setBreadcrumbs(refactoredArray)
-    }, [storeCurrentPage])
-
-    const breadcrumbsList = breadcrumbs.map((crumb: any, index) => {
-        const listLength = breadcrumbs.length - 1
-        return (
-            <div key={index} className={classNames('header__breadcrumbs-item', { 'last': index === listLength })}>
-                {crumb}
-                {index !== listLength ? <span className='breadcrumb-divider'>/</span> : ''}
-            </div>
-        )
-    }) */
+    */
 
     return (<ol className='breadcrumbs'>
-        {breadcrumbs.map((breadcrumb, index, array) =>
+        {breadcrumbs.map((crumb) => {
             <li className='breadcrumbs__item'>
-                <Link
+                {crumb}
+            </li>
+        })}
+        {/* {storeBreadcrumbs && storeBreadcrumbs.map((breadcrumb, index, array) =>
+            <li className='breadcrumbs__item'>
+                <a
                     className='breadcrumbs__link'
-                    to={breadcrumb.href}
+                    // to={breadcrumb.href}
                     aria-current={index === (array.length - 1) ? 'location' : undefined}
                 >
                     {breadcrumb.text}
-                </Link>
+                </a>
             </li>)
-        }
+        } */}
     </ol>);
 }
 

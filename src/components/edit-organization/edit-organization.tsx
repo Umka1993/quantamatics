@@ -11,6 +11,7 @@ import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import Headline from "../page-title/index";
 import type { IUserRow } from "types/table/types";
+import { changeAllNavLinks } from "../../store/breadcrumbs/actions";
 
 
 type RouteParams = {
@@ -36,6 +37,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             .then((r: any) => {
 
                 let result = r.data.map((row: any) => {
+                    // console.log(row)
 
                     return {
                         editable: true,
@@ -75,6 +77,8 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const fetchOrganization = () => {
         network.get('api/Organization/get', { id: orgId })
             .then((r: any) => {
+
+                // dispatch(changeAllNavLinks())
 
                 dispatch(changeRoute(`apps/organizations/${r.data.name}`))
                 setOrganization(r.data)
