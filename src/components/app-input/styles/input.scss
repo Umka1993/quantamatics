@@ -20,9 +20,22 @@ $text: #bcc4d8;
     font-size: 16px;
     line-height: 18px;
     color: #003c71;
+
+    &--limited::after {
+      content: attr(data-limit);
+      position: absolute;
+      right: 0;
+      top: 12px;
+
+      font-size: 14px;
+      line-height: 1.143;
+
+      color: $inactive;
+    }
   }
 
-  &__field, &__dummy {
+  &__field,
+  &__dummy {
     accent-color: $accent;
 
     width: 100%;
@@ -116,14 +129,13 @@ $text: #bcc4d8;
     background-color: #fff;
     pointer-events: none;
     text-align: left;
-    
   }
 
   &__field:active ~ &__dummy,
   &__field:focus ~ &__dummy {
     color: $accent;
     svg {
-      fill: currentColor
+      fill: currentColor;
     }
   }
 

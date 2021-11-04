@@ -27,6 +27,7 @@ const Input: React.FunctionComponent<IInput> = ({
     autoComplete,
     externalSetter,
     error,
+    maxLength,
     ...other
 }) => {
     // const [innerValue, setInnerValue] = useState<string>(value as string);
@@ -71,17 +72,23 @@ const Input: React.FunctionComponent<IInput> = ({
                 "app-input--validate": errorMessage,
             })}
         >
-            <div className="app-input__wrapper">
+            <div className={
+                classNames("app-input__wrapper", { "app-input__wrapper--limited": maxLength })}
+                data-limit={`${(value as string)?.length} / ${maxLength}`}
+            >
                 <input
                     className="app-input__field"
                     onChange={changeHandler}
                     aria-invalid={!!errorMessage}
                     aria-label={labelText}
                     autoComplete={autoComplete}
-                    placeholder={`${placeholder}${required && '*'}`}
+                    placeholder={
+                        `${placeholder ? placeholder : labelText}${required ? '*' : ''}`
+                    }
                     required={required}
                     aria-required={required}
                     value={value || ""}
+                    maxLength={maxLength}
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}

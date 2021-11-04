@@ -1,9 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import "./styles/create-organization.scss"
-import { Input } from "../input";
+import Input from "../app-input";
 import { useHistory } from "react-router-dom";
 import Button, { ResetButton } from "../button";
-import { network } from "../../services/networkService";
 import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import Form from './form';
@@ -28,12 +27,11 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
         history.push('/apps/organizations/list')
     }
 
-
-    const registerOrganization = () => dispatch(createOrganization(
-        { name, customerCrmId, customerCrmLink, comments, },
-        returnBack,
-        () => setFinish(true)
-    ))
+    const registerOrganization = () => dispatch(
+        createOrganization({ name, customerCrmId, customerCrmLink, comments, },
+            returnBack,
+            () => setFinish(true))
+    )
 
     return (
         <Form
@@ -44,32 +42,37 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
             onReset={returnBack}
             stopLoading={finish}
         >
-            <Input
-                className='create-organization__first-input'
-                onChangeInput={(value) => setName(value)}
-                placeholder='Organization Name'
-                value={name}
-                required
-                limit={32}
-            />
-            <Input
-                onChangeInput={(value) => setCustomerCrmId(value)}
-                placeholder='CRM Customer ID'
-                value={customerCrmId}
-                limit={32}
-            />
-            <Input
-                onChangeInput={(value) => setCustomerCrmLink(value)}
-                placeholder='CRM Customer ID Link'
-                value={customerCrmLink}
-                limit={32}
-            />
-            <Input
-                onChangeInput={(value) => setComments(value)}
-                limit={200}
-                placeholder='commentss'
-                value={comments}
-            />
+            <div className="create-organization__fields">
+                <Input
+                    externalSetter={setName}
+                    placeholder='Organization Name'
+                    required
+                    value={name}
+                    maxLength={32}
+                />
+
+                <Input
+                    externalSetter={setCustomerCrmId}
+                    placeholder='CRM Customer ID'
+                    value={customerCrmId}
+                    maxLength={32}
+                />
+
+                <Input
+                    externalSetter={setCustomerCrmLink}
+                    placeholder='CRM Customer ID Link'
+                    value={customerCrmLink}
+                    maxLength={32}
+                />
+
+                <Input
+                    externalSetter={setComments}
+                    placeholder='Comments'
+                    value={comments}
+                    maxLength={200}
+                />
+            </div>
+
             <Button
                 className='create-organization__submit'
                 type='submit'
