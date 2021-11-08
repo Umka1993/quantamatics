@@ -34,6 +34,10 @@ $text: #bcc4d8;
     }
   }
 
+  &__wrapper--limited &__field {
+    padding-right: 4em;
+  }
+
   &__field,
   &__dummy {
     accent-color: $accent;

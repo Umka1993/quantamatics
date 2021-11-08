@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./styles/create-organization.scss"
-import Input from "../app-input";
+import Input, { InputURL } from "../app-input";
 import { useHistory } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import { useDispatch } from "react-redux";
@@ -55,13 +55,21 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
                     externalSetter={setCustomerCrmId}
                     placeholder='CRM Customer ID'
                     value={customerCrmId}
+                    // type='number'
+                    // max={99999999999999999999999999999999}
                     maxLength={32}
                 />
+
+                {/* <InputURL 
+                    externalSetter={setCustomerCrmLink} value={customerCrmLink}
+                    placeholder='CRM Customer ID Link' maxLength={32}
+                /> */}
 
                 <Input
                     externalSetter={setCustomerCrmLink}
                     placeholder='CRM Customer ID Link'
                     value={customerCrmLink}
+                    type='url'
                     maxLength={32}
                 />
 
