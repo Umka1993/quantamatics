@@ -17,4 +17,5 @@ export interface IUser {
     location: string,
     subscriptionType: number,
     subscriptionEndDate: string,
+    userRoles: string[];
 }

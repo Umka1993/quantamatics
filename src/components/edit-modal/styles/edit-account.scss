@@ -27,7 +27,7 @@
         line-height: 1.125;
         color: $main-text;
         display: flex;
-        flex-wrap: wrap;
+        // flex-wrap: wrap;
         justify-content: space-between;
         border-bottom: 1px solid transparentize($inactive, 0.76);
 
@@ -37,12 +37,27 @@
         }
     }
 
+    &__roles {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: end;
+        li:not(:last-child)::after {
+            content: ',';
+            margin-right: 3px;
+            
+        }
+    }
+
     &__name {
         font: inherit;
+        flex: 0 1 52%;
+        height: 100%;
     }
 
     &__value {
         color: $headlines;
+        margin: 0;
     }
 
     &__button {

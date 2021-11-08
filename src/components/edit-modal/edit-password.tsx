@@ -101,9 +101,14 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                     <dt className="edit-account__name">
                         Organization Role
                     </dt>
+
                     <dd className="edit-account__value">
-                        {user.companyRole}
+                        <ul className="edit-account__roles">
+                            {user.userRoles.map((role) => (<li>{role}</li>))}
+                        </ul>
+
                     </dd>
+
                 </div>
                 <div className="edit-account__row">
                     <dt className="edit-account__name">
@@ -148,38 +153,38 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                     ref={formRef}
                 // noValidate={!validateNew}
                 >
-                        <Password
-                            placeholder="Current Password"
-                            value={currentPassword}
-                            externalSetter={setCurrentPassword}
-                            name="password"
-                            autoComplete="current-password"
-                            error={wrongCurrent}
-                        // triggerValidity={Boolean(wrongCurrent)}
-                        />
+                    <Password
+                        placeholder="Current Password"
+                        value={currentPassword}
+                        externalSetter={setCurrentPassword}
+                        name="password"
+                        autoComplete="current-password"
+                        error={wrongCurrent}
+                    // triggerValidity={Boolean(wrongCurrent)}
+                    />
 
-                        <Password
-                            autoComplete="new-password"
-                            value={newPassword}
-                            externalSetter={setNewPassword}
-                            placeholder="New Password"
-                            formNoValidate={validateNew}
-                        />
-                        <Password
-                            autoComplete="new-password"
-                            value={confirmPassword}
-                            externalSetter={setConfirmPassword}
-                            placeholder="Confirm New Password"
-                            formNoValidate={validateNew}
-                            error={compare}
-                        />
+                    <Password
+                        autoComplete="new-password"
+                        value={newPassword}
+                        externalSetter={setNewPassword}
+                        placeholder="New Password"
+                        formNoValidate={validateNew}
+                    />
+                    <Password
+                        autoComplete="new-password"
+                        value={confirmPassword}
+                        externalSetter={setConfirmPassword}
+                        placeholder="Confirm New Password"
+                        formNoValidate={validateNew}
+                        error={compare}
+                    />
                 </form>
             )}
 
             <footer className="edit-account__footer">
                 <ResetButton onClick={onClose}>Cancel</ResetButton>
-                <Button 
-                    type="submit" 
+                <Button
+                    type="submit"
                     disabled={!Boolean(currentPassword && newPassword && confirmPassword)}
                     form="edit-pass-form"
                 >
