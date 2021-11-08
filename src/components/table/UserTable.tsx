@@ -10,6 +10,7 @@ import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { USER } from "../../contstans/constans";
 
 import { formatDate } from "../../services/baseService"
+import ComaList from "../coma-list";
 import { IUser } from "types/edit-profile/types";
 
 interface ITable {
@@ -21,7 +22,7 @@ interface ITable {
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const { rows, deleteUser } = props;
     console.table(rows);
-    
+
     const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
     const [showModal, setShowModal] = useState<Boolean>(false)
     const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
@@ -86,6 +87,11 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                             sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                             className="user"
                         />
+                        <SortTableHeader
+                            name="" text="User Role"
+                            sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
+                            className="user"
+                        />
                         <th className='table__headline table__headline--hidden'>Actions</th>
                     </tr>
                 </thead>
@@ -103,6 +109,9 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                             </td>
                             <td className="table__cell">
                                 {formatDate(row.row.subscriptionEndDate)}
+                            </td>
+                            <td className="table__cell">
+                                <ComaList list={['Coherence', 'Research', 'Org.Owner', 'Org.Admin']} />
                             </td>
                             <td className='table__cell table__cell--actions'>
                                 <button
