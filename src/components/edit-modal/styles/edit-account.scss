@@ -1,7 +1,7 @@
 @import "../../../variables.scss";
 
 .edit-account {
-    padding: 40px 40px 52px;
+    padding: 40px;
     width: 100%;
     max-width: 440px;
     height: 624px;
@@ -44,9 +44,8 @@
         justify-content: end;
         margin: 0;
         li:not(:last-child)::after {
-            content: ',';
+            content: ",";
             margin-right: 3px;
-            
         }
     }
 
@@ -89,5 +88,34 @@
         align-items: center;
         justify-content: end;
         gap: 40px;
+    }
+
+    &__form-account {
+        margin-top: 40px - 10px - 21px;
+        display: grid;
+        gap: 30px - 10px;
+
+        .selector-input {
+            margin-top: 10px;
+        }
+    }
+
+    &__fieldset {
+        display: flex;
+        justify-content: space-between;
+        // grid-template-columns: repeat(3, 1fr);
+        border: none;
+        margin: 0;
+        padding: 0;
+        justify-content: space-between;
+        gap: 20px;
+
+        legend {
+            color: $main-text;
+            margin: 0 0 1em;
+        }
+        .check-block {
+            flex-direction: row-reverse;
+        }
     }
 }

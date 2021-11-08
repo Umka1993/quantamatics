@@ -1,19 +1,17 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 
 import Button, { ResetButton } from "../button";
-import { Input } from "../input";
 import { IUser } from "../../types/edit-profile/types";
 import { network } from "../../services/networkService";
 
-import { DatePick, Email } from "../app-input";
+import AppInput, { DatePick, Email } from "../app-input";
+import { CheckBox } from "../checkbox/index";
+import Checkbox from "../app-checkbox/checkbox";
 import { SelectorInput } from "../selector-input";
 import { USER_ORGS } from "../../contstans/constans";
-import editIcon from "./assets/edit.svg";
-import ProfileSummary from "../profile-summary";
 import Modal from "../modal";
-import Headline from "../page-title/index";
 
-import "./styles/edit-modal.scss";
+import "./styles/edit-account.scss";
 interface IEditProfile {
     onClose: () => void;
     user: IUser;
@@ -37,7 +35,11 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
-    const formRef = useRef<HTMLFormElement>(null)
+
+    const [orgAdmin, setOrgAdmin] = useState<boolean>(false);
+    const [research, setResearch] = useState<boolean>(false);
+    const [coherence, setCoherence] = useState<boolean>(false);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const updateUser = (validate: any) => {
         let newUserData: any = {
@@ -46,12 +48,20 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             lastName: surname,
             companyName: organization,
             subscriptionEndDate: new Date(expiration),
+            // companyRole: [],
+            userRoles: [],
         };
+
+        orgAdmin && newUserData.userRoles.push("Org. Admin");
+        research && newUserData.userRoles.push("Research");
+        coherence && newUserData.userRoles.push("Coherence");
+
+        console.log(newUserData);
 
         if (email !== user.email) {
             newUserData = {
                 ...newUserData,
-                newEmail: email
+                newEmail: email,
             };
         }
 
@@ -63,29 +73,23 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                 onClose();
             })
             .catch(({ response: { data } }) => {
-
-                if (data.includes(' already taken')) {
-                    setEmailError('The user with such email already exists')
-                }                
+                if (data.includes(" already taken")) {
+                    setEmailError("The user with such email already exists");
+                }
             });
     };
 
-
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
+        console.log("asd");
 
         setValidate(true);
 
         const isValid = formRef.current?.reportValidity();
 
         if (isValid) {
-
             updateUser(validate);
         }
-    };
-
-    const handlerReset = (evt: FormEvent<HTMLFormElement>) => {
-        onClose();
     };
 
     useEffect(() => {
@@ -97,68 +101,73 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     }, [emailError]);
 
     return (
-        <Modal onClose={onClose} className="edit-profile">
-            <ProfileSummary
-                user={{
-                    ...user,
-                    firstName: name,
-                    lastName: surname,
-                    companyName: organization,
-                    email,
-                    subscriptionEndDate: expiration.toLocaleDateString(),
-                }}
-                className="edit-profile__summary"
-            />
+        <Modal onClose={onClose} className="edit-account" headline="Edit Account">
             <form
+                id="edit-account-form"
                 action=""
-                className="edit-profile__form"
+                className="edit-account__form-account"
                 onSubmit={handlerSubmit}
-                onReset={handlerReset}
                 noValidate={validate ? undefined : true}
                 ref={formRef}
             >
-                <Headline id="modal-label" className="edit-profile__title">
-                    Edit Profile
-                </Headline>
+                <AppInput
+                    externalSetter={setName}
+                    value={name}
+                    name="firstName"
+                    icon="edit"
+                />
+                <AppInput
+                    externalSetter={setSurname}
+                    value={surname}
+                    name="lastName"
+                    icon="edit"
+                />
+                <SelectorInput
+                    onChangeInput={(value) => setOrganization(value)}
+                    options={USER_ORGS}
+                    value={organization}
+                    disabled
+                />
+                <Email
+                    externalSetter={setEmail}
+                    value={email}
+                    error={emailError}
+                    icon="edit"
+                />
+                <DatePick externalSetter={setExpiration} valueAsDate={expiration} />
+                <fieldset className="edit-account__fieldset">
+                    <legend>Organization Role</legend>
 
-                <div>
-                    <Input
-                        onChangeInput={(value) => setName(value)}
-                        value={name}
-                        icon={editIcon}
-                        name="firstName"
-                    />
-                    <Input
-                        onChangeInput={(value) => setSurname(value)}
-                        value={surname}
-                        icon={editIcon}
-                        name="lastName"
-                    />
-                    <SelectorInput
-                        onChangeInput={(value) => setOrganization(value)}
-                        options={USER_ORGS}
-                        value={organization}
-                        disabled
-                    />
-                    <Email
-                        className="edit-profile__temp-input"
-                        externalSetter={setEmail}
-                        value={email}
-                        error={emailError}
-                        icon="edit"
-                    />
-                    <DatePick
-                        className="edit-profile__temp-input"
-                        externalSetter={setExpiration}
-                        valueAsDate={expiration}
-                    />
-                </div>
-
-                <div className="edit-profile__buttons">
-                    <ResetButton>Cancel</ResetButton>
-                    <Button type="submit">Save</Button>
-                </div>
+                    <Checkbox
+                        name="org-admin"
+                        defaultChecked={orgAdmin}
+                        externalSetter={setOrgAdmin}
+                    >
+                        Org. Admin
+                    </Checkbox>
+                    <Checkbox
+                        name="research"
+                        defaultChecked={research}
+                        externalSetter={setResearch}
+                    >
+                        Research
+                    </Checkbox>
+                    <Checkbox
+                        name="coherence"
+                        defaultChecked={coherence}
+                        externalSetter={setCoherence}
+                    >
+                        Coherence
+                    </Checkbox>
+                </fieldset>
             </form>
+
+            <footer className="edit-account__footer">
+                <ResetButton onClick={onClose}>Cancel</ResetButton>
+                <Button type="submit" form="edit-account-form">
+                    Save
+                </Button>
+            </footer>
         </Modal>
     );
 };

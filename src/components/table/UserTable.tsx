@@ -20,6 +20,8 @@ interface ITable {
 
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const { rows, deleteUser } = props;
+    console.table(rows);
+    
     const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
     const [showModal, setShowModal] = useState<Boolean>(false)
     const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
@@ -90,18 +92,18 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                 <tbody className="table__body">
                     {localRows.map((row, index) => (
                         <tr className="table__row" key={row.row.id}>
-                            <div className="table__cell">
+                            <td className="table__cell">
                                 {row.row.firstName}
-                            </div>
-                            <div className="table__cell">
+                            </td>
+                            <td className="table__cell">
                                 {row.row.lastName}
-                            </div>
-                            <div className="table__cell">
+                            </td>
+                            <td className="table__cell">
                                 {row.row.email}
-                            </div>
-                            <div className="table__cell">
+                            </td>
+                            <td className="table__cell">
                                 {formatDate(row.row.subscriptionEndDate)}
-                            </div>
+                            </td>
                             <td className='table__cell table__cell--actions'>
                                 <button
                                     type='button'
