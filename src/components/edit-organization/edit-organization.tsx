@@ -142,15 +142,17 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                         </Button>
                     </div>
                 </header>
-                <form
-                    className="edit-organization__body" id="edit-organization"
-                    onSubmit={(evt) => { evt.preventDefault(); updateOrganization() }}
-                    onReset={(evt) => {
-                        evt.preventDefault(); dispatch(changeRoute('apps/organizations/list'));
-                        history.push("/apps/organizations/list");
-                    }}
+                <div
+                    className="edit-organization__body"
                 >
-                    <div className="edit-organization__info">
+                    <form 
+                        className="edit-organization__info" id="edit-organization"
+                        onSubmit={(evt) => { evt.preventDefault(); updateOrganization() }}
+                        onReset={(evt) => {
+                            evt.preventDefault(); dispatch(changeRoute('apps/organizations/list'));
+                            history.push("/apps/organizations/list");
+                        }}
+                    >
                         <h2 className="subheadline edit-organization__info-title">
                             Ogranization info
                         </h2>
@@ -181,7 +183,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                 limit={200}
                             />
                         </div>
-                    </div>
+                    </form>
                     <div className="edit-organization__user-list">
                         <div className="edit-organization__user-list-header">
                             <h2 className="subheadline edit-organization__user-list-title">
@@ -200,7 +202,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                         </div>
                         {!!users && <UserTable inEdit rows={users} deleteUser={deleteUser} />}
                     </div>
-                </form>
+                </div>
             </div>
 
         </div>
