@@ -24,9 +24,7 @@ import Breadcrumbs from '../breadcrumbs';
 
 export const Header: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.auth.user)
-    console.log(user);
     
-
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [showProfile, setShowProfile] = useState<boolean>(false)
 

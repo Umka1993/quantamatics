@@ -1,0 +1,77 @@
+@import "../../../variables.scss";
+
+.edit-account {
+    padding: 40px 40px 52px;
+    width: 100%;
+    max-width: 440px;
+    height: 624px;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+
+    display: flex;
+    flex-direction: column;
+
+    .modal__title {
+        margin: 0 0 32px - 11px;
+    }
+
+    &__list {
+        margin: 0;
+    }
+
+    &__row {
+        padding: 11px 0;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 1.125;
+        color: $main-text;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        border-bottom: 1px solid transparentize($inactive, 0.76);
+
+        &--inactive {
+            border-bottom: none;
+            color: $inactive;
+        }
+    }
+
+    &__name {
+        font: inherit;
+    }
+
+    &__value {
+        color: $headlines;
+    }
+
+    &__button {
+        all: unset;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        svg {
+            margin-left: 6px;
+        }
+
+        &:hover,
+        &:focus-visible {
+            color: $accent;
+        }
+    }
+
+    &__form {
+        margin: 4px 0 20px;
+        display: grid;
+        gap: 4px;
+    }
+
+    &__footer {
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: auto 140px;
+        align-items: center;
+        justify-content: end;
+        gap: 40px;
+    }
+}
