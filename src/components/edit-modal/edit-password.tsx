@@ -11,6 +11,7 @@ import "./styles/edit-account.scss"
 import { AxiosError, AxiosResponse } from "axios";
 import { formatDate } from "../../services/baseService";
 import KeyIcon from './assets/key.svg';
+import ComaList from '../coma-list';
 
 interface IEditProfile {
     onClose: () => void;
@@ -103,10 +104,8 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                     </dt>
 
                     <dd className="edit-account__value">
-                        <ul className="edit-account__roles">
-                            {user.userRoles.map((role) => (<li key={role}>{role}</li>))}
-                        </ul>
-
+                        {/* <ComaList list={['Coherence', 'Research', 'Org.Owner', 'Org.Admin']} /> */}
+                        <ComaList list={user.userRoles} />
                     </dd>
 
                 </div>
