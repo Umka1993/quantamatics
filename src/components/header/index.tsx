@@ -24,6 +24,8 @@ import Breadcrumbs from '../breadcrumbs';
 
 export const Header: React.FunctionComponent = (props) => {
     const user = useSelector<RootState>((state) => state.auth.user)
+    console.log(user);
+    
 
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [showProfile, setShowProfile] = useState<boolean>(false)
@@ -72,11 +74,8 @@ export const Header: React.FunctionComponent = (props) => {
                 {username && logged && !hideUser && (<div className="header__nav">
                     <div className="header__nav-item">
                         <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
-                            <div className={classNames("profile__avatar", { 'opened': showMenu })}>
-                                {/*<SVG icon={avatar} name="avatar"/>*/}
-                                <div className="img-wrapper"><img src={require("./assets/avatar-img.jpeg").default} alt="ava" /></div>
-
-                            </div>
+                            {(user as IUser).firstName} {(user as IUser).lastName}
+                            
                             <SVG icon={arrowImg} className={classNames("profile__arrow", { 'opened': showMenu })} />
                             <div className={classNames('profile__dropdown', { showMenu: showMenu })}>
                                 <div className="profile__dropdown-triangle" />
