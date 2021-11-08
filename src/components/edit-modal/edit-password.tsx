@@ -104,7 +104,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 
                     <dd className="edit-account__value">
                         <ul className="edit-account__roles">
-                            {user.userRoles.map((role) => (<li>{role}</li>))}
+                            {user.userRoles.map((role) => (<li key={role}>{role}</li>))}
                         </ul>
 
                     </dd>
