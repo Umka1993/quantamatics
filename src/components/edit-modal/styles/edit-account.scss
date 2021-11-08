@@ -42,6 +42,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: end;
+        margin: 0;
         li:not(:last-child)::after {
             content: ',';
             margin-right: 3px;
