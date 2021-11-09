@@ -19,7 +19,7 @@ export const Organizations: React.FunctionComponent = (props) => {
         network.get('api/Organization/getAll')
             .then((r: any) => {
 
-                let result = r.data.map((row: any) => {
+                const result = r.data.map((row: any) => {
                     return {
                         editable: true,
                         row

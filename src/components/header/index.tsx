@@ -101,7 +101,7 @@ export const Header: React.FunctionComponent = (props) => {
                         <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
                             <div className={classNames("profile__avatar", { 'opened': showMenu })}>
                                 {/*<SVG icon={avatar} name="avatar"/>*/}
-                                <div className="img-wrapper"><img src={require("./assets/avatar-img.jpeg").default} alt="ava" /></div>
+                                <div className="img-wrapper"><SVG icon={avatar} name="avatar"/></div>
 
                             </div>
                             <SVG icon={arrowImg} className={classNames("profile__arrow", { 'opened': showMenu })} />

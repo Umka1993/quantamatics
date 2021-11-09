@@ -1,0 +1,266 @@
+image: registry.gitlab.com/facteus/platform-team/shared-infra/images/dotnet-ci-image:latest
+
+stages:
+  - pre-deploy
+  - build
+  - deploy-develop
+  - deploy-staging
+  - deploy-production
+
+variables:
+  AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_DEV
+  AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_DEV
+  AWS_DEFAULT_REGION: us-west-2
+  ENV_SUFFIX: development
+  STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+  TEMPLATE_PATH: website.yml
+  CERTIFICATE_ARN: arn:aws:acm:us-east-1:383101536740:certificate/29d974c2-caef-44cf-bd78-4e6102652152
+  DISTRIBUTION_ALIAS: dev.quantamatics.net
+
+validate template:
+  stage: pre-deploy
+  script:
+  - aws cloudformation validate-template --template-body file://$TEMPLATE_PATH
+
+build:
+  image: node:lts
+  dependencies:
+    - validate template
+  stage: build
+  before_script:
+    - npm ci
+  script:
+    - npm run build && mv publish dist-development
+    # - npm run buildCoherence && mv publish dist-development-coherence
+    # - npm run buildFacteus && mv publish dist-development-facteus
+    # - npm run buildLive && mv publish dist-development-live
+    # - npm run buildResearch && mv publish dist-development-research
+    - npm run buildStaging && mv publish dist-staging
+    # - npm run buildStagingCoherence && mv publish dist-staging-coherence
+    # - npm run buildStagingFacteus && mv publish dist-staging-facteus
+    # - npm run buildStagingLive && mv publish dist-staging-live
+    # - npm run buildStagingResearch && mv publish dist-staging-research    
+    # - npm run buildProduction && mv publish dist-production
+    # - npm run buildProductionCoherence && mv publish dist-production-coherence
+    # - npm run buildProductionFacteus && mv publish dist-production-facteus
+    # - npm run buildProductionLive && mv publish dist-production-live
+    # - npm run buildProductionResearch && mv publish dist-production-research
+  artifacts:
+    paths:
+      - dist-development/
+      # - dist-development-coherence/
+      # - dist-development-facteus/
+      # - dist-development-live/
+      # - dist-development-research/
+      - dist-staging/
+      # - dist-staging-coherence/
+      # - dist-staging-facteus/
+      # - dist-staging-live/
+      # - dist-staging-research/      
+      # - dist-production/
+      # - dist-production-coherence/
+      # - dist-production-facteus/
+      # - dist-production-live/
+      # - dist-production-research/
+      
+.deploy:
+  dependencies:
+    - build
+  script:
+    - aws cloudformation deploy --stack-name $STACK_NAME --template-file $TEMPLATE_PATH --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides "CertificateArn=$CERTIFICATE_ARN" "DistributionAlias=$DISTRIBUTION_ALIAS"
+    - aws s3 sync ./dist-$ENV_SUFFIX s3://$STACK_NAME --acl public-read
+    - export DISTRIBUTION_ID=`aws cloudformation describe-stack-resource --stack-name $STACK_NAME --logical-resource-id CloudFrontDistribution | jq -r '.StackResourceDetail.PhysicalResourceId'`
+    - invalidation_id=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*" | jq -r '.Invalidation.Id')
+    - echo $invalidation_id
+    - aws cloudfront wait invalidation-completed --distribution-id $DISTRIBUTION_ID --id $invalidation_id
+
+deploy dev:
+  stage: deploy-develop
+  extends: .deploy
+  only:
+    - develop
+
+deploy staging:
+  stage: deploy-staging
+  extends: .deploy
+  variables:
+    AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_STAG
+    AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_STAG
+    AWS_DEFAULT_REGION: us-east-1
+    ENV_SUFFIX: staging
+    STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+    CERTIFICATE_ARN: arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526
+    DISTRIBUTION_ALIAS: stag.quantamatics.net    
+  only:
+    - master
+
+# deploy dev-coherence:
+#   stage: deploy-develop
+#   extends: .deploy
+#   variables:
+#     ENV_SUFFIX: development-coherence
+#     DISTRIBUTION_ALIAS: coherence.dev.quantamatics.net
+#   only:
+#     - develop
+
+# deploy dev-facteus:
+#   stage: deploy-develop
+#   extends: .deploy
+#   variables:
+#     ENV_SUFFIX: development-facteus
+#     DISTRIBUTION_ALIAS: facteus.dev.quantamatics.net
+#   only:
+#     - develop
+
+# deploy dev-live:
+#   stage: deploy-develop
+#   extends: .deploy
+#   variables:
+#     ENV_SUFFIX: development-live
+#     DISTRIBUTION_ALIAS: live.dev.quantamatics.net
+#   only:
+#     - develop
+
+# deploy dev-research:
+#   stage: deploy-develop
+#   extends: .deploy
+#   variables:
+#     ENV_SUFFIX: development-research
+#     DISTRIBUTION_ALIAS: research.dev.quantamatics.net
+#   only:
+#     - develop
+
+# deploy stag:
+#   stage: deploy-staging
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_STAG
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_STAG
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: staging
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526"
+#     DISTRIBUTION_ALIAS: stag.quantamatics.net
+#   only:
+#     - master
+
+# deploy stag-coherence:
+#   stage: deploy-staging
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_STAG
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_STAG
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: staging-coherence
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526"
+#     DISTRIBUTION_ALIAS: coherence.stag.quantamatics.net
+#   only:
+#     - master
+
+# deploy stag-facteus:
+#   stage: deploy-staging
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_STAG
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_STAG
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: staging-facteus
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526"
+#     DISTRIBUTION_ALIAS: facteus.stag.quantamatics.net
+#   only:
+#     - master
+
+# deploy stag-live:
+#   stage: deploy-staging
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_STAG
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_STAG
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: staging-live
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526"
+#     DISTRIBUTION_ALIAS: live.stag.quantamatics.net
+#   only:
+#     - master
+
+# deploy stag-research:
+#   stage: deploy-staging
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_STAG
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_STAG
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: staging-research
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526"
+#     DISTRIBUTION_ALIAS: research.stag.quantamatics.net
+#   only:
+#     - master
+
+# deploy prod:
+#   stage: deploy-production
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_PROD
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_PROD
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: production
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:695033446027:certificate/033fbbee-1764-484f-8a4b-23c448dd9446"
+#     DISTRIBUTION_ALIAS: prod.quantamatics.net
+#   when: manual
+#   only:
+#     - master
+
+# deploy prod-coherence:
+#   stage: deploy-production
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_PROD
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_PROD
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: production-coherence
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:695033446027:certificate/033fbbee-1764-484f-8a4b-23c448dd9446"
+#     DISTRIBUTION_ALIAS: coherence.prod.quantamatics.net
+#   when: manual
+#   only:
+#     - master
+
+# deploy prod-facteus:
+#   stage: deploy-production
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_PROD
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_PROD
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: production-facteus
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:695033446027:certificate/033fbbee-1764-484f-8a4b-23c448dd9446"
+#     DISTRIBUTION_ALIAS: facteus.prod.quantamatics.net
+#   when: manual
+#   only:
+#     - master
+
+# deploy prod-live:
+#   stage: deploy-production
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_PROD
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_PROD
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: production-live
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:695033446027:certificate/033fbbee-1764-484f-8a4b-23c448dd9446"
+#     DISTRIBUTION_ALIAS: live.prod.quantamatics.net
+#   when: manual
+#   only:
+#     - master
+
+# deploy prod-research:
+#   stage: deploy-production
+#   extends: .deploy
+#   variables:
+#     AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_PROD
+#     AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_PROD
+#     AWS_DEFAULT_REGION: us-east-1
+#     ENV_SUFFIX: production-research
+#     CERTIFICATE_ARN: "arn:aws:acm:us-east-1:695033446027:certificate/033fbbee-1764-484f-8a4b-23c448dd9446"
+#     DISTRIBUTION_ALIAS: research.prod.quantamatics.net
+#   when: manual
+#   only:
+#     - master

@@ -11,7 +11,7 @@ export const sortTable = (
     setSort: any,
     setLocalRows: any
 ) => {
-    let newSort = sort;
+    const newSort = sort;
 
     if (name === sort.name) {
         switch (sort.direction) {
@@ -93,6 +93,6 @@ export const sortTable = (
  */
 
 export function formatDate(date: string): string {
-    let result = date.split(" ")[0];
+    const result = date.split(" ")[0];
     return result.replace(/[/]/g, ".");
 }

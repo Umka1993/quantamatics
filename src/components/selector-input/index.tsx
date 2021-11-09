@@ -24,11 +24,9 @@ export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({classNam
         "selector-input--disabled": disabled,
     });
 
-    const optionsMap = options.map((item) => (
-        <div className="selector-input__item" onClick={() => setSelecting(false)}>
-            {item}
-        </div>
-    ));
+    const optionsMap = options.map((item) =>
+        <div className="selector-input__item" key={item} onClick={() => setSelecting(false)}>{item}</div>
+    )
 
     const changeState = () => {
         if (!disabled) {

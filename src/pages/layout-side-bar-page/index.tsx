@@ -1,10 +1,11 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { changeRoute } from "../../store/currentPage/actions";
-import { SideBar } from "../../components/side-bar";
-import { Organizations } from "../organizations";
-import { JupyterFrame } from "../../components/jupyter-frame";
-import { SIDE_BAR_ITEMS } from "../../contstans/constans";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {changeRoute} from "../../store/currentPage/actions";
+import {SideBar} from "../../components/side-bar";
+import {Organizations} from "../organizations";
+import {JupyterFrame} from "../../components/jupyter-frame";
+import {CoherenceFrame} from "../../components/coherence-frame";
+import {SIDE_BAR_ITEMS} from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
 import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
 import { EditOrganization } from "../../components/edit-organization/edit-organization";
@@ -41,7 +42,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                         </Route>
 
                         <Route path='/coherence'>
-                            <JupyterFrame type='coherence' />
+                            <CoherenceFrame />
                         </Route>
 
                         <Route path='/apps/organizations/list' component={Organizations} />

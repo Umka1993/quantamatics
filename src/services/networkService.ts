@@ -2,10 +2,10 @@ import axios from 'axios'
 
 export const network = {
     apiUrl() {
-        return 'https://qmc-api.k8s.dev.quantamatics.net'
+        return process.env.DATA_API_URL
     },
     headers() {
-        let headers: any = { Accept: 'application/json', 'Content-Type': 'application/json' }
+        const headers: any = { Accept: 'application/json', 'Content-Type': 'application/json' }
         if (!!localStorage.getItem('id_token')) headers['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`
 
         return headers

@@ -1,23 +1,27 @@
-const path = require('path');
+﻿const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-    watch: true,
-    devtool: false,
+    devServer: {
+        static: path.resolve(__dirname, '../publish'),
+        historyApiFallback: true,
+        port: 8888
+    },
     entry: path.resolve(__dirname, '../src', 'index.tsx'),
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, '../dist'),
+        path: path.resolve(__dirname, '../publish'),
         publicPath: '/'
     },
-    mode: "development",
+    mode: "production",
     resolve: {
         extensions: ['.js', '.ts', '.tsx']
     },
     module: {
         rules: [
             {
-                test: /\.(png|jp(e*)g|svg|gif)$/,
+                test: /\.(png|jp(e*)g|gif)$/,
                 use: [
                     {
                         loader: 'file-loader',
@@ -51,7 +55,10 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, '../public', 'index.html')
-        })
+            template: path.resolve(__dirname, '../public', 'index.html'),
+        }),
+        new Dotenv({
+            path: '.env.stag',
+        }),
     ]
 };

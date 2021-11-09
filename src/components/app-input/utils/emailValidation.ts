@@ -10,4 +10,4 @@ export default function getValidationMessage(validity: ValidityState, error?: st
     }
 
     return "";
-};
+}

@@ -21,7 +21,7 @@ interface ITable {
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const { rows, deleteUser } = props;
     const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
-    const [showModal, setShowModal] = useState<Boolean>(false)
+    const [showModal, setShowModal] = useState<boolean>(false)
     const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
 
     const [user, setUser] = useState<any>(USER)

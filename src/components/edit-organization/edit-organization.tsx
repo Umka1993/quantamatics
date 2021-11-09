@@ -29,14 +29,13 @@ export const EditOrganization: React.FunctionComponent = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const [addUserActive, setAddUserActive] = useState<Boolean>(false)
+    const [addUserActive, setAddUserActive] = useState<boolean>(false)
 
     const fetchUsers = () => {
         network.get('api/User/list', { orgId })
             .then((r: any) => {
 
-                let result = r.data.map((row: any) => {
-
+                const result = r.data.map((row: any) => {
                     return {
                         editable: true,
                         row
@@ -106,8 +105,9 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                 .catch((e) => {
                     console.log(e)
                 })
-        } else {
         }
+        // else {
+        // }
 
     }, [organizationName, customerID, customerLink, comment])
 

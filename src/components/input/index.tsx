@@ -45,7 +45,7 @@ export const Input: React.FunctionComponent<IInput> = ({
     onInvalid,
     ...props
 }) => {
-    let { errors } = props;
+    const { errors } = props;
 
     const inputRef = useRef<HTMLInputElement>(null);
 

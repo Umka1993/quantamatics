@@ -9,7 +9,7 @@ export default function getValidationMessage(
 
     if (tooShort || patternMismatch) {
         const textStart = "The password must contain at least ";
-        let requirements = [];
+        const requirements = [];
 
         tooShort && requirements.push("8 characters");
         patternMismatch &&
