@@ -63,10 +63,6 @@ const Email: React.FunctionComponent<IEmail> = ({
 
             const { validationMessage } = inputRef.current;
 
-            console.log(validationMessage);
-            console.log(errorMessage);
-
-
             error &&
                 errorMessage !== validationMessage &&
                 setErrorMessage(validationMessage);
