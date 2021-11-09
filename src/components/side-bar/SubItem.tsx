@@ -6,7 +6,7 @@ import toggleArrow from "./assets/toggle-arrow.svg";
 import { SideBarItem, SideBarSubItem } from "../../types/side-bar/side-bar";
 import { SVG } from "../SVG";
 import { useLocation } from "react-router";
-
+import { NavLink } from 'react-router-dom'
 interface ISideBar {
     classNames?: string
     item: SideBarItem
@@ -39,7 +39,7 @@ export const BarItem: React.FunctionComponent<ISideBar> = (props) => {
     })
 
     return (
-        <div className='side-bar__item-wrapper'>
+        <div className='side-bar__item-wrapper'>            
             <div className={itemClasses} key={item.name} onClick={() => !!item.subItems ? setOpened(!opened) : props.onSwitch(item.route ? item.route : '/')}>
                 <SVG icon={item.image} className={"side-bar__item-img"} />
                 <div className="side-bar__item-name">

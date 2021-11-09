@@ -4,7 +4,6 @@ import { changeRoute } from "../../store/currentPage/actions";
 import { SideBar } from "../../components/side-bar";
 import { Organizations } from "../organizations";
 import { JupyterFrame } from "../../components/jupyter-frame";
-import { SIDE_BAR_ITEMS } from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
 import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
 import { EditOrganization } from "../../components/edit-organization/edit-organization";
@@ -23,7 +22,6 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
     return (
         <div className="layout-page app__main">
             <SideBar
-                items={SIDE_BAR_ITEMS}
                 onSwitch={(value) => changeRoutePath(value)}
             />
 
