@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./styles/table.scss"
 import { IUserRow } from "../../types/table/types";
-import { SVG } from "../SVG";
 import EditSVG from "./assets/edit-row-icon.svg";
 import DeleteSVG from "./assets/delete-row-icon.svg";
 import { EditProfile } from "../edit-modal/edit-profile";
@@ -9,7 +8,7 @@ import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import { USER } from "../../contstans/constans";
 
-import { formatDate } from "../../services/baseService"
+import { formatDate, adaptRoles } from "../../services/baseService"
 import ComaList from "../coma-list";
 import { IUser } from "types/edit-profile/types";
 
@@ -21,7 +20,6 @@ interface ITable {
 
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const { rows, deleteUser } = props;
-    console.table(rows);
 
     const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
     const [showModal, setShowModal] = useState<Boolean>(false)
@@ -88,7 +86,7 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                             className="user"
                         />
                         <SortTableHeader
-                            name="" text="User Role"
+                            name="userRoles" text="User Role"
                             sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                             className="user"
                         />
@@ -111,7 +109,7 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                                 {formatDate(row.row.subscriptionEndDate)}
                             </td>
                             <td className="table__cell">
-                                <ComaList list={row.row.userRoles} />
+                                <ComaList list={adaptRoles(row.row.userRoles)} />
                             </td>
                             <td className='table__cell table__cell--actions'>
                                 <button

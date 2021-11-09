@@ -1,3 +1,5 @@
+import { UserRole } from "../data/enum";
+
 export const enum SortDirection {
     Down = "descending",
     Up = "ascending",
@@ -39,26 +41,18 @@ export const sortTable = (
     switch (newSort.direction) {
         case SortDirection.Up:
             newRows.sort((a: any, b: any) => {
-                const first =
-                    name === "subscriptionEndDate" ? new Date(a.row[name]) : a.row[name].toUpperCase();
-
-                const second =
-                    name === "subscriptionEndDate" ? new Date(b.row[name]) : b.row[name].toUpperCase();
-
-                // console.log(`${first} > ${second} = ${first > second}`);
+                const first = normalizeCompare(a, name);
+                const second = normalizeCompare(b, name); 
                 
-
                 return first > second ? 1 : second > first ? -1 : 0;
             });
             break;
 
         case SortDirection.Down:
             newRows.sort((a: any, b: any) => {
-                const first =
-                    name === "subscriptionEndDate" ? new Date(a.row[name]) : a.row[name].toUpperCase();
-
-                const second =
-                    name === "subscriptionEndDate" ? new Date(b.row[name]) : b.row[name].toUpperCase();
+                const first = normalizeCompare(a, name);
+                const second = normalizeCompare(b, name); 
+                
                 return second > first
                     ? 1
                     : first > second
@@ -78,6 +72,20 @@ export const sortTable = (
     setLocalRows(newRows);
 };
 
+function normalizeCompare(item : any, name: string) {
+    switch (name) {
+        case "subscriptionEndDate":
+            return new Date(item.row[name]);
+    
+        case "userRoles":
+            return item.row[name];
+    
+        default:
+            return item.row[name].toUpperCase()
+    }      
+}
+
+
 /**
  * A function to format server date to dot separated
 
@@ -95,4 +103,15 @@ export const sortTable = (
 export function formatDate(date: string): string {
     let result = date.split(" ")[0];
     return result.replace(/[/]/g, ".");
+}
+
+
+export function adaptRoles(array: string[]): string[] {
+    if (array.includes(UserRole.OrgAdmin)) {
+        const index = array.indexOf(UserRole.OrgAdmin);
+        array[index] = 'Org. Admin'
+    }
+
+    return array;
+    
 }
