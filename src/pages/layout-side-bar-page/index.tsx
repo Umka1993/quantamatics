@@ -41,10 +41,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                             <JupyterFrame type='files' />
                         </Route>
 
-                        <Route path='/coherence'>
-                            <CoherenceFrame />
-                        </Route>
-
+                        <Route path='/coherence' component={CoherenceFrame} />
                         <Route path='/apps/organizations/list' component={Organizations} />
                         <Route path='/apps/organizations/new-organization' component={CreateOrganization} />
                         <Route path='/apps/organizations/:id' component={EditOrganization} />
