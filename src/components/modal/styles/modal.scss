@@ -1,40 +1,51 @@
-.modal {
-  background: rgba(38, 55, 104, 0.5);
-  backdrop-filter: blur(6px);
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
-  right: 0;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  &__inner {
-    padding: 54px;
-    background: #FFFFFF;
-    box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.2);
-    border-radius: 4px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-  }
+@import '../../../variables.scss';
+
+.modal-overlay {
+  background: transparentize(#263768, 0.2);
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  place-items: center;
+  cursor: pointer;
 }
 
-.cancel-button {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 18px;
-  color: rgba(61, 83, 102, 0.5);
-  cursor: pointer;
-  margin-top: 18px;
-  display: flex;
-  justify-content: center;
-  span {
-    border-bottom: 2px dotted rgba(61, 83, 102, 0.5);
-    &:hover {
-      border-bottom-color: #fff;
+
+.modal {
+  width: 775px;
+  height: 602px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.2);
+  border-radius: 4px;
+  max-width: 775px;
+  min-height: 602px;
+  cursor: default;
+  
+  z-index: 200;
+
+  margin: auto;
+  position: relative;
+
+  &:focus {
+    outline: none;
+  }
+
+  &__close {
+    all: unset;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    color: #BCC4D8;
+    
+    padding: 24px;
+    cursor: pointer;
+    &:hover, &:focus-visible {
+      color: $accent;
+    }
+
+    &:active {
+      color: darken($accent, 20)
     }
   }
 }

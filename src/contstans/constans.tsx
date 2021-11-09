@@ -52,7 +52,8 @@ export const SIDE_BAR_ITEMS = [
         name: 'Organizations',
         image: orgImg,
         active: false,
-        route: 'apps/organizations/list'
+        route: 'apps/organizations/list',
+        pathToActivate: 'apps/organizations/'
     },
     // {
     //     name: 'Accounts list',

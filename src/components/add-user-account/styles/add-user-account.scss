@@ -1,13 +1,24 @@
 .add-user-account {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  min-height: 600px;
+  min-height: var(--min-height);
+  display: grid;
+  place-items: center;
   position: relative;
 
   &__header {
     width: 100%;
-    margin-bottom: 12px;
+    margin-bottom: 50px;
+
+    h2 {
+      margin: 0 0 12px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.125;
+      color: #7182a6;
+    }
   }
 
   &__button {
@@ -26,15 +37,6 @@
 
   &__form {
     text-align: center;
-
-    h2 {
-      margin-bottom: 40px;
-      font-weight: 500;
-      font-size: 24px;
-      line-height: 28px;
-      color: #003C71;
-    }
-
     width: 100%;
     max-width: 360px;
     margin: 0 auto;
@@ -51,46 +53,4 @@
     margin: 18px auto 0;
   }
 
-  &__forgot-password {
-    position: absolute;
-    background-color: #fff;
-    height: 100%;
-    width: calc(100% + 274px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    left: -274px;
-
-    &.success {
-      .login-page__container {
-        max-width: 656px;
-      }
-      .login-page__btn {
-        max-width: 210px;
-      }
-    }
-
-    &-success-text {
-      font-weight: 500;
-      font-size: 24px;
-      line-height: 28px;
-      letter-spacing: 0.2px;
-      color: #00CD52;
-      margin-bottom: 32px;
-      svg {
-        margin-right: 8px;
-      }
-    }
-
-    .add-user-account__btn {
-      display: flex;
-      justify-content: center;
-      .button {
-        width: 100%;
-        padding: 10px 40px;
-        max-width: 140px;
-      }
-    }
-  }
 }

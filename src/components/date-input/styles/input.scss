@@ -7,6 +7,7 @@
     right: 0;
     top: 50%;
     transform: translate(0, -50%);
+    pointer-events: none;
   }
   input {
     width: 100%;
