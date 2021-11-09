@@ -9,7 +9,7 @@ import Modal from "../modal";
 // import "./styles/edit-modal.scss";
 import "./styles/edit-account.scss"
 import { AxiosError, AxiosResponse } from "axios";
-import { formatDate } from "../../services/baseService";
+import { adaptRoles, formatDate } from "../../services/baseService";
 import KeyIcon from './assets/key.svg';
 import ComaList from '../coma-list';
 
@@ -104,8 +104,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                     </dt>
 
                     <dd className="edit-account__value">
-                        {/* <ComaList list={['Coherence', 'Research', 'Org.Owner', 'Org.Admin']} /> */}
-                        <ComaList list={user.userRoles} />
+                        <ComaList list={adaptRoles(user.userRoles)} />
                     </dd>
 
                 </div>
