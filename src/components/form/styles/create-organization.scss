@@ -23,4 +23,13 @@
         display: grid;
         gap: 18px;
     }
+
+    .role-checkboxes {
+        margin-top: 10px;
+        color: $headlines;
+    }
+
+    .check-block {
+        color: $main-text;
+    }
 }

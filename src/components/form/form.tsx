@@ -10,7 +10,6 @@ interface IForm extends FormHTMLAttributes<HTMLFormElement> {
     headline?: string | JSX.Element;
     headlineText?: string;
     subtitle?: string;
-    ref?: React.Ref<HTMLFormElement>;
 }
 
 

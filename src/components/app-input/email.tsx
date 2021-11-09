@@ -36,7 +36,6 @@ const Email: React.FunctionComponent<IEmail> = ({
     name,
     ...other
 }) => {
-    const [innerValue, setInnerValue] = useState<string>(value as string);
     const inputRef = useRef<HTMLInputElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(error);
 
@@ -46,21 +45,16 @@ const Email: React.FunctionComponent<IEmail> = ({
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         const { value } = evt.target;
-        setInnerValue(value);
         externalSetter && externalSetter(value);
         onChange && onChange(evt);
     };
 
     const blurHandler: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
         if (!value.includes('@')) {
-            setInnerValue(`${value}@gmail.com`);
-            externalSetter && externalSetter(`${value}@gmail.com`);
+            value = `${value}@gmail.com`
+            externalSetter && externalSetter(value);
         }
     }
-
-    useEffect(() => {
-        setInnerValue(value as string);
-    }, [value]);
 
     useEffect(() => {
         if (inputRef.current) {
@@ -69,13 +63,17 @@ const Email: React.FunctionComponent<IEmail> = ({
 
             const { validationMessage } = inputRef.current;
 
-            errorMessage &&
+            console.log(validationMessage);
+            console.log(errorMessage);
+
+
+            error &&
                 errorMessage !== validationMessage &&
                 setErrorMessage(validationMessage);
 
             !validationMessage.length && setErrorMessage(undefined);
         }
-    }, [inputRef.current?.validity, error, innerValue]);
+    }, [inputRef.current?.validity, error, value]);
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
@@ -104,7 +102,7 @@ const Email: React.FunctionComponent<IEmail> = ({
                     placeholder={`${placeholder}${required ? "*" : ""}`}
                     required={required}
                     aria-required={required}
-                    value={innerValue}
+                    value={value || ''}
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
