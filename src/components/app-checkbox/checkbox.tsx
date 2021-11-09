@@ -33,6 +33,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                 <input
                     type="checkbox"
                     name={name}
+                    // checked=
                     defaultChecked={checked}
                     onInput={inputHandler}
                     className="check-block__input"

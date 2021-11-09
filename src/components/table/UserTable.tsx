@@ -111,7 +111,7 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                                 {formatDate(row.row.subscriptionEndDate)}
                             </td>
                             <td className="table__cell">
-                                <ComaList list={['Coherence', 'Research', 'Org.Owner', 'Org.Admin']} />
+                                <ComaList list={row.row.userRoles} />
                             </td>
                             <td className='table__cell table__cell--actions'>
                                 <button

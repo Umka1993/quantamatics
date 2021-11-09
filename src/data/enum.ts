@@ -40,3 +40,9 @@ export const enum AuthorizationStatus {
     NoAuth = 'NO_AUTH',
     Unknown = 'UNKNOWN',
 }
+
+export const enum UserRole {
+    OrgAdmin = "OrgAdmin",
+    Research = "Research",
+    Coherence = "Coherence",
+}
