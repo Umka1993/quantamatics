@@ -5,10 +5,10 @@ import { IUser } from "../../types/edit-profile/types";
 import { network } from "../../services/networkService";
 
 import AppInput, { DatePick, Email } from "../app-input";
-import Checkbox from "../app-checkbox/checkbox";
 import { SelectorInput } from "../selector-input";
 import { USER_ORGS } from "../../contstans/constans";
 import Modal from "../modal";
+import RoleCheckboxes from "../role-checkboxes";
 
 import "./styles/edit-account.scss";
 import { UserRole } from "../../data/enum";
@@ -22,7 +22,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     onClose,
     user,
     onSubmit,
-}) => {
+}) => {    
     const initialExp = user.subscriptionEndDate
         ? new Date(user.subscriptionEndDate.split(".").join("/"))
         : new Date();  
@@ -35,10 +35,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
+    const [userRoles, setRoles] = useState<UserRole[]>(user.userRoles)
 
-    const [orgAdmin, setOrgAdmin] = useState<boolean>(user.userRoles.includes(UserRole.OrgAdmin));
-    const [research, setResearch] = useState<boolean>(user.userRoles.includes(UserRole.Research));
-    const [coherence, setCoherence] = useState<boolean>(user.userRoles.includes(UserRole.Coherence));
     const formRef = useRef<HTMLFormElement>(null);
 
     const updateUser = (validate: any) => {
@@ -48,12 +46,9 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             lastName: surname,
             companyName: organization,
             subscriptionEndDate: new Date(expiration),
-            userRoles: [],
+            userRoles: userRoles,
         };
 
-        orgAdmin && newUserData.userRoles.push(UserRole.OrgAdmin);
-        research && newUserData.userRoles.push(UserRole.Research);
-        coherence && newUserData.userRoles.push(UserRole.Coherence);
 
         if (email !== user.email) {
             newUserData = {
@@ -132,31 +127,10 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                     icon="edit"
                 />
                 <DatePick externalSetter={setExpiration} valueAsDate={expiration} />
-                <fieldset className="edit-account__fieldset">
-                    <legend>Organization Role</legend>
-
-                    <Checkbox
-                        name="org-admin"
-                        checked={orgAdmin}
-                        externalSetter={setOrgAdmin}
-                    >
-                        Org. Admin
-                    </Checkbox>
-                    <Checkbox
-                        name={UserRole.Research}
-                        checked={research}
-                        externalSetter={setResearch}
-                    >
-                        {UserRole.Research}
-                    </Checkbox>
-                    <Checkbox
-                        name={UserRole.Coherence}
-                        checked={coherence}
-                        externalSetter={setCoherence}
-                    >
-                        {UserRole.Coherence}
-                    </Checkbox>
-                </fieldset>
+                <RoleCheckboxes 
+                    defaultRoles={userRoles}
+                    externalSetter={setRoles}
+                />
             </form>
 
             <footer className="edit-account__footer">

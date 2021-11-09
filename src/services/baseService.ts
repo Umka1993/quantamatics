@@ -107,11 +107,12 @@ export function formatDate(date: string): string {
 
 
 export function adaptRoles(array: string[]): string[] {
-    if (array.includes(UserRole.OrgAdmin)) {
-        const index = array.indexOf(UserRole.OrgAdmin);
-        array[index] = 'Org. Admin'
+    const formattedArray = [...array];
+    if (formattedArray.includes(UserRole.OrgAdmin)) {
+        const index = formattedArray.indexOf(UserRole.OrgAdmin);
+        formattedArray[index] = 'Org. Admin'
     }
 
-    return array;
+    return formattedArray;
     
 }

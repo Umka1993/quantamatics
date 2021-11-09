@@ -1,3 +1,5 @@
+import { UserRole } from "../../data/enum";
+
 export interface User {
     avatar: string,
     type: string,
@@ -17,5 +19,5 @@ export interface IUser {
     location: string,
     subscriptionType: number,
     subscriptionEndDate: string,
-    userRoles: string[];
+    userRoles: UserRole[];
 }

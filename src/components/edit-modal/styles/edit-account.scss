@@ -89,23 +89,7 @@
         }
     }
 
-    &__fieldset {
-        display: flex;
-        justify-content: space-between;
-        // grid-template-columns: repeat(3, 1fr);
-        border: none;
-        margin: 0;
-        padding: 0;
-        justify-content: space-between;
-        gap: 20px;
-
-        legend {
-            color: $main-text;
-            margin: 0 0 1em;
-        }
-        .check-block {
-            flex-direction: row-reverse;
-            color: $headlines
-        }
+    .check-block {
+        color: $headlines
     }
 }
