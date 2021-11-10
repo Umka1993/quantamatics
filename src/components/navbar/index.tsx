@@ -77,7 +77,7 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
                         { 
                             'navigation__item--active': 
                                 pathname.includes('/apps/organizations/') &&
-                                pathname !== `/apps/organizations/${user?.organizationId}`
+                                !pathname.includes(`/apps/organizations/${user?.organizationId}`) 
                         })}
                     activeClassName='navigation__item--active'
                 >

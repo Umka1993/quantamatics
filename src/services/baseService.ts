@@ -112,6 +112,7 @@ export function adaptRoles(array: string[]): string[] {
         const index = formattedArray.indexOf(UserRole.OrgAdmin);
         formattedArray[index] = 'Org. Admin'
     }
+    // delete formattedArray[formattedArray.indexOf(UserRole.Admin)];
 
     return formattedArray;
     

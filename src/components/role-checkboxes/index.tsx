@@ -15,13 +15,13 @@ const RoleCheckboxes: FunctionComponent<RoleCheckboxesProps> = ({ defaultRoles =
     const [coherence, setCoherence] = useState<boolean>(defaultRoles.includes(UserRole.Coherence));
 
     useEffect(() => {
-        const newValues = [];
+        const newValues = new Set(defaultRoles);
 
-        orgAdmin && newValues.push(UserRole.OrgAdmin);
-        research && newValues.push(UserRole.Research);
-        coherence && newValues.push(UserRole.Coherence);
+        orgAdmin ? newValues.add(UserRole.OrgAdmin) : newValues.delete(UserRole.OrgAdmin);
+        research ? newValues.add(UserRole.Research) : newValues.delete(UserRole.Research);
+        coherence ? newValues.add(UserRole.Coherence) : newValues.delete(UserRole.Coherence);
 
-        externalSetter(newValues)
+        externalSetter(Array.from(newValues))
     }, [orgAdmin, research, coherence])
 
     return (
