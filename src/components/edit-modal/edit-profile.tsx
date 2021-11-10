@@ -22,10 +22,10 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     onClose,
     user,
     onSubmit,
-}) => {    
+}) => {
     const initialExp = user.subscriptionEndDate
         ? new Date(user.subscriptionEndDate.split(".").join("/"))
-        : new Date();  
+        : new Date();
 
     const [name, setName] = useState<string>(user.firstName);
     const [surname, setSurname] = useState<string>(user.lastName);
@@ -60,9 +60,14 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
         network
             .post("/api/Admin/updateUser", newUserData)
             .then((r: any) => {
-                onSubmit(newUserData);
 
-                onClose();
+                network.post(`/api/Admin/editRoles/${user.id}`, {userRoles: userRoles})
+                    .then((r: any) => {
+                        onSubmit(newUserData);
+
+                        onClose();
+                    })
+
             })
             .catch(({ response: { data } }) => {
                 if (data.includes(" already taken")) {
@@ -127,7 +132,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                     icon="edit"
                 />
                 <DatePick externalSetter={setExpiration} valueAsDate={expiration} />
-                <RoleCheckboxes 
+                <RoleCheckboxes
                     defaultRoles={userRoles}
                     externalSetter={setRoles}
                 />

@@ -57,7 +57,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
         // console.table(users.filter(({row}: IUserRow) => row.id !== id ))
         /* network.post('api/Admin/updateUserOrg', { userId: id })
             .then((r: any) => {
-
+    
                 // let result = r.data.map((row: any) => {
                 //     return {
                 //         editable: true,
@@ -145,7 +145,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                 <div
                     className="edit-organization__body"
                 >
-                    <form 
+                    <form
                         className="edit-organization__info" id="edit-organization"
                         onSubmit={(evt) => { evt.preventDefault(); updateOrganization() }}
                         onReset={(evt) => {
