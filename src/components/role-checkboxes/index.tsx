@@ -21,7 +21,7 @@ const RoleCheckboxes: FunctionComponent<RoleCheckboxesProps> = ({ defaultRoles =
         research ? newValues.add(UserRole.Research) : newValues.delete(UserRole.Research);
         coherence ? newValues.add(UserRole.Coherence) : newValues.delete(UserRole.Coherence);
 
-        externalSetter(Array.from(newValues))
+        externalSetter(Array.from(newValues).sort())
     }, [orgAdmin, research, coherence])
 
     return (

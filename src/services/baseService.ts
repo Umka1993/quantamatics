@@ -108,12 +108,18 @@ export function formatDate(date: string): string {
 
 export function adaptRoles(array: string[]): string[] {
     const formattedArray = [...array];
-    if (formattedArray.includes(UserRole.OrgAdmin)) {
-        const index = formattedArray.indexOf(UserRole.OrgAdmin);
-        formattedArray[index] = 'Org. Admin'
-    }
-    // delete formattedArray[formattedArray.indexOf(UserRole.Admin)];
+  
+    replaceItemInArray(formattedArray, UserRole.OrgAdmin, 'Org. Admin')
+    replaceItemInArray(formattedArray, UserRole.Admin, 'Super Admin')
+    replaceItemInArray(formattedArray, UserRole.OrgOwner, 'Org. Owner')
 
     return formattedArray;
     
+}
+
+function replaceItemInArray(array: any[], oldValue: any, newValue: any) {
+    if (array.includes(oldValue)) {
+        const index = array.indexOf(oldValue);
+        array[index] = newValue
+    }
 }

@@ -43,6 +43,7 @@ export const enum AuthorizationStatus {
 
 export const enum UserRole {
     Admin = "Admin",
+    OrgOwner = 'OrgOwner',
     OrgAdmin = "OrgAdmin",
     Research = "Research",
     Coherence = "Coherence",

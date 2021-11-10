@@ -12,6 +12,9 @@ import RoleCheckboxes from "../role-checkboxes";
 
 import "./styles/edit-account.scss";
 import { UserRole } from "../../data/enum";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { requireAuthorization } from "../../store/authorization/actions";
 interface IEditProfile {
     onClose: () => void;
     user: IUser;
@@ -36,6 +39,9 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
     const [userRoles, setRoles] = useState<UserRole[]>(user.userRoles)
+
+    const loggedId = useSelector((state: RootState) => state.auth.user?.id)
+    const dispatch = useDispatch()
 
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -63,7 +69,13 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
                 network.post(`/api/Admin/editRoles/${user.id}`, {userRoles: userRoles})
                     .then((r: any) => {
+                        if (loggedId === user.id) {
+                            dispatch(requireAuthorization(newUserData))
+                        }
+                        
                         onSubmit(newUserData);
+
+                        
 
                         onClose();
                     })
