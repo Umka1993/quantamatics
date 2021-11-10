@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import { useHistory } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { AppRoute } from '../../data/enum';
 
@@ -13,15 +14,17 @@ import FavoritesIcon from './assets/favorites.svg'
 import ToggleArrow from './assets/toggle-arrow.svg'
 
 import './style/navbar.scss'
+import classNames from 'classnames';
 
 interface NavBarProps {
 
 }
 
 const NavBar: FunctionComponent<NavBarProps> = () => {
+    const { location: { pathname } } = useHistory();
     return (
         <nav className='navigation'>
-            <details >
+            <details open={pathname.includes('/research') ? true : undefined} >
                 <summary className='navigation__item'>
                     <DocIcon aria-hidden='true' className='navigation__icon' />
                     Research
@@ -58,7 +61,11 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
                 Coherence
             </NavLink>
             <NavLink
-                to='/apps/organizations/list' className='navigation__item' activeClassName='navigation__item--active'
+                to='/apps/organizations/list'
+                className={
+                    classNames('navigation__item', 
+                    { 'navigation__item--active': pathname.includes('/apps/organizations/') })
+                }
             >
                 <OrganizationsIcon aria-hidden='true' className='navigation__icon' />
                 Organizations
@@ -70,7 +77,7 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
                 <CogsIcon aria-hidden='true' className='navigation__icon' />
                 Settings
             </NavLink>
-        </nav>
+        </nav >
     );
 }
 

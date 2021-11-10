@@ -51,8 +51,9 @@
     }
 
     &__sublist {
-        margin-left: 20px;
+        margin: 12px 0 12px 20px;
         height: 0;
+        transition: height .3s ease-in-out;
         overflow-y: hidden;
     }
 
@@ -63,11 +64,13 @@
     }
 
     details[open] &__sublist {
-        height: 128px;
-        // height: auto;
-        transition: height .3s ease-in-out;
+        height: 128px; 
+        /* TODO: Hardcoded val, need to rework for this: 
+        https://css-tricks.com/how-to-animate-the-details-element/ 
+        */        
     }
 
+    details[open] summary &__icon,
     &__item:hover &__icon,
     &__item--active &__icon {
         fill: $accent;

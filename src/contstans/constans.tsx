@@ -1,6 +1,3 @@
-
-
-
 export const TABLE_ITEMS = [
     {
         editable: true,

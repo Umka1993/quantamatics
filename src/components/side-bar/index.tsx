@@ -2,7 +2,6 @@ import React from "react";
 import "./styles/side-bar.scss"
 import NavBar from '../navbar'
 
-
 interface ISideBar {
     onSwitch: (name: string) => void
 }

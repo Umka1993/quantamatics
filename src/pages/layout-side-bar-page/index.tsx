@@ -26,7 +26,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
             />
 
             <div className="layout-page__scroll">
-                <div className="layout-page__content-container">
+                <main className="layout-page__content-container">
                     <Switch>
                         <Route exact path='/'>
                             <Redirect push to='/research/my-files' />
@@ -47,7 +47,7 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
                         <Route path='/apps/organizations/:id/add-user' component={AddUserForm} />
                         <Route path='/apps/organizations/:id' component={EditOrganization} />
                     </Switch>
-                </div>
+                </main>
             </div>
         </div>
     )
