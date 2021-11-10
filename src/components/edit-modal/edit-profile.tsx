@@ -45,6 +45,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     const formRef = useRef<HTMLFormElement>(null);
 
+    const storage = localStorage.getItem("user") ? 'local' : 'session'
+
     const updateUser = (validate: any) => {
         let newUserData: any = {
             ...user,
@@ -67,15 +69,18 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             .post("/api/Admin/updateUser", newUserData)
             .then((r: any) => {
 
-                network.post(`/api/Admin/editRoles/${user.id}`, {userRoles: userRoles})
+                network.post(`/api/Admin/editRoles/${user.id}`, { userRoles: userRoles })
                     .then((r: any) => {
                         if (loggedId === user.id) {
                             dispatch(requireAuthorization(newUserData))
+                            storage === 'local'
+                                ? localStorage.setItem('user', JSON.stringify(newUserData))
+                                : sessionStorage.setItem('user', JSON.stringify(newUserData))
                         }
-                        
+
                         onSubmit(newUserData);
 
-                        
+
 
                         onClose();
                     })
