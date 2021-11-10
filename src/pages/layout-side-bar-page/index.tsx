@@ -4,51 +4,96 @@ import { changeRoute } from "../../store/currentPage/actions";
 import { SideBar } from "../../components/side-bar";
 import { Organizations } from "../organizations";
 import { JupyterFrame } from "../../components/jupyter-frame";
-import "./styles/layout-side-bar-page.scss"
-import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
+import "./styles/layout-side-bar-page.scss";
+import { useHistory, Switch, Route, Redirect } from "react-router-dom";
 import { EditOrganization } from "../../components/edit-organization/edit-organization";
-import { CreateOrganizationForm , AddUserForm} from "../../components/form";
+import { CreateOrganizationForm, AddUserForm } from "../../components/form";
+import useUser from "../../hooks/useUser";
+import { UserRole, AppRoute } from "../../data/enum";
 
-export const LayoutSideBarPage: React.FunctionComponent = (props) => {
+export const LayoutSideBarPage: React.FunctionComponent = () => {
+    const user = useUser();
 
-    const history = useHistory()
+    const history = useHistory();
     const dispatch = useDispatch();
 
     const changeRoutePath = (route: string) => {
-        dispatch(changeRoute(route))
-        history.push('/')
-        history.push('/' + route)
-    }
+        dispatch(changeRoute(route));
+        history.push("/");
+        history.push("/" + route);
+    };
+
+    const isOrganizationAvailable =
+        user &&
+        (user.userRoles.includes(UserRole.Admin) ||
+            user.userRoles.includes(UserRole.OrgOwner));
+
+    const isEditOrgAvailable =
+        isOrganizationAvailable || user?.userRoles.includes(UserRole.OrgAdmin);
+
+    const isCoherence = user?.userRoles.includes(UserRole.Coherence);
+
+    const HomePath = isOrganizationAvailable
+        ? "/apps/organizations/list"
+        : isEditOrgAvailable
+            ? `/apps/organizations/${user?.id}`
+            : isCoherence ? AppRoute.Coherence : AppRoute.Files;
+
     return (
         <div className="layout-page app__main">
-            <SideBar
-                onSwitch={(value) => changeRoutePath(value)}
-            />
+            <SideBar onSwitch={(value) => changeRoutePath(value)} />
 
             <div className="layout-page__scroll">
                 <main className="layout-page__content-container">
                     <Switch>
-                        <Route exact path='/'>
-                            <Redirect push to='/research/my-files' />
+                        <Route exact path="/">
+                            <Redirect push to={HomePath} />
                         </Route>
 
-                        {/* <Route path='/add-user' component={AddUserPage} /> */}
+                        <Route path="/research/my-files">
 
-                        <Route path='/research/my-files'>
-                            <JupyterFrame type='files' />
+                            <JupyterFrame type="files" />
+
                         </Route>
 
-                        <Route path='/coherence'>
-                            <JupyterFrame type='coherence' />
+                        <Route path={AppRoute.Coherence}>
+                            {isCoherence ? (
+                                <JupyterFrame type="coherence" />
+                            ) : (
+                                <Redirect to={AppRoute.Home} />
+                            )}
                         </Route>
 
-                        <Route path='/apps/organizations/list' component={Organizations} />
-                        <Route path='/apps/organizations/new-organization' component={CreateOrganizationForm} />
-                        <Route path='/apps/organizations/:id/add-user' component={AddUserForm} />
-                        <Route path='/apps/organizations/:id' component={EditOrganization} />
+                        {isOrganizationAvailable && (
+                            <Route
+                                path="/apps/organizations/list"
+                                component={Organizations}
+                            />
+                        )}
+
+                        {isOrganizationAvailable && (
+                            <Route
+                                path="/apps/organizations/new-organization"
+                                component={CreateOrganizationForm}
+                            />
+                        )}
+
+                        {isEditOrgAvailable && (
+                            <Route
+                                path="/apps/organizations/:id/add-user"
+                                component={AddUserForm}
+                            />
+                        )}
+
+                        {isEditOrgAvailable && (
+                            <Route
+                                path="/apps/organizations/:id"
+                                component={EditOrganization}
+                            />
+                        )}
                     </Switch>
                 </main>
             </div>
         </div>
-    )
-}
+    );
+};

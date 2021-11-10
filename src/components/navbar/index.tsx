@@ -14,9 +14,8 @@ import FavoritesIcon from './assets/favorites.svg'
 import ToggleArrow from './assets/toggle-arrow.svg'
 
 import './style/navbar.scss'
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 import classNames from 'classnames';
+import useUser from '../../hooks/useUser';
 
 interface NavBarProps {
 
@@ -24,7 +23,7 @@ interface NavBarProps {
 
 const NavBar: FunctionComponent<NavBarProps> = () => {
     const { location: { pathname } } = useHistory();
-    const user = useSelector((state: RootState) => state.auth.user)
+    const user = useUser();
 
     return (
         <nav className='navigation'>
