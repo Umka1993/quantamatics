@@ -14,6 +14,8 @@ import "./styles/edit-account.scss";
 import { UserRole } from "../../data/enum";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { updateUser } from "../../store/admin/actions";
+import { IUpdateUser } from "../../types/user";
 import { requireAuthorization } from "../../store/authorization/actions";
 interface IEditProfile {
     onClose: () => void;
@@ -47,7 +49,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     const storage = localStorage.getItem("user") ? 'local' : 'session'
 
-    const updateUser = (validate: any) => {
+    const sendNewUser = (validate: any) => {
         let newUserData: any = {
             ...user,
             firstName: name,
@@ -65,6 +67,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             };
         }
 
+        // dispatch(updateUser({newUserData}))
+
         network
             .post("/api/Admin/updateUser", newUserData)
             .then((r: any) => {
@@ -72,15 +76,13 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                 network.post(`/api/Admin/editRoles/${user.id}`, { userRoles: userRoles })
                     .then((r: any) => {
                         if (loggedId === user.id) {
-                            dispatch(requireAuthorization(newUserData))
+                            dispatch(requireAuthorization(newUserData as any))
                             storage === 'local'
                                 ? localStorage.setItem('user', JSON.stringify(newUserData))
                                 : sessionStorage.setItem('user', JSON.stringify(newUserData))
                         }
 
                         onSubmit(newUserData);
-
-
 
                         onClose();
                     })
@@ -102,7 +104,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
         const isValid = formRef.current?.reportValidity();
 
         if (isValid) {
-            updateUser(validate);
+            sendNewUser(validate);
         }
     };
 

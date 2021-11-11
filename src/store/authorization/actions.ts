@@ -1,13 +1,10 @@
-
-import { AxiosInstance } from 'axios';
-import { ThunkAction } from 'redux-thunk';
 import { LoginResponse } from '../../types/loginResponse';
-import { RootState } from '../../store';
 import { AuthorizationActionType } from './reducer';
 import { IUser } from '../../types/user';
 import { saveToken, dropToken } from '../../services/token';
 import { ApiRoute, AppRoute } from '../../data/enum';
 import { Dispatch } from 'redux';
+import { ThunkActionResult } from '../../types/thunk-actions';
 
 export const requireAuthorization = (authData: IUser) => ({
     type: AuthorizationActionType.Login,
@@ -22,9 +19,6 @@ export const requireLogout = () => ({
 export type AuthorizationActions =
     | ReturnType<typeof requireAuthorization>
     | ReturnType<typeof requireLogout>;
-
-
-export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, RootState, AxiosInstance, AuthorizationActions>;
 
 
 export const logoutAction = () => (dispatch: Dispatch<AuthorizationActions>) => {

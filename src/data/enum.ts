@@ -32,7 +32,11 @@ export const enum ApiRoute {
     OrganizationCreate = 'api/Organization/create',
     OrganizationDelete = 'api/Organization/delete',
 
-    RegisterUser = '/api/Account/register'
+    RegisterUser = '/api/Account/register',
+
+    UpdateUser = '/api/Admin/updateUser',
+    EditRoles = '/api/Admin/editRoles/',
+
 }
 
 export const enum AuthorizationStatus {

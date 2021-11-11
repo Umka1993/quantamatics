@@ -14,3 +14,8 @@ export interface IUser {
     userRoles: Array<string>,
     organizationId: string,
 }
+
+export interface IUpdateUser extends Omit<IUser, "subscriptionEndDate">  {
+    newEmail?: string,
+    subscriptionEndDate: Date,
+}
