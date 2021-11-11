@@ -1,12 +1,16 @@
+import { setList } from ".";
 import { ApiRoute } from "../../data/enum";
 import { ThunkActionResult } from "../../types/thunk-actions"
 
 export const fetchOrganizationUsers =
     (orgId: any, onFinish: any, onError: any): ThunkActionResult =>
-        async (_dispatch, _getState, api) => {
+        async (dispatch, _getState, api) => {
             api
                 .get(ApiRoute.GetUsersByOrgID, {params: { orgId }})
-                .then(onFinish)
+                .then(({data}) => {
+                    dispatch(setList(data));
+                    onFinish(data)
+                })
                 .catch(onError);
         };
 

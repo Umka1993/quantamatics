@@ -93,8 +93,9 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             dispatch(
                 fetchOrganizationUsers(
                     orgId,
-                    (r: any) => {
-                        let result = r.data.map((row: any) => {
+                    (data: any) => {
+                        
+                        let result = data.map((row: any) => {
                             // console.log(row)
 
                             return {
