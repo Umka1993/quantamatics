@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { network } from "../../services/networkService";
 import "./styles/organiations.scss"
 import AddIcon from "./assets/add.svg"
 import { OrganizationTable } from "../../components/table/OrganizationTable";
@@ -9,28 +8,27 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Loader } from "../../components/loader";
 import Headline from "../../components/page-title/index";
+import { getAllOrganization } from '../../store/organization/actions';
 
 export const Organizations: React.FunctionComponent = (props) => {
     const [organizations, setOrganizations] = useState<any>()
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const fetchOrganizations = () => {
-        network.get('api/Organization/getAll')
-            .then((r: any) => {
+    const onFinishGetAll = (r: any) => {
 
-                let result = r.data.map((row: any) => {
-                    return {
-                        editable: true,
-                        row
-                    }
-                })
-                console.log('result', result)
-                setOrganizations(result)
-            })
-            .catch((e: any) => {
-                console.log(e.data)
-            })
+        let result = r.data.map((row: any) => {
+            return {
+                editable: true,
+                row
+            }
+        })
+        console.log('result', result)
+        setOrganizations(result)
+    }
+
+    const onErrorGetAll = (e: any) => {
+        console.log(e.data)
     }
 
     const createNew = () => {
@@ -39,7 +37,7 @@ export const Organizations: React.FunctionComponent = (props) => {
     }
 
     useEffect(() => {
-        if (!organizations) fetchOrganizations()
+        if (!organizations) dispatch(getAllOrganization(onFinishGetAll, onErrorGetAll))
     }, [organizations])
 
     return (

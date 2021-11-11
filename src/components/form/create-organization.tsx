@@ -28,7 +28,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
     }
 
     const registerOrganization = () => dispatch(
-        createOrganization({ name, customerCrmId, customerCrmLink, comments, },
+        createOrganization({ name, customerCrmId, customerCrmLink, comments },
             returnBack,
             () => setFinish(true))
     )

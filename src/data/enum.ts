@@ -32,6 +32,12 @@ export const enum ApiRoute {
     OrganizationInfo = 'api/Organization/get',
     OrganizationCreate = 'api/Organization/create',
     OrganizationDelete = 'api/Organization/delete',
+    OrganizationUpdate = 'api/Organization/update',
+    GetAllOrganization = 'api/Organization/getAll',
+
+    GetUsersByOrgID = 'api/User/list',
+    GetUserByID = '/api/User/getUser',
+    
 
     RegisterUser = '/api/Account/register',
 

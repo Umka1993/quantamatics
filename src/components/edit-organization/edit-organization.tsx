@@ -1,121 +1,122 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "./styles/edit-organizations.scss"
-import AddIcon from "./assets/human-add.svg"
+import React, { useEffect, useState } from "react";
+import "./styles/edit-organizations.scss";
+import AddIcon from "./assets/human-add.svg";
 import Button, { ResetButton } from "../button";
 import { UserTable } from "../table/UserTable";
 import { Input } from "../input";
 import { useHistory, useParams } from "react-router-dom";
-import { network } from "../../services/networkService";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import Headline from "../page-title/index";
-import type { IUserRow } from "types/table/types";
 // import { changeAllNavLinks } from "../../store/breadcrumbs/actions";
-import { fetchOrganization } from "../../store/organization/actions";
-
+import {
+    fetchOrganization,
+    updateOrganization,
+} from "../../store/organization/actions";
+import { fetchOrganizationUsers } from "../../store/user/actions";
 
 type RouteParams = {
     id: string;
-}
+};
 
 export const EditOrganization: React.FunctionComponent = (props) => {
-    const [organizationName, setOrganizationName] = useState<string>('')
-    const [customerID, setCustomerID] = useState<string>('')
-    const [customerLink, setCustomerLink] = useState<string>('')
-    const [comment, setComment] = useState<string | undefined>('')
-    const [users, setUsers] = useState<any>(null)
-    const [organization, setOrganization] = useState<any>(null)
+    const [organizationName, setOrganizationName] = useState<string>("");
+    const [customerID, setCustomerID] = useState<string>("");
+    const [customerLink, setCustomerLink] = useState<string>("");
+    const [comment, setComment] = useState<string | undefined>("");
+    const [users, setUsers] = useState<any>(null);
+    const [organization, setOrganization] = useState<any>(null);
 
     const { id: orgId } = useParams<RouteParams>();
 
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const fetchUsers = () => {
-        network.get('api/User/list', { orgId })
-            .then((r: any) => {
-
-                let result = r.data.map((row: any) => {
-                    // console.log(row)
-
-                    return {
-                        editable: true,
-                        row
-                    }
-                })
-                setUsers(result)
-            })
-            .catch((e: any) => {
-                console.log(e.data)
-            })
-    }
-
     const deleteUser = (id: number) => {
         // TODO: Delete user
 
-        console.log(`Guy #${id} bust be deleted`)
+        console.log(`Guy #${id} bust be deleted`);
         // console.table(users.filter(({row}: IUserRow) => row.id !== id ))
         /* network.post('api/Admin/updateUserOrg', { userId: id })
-            .then((r: any) => {
-    
-                // let result = r.data.map((row: any) => {
-                //     return {
-                //         editable: true,
-                //         row
-                //     }
-                // })
-                console.log('users result', r)
-                // setUsers(result)
-            })
-            .catch((e: any) => {
-                console.log(e)
-                console.log(e.data)
-            }) */
-    }
+                .then((r: any) => {
+        
+                    // let result = r.data.map((row: any) => {
+                    //     return {
+                    //         editable: true,
+                    //         row
+                    //     }
+                    // })
+                    console.log('users result', r)
+                    // setUsers(result)
+                })
+                .catch((e: any) => {
+                    console.log(e)
+                    console.log(e.data)
+                }) */
+    };
 
     const saveCompanyInfo = (data: any) => {
-        dispatch(changeRoute(`apps/organizations/${data.name}`))
-        setOrganization(data)
-        setOrganizationName(data.name)
-        setCustomerID(data.customerCrmId)
-        setCustomerLink(data.customerCrmLink)
-        setComment(data.comments)
-    }
+        dispatch(changeRoute(`apps/organizations/${data.name}`));
+        setOrganization(data);
+        setOrganizationName(data.name);
+        setCustomerID(data.customerCrmId);
+        setCustomerLink(data.customerCrmLink);
+        setComment(data.comments);
+    };
 
+    const submitHandler = (evt: any) => {
+        evt.preventDefault();
 
-    const updateOrganization = useCallback(() => {
-        if (organizationName && customerID && customerLink) {
-            network.put('api/Organization/update', {
-                id: orgId,
-                name: organizationName,
-                customerCrmId: customerID,
-                customerCrmLink: customerLink,
-                comments: comment,
-            })
-                .then((r: any) => {
-                    console.log(r)
-                    dispatch(changeRoute("apps/organizations/list"))
+        dispatch(
+            updateOrganization(
+                {
+                    id: orgId,
+                    name: organizationName,
+                    customerCrmId: customerID,
+                    customerCrmLink: customerLink,
+                    comments: comment,
+                },
+                (r: any) => {
+                    console.log(r);
+                    dispatch(changeRoute("apps/organizations/list"));
                     history.push("/apps/organizations/list");
-                })
-                .catch((e) => {
-                    console.log(e)
-                })
-        } else {
-        }
-
-    }, [organizationName, customerID, customerLink, comment])
-
-    useEffect(() => {
-        if (!users && orgId) fetchUsers()
-    }, [!users])
+                },
+                (e: any) => {
+                    console.log(e);
+                }
+            )
+        );
+    };
 
     useEffect(() => {
-        if (!organization) dispatch(fetchOrganization(orgId, saveCompanyInfo))
-    }, [!organization])
+        if (!users && orgId)
+            dispatch(
+                fetchOrganizationUsers(
+                    orgId,
+                    (r: any) => {
+                        let result = r.data.map((row: any) => {
+                            // console.log(row)
+
+                            return {
+                                editable: true,
+                                row,
+                            };
+                        });
+                        setUsers(result);
+                    },
+                    (e: any) => {
+                        console.log(e.data);
+                    }
+                )
+            );
+    }, [!users]);
+
+    useEffect(() => {
+        if (!organization) dispatch(fetchOrganization(orgId, saveCompanyInfo));
+    }, [!organization]);
 
     return (
         <div className="content-wrapper">
-
             <div className="edit-organization">
                 <header className="edit-organization__header">
                     <Headline className="edit-organization__title">
@@ -126,15 +127,13 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                             // href='/apps/organizations/list'
                             form="edit-organization"
                             className="edit-organization__cancel-btn"
-                            onClick={() => {
-
-                            }}
+                            onClick={() => { }}
                         >
                             Cancel
                         </ResetButton>
 
                         <Button
-                            type='submit'
+                            type="submit"
                             form="edit-organization"
                             className="edit-organization__save-btn"
                         >
@@ -142,14 +141,14 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                         </Button>
                     </div>
                 </header>
-                <div
-                    className="edit-organization__body"
-                >
+                <div className="edit-organization__body">
                     <form
-                        className="edit-organization__info" id="edit-organization"
-                        onSubmit={(evt) => { evt.preventDefault(); updateOrganization() }}
+                        className="edit-organization__info"
+                        id="edit-organization"
+                        onSubmit={submitHandler}
                         onReset={(evt) => {
-                            evt.preventDefault(); dispatch(changeRoute('apps/organizations/list'));
+                            evt.preventDefault();
+                            dispatch(changeRoute("apps/organizations/list"));
                             history.push("/apps/organizations/list");
                         }}
                     >
@@ -158,28 +157,32 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                         </h2>
                         <div className="edit-organization__inputs">
                             <div className="edit-organization__input">
-                                <Input onChangeInput={(value) => setOrganizationName(value)}
+                                <Input
+                                    onChangeInput={(value) => setOrganizationName(value)}
                                     value={organizationName}
-                                    placeholder='Name of The Organization'
+                                    placeholder="Name of The Organization"
                                 />
                             </div>
                             <div className="edit-organization__input">
-                                <Input onChangeInput={(value) => setCustomerID(value)}
+                                <Input
+                                    onChangeInput={(value) => setCustomerID(value)}
                                     value={customerID}
-                                    placeholder='CRM Customer ID'
+                                    placeholder="CRM Customer ID"
                                 />
                             </div>
                             <div className="edit-organization__input">
-                                <Input onChangeInput={(value) => setCustomerLink(value)}
+                                <Input
+                                    onChangeInput={(value) => setCustomerLink(value)}
                                     value={customerLink}
-                                    placeholder='CRM Customer ID Link'
+                                    placeholder="CRM Customer ID Link"
                                 />
                             </div>
                         </div>
                         <div className="edit-organization__comments">
-                            <Input onChangeInput={(value) => setComment(value)}
+                            <Input
+                                onChangeInput={(value) => setComment(value)}
                                 value={comment}
-                                placeholder='Comments'
+                                placeholder="Comments"
                                 limit={200}
                             />
                         </div>
@@ -198,13 +201,13 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                 <AddIcon />
                                 Add New
                             </Button>
-
                         </div>
-                        {!!users && <UserTable inEdit rows={users} deleteUser={deleteUser} />}
+                        {!!users && (
+                            <UserTable inEdit rows={users} deleteUser={deleteUser} />
+                        )}
                     </div>
                 </div>
             </div>
-
         </div>
-    )
-}
+    );
+};
