@@ -1,7 +1,7 @@
 import { ApiRoute, UserRole } from "../../data/enum";
 import { IUpdateUser } from "../../types/user";
 import { ThunkActionResult } from "../../types/thunk-actions";
-import { requireAuthorization } from "../authorization/actions";
+import { login } from "../authorization";
 import { Dispatch, SetStateAction } from "react";
 
 export const updateUser =
@@ -19,7 +19,7 @@ export const updateUser =
                             subscriptionEndDate:
                                 newUserData.subscriptionEndDate.toLocaleDateString(),
                         };
-                        dispatch(requireAuthorization(normalizedNewData));
+                        dispatch(login(normalizedNewData));
 
                         localStorage.getItem("user")
                             ? localStorage.setItem("user", JSON.stringify(normalizedNewData))
