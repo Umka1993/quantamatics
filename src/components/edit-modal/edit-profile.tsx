@@ -64,7 +64,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             onClose();
         }
 
-        dispatch(updateUser({newUserData, onFinish, setEmailError}))
+        dispatch(updateUser(newUserData, onFinish, setEmailError))
     };
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
