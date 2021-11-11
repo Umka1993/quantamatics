@@ -1,3 +1,5 @@
+import { UserRole } from "../data/enum";
+
 export interface IUser {
     id: number,
     email: string,
@@ -11,7 +13,7 @@ export interface IUser {
     reportPanel: any,
     expirationDate: string,
     avatar: string,
-    userRoles: Array<string>,
+    userRoles: Array<UserRole>,
     organizationId: string,
 }
 

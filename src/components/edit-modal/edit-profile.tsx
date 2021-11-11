@@ -1,9 +1,6 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 
 import Button, { ResetButton } from "../button";
-import { IUser } from "../../types/edit-profile/types";
-import { network } from "../../services/networkService";
-
 import AppInput, { DatePick, Email } from "../app-input";
 import { SelectorInput } from "../selector-input";
 import { USER_ORGS } from "../../contstans/constans";
@@ -12,11 +9,9 @@ import RoleCheckboxes from "../role-checkboxes";
 
 import "./styles/edit-account.scss";
 import { UserRole } from "../../data/enum";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useDispatch } from "react-redux";
 import { updateUser } from "../../store/admin/actions";
-import { IUpdateUser } from "../../types/user";
-import { requireAuthorization } from "../../store/authorization/actions";
+import { IUpdateUser, IUser } from "../../types/user";
 interface IEditProfile {
     onClose: () => void;
     user: IUser;
@@ -41,22 +36,19 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
     const [userRoles, setRoles] = useState<UserRole[]>(user.userRoles)
-
-    const loggedId = useSelector((state: RootState) => state.auth.user?.id)
     const dispatch = useDispatch()
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const storage = localStorage.getItem("user") ? 'local' : 'session'
-
+    
     const sendNewUser = (validate: any) => {
-        let newUserData: any = {
+        let newUserData: IUpdateUser = {
             ...user,
             firstName: name,
             lastName: surname,
             companyName: organization,
             subscriptionEndDate: new Date(expiration),
-            userRoles: userRoles,
+            userRoles,
         };
 
 
@@ -67,32 +59,12 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
             };
         }
 
-        // dispatch(updateUser({newUserData}))
+        const onFinish = () => {
+            onSubmit(newUserData);
+            onClose();
+        }
 
-        network
-            .post("/api/Admin/updateUser", newUserData)
-            .then((r: any) => {
-
-                network.post(`/api/Admin/editRoles/${user.id}`, { userRoles: userRoles })
-                    .then((r: any) => {
-                        if (loggedId === user.id) {
-                            dispatch(requireAuthorization(newUserData as any))
-                            storage === 'local'
-                                ? localStorage.setItem('user', JSON.stringify(newUserData))
-                                : sessionStorage.setItem('user', JSON.stringify(newUserData))
-                        }
-
-                        onSubmit(newUserData);
-
-                        onClose();
-                    })
-
-            })
-            .catch(({ response: { data } }) => {
-                if (data.includes(" already taken")) {
-                    setEmailError("The user with such email already exists");
-                }
-            });
+        dispatch(updateUser({newUserData, onFinish, setEmailError}))
     };
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {

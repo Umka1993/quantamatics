@@ -1,52 +1,38 @@
 import { ApiRoute } from '../../data/enum';
 import { IUpdateUser } from '../../types/user';
 import { ThunkActionResult } from '../../types/thunk-actions';
+import { requireAuthorization } from '../authorization/actions';
 
 export const updateUser =
-    ({ newUserData }: any): ThunkActionResult =>
+    ({ newUserData, onFinish, setEmailError }: any): ThunkActionResult =>
         async (dispatch, getState, api) => {
             api
             .post<IUpdateUser>(ApiRoute.UpdateUser, newUserData)
             .then(({ data }: any) => {
 
-                // if (newUserData as IUpdateUser).id
+                if (newUserData.id === getState().auth.user?.id) {
+                    dispatch(requireAuthorization(newUserData))
 
-                console.log(getState);
-                console.log(getState());
-                console.log(newUserData);
-                
-                
-                
-                // console.log(data);
-                // dispatch(requireAuthorization(data.user));
-                // saveToken(data.token);
-                // onFinish(data.user)
+                    localStorage.getItem('user') ? localStorage.setItem('user', JSON.stringify(newUserData)) :sessionStorage.setItem('user', JSON.stringify(newUserData))
+                }
+
+                dispatch(updateRoles(newUserData.id, newUserData.userRoles, onFinish))
             })
-            .catch(({response}) => {
-                // console.log(response);
-                // onError(response.status)
+            .catch(({ response: { data } }) => {
+                if (data.includes(" already taken")) {
+                    setEmailError("The user with such email already exists");
+                }
             });
 
         }; 
 
 
-      /*   .post("/api/Admin/updateUser", newUserData)
-        .then((r: any) => {
-
-            network.post(`/api/Admin/editRoles/${user.id}`, { userRoles: userRoles })
-                .then((r: any) => {
-                    if (loggedId === user.id) {
-                        dispatch(requireAuthorization(newUserData))
-                        storage === 'local'
-                            ? localStorage.setItem('user', JSON.stringify(newUserData))
-                            : sessionStorage.setItem('user', JSON.stringify(newUserData))
-                    }
-
-                    onSubmit(newUserData);
-
-
-
-                    onClose();
+export const updateRoles =
+        (id: number, userRoles: any, onFinish: any): ThunkActionResult =>
+            async (_dispatch, _getState, api) => {
+                api.post(`${ApiRoute.EditRoles}${id}`, {userRoles})
+                .then(({ data }: any) => {        
+                    onFinish();
                 })
+            }; 
 
-        }) */
