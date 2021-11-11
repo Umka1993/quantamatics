@@ -27,6 +27,7 @@ export const enum ApiRoute {
 
     ResetPasswordMail = 'api/Account/sendPasswordReset',
     ResetPassword = "/api/Account/resetPassword",
+    ChangePassword = '/api/Account/changePassword',
 
     OrganizationInfo = 'api/Organization/get',
     OrganizationCreate = 'api/Organization/create',

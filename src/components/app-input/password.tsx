@@ -37,7 +37,6 @@ const Password: React.FunctionComponent<IPassword> = ({
     ...other
 }) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [innerValue, setInnerValue] = useState<string>(value as string);
     const inputRef = useRef<HTMLInputElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
@@ -61,7 +60,6 @@ const Password: React.FunctionComponent<IPassword> = ({
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         const { value } = evt.target;
-        setInnerValue(value);
         externalSetter && externalSetter(value);
         onChange && onChange(evt);
     };
@@ -79,7 +77,7 @@ const Password: React.FunctionComponent<IPassword> = ({
 
             !validationMessage.length && setErrorMessage(undefined);
         }
-    }, [inputRef.current?.validity, error, innerValue]);
+    }, [inputRef.current?.validity, error, value]);
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
@@ -108,7 +106,7 @@ const Password: React.FunctionComponent<IPassword> = ({
                     aria-required={required}
                     pattern={regularExp}
                     minLength={8}
-                    value={innerValue}
+                    value={value || ''}
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}

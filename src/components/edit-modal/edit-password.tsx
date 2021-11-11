@@ -3,15 +3,14 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Button, { ResetButton } from "../button"
 import Password from "../app-input/password";
 import { IUser } from "../../types/edit-profile/types";
-import { network } from "../../services/networkService";
 
 import Modal from "../modal";
-// import "./styles/edit-modal.scss";
 import "./styles/edit-account.scss"
-import { AxiosError, AxiosResponse } from "axios";
 import { adaptRoles, formatDate } from "../../services/baseService";
 import KeyIcon from './assets/key.svg';
 import ComaList from '../coma-list';
+import { useDispatch } from "react-redux";
+import { changePassword } from "../../store/account/actions";
 
 interface IEditProfile {
     onClose: () => void;
@@ -31,9 +30,9 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
         undefined
     );
     const [compare, setCompare] = useState<string | undefined>(undefined);
-
     const [validateNew, setValidateNew] = useState<boolean>(false);
 
+    const dispatch = useDispatch();
     const formRef = useRef<HTMLFormElement>(null)
 
 
@@ -55,19 +54,11 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 
         setValidateNew(true)
         if (formRef.current?.checkValidity()) {
-            network
-                .put("api/Account/changePassword", {
-                    currentPassword: currentPassword,
-                    newPassword: newPassword
-                }).then(({ data }: any) => {
-                    console.log(data);
 
-                    onClose()
-
-                }).catch(({ response }: AxiosError) => {
-                    console.log(response);
-                    setWrongCurrent("Current password is incorrect");
-                })
+            dispatch(changePassword({
+                currentPassword,
+                newPassword
+            }, onClose, setWrongCurrent))
         }
     };
 
