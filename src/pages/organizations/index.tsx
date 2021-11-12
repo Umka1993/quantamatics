@@ -32,12 +32,7 @@ export const Organizations: React.FunctionComponent = (props) => {
                 </Button>
 
             </header>
-            <div className="organization__list">
-
-            {/* <div className='organization-table-loader'><Loader /></div> */}
-            <OrganizationTable /> 
-        
-            </div>
+            <OrganizationTable />
         </section>
     )
 }
