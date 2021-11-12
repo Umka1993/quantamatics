@@ -14,17 +14,16 @@ import {
     updateOrganization,
 } from "../../store/organization/actions";
 import { fetchOrganizationUsers } from "../../store/user/actions";
+import type { RouteParams } from "../../types/route-params";
+import { setList } from "../../store/user";
 
-type RouteParams = {
-    id: string;
-};
+
 
 export const EditOrganization: React.FunctionComponent = (props) => {
     const [organizationName, setOrganizationName] = useState<string>("");
     const [customerID, setCustomerID] = useState<string>("");
     const [customerLink, setCustomerLink] = useState<string>("");
     const [comment, setComment] = useState<string | undefined>("");
-    const [users, setUsers] = useState<any>(null);
     const [organization, setOrganization] = useState<any>(null);
 
     const { id: orgId } = useParams<RouteParams>();
@@ -36,23 +35,6 @@ export const EditOrganization: React.FunctionComponent = (props) => {
         // TODO: Delete user
 
         console.log(`Guy #${id} bust be deleted`);
-        // console.table(users.filter(({row}: IUserRow) => row.id !== id ))
-        /* network.post('api/Admin/updateUserOrg', { userId: id })
-                .then((r: any) => {
-        
-                    // let result = r.data.map((row: any) => {
-                    //     return {
-                    //         editable: true,
-                    //         row
-                    //     }
-                    // })
-                    console.log('users result', r)
-                    // setUsers(result)
-                })
-                .catch((e: any) => {
-                    console.log(e)
-                    console.log(e.data)
-                }) */
     };
 
     const saveCompanyInfo = (data: any) => {
@@ -89,28 +71,13 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     };
 
     useEffect(() => {
-        if (!users && orgId)
-            dispatch(
-                fetchOrganizationUsers(
-                    orgId,
-                    (data: any) => {
-                        
-                        let result = data.map((row: any) => {
-                            // console.log(row)
+        orgId && dispatch(
+            fetchOrganizationUsers(orgId)
+        );
 
-                            return {
-                                editable: true,
-                                row,
-                            };
-                        });
-                        setUsers(result);
-                    },
-                    (e: any) => {
-                        console.log(e.data);
-                    }
-                )
-            );
-    }, [!users]);
+        return () => {orgId && dispatch(setList([]))};
+
+    }, [orgId]);
 
     useEffect(() => {
         if (!organization) dispatch(fetchOrganization(orgId, saveCompanyInfo));
@@ -203,9 +170,9 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                 Add New
                             </Button>
                         </div>
-                        {!!users && (
-                            <UserTable inEdit rows={users} deleteUser={deleteUser} />
-                        )}
+
+                        <UserTable inEdit deleteUser={deleteUser} />
+
                     </div>
                 </div>
             </div>

@@ -59,3 +59,20 @@ export const enum UserRole {
     Research = "Research",
     Coherence = "Coherence",
 }
+
+
+export const enum OrganizationKey {
+    Id = 'id',
+    Parent = 'parentId',
+    Name = 'name',
+    IdCRM = 'customerCrmId',
+    LinkCRM = 'customerCrmLink',
+    Comment = 'comments',
+    Assets = 'assets',
+}
+
+export const enum SortDirection {
+    Down = "descending",
+    Up = "ascending",
+    Default = "none",
+}

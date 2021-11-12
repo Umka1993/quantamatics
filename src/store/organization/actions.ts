@@ -1,3 +1,4 @@
+import { setAllOrg } from ".";
 import { ApiRoute } from "../../data/enum";
 import { Organization } from "../../types/organization/types"
 import { ThunkActionResult } from "../../types/thunk-actions";
@@ -35,9 +36,10 @@ export const createOrganization = (organization: any, onFinish : any, onError: a
         const user = getState().auth.user;
         
 
-        organization.assets = [{createdByID: user?.id, 
+        /*   organization.assets = [{
+            createdByID: user?.id, 
             lastModifiedByID: user?.id, 
-        }]        
+        }]        */ 
         api.post(ApiRoute.OrganizationCreate, organization )
         .then(({ data }: any) => {
             console.log(data);
@@ -62,11 +64,15 @@ export const deleteOrganization = (id: string, onFinish : any): ThunkActionResul
     }; 
 
 
-export const getAllOrganization = (onResolve: any, onError: any): ThunkActionResult =>
-    async (_dispatch, _getState, api) => {
+export const getAllOrganization = (onResolve?: any, onError?: any): ThunkActionResult =>
+    async (dispatch, _getState, api) => {
         api.get(ApiRoute.GetAllOrganization)
-        .then(onResolve)
-        .catch(onError)
+        .then(({data}) => {
+            dispatch(setAllOrg(data))
+        })
+        .catch((e: any) => {
+            console.log(e.data)
+        })
     }; 
 
 

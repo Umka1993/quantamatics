@@ -10,32 +10,41 @@ import { USER } from "../../contstans/constans";
 
 import { formatDate, adaptRoles } from "../../services/baseService"
 import ComaList from "../coma-list";
-import { IUser } from "types/edit-profile/types";
+import { IUser } from "../../types/user";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import ISort from "../../types/sort-type";
+import { SortDirection } from "../../data/enum";
 
 interface ITable {
-    rows: IUserRow[]
     inEdit?: boolean,
     deleteUser: Function,
 }
 
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
-    const { rows, deleteUser } = props;
+    const { deleteUser } = props;
 
-    const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
+    const users = useSelector((state: RootState) => state.users.list);
+
+    const [localRows, setLocalRows] = useState<IUser[]>(users)
     const [showModal, setShowModal] = useState<Boolean>(false)
-    const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
+    const [sort, setSort] = useState<ISort>({ name: '', direction: SortDirection.Default })
 
     const [user, setUser] = useState<any>(USER)
 
     const [editIndex, setEditIndex] = useState<number>(-1);
 
     useEffect(() => {
-        localStorage.setItem('rows', JSON.stringify(rows))
-    }, [rows])
+        setLocalRows(users)
+    }, [users])
+
+    useEffect(() => {
+        sort.direction === SortDirection.Default && setLocalRows(users)
+    }, [sort])
 
     const handleEditUser = (user: any, index: number) => {
         setEditIndex(index)
-        setUser(user.row)
+        setUser(user)
         setShowModal(true)
     }
 
@@ -49,7 +58,7 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
         }
 
 
-        newRows[editIndex].row = user
+        // newRows[editIndex].row = user
         setLocalRows(newRows)
     }
 
@@ -94,28 +103,28 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                     </tr>
                 </thead>
                 <tbody className="table__body">
-                    {localRows.map((row, index) => (
-                        <tr className="table__row" key={row.row.id}>
+                    {localRows.map((user, index) => (
+                        <tr className="table__row" key={user.id}>
                             <td className="table__cell">
-                                {row.row.firstName}
+                                {user.firstName}
                             </td>
                             <td className="table__cell">
-                                {row.row.lastName}
+                                {user.lastName}
                             </td>
                             <td className="table__cell">
-                                {row.row.email}
+                                {user.email}
                             </td>
                             <td className="table__cell">
-                                {formatDate(row.row.subscriptionEndDate)}
+                                {formatDate(user.subscriptionEndDate)}
                             </td>
                             <td className="table__cell">
-                                <ComaList list={adaptRoles(row.row.userRoles)} />
+                                <ComaList list={adaptRoles(user.userRoles)} />
                             </td>
                             <td className='table__cell table__cell--actions'>
                                 <button
                                     type='button'
                                     className='table__action'
-                                    onClick={() => { handleEditUser(row, index) }}
+                                    onClick={() => { handleEditUser(user, index) }}
                                 >
                                     <EditSVG role="img" aria-label="edit" fill="currentColor" />
                                 </button>

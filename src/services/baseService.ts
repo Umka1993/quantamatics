@@ -1,10 +1,4 @@
-import { UserRole } from "../data/enum";
-
-export const enum SortDirection {
-    Down = "descending",
-    Up = "ascending",
-    Default = "none",
-}
+import { UserRole, SortDirection } from "../data/enum";
 
 export const sortTable = (
     name: string,
@@ -12,7 +6,7 @@ export const sortTable = (
     localRows: any,
     setSort: any,
     setLocalRows: any
-) => {
+) => {    
     let newSort = sort;
 
     if (name === sort.name) {
@@ -36,7 +30,7 @@ export const sortTable = (
 
     setSort({ name: newSort.name, direction: newSort.direction });
 
-    let newRows = localRows;
+    let newRows = [...localRows];
 
     switch (newSort.direction) {
         case SortDirection.Up:
@@ -62,9 +56,9 @@ export const sortTable = (
             break;
 
         default:
-            newRows = localStorage.getItem("rows")
+            /* newRows = localStorage.getItem("rows")
                 ? JSON.parse(localStorage.getItem("rows") as string)
-                : localRows;
+                : localRows; */
             break;
     }
 
@@ -75,13 +69,13 @@ export const sortTable = (
 function normalizeCompare(item : any, name: string) {
     switch (name) {
         case "subscriptionEndDate":
-            return new Date(item.row[name]);
+            return new Date(item[name]);
     
         case "userRoles":
-            return item.row[name];
+            return item[name];
     
         default:
-            return item.row[name].toUpperCase()
+            return item[name].toUpperCase()
     }      
 }
 

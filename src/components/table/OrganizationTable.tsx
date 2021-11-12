@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./styles/table.scss"
 import { useHistory } from "react-router-dom";
-import { IRow } from "../../types/table/types";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import EditSVG from './assets/edit-row-icon.svg'
@@ -10,20 +9,13 @@ import DeleteSVG from './assets/delete-row-icon.svg'
 import classNames from "classnames";
 import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
-// import { deleteOrganization } from "../../store/organization/actions";
+import { Organization } from "../../types/organization/types";
+import { OrganizationKey, SortDirection } from "../../data/enum";
+import ISort from "../../types/sort-type";
 
 interface ITable {
-    rows: IRow[]
+    rows: Organization[]
     inEdit?: boolean
-}
-
-const enum OrganizationKey {
-    id = 'id',
-    name = 'name',
-    idCRM = 'customerCrmId',
-    linkCRM = 'customerCrmLink',
-    comments = 'comments',
-    assets = 'assets',
 }
 
 export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
@@ -31,9 +23,9 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [localRows, setLocalRows] = useState<IRow[]>(rows)
+    const [localRows, setLocalRows] = useState<Organization[]>(rows)
     const [itemDeleting, setItemDeleting] = useState<number | null>(null)
-    const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
+    const [sort, setSort] = useState<ISort>({ name: '', direction: SortDirection.Default })
 
     const handleEditRoute = (route: string, id: string) => {
         dispatch(changeRoute(route))
@@ -42,8 +34,9 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
     }
 
     useEffect(() => {
-        localStorage.setItem('rows', JSON.stringify(props.rows))
-    }, [props.rows])
+        sort.direction === SortDirection.Default && setLocalRows(rows)
+    }, [sort])
+
 
     // ? For the future use
 
@@ -64,22 +57,22 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
             <thead className="table__head">
                 <tr className="table__header">
                     <SortTableHeader
-                        name={OrganizationKey.name} text='Organization Name'
+                        name={OrganizationKey.Name} text='Organization Name'
                         sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                     />
 
                     <SortTableHeader
-                        name={OrganizationKey.idCRM} text='CRM Customer ID '
+                        name={OrganizationKey.IdCRM} text='CRM Customer ID '
                         sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                     />
 
                     <SortTableHeader
-                        name={OrganizationKey.linkCRM} text='CRM Customer link'
+                        name={OrganizationKey.LinkCRM} text='CRM Customer link'
                         sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                     />
 
                     <SortTableHeader
-                        name={OrganizationKey.comments} text='Comments'
+                        name={OrganizationKey.Comment} text='Comments'
                         sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
                     />
 
@@ -87,25 +80,25 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                 </tr>
             </thead>
             <tbody className="table__body">
-                {localRows.map((row, index) => (
+                {localRows.map((organization, index) => (
                     <tr className={classNames("table__row", { deleting: index === itemDeleting })} key={index}>
                         <td className="table__cell">
-                            {row.row.name}
+                            {organization.name}
                         </td>
                         <td className="table__cell">
-                            {row.row.customerCrmId}
+                            {organization.customerCrmId}
                         </td>
                         <td className="table__cell">
-                            <a href={row.row.customerCrmLink} target="_blank" rel="noopener noreferrer">{row.row.customerCrmLink}</a>
+                            <a href={organization.customerCrmLink} target="_blank" rel="noopener noreferrer">{organization.customerCrmLink}</a>
                         </td>
                         <td className="table__cell table__cell--comment">
-                            {row.row.comments}
+                            {organization.comments}
                         </td>
                         <td className='table__cell table__cell--actions'>
                             <button
                                 type='button'
                                 className='table__action'
-                                onClick={() => handleEditRoute("apps/organizations", row.row.id)}
+                                onClick={() => handleEditRoute("apps/organizations", organization.id)}
                             >
                                 <EditSVG role="img" aria-label="edit" fill="currentColor" />
                             </button>

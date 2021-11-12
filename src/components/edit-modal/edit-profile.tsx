@@ -12,6 +12,9 @@ import { UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../store/admin/actions";
 import { IUpdateUser, IUser } from "../../types/user";
+import { fetchOrganizationUsers } from "../../store/user/actions";
+import type { RouteParams } from "types/route-params";
+import { useParams } from "react-router";
 interface IEditProfile {
     onClose: () => void;
     user: IUser;
@@ -40,7 +43,8 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    
+    const { id: orgId } = useParams<RouteParams>();    
+
     const sendNewUser = (validate: any) => {
         let newUserData: IUpdateUser = {
             ...user,
@@ -62,15 +66,15 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
         const onFinish = () => {
             onSubmit(newUserData);
             onClose();
+            dispatch(fetchOrganizationUsers(orgId))
         }
 
         dispatch(updateUser(newUserData, onFinish, setEmailError))
+
     };
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-        console.log("asd");
-
         setValidate(true);
 
         const isValid = formRef.current?.reportValidity();
