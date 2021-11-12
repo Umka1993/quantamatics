@@ -5,7 +5,6 @@ import { createAPI } from "./services/api";
 import { currentPageReducer } from "./store/currentPage/reducer";
 import authorizationReducer from "./store/authorization";
 import userReducer from './store/user/index';
-import OrganizationReducer from "./store/organization/";
 import quantamaticsApi from "./api";
 // import { breadcrumbsReducer, LinkData } from './store/breadcrumbs/reducer';
 
@@ -15,7 +14,6 @@ const rootReducer = combineReducers({
   currentPage: currentPageReducer,
   auth: authorizationReducer,
   users: userReducer,
-  organization: OrganizationReducer,
   [quantamaticsApi.reducerPath]: quantamaticsApi.reducer
   // breadcrumbs: breadcrumbsReducer
 });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, FunctionComponent } from "react";
 import "./styles/create-organization.scss"
 import Input, { InputURL } from "../app-input";
 import { useHistory } from "react-router-dom";
@@ -6,32 +6,32 @@ import Button, { ResetButton } from "../button";
 import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import Form from './form';
-import { createOrganization } from "../../store/organization/actions";
+import { useAddOrganizationMutation } from "../../api";
 
 interface ICreateOrganization {
 }
 
-const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props) => {
+const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const history = useHistory();
     const dispatch = useDispatch();
+
+    const [register, { isError, isSuccess }] = useAddOrganizationMutation();
 
     const [name, setName] = useState<string>('')
     const [customerCrmId, setCustomerCrmId] = useState<string>('')
     const [customerCrmLink, setCustomerCrmLink] = useState<string>('')
     const [comments, setComments] = useState<string | undefined>('')
 
-    const [finish, setFinish] = useState<boolean | undefined>(undefined)
-
     const returnBack = () => {
         dispatch(changeRoute("apps/organizations/list"))
         history.push('/apps/organizations/list')
     }
 
-    const registerOrganization = () => dispatch(
-        createOrganization({ name, customerCrmId, customerCrmLink, comments },
-            returnBack,
-            () => setFinish(true))
-    )
+    useEffect(() => {
+        isSuccess && returnBack()
+    }, [isSuccess])
+
+    const registerOrganization = () => register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
 
     return (
         <Form
@@ -40,7 +40,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (props)
             subtitle='Create an organization for the future admin'
             onSubmit={registerOrganization}
             onReset={returnBack}
-            stopLoading={finish}
+            stopLoading={isError}
         >
             <div className="create-organization__fields">
                 <Input

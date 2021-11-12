@@ -1,4 +1,3 @@
-import { setAllOrg } from ".";
 import { ApiRoute } from "../../data/enum";
 import { Organization } from "../../types/organization/types"
 import { ThunkActionResult } from "../../types/thunk-actions";
@@ -62,19 +61,6 @@ export const deleteOrganization = (id: string, onFinish : any): ThunkActionResul
             console.log(response);
         })
     }; 
-
-
-export const getAllOrganization = (onResolve?: any, onError?: any): ThunkActionResult =>
-    async (dispatch, _getState, api) => {
-        api.get(ApiRoute.GetAllOrganization)
-        .then(({data}) => {
-            dispatch(setAllOrg(data))
-        })
-        .catch((e: any) => {
-            console.log(e.data)
-        })
-    }; 
-
 
 export const updateOrganization = (body: any, onResolve: any, onReject?: any): ThunkActionResult =>
     async (_dispatch, _getState, api) => {
