@@ -1,3 +1,5 @@
+@import '../../../variables.scss';
+
 .selector-input {
   width: 100%;
   margin-top: 24px;
@@ -14,12 +16,17 @@
     }
   }
 
+  &--disabled {
+    background-color: #f8f8f8;
+    cursor: no-drop;
+  }
+
   &__active{
-    border-bottom: 1px solid #017AEE;
+    border-bottom: 1px solid $accent;
     svg {
       transform: rotate(0deg);
       path {
-        fill: #017AEE;
+        fill: $accent;
       }
     }
   }
@@ -40,16 +47,6 @@
     z-index: 10;
     top: 39px;
     overflow-y: scroll;
-
-    &::-webkit-scrollbar-thumb {
-      background-color: #017AEE;
-      outline: none;
-      border-radius: 63px;
-    }
-    &::-webkit-scrollbar {
-      width: 5px;
-    }
-
   }
   &__item{
     margin-bottom: 8px;
@@ -62,7 +59,7 @@
       margin-top: 8px;
     }
     &:hover{
-      color: #017AEE;
+      color: $accent;
       background: #F2F8FE;
       cursor: pointer;
     }

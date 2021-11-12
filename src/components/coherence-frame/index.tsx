@@ -8,7 +8,7 @@ export const CoherenceFrame: React.FunctionComponent = (props) => {
     const frame: any = useRef(null)
     const formAction = HUB_URL + 'hub/login'
     const token = localStorage.getItem('id_token')
-    const username = useSelector<RootState>((state) => state.user.user.email)
+    const username = useSelector<RootState>((state) => state.auth.user?.email)
     const COHERENCE_URL = HUB_URL + "user/" + username + "/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0"
 
     const submit: any = useRef(null);

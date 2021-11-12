@@ -3,27 +3,18 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
 import {SideBar} from "../../components/side-bar";
 import {Organizations} from "../organizations";
-import {AddUserPage} from "../add-user-page";
 import {JupyterFrame} from "../../components/jupyter-frame";
 import {CoherenceFrame} from "../../components/coherence-frame";
 import {SIDE_BAR_ITEMS} from "../../contstans/constans";
 import "./styles/layout-side-bar-page.scss"
-import {useHistory, useLocation} from 'react-router-dom'
-import {EditOrganization} from "../../components/edit-organization/edit-organization";
-import {CreateOrganization} from "../../components/create-organization";
+import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
+import { EditOrganization } from "../../components/edit-organization/edit-organization";
+import { CreateOrganization } from "../../components/create-organization";
 
 export const LayoutSideBarPage: React.FunctionComponent = (props) => {
-    const [currentPage, setCurrentPage] = useState<string>('')
+
     const history = useHistory()
     const dispatch = useDispatch();
-
-    useEffect(()=> {
-        if (window.location.pathname.substring(1) === '') {
-            history.push('/research/my-files')
-            dispatch(changeRoute('research/my-files'))
-        }
-        setCurrentPage(window.location.pathname.substring(1))
-    }, [window.location.pathname])
 
     const changeRoutePath = (route: string) => {
         dispatch(changeRoute(route))
@@ -31,22 +22,31 @@ export const LayoutSideBarPage: React.FunctionComponent = (props) => {
         history.push('/' + route)
     }
     return (
-        <div className="layout-page">
-            <div className="layout-page__side-bar-container">
-                <SideBar
-                    items={SIDE_BAR_ITEMS}
-                    onSwitch={(value) => changeRoutePath(value)}
-                />
-            </div>
-            <div className="layout-page__content-container">
-                {(currentPage === 'research/my-files') && (
-                    <JupyterFrame type={'files'} />
-                )}
-                {currentPage === 'coherence' && <CoherenceFrame />}
-                {currentPage === 'add-user' && <AddUserPage />}
-                {currentPage === 'apps/organizations/list' && <Organizations/>}
-                {currentPage === 'apps/organizations/new-organization' && <CreateOrganization/>}
-                {currentPage.includes('apps/organizations/dudka-agency') && <EditOrganization/>}
+        <div className="layout-page app__main">
+            <SideBar
+                items={SIDE_BAR_ITEMS}
+                onSwitch={(value) => changeRoutePath(value)}
+            />
+
+            <div className="layout-page__scroll">
+                <div className="layout-page__content-container">
+                    <Switch>
+                        <Route exact path='/'>
+                            <Redirect push to='/research/my-files' />
+                        </Route>
+
+                        {/* <Route path='/add-user' component={AddUserPage} /> */}
+
+                        <Route path='/research/my-files'>
+                            <JupyterFrame type='files' />
+                        </Route>
+
+                        <Route path='/coherence' component={CoherenceFrame} />
+                        <Route path='/apps/organizations/list' component={Organizations} />
+                        <Route path='/apps/organizations/new-organization' component={CreateOrganization} />
+                        <Route path='/apps/organizations/:id' component={EditOrganization} />
+                    </Switch>
+                </div>
             </div>
         </div>
     )

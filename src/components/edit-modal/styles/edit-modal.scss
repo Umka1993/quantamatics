@@ -1,0 +1,49 @@
+@import "../../../variables.scss";
+
+.edit-profile {
+  display: grid;
+  grid-template-columns: 334px 1fr;
+
+  &__summary {
+    border-right: 1px solid rgba(188, 196, 216, 0.35);
+  }
+
+  &__form {
+    width: 100%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  &__title {
+    margin: 0 0 (40px - 24px);
+  }
+
+  &__temp {
+    margin-top: 24px;
+    &-input {
+      margin-top: 24px - 10px;
+    }
+  }
+
+  &__inputs {
+    display: grid;
+    gap: 32px - 10px;
+  }
+
+  &__buttons {
+    display: grid;
+    grid-template-columns: auto 140px;
+    gap: 40px;
+    justify-content: end;
+    align-items: center;
+    margin-top: auto;
+    height: 40px;
+
+    .button--dotted {
+      height: auto;
+    }
+  }
+}
+

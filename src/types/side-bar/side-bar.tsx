@@ -9,7 +9,8 @@ export interface SideBarItem {
     name: string,
     active: boolean
     subItems?: SideBarSubItem[]
-    route?: string
+    route?: string,
+    pathToActivate?: string
 }
 
 export interface SideBarSubItem {

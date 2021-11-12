@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./styles/side-bar.scss"
 import classNames from 'classnames';
 
 import toggleArrow from "./assets/toggle-arrow.svg";
-import {SideBarItem, SideBarSubItem} from "../../types/side-bar/side-bar";
-import {SVG} from "../SVG";
-
+import { SideBarItem, SideBarSubItem } from "../../types/side-bar/side-bar";
+import { SVG } from "../SVG";
+import { useLocation } from "react-router";
 
 interface ISideBar {
     classNames?: string
@@ -14,8 +14,13 @@ interface ISideBar {
 }
 
 export const BarItem: React.FunctionComponent<ISideBar> = (props) => {
-    const {item} = props;
-    const itemActive = window.location.pathname.substring(1) === item.route
+    const { item } = props;
+    const { pathname } = useLocation();
+
+    const itemActive = item.pathToActivate ? 
+                pathname.includes(String(item.pathToActivate)) : 
+                pathname.includes(String(item.route));
+
     const subItemActive = !!item.subItems && item.subItems.filter(obj => obj.route === window.location.pathname.substring(1))[0]
     const [opened, setOpened] = useState<boolean>(!!subItemActive)
     const itemClasses: any = classNames({
@@ -36,13 +41,13 @@ export const BarItem: React.FunctionComponent<ISideBar> = (props) => {
     return (
         <div className='side-bar__item-wrapper'>
             <div className={itemClasses} key={item.name} onClick={() => !!item.subItems ? setOpened(!opened) : props.onSwitch(item.route ? item.route : '/')}>
-                <SVG icon={item.image} className={"side-bar__item-img"}/>
+                <SVG icon={item.image} className={"side-bar__item-img"} />
                 <div className="side-bar__item-name">
                     {item.name}
                 </div>
-                {!!item.subItems && <SVG icon={toggleArrow} className={"side-bar__item-toggle-img"}/>}
+                {!!item.subItems && <SVG icon={toggleArrow} className={"side-bar__item-toggle-img"} />}
             </div>
-            <div className={classNames('sub-items-list', {opened: opened})}>
+            <div className={classNames('sub-items-list', { opened: opened })}>
                 {subItemsList}
             </div>
 

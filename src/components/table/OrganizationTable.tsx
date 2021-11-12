@@ -2,22 +2,28 @@ import React, {useState, useEffect} from "react";
 import "./styles/table.scss"
 import {useHistory} from "react-router-dom";
 import {IRow} from "../../types/table/types";
-import {SVG} from "../SVG";
-import {sortTable} from "../../services/baseService";
+import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
-import editSVG from './assets/edit-row-icon.svg'
-import deleteSVG from './assets/delete-row-icon.svg'
-import sortNoneSVG from './assets/sort-none.svg'
-import sortActiveSVG from './assets/sort-active.svg'
+import EditSVG from './assets/edit-row-icon.svg'
+import DeleteSVG from './assets/delete-row-icon.svg'
+
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
 import {changeRoute} from "../../store/currentPage/actions";
-import {network} from "../../services/networkService";
-
+// import {network} from "../../services/networkService";
 
 interface ITable {
     rows: IRow[]
     inEdit?: boolean
+}
+
+const enum OrganizationKey {
+    id = 'id',
+    name ='name',
+    idCRM = 'customerCrmId',
+    linkCRM = 'customerCrmLink',
+    comments = 'comments',
+    assets = 'assets',
 }
 
 export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
@@ -39,7 +45,9 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
         localStorage.setItem('rows', JSON.stringify(props.rows))
     }, [props.rows])
 
-    const handleDeleteOrganization = (id: string, index: number) => {
+    // ? For the future use
+
+    /* const handleDeleteOrganization = (id: string, index: number) => {
         console.log('delete', id)
         setItemDeleting(index)
         network.delete('api/Organization/delete', {id})
@@ -51,59 +59,72 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
             .catch((e: any) => {
                 console.log(e.data)
             })
-    }
+    } */
 
     if(!localRows) return null
 
     return(
-        <div className="table">
-            <div className="table-head">
-                <div className="table-head-row">
-                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('organization', sort, localRows, setSort, setLocalRows) }
-                    >
-                        ORGANIZATION Name <SVG icon={sort.name === 'organization' ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('customerId', sort, localRows, setSort, setLocalRows) }
-                    >
-                        CRM Customer ID <SVG icon={sort.name === 'customerId' ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('customerLink', sort, localRows, setSort, setLocalRows) }
-                    >
-                        CRM Customer link <SVG icon={sort.name === 'customerLink' ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                    <div className={classNames("table-head-item", {desc: sort.direction === 'desc'})}
-                         onClick={() => sortTable('comments', sort, localRows, setSort, setLocalRows)}
-                    >
-                        comments <SVG icon={sort.name === 'comments' ? sortActiveSVG : sortNoneSVG} />
-                    </div>
-                </div>
-            </div>
-            <div className="table-body">
+        <table className="table table--organization">
+            <thead className="table__head">
+                <tr className="table__header">
+                    <SortTableHeader 
+                        name={OrganizationKey.name} text='Organization Name'  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    />
+
+                    <SortTableHeader 
+                        name={OrganizationKey.idCRM} text='CRM Customer ID '  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    />
+
+                    <SortTableHeader 
+                        name={OrganizationKey.linkCRM} text='CRM Customer link'  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    />
+
+                    <SortTableHeader 
+                        name={OrganizationKey.comments} text='Comments'  
+                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}  
+                    />
+
+                    <th className='table__headline table__headline--hidden'>Actions</th>
+                </tr>
+            </thead>
+            <tbody className="table__body">
                 {localRows.map((row, index) => (
-                    <div className={classNames("table-body-row", {deleting: index === itemDeleting})} key={index}>
-                        <div className="table-body-item">
+                    <tr className={classNames("table__row", {deleting: index === itemDeleting})} key={index}>
+                        <td className="table__cell">
                             {row.row.name}
-                        </div>
-                        <div className="table-body-item">
+                        </td>
+                        <td className="table__cell">
                             {row.row.customerCrmId}
-                        </div>
-                        <div className="table-body-item">
-                            <span><a href={row.row.customerCrmLink}>{row.row.customerCrmLink}</a></span>
-                        </div>
-                        <div className="table-body-item">
+                        </td>
+                        <td className="table__cell">
+                            <a href={row.row.customerCrmLink} target="_blank" rel="noopener noreferrer">{row.row.customerCrmLink}</a>
+                        </td>
+                        <td className="table__cell table__cell--comment">
                             {row.row.comments}
-                        </div>
-                        <div className='table-body-row__actions'>
-                            <SVG icon={editSVG}
-                                 onClick={() => handleEditRoute("apps/organizations/dudka-agency", row.row.id)}/>
-                            <SVG icon={deleteSVG} onClick={() => handleDeleteOrganization(row.row.id, index)}/>
-                        </div>
-                    </div>
+                        </td>
+                        <td className='table__cell table__cell--actions'>
+                            <button
+                                type='button'
+                                className='table__action'
+                                onClick={() => handleEditRoute("apps/organizations", row.row.id)}
+                            >
+                                <EditSVG role="img" aria-label="edit" fill="currentColor" />
+                            </button>
+                            <button 
+                                type='button'
+                                className='table__action'
+                                // onClick={() => handleDeleteOrganization(row.row.id, index)}
+                                disabled
+                            >
+                                <DeleteSVG role="img" aria-label="delete" fill="currentColor" />
+                            </button>
+                        </td>
+                    </tr>
                 ))}
-            </div>
-        </div>
+            </tbody>
+        </table>
     )
 }

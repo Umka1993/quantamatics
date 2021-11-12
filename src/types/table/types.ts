@@ -1,3 +1,4 @@
+import { IUser } from "../edit-profile/types";
 
 export interface IRow {
     editable: boolean
@@ -14,9 +15,10 @@ export interface IRow {
 export interface IUserRow {
     editable: boolean
     row: {
+        id: number,
         firstName: string
         lastName: string
         email: string
-        expirationDate: string
+        subscriptionEndDate: string
     }
 }
