@@ -11,10 +11,11 @@ import { USER } from "../../contstans/constans";
 import { formatDate, adaptRoles } from "../../services/baseService"
 import ComaList from "../coma-list";
 import { IUser } from "../../types/user";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 import ISort from "../../types/sort-type";
 import { SortDirection } from "../../data/enum";
+import { useGetOrganizationUsersQuery } from "../../api";
+import { useParams } from "react-router";
+import { RouteParams } from "types/route-params";
 
 interface ITable {
     inEdit?: boolean,
@@ -24,9 +25,11 @@ interface ITable {
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const { deleteUser } = props;
 
-    const users = useSelector((state: RootState) => state.users.list);
+    const { id } = useParams<RouteParams>()
 
-    const [localRows, setLocalRows] = useState<IUser[]>(users)
+    const {data, isSuccess} = useGetOrganizationUsersQuery(id);
+
+    const [localRows, setLocalRows] = useState<IUser[]>([])
     const [showModal, setShowModal] = useState<Boolean>(false)
     const [sort, setSort] = useState<ISort>({ name: '', direction: SortDirection.Default })
 
@@ -35,12 +38,8 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const [editIndex, setEditIndex] = useState<number>(-1);
 
     useEffect(() => {
-        setLocalRows(users)
-    }, [users])
-
-    useEffect(() => {
-        sort.direction === SortDirection.Default && setLocalRows(users)
-    }, [sort])
+        sort.direction === SortDirection.Default && isSuccess && setLocalRows(data as IUser[])
+    }, [sort, isSuccess])
 
     const handleEditUser = (user: any, index: number) => {
         setEditIndex(index)

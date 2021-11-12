@@ -13,10 +13,11 @@ import {
     fetchOrganization,
     updateOrganization,
 } from "../../store/organization/actions";
-import { fetchOrganizationUsers } from "../../store/user/actions";
+// import { fetchOrganizationUsers } from "../../store/user/actions";
 import type { RouteParams } from "../../types/route-params";
 import { setList } from "../../store/user";
-// import { useGetOrganizationQuery } from "../../api";
+import { useGetOrganizationUsersQuery } from "../../api";
+import Loader from "../loader";
 
 
 
@@ -27,7 +28,9 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const [comment, setComment] = useState<string | undefined>("");
     const [organization, setOrganization] = useState<any>(null);
 
-    const { id: orgId } = useParams<RouteParams>();
+    const { id } = useParams<RouteParams>();
+
+    const { data, isError, isSuccess, isLoading } = useGetOrganizationUsersQuery(id)
 
 
     // const {data, isSuccess} = useGetOrganizationQuery(orgId)
@@ -56,7 +59,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
         dispatch(
             updateOrganization(
                 {
-                    id: orgId,
+                    id,
                     name: organizationName,
                     customerCrmId: customerID,
                     customerCrmLink: customerLink,
@@ -74,18 +77,18 @@ export const EditOrganization: React.FunctionComponent = (props) => {
         );
     };
 
-    useEffect(() => {
-        orgId && dispatch(
-            fetchOrganizationUsers(orgId)
-        );
+    // useEffect(() => {
+    //     id && dispatch(
+    //         fetchOrganizationUsers(id)
+    //     );
 
-        return () => {orgId && dispatch(setList([]))};
+    //     return () => {id && dispatch(setList([]))};
 
-    }, [orgId]);
+    // }, [id]);
 
-    useEffect(() => {
-        if (!organization) dispatch(fetchOrganization(orgId, saveCompanyInfo));
-    }, [!organization]);
+    // useEffect(() => {
+    //     if (!organization) dispatch(fetchOrganization(id, saveCompanyInfo));
+    // }, [!organization]);
 
     return (
         <div className="content-wrapper">
@@ -167,7 +170,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
 
                             <Button
                                 className="edit-organization__user-list-add"
-                                href={`/apps/organizations/${orgId}/add-user`}
+                                href={`/apps/organizations/${id}/add-user`}
                             // onClick={() => setAddUserActive(true)}
                             >
                                 <AddIcon />
@@ -175,7 +178,12 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                             </Button>
                         </div>
 
-                        <UserTable inEdit deleteUser={deleteUser} />
+
+                        {isLoading && <div className="edit-organization__load">
+                            <Loader />
+                        </div>}
+
+                        {isSuccess && <UserTable inEdit deleteUser={deleteUser} />}
 
                     </div>
                 </div>
