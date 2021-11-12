@@ -6,6 +6,7 @@ import { currentPageReducer } from "./store/currentPage/reducer";
 import authorizationReducer from "./store/authorization";
 import userReducer from './store/user/index';
 import OrganizationReducer from "./store/organization/";
+import quantamaticsApi from "./api";
 // import { breadcrumbsReducer, LinkData } from './store/breadcrumbs/reducer';
 
 const api = createAPI();
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   auth: authorizationReducer,
   users: userReducer,
   organization: OrganizationReducer,
+  [quantamaticsApi.reducerPath]: quantamaticsApi.reducer
   // breadcrumbs: breadcrumbsReducer
 });
 
@@ -27,6 +29,6 @@ export const store = configureStore({
       thunk: {
         extraArgument: api,
       },
-    }),
+    }).concat(quantamaticsApi.middleware),
 });
 

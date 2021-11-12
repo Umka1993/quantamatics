@@ -12,18 +12,22 @@ import { changeRoute } from "../../store/currentPage/actions";
 import { Organization } from "../../types/organization/types";
 import { OrganizationKey, SortDirection } from "../../data/enum";
 import ISort from "../../types/sort-type";
+import { useGetAllOrganizationsQuery } from "../../api";
 
 interface ITable {
-    rows: Organization[]
-    inEdit?: boolean
+    // rows?: Organization[]
+    // inEdit?: boolean
 }
 
 export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
-    const { rows } = props;
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [localRows, setLocalRows] = useState<Organization[]>(rows)
+    const {isLoading, data, isError, isSuccess} = useGetAllOrganizationsQuery();
+    
+
+    const [localRows, setLocalRows] = useState<Organization[]>([])
+    
     const [itemDeleting, setItemDeleting] = useState<number | null>(null)
     const [sort, setSort] = useState<ISort>({ name: '', direction: SortDirection.Default })
 
@@ -34,8 +38,8 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
     }
 
     useEffect(() => {
-        sort.direction === SortDirection.Default && setLocalRows(rows)
-    }, [sort])
+        sort.direction === SortDirection.Default && isSuccess && setLocalRows(data as Organization[])
+    }, [sort, isSuccess])
 
 
     // ? For the future use
@@ -51,6 +55,14 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
     } */
 
     if (!localRows) return null
+
+    if (isError) {
+        return <div>Something went wrong</div>
+    }
+
+    if (isLoading) {
+        return <div>Loading</div>
+    }
 
     return (
         <table className="table table--organization">
