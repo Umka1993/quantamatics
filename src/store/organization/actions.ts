@@ -29,27 +29,6 @@ export const fetchOrganization = (id: string, onFinish : any): ThunkActionResult
             })
         }; 
 
-
-export const createOrganization = (organization: any, onFinish : any, onError: any): ThunkActionResult =>
-    async (_dispatch, getState, api) => {
-        const user = getState().auth.user;
-        
-
-        /*   organization.assets = [{
-            createdByID: user?.id, 
-            lastModifiedByID: user?.id, 
-        }]        */ 
-        api.post(ApiRoute.OrganizationCreate, organization )
-        .then(({ data }: any) => {
-            console.log(data);
-            onFinish(data)
-        })
-        .catch(({response}) => {
-            console.log(response);
-            onError()
-        })
-    }; 
-
 export const deleteOrganization = (id: string, onFinish : any): ThunkActionResult =>
     async (_dispatch, _getState, api) => {
         api.delete(ApiRoute.OrganizationDelete, {params: {id}})

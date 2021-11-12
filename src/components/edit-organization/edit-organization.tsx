@@ -16,6 +16,7 @@ import {
 import { fetchOrganizationUsers } from "../../store/user/actions";
 import type { RouteParams } from "../../types/route-params";
 import { setList } from "../../store/user";
+// import { useGetOrganizationQuery } from "../../api";
 
 
 
@@ -27,6 +28,9 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const [organization, setOrganization] = useState<any>(null);
 
     const { id: orgId } = useParams<RouteParams>();
+
+
+    // const {data, isSuccess} = useGetOrganizationQuery(orgId)
 
     const dispatch = useDispatch();
     const history = useHistory();
