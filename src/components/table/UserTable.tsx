@@ -23,6 +23,11 @@ interface ITable {
     deleteUser: Function;
 }
 
+const initialSort = {
+    name: "",
+    direction: SortDirection.Default,
+}
+
 export const UserTable: React.FunctionComponent<ITable> = (props) => {
     const { deleteUser } = props;
 
@@ -32,18 +37,14 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
 
     const [localRows, setLocalRows] = useState<IUser[]>([]);
     const [showModal, setShowModal] = useState<Boolean>(false);
-    const [sort, setSort] = useState<ISort>({
-        name: "",
-        direction: SortDirection.Default,
-    });
+    const [sort, setSort] = useState<ISort>(initialSort);
 
     const [user, setUser] = useState<any>(USER);
 
     useEffect(() => {
-        sort.direction === SortDirection.Default &&
-            isSuccess &&
-            setLocalRows(data as IUser[]);
-    }, [sort, isSuccess]);
+        isSuccess && setLocalRows(data as IUser[]);
+        setSort(initialSort);
+    }, [sort, isSuccess, data]);
 
     const handleEditUser = (user: any, index: number) => {
         setUser(user);
