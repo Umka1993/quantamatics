@@ -8,7 +8,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import Headline from "../page-title/index";
-// import { changeAllNavLinks } from "../../store/breadcrumbs/actions";
 import {updateOrganization} from "../../store/organization/actions";
 import type { RouteParams } from "../../types/route-params";
 import { useGetOrganizationQuery } from "../../api";
@@ -32,25 +31,13 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             setCustomerID(data.customerCrmId)
             setCustomerLink(data.customerCrmLink)
             setComment(data.comments)
+
+            dispatch(changeRoute(`apps/organizations/${data.name}`));
         }
     }, [isSuccess])
 
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const deleteUser = (id: number) => {
-        // TODO: Delete user
-
-        console.log(`Guy #${id} bust be deleted`);
-    };
-
-    const saveCompanyInfo = (data: any) => {
-        dispatch(changeRoute(`apps/organizations/${data.name}`));
-        setOrganizationName(data.name);
-        setCustomerID(data.customerCrmId);
-        setCustomerLink(data.customerCrmLink);
-        setComment(data.comments);
-    };
 
     const submitHandler = (evt: any) => {
         evt.preventDefault();
@@ -88,7 +75,6 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                             // href='/apps/organizations/list'
                             form="edit-organization"
                             className="edit-organization__cancel-btn"
-                            onClick={() => { }}
                         >
                             Cancel
                         </ResetButton>
@@ -165,7 +151,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                             </Button>
                         </div>
 
-                        <UserTable inEdit deleteUser={deleteUser} />
+                        <UserTable />
 
                     </div>
                 </div>

@@ -19,8 +19,6 @@ import { RouteParams } from "types/route-params";
 import Loader from "../loader";
 
 interface ITable {
-    inEdit?: boolean;
-    deleteUser: Function;
 }
 
 const initialSort = {
@@ -28,8 +26,7 @@ const initialSort = {
     direction: SortDirection.Default,
 }
 
-export const UserTable: React.FunctionComponent<ITable> = (props) => {
-    const { deleteUser } = props;
+export const UserTable: React.FunctionComponent<ITable> = () => {
 
     const { id } = useParams<RouteParams>();
 
@@ -46,32 +43,7 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
         setSort(initialSort);
     }, [sort, isSuccess, data]);
 
-    const handleEditUser = (user: any, index: number) => {
-        setUser(user);
-        setShowModal(true);
-    };
-
-    const updateUsers = (user: any) => {
-        const newRows = localRows;
-
-        user.subscriptionEndDate = new Date(
-            user.subscriptionEndDate
-        ).toLocaleDateString("en-US", {
-            month: "2-digit",
-            day: "2-digit",
-            year: "numeric",
-        });
-
-        if (user.newEmail) {
-            user.email = user.newEmail;
-        }
-
-        // newRows[editIndex].row = user
-        setLocalRows(newRows);
-    };
-
     const handleDeleteUser = (data: IUserRow) => {
-        deleteUser(data.row.id);
     };
 
     if (isLoading) {
@@ -155,7 +127,8 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                                     type="button"
                                     className="table__action"
                                     onClick={() => {
-                                        handleEditUser(user, index);
+                                        setUser(user);
+                                        setShowModal(true);
                                     }}
                                 >
                                     <EditSVG role="img" aria-label="edit" fill="currentColor" />
@@ -181,7 +154,6 @@ export const UserTable: React.FunctionComponent<ITable> = (props) => {
                 <EditProfile
                     user={user}
                     onClose={() => setShowModal(false)}
-                    onSubmit={updateUsers}
                 />
             )}
         </>

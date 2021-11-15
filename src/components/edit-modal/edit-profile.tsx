@@ -19,13 +19,11 @@ import "./styles/edit-account.scss";
 interface IEditProfile {
     onClose: () => void;
     user: IUser;
-    onSubmit: any;
 }
 
 export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     onClose,
     user,
-    onSubmit,
 }) => {
     const initialExp = user.subscriptionEndDate
         ? new Date(user.subscriptionEndDate.split(".").join("/"))
