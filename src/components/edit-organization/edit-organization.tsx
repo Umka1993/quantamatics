@@ -10,15 +10,15 @@ import { useDispatch } from "react-redux";
 import Headline from "../page-title/index";
 // import { changeAllNavLinks } from "../../store/breadcrumbs/actions";
 import {
-    fetchOrganization,
-    updateOrganization,
+    updateOrganization
 } from "../../store/organization/actions";
-// import { fetchOrganizationUsers } from "../../store/user/actions";
 import type { RouteParams } from "../../types/route-params";
-import { setList } from "../../store/user";
-import { useGetOrganizationUsersQuery } from "../../api";
-import Loader from "../loader";
+import { useGetOrganizationQuery } from "../../api";
 
+interface ApiError {
+    status: number,
+    data: string,
+}
 
 
 export const EditOrganization: React.FunctionComponent = (props) => {
@@ -26,14 +26,21 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const [customerID, setCustomerID] = useState<string>("");
     const [customerLink, setCustomerLink] = useState<string>("");
     const [comment, setComment] = useState<string | undefined>("");
-    const [organization, setOrganization] = useState<any>(null);
 
     const { id } = useParams<RouteParams>();
 
-    const { data, isError, isSuccess, isLoading } = useGetOrganizationUsersQuery(id)
 
-
-    // const {data, isSuccess} = useGetOrganizationQuery(orgId)
+    const { data, isSuccess, isError, error } = useGetOrganizationQuery(id);
+    console.log(error);
+    
+    useEffect(() => {
+        if (isSuccess && data) {
+            setOrganizationName(data.name);
+            setCustomerID(data.customerCrmId)
+            setCustomerLink(data.customerCrmLink)
+            setComment(data.comments)
+        }
+    }, [isSuccess])
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -46,7 +53,6 @@ export const EditOrganization: React.FunctionComponent = (props) => {
 
     const saveCompanyInfo = (data: any) => {
         dispatch(changeRoute(`apps/organizations/${data.name}`));
-        setOrganization(data);
         setOrganizationName(data.name);
         setCustomerID(data.customerCrmId);
         setCustomerLink(data.customerCrmLink);
@@ -117,73 +123,69 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                     </div>
                 </header>
                 <div className="edit-organization__body">
-                    <form
-                        className="edit-organization__info"
-                        id="edit-organization"
-                        onSubmit={submitHandler}
-                        onReset={(evt) => {
-                            evt.preventDefault();
-                            dispatch(changeRoute("apps/organizations/list"));
-                            history.push("/apps/organizations/list");
-                        }}
-                    >
-                        <h2 className="subheadline edit-organization__info-title">
-                            Ogranization info
-                        </h2>
-                        <div className="edit-organization__inputs">
-                            <div className="edit-organization__input">
+                    {isError ? <p>Error on loading data: {(error as ApiError).data} </p> :
+                        <form
+                            className="edit-organization__info"
+                            id="edit-organization"
+                            onSubmit={submitHandler}
+                            onReset={(evt) => {
+                                evt.preventDefault();
+                                dispatch(changeRoute("apps/organizations/list"));
+                                history.push("/apps/organizations/list");
+                            }}
+                        >
+                            <h2 className="sub-headline">
+                                Ogranization info
+                            </h2>
+
+                            <div className="edit-organization__inputs">
+                                <div className="edit-organization__input">
+                                    <Input
+                                        onChangeInput={(value) => setOrganizationName(value)}
+                                        value={organizationName}
+                                        placeholder="Name of The Organization"
+                                    />
+                                </div>
+                                <div className="edit-organization__input">
+                                    <Input
+                                        onChangeInput={(value) => setCustomerID(value)}
+                                        value={customerID}
+                                        placeholder="CRM Customer ID"
+                                    />
+                                </div>
+                                <div className="edit-organization__input">
+                                    <Input
+                                        onChangeInput={(value) => setCustomerLink(value)}
+                                        value={customerLink}
+                                        placeholder="CRM Customer ID Link"
+                                    />
+                                </div>
+                            </div>
+                            <div className="edit-organization__comments">
                                 <Input
-                                    onChangeInput={(value) => setOrganizationName(value)}
-                                    value={organizationName}
-                                    placeholder="Name of The Organization"
+                                    onChangeInput={(value) => setComment(value)}
+                                    value={comment}
+                                    placeholder="Comments"
+                                    limit={200}
                                 />
                             </div>
-                            <div className="edit-organization__input">
-                                <Input
-                                    onChangeInput={(value) => setCustomerID(value)}
-                                    value={customerID}
-                                    placeholder="CRM Customer ID"
-                                />
-                            </div>
-                            <div className="edit-organization__input">
-                                <Input
-                                    onChangeInput={(value) => setCustomerLink(value)}
-                                    value={customerLink}
-                                    placeholder="CRM Customer ID Link"
-                                />
-                            </div>
-                        </div>
-                        <div className="edit-organization__comments">
-                            <Input
-                                onChangeInput={(value) => setComment(value)}
-                                value={comment}
-                                placeholder="Comments"
-                                limit={200}
-                            />
-                        </div>
-                    </form>
+                        </form>}
                     <div className="edit-organization__user-list">
                         <div className="edit-organization__user-list-header">
-                            <h2 className="subheadline edit-organization__user-list-title">
+                            <h2 className="sub-headline">
                                 User List
                             </h2>
 
                             <Button
                                 className="edit-organization__user-list-add"
                                 href={`/apps/organizations/${id}/add-user`}
-                            // onClick={() => setAddUserActive(true)}
                             >
                                 <AddIcon />
                                 Add New
                             </Button>
                         </div>
 
-
-                        {isLoading && <div className="edit-organization__load">
-                            <Loader />
-                        </div>}
-
-                        {isSuccess && <UserTable inEdit deleteUser={deleteUser} />}
+                        <UserTable inEdit deleteUser={deleteUser} />
 
                     </div>
                 </div>
