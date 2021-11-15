@@ -8,9 +8,9 @@ import { useHistory, useParams } from "react-router-dom";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import Headline from "../page-title/index";
-import {updateOrganization} from "../../store/organization/actions";
+import { updateOrganization } from "../../store/organization/actions";
 import type { RouteParams } from "../../types/route-params";
-import { useGetOrganizationQuery } from "../../api";
+import { useGetOrganizationQuery } from "../../api/organization";
 import IApiError from "../../types/api-error";
 
 export const EditOrganization: React.FunctionComponent = (props) => {
@@ -24,7 +24,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
 
     const { data, isSuccess, isError, error } = useGetOrganizationQuery(id);
     console.log(error);
-    
+
     useEffect(() => {
         if (isSuccess && data) {
             setOrganizationName(data.name);

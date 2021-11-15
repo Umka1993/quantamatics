@@ -6,7 +6,7 @@ import Button, { ResetButton } from "../button";
 import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import Form from "./form";
-import { useAddOrganizationMutation } from "../../api";
+import { useAddOrganizationMutation } from "../../api/organization";
 
 interface ICreateOrganization { }
 

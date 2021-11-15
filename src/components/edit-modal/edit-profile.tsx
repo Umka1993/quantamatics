@@ -9,7 +9,7 @@ import RoleCheckboxes from "../role-checkboxes";
 import { UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
 import { IUpdateUser, IUser } from "../../types/user";
-import { useUpdateUserMutation, useUpdateUserRolesMutation } from "../../api";
+import { useUpdateUserMutation, useUpdateUserRolesMutation } from "../../api/user";
 import IApiError from "../../types/api-error";
 import useUser from "../../hooks/useUser";
 import { login } from "../../store/authorization";

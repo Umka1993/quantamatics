@@ -12,7 +12,7 @@ import { changeRoute } from "../../store/currentPage/actions";
 import { Organization } from "../../types/organization/types";
 import { OrganizationKey, SortDirection } from "../../data/enum";
 import ISort from "../../types/sort-type";
-import { useGetAllOrganizationsQuery } from "../../api";
+import { useGetAllOrganizationsQuery } from "../../api/organization";
 import Loader from "../loader/";
 
 interface ITable {

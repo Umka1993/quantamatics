@@ -13,7 +13,7 @@ import ComaList from "../coma-list";
 import { IUser } from "../../types/user";
 import ISort from "../../types/sort-type";
 import { SortDirection } from "../../data/enum";
-import { useGetOrganizationUsersQuery } from "../../api";
+import { useGetOrganizationUsersQuery } from "../../api/user";
 import { useParams } from "react-router";
 import { RouteParams } from "types/route-params";
 import Loader from "../loader";
