@@ -9,17 +9,10 @@ import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
 import Headline from "../page-title/index";
 // import { changeAllNavLinks } from "../../store/breadcrumbs/actions";
-import {
-    updateOrganization
-} from "../../store/organization/actions";
+import {updateOrganization} from "../../store/organization/actions";
 import type { RouteParams } from "../../types/route-params";
 import { useGetOrganizationQuery } from "../../api";
-
-interface ApiError {
-    status: number,
-    data: string,
-}
-
+import IApiError from "../../types/api-error";
 
 export const EditOrganization: React.FunctionComponent = (props) => {
     const [organizationName, setOrganizationName] = useState<string>("");
@@ -83,19 +76,6 @@ export const EditOrganization: React.FunctionComponent = (props) => {
         );
     };
 
-    // useEffect(() => {
-    //     id && dispatch(
-    //         fetchOrganizationUsers(id)
-    //     );
-
-    //     return () => {id && dispatch(setList([]))};
-
-    // }, [id]);
-
-    // useEffect(() => {
-    //     if (!organization) dispatch(fetchOrganization(id, saveCompanyInfo));
-    // }, [!organization]);
-
     return (
         <div className="content-wrapper">
             <div className="edit-organization">
@@ -123,7 +103,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                     </div>
                 </header>
                 <div className="edit-organization__body">
-                    {isError ? <p>Error on loading data: {(error as ApiError).data} </p> :
+                    {isError ? <p>Error on loading data: {(error as IApiError).data} </p> :
                         <form
                             className="edit-organization__info"
                             id="edit-organization"

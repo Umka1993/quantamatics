@@ -12,6 +12,8 @@
     display: flex;
     flex-direction: column;
 
+    position: relative;
+
     .modal__title {
         margin: 0 0 32px - 11px;
     }
