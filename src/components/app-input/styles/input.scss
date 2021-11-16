@@ -81,8 +81,9 @@ $text: #bcc4d8;
         width: auto;
         height: auto;
         color: transparent;
-        // background: #fff;
+        background: none;
         cursor: pointer;
+        margin: 0;
       }
       &::-webkit-inner-spin-button {
         z-index: 1;
@@ -92,6 +93,8 @@ $text: #bcc4d8;
       }
     }
   }
+
+
 
   &--validate &__field:not(:placeholder-shown):invalid {
     border-bottom: 1px solid #ff5757;
@@ -133,6 +136,7 @@ $text: #bcc4d8;
     background-color: #fff;
     pointer-events: none;
     text-align: left;
+    height: 100%;
   }
 
   &__field:active ~ &__dummy,
