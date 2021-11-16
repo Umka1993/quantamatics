@@ -15,6 +15,7 @@
         display: flex;
         align-items: center;
         position: relative;
+        cursor: pointer;
 
         &::-webkit-details-marker {
             display: none;
@@ -26,6 +27,7 @@
             color: $accent;
         }
 
+        &:focus-visible::before,
         &:hover::before,
         &--active::before {
             content: "";
@@ -85,9 +87,14 @@
         margin-right: 24px;
     }
 
+    details[open] &__marker {
+        transform: none;
+    }
+
     &__marker {
         fill: $inactive;
         margin-left: auto;
+        transition: transform 0.3s;
         transform: rotate(180deg);
     }
 }
