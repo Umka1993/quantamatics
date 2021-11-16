@@ -10,21 +10,22 @@ import classNames from "classnames";
 import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import { Organization } from "../../types/organization/types";
-import { OrganizationKey, SortDirection } from "../../data/enum";
+import { OrganizationKey, SortDirection, UserRole } from "../../data/enum";
 import ISort from "../../types/sort-type";
 import { useGetAllOrganizationsQuery, useDeleteOrganizationMutation } from "../../api/organization";
 import Loader from "../loader/";
+import useUser from "../../hooks/useUser";
 
 interface ITable {
-    // rows?: Organization[]
-    // inEdit?: boolean
 }
 
-export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
+export const OrganizationTable: React.FunctionComponent<ITable> = () => {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const { isLoading, data, isError, isSuccess, error, refetch } =
+    const user = useUser();
+
+    const { isLoading, data, isError, isSuccess, error } =
         useGetAllOrganizationsQuery();
 
     const [deleteOrg, { isSuccess: isDeleted }] = useDeleteOrganizationMutation();
@@ -43,10 +44,17 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
         history.push("/" + route + `/${id}`);
     };
 
+
+    function filterOrganizationToOrgAdmin(organizations: Organization[]): Organization[] {
+        return user?.userRoles.includes(UserRole.Admin)
+            ? organizations
+            : organizations?.filter((organization) => organization.parentId === String(user?.organizationId))
+
+    }
     useEffect(() => {
-        sort.direction === SortDirection.Default &&
-            isSuccess &&
-            setLocalRows(data as Organization[]);
+        isSuccess && sort.direction === SortDirection.Default 
+            && setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]))
+
     }, [sort, data, isSuccess]);
 
     // ? For the future use
@@ -59,7 +67,6 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
     useEffect(() => {
         if (isDeleted) {
             setItemDeleting(null);
-            // refetch();
         }
     }, [isDeleted])
 
