@@ -103,7 +103,7 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
                         />
                         <SortTableHeader
                             name="userRoles"
-                            text="User Role"
+                            text="Organization Role"
                             sort={sort}
                             localRows={localRows}
                             setSort={setSort}
