@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "./styles/create-organization.scss";
 import { useHistory, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
@@ -7,14 +7,14 @@ import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import Form from "./form";
 import { fetchOrganization } from "../../store/organization/actions";
-import { registerUser } from "../../store/account/actions";
 import RoleCheckboxes from "../role-checkboxes";
 import { UserRole } from "../../data/enum";
+import { useRegisterUserMutation } from "../../api/account";
 
 interface ICreateOrganization { }
 
 const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
-    props
+    
 ) => {
     const { id: organizationId } = useParams<{ id: string }>();
 
@@ -29,8 +29,21 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
 
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
-    const [finish, setFinish] = useState<boolean | undefined>(undefined);
     const [userRoles, setRoles] = useState<UserRole[]>([]);
+
+    const [register, { isSuccess, isError, error }] = useRegisterUserMutation();
+    
+
+    useEffect(() => {
+        isError && (error as any).data[0].code === "DuplicateUserName" 
+            && setErrors("The user with such email already exists")
+    }, [isError])
+
+
+    useEffect(() => {
+        isSuccess && history.push("/success-invitation");
+    }, [isSuccess])
+    
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -48,34 +61,16 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
         errors && setErrors(undefined);
     }, [email]);
 
-    const onFinish = () => history.push("/success-invitation");
-
-    const onError = (data: any) => {
-        setFinish(true);
-        if (data) {
-            const { code } = data[0];
-
-            if (code === "DuplicateUserName") {
-                setErrors("The user with such email already exists");
-            }
-        }
-    };
     const addUserToOrg = useCallback(() => {
-        dispatch(
-            registerUser(
-                {
-                    firstName,
-                    lastName,
-                    email,
-                    organizationId,
-                    companyName,
-                    subscriptionEndDate,
-                    userRoles: userRoles,
-                },
-                onFinish,
-                onError
-            )
-        );
+        register({
+            firstName,
+            lastName,
+            email,
+            organizationId,
+            companyName,
+            subscriptionEndDate,
+            userRoles: userRoles
+        })
     }, [firstName, lastName, email, subscriptionEndDate, userRoles]);
 
     return (
@@ -84,7 +79,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
             headline="Add User Accounts"
             subtitle="Add users to your organization and manage them"
             onSubmit={addUserToOrg}
-            stopLoading={finish}
+            stopLoading={isError}
         >
             <div className="create-organization__fields">
                 <Input
