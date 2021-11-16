@@ -36,7 +36,7 @@ export const LayoutSideBarPage: React.FunctionComponent = () => {
     const HomePath = isOrganizationAvailable
         ? "/apps/organizations/list"
         : isEditOrgAvailable
-            ? `/apps/organizations/${user?.id}`
+            ? `/apps/organizations/${user?.organizationId}`
             : isCoherence ? AppRoute.Coherence : AppRoute.Files;
 
     return (
