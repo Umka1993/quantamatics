@@ -39,9 +39,12 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
     const [user, setUser] = useState<any>(USER);
 
     useEffect(() => {
-        isSuccess && setLocalRows(data as IUser[]);
         setSort(initialSort);
-    }, [sort, isSuccess, data]);
+    }, [data]);
+
+    useEffect(() => {
+        isSuccess && sort.direction === SortDirection.Default && setLocalRows(data as IUser[]);
+    }, [isSuccess, sort])
 
     const handleDeleteUser = (data: IUserRow) => {
     };
