@@ -28,6 +28,24 @@ const organizationsApi = baseApi.injectEndpoints({
             invalidatesTags: [{ type: "Organizations", id: "list" }],
         }),
 
+        updateOrganization: build.mutation({
+            query: (body: any) => ({
+                url: ApiRoute.OrganizationUpdate,
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: [{ type: "Organizations", id: "list" }],
+        }),
+
+        deleteOrganization: build.mutation({
+            query: (id: string) => ({
+                url: ApiRoute.OrganizationDelete,
+                method: "DELETE",
+                params: { id },
+            }),
+            invalidatesTags: [{ type: "Organizations", id: "list" }],
+        }),
+
         getOrganization: build.query<Organization, string>({
             query: (id) => ({
                 url: ApiRoute.OrganizationInfo,
@@ -49,4 +67,6 @@ export const {
     useGetAllOrganizationsQuery,
     useAddOrganizationMutation,
     useGetOrganizationQuery,
+    useDeleteOrganizationMutation,
+    useUpdateOrganizationMutation
 } = organizationsApi;

@@ -12,7 +12,7 @@ import { changeRoute } from "../../store/currentPage/actions";
 import { Organization } from "../../types/organization/types";
 import { OrganizationKey, SortDirection } from "../../data/enum";
 import ISort from "../../types/sort-type";
-import { useGetAllOrganizationsQuery } from "../../api/organization";
+import { useGetAllOrganizationsQuery, useDeleteOrganizationMutation } from "../../api/organization";
 import Loader from "../loader/";
 
 interface ITable {
@@ -24,8 +24,10 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const { isLoading, data, isError, isSuccess, error } =
+    const { isLoading, data, isError, isSuccess, error, refetch } =
         useGetAllOrganizationsQuery();
+
+    const [deleteOrg, { isSuccess: isDeleted }] = useDeleteOrganizationMutation();
 
     const [localRows, setLocalRows] = useState<Organization[]>([]);
 
@@ -45,19 +47,21 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
         sort.direction === SortDirection.Default &&
             isSuccess &&
             setLocalRows(data as Organization[]);
-    }, [sort, isSuccess]);
+    }, [sort, data, isSuccess]);
 
     // ? For the future use
 
-    /* const handleDeleteOrganization = (id: string, index: number) => {
-          console.log('delete', id)
-          setItemDeleting(index)
-          const onFinish = () => {
-              setItemDeleting(null)
-              setLocalRows(localRows.filter(rowItem => rowItem.row.id !== id))
-          }
-          dispatch(deleteOrganization(id, onFinish))
-      } */
+    const handleDeleteOrganization = (id: string, index: number) => {
+        setItemDeleting(index)
+        deleteOrg(id).unwrap()
+    }
+
+    useEffect(() => {
+        if (isDeleted) {
+            setItemDeleting(null);
+            // refetch();
+        }
+    }, [isDeleted])
 
     if (!localRows) return null;
 
@@ -153,8 +157,8 @@ export const OrganizationTable: React.FunctionComponent<ITable> = (props) => {
                             <button
                                 type="button"
                                 className="table__action"
-                                // onClick={() => handleDeleteOrganization(row.row.id, index)}
-                                disabled
+                                onClick={() => handleDeleteOrganization(organization.id, index)}
+                            // disabled
                             >
                                 <DeleteSVG role="img" aria-label="delete" fill="currentColor" />
                             </button>
