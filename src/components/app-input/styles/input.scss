@@ -131,12 +131,12 @@ $text: #bcc4d8;
 
   &__dummy {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0 0 2px;
     background-color: #fff;
     pointer-events: none;
     text-align: left;
-    height: 100%;
+    min-height: auto;
+    border-bottom: none;
   }
 
   &__field:active ~ &__dummy,
