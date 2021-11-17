@@ -77,6 +77,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
     const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
         setInitialOrg();
+        
         if (isHaveAccessToOrgList) {
             dispatch(changeRoute("apps/organizations/list"));
             history.push("/apps/organizations/list");
@@ -92,9 +93,10 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                     </Headline>
                     <div className="edit-organization__buttons">
                         <ResetButton
-                            // href='/apps/organizations/list'
+                            onClick={
+                                ({ target }) => setTimeout(() => (target as HTMLButtonElement).blur(), 800)
+                            }
                             form="edit-organization"
-                            className="edit-organization__cancel-btn"
                         >
                             Cancel
                         </ResetButton>
