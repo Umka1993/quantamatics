@@ -18,17 +18,6 @@ interface OrganizationInfoResponse {
     name: string;
 }
 
-export const fetchOrganization = (id: string, onFinish : any): ThunkActionResult =>
-        async (_dispatch, _getState, api) => {
-            api.get<OrganizationInfoResponse>(ApiRoute.OrganizationInfo, {params: {id}})
-            .then(({ data }: any) => {
-                onFinish(data)
-            })
-            .catch(({response}) => {
-                console.log(response);
-            })
-        }; 
-
 export const deleteOrganization = (id: string, onFinish : any): ThunkActionResult =>
     async (_dispatch, _getState, api) => {
         api.delete(ApiRoute.OrganizationDelete, {params: {id}})

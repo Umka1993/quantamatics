@@ -6,10 +6,10 @@ import Input, { DatePick, Email } from "../app-input/";
 import { useDispatch } from "react-redux";
 import { changeRoute } from "../../store/currentPage/actions";
 import Form from "./form";
-import { fetchOrganization } from "../../store/organization/actions";
 import RoleCheckboxes from "../role-checkboxes";
 import { UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
+import { useGetOrganizationQuery } from "../../api/organization";
 
 interface ICreateOrganization { }
 
@@ -18,7 +18,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
 ) => {
     const { id: organizationId } = useParams<{ id: string }>();
 
-    const [companyName, setCompanyName] = useState<string>("");
+    const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(organizationId);
 
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
@@ -48,14 +48,9 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const getOrgName = (data: any) => {
-        dispatch(changeRoute(`organizations/${data.name}/add-user`));
-        setCompanyName(data.name);
-    };
-
     useEffect(() => {
-        dispatch(fetchOrganization(organizationId, getOrgName));
-    }, [organizationId]);
+        dispatch(changeRoute(`organizations/${company?.name}/add-user`));
+    }, [isOrgLoaded])
 
     useEffect(() => {
         errors && setErrors(undefined);
@@ -66,12 +61,12 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
             firstName,
             lastName,
             email,
-            organizationId,
-            companyName,
+            organizationId: company?.id,
+            companyName: company?.name,
             subscriptionEndDate,
             userRoles: userRoles
         })
-    }, [firstName, lastName, email, subscriptionEndDate, userRoles]);
+    }, [firstName, lastName, email, subscriptionEndDate, userRoles, company]);
 
     return (
         <Form
@@ -121,7 +116,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
 
             <ResetButton
                 className="create-organization__cancel"
-                href={`/apps/organizations/${organizationId}`}
+                href={`/apps/organizations/${company?.id}`}
             >
                 Cancel
             </ResetButton>
