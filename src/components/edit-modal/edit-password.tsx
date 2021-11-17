@@ -142,6 +142,12 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                     ref={formRef}
                 // noValidate={!validateNew}
                 >
+                    <button
+                        type='button' className="edit-account__button edit-account__button--cancel"
+                        onClick={() => setShowEditForm(false)}
+                    >
+                        cancel
+                    </button>
                     <Password
                         placeholder="Current Password"
                         value={currentPassword}

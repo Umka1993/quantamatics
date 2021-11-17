@@ -73,10 +73,25 @@
         display: grid;
         gap: 4px;
 
-        &--pass .app-input__error {
-            font-size: 14px;
-            margin-top: 0.43em;
-        }
+        &--pass {
+            position: relative;
+            .app-input {
+                &__field {
+                    padding-right: 5em;
+                }
+
+                &__error {
+                    font-size: 14px;
+                    margin-top: 0.43em;
+                }
+            }
+        } 
+    }
+    &__form--pass  &__button--cancel {
+        position: absolute;
+        right: 1.4em;
+        top: 0.45em;
+        z-index: 2;
     }
 
     &__footer {
