@@ -25,6 +25,10 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
     const { location: { pathname } } = useHistory();
     const user = useUser();
 
+    const isHaveAccessToOrgList =
+        user?.userRoles.includes(UserRole.Admin) ||
+        user?.userRoles.includes(UserRole.OrgOwner);
+
     return (
         <nav className='navigation'>
             {user?.userRoles.includes(UserRole.Research) &&
@@ -68,7 +72,7 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
                 </NavLink>
             }
 
-            {user && (user.userRoles.includes(UserRole.Admin) || user.userRoles.includes(UserRole.OrgOwner)) &&
+            {isHaveAccessToOrgList &&
                 <NavLink
                     to='/apps/organizations/list'
                     className={classNames(

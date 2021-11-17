@@ -15,8 +15,6 @@ import "./styles/login-page.scss";
 import { loginAction } from "../../store/authorization/actions";
 
 const LoginForm: React.FunctionComponent = () => {
-    const status = useSelector((state: RootState) => state.auth.status);
-
     const localUserName = localStorage.getItem("savedUsername") || "";
     const localPassword = localStorage.getItem("savedPassword") || "";
 
@@ -28,10 +26,6 @@ const LoginForm: React.FunctionComponent = () => {
     const [rememberMe, setRememberMe] = useState<boolean>(false);
 
     const [errors, setErrors] = useState<string | undefined>(undefined);
-
-    useEffect(() => {
-        if (status === AuthorizationStatus.Auth) history.push("/research/my-files");
-    }, [status]);
 
     const history = useHistory();
     const dispatch = useDispatch();
