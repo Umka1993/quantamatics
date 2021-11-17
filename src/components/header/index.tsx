@@ -2,9 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import "./styles/header.scss"
 import logoImg from "./assets/new-logo.svg"
 import logoTextImg from "./assets/Quantamatics.svg"
-import searchImg from "./assets/search.svg"
-import ringImg from "./assets/ring.svg"
-import avatar from "./assets/avatar.svg"
 import arrowImg from "./assets/toggle-arrow.svg"
 import profileImg from "./assets/profile.svg"
 import settingsImg from "./assets/settings.svg"
@@ -16,15 +13,14 @@ import { RootState } from "../../store";
 import { useHistory } from "react-router-dom";
 import { changeRoute } from "../../store/currentPage/actions";
 import { EditPassword } from '../edit-modal/edit-password';
-// import {EditProfile} from "../edit-profile";
 import { IUser, User } from 'types/edit-profile/types';
-import { AppRoute } from '../../data/enum';
+import { AppRoute, AuthorizationStatus } from '../../data/enum';
 import Breadcrumbs from '../breadcrumbs';
 import { logout } from '../../store/authorization';
 
 export const Header: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.auth.user)
-    
+    const { user, status } = useSelector((state: RootState) => state.auth)
+
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [showProfile, setShowProfile] = useState<boolean>(false)
 
@@ -53,24 +49,19 @@ export const Header: React.FunctionComponent = (props) => {
         history.push(route)
     }
 
-    const username: any = !!user ? user : ''
-
-    // TODO: Rework login process
-    const logged: boolean = username.id !== 0 
-    
     return (
         <div className="header">
             <div className="header__content">
                 <div className="header__logo">
                     <SVG icon={logoImg} name="logo" onClick={() => !!user ? history.push('/') : null} />
-                    {user && logged && (<Breadcrumbs className="header__breadcrumbs" />)}
+                    {status === AuthorizationStatus.Auth && (<Breadcrumbs className="header__breadcrumbs" />)}
                 </div>
 
-                {user && (<div className="header__nav">
+                {status === AuthorizationStatus.Auth && (<div className="header__nav">
                     <div className="header__nav-item">
                         <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
                             {(user as IUser).firstName} {(user as IUser).lastName}
-                            
+
                             <SVG icon={arrowImg} className={classNames("profile__arrow", { 'opened': showMenu })} />
                             <div className={classNames('profile__dropdown', { showMenu: showMenu })}>
                                 <div className="profile__dropdown-triangle" />
@@ -89,7 +80,7 @@ export const Header: React.FunctionComponent = (props) => {
                 </div>)}
                 {
                     showProfile &&
-                    <EditPassword user={user as IUser} onClose={() => setShowProfile(false)}/>
+                    <EditPassword user={user as IUser} onClose={() => setShowProfile(false)} />
                 }
             </div>
         </div>
