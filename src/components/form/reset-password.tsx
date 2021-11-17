@@ -28,7 +28,7 @@ const ResetPassword: React.FunctionComponent = () => {
     const onError = () => setFinish(true);
 
     const handleResetPassword = useCallback(() => {
-        dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError))
+        dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError, false))
 
     }, [password, passwordConfirm,]);
 
