@@ -41,13 +41,6 @@ export const TABLE_ITEMS = [
         }
     },
 ]
-export const USER_ORGS = [
-    'General Electric',
-    'Sony',
-    'Starbucks',
-    'IBM',
-    'The Walt Disney Company'
-]
 export const USER_TABLE_ITEMS = [
     {
         editable: true,

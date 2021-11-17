@@ -3,13 +3,13 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Button, { ResetButton } from "../button";
 import AppInput, { DatePick, Email } from "../app-input";
 import { SelectorInput } from "../selector-input";
-import { USER_ORGS } from "../../contstans/constans";
 import Modal from "../modal";
 import RoleCheckboxes from "../role-checkboxes";
 import { UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
 import { IUpdateUser, IUser } from "../../types/user";
 import { useUpdateUserMutation, useUpdateUserRolesMutation } from "../../api/user";
+import { useGetAllOrganizationsQuery } from "../../api/organization";
 import IApiError from "../../types/api-error";
 import useUser from "../../hooks/useUser";
 import { login } from "../../store/authorization";
@@ -28,6 +28,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const initialExp = user.subscriptionEndDate
         ? new Date(user.subscriptionEndDate.split(".").join("/"))
         : new Date();
+        
 
     const [firstName, setName] = useState<string>(user.firstName);
     const [lastName, setSurname] = useState<string>(user.lastName);
@@ -38,6 +39,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
     const [userRoles, setRoles] = useState<UserRole[]>(user.userRoles)
+    // const [organizationId, setOrganizationId] = useState<string>('')
     const dispatch = useDispatch()
 
     const formRef = useRef<HTMLFormElement>(null);
@@ -47,11 +49,13 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const [update, { isSuccess, isError, error, isLoading }] = useUpdateUserMutation();
     const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] = useUpdateUserRolesMutation();
 
+    const { data: allOrganizations } = useGetAllOrganizationsQuery();    
+
     const sendNewUser = (validate: any) => {
         const newUserData: IUpdateUser = {
             ...user,
             firstName, lastName, companyName,
-            subscriptionEndDate,  userRoles,
+            subscriptionEndDate, userRoles,
         };
         if (email !== user.email) {
             newUserData.newEmail = email;
@@ -136,21 +140,25 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                             name="lastName"
                             icon="edit"
                         />
+                        {allOrganizations &&
                         <SelectorInput
-                            onChangeInput={(value) => setOrganization(value)}
-                            options={USER_ORGS}
+                            options={allOrganizations?.map(({name}) => name) as string[]}
+                            // valueSetter={setOrganizationId}
+                            optionSetter={setOrganization}
+                            // values={allOrganizations?.map(({id}) => id) as string[]}
                             value={companyName}
                             disabled
                         />
+                    }
                         <Email
                             externalSetter={setEmail}
                             value={email}
                             error={emailError}
                             icon="edit"
                         />
-                        <DatePick 
+                        <DatePick
                             externalSetter={setExpiration}
-                            valueAsDate={subscriptionEndDate} 
+                            valueAsDate={subscriptionEndDate}
                         />
                         <RoleCheckboxes
                             defaultRoles={userRoles}
