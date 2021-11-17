@@ -10,7 +10,7 @@ import "./styles/form.scss";
 import "./styles/login-page.scss";
 import { resetPassword } from "../../store/reset-password/actions";
 
-const ResetPassword: React.FunctionComponent = (props) => {
+const ResetPassword: React.FunctionComponent = () => {
     const [password, setPassword] = useState<string>("");
     const [passwordConfirm, setPasswordConfirm] = useState<string>("");
     const [compare, setCompare] = useState<string | undefined>(undefined);

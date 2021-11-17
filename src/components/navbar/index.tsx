@@ -68,7 +68,7 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
                 </NavLink>
             }
 
-            {user?.userRoles.includes(UserRole.Admin) &&
+            {user?.userRoles.includes(UserRole.Admin) || user?.userRoles.includes(UserRole.OrgOwner) &&
                 <NavLink
                     to='/apps/organizations/list'
                     className={classNames(
