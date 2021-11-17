@@ -68,15 +68,15 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
                 </NavLink>
             }
 
-            {user?.userRoles.includes(UserRole.Admin) || user?.userRoles.includes(UserRole.OrgOwner) &&
+            {user && (user.userRoles.includes(UserRole.Admin) || user.userRoles.includes(UserRole.OrgOwner)) &&
                 <NavLink
                     to='/apps/organizations/list'
                     className={classNames(
                         'navigation__item',
-                        { 
-                            'navigation__item--active': 
+                        {
+                            'navigation__item--active':
                                 pathname.includes('/apps/organizations/') &&
-                                !pathname.includes(`/apps/organizations/${user?.organizationId}`) 
+                                !pathname.includes(`/apps/organizations/${user?.organizationId}`)
                         })}
                     activeClassName='navigation__item--active'
                 >
