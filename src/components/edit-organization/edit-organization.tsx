@@ -94,7 +94,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                     <div className="edit-organization__buttons">
                         <ResetButton
                             onClick={
-                                ({ target }) => setTimeout(() => (target as HTMLButtonElement).blur(), 800)
+                                ({ target }) => (target as HTMLButtonElement).blur()
                             }
                             form="edit-organization"
                         >
