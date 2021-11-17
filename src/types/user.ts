@@ -1,23 +1,23 @@
-import { UserRole } from "../data/enum";
+import { UserKey, UserRole } from "../data/enum";
 
 export interface IUser {
-    id: number,
-    email: string,
-    firstName: string,
-    lastName: string,
-    companyName: string,
-    companyRole: string,
-    location: string,
-    subscriptionType: number,
-    subscriptionEndDate: string,
-    reportPanel: any,
-    expirationDate: string,
-    avatar: string,
-    userRoles: Array<UserRole>,
-    organizationId: string,
+    [UserKey.Id]: number,
+    [UserKey.Email]: string,
+    [UserKey.Name]: string,
+    [UserKey.Surname]: string,
+    [UserKey.Company]: string,
+    [UserKey.CompanyRole]: string,
+    [UserKey.Location]: string,
+    [UserKey.SubscriptionType]: number,
+    [UserKey.SubscriptionEndDate]: string,
+    [UserKey.ReportPanel]: any,
+    [UserKey.Expiration]: string,
+    [UserKey.Avatar]: string,
+    [UserKey.UserRoles]: Array<UserRole>,
+    [UserKey.OrganizationId]: string,
 }
 
-export interface IUpdateUser extends Omit<IUser, "subscriptionEndDate">  {
+export interface IUpdateUser extends Omit<IUser, UserKey.SubscriptionEndDate>  {
     newEmail?: string,
-    subscriptionEndDate: Date,
+    [UserKey.SubscriptionEndDate]: Date,
 }

@@ -71,6 +71,23 @@ export const enum OrganizationKey {
     Assets = 'assets',
 }
 
+export const enum UserKey {
+    Id = 'id',
+    Email = 'email',
+    Name = 'firstName',
+    Surname = 'lastName',
+    Company = 'companyName',
+    CompanyRole = 'companyRole',
+    Location = 'location',
+    SubscriptionType = 'subscriptionType',
+    SubscriptionEndDate = 'subscriptionEndDate',
+    ReportPanel = 'reportPanel',
+    Expiration = 'expirationDate',
+    Avatar = 'avatar',
+    UserRoles = 'userRoles',
+    OrganizationId = 'organizationId',
+}
+
 export const enum SortDirection {
     Down = "descending",
     Up = "ascending",

@@ -13,7 +13,7 @@ export const Loader: FunctionComponent<HTMLAttributes<HTMLDivElement>> = ({
                 viewBox="0 0 340 340"
                 width={96}
                 height={96}
-                stroke-linecap="round"
+                strokeLinecap="round"
             >
                 <circle cx="170" cy="170" r="160" stroke="#017AEE" />
                 <circle cx="170" cy="170" r="135" stroke="#003C71" />

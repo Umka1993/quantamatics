@@ -1,53 +1,50 @@
 import React, { useState, useEffect } from "react";
-import "./styles/table.scss";
-import { IUserRow } from "../../types/table/types";
+
 import EditSVG from "./assets/edit-row-icon.svg";
 import DeleteSVG from "./assets/delete-row-icon.svg";
+
 import { EditProfile } from "../edit-modal/edit-profile";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
-
-import { USER } from "../../contstans/constans";
-
 import { formatDate, adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
 import { IUser } from "../../types/user";
 import ISort from "../../types/sort-type";
-import { SortDirection } from "../../data/enum";
+import { SortDirection, UserKey } from "../../data/enum";
 import { useGetOrganizationUsersQuery } from "../../api/user";
 import { useParams } from "react-router";
 import { RouteParams } from "types/route-params";
 import Loader from "../loader";
 
+import "./styles/table.scss";
+
 interface ITable {
 }
 
-const initialSort = {
-    name: "",
-    direction: SortDirection.Default,
-}
-
 export const UserTable: React.FunctionComponent<ITable> = () => {
-
     const { id } = useParams<RouteParams>();
 
     const { data, isSuccess, isLoading } = useGetOrganizationUsersQuery(id);
 
     const [localRows, setLocalRows] = useState<IUser[]>([]);
     const [showModal, setShowModal] = useState<Boolean>(false);
+
+    const initialSort = { name: "", direction: SortDirection.Default }
     const [sort, setSort] = useState<ISort>(initialSort);
 
-    const [user, setUser] = useState<any>(USER);
+    const [user, setUser] = useState<IUser>();
 
     useEffect(() => {
-        setSort(initialSort);
-    }, [data]);
+        console.log('updated');
+        console.log(initialSort);
+        
+        if (isSuccess) {
+            setLocalRows(data as IUser[]);
+            setSort(initialSort);
+        }
+    }, [isSuccess, data])
 
-    useEffect(() => {
-        isSuccess && sort.direction === SortDirection.Default && setLocalRows(data as IUser[]);
-    }, [isSuccess, sort])
-
-    const handleDeleteUser = (data: IUserRow) => {
-    };
+    /* const handleDeleteUser = (data: IUserRow) => {
+    }; */
 
     if (isLoading) {
         return (
@@ -57,59 +54,28 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
         );
     }
 
+    const tableTitles = ["First Name", "Last Name", "Email", "Expiration Date", "Organization Role"];
+
+    const tableTitlesKeys = [UserKey.Name, UserKey.Surname, UserKey.Email, UserKey.SubscriptionEndDate, UserKey.UserRoles];
+
+
     return (
         <>
             <table className="table table--user">
                 <thead className="table__head">
                     <tr className="table__header">
-                        <SortTableHeader
-                            name="firstName"
-                            text="First Name"
+                        {tableTitles.map((title: string, index: number) =>
+                        (<SortTableHeader
+                            key={title}
+                            name={tableTitlesKeys[index]}
+                            text={title}
                             sort={sort}
                             localRows={localRows}
                             setSort={setSort}
                             setLocalRows={setLocalRows}
                             className="user"
-                        />
-
-                        <SortTableHeader
-                            name="lastName"
-                            text="Last Name"
-                            sort={sort}
-                            localRows={localRows}
-                            setSort={setSort}
-                            setLocalRows={setLocalRows}
-                            className="user"
-                        />
-
-                        <SortTableHeader
-                            name="email"
-                            text="Email"
-                            sort={sort}
-                            localRows={localRows}
-                            setSort={setSort}
-                            setLocalRows={setLocalRows}
-                            className="user"
-                        />
-
-                        <SortTableHeader
-                            name="subscriptionEndDate"
-                            text="Expiration Date"
-                            sort={sort}
-                            localRows={localRows}
-                            setSort={setSort}
-                            setLocalRows={setLocalRows}
-                            className="user"
-                        />
-                        <SortTableHeader
-                            name="userRoles"
-                            text="Organization Role"
-                            sort={sort}
-                            localRows={localRows}
-                            setSort={setSort}
-                            setLocalRows={setLocalRows}
-                            className="user"
-                        />
+                        />))
+                        }
                         <th className="table__headline table__headline--hidden">Actions</th>
                     </tr>
                 </thead>
@@ -155,7 +121,7 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
             </table>
             {showModal && (
                 <EditProfile
-                    user={user}
+                    user={user as IUser}
                     onClose={() => setShowModal(false)}
                 />
             )}

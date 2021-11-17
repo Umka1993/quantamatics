@@ -90,12 +90,3 @@ export const USER_TABLE_ITEMS = [
         }
     },
 ]
-export const USER = {
-    avatar: '',
-    type: '',
-    name: 'Lorn',
-    surname: 'Davis',
-    organization: 'Facteus',
-    email: 'lorn@facteus.com',
-    exp_date: '12.18.2023'
-}
