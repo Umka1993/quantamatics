@@ -136,7 +136,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                 <form
                     id='edit-pass-form'
                     action=""
-                    className="edit-account__form"
+                    className="edit-account__form edit-account__form--pass"
                     onSubmit={handlerSubmit}
                     onReset={onClose}
                     ref={formRef}

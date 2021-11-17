@@ -33,10 +33,7 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
 
     const [user, setUser] = useState<IUser>();
 
-    useEffect(() => {
-        console.log('updated');
-        console.log(initialSort);
-        
+    useEffect(() => {        
         if (isSuccess) {
             setLocalRows(data as IUser[]);
             setSort(initialSort);
