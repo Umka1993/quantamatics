@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useCallback, useEffect, useState } from "react";
 import "./styles/edit-organizations.scss";
 import AddIcon from "./assets/human-add.svg";
 import Button, { ResetButton } from "../button";
@@ -31,26 +31,31 @@ export const EditOrganization: React.FunctionComponent = (props) => {
         useUpdateOrganizationMutation();
 
     const { data, isSuccess, isError, error } = useGetOrganizationQuery(id);
+    const isHaveAccessToOrgList =
+        user?.userRoles.includes(UserRole.Admin) ||
+        user?.userRoles.includes(UserRole.OrgOwner);
 
     useEffect(() => {
         if (isUpdated) {
-            if (
-                user?.userRoles.includes(UserRole.Admin) ||
-                user?.userRoles.includes(UserRole.OrgOwner)
-            ) {
+            if (isHaveAccessToOrgList) {
                 dispatch(changeRoute("apps/organizations/list"));
                 history.push("/apps/organizations/list");
             }
         }
     }, [isUpdated]);
 
-    useEffect(() => {
-        if (isSuccess && data) {
+    const setInitialOrg = useCallback(() => {
+        if (data) {
             setOrganizationName(data.name);
             setCustomerID(data.customerCrmId);
             setCustomerLink(data.customerCrmLink);
             setComment(data.comments);
+        }
+    }, [data]);
 
+    useEffect(() => {
+        if (isSuccess && data) {
+            setInitialOrg();
             dispatch(changeRoute(`apps/organizations/${data.name}`));
         }
     }, [isSuccess]);
@@ -68,6 +73,15 @@ export const EditOrganization: React.FunctionComponent = (props) => {
             comments: comment,
         });
     };
+
+    const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
+        evt.preventDefault();
+        setInitialOrg();
+        if (isHaveAccessToOrgList) {
+            dispatch(changeRoute("apps/organizations/list"));
+            history.push("/apps/organizations/list");
+        }
+    }
 
     return (
         <div className="content-wrapper">
@@ -103,18 +117,12 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                             className="edit-organization__info"
                             id="edit-organization"
                             onSubmit={submitHandler}
-                            onReset={(evt) => {
-                                evt.preventDefault();
-                                dispatch(changeRoute("apps/organizations/list"));
-                                history.push("/apps/organizations/list");
-                            }}
+                            onReset={resetHandler}
                         >
                             {isUpdating ? (
                                 <Loader />
                             ) : (
                                 <>
-                                    <h2 className="sub-headline">Ogranization info</h2>
-
                                     <div className="edit-organization__inputs">
                                         <div className="edit-organization__input">
                                             <Input
