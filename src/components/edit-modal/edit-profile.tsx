@@ -133,12 +133,14 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                             value={firstName}
                             name="firstName"
                             icon="edit"
+                            placeholder=''
                         />
                         <AppInput
                             externalSetter={setSurname}
                             value={lastName}
                             name="lastName"
                             icon="edit"
+                            placeholder=''
                         />
                         {allOrganizations &&
                         <SelectorInput
@@ -155,6 +157,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                             value={email}
                             error={emailError}
                             icon="edit"
+                            placeholder=''
                         />
                         <DatePick
                             externalSetter={setExpiration}

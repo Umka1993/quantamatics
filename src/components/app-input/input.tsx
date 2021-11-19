@@ -85,7 +85,7 @@ const Input: React.FunctionComponent<IInput> = ({
                     aria-label={labelText}
                     autoComplete={autoComplete}
                     placeholder={
-                        `${placeholder ? placeholder : labelText}${required ? '*' : ''}`
+                        `${placeholder === undefined ? labelText : placeholder}${required ? '*' : ''}`
                     }
                     required={required}
                     aria-required={required}
