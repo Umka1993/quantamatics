@@ -71,9 +71,7 @@ const Password: React.FunctionComponent<IPassword> = ({
 
             const { validationMessage } = inputRef.current;
 
-            errorMessage &&
-                errorMessage !== validationMessage &&
-                setErrorMessage(validationMessage);
+            error && inputRef.current.reportValidity();
 
             !validationMessage.length && setErrorMessage(undefined);
         }

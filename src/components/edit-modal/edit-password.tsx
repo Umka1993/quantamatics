@@ -53,7 +53,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
         evt.preventDefault();
 
         setValidateNew(true)
-        if (formRef.current?.checkValidity()) {
+        if (formRef.current?.checkValidity() && !compare) {
 
             dispatch(changePassword({
                 currentPassword,
@@ -140,7 +140,6 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                     onSubmit={handlerSubmit}
                     onReset={onClose}
                     ref={formRef}
-                // noValidate={!validateNew}
                 >
                     <button
                         type='button' className="edit-account__button edit-account__button--cancel"
@@ -155,7 +154,6 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         name="password"
                         autoComplete="current-password"
                         error={wrongCurrent}
-                    // triggerValidity={Boolean(wrongCurrent)}
                     />
 
                     <Password
@@ -163,15 +161,13 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         value={newPassword}
                         externalSetter={setNewPassword}
                         placeholder="New Password"
-                        formNoValidate={validateNew}
                     />
                     <Password
                         autoComplete="new-password"
                         value={confirmPassword}
                         externalSetter={setConfirmPassword}
                         placeholder="Confirm New Password"
-                        formNoValidate={validateNew}
-                        error={compare}
+                        error={validateNew ? compare : undefined}
                     />
                 </form>
             )}
