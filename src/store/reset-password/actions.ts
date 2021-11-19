@@ -1,15 +1,6 @@
-import { AxiosInstance } from "axios";
 import { ApiRoute } from "../../data/enum";
-import { ThunkAction } from "redux-thunk";
-import { RootState } from "store";
 import { loginAction } from '../authorization/actions';
-
-type ThunkActionResult<R = Promise<void>> = ThunkAction<
-    R,
-    RootState,
-    AxiosInstance,
-    any
->;
+import { ThunkActionResult } from "../../types/thunk-actions";
 
 export const sendResetPasswordMail =
     (email: string, onFinish: any, onError: any): ThunkActionResult =>
@@ -28,13 +19,13 @@ export const sendResetPasswordMail =
 
 
 export const resetPassword =
-    (password: string, token: string, email: string,  onFinish: any, onError: any): ThunkActionResult =>
+    (password: string, token: string, email: string,  onFinish: any, onError: any, login = true): ThunkActionResult =>
         async (dispatch, _getState, api) => {
             api
                 .post(ApiRoute.ResetPassword, {password, token, email})
                 .then((r: any) => {
                     console.log(r);
-                    dispatch(loginAction({email, password, onFinish, onError}))
+                    login ? dispatch(loginAction({email, password, onFinish, onError})) : onFinish();
                 })
                 .catch((e) => {
                     console.log(e);

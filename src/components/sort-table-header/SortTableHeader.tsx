@@ -1,5 +1,6 @@
+import { SortDirection } from "../../data/enum";
 import React from "react";
-import { SortDirection, sortTable } from "../../services/baseService";
+import { sortTable } from "../../services/baseService";
 import SortIcon from "./assets/sort-icon.svg";
 import "./styles/sort-th.scss";
 

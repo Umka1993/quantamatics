@@ -1,0 +1,46 @@
+@import "../../../variables.scss";
+
+.check-block {
+    font: inherit;
+    display: inline-flex;
+    gap: 0.625em;
+    cursor: pointer;
+    align-items: center;
+
+    &__wrapper {
+        position: relative;
+        width: 1em;
+        height: 1em;
+        display: block;
+    }
+
+    &__input {
+        width: 100%;
+        height: 100%;
+        font: inherit;
+        margin: 0;
+        -webkit-appearance: none;
+        appearance: none;
+        background-color: #fff;
+        border: 0.0625em solid transparentize($main-text, 0.7);
+        box-sizing: border-box;
+        box-shadow: inset 0px 0.125em 0.4375em transparentize($main-text, 0.9);
+        border-radius: 0.125em;
+        cursor: pointer;
+    }
+
+    &__input:checked + &__check {
+        display: block;
+    }
+
+    &__check {
+        position: absolute;
+        left: 0.2075em;
+        top: 0.286875em;
+
+        fill: $accent;
+        width: 0.625em;
+        height: 0.4375em;
+        display: none;
+    }
+}

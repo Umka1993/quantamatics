@@ -31,15 +31,18 @@ const SignUp: React.FunctionComponent = (props) => {
     const onError = () => setFinish(true);
 
     const handleResetPassword = useCallback(() => {
-        dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError))
-
+        setFinish(false)
+        if (password !== passwordConfirm) {
+            setCompare("The passwords do not match");
+            setFinish(true)
+        } else {
+            dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError))
+        }
     }, [password, passwordConfirm,]);
-
+    
     useEffect(() => {
-        setCompare(
-            password !== passwordConfirm ? "The passwords do not match" : undefined
-        );
-    }, [password, passwordConfirm]);
+        compare && setCompare(undefined)
+    }, [password, passwordConfirm])
 
     return (
         <Form

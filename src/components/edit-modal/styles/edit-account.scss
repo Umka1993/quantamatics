@@ -1,0 +1,119 @@
+@import "../../../variables.scss";
+
+.edit-account {
+    padding: 40px;
+    width: 100%;
+    max-width: 440px;
+    min-height: 624px; 
+    height: auto;
+    max-height: 98vh;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+
+    .modal__title {
+        margin: 0 0 32px - 11px;
+    }
+
+    &__list {
+        margin: 0;
+    }
+
+    &__row {
+        padding: 11px 0;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 1.125;
+        color: $main-text;
+        display: flex;
+        // flex-wrap: wrap;
+        justify-content: space-between;
+        border-bottom: 1px solid transparentize($inactive, 0.76);
+
+        &--inactive {
+            border-bottom: none;
+            color: $inactive;
+        }
+    }
+
+    &__name {
+        font: inherit;
+        flex: 0 1 52%;
+        height: 100%;
+    }
+
+    &__value {
+        color: $headlines;
+        margin: 0;
+        text-align: right;
+    }
+
+    &__button {
+        all: unset;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        svg {
+            margin-left: 6px;
+        }
+
+        &:hover,
+        &:focus-visible {
+            color: $accent;
+        }
+    }
+
+    &__form {
+        margin: 4px 0 20px;
+        display: grid;
+        gap: 4px;
+
+        &--pass {
+            position: relative;
+            .app-input {
+                &__field {
+                    padding-right: 5em;
+                }
+
+                &__error {
+                    font-size: 14px;
+                    margin-top: 0.43em;
+                }
+            }
+        } 
+    }
+    &__form--pass  &__button--cancel {
+        position: absolute;
+        right: 1.4em;
+        top: 0.45em;
+        z-index: 2;
+    }
+
+    &__footer {
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: auto 140px;
+        align-items: center;
+        justify-content: end;
+        gap: 40px;
+    }
+
+    &__form-account {
+        margin-top: 40px - 10px - 21px;
+        display: grid;
+        gap: 30px - 10px;
+
+        .selector-input {
+            margin-top: 10px;
+        }
+    }
+
+    .check-block {
+        color: $headlines
+    }
+}

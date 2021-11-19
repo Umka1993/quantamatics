@@ -40,6 +40,7 @@ const ForgotPassword: React.FunctionComponent = (props) => {
             subtitle="To restore the password, enter your email"
             onSubmit={sendPasswordResetRequest}
             stopLoading={finish}
+            className='login-form'
         >
             <div className="login-page__inputs">
                 <Email

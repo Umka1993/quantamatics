@@ -26,11 +26,70 @@ export const enum ApiRoute {
     Login = '/api/Account/login',
 
     ResetPasswordMail = 'api/Account/sendPasswordReset',
-    ResetPassword = "/api/Account/resetPassword"
+    ResetPassword = "/api/Account/resetPassword",
+    ChangePassword = '/api/Account/changePassword',
+
+    OrganizationInfo = 'api/Organization/get',
+    OrganizationCreate = 'api/Organization/create',
+    OrganizationDelete = 'api/Organization/delete',
+    OrganizationUpdate = 'api/Organization/update',
+    GetAllOrganization = 'api/Organization/getAll',
+
+    GetUsersByOrgID = 'api/User/list',
+    GetUserByID = '/api/User/getUser',
+    
+
+    RegisterUser = '/api/Account/register',
+
+    UpdateUser = '/api/Admin/updateUser',
+    EditRoles = '/api/Admin/editRoles/',
+
 }
 
 export const enum AuthorizationStatus {
     Auth = 'AUTH',
     NoAuth = 'NO_AUTH',
     Unknown = 'UNKNOWN',
+}
+
+export const enum UserRole {
+    Admin = "Admin",
+    OrgOwner = 'OrgOwner',
+    OrgAdmin = "OrgAdmin",
+    Research = "Research",
+    Coherence = "Coherence",
+}
+
+
+export const enum OrganizationKey {
+    Id = 'id',
+    Parent = 'parentId',
+    Name = 'name',
+    IdCRM = 'customerCrmId',
+    LinkCRM = 'customerCrmLink',
+    Comment = 'comments',
+    Assets = 'assets',
+}
+
+export const enum UserKey {
+    Id = 'id',
+    Email = 'email',
+    Name = 'firstName',
+    Surname = 'lastName',
+    Company = 'companyName',
+    CompanyRole = 'companyRole',
+    Location = 'location',
+    SubscriptionType = 'subscriptionType',
+    SubscriptionEndDate = 'subscriptionEndDate',
+    ReportPanel = 'reportPanel',
+    Expiration = 'expirationDate',
+    Avatar = 'avatar',
+    UserRoles = 'userRoles',
+    OrganizationId = 'organizationId',
+}
+
+export const enum SortDirection {
+    Down = "descending",
+    Up = "ascending",
+    Default = "none",
 }

@@ -20,9 +20,26 @@ $text: #bcc4d8;
     font-size: 16px;
     line-height: 18px;
     color: #003c71;
+
+    &--limited::after {
+      content: attr(data-limit);
+      position: absolute;
+      right: 0;
+      top: 12px;
+
+      font-size: 14px;
+      line-height: 1.143;
+
+      color: $inactive;
+    }
   }
 
-  &__field, &__dummy {
+  &__wrapper--limited &__field {
+    padding-right: 4em;
+  }
+
+  &__field,
+  &__dummy {
     accent-color: $accent;
 
     width: 100%;
@@ -64,8 +81,9 @@ $text: #bcc4d8;
         width: auto;
         height: auto;
         color: transparent;
-        // background: #fff;
+        background: none;
         cursor: pointer;
+        margin: 0;
       }
       &::-webkit-inner-spin-button {
         z-index: 1;
@@ -75,6 +93,8 @@ $text: #bcc4d8;
       }
     }
   }
+
+
 
   &--validate &__field:not(:placeholder-shown):invalid {
     border-bottom: 1px solid #ff5757;
@@ -111,19 +131,19 @@ $text: #bcc4d8;
 
   &__dummy {
     position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #fff;
+    inset: 0;
     pointer-events: none;
     text-align: left;
-    
+    min-height: auto;
+    border-bottom: none;
+    background-image: linear-gradient(to bottom, #fff 95%, transparent 95%);
   }
 
   &__field:active ~ &__dummy,
   &__field:focus ~ &__dummy {
     color: $accent;
     svg {
-      fill: currentColor
+      fill: currentColor;
     }
   }
 

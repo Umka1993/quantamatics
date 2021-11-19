@@ -10,7 +10,7 @@ import "./styles/form.scss";
 import "./styles/login-page.scss";
 import { resetPassword } from "../../store/reset-password/actions";
 
-const ResetPassword: React.FunctionComponent = (props) => {
+const ResetPassword: React.FunctionComponent = () => {
     const [password, setPassword] = useState<string>("");
     const [passwordConfirm, setPasswordConfirm] = useState<string>("");
     const [compare, setCompare] = useState<string | undefined>(undefined);
@@ -28,15 +28,19 @@ const ResetPassword: React.FunctionComponent = (props) => {
     const onError = () => setFinish(true);
 
     const handleResetPassword = useCallback(() => {
-        dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError))
-
-    }, [password, passwordConfirm,]);
+        setFinish(false)
+        if (password !== passwordConfirm) {
+            setCompare("The passwords do not match");
+            setFinish(true)
+        } else {
+            dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError, false))
+        }
+    }, [password, passwordConfirm]);
 
     useEffect(() => {
-        setCompare(
-            password !== passwordConfirm ? "The passwords do not match" : undefined
-        );
-    }, [password, passwordConfirm]);
+        compare && setCompare(undefined)
+    }, [password, passwordConfirm])
+
 
     return (
         <Form

@@ -1,0 +1,42 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { dropToken } from "../../services/token";
+import { AppRoute, AuthorizationStatus } from "../../data/enum";
+import { IUser } from "../../types/user";
+
+export interface AuthState {
+    status: AuthorizationStatus;
+    user?: IUser;
+}
+
+const user: IUser = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user") as string)
+    : sessionStorage.getItem("user")
+        ? JSON.parse(sessionStorage.getItem("user") as string)
+        : undefined;
+
+const initialState: AuthState = {
+    status: user ? AuthorizationStatus.Auth : AuthorizationStatus.Unknown,
+    user: user,
+};
+
+const authorizationSlice = createSlice({
+    name: "auth",
+    initialState,
+    reducers: {
+        login(state, action: PayloadAction<IUser>) {
+            state.status = AuthorizationStatus.Auth;
+            state.user = action.payload;
+        },
+        logout(state) {
+            dropToken()
+            localStorage.removeItem('user')
+            sessionStorage.removeItem('user')
+            state.status = AuthorizationStatus.NoAuth;
+            delete state.user;
+            window.location.href = AppRoute.Login;
+        },
+    },
+});
+
+export const { login, logout } = authorizationSlice.actions;
+export default authorizationSlice.reducer;

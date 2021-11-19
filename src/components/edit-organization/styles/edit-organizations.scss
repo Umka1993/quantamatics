@@ -1,11 +1,11 @@
-.content-wrapper{
+.content-wrapper {
   height: 100%;
   overflow-y: auto;
 }
 
 .edit-organization {
   &__header {
-    background: #FFFFFF;
+    background: #ffffff;
     box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
     border-radius: 4px 4px 0px 0px;
     display: flex;
@@ -19,19 +19,14 @@
     margin: 0;
   }
 
-  &__body{
+  &__body {
     padding: 40px;
   }
 
-  &__info{
+  &__info {
     margin-bottom: 60px;
-  }
-
-  &__info-title{
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 21px;
-    color: #003C71;
+    min-height: 142px;
+    position: relative;
   }
 
   &__buttons {
@@ -41,39 +36,33 @@
     justify-content: space-between;
   }
 
-  &__save-btn{
+  &__save-btn {
     width: 140px;
     height: 40px;
   }
 
-  &__inputs{
+  &__inputs {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    gap: 0 40px;
   }
 
-  &__input{
-    width: 317px;
+  &__input {
+    flex: 1 0 317px;
   }
 
-  &__comments{
-    width: 100%;
+  &__comments {
+    flex-basis: 100%;
   }
 
-  &__user-list-header{
+  &__user-list-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
 
-  &__user-list-title{
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 21px;
-    color: #003C71;
-  }
-
-  &__user-list-add{
+  &__user-list-add {
     width: 140px;
     height: 40px;
   }

@@ -1,92 +1,111 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 
 import Button, { ResetButton } from "../button";
-import { Input } from "../input";
-import { IUser } from "../../types/edit-profile/types";
-import { network } from "../../services/networkService";
-
-import { DatePick, Email } from "../app-input";
+import AppInput, { DatePick, Email } from "../app-input";
 import { SelectorInput } from "../selector-input";
-import { USER_ORGS } from "../../contstans/constans";
-import editIcon from "./assets/edit.svg";
-import ProfileSummary from "../profile-summary";
 import Modal from "../modal";
-import Headline from "../page-title/index";
+import RoleCheckboxes from "../role-checkboxes";
+import { UserRole } from "../../data/enum";
+import { useDispatch } from "react-redux";
+import { IUpdateUser, IUser } from "../../types/user";
+import { useUpdateUserMutation, useUpdateUserRolesMutation } from "../../api/user";
+import { useGetAllOrganizationsQuery } from "../../api/organization";
+import IApiError from "../../types/api-error";
+import useUser from "../../hooks/useUser";
+import { login } from "../../store/authorization";
+import Loader from "../loader";
 
-import "./styles/edit-modal.scss";
+import "./styles/edit-account.scss";
 interface IEditProfile {
     onClose: () => void;
     user: IUser;
-    onSubmit: any;
 }
 
 export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     onClose,
     user,
-    onSubmit,
 }) => {
     const initialExp = user.subscriptionEndDate
         ? new Date(user.subscriptionEndDate.split(".").join("/"))
         : new Date();
+        
 
-    const [name, setName] = useState<string>(user.firstName);
-    const [surname, setSurname] = useState<string>(user.lastName);
-    const [organization, setOrganization] = useState<string>(user.companyName);
+    const [firstName, setName] = useState<string>(user.firstName);
+    const [lastName, setSurname] = useState<string>(user.lastName);
+    const [companyName, setOrganization] = useState<string>(user.companyName);
     const [email, setEmail] = useState<string>(user.email);
-    const [expiration, setExpiration] = useState<Date>(initialExp);
+    const [subscriptionEndDate, setExpiration] = useState<Date>(initialExp);
 
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
-    const formRef = useRef<HTMLFormElement>(null)
+    const [userRoles, setRoles] = useState<UserRole[]>(user.userRoles)
+    // const [organizationId, setOrganizationId] = useState<string>('')
+    const dispatch = useDispatch()
 
-    const updateUser = (validate: any) => {
-        let newUserData: any = {
+    const formRef = useRef<HTMLFormElement>(null);
+
+    const loggedUser = useUser();
+
+    const [update, { isSuccess, isError, error, isLoading }] = useUpdateUserMutation();
+    const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] = useUpdateUserRolesMutation();
+
+    const { data: allOrganizations } = useGetAllOrganizationsQuery();    
+
+    const sendNewUser = (validate: any) => {
+        const newUserData: IUpdateUser = {
             ...user,
-            firstName: name,
-            lastName: surname,
-            companyName: organization,
-            subscriptionEndDate: new Date(expiration),
+            firstName, lastName, companyName,
+            subscriptionEndDate, userRoles,
         };
-
         if (email !== user.email) {
-            newUserData = {
-                ...newUserData,
-                newEmail: email
-            };
+            newUserData.newEmail = email;
         }
-
-        network
-            .post("/api/Admin/updateUser", newUserData)
-            .then((r: any) => {
-                onSubmit(newUserData);
-
-                onClose();
-            })
-            .catch(({ response: { data } }) => {
-
-                if (data.includes(' already taken')) {
-                    setEmailError('The user with such email already exists')
-                }                
-            });
+        update(newUserData).unwrap();
     };
-
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
-
         setValidate(true);
 
         const isValid = formRef.current?.reportValidity();
 
         if (isValid) {
-
-            updateUser(validate);
+            sendNewUser(validate);
         }
     };
 
-    const handlerReset = (evt: FormEvent<HTMLFormElement>) => {
-        onClose();
-    };
+    useEffect(() => {
+        if (isSuccess) {
+            updateRoles([user.id, userRoles])
+
+            if (user.id === loggedUser?.id) {
+                const normalizedNewData = {
+                    ...loggedUser,
+                    firstName, lastName, companyName, email,
+                    subscriptionEndDate: subscriptionEndDate.toLocaleDateString(),
+                    userRoles
+                };
+                dispatch(login(normalizedNewData));
+
+                localStorage.getItem("user")
+                    ? localStorage.setItem("user", JSON.stringify(normalizedNewData))
+                    : sessionStorage.setItem("user", JSON.stringify(normalizedNewData));
+            }
+
+        }
+    }, [isSuccess])
+
+    useEffect(() => {
+        isFinish && onClose();
+    }, [isFinish])
+
+    useEffect(() => {
+        if (isError) {
+            (error as IApiError).data.includes(" already taken")
+                && setEmailError("The user with such email already exists")
+        }
+    }, [isError])
+
 
     useEffect(() => {
         emailError && setEmailError(undefined);
@@ -97,68 +116,67 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     }, [emailError]);
 
     return (
-        <Modal onClose={onClose} className="edit-profile">
-            <ProfileSummary
-                user={{
-                    ...user,
-                    firstName: name,
-                    lastName: surname,
-                    companyName: organization,
-                    email,
-                    subscriptionEndDate: expiration.toLocaleDateString(),
-                }}
-                className="edit-profile__summary"
-            />
-            <form
-                action=""
-                className="edit-profile__form"
-                onSubmit={handlerSubmit}
-                onReset={handlerReset}
-                noValidate={validate ? undefined : true}
-                ref={formRef}
-            >
-                <Headline id="modal-label" className="edit-profile__title">
-                    Edit Profile
-                </Headline>
+        <Modal onClose={onClose} className="edit-account" headline="Edit Account">
+            {(isLoading || secondLoading) ? <Loader />
+                :
+                <>
+                    <form
+                        id="edit-account-form"
+                        action=""
+                        className="edit-account__form-account"
+                        onSubmit={handlerSubmit}
+                        noValidate={validate ? undefined : true}
+                        ref={formRef}
+                    >
+                        <AppInput
+                            externalSetter={setName}
+                            value={firstName}
+                            name="firstName"
+                            icon="edit"
+                            placeholder=''
+                        />
+                        <AppInput
+                            externalSetter={setSurname}
+                            value={lastName}
+                            name="lastName"
+                            icon="edit"
+                            placeholder=''
+                        />
+                        {allOrganizations &&
+                        <SelectorInput
+                            options={allOrganizations?.map(({name}) => name) as string[]}
+                            // valueSetter={setOrganizationId}
+                            optionSetter={setOrganization}
+                            // values={allOrganizations?.map(({id}) => id) as string[]}
+                            value={companyName}
+                            disabled
+                        />
+                    }
+                        <Email
+                            externalSetter={setEmail}
+                            value={email}
+                            error={emailError}
+                            icon="edit"
+                            placeholder=''
+                        />
+                        <DatePick
+                            externalSetter={setExpiration}
+                            valueAsDate={subscriptionEndDate}
+                        />
+                        <RoleCheckboxes
+                            defaultRoles={userRoles}
+                            externalSetter={setRoles}
+                        />
+                    </form>
 
-                <div>
-                    <Input
-                        onChangeInput={(value) => setName(value)}
-                        value={name}
-                        icon={editIcon}
-                        name="firstName"
-                    />
-                    <Input
-                        onChangeInput={(value) => setSurname(value)}
-                        value={surname}
-                        icon={editIcon}
-                        name="lastName"
-                    />
-                    <SelectorInput
-                        onChangeInput={(value) => setOrganization(value)}
-                        options={USER_ORGS}
-                        value={organization}
-                        disabled
-                    />
-                    <Email
-                        className="edit-profile__temp-input"
-                        externalSetter={setEmail}
-                        value={email}
-                        error={emailError}
-                        icon="edit"
-                    />
-                    <DatePick
-                        className="edit-profile__temp-input"
-                        externalSetter={setExpiration}
-                        valueAsDate={expiration}
-                    />
-                </div>
-
-                <div className="edit-profile__buttons">
-                    <ResetButton>Cancel</ResetButton>
-                    <Button type="submit">Save</Button>
-                </div>
-            </form>
+                    <footer className="edit-account__footer">
+                        <ResetButton onClick={onClose}>Cancel</ResetButton>
+                        <Button type="submit" form="edit-account-form">
+                            Save
+                        </Button>
+                    </footer>
+                </>
+            }
         </Modal>
     );
 };

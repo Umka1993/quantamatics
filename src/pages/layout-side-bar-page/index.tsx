@@ -1,53 +1,99 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {changeRoute} from "../../store/currentPage/actions";
-import {SideBar} from "../../components/side-bar";
-import {Organizations} from "../organizations";
-import {JupyterFrame} from "../../components/jupyter-frame";
-import {CoherenceFrame} from "../../components/coherence-frame";
-import {SIDE_BAR_ITEMS} from "../../contstans/constans";
-import "./styles/layout-side-bar-page.scss"
-import { useHistory, Switch, Route, Redirect } from 'react-router-dom'
+import React from "react";
+import { useDispatch } from "react-redux";
+import { changeRoute } from "../../store/currentPage/actions";
+import { SideBar } from "../../components/side-bar";
+import { Organizations } from "../organizations";
+import { JupyterFrame } from "../../components/jupyter-frame";
+import "./styles/layout-side-bar-page.scss";
+import { useHistory, Switch, Route, Redirect } from "react-router-dom";
 import { EditOrganization } from "../../components/edit-organization/edit-organization";
-import { CreateOrganization } from "../../components/create-organization";
+import { CreateOrganizationForm, AddUserForm } from "../../components/form";
+import useUser from "../../hooks/useUser";
+import { UserRole, AppRoute } from "../../data/enum";
 
-export const LayoutSideBarPage: React.FunctionComponent = (props) => {
+export const LayoutSideBarPage: React.FunctionComponent = () => {
+    const user = useUser();
 
-    const history = useHistory()
+    const history = useHistory();
     const dispatch = useDispatch();
 
     const changeRoutePath = (route: string) => {
-        dispatch(changeRoute(route))
-        history.push('/')
-        history.push('/' + route)
-    }
+        dispatch(changeRoute(route));
+        history.push("/");
+        history.push("/" + route);
+    };
+
+    const isOrganizationAvailable =
+        user &&
+        (user.userRoles.includes(UserRole.Admin) ||
+            user.userRoles.includes(UserRole.OrgOwner));
+
+    const isEditOrgAvailable =
+        isOrganizationAvailable || user?.userRoles.includes(UserRole.OrgAdmin);
+
+    const isCoherence = user?.userRoles.includes(UserRole.Coherence);
+
+    const HomePath = isOrganizationAvailable
+        ? "/apps/organizations/list"
+        : isEditOrgAvailable
+            ? `/apps/organizations/${user?.organizationId}`
+            : isCoherence ? AppRoute.Coherence : AppRoute.Files;
+
     return (
         <div className="layout-page app__main">
-            <SideBar
-                items={SIDE_BAR_ITEMS}
-                onSwitch={(value) => changeRoutePath(value)}
-            />
+            <SideBar onSwitch={(value) => changeRoutePath(value)} />
 
             <div className="layout-page__scroll">
-                <div className="layout-page__content-container">
+                <main className="layout-page__content-container">
                     <Switch>
-                        <Route exact path='/'>
-                            <Redirect push to='/research/my-files' />
+                        <Route exact path="/">
+                            <Redirect push to={HomePath} />
                         </Route>
 
-                        {/* <Route path='/add-user' component={AddUserPage} /> */}
+                        <Route path="/research/my-files">
 
-                        <Route path='/research/my-files'>
-                            <JupyterFrame type='files' />
+                            <JupyterFrame type="files" />
+
                         </Route>
 
-                        <Route path='/coherence' component={CoherenceFrame} />
-                        <Route path='/apps/organizations/list' component={Organizations} />
-                        <Route path='/apps/organizations/new-organization' component={CreateOrganization} />
-                        <Route path='/apps/organizations/:id' component={EditOrganization} />
+                        <Route path={AppRoute.Coherence}>
+                            {isCoherence ? (
+                                <JupyterFrame type="coherence" />
+                            ) : (
+                                <Redirect to={AppRoute.Home} />
+                            )}
+                        </Route>
+
+                        {isOrganizationAvailable && (
+                            <Route
+                                path="/apps/organizations/list"
+                                component={Organizations}
+                            />
+                        )}
+
+                        {isOrganizationAvailable && (
+                            <Route
+                                path="/apps/organizations/new-organization"
+                                component={CreateOrganizationForm}
+                            />
+                        )}
+
+                        {isEditOrgAvailable && (
+                            <Route
+                                path="/apps/organizations/:id/add-user"
+                                component={AddUserForm}
+                            />
+                        )}
+
+                        {isEditOrgAvailable && (
+                            <Route
+                                path="/apps/organizations/:id"
+                                component={EditOrganization}
+                            />
+                        )}
                     </Switch>
-                </div>
+                </main>
             </div>
         </div>
-    )
-}
+    );
+};

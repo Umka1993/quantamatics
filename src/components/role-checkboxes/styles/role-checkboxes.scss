@@ -1,0 +1,21 @@
+@import '../../../variables.scss';
+
+.role-checkboxes {
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    margin: 0;
+    padding: 0;
+    justify-content: space-between;
+    gap: 20px;
+
+    &__legend {
+        color: inherit;
+        margin: 0 0 1em;
+        padding: 0;
+    }
+    .check-block {
+        flex-direction: row-reverse;
+        // color: $headlines
+    }
+}

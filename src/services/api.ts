@@ -1,8 +1,12 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiRoute } from '../data/enum';
 import { getToken } from './token';
 
 const REQUEST_TIMEOUT = 5000;
+
+/**
+ * {@link https://qmc-api.k8s.dev.quantamatics.net/swagger/index.html | All routes}
+ */
 
 export const createAPI = (
 ): AxiosInstance => {
