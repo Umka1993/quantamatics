@@ -49,12 +49,12 @@ const Email: React.FunctionComponent<IEmail> = ({
         onChange && onChange(evt);
     };
 
-    const blurHandler: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
-        if (!value.includes('@')) {
-            value = `${value}@gmail.com`
-            externalSetter && externalSetter(value);
-        }
-    }
+    /*  const blurHandler: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
+         if (!value.includes('@')) {
+             value = `${value}@gmail.com`
+             externalSetter && externalSetter(value);
+         }
+     } */
 
     useEffect(() => {
         if (inputRef.current) {
@@ -90,7 +90,7 @@ const Email: React.FunctionComponent<IEmail> = ({
                     autoComplete="email"
                     className="app-input__field"
                     onChange={changeHandler}
-                    onBlur={blurHandler}
+                    // onBlur={blurHandler}
                     aria-invalid={!!errorMessage}
                     aria-label={errorMessage && hideError ? errorMessage : labelText}
                     name={name}
