@@ -26,7 +26,7 @@ export const changePassword =
         (passwordBody: IChangePassword, onClose: any, setWrongCurrent: any): ThunkActionResult =>
             async (_dispatch, _getState, api) => {
                 api
-                    .post(ApiRoute.ChangePassword, passwordBody)
+                    .put(ApiRoute.ChangePassword, passwordBody)
                     .then(({ data }: AxiosResponse) => {
                         console.log(data);
                         onClose();
