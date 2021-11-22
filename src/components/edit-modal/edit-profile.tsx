@@ -5,7 +5,7 @@ import AppInput, { DatePick, Email } from "../app-input";
 import { SelectorInput } from "../selector-input";
 import Modal from "../modal";
 import RoleCheckboxes from "../role-checkboxes";
-import { UserRole } from "../../data/enum";
+import { OrganizationKey, UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
 import { IUpdateUser, IUser } from "../../types/user";
 import { useUpdateUserMutation, useUpdateUserRolesMutation } from "../../api/user";
@@ -28,7 +28,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const initialExp = user.subscriptionEndDate
         ? new Date(user.subscriptionEndDate.split(".").join("/"))
         : new Date();
-        
+
 
     const [firstName, setName] = useState<string>(user.firstName);
     const [lastName, setSurname] = useState<string>(user.lastName);
@@ -49,7 +49,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const [update, { isSuccess, isError, error, isLoading }] = useUpdateUserMutation();
     const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] = useUpdateUserRolesMutation();
 
-    const { data: allOrganizations } = useGetAllOrganizationsQuery();    
+    const { data: allOrganizations } = useGetAllOrganizationsQuery();
 
     const sendNewUser = (validate: any) => {
         const newUserData: IUpdateUser = {
@@ -144,14 +144,14 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                         />
                         {allOrganizations &&
                         <SelectorInput
-                            options={allOrganizations?.map(({name}) => name) as string[]}
+                            options={allOrganizations?.map(org => org[OrganizationKey.Name]) as string[]}
                             // valueSetter={setOrganizationId}
                             optionSetter={setOrganization}
                             // values={allOrganizations?.map(({id}) => id) as string[]}
                             value={companyName}
                             disabled
-                        />
-                    }
+                        /> }
+
                         <Email
                             externalSetter={setEmail}
                             value={email}
