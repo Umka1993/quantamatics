@@ -85,8 +85,18 @@
             }
         }
     }
-}
 
+    &__note {
+        font-size: 16px;
+        line-height: 1.125;
+
+        color: $main-text;
+        a {
+            color: $accent;
+            text-decoration: none;
+        }
+    }
+}
 
 .login-form {
     padding: 30px 0;

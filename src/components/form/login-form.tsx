@@ -6,7 +6,7 @@ import { RootState } from "../../store";
 import Button from "../button";
 import { CheckBox } from "../../components/checkbox";
 import { Password, Email } from "../../components/app-input";
-import Form from './form';
+import Form from "./form";
 
 import { AppRoute, AuthorizationStatus } from "../../data/enum";
 
@@ -35,8 +35,8 @@ const LoginForm: React.FunctionComponent = () => {
         errors && setErrors(undefined);
     }, [email, password]);
 
-    const onFinish = (user : any) => {
-        setErrors(undefined);                
+    const onFinish = (user: any) => {
+        setErrors(undefined);
         if (rememberMe) {
             localStorage.setItem("savedUsername", email);
             localStorage.setItem("savedPassword", password);
@@ -46,10 +46,10 @@ const LoginForm: React.FunctionComponent = () => {
             sessionStorage.setItem("savedPassword", password);
             sessionStorage.setItem("user", JSON.stringify(user));
         }
-        
+
         setFinish(true);
         history.push(AppRoute.Home);
-    }
+    };
 
     const onError = (status: number) => {
         if (status >= 400) {
@@ -58,23 +58,23 @@ const LoginForm: React.FunctionComponent = () => {
             setErrors("Something went wrong");
         }
         setFinish(true);
-    }
+    };
 
     const handleLogin = (evt: FormEvent<HTMLFormElement>) => {
-        dispatch(loginAction({ email, password, onFinish, onError }))
+        dispatch(loginAction({ email, password, onFinish, onError }));
     };
 
     return (
         <Form
             onSubmit={handleLogin}
-            headline='Sign in to your account'
-            subtitle='Enter your email and password'
+            headline="Sign in to your account"
+            subtitle="Enter your email and password"
             stopLoading={finish}
         >
             <div className="login-page__inputs">
                 <Email
                     externalSetter={setEmail}
-                    placeholder='Email'
+                    placeholder="Email"
                     name="email"
                     value={email}
                     error={errors}
@@ -100,10 +100,23 @@ const LoginForm: React.FunctionComponent = () => {
                     Forgot Password?
                 </Link>
             </div>
-            <Button className="login-page__btn" disabled={!email || !password} type="submit">
+            <Button
+                className="login-page__btn"
+                disabled={!email || !password}
+                type="submit"
+            >
                 Sign In
             </Button>
-
+            <p className='login-page__note'>
+                Interested in Quantamatics and want to{' '}
+                <a
+                    href="https://www.facteus.com/technology/quantamatics/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    learn more?
+                </a>
+            </p>
         </Form>
     );
 };
