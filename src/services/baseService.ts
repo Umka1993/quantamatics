@@ -7,7 +7,7 @@ export const sortTable = (
     setSort: any,
     setLocalRows: any
 ) => {    
-    let newSort = sort;
+    const newSort = sort;
 
     if (name === sort.name) {
         switch (sort.direction) {
@@ -30,7 +30,7 @@ export const sortTable = (
 
     setSort({ name: newSort.name, direction: newSort.direction });
 
-    let newRows = [...localRows];
+    const newRows = [...localRows];
 
     switch (newSort.direction) {
         case SortDirection.Up:
@@ -95,7 +95,7 @@ function normalizeCompare(item : any, name: string) {
  */
 
 export function formatDate(date: string): string {
-    let result = date.split(" ")[0];
+    const result = date.split(" ")[0];
     return result.replace(/[/]/g, ".");
 }
 
