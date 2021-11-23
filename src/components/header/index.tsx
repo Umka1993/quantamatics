@@ -17,6 +17,8 @@ import { IUser, User } from 'types/edit-profile/types';
 import { AppRoute, AuthorizationStatus } from '../../data/enum';
 import Breadcrumbs from '../breadcrumbs';
 import { logout } from '../../store/authorization';
+import { EXCEL_PLUGIN } from '../../data/constants';
+import DownLoadIcon from './assets/download.svg'
 
 export const Header: React.FunctionComponent = (props) => {
     const { user, status } = useSelector((state: RootState) => state.auth)
@@ -57,9 +59,22 @@ export const Header: React.FunctionComponent = (props) => {
                     {status === AuthorizationStatus.Auth && (<Breadcrumbs className="header__breadcrumbs" />)}
                 </div>
 
-                {status === AuthorizationStatus.Auth && (<div className="header__nav">
-                    <div className="header__nav-item">
-                        <div className="profile" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
+                {status === AuthorizationStatus.Auth && (
+                    <>
+                        <a
+                            className='header__excel'
+                            href={EXCEL_PLUGIN} download
+                        >
+                            Get Excel Plug-in
+                            <DownLoadIcon
+                                fill="#BCC4D8"
+                                width={16} height={16}
+                                aria-hidden="true"
+                            />
+                        </a>
+
+
+                        <div className="profile header__user" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
                             {(user as IUser).firstName} {(user as IUser).lastName}
 
                             <SVG icon={arrowImg} className={classNames("profile__arrow", { 'opened': showMenu })} />
@@ -68,16 +83,14 @@ export const Header: React.FunctionComponent = (props) => {
                                 <div className="profile__dropdown-item" onClick={() => { setShowProfile(true) }}>
                                     <SVG icon={profileImg} name="profileImg" /> My Account
                                 </div>
-                                <div className="profile__dropdown-item" onClick={() => { }}>
-                                    <SVG icon={settingsImg} name="settingsImg" /> Settings
-                                </div>
                                 <div className="profile__dropdown-item" onClick={() => handleChangeRoute(AppRoute.Login)}>
                                     <SVG icon={logoutImg} name="logoutImg" /> Log Out
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>)}
+
+
+                    </>)}
                 {
                     showProfile &&
                     <EditPassword user={user as IUser} onClose={() => setShowProfile(false)} />
