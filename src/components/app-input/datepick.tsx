@@ -45,7 +45,6 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
     const initialDumb = valueAsDate ? formatToDummy(valueAsDate) : "Enter date";
 
     const [innerValue, setInnerValue] = useState<string>(initialVal as string);
-    const [dummy, setDummy] = useState<string>(initialDumb);
 
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
@@ -60,8 +59,6 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
         const { value, valueAsDate } = evt.target;
 
         setInnerValue(value);
-        setDummy(formatToDummy(valueAsDate));
-
         externalSetter && externalSetter(valueAsDate ? valueAsDate : new Date());
         onChange && onChange(evt);
     };
@@ -91,10 +88,9 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                         min={minDate ? formatToValue(minDate) : min}
                         max={maxDate ? formatToValue(maxDate) : max}
                     />
-                    <span className={"app-input__dummy"} aria-hidden="true">
-                        {dummy}
-                        <CalendarIcon className="app-input__icon" />
-                    </span>
+
+                    <CalendarIcon className="app-input__icon" />
+
                 </div>
             ) : (
                 <div className="app-input__wrapper">
@@ -104,7 +100,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                         minDate={minDate}
                         selected={valueAsDate}
                         showDisabledMonthNavigation
-                        dateFormat="MM.dd.yyyy"
+                        dateFormat="MM/dd/yyyy"
                         className="app-input__field"
                     />
                     <CalendarIcon className="app-input__icon" />
