@@ -11,8 +11,6 @@ import FilesIcon from "./assets/files.svg";
 import ShareIcon from "./assets/share.svg";
 import FavoritesIcon from "./assets/favorites.svg";
 
-import ToggleArrow from "./assets/toggle-arrow.svg";
-
 import "./style/navbar.scss";
 import classNames from "classnames";
 import useUser from "../../hooks/useUser";
@@ -50,7 +48,6 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
                     <summary className="navigation__item">
                         <DocIcon aria-hidden="true" className="navigation__icon" />
                         Research
-                        <ToggleArrow aria-hidden="true" className="navigation__marker" />
                     </summary>
                     <div className="navigation__sublist">
                         {subItems.map((item) => (
