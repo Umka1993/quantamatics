@@ -39,7 +39,7 @@ $text: #bcc4d8;
   }
 
   &__field,
-  &__dummy {
+  .rdt input {
     accent-color: $accent;
 
     width: 100%;

@@ -31,8 +31,3 @@ export function formatDate(date: Date): string {
         year: "numeric",
     });
 }
-
-export function formatToDummy(value: Date | null) {
-    const result = value ? formatDate(value) : formatDate(new Date());
-    return result.split("/").join(".");
-}

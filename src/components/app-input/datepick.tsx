@@ -8,9 +8,10 @@ import React, {
 import "./styles/input.scss";
 import classNames from "classnames";
 import CalendarIcon from "./assets/calendar.svg";
-import { checkDateInputSupport, formatToValue, formatToDummy } from "./utils/date-utils";
-// import SVG from '../SVG'
-import DatePicker from "react-datepicker";
+import { checkDateInputSupport, formatToValue } from "./utils/date-utils";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import { Moment } from "moment";
 
 interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
@@ -41,10 +42,6 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
 
     const label = "Choose date";
     const inputRef = useRef<HTMLInputElement>(null);
-    const initialVal = value ? value : formatToValue(valueAsDate);
-    const initialDumb = valueAsDate ? formatToDummy(valueAsDate) : "Enter date";
-
-    const [innerValue, setInnerValue] = useState<string>(initialVal as string);
 
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
@@ -56,9 +53,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
     };
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        const { value, valueAsDate } = evt.target;
-
-        setInnerValue(value);
+        const { valueAsDate } = evt.target;
         externalSetter && externalSetter(valueAsDate ? valueAsDate : new Date());
         onChange && onChange(evt);
     };
@@ -70,8 +65,8 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
             })}
             ref={itemRef}
         >
-            {isSupport ? (
-                <div className="app-input__wrapper">
+            <div className="app-input__wrapper">
+                {isSupport ? (
                     <input
                         className="app-input__field"
                         type="date"
@@ -80,7 +75,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                         placeholder={label}
                         required={required}
                         onChange={changeHandler}
-                        value={innerValue}
+                        value={formatToValue(valueAsDate)}
                         aria-required={required}
                         {...other}
                         ref={inputRef}
@@ -88,24 +83,25 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                         min={minDate ? formatToValue(minDate) : min}
                         max={maxDate ? formatToValue(maxDate) : max}
                     />
-
-                    <CalendarIcon className="app-input__icon" />
-
-                </div>
-            ) : (
-                <div className="app-input__wrapper">
-                    <DatePicker
-                        // placeholderText={placeholder}
-                        onChange={(date) => externalSetter && externalSetter(date as Date)}
-                        minDate={minDate}
-                        selected={valueAsDate}
-                        showDisabledMonthNavigation
-                        dateFormat="MM/dd/yyyy"
-                        className="app-input__field"
+                ) : (
+                    <Datetime
+                        dateFormat="MM/DD/YYYY"
+                        onChange={(date) =>
+                            externalSetter && externalSetter((date as Moment).toDate())
+                        }
+                        timeFormat={false}
+                        value={valueAsDate}
+                        isValidDate={(currentDate) => {
+                            if (minDate) {
+                                return currentDate.toDate() > minDate;
+                            }
+                            return true;
+                        }}
                     />
-                    <CalendarIcon className="app-input__icon" />
-                </div>
-            )}
+                )}
+
+                <CalendarIcon className="app-input__icon" />
+            </div>
 
             {errorMessage && <p className="app-input__error">{errorMessage}</p>}
         </div>
