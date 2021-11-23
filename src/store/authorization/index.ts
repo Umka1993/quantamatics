@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { dropToken } from "../../services/token";
 import { AppRoute, AuthorizationStatus } from "../../data/enum";
 import { IUser } from "../../types/user";
+import pendoInitialize from "../../services/pendoInitialize";
 
 export interface AuthState {
     status: AuthorizationStatus;
@@ -13,6 +14,8 @@ const user: IUser = localStorage.getItem("user")
     : sessionStorage.getItem("user")
         ? JSON.parse(sessionStorage.getItem("user") as string)
         : undefined;
+
+user && pendoInitialize(user);
 
 const initialState: AuthState = {
     status: user ? AuthorizationStatus.Auth : AuthorizationStatus.Unknown,

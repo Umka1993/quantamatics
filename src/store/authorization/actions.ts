@@ -4,6 +4,7 @@ import { saveToken } from '../../services/token';
 import { ApiRoute } from '../../data/enum';
 import { ThunkActionResult } from '../../types/thunk-actions';
 import { login } from '.';
+import pendoInitialize from '../../services/pendoInitialize';
 
 
 
@@ -19,7 +20,8 @@ export const loginAction =
                 console.log(data);
                 dispatch(login(data.user));
                 saveToken(data.token);
-                onFinish(data.user)
+                onFinish(data.user);
+                pendoInitialize(data.user)
             })
             .catch(({response}) => {
                 console.log(response);
