@@ -12,6 +12,11 @@
   flex-direction: column;
   transition: width 0.4s;
   padding: 18px 0 28px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   --side: 32px;
 
