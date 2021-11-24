@@ -162,7 +162,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                     )}
                     <div className="edit-organization__user-list">
                         <div className="edit-organization__user-list-header">
-                            <h2 className="sub-headline">User List</h2>
+                            <h2 className="sub-headline">User Accounts</h2>
 
                             <Button
                                 className="edit-organization__user-list-add"

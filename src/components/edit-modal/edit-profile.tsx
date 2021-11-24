@@ -116,7 +116,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     }, [emailError]);
 
     return (
-        <Modal onClose={onClose} className="edit-account" headline="Edit Account">
+        <Modal onClose={onClose} className="edit-account" headline="Edit User Account">
             {(isLoading || secondLoading) ? <Loader />
                 :
                 <>

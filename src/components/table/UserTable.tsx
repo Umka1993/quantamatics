@@ -5,7 +5,7 @@ import DeleteSVG from "./assets/delete-row-icon.svg";
 
 import { EditProfile } from "../edit-modal/edit-profile";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
-import { formatDate, adaptRoles } from "../../services/baseService";
+import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
 import { IUser } from "../../types/user";
 import ISort from "../../types/sort-type";
@@ -77,13 +77,13 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
                     </tr>
                 </thead>
                 <tbody className="table__body">
-                    {localRows.map((user, index) => (
+                    {localRows.map((user) => (
                         <tr className="table__row" key={user.id}>
                             <td className="table__cell">{user.firstName}</td>
                             <td className="table__cell">{user.lastName}</td>
                             <td className="table__cell">{user.email}</td>
                             <td className="table__cell">
-                                {formatDate(user.subscriptionEndDate)}
+                                {user.subscriptionEndDate.split(' ')[0]}
                             </td>
                             <td className="table__cell">
                                 <ComaList list={adaptRoles(user.userRoles)} />
