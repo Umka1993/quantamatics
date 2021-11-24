@@ -26,7 +26,7 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
     const { data, isSuccess, isLoading } = useGetOrganizationUsersQuery(id);
 
     const [localRows, setLocalRows] = useState<IUser[]>([]);
-    const [showModal, setShowModal] = useState<Boolean>(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     const initialSort = { name: "", direction: SortDirection.Default }
     const [sort, setSort] = useState<ISort>(initialSort);
