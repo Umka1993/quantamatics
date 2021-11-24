@@ -10,18 +10,6 @@ $text: #bcc4d8;
     font-size: 16px;
     line-height: 18px;
     color: #003c71;
-
-    &--limited::after {
-      content: attr(data-limit);
-      position: absolute;
-      right: 0;
-      top: 12px;
-
-      font-size: 14px;
-      line-height: 1.143;
-
-      color: $inactive;
-    }
   }
 
   &__wrapper--limited &__field {
@@ -42,6 +30,7 @@ $text: #bcc4d8;
     &--icon {
       padding-right: 20px;
     }
+
   }
 
   &__field:not(:placeholder-shown) ~ &__label,

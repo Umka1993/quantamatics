@@ -133,36 +133,38 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                             value={firstName}
                             name="firstName"
                             icon="edit"
-                            placeholder=''
+                            label='Name'
                         />
                         <AppInput
                             externalSetter={setSurname}
                             value={lastName}
                             name="lastName"
                             icon="edit"
-                            placeholder=''
+                            label='Surname'
                         />
-                        {allOrganizations &&
-                        <SelectorInput
-                            options={allOrganizations?.map(org => org[OrganizationKey.Name]) as string[]}
-                            // valueSetter={setOrganizationId}
-                            optionSetter={setOrganization}
-                            // values={allOrganizations?.map(({id}) => id) as string[]}
-                            value={companyName}
-                            disabled
-                        /> }
+
 
                         <Email
                             externalSetter={setEmail}
                             value={email}
                             error={emailError}
                             icon="edit"
-                            placeholder=''
+                            label='Email'
                         />
                         <DatePick
                             externalSetter={setExpiration}
                             valueAsDate={subscriptionEndDate}
+                            label='Expiration Date'
                         />
+                        {allOrganizations &&
+                            <SelectorInput
+                                options={allOrganizations?.map(org => org[OrganizationKey.Name]) as string[]}
+                                // valueSetter={setOrganizationId}
+                                optionSetter={setOrganization}
+                                // values={allOrganizations?.map(({id}) => id) as string[]}
+                                value={companyName}
+                                disabled
+                            />}
                         <RoleCheckboxes
                             defaultRoles={userRoles}
                             externalSetter={setRoles}

@@ -16,6 +16,7 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     externalSetter?: (value: string) => void;
     icon?: string;
+    showLimit?: boolean;
 }
 
 const Input: React.FunctionComponent<IInput> = ({
@@ -31,6 +32,8 @@ const Input: React.FunctionComponent<IInput> = ({
     error,
     icon,
     maxLength,
+    showLimit,
+    onFocus,
     ...other
 }) => {
     // const [innerValue, setInnerValue] = useState<string>(value as string);
@@ -39,6 +42,7 @@ const Input: React.FunctionComponent<IInput> = ({
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
     );
+    const [rightOffset, setRightOffset] = useState<number>(20);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         const { value } = evt.target;
@@ -47,6 +51,7 @@ const Input: React.FunctionComponent<IInput> = ({
     };
 
     useEffect(() => {
+        reCalcLabelWidth();
         if (inputRef.current) {
             error && inputRef.current.setCustomValidity(error);
 
@@ -63,6 +68,10 @@ const Input: React.FunctionComponent<IInput> = ({
         onInvalid && onInvalid(evt);
     };
 
+    const reCalcLabelWidth = () => {
+        labelRef.current && setRightOffset(labelRef.current?.offsetWidth);
+    }
+
     return (
         <div
             className={classNames("app-input", className, {
@@ -70,14 +79,12 @@ const Input: React.FunctionComponent<IInput> = ({
             })}
         >
             <label
-                className={classNames("app-input__wrapper", {
-                    "app-input__wrapper--limited": maxLength,
-                })}
-                data-limit={`${(value as string)?.length} / ${maxLength}`}
-                style={
+                className="app-input__wrapper"
+                style={label ?
                     {
-                        "--label-width": `${labelRef.current?.offsetWidth}px`,
+                        "--label-width": `${rightOffset}px`,
                     } as CSSProperties
+                    : undefined
                 }
             >
                 <input
@@ -93,15 +100,19 @@ const Input: React.FunctionComponent<IInput> = ({
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
+                    onFocus={(evt) => {reCalcLabelWidth(); onFocus && onFocus(evt)}}
                 />
                 {icon === "edit" && <EditIcon className="app-input__icon" />}
                 {label && (
                     <span
-                        className="app-input__label"
+                        className={classNames("app-input__label", {
+                            'app-input__label--empty': !String(value).length,
+                            'app-input__label--icon': Boolean(icon)
+                        })}
                         ref={labelRef}
                         data-width={labelRef.current?.offsetWidth}
                     >
-                        {label}
+                        {label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}
                     </span>
                 )}
             </label>

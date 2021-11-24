@@ -35,11 +35,13 @@ const Email: React.FunctionComponent<IEmail> = ({
     error,
     icon,
     name,
+    onFocus,
     ...other
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(error);
+    const [rightOffset, setRightOffset] = useState<number>(20);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         const { value } = evt.target;
@@ -48,6 +50,7 @@ const Email: React.FunctionComponent<IEmail> = ({
     };
 
     useEffect(() => {
+        reCalcLabelWidth();
         if (inputRef.current) {
             const { validity } = inputRef.current;
             inputRef.current.setCustomValidity(getValidationMessage(validity, error));
@@ -68,6 +71,10 @@ const Email: React.FunctionComponent<IEmail> = ({
         onInvalid && onInvalid(evt);
     };
 
+    const reCalcLabelWidth = () => {
+        labelRef.current && setRightOffset(rightOffset);
+    }
+
     return (
         <div
             className={classNames("app-input", className, {
@@ -77,9 +84,11 @@ const Email: React.FunctionComponent<IEmail> = ({
             <label
                 className="app-input__wrapper"
                 style={
-                    {
-                        "--label-width": `${labelRef.current?.offsetWidth}px`,
-                    } as CSSProperties
+                    label ?
+                        {
+                            "--label-width": `${labelRef.current?.offsetWidth}px`,
+                        } as CSSProperties
+                        : undefined
                 }
             >
                 <input
@@ -88,7 +97,7 @@ const Email: React.FunctionComponent<IEmail> = ({
                     autoComplete="email"
                     className="app-input__field"
                     onChange={changeHandler}
-                    // onBlur={blurHandler}
+                    onFocus={(evt) => {reCalcLabelWidth(); onFocus && onFocus(evt)}}
                     aria-invalid={!!errorMessage}
                     aria-label={errorMessage && hideError ? errorMessage : undefined}
                     name={name}
@@ -106,7 +115,10 @@ const Email: React.FunctionComponent<IEmail> = ({
                 {icon === "edit" && <EditIcon className="app-input__icon" />}
                 {label && (
                     <span
-                        className="app-input__label"
+                    className={classNames("app-input__label", {
+                        'app-input__label--empty': !String(value).length,
+                        'app-input__label--icon': Boolean(icon)
+                    })}
                         ref={labelRef}
                         data-width={labelRef.current?.offsetWidth}
                     >
