@@ -36,6 +36,7 @@
     display: inline-flex;
     cursor: pointer;
     font-weight: normal;
+    transition: font-size 0.05s 0.4s;
 
     svg {
       margin-right: 24px;
@@ -51,37 +52,13 @@
     &[aria-checked="true"] {
       justify-content: center;
       font-size: 0;
+      transition: none;
       svg {
         transform: rotate(180deg);
         margin-right: 0;
       }
     }
   }
-
-  &__button {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 1.125;
-    display: flex;
-    margin: auto auto 1.5em;
-    place-content: center;
-
-    color: $inactive;
-    text-decoration: none;
-    padding: 10px 15px 11px;
-    border: 1px solid currentColor;
-    border-radius: 2px;
-    transition: color 0.4s, background-color 0.3s;
-
-    &:hover,
-    &:focus-visible,
-    &:active {
-      background-color: $accent;
-      border-color: $accent;
-      color: #fff;
-    }
-  }
-
   &__footer {
     margin: auto 0 0;
     font-weight: normal;

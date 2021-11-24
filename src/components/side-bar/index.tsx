@@ -26,9 +26,6 @@ export const SideBar: React.FunctionComponent = () => {
 
             {!collapsed && (
                 <p className="side-bar__footer">
-                    <a className="side-bar__button" href={EXCEL_PLUGIN} download>
-                        Get Excel Plug-in
-                    </a>
                     <small>
                         © Copyright 2021 Facteus. <br />
                         All rights reserved.{" "}

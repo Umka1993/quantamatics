@@ -15,6 +15,7 @@
         align-items: center;
         position: relative;
         cursor: pointer;
+        transition: font-size 0.05s 0.4s;
 
         &::-webkit-details-marker {
             display: none;
@@ -119,6 +120,7 @@
         font-size: 0;
         padding-right: 0;
         padding-left: 0;
+        transition: none;
     }
 
     &--collapsed &__icon {
