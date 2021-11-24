@@ -5,11 +5,12 @@ import React, {
     InputHTMLAttributes,
     ChangeEventHandler,
     FormEventHandler,
+    CSSProperties,
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import EditIcon from './assets/edit.svg';
-import getValidationMessage from './utils/emailValidation';
+import EditIcon from "./assets/edit.svg";
+import getValidationMessage from "./utils/emailValidation";
 
 interface IEmail extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
@@ -37,24 +38,14 @@ const Email: React.FunctionComponent<IEmail> = ({
     ...other
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
+    const labelRef = useRef<HTMLSpanElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(error);
-
-    // check if any label is provided
-    let labelText = label ? label : placeholder;
-    labelText = labelText ? labelText : "Enter text";
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         const { value } = evt.target;
         externalSetter && externalSetter(value);
         onChange && onChange(evt);
     };
-
-    /*  const blurHandler: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
-         if (!value.includes('@')) {
-             value = `${value}@gmail.com`
-             externalSetter && externalSetter(value);
-         }
-     } */
 
     useEffect(() => {
         if (inputRef.current) {
@@ -83,7 +74,14 @@ const Email: React.FunctionComponent<IEmail> = ({
                 "app-input--validate": errorMessage,
             })}
         >
-            <div className="app-input__wrapper">
+            <label
+                className="app-input__wrapper"
+                style={
+                    {
+                        "--label-width": `${labelRef.current?.offsetWidth}px`,
+                    } as CSSProperties
+                }
+            >
                 <input
                     type="email"
                     inputMode="email"
@@ -92,26 +90,36 @@ const Email: React.FunctionComponent<IEmail> = ({
                     onChange={changeHandler}
                     // onBlur={blurHandler}
                     aria-invalid={!!errorMessage}
-                    aria-label={errorMessage && hideError ? errorMessage : labelText}
+                    aria-label={errorMessage && hideError ? errorMessage : undefined}
                     name={name}
                     aria-describedby={name && errorMessage ? name + "_error" : undefined}
-                    placeholder={`${placeholder}${required ? "*" : ""}`}
+                    placeholder={label ? " " : placeholder}
                     required={required}
                     aria-required={required}
-                    value={value || ''}
+                    value={value || ""}
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
                     pattern={EMAIL_REG_EXP}
                 />
 
-                {icon === 'edit' && (
-                    <EditIcon className="app-input__icon" />
+                {icon === "edit" && <EditIcon className="app-input__icon" />}
+                {label && (
+                    <span
+                        className="app-input__label"
+                        ref={labelRef}
+                        data-width={labelRef.current?.offsetWidth}
+                    >
+                        {label}
+                    </span>
                 )}
-            </div>
+            </label>
 
             {errorMessage && !hideError && (
-                <p id={name && errorMessage ? name + "_error" : undefined} className="app-input__error">
+                <p
+                    id={name && errorMessage ? name + "_error" : undefined}
+                    className="app-input__error"
+                >
                     {errorMessage}
                 </p>
             )}

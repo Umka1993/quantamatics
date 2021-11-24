@@ -5,10 +5,11 @@ import React, {
     InputHTMLAttributes,
     ChangeEventHandler,
     FormEventHandler,
+    CSSProperties,
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import EditIcon from './assets/edit.svg';
+import EditIcon from "./assets/edit.svg";
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
@@ -34,14 +35,10 @@ const Input: React.FunctionComponent<IInput> = ({
 }) => {
     // const [innerValue, setInnerValue] = useState<string>(value as string);
     const inputRef = useRef<HTMLInputElement>(null);
+    const labelRef = useRef<HTMLSpanElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
     );
-
-    // check if any label is provided
-    let labelText = label ? label : placeholder;
-    labelText = labelText ? labelText : "Enter text";
-
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         const { value } = evt.target;
@@ -49,14 +46,13 @@ const Input: React.FunctionComponent<IInput> = ({
         onChange && onChange(evt);
     };
 
-
-
     useEffect(() => {
         if (inputRef.current) {
             error && inputRef.current.setCustomValidity(error);
 
             if (value && Boolean(String(value).length)) {
-                !inputRef.current.validationMessage.length && setErrorMessage(undefined)
+                !inputRef.current.validationMessage.length &&
+                    setErrorMessage(undefined);
             }
         }
     }, [inputRef.current?.validity, error, value]);
@@ -67,26 +63,29 @@ const Input: React.FunctionComponent<IInput> = ({
         onInvalid && onInvalid(evt);
     };
 
-
     return (
         <div
             className={classNames("app-input", className, {
                 "app-input--validate": errorMessage,
             })}
         >
-            <div className={
-                classNames("app-input__wrapper", { "app-input__wrapper--limited": maxLength })}
+            <label
+                className={classNames("app-input__wrapper", {
+                    "app-input__wrapper--limited": maxLength,
+                })}
                 data-limit={`${(value as string)?.length} / ${maxLength}`}
+                style={
+                    {
+                        "--label-width": `${labelRef.current?.offsetWidth}px`,
+                    } as CSSProperties
+                }
             >
                 <input
                     className="app-input__field"
                     onChange={changeHandler}
                     aria-invalid={!!errorMessage}
-                    aria-label={labelText}
                     autoComplete={autoComplete}
-                    placeholder={
-                        `${placeholder === undefined ? labelText : placeholder}${required ? '*' : ''}`
-                    }
+                    placeholder={label ? " " : placeholder}
                     required={required}
                     aria-required={required}
                     value={value || ""}
@@ -95,12 +94,21 @@ const Input: React.FunctionComponent<IInput> = ({
                     ref={inputRef}
                     onInvalid={invalidHandler}
                 />
-                {icon === 'edit' && (
-                    <EditIcon className="app-input__icon" />
+                {icon === "edit" && <EditIcon className="app-input__icon" />}
+                {label && (
+                    <span
+                        className="app-input__label"
+                        ref={labelRef}
+                        data-width={labelRef.current?.offsetWidth}
+                    >
+                        {label}
+                    </span>
                 )}
-            </div>
+            </label>
 
-            {errorMessage && errorMessage.length && <p className="app-input__error">{errorMessage}</p>}
+            {errorMessage && errorMessage.length && (
+                <p className="app-input__error">{errorMessage}</p>
+            )}
         </div>
     );
 };

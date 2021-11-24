@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./styles/side-bar.scss";
 import NavBar from "../navbar";
-import { EXCEL_PLUGIN } from "../../data/constants";
 import ArrowsIcon from "./assets/arrows.svg";
 import classNames from "classnames";
 

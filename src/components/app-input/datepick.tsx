@@ -4,6 +4,7 @@ import React, {
     FormEventHandler,
     useRef,
     ChangeEventHandler,
+    CSSProperties,
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
@@ -28,7 +29,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
     className,
     itemRef,
     required,
-    value,
+    label,
     valueAsDate,
     onChange,
     externalSetter,
@@ -39,8 +40,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
     ...other
 }) => {
     const isSupport = checkDateInputSupport();
-
-    const label = "Choose date";
+    const labelRef = useRef<HTMLSpanElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -65,7 +65,14 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
             })}
             ref={itemRef}
         >
-            <div className="app-input__wrapper">
+            <div
+                className="app-input__wrapper"
+                style={
+                    {
+                        "--label-width": `${labelRef.current?.offsetWidth}px`,
+                    } as CSSProperties
+                }
+            >
                 {isSupport ? (
                     <input
                         className="app-input__field"
@@ -101,6 +108,15 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                 )}
 
                 <CalendarIcon className="app-input__icon" />
+                {label && (
+                    <span
+                        className="app-input__label app-input__label--icon"
+                        ref={labelRef}
+                        data-width={labelRef.current?.offsetWidth}
+                    >
+                        {label}
+                    </span>
+                )}
             </div>
 
             {errorMessage && <p className="app-input__error">{errorMessage}</p>}
