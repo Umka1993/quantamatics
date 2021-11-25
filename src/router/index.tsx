@@ -26,6 +26,7 @@ const AppRouter = () => (
         <UnLoggedRoute path={AppRoute.ResetPassword} component={FullWidthLayout} />
         <UnLoggedRoute path={AppRoute.Login} component={FullWidthLayout} />
         <UnLoggedRoute path={AppRoute.ForgotPassword} component={FullWidthLayout} />
+        <UnLoggedRoute path={AppRoute.Expired} component={FullWidthLayout} />
         <Route path={AppRoute.Success} component={FullWidthLayout} />
         <Route component={NotFoundPage} />
     </Switch>

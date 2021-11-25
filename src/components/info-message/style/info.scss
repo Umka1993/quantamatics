@@ -1,0 +1,13 @@
+.info {
+    display: grid;
+    justify-items: center;
+    align-items: start;
+    text-align: center;
+    &__title {
+        margin: 28px auto 11px ;
+    }
+
+    &__text {
+        margin: 0;
+    }
+}

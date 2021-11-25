@@ -55,26 +55,24 @@ const LoginForm: React.FunctionComponent = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
-            dispatch(login(data.user));
-
-            saveToken(data.token);
-
-
             setErrors(undefined);
-            if (rememberMe) {
-                localStorage.setItem("savedUsername", email);
-                localStorage.setItem("savedPassword", password);
-                localStorage.setItem("user", JSON.stringify(data.user));
+            pendoInitialize(data.user);
+            if (new Date(data.user.subscriptionEndDate) > new Date()) {
+                dispatch(login(data.user));
+                saveToken(data.token);
+                if (rememberMe) {
+                    localStorage.setItem("savedUsername", email);
+                    localStorage.setItem("savedPassword", password);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                } else {
+                    sessionStorage.setItem("savedUsername", email);
+                    sessionStorage.setItem("savedPassword", password);
+                    sessionStorage.setItem("user", JSON.stringify(data.user));
+                }
+                history.push(AppRoute.Home);
             } else {
-                sessionStorage.setItem("savedUsername", email);
-                sessionStorage.setItem("savedPassword", password);
-                sessionStorage.setItem("user", JSON.stringify(data.user));
+                history.push(AppRoute.Expired);
             }
-
-            pendoInitialize(data.user)
-
-
-            history.push(AppRoute.Home);
         }
     }, [isSuccess]);
 

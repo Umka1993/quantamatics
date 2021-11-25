@@ -17,7 +17,8 @@ export const enum AppRoute {
     Login = '/login',
     ForgotPassword = '/forgot-password',
 
-    Success = '/success-:success'
+    Success = '/success-:success',
+    Expired = '/expired'
 }
 
 export const enum ApiRoute {

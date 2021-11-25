@@ -5,6 +5,7 @@ import { LoginForm, ResetPasswordForm, ForgotPasswordForm, SignUpForm } from "..
 import "./style/full-width.scss";
 import { AppRoute } from "../../data/enum";
 import SuccessMessage from "../../components/success-message";
+import ExpiredMessage from "../../components/info-message";
 
 type Param = { success: string };
 
@@ -33,6 +34,9 @@ const FullWidthLayout: React.FunctionComponent = (props) => {
             child = <SignUpForm />;
             break;
 
+        case AppRoute.Expired:
+            child = <ExpiredMessage />;
+            break;
         default:
             break;
     }
