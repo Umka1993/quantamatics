@@ -1,6 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { changeRoute } from "../../store/currentPage/actions";
 import { SideBar } from "../../components/side-bar";
 import { Organizations } from "../organizations";
 import { JupyterFrame } from "../../components/jupyter-frame";
