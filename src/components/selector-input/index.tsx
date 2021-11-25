@@ -15,9 +15,10 @@ interface ISelectorInput {
     values?: string[];
     valueSetter?: any;
     optionSetter?: any;
+    label?: string;
 }
 
-export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({className, values, valueSetter, optionSetter, placeholder, value, required, errors, options, disabled }) => {
+export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({ className, values, valueSetter, optionSetter, placeholder, value, required, errors, options, disabled, label }) => {
     const [selecting, setSelecting] = useState<boolean>(false);
     const [selected, setSelected] = useState<string>(value);
 
@@ -28,15 +29,15 @@ export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({classNam
     });
 
     const optionsMap = options.map((item, index) => (
-        <div 
-            key={item + index} className="selector-input__item" 
+        <div
+            key={item + index} className="selector-input__item"
             onClick={() => {
                 // valueSetter && values && valueSetter(values[index]);
                 optionSetter && optionSetter(item);
                 setSelected(item)
                 setSelecting(false);
             }}
-            // data-value={values ? values[index] : undefined}
+        // data-value={values ? values[index] : undefined}
         >
             {item}
         </div>
@@ -51,8 +52,10 @@ export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({classNam
     return (
         <div className={inputClassNames} onClick={changeState}>
             <div className="selector-input__value">{selected}</div>
+            {label && <span className='selector-input__label'>{label}</span>}
             <SVG icon={arrowIcon} />
             {selecting && <div className="selector-input__list">{optionsMap}</div>}
+
         </div>
     );
 };

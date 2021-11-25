@@ -20,26 +20,21 @@ $text: #bcc4d8;
     font: inherit;
     color: $inactive;
     position: absolute;
-    height: 100%;
-    min-height: 40px;
-    display: inline-flex;
+    margin: auto 0;
     width: max-content;
     align-items: center;
-    left: 0;
+    inset: 0 auto 0 0;
     transition: left 0.3s ease-in;
+    display: inline-flex;
     &--icon {
       padding-right: 20px;
     }
-
   }
 
   &__field:not(:placeholder-shown) ~ &__label,
   &__field:focus ~ &__label {
     left: calc(100% - var(--label-width, 0));
     font-size: 14px;
-    &--icon {
-      top: -2px;
-    }
   }
 
   &__field,
@@ -47,7 +42,7 @@ $text: #bcc4d8;
     accent-color: $accent;
 
     width: 100%;
-    min-height: 40px;
+    height: 40px;
     border: none;
     border-bottom: 1px solid rgba(113, 130, 166, 0.3);
     padding: 10px calc(var(--label-width, 0) + 5px) 10px 0;
@@ -98,8 +93,6 @@ $text: #bcc4d8;
     }
   }
 
-
-
   &--validate &__field:not(:placeholder-shown):invalid {
     border-bottom: 1px solid #ff5757;
   }
@@ -129,8 +122,8 @@ $text: #bcc4d8;
   &__icon {
     fill: $inactive;
     position: absolute;
-    right: 0;
-    top: 10px;
+    inset: 0 0 0 auto;
+    margin: auto 0;
   }
 
   &__field:hover ~ &__icon {
