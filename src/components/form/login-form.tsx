@@ -1,18 +1,21 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
-import { RootState } from "../../store";
 
 import Button from "../button";
 import { CheckBox } from "../../components/checkbox";
 import { Password, Email } from "../../components/app-input";
 import Form from "./form";
 
-import { AppRoute, AuthorizationStatus } from "../../data/enum";
+import { AppRoute } from "../../data/enum";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
-import { loginAction } from "../../store/authorization/actions";
+import { useLoginUserMutation } from "../../api/account";
+import IApiError from "../../types/api-error";
+import { login } from "../../store/authorization";
+import { saveToken } from "../../services/token";
+import pendoInitialize from "../../services/pendoInitialize";
 
 const LoginForm: React.FunctionComponent = () => {
     const localUserName = localStorage.getItem("savedUsername") || "";
@@ -21,55 +24,66 @@ const LoginForm: React.FunctionComponent = () => {
     const [email, setEmail] = useState<string>(localUserName);
     const [password, setPassword] = useState<string>(localPassword);
 
-    const [finish, setFinish] = useState<boolean | undefined>(undefined);
-
     const [rememberMe, setRememberMe] = useState<boolean>(false);
 
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const [sendLogin, { isError, isSuccess, isLoading, error, data }] =
+        useLoginUserMutation();
 
     // hide errors on any input
     useEffect(() => {
         errors && setErrors(undefined);
     }, [email, password]);
 
-    const onFinish = (user: any) => {
-        setErrors(undefined);
-        if (rememberMe) {
-            localStorage.setItem("savedUsername", email);
-            localStorage.setItem("savedPassword", password);
-            localStorage.setItem("user", JSON.stringify(user));
-        } else {
-            sessionStorage.setItem("savedUsername", email);
-            sessionStorage.setItem("savedPassword", password);
-            sessionStorage.setItem("user", JSON.stringify(user));
-        }
-
-        setFinish(true);
-        history.push(AppRoute.Home);
-    };
-
-    const onError = (status: number) => {
-        if (status >= 400) {
-            setErrors("Incorrect username or password");
-        } else {
-            setErrors("Something went wrong");
-        }
-        setFinish(true);
-    };
-
     const handleLogin = (evt: FormEvent<HTMLFormElement>) => {
-        dispatch(loginAction({ email, password, onFinish, onError }));
+        sendLogin({ email, password }).unwrap;
     };
+
+    useEffect(() => {
+        if (isError) {
+            const text =
+                (error as IApiError).status >= 400
+                    ? "Incorrect username or password"
+                    : "Something went wrong";
+
+            setErrors(text);
+        }
+    }, [isError]);
+
+    useEffect(() => {
+        if (isSuccess && data) {
+            dispatch(login(data.user));
+
+            saveToken(data.token);
+
+
+            setErrors(undefined);
+            if (rememberMe) {
+                localStorage.setItem("savedUsername", email);
+                localStorage.setItem("savedPassword", password);
+                localStorage.setItem("user", JSON.stringify(data.user));
+            } else {
+                sessionStorage.setItem("savedUsername", email);
+                sessionStorage.setItem("savedPassword", password);
+                sessionStorage.setItem("user", JSON.stringify(data.user));
+            }
+
+            pendoInitialize(data.user)
+
+
+            history.push(AppRoute.Home);
+        }
+    }, [isSuccess]);
 
     return (
         <Form
             onSubmit={handleLogin}
             headline="Sign In"
             subtitle="Enter your email and password"
-            stopLoading={finish}
+            stopLoading={isLoading ? undefined : true}
         >
             <div className="login-page__inputs">
                 <Email
@@ -107,8 +121,8 @@ const LoginForm: React.FunctionComponent = () => {
             >
                 Sign In
             </Button>
-            <p className='login-page__note'>
-                Interested in Quantamatics and want to{' '}
+            <p className="login-page__note">
+                Interested in Quantamatics and want to{" "}
                 <a
                     href="https://www.facteus.com/technology/quantamatics/"
                     target="_blank"
