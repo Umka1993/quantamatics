@@ -7,6 +7,7 @@ const ExpiredMessage: FunctionComponent = () => {
     return (
         <article className='info'>
             <Illustration className='info__img' width={244} height={216} aria-hidden='true' />
+            
             <Headline className='info__title'>Your user account has reached its Expiration Date</Headline>
             <p className='info__text'>
                 Please contact your organization admin or us at{" "}
