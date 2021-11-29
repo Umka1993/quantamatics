@@ -32,11 +32,11 @@ const authorizationSlice = createSlice({
         },
         logout(state) {
             dropToken()
-            localStorage.removeItem('user')
-            sessionStorage.removeItem('user')
             state.status = AuthorizationStatus.NoAuth;
             delete state.user;
             window.location.href = AppRoute.Login;
+            localStorage.clear()
+            sessionStorage.clear()
         },
     },
 });
