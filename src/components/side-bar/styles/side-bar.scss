@@ -43,8 +43,8 @@
       transition: transform 0.5s;
     }
 
-    &:hover,
-    &:focus-visible {
+    &[aria-checked]:hover,
+    &[aria-checked]:focus-visible {
       svg {
         fill: $accent;
       }
@@ -54,6 +54,7 @@
       font-size: 0;
       transition: none;
       svg {
+        fill: $main-text;
         transform: rotate(180deg);
         margin-right: 0;
       }
