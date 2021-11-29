@@ -50,7 +50,6 @@
     line-height: 16px;
     border-right: 1px solid #E4EBFA;
     padding-right: var(--right-offset);
-    margin-right: var(--right-offset);
 
     &:hover,
     &:active,
@@ -76,6 +75,8 @@
   cursor: pointer;
   align-items: center;
   position: relative;
+  min-width: 170px;
+  justify-content: end;
   &__arrow {
     margin-left: 6px;
     margin-top: 3px;
@@ -99,7 +100,7 @@
     padding: 32px 24px;
     right: -10px;
     top: calc(100% + 25px);
-    width: 133px + 24px * 2;
+    width: 170px;
     box-shadow: 0px 1px 18px rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     transition: 0.3s ease-in-out;
