@@ -78,8 +78,9 @@
         &::after {
             content: "";
             position: absolute;
-            width: 10px;
-            height: 6px;
+            width: 0.625em;
+            height: 0.375em;
+            transition: width 0.2s, height 0.2s;
             background-color: $inactive;
             right: 30px;
             clip-path: path(
