@@ -23,23 +23,21 @@ export const SideBar: React.FunctionComponent = () => {
 
             <NavBar collapsed={collapsed} />
 
-            {!collapsed && (
-                <p className="side-bar__footer">
-                    <small>
-                        © Copyright 2021 Facteus. <br />
-                        All rights reserved.{" "}
-                        <a
-                            className='side-bar__privacy'
-                            target="_blank"
-                            href="https://www.facteus.com/privacy-policy/"
-                            rel="noreferrer"
-                        >
-                            Privacy Policy
-                        </a>
-                    </small>
-                </p>
+            <p className="side-bar__footer" hidden={collapsed}>
+                <small>
+                    © Copyright 2021 Facteus. <br />
+                    All rights reserved.{" "}
+                    <a
+                        className='side-bar__privacy'
+                        target="_blank"
+                        href="https://www.facteus.com/privacy-policy/"
+                        rel="noreferrer"
+                    >
+                        Privacy Policy
+                    </a>
+                </small>
+            </p>
 
-            )}
         </aside>
     );
 };
