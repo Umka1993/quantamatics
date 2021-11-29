@@ -56,10 +56,15 @@
     &:hover,
     &:active,
     &:focus-visible {
-      color: $accent;
+      outline: none;
       svg {
-        fill: currentColor;
+        fill: $accent;
       }
+    }
+
+    &:focus-visible {
+      color: $accent;
+      text-decoration: underline;
     }
     svg {
       margin-right: 8px;
