@@ -1,29 +1,29 @@
 <mjml>
   <mj-head>
-    <mj-attributes>
-      <mj-text align="left" color="#333" font-size="14px" padding="0" />
-    </mj-attributes>
     <mj-font name="Proxima Nova" href="https://fonts.googleapis.com/css?family=Proxima+Nova" />
+    <mj-attributes>
+      <mj-text align="left" color="#333" font-size="14px" padding="0" font-family="Proxima Nova, system-ui, sans-serif" />
+    </mj-attributes>
     <mj-style>
       body {
-        background-color: "#0A4184";
-        background-image: url("https://quantamatics-dev.dudka-api.com/img/email-bg.png");
-        background-repeat: no-repeat;
-        background-size: cover;
-        padding-top: 42px;
-        padding-bottom: 42px;
+      background-color: "#0A4184";
+      background-image: url("https://quantamatics-dev.dudka-api.com/img/email-bg.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      padding-top: 42px;
+      padding-bottom: 42px;
       }
 
       .strip {
-        background-color: #fff;
-        background-image: repeating-linear-gradient(36deg, transparent, transparent 15px, #D1ACE2 15px, #D1ACE2 30px, transparent 30px, transparent 45px, #017AEE 45px, #017AEE 60px);
-        background-size: 100% 12px;
-        background-repeat-y: no-repeat;
+      background-color: #fff;
+      background-image: repeating-linear-gradient(36deg, transparent, transparent 15px, #D1ACE2 15px, #D1ACE2 30px, transparent 30px, transparent 45px, #017AEE 45px, #017AEE 60px);
+      background-size: 100% 12px;
+      background-repeat-y: no-repeat;
       }
 
       a {
-        color: #017AEE;
-        text-decoration: none;
+      color: #017AEE;
+      text-decoration: none;
       }
 
       .button {}
