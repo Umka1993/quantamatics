@@ -8,12 +8,13 @@ import React, {
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-
+import EditIcon from './assets/edit.svg';
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
     externalSetter?: (value: string) => void;
+    icon?: string;
 }
 
 const Input: React.FunctionComponent<IInput> = ({
@@ -27,6 +28,8 @@ const Input: React.FunctionComponent<IInput> = ({
     autoComplete,
     externalSetter,
     error,
+    icon,
+    maxLength,
     ...other
 }) => {
     // const [innerValue, setInnerValue] = useState<string>(value as string);
@@ -71,21 +74,30 @@ const Input: React.FunctionComponent<IInput> = ({
                 "app-input--validate": errorMessage,
             })}
         >
-            <div className="app-input__wrapper">
+            <div className={
+                classNames("app-input__wrapper", { "app-input__wrapper--limited": maxLength })}
+                data-limit={`${(value as string)?.length} / ${maxLength}`}
+            >
                 <input
                     className="app-input__field"
                     onChange={changeHandler}
                     aria-invalid={!!errorMessage}
                     aria-label={labelText}
                     autoComplete={autoComplete}
-                    placeholder={`${placeholder}${required && '*'}`}
+                    placeholder={
+                        `${placeholder === undefined ? labelText : placeholder}${required ? '*' : ''}`
+                    }
                     required={required}
                     aria-required={required}
                     value={value || ""}
+                    maxLength={maxLength}
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
                 />
+                {icon === 'edit' && (
+                    <EditIcon className="app-input__icon" />
+                )}
             </div>
 
             {errorMessage && errorMessage.length && <p className="app-input__error">{errorMessage}</p>}

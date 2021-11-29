@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { changeRoute } from "../../store/currentPage/actions";
 import Headline from "../../components/page-title/index";
+import { getToken } from "../../services/token";
 
 interface JupyterFrameProps {
     type: string
@@ -17,15 +18,16 @@ export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = (props) 
     if (type === 'files') {
         dispatch(changeRoute('research/my-files'))
     }
-    
-    const user = useSelector<RootState>((state) => state.auth.user?.email)
+
+
+    const user = useSelector<RootState>((state) => state.auth.user?.firstName)
     const username: any = !!user ? user : ''
-    const filesUrl = process.env.HUB_URL + 'user/' + username +'/tree?'
-    const coherenceUrl = process.env.HUB_URL +'user/' + username +'/'
+    const filesUrl = 'https://hub-k8s.dev.quantamatics.net/user/' + username + '/tree?'
+    const coherenceUrl = 'https://coherence-k8s.dev.quantamatics.net/user/' + username + '/'
     const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
     const frame: any = useRef(null)
-    const formAction = process.env.HUB_URL + 'hub/login'
-    const token = localStorage.getItem('id_token')
+    const formAction = 'https://hub-k8s.dev.quantamatics.net/hub/login'
+    const token = getToken()
 
     const submit: any = useRef(null);
 

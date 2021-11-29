@@ -1,0 +1,100 @@
+@import "../../../variables.scss";
+
+.navigation {
+    $block: &;
+    &__item {
+        appearance: none;
+        height: 56px;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 1.125;
+        color: $headlines;
+        text-decoration: none;
+        padding-left: 32px;
+        padding-right: 28px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        cursor: pointer;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &--active {
+            background-color: #f2f8fe;
+            font-weight: 500;
+            color: $accent;
+        }
+
+        &:focus-visible::before,
+        &:hover::before,
+        &--active::before {
+            content: "";
+            width: 2px;
+            height: 100%;
+            background-color: $accent;
+            border-radius: 0px 5px 5px 0px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        &--sub {
+            height: 18px + 24px;
+            padding-left: 25px;
+            padding-right: 10px;
+            background-color: transparent;
+
+            &::before {
+                display: none;
+            }
+        }
+    }
+
+    &__sublist {
+        margin: 12px 0 12px 20px;
+        height: 0;
+        transition: height .3s ease-in-out;
+        overflow-y: hidden;
+    }
+
+    details[open] > &__item {
+        background-color: #f2f8fe;
+        font-weight: 500;
+        color: $accent;
+    }
+
+    details[open] &__sublist {
+        height: 128px; 
+        /* TODO: Hardcoded val, need to rework for this: 
+        https://css-tricks.com/how-to-animate-the-details-element/ 
+        */        
+    }
+
+    details[open] summary &__icon,
+    &__item:hover &__icon,
+    &__item--active &__icon {
+        fill: $accent;
+    }
+
+    &__item--sub &__icon {
+        margin-right: 12px;
+    }
+
+    &__icon {
+        fill: $inactive;
+        margin-right: 24px;
+    }
+
+    details[open] &__marker {
+        transform: none;
+    }
+
+    &__marker {
+        fill: $inactive;
+        margin-left: auto;
+        transition: transform 0.3s;
+        transform: rotate(180deg);
+    }
+}

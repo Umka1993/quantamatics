@@ -1,131 +1,127 @@
 import React, { useState, useEffect } from "react";
-import "./styles/table.scss"
-import { IUserRow } from "../../types/table/types";
-import { SVG } from "../SVG";
+
 import EditSVG from "./assets/edit-row-icon.svg";
 import DeleteSVG from "./assets/delete-row-icon.svg";
+
 import { EditProfile } from "../edit-modal/edit-profile";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
+import { formatDate, adaptRoles } from "../../services/baseService";
+import ComaList from "../coma-list";
+import { IUser } from "../../types/user";
+import ISort from "../../types/sort-type";
+import { SortDirection, UserKey } from "../../data/enum";
+import { useGetOrganizationUsersQuery } from "../../api/user";
+import { useParams } from "react-router";
+import { RouteParams } from "types/route-params";
+import Loader from "../loader";
 
-import { USER } from "../../contstans/constans";
-
-import { formatDate } from "../../services/baseService"
-import { IUser } from "types/edit-profile/types";
+import "./styles/table.scss";
 
 interface ITable {
-    rows: IUserRow[]
-    inEdit?: boolean,
-    deleteUser: Function,
 }
 
-export const UserTable: React.FunctionComponent<ITable> = (props) => {
-    const { rows, deleteUser } = props;
-    const [localRows, setLocalRows] = useState<IUserRow[]>(rows)
-    const [showModal, setShowModal] = useState<boolean>(false)
-    const [sort, setSort] = useState<any>({ name: '', direction: 'none' })
+export const UserTable: React.FunctionComponent<ITable> = () => {
+    const { id } = useParams<RouteParams>();
 
-    const [user, setUser] = useState<any>(USER)
+    const { data, isSuccess, isLoading } = useGetOrganizationUsersQuery(id);
 
-    const [editIndex, setEditIndex] = useState<number>(-1);
+    const [localRows, setLocalRows] = useState<IUser[]>([]);
+    const [showModal, setShowModal] = useState<Boolean>(false);
 
-    useEffect(() => {
-        localStorage.setItem('rows', JSON.stringify(rows))
-    }, [rows])
+    const initialSort = { name: "", direction: SortDirection.Default }
+    const [sort, setSort] = useState<ISort>(initialSort);
 
-    const handleEditUser = (user: any, index: number) => {
-        setEditIndex(index)
-        setUser(user.row)
-        setShowModal(true)
-    }
+    const [user, setUser] = useState<IUser>();
 
-    const updateUsers = (user: any) => {
-        const newRows = localRows;
-
-        user.subscriptionEndDate = new Date(user.subscriptionEndDate).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
-
-        if (user.newEmail) {
-            user.email = user.newEmail
+    useEffect(() => {        
+        if (isSuccess) {
+            setLocalRows(data as IUser[]);
+            setSort(initialSort);
         }
-        
+    }, [isSuccess, data])
 
-        newRows[editIndex].row = user
-        setLocalRows(newRows)
+    /* const handleDeleteUser = (data: IUserRow) => {
+    }; */
+
+    if (isLoading) {
+        return (
+            <div className="user-table-loader">
+                <Loader />
+            </div>
+        );
     }
 
-    const handleDeleteUser = (data: IUserRow) => {
-        deleteUser(data.row.id);
-    }
+    const tableTitles = ["First Name", "Last Name", "Email", "Expiration Date", "Organization Role"];
+
+    const tableTitlesKeys = [UserKey.Name, UserKey.Surname, UserKey.Email, UserKey.SubscriptionEndDate, UserKey.UserRoles];
+
 
     return (
-        <table className="table table--user">
-            <thead className="table__head">
-                <tr className="table__header">
-                    <SortTableHeader
-                        name="firstName" text="First Name"
-                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
-                        className="user"
-                    />
-
-                    <SortTableHeader
-                        name="lastName" text="Last Name"
-                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
-                        className="user"
-                    />
-
-                    <SortTableHeader
-                        name="email" text="Email"
-                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
-                        className="user"
-                    />
-
-                    <SortTableHeader
-                        name="subscriptionEndDate" text="Expiration Date"
-                        sort={sort} localRows={localRows} setSort={setSort} setLocalRows={setLocalRows}
-                        className="user"
-                    />
-                    <th className='table__headline table__headline--hidden'>Actions</th>
-                </tr>
-            </thead>
-            <tbody className="table__body">
-                {localRows.map((row, index) => (
-                    <tr className="table__row" key={row.row.id}>
-                        <div className="table__cell">
-                            {row.row.firstName}
-                        </div>
-                        <div className="table__cell">
-                            {row.row.lastName}
-                        </div>
-                        <div className="table__cell">
-                            {row.row.email}
-                        </div>
-                        <div className="table__cell">
-                            {formatDate(row.row.subscriptionEndDate)}
-                        </div>
-                        <td className='table__cell table__cell--actions'>
-                            <button 
-                                className='table__action'
-                                onClick={() => { handleEditUser(row, index) }}
-                            >
-                                <EditSVG role="img" aria-label="edit" fill="currentColor" />
-                            </button>
-                            <button 
-                                className='table__action'
-                                // onClick={() => { handleDeleteUser(row) }}
-                                disabled
-                            >
-                                <DeleteSVG role="img" aria-label="delete" fill="currentColor" />
-                            </button>
-                        </td>
+        <>
+            <table className="table table--user">
+                <thead className="table__head">
+                    <tr className="table__header">
+                        {tableTitles.map((title: string, index: number) =>
+                        (<SortTableHeader
+                            key={title}
+                            name={tableTitlesKeys[index]}
+                            text={title}
+                            sort={sort}
+                            localRows={localRows}
+                            setSort={setSort}
+                            setLocalRows={setLocalRows}
+                            className="user"
+                        />))
+                        }
+                        <th className="table__headline table__headline--hidden">Actions</th>
                     </tr>
-                ))}
-            </tbody>
-            
-            {showModal &&
-                // <Modal onClose={() => setShowModal(false)}><p>Test</p></Modal>
-                <EditProfile user={user} onClose={() => setShowModal(false)} onSubmit={updateUsers} />
-            }
-        </table>
-    )
-}
-
-
+                </thead>
+                <tbody className="table__body">
+                    {localRows.map((user, index) => (
+                        <tr className="table__row" key={user.id}>
+                            <td className="table__cell">{user.firstName}</td>
+                            <td className="table__cell">{user.lastName}</td>
+                            <td className="table__cell">{user.email}</td>
+                            <td className="table__cell">
+                                {formatDate(user.subscriptionEndDate)}
+                            </td>
+                            <td className="table__cell">
+                                <ComaList list={adaptRoles(user.userRoles)} />
+                            </td>
+                            <td className="table__cell table__cell--actions">
+                                <button
+                                    type="button"
+                                    className="table__action"
+                                    onClick={() => {
+                                        setUser(user);
+                                        setShowModal(true);
+                                    }}
+                                >
+                                    <EditSVG role="img" aria-label="edit" fill="currentColor" />
+                                </button>
+                                <button
+                                    type="button"
+                                    className="table__action"
+                                    // onClick={() => { handleDeleteUser(row) }}
+                                    disabled
+                                >
+                                    <DeleteSVG
+                                        role="img"
+                                        aria-label="delete"
+                                        fill="currentColor"
+                                    />
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {showModal && (
+                <EditProfile
+                    user={user as IUser}
+                    onClose={() => setShowModal(false)}
+                />
+            )}
+        </>
+    );
+};

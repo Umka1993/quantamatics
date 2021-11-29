@@ -1,26 +1,30 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { userReducer } from "./store/user/reducer";
-import { UserState } from "./store/user/reducer";
-import { currentPageReducer } from "./store/currentPage/reducer";
-import { CurrentPageState } from "./store/currentPage/reducer";
-import thunk from "redux-thunk";
+import { combineReducers } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import { createAPI } from "./services/api";
-import authorizationReducer, { AuthState } from "./store/authorization/reducer";
 
+import { currentPageReducer } from "./store/currentPage/reducer";
+import authorizationReducer from "./store/authorization";
+import quantamaticsApi from "./api";
+// import { breadcrumbsReducer, LinkData } from './store/breadcrumbs/reducer';
 
 const api = createAPI();
 
-// export type RootState = ReturnType<typeof rootReducer>
-export interface RootState {
-  currentPage: CurrentPageState,
-  auth: AuthState,
-}
-
 const rootReducer = combineReducers({
-  user: userReducer,
   currentPage: currentPageReducer,
-  auth: authorizationReducer
+  auth: authorizationReducer,
+  [quantamaticsApi.reducerPath]: quantamaticsApi.reducer
+  // breadcrumbs: breadcrumbsReducer
 });
 
-export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk.withExtraArgument(api))))
+export type RootState = ReturnType<typeof rootReducer>
+
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: api,
+      },
+    }).concat(quantamaticsApi.middleware),
+});
+

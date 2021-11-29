@@ -1,46 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { network } from "../../services/networkService";
+import React from 'react';
 import "./styles/organiations.scss"
 import AddIcon from "./assets/add.svg"
 import { OrganizationTable } from "../../components/table/OrganizationTable";
 import Button from "../../components/button";
 import { changeRoute } from "../../store/currentPage/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Loader } from "../../components/loader";
 import Headline from "../../components/page-title/index";
 
 export const Organizations: React.FunctionComponent = (props) => {
-    const [organizations, setOrganizations] = useState<any>()
     const dispatch = useDispatch();
     const history = useHistory()
-
-    const fetchOrganizations = () => {
-        network.get('api/Organization/getAll')
-            .then((r: any) => {
-
-                const result = r.data.map((row: any) => {
-                    return {
-                        editable: true,
-                        row
-                    }
-                })
-                console.log('result', result)
-                setOrganizations(result)
-            })
-            .catch((e: any) => {
-                console.log(e.data)
-            })
-    }
 
     const createNew = () => {
         dispatch(changeRoute('apps/organizations/new-organization'))
         history.push('/apps/organizations/new-organization')
     }
-
-    useEffect(() => {
-        if (!organizations) fetchOrganizations()
-    }, [organizations])
 
     return (
         <section className="organization">
@@ -57,10 +32,7 @@ export const Organizations: React.FunctionComponent = (props) => {
                 </Button>
 
             </header>
-            <div className="organization__list">
-
-                {!!organizations ? <OrganizationTable rows={organizations} /> : (<div className='organization-table-loader'><Loader /></div>)}
-            </div>
+            <OrganizationTable />
         </section>
     )
 }
