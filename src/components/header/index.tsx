@@ -52,50 +52,49 @@ export const Header: React.FunctionComponent = (props) => {
     }
 
     return (
-        <div className="header">
-            <div className="header__content">
-                <div className="header__logo">
-                    <SVG icon={logoImg} name="logo" onClick={() => !!user ? history.push('/') : null} />
-                    {status === AuthorizationStatus.Auth && (<Breadcrumbs className="header__breadcrumbs" />)}
-                </div>
+        <header className="header">
+            <div className="header__logo">
+                <SVG icon={logoImg} name="logo" onClick={() => !!user ? history.push('/') : null} />
+                {status === AuthorizationStatus.Auth && (<Breadcrumbs className="header__breadcrumbs" />)}
+            </div>
 
-                {status === AuthorizationStatus.Auth && (
-                    <>
-                        <a
-                            className='header__excel'
-                            href={EXCEL_PLUGIN} download
-                        >
-                            Get Excel Plug-in
-                            <DownLoadIcon
-                                fill="#BCC4D8"
-                                width={16} height={16}
-                                aria-hidden="true"
-                            />
-                        </a>
+            {status === AuthorizationStatus.Auth && (
+                <>
+                    <a
+                        className='header__excel'
+                        href={EXCEL_PLUGIN} download
+                    >
+                        <DownLoadIcon
+                            fill="#BCC4D8"
+                            width={16} height={16}
+                            aria-hidden="true"
+                        />
+                        Get Excel Plug-in
+                    </a>
 
 
-                        <div className="profile header__user" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
-                            {(user as IUser).firstName} {(user as IUser).lastName}
+                    <div className="profile header__user" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
+                        {(user as IUser).firstName} {(user as IUser).lastName}
 
-                            <SVG icon={arrowImg} className={classNames("profile__arrow", { 'opened': showMenu })} />
-                            <div className={classNames('profile__dropdown', { showMenu: showMenu })}>
-                                <div className="profile__dropdown-triangle" />
-                                <div className="profile__dropdown-item" onClick={() => { setShowProfile(true) }}>
-                                    <SVG icon={profileImg} name="profileImg" /> My Account
-                                </div>
-                                <div className="profile__dropdown-item" onClick={() => handleChangeRoute(AppRoute.Login)}>
-                                    <SVG icon={logoutImg} name="logoutImg" /> Log Out
-                                </div>
+                        <SVG icon={arrowImg} className={classNames("profile__arrow", { 'opened': showMenu })} />
+                        <div className={classNames('profile__dropdown', { showMenu: showMenu })}>
+                            <div className="profile__dropdown-triangle" />
+                            <div className="profile__dropdown-item" onClick={() => { setShowProfile(true) }}>
+                                <SVG icon={profileImg} name="profileImg" /> My Account
+                            </div>
+                            <div className="profile__dropdown-item" onClick={() => handleChangeRoute(AppRoute.Login)}>
+                                <SVG icon={logoutImg} name="logoutImg" /> Log Out
                             </div>
                         </div>
+                    </div>
 
 
-                    </>)}
-                {
-                    showProfile &&
-                    <EditPassword user={user as IUser} onClose={() => setShowProfile(false)} />
-                }
-            </div>
-        </div>
+                </>)}
+            {
+                showProfile &&
+                <EditPassword user={user as IUser} onClose={() => setShowProfile(false)} />
+            }
+        </header>
+
     )
 }

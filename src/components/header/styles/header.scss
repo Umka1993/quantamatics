@@ -1,7 +1,13 @@
 @import "../../../variables.scss";
 
+
+
 .header {
+  $right-offset: 54 / 1440 * 100vw;
+  --right-offset: min(#{$right-offset}, 54px);
   height: 80px;
+  padding-left: 36px;
+  padding-right: var(--right-offset);
   margin-bottom: 24px;
   width: 100%;
   background: #ffffff;
@@ -9,15 +15,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  &__content {
-    margin: 0 35px;
-    // max-width: 1392px;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    width: 100%;
-  }
 
   &__breadcrumbs {
     margin-left: 70px;
@@ -43,13 +40,19 @@
   }
 
   &__excel {
+    position: relative;
     color: $main-text;
-    display: inline-flex;
+    display: flex;
+    height: 100%;
     text-decoration: none;
     align-items: center;
     margin-left: auto;
     font-size: 14px;
     line-height: 16px;
+    border-right: 1px solid #E4EBFA;
+    padding-right: var(--right-offset);
+    margin-right: var(--right-offset);
+
     &:hover,
     &:active,
     &:focus-visible {
@@ -59,12 +62,8 @@
       }
     }
     svg {
-      margin-left: 8px;
+      margin-right: 8px;
     }
-  }
-
-  &__user {
-    margin-left: 32px;
   }
 }
 
