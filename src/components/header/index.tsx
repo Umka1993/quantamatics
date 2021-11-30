@@ -50,12 +50,12 @@ export const Header: React.FunctionComponent = (props) => {
         history.push(route)
     }
 
-    useEffect(() => {
+    useEffect(() => {        
         if (profileRef.current) {
-            const calculatedWidth = 161 - profileRef.current.offsetWidth;
+            const calculatedWidth = 160 - profileRef.current.offsetWidth;
             setSummaryWidth(calculatedWidth > 30 ? calculatedWidth : 30 )
         }
-    }, [profileRef.current])
+    }, [profileRef.current, status ])
 
     return (
         <header className="header">
