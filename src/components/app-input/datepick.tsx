@@ -10,9 +10,10 @@ import "./styles/input.scss";
 import classNames from "classnames";
 import CalendarIcon from "./assets/calendar.svg";
 import { checkDateInputSupport, formatToValue } from "./utils/date-utils";
-import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
-import { Moment } from "moment";
+import DayPickerInput from 'react-day-picker/DayPickerInput'
+import 'react-day-picker/lib/style.css';
+import dateFnsFormat from 'date-fns/format';
+// import dateFnsParse from 'date-fns/parse';
 
 interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
@@ -59,6 +60,16 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
         onChange && onChange(evt);
     };
 
+    const changeFallbackHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
+        const { value } = evt.currentTarget;
+
+        const formattedDate = new Date(value);
+
+        const isInvalidDate = isNaN(formattedDate.getTime())
+        !isInvalidDate && externalSetter && externalSetter(formattedDate);
+        onChange && onChange(evt);
+    };
+
     return (
         <div
             className={classNames("app-input", className, {
@@ -92,37 +103,31 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                         max={maxDate ? formatToValue(maxDate) : max}
                     />
                 ) : (
-                    <Datetime
-                        dateFormat="MM/DD/YYYY"
-                        onChange={(date) =>
-                           { 
-                            
-                            if (date instanceof Object ) {
-                                return externalSetter && externalSetter((date as Moment).toDate());
-                            } else {
-                                return date;
-                            }
-                            
-                        }
-                        }
-                        timeFormat={false}
-                        initialValue={valueAsDate}
-                        inputProps={{
-                            placeholder: 'MM/DD/YYYY',
-                            className: 'app-input__fallback-date'
-                        }}
-                        isValidDate={(currentDate) => {                            
-                            
-                            if (minDate) {
-                                return currentDate.toDate() > minDate;
-                            }
-                            return true;
-                        }}
+                    <DayPickerInput
+                        format='MM/dd/yyyy'
+                        formatDate={(date, format) =>  dateFnsFormat(date, format)}
+                        
+                        dayPickerProps={{
+                            disabledDays: [minDate && {
+                                before: minDate
+                            }, maxDate && {
+                                after: maxDate,
+                            }]
+                        }}        
+                    placeholder=''
+                    value={valueAsDate || undefined}
+                    inputProps={{
+                        className: 'app-input__field',
+                        onChange: changeFallbackHandler,
+                    }}
+                    
                     />
                 )}
                 {label && (
                     <span
-                        className="app-input__label app-input__label--start"
+                        className={classNames("app-input__label", {
+                            'app-input__label--start': String(valueAsDate).length,
+                        })}
                         ref={labelRef}
                         data-width={labelRef.current?.offsetWidth}
                     >
