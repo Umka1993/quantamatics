@@ -74,8 +74,12 @@ const Email: React.FunctionComponent<IEmail> = ({
         onInvalid && onInvalid(evt);
     };
 
+
     const reCalcLabelWidth = () => {
-        labelRef.current && setRightOffset(rightOffset);
+        if (labelRef.current) {
+            const { offsetWidth } = labelRef.current;
+            setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5)
+        }
     }
 
     return (
@@ -89,7 +93,7 @@ const Email: React.FunctionComponent<IEmail> = ({
                 style={
                     label ?
                         {
-                            "--label-width": `${labelRef.current?.offsetWidth}px`,
+                            "--label-width": `${rightOffset}px`,
                         } as CSSProperties
                         : undefined
                 }
@@ -115,16 +119,15 @@ const Email: React.FunctionComponent<IEmail> = ({
                     pattern={EMAIL_REG_EXP}
                 />
 
+                {icon === "edit" && <EditIcon className="app-input__icon" />}
                 {label && (
                     <span
                         className={classNames("app-input__label", {
-                            'app-input__label--empty': !String(value).length,
+                            'app-input__label--icon': icon
                         })}
-                        ref={labelRef}
-                        data-width={labelRef.current?.offsetWidth}
+
                     >
-                        {label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}
-                        {icon === "edit" && <EditIcon className="app-input__icon" />}
+                        <span ref={labelRef}>{label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}</span>
                     </span>
                 )}
             </label>

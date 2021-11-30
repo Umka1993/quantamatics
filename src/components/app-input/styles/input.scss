@@ -6,6 +6,7 @@ $text: #bcc4d8;
   width: 100%;
 
   &__wrapper {
+    display: block;
     position: relative;
     font-size: 16px;
     line-height: 18px;
@@ -22,35 +23,40 @@ $text: #bcc4d8;
 
   &__label {
     font: inherit;
+    background-color: transparent;
     color: $inactive;
     position: absolute;
-    margin: auto 0;
-    width: max-content;
-    align-items: center;
-    inset: 0 auto 0 0;
-    transition: left 0.3s ease-in;
-    display: inline-flex;
+    display: block;
+    padding: 10px 0;
+    inset: 0;
+    height: 100%;
+    text-align: right;
+    white-space: nowrap;
+    pointer-events: none;
+    width: 0;
+    transition: width 0.8s ease;
     &--icon {
       padding-right: 20px;
     }
   }
 
-  &__label--start,
+  &__label--shifted,
   &__field:not(:placeholder-shown) ~ &__label,
   &__field:focus ~ &__label {
-    left: calc(100% - var(--label-width, 0));
+    width: 100%;
     font-size: 14px;
   }
 
   &__field,
   &__fallback-date {
     accent-color: $accent;
+    position: relative;
 
     width: 100%;
     height: 40px;
     border: none;
     border-bottom: 1px solid rgba(113, 130, 166, 0.3);
-    padding: 10px calc(var(--label-width, 0) + 5px) 10px 0;
+    padding: 10px var(--label-width, 0) 10px 0;
     font: inherit;
     color: inherit;
 
@@ -138,10 +144,8 @@ $text: #bcc4d8;
     fill: $inactive;
     margin: auto 0 auto 4px;
 
-    &--solo {
-      position: absolute;
-      inset: 0 0 0 auto;
-    }
+    position: absolute;
+    inset: 0 0 0 auto;
   }
 
   &__field:hover ~ &__icon {

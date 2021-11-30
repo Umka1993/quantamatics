@@ -48,6 +48,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
         undefined
     );
 
+
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
         setErrorMessage(inputRef.current?.validationMessage);
@@ -55,7 +56,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         const { valueAsDate } = evt.target;
-        
+
         externalSetter && externalSetter(valueAsDate ? valueAsDate : new Date());
         onChange && onChange(evt);
     };
@@ -81,7 +82,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                 className="app-input__wrapper"
                 style={
                     {
-                        "--label-width": `${labelRef.current?.offsetWidth}px`,
+                        "--label-width": `${labelRef.current ? labelRef.current.offsetWidth + 25 : 100}px`,
                     } as CSSProperties
                 }
             >
@@ -105,34 +106,30 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                 ) : (
                     <DayPickerInput
                         format='MM/dd/yyyy'
-                        formatDate={(date, format) =>  dateFnsFormat(date, format)}
-                        
+                        formatDate={(date, format) => dateFnsFormat(date, format)}
+
                         dayPickerProps={{
                             disabledDays: [minDate && {
                                 before: minDate
                             }, maxDate && {
                                 after: maxDate,
                             }]
-                        }}        
-                    placeholder=''
-                    value={valueAsDate || undefined}
-                    inputProps={{
-                        className: 'app-input__field',
-                        onChange: changeFallbackHandler,
-                    }}
-                    
+                        }}
+                        placeholder=''
+
+                        value={valueAsDate || undefined}
+                        inputProps={{
+                            className: 'app-input__field',
+                            onChange: changeFallbackHandler,
+                        }}
+
                     />
                 )}
+                <CalendarIcon className="app-input__icon" />
                 {label && (
                     <span
-                        className={classNames("app-input__label", {
-                            'app-input__label--start': String(valueAsDate).length,
-                        })}
-                        ref={labelRef}
-                        data-width={labelRef.current?.offsetWidth}
-                    >
-                        {label}
-                        <CalendarIcon className="app-input__icon" />
+                        className="app-input__label app-input__label--icon app-input__label--shifted"                    >
+                        <span ref={labelRef}>{label}</span>
                     </span>
                 )}
             </div>

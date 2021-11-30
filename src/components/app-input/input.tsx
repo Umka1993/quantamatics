@@ -69,7 +69,10 @@ const Input: React.FunctionComponent<IInput> = ({
     };
 
     const reCalcLabelWidth = () => {
-        labelRef.current && setRightOffset(labelRef.current?.offsetWidth);
+        if (labelRef.current) {
+            const { offsetWidth } = labelRef.current;
+            setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5)
+        }
     }
 
     return (
@@ -83,7 +86,7 @@ const Input: React.FunctionComponent<IInput> = ({
                 style={
                     label ?
                         {
-                            "--label-width": `${labelRef.current?.offsetWidth}px`,
+                            "--label-width": `${rightOffset}px`,
                         } as CSSProperties
                         : undefined
                 }
@@ -103,16 +106,15 @@ const Input: React.FunctionComponent<IInput> = ({
                     onInvalid={invalidHandler}
                     onFocus={(evt) => { reCalcLabelWidth(); onFocus && onFocus(evt) }}
                 />
+                {icon === "edit" && <EditIcon className="app-input__icon" />}
                 {label && (
                     <span
                         className={classNames("app-input__label", {
-                            'app-input__label--empty': !String(value).length,
+                            'app-input__label--icon': icon
                         })}
-                        ref={labelRef}
-                        data-width={labelRef.current?.offsetWidth}
+
                     >
-                        {label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}
-                        {icon === "edit" && <EditIcon className="app-input__icon" />}
+                        <span ref={labelRef}>{label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}</span>
                     </span>
                 )}
             </label>
