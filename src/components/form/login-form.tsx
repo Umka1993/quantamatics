@@ -122,7 +122,7 @@ const LoginForm: React.FunctionComponent = () => {
             <p className="login-page__note">
                 Interested in Quantamatics and want to{" "}
                 <a
-                    href="https://www.facteus.com/technology/quantamatics/"
+                    href="https://www.facteus.com/quantamatics"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
