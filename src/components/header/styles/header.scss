@@ -26,15 +26,6 @@
       cursor: pointer;
       margin-top: -7px;
     }
-    //? What is it?
-    /*   span{
-      font-style: normal;
-      font-weight: 600;
-      font-size: 25px;
-      line-height: 32px;
-      color: #003C71;
-      cursor: pointer;
-    } */
   }
 
   &__right {
@@ -58,6 +49,7 @@
   &__excel {
     position: relative;
     color: $main-text;
+    display: inline-flex;
     text-decoration: none;
     align-items: center;
     font-size: 14px;
@@ -87,7 +79,6 @@
   cursor: pointer;
   align-items: center;
   position: relative;
-  // min-width: 130px;
   justify-content: flex-end;
   &__arrow {
     margin-left: 6px;

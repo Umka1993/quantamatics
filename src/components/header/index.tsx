@@ -51,7 +51,10 @@ export const Header: React.FunctionComponent = (props) => {
     }
 
     useEffect(() => {
-        profileRef.current && setSummaryWidth(161 - profileRef.current.offsetWidth)
+        if (profileRef.current) {
+            const calculatedWidth = 161 - profileRef.current.offsetWidth;
+            setSummaryWidth(calculatedWidth > 30 ? calculatedWidth : 30 )
+        }
     }, [profileRef.current])
 
     return (
