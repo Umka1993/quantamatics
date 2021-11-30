@@ -54,6 +54,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         const { valueAsDate } = evt.target;
+        
         externalSetter && externalSetter(valueAsDate ? valueAsDate : new Date());
         onChange && onChange(evt);
     };
@@ -82,7 +83,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                         placeholder={label}
                         required={required}
                         onChange={changeHandler}
-                        value={formatToValue(valueAsDate)}
+                        defaultValue={formatToValue(valueAsDate)}
                         aria-required={required}
                         {...other}
                         ref={inputRef}
@@ -94,11 +95,24 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                     <Datetime
                         dateFormat="MM/DD/YYYY"
                         onChange={(date) =>
-                            externalSetter && externalSetter((date as Moment).toDate())
+                           { 
+                            
+                            if (date instanceof Object ) {
+                                return externalSetter && externalSetter((date as Moment).toDate());
+                            } else {
+                                return date;
+                            }
+                            
+                        }
                         }
                         timeFormat={false}
-                        value={valueAsDate}
-                        isValidDate={(currentDate) => {
+                        initialValue={valueAsDate}
+                        inputProps={{
+                            placeholder: 'MM/DD/YYYY',
+                            className: 'app-input__fallback-date'
+                        }}
+                        isValidDate={(currentDate) => {                            
+                            
                             if (minDate) {
                                 return currentDate.toDate() > minDate;
                             }
@@ -106,15 +120,14 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                         }}
                     />
                 )}
-
-                <CalendarIcon className="app-input__icon" />
                 {label && (
                     <span
-                        className="app-input__label app-input__label--icon"
+                        className="app-input__label app-input__label--start"
                         ref={labelRef}
                         data-width={labelRef.current?.offsetWidth}
                     >
                         {label}
+                        <CalendarIcon className="app-input__icon" />
                     </span>
                 )}
             </div>

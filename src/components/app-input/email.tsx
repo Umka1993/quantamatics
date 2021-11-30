@@ -112,17 +112,17 @@ const Email: React.FunctionComponent<IEmail> = ({
                     pattern={EMAIL_REG_EXP}
                 />
 
-                {icon === "edit" && <EditIcon className="app-input__icon" />}
+                {icon === "edit" && <EditIcon className="app-input__icon app-input__icon--solo" />}
                 {label && (
                     <span
                     className={classNames("app-input__label", {
                         'app-input__label--empty': !String(value).length,
-                        'app-input__label--icon': Boolean(icon)
                     })}
                         ref={labelRef}
                         data-width={labelRef.current?.offsetWidth}
                     >
                         {label}
+                        {icon === "edit" && <EditIcon className="app-input__icon" />}
                     </span>
                 )}
             </label>

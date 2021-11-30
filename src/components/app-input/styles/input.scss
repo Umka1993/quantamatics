@@ -31,6 +31,7 @@ $text: #bcc4d8;
     }
   }
 
+  &__label--start,
   &__field:not(:placeholder-shown) ~ &__label,
   &__field:focus ~ &__label {
     left: calc(100% - var(--label-width, 0));
@@ -38,7 +39,7 @@ $text: #bcc4d8;
   }
 
   &__field,
-  .rdt input {
+  &__fallback-date {
     accent-color: $accent;
 
     width: 100%;
@@ -93,6 +94,16 @@ $text: #bcc4d8;
     }
   }
 
+  &__fallback-date {
+    &::placeholder {
+      color: $headlines;
+    }
+    &:active::placeholder,
+    &:focus::placeholder {
+      color: $accent;
+    }
+  }
+
   &--validate &__field:not(:placeholder-shown):invalid {
     border-bottom: 1px solid #ff5757;
   }
@@ -121,9 +132,12 @@ $text: #bcc4d8;
 
   &__icon {
     fill: $inactive;
-    position: absolute;
-    inset: 0 0 0 auto;
-    margin: auto 0;
+    margin: auto 0 auto 4px;
+
+    &--solo {
+      position: absolute;
+      inset: 0 0 0 auto;
+    }
   }
 
   &__field:hover ~ &__icon {

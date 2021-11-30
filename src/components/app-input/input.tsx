@@ -102,17 +102,16 @@ const Input: React.FunctionComponent<IInput> = ({
                     onInvalid={invalidHandler}
                     onFocus={(evt) => {reCalcLabelWidth(); onFocus && onFocus(evt)}}
                 />
-                {icon === "edit" && <EditIcon className="app-input__icon" />}
                 {label && (
                     <span
                         className={classNames("app-input__label", {
                             'app-input__label--empty': !String(value).length,
-                            'app-input__label--icon': Boolean(icon)
                         })}
                         ref={labelRef}
                         data-width={labelRef.current?.offsetWidth}
                     >
                         {label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}
+                        {icon === "edit" && <EditIcon className="app-input__icon" />}
                     </span>
                 )}
             </label>
