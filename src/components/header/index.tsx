@@ -1,10 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, CSSProperties } from 'react';
 import "./styles/header.scss"
 import logoImg from "./assets/new-logo.svg"
-import logoTextImg from "./assets/Quantamatics.svg"
 import arrowImg from "./assets/toggle-arrow.svg"
 import profileImg from "./assets/profile.svg"
-import settingsImg from "./assets/settings.svg"
 import logoutImg from "./assets/logout.svg"
 import SVG from '../SVG'
 import { useDispatch, useSelector } from "react-redux";
@@ -26,9 +24,10 @@ export const Header: React.FunctionComponent = (props) => {
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [showProfile, setShowProfile] = useState<boolean>(false)
 
-    const profileRef = useRef(null)
+    const profileRef = useRef<HTMLDivElement>(null)
     const dispatch = useDispatch()
     const history = useHistory()
+    const [summaryWidth, setSummaryWidth] = useState<number>(54);
 
     const useOutsideClick = (ref: any, callback: any) => {
         useEffect(() => {
@@ -51,6 +50,10 @@ export const Header: React.FunctionComponent = (props) => {
         history.push(route)
     }
 
+    useEffect(() => {
+        profileRef.current && setSummaryWidth(161 - profileRef.current.offsetWidth)
+    }, [profileRef.current])
+
     return (
         <header className="header">
             <div className="header__logo">
@@ -59,7 +62,7 @@ export const Header: React.FunctionComponent = (props) => {
             </div>
 
             {status === AuthorizationStatus.Auth && (
-                <>
+                <div className="header__right" style={{'--gap': summaryWidth + 'px' } as CSSProperties}>
                     <a
                         className='header__excel'
                         href={EXCEL_PLUGIN} download
@@ -72,7 +75,7 @@ export const Header: React.FunctionComponent = (props) => {
                         Get Excel Plug-in
                     </a>
 
-
+                    <hr />
                     <div className="profile header__user" ref={profileRef} onClick={() => setShowMenu(!showMenu)}>
                         {(user as IUser).firstName} {(user as IUser).lastName}
 
@@ -89,7 +92,7 @@ export const Header: React.FunctionComponent = (props) => {
                     </div>
 
 
-                </>)}
+                </div>)}
             {
                 showProfile &&
                 <EditPassword user={user as IUser} onClose={() => setShowProfile(false)} />

@@ -4,10 +4,9 @@
 
 .header {
   $right-offset: 54 / 1440 * 100vw;
-  --right-offset: min(#{$right-offset}, 54px);
   height: 80px;
   padding-left: 36px;
-  padding-right: var(--right-offset);
+  padding-right: m#{i}n(#{$right-offset}, 54px);
   margin-bottom: 24px;
   width: 100%;
   background: #ffffff;
@@ -38,18 +37,31 @@
     } */
   }
 
+  &__right {
+    margin-left: auto;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: auto 1px auto;
+    height: 100%;
+    align-items: center;
+
+
+    hr {
+      height: 100%;
+      width: 1px;
+      border: none;
+      background-color: #E4EBFA;
+    }
+  }
+
+
   &__excel {
     position: relative;
     color: $main-text;
-    display: flex;
-    height: 100%;
     text-decoration: none;
     align-items: center;
-    margin-left: auto;
     font-size: 14px;
     line-height: 16px;
-    border-right: 1px solid #E4EBFA;
-    padding-right: var(--right-offset);
 
     &:hover,
     &:active,
@@ -75,7 +87,7 @@
   cursor: pointer;
   align-items: center;
   position: relative;
-  min-width: 170px;
+  // min-width: 130px;
   justify-content: flex-end;
   &__arrow {
     margin-left: 6px;
