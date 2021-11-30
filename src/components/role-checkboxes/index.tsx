@@ -20,8 +20,8 @@ const RoleCheckboxes: FunctionComponent<RoleCheckboxesProps> = ({ defaultRoles =
     }, [orgAdmin])
 
     return (
-        <fieldset className={['role-checkboxes', className].join(' ')}>
-            <legend className='role-checkboxes__legend'>Organization Role</legend>
+        <div className={['role-checkboxes', className].join(' ')}>
+            <h4 className='role-checkboxes__legend'>Organization Role</h4>
 
             <Checkbox
                 name="org-admin"
@@ -30,7 +30,7 @@ const RoleCheckboxes: FunctionComponent<RoleCheckboxesProps> = ({ defaultRoles =
             >
                 Organization Admin
             </Checkbox>
-        </fieldset>
+        </div>
     );
 }
 
