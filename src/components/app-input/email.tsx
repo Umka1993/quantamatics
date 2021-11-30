@@ -13,11 +13,12 @@ import EditIcon from "./assets/edit.svg";
 import getValidationMessage from "./utils/emailValidation";
 
 interface IEmail extends InputHTMLAttributes<HTMLInputElement> {
-    error?: string;
-    label?: string;
-    externalSetter?: (value: string) => void;
-    hideError?: boolean;
-    icon?: string;
+    error?: string,
+    label?: string,
+    externalSetter?: (value: string) => void,
+    hideError?: boolean,
+    icon?: string,
+    showLimit?: boolean,
 }
 
 const EMAIL_REG_EXP = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
@@ -36,6 +37,8 @@ const Email: React.FunctionComponent<IEmail> = ({
     icon,
     name,
     onFocus,
+    showLimit,
+    maxLength,
     ...other
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -97,7 +100,7 @@ const Email: React.FunctionComponent<IEmail> = ({
                     autoComplete="email"
                     className="app-input__field"
                     onChange={changeHandler}
-                    onFocus={(evt) => {reCalcLabelWidth(); onFocus && onFocus(evt)}}
+                    onFocus={(evt) => { reCalcLabelWidth(); onFocus && onFocus(evt) }}
                     aria-invalid={!!errorMessage}
                     aria-label={errorMessage && hideError ? errorMessage : undefined}
                     name={name}
@@ -112,16 +115,15 @@ const Email: React.FunctionComponent<IEmail> = ({
                     pattern={EMAIL_REG_EXP}
                 />
 
-                {icon === "edit" && <EditIcon className="app-input__icon app-input__icon--solo" />}
                 {label && (
                     <span
-                    className={classNames("app-input__label", {
-                        'app-input__label--empty': !String(value).length,
-                    })}
+                        className={classNames("app-input__label", {
+                            'app-input__label--empty': !String(value).length,
+                        })}
                         ref={labelRef}
                         data-width={labelRef.current?.offsetWidth}
                     >
-                        {label}
+                        {label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}
                         {icon === "edit" && <EditIcon className="app-input__icon" />}
                     </span>
                 )}

@@ -80,11 +80,12 @@ const Input: React.FunctionComponent<IInput> = ({
         >
             <label
                 className="app-input__wrapper"
-                style={label ?
-                    {
-                        "--label-width": `${rightOffset}px`,
-                    } as CSSProperties
-                    : undefined
+                style={
+                    label ?
+                        {
+                            "--label-width": `${labelRef.current?.offsetWidth}px`,
+                        } as CSSProperties
+                        : undefined
                 }
             >
                 <input
@@ -100,7 +101,7 @@ const Input: React.FunctionComponent<IInput> = ({
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
-                    onFocus={(evt) => {reCalcLabelWidth(); onFocus && onFocus(evt)}}
+                    onFocus={(evt) => { reCalcLabelWidth(); onFocus && onFocus(evt) }}
                 />
                 {label && (
                     <span
