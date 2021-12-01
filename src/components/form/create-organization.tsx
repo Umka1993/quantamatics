@@ -52,18 +52,16 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
             <div className="create-organization__fields">
                 <Input
                     externalSetter={setName}
-                    placeholder="Organization Name"
+                    label="Organization Name"
                     required
                     value={name}
-                    maxLength={32}
+                    maxLength={64}
                 />
 
                 <Input
                     externalSetter={setCustomerCrmId}
-                    placeholder="CRM Customer ID"
+                    label="CRM Customer ID"
                     value={customerCrmId}
-                    // type='number'
-                    // max={99999999999999999999999999999999}
                     maxLength={32}
                 />
 
@@ -74,17 +72,18 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 
                 <Input
                     externalSetter={setCustomerCrmLink}
-                    placeholder="CRM Customer ID Link"
+                    label="CRM Customer ID Link"
                     value={customerCrmLink}
                     type="url"
-                    maxLength={32}
+                    maxLength={64}
                 />
 
                 <Input
                     externalSetter={setComments}
-                    placeholder="Comments"
+                    label="Comments"
                     value={comments}
                     maxLength={200}
+                    showLimit
                 />
             </div>
 

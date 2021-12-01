@@ -5,7 +5,7 @@ import AppInput, { DatePick, Email } from "../app-input";
 import { SelectorInput } from "../selector-input";
 import Modal from "../modal";
 import RoleCheckboxes from "../role-checkboxes";
-import { UserRole } from "../../data/enum";
+import { OrganizationKey, UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
 import { IUpdateUser, IUser } from "../../types/user";
 import { useUpdateUserMutation, useUpdateUserRolesMutation } from "../../api/user";
@@ -28,7 +28,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const initialExp = user.subscriptionEndDate
         ? new Date(user.subscriptionEndDate.split(".").join("/"))
         : new Date();
-        
+
 
     const [firstName, setName] = useState<string>(user.firstName);
     const [lastName, setSurname] = useState<string>(user.lastName);
@@ -49,7 +49,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     const [update, { isSuccess, isError, error, isLoading }] = useUpdateUserMutation();
     const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] = useUpdateUserRolesMutation();
 
-    const { data: allOrganizations } = useGetAllOrganizationsQuery();    
+    const { data: allOrganizations } = useGetAllOrganizationsQuery();
 
     const sendNewUser = (validate: any) => {
         const newUserData: IUpdateUser = {
@@ -116,7 +116,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
     }, [emailError]);
 
     return (
-        <Modal onClose={onClose} className="edit-account" headline="Edit Account">
+        <Modal onClose={onClose} className="edit-account" headline="Edit User Account">
             {(isLoading || secondLoading) ? <Loader />
                 :
                 <>
@@ -133,36 +133,39 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                             value={firstName}
                             name="firstName"
                             icon="edit"
-                            placeholder=''
+                            label='Name'
                         />
                         <AppInput
                             externalSetter={setSurname}
                             value={lastName}
                             name="lastName"
                             icon="edit"
-                            placeholder=''
+                            label='Surname'
                         />
-                        {allOrganizations &&
-                        <SelectorInput
-                            options={allOrganizations?.map(({name}) => name) as string[]}
-                            // valueSetter={setOrganizationId}
-                            optionSetter={setOrganization}
-                            // values={allOrganizations?.map(({id}) => id) as string[]}
-                            value={companyName}
-                            disabled
-                        />
-                    }
+
+
                         <Email
                             externalSetter={setEmail}
                             value={email}
                             error={emailError}
                             icon="edit"
-                            placeholder=''
+                            label='Email'
                         />
                         <DatePick
                             externalSetter={setExpiration}
                             valueAsDate={subscriptionEndDate}
+                            label='Expiration Date'
                         />
+                        {allOrganizations &&
+                            <SelectorInput
+                                options={allOrganizations?.map(org => org[OrganizationKey.Name]) as string[]}
+                                // valueSetter={setOrganizationId}
+                                optionSetter={setOrganization}
+                                // values={allOrganizations?.map(({id}) => id) as string[]}
+                                value={companyName}
+                                label='Organization'
+                                disabled
+                            />}
                         <RoleCheckboxes
                             defaultRoles={userRoles}
                             externalSetter={setRoles}

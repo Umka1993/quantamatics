@@ -1,11 +1,9 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { changeRoute } from "../../store/currentPage/actions";
 import { SideBar } from "../../components/side-bar";
 import { Organizations } from "../organizations";
 import { JupyterFrame } from "../../components/jupyter-frame";
 import "./styles/layout-side-bar-page.scss";
-import { useHistory, Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { EditOrganization } from "../../components/edit-organization/edit-organization";
 import { CreateOrganizationForm, AddUserForm } from "../../components/form";
 import useUser from "../../hooks/useUser";
@@ -13,15 +11,6 @@ import { UserRole, AppRoute } from "../../data/enum";
 
 export const LayoutSideBarPage: React.FunctionComponent = () => {
     const user = useUser();
-
-    const history = useHistory();
-    const dispatch = useDispatch();
-
-    const changeRoutePath = (route: string) => {
-        dispatch(changeRoute(route));
-        history.push("/");
-        history.push("/" + route);
-    };
 
     const isOrganizationAvailable =
         user &&
@@ -41,7 +30,7 @@ export const LayoutSideBarPage: React.FunctionComponent = () => {
 
     return (
         <div className="layout-page app__main">
-            <SideBar onSwitch={(value) => changeRoutePath(value)} />
+            <SideBar />
 
             <div className="layout-page__scroll">
                 <main className="layout-page__content-container">

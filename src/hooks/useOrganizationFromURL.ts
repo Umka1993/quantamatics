@@ -5,9 +5,8 @@ import { RouteParams } from "../types/route-params";
 
 function useGetOrganizationFromURL() {
     const { id } = useParams<RouteParams>();
-    let organizationReturnQuery = useGetOrganizationQuery(id);    
+    const organizationReturnQuery = useGetOrganizationQuery(id);    
     return organizationReturnQuery;
-
 }
 
 export default useGetOrganizationFromURL;

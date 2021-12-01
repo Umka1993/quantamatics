@@ -19,6 +19,10 @@ settings: {
     version: "999.999.999" # no latest option, 999.999.999 as a hack
   }
 }
+
+globals:
+  pendo: readonly
+
 rules: {
   "no-empty-function": "off",
   "no-extra-boolean-cast": "off",

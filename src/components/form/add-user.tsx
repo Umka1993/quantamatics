@@ -14,7 +14,7 @@ import { useGetOrganizationQuery } from "../../api/organization";
 interface ICreateOrganization { }
 
 const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
-    
+
 ) => {
     const { id: organizationId } = useParams<{ id: string }>();
 
@@ -32,10 +32,10 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
     const [userRoles, setRoles] = useState<UserRole[]>([]);
 
     const [register, { isSuccess, isError, error }] = useRegisterUserMutation();
-    
+
 
     useEffect(() => {
-        isError && (error as any).data[0].code === "DuplicateUserName" 
+        isError && (error as any).data[0].code === "DuplicateUserName"
             && setErrors("The user with such email already exists")
     }, [isError])
 
@@ -43,7 +43,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
     useEffect(() => {
         isSuccess && history.push("/success-invitation");
     }, [isSuccess])
-    
+
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -79,28 +79,29 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
             <div className="create-organization__fields">
                 <Input
                     externalSetter={setFirstName}
-                    placeholder="Name"
                     required
                     value={firstName}
+                    label='Name'
                 />
                 <Input
                     externalSetter={setLastName}
-                    placeholder="Last name"
                     required
                     value={lastName}
+                    label='Surname'
                 />
                 <Email
                     externalSetter={setEmail}
-                    placeholder="Email Address"
                     required
                     value={email}
                     error={errors}
+                    label='Email Address'
                 />
                 <DatePick
                     externalSetter={setSubscriptionEndDate}
                     valueAsDate={subscriptionEndDate}
                     minDate={new Date()}
                     required
+                    label='Expiration Date'
                 />
                 <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
             </div>
