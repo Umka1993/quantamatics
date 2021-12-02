@@ -8,28 +8,25 @@
     <mj-style>
       body {
         background-color: "#0A4184";
-        background-image: url(https://quantamatics-dev.dudka-api.com/img/email-bg.png);
+        background-image: url("https://quantamatics-dev.dudka-api.com/img/email-bg.png");
         background-repeat: no-repeat;
         background-size: cover;
         padding: 42px 10px 42px;
+        margin: auto;
       }
 
       .strip {
-        padding: 58px 50px 30px;
+        padding: 58px 50px 20px;
         background-color: #fff;
-        background-size: 90px 7px;
+        background-size: 68px 7px;
         background-repeat: repeat-x;
-        background-image: linear-gradient(36deg,
-          transparent,
-          transparent 8px, #D1ACE2 8px,
-          #D1ACE2 22px, transparent 22px,
-          transparent 34px, #017AEE 34px,
-          #017AEE 48px, transparent 48px);
+        background-image: url("https://quantamatics-dev.dudka-api.com/img/email-strip.png");
+        box-sizing: border-box;
       }
 
       @media (max-width: 600px) {
         .strip {
-          padding: 30px 30px 20px !important;
+          padding: 30px 30px 30px !important;
         }
 
       }
@@ -41,7 +38,7 @@
     </mj-style>
   </mj-head>
   <mj-body>
-    <mj-wrapper css-class="strip" border-radius="4px">
+    <mj-wrapper css-class="strip" border-radius="4px" padding="0">
       <mj-section padding="0">
         <mj-column>
           <mj-image src="https://quantamatics-dev.dudka-api.com/img/logo.png" width="150px" height="30px" align="left" padding="0 0 42px"></mj-image>
@@ -52,11 +49,11 @@
         </mj-column>
       </mj-section>
       <mj-section padding="0">
-        <mj-column vertical-align="middle">
-          <mj-text font-size="10px" padding-top="8px" padding-bottom="20px"> By clicking Complete Registration and setting a password, you agree to the <a href="https://www.facteus.com/privacy-policy/" target="_blank" rel="noopener noreferrer"> terms of service</a> for Quantamatics. </mj-text>
+        <mj-column vertical-align="middle" width="60%">
+          <mj-text font-size="10px" padding-top="8px" padding-bottom="20px" padding-right="10px"> By clicking Complete Registration and setting a password, you agree to the <a href="https://www.facteus.com/privacy-policy/" target="_blank" rel="noopener noreferrer"> terms of service</a> for Quantamatics. </mj-text>
         </mj-column>
-        <mj-column>
-          <mj-button background-color="#017AEE" href="#" font-weight="600" text-transform="uppercase" font-size="14px" font-family="Proxima Nova, system-ui, sans-serif" padding="0" inner-padding="8px 14px"> Complete Registration </mj-button>
+        <mj-column css-class="button" width="40%">
+          <mj-button background-color="#017AEE" href="https://quantamatics-dev.dudka-api.com/sign-up" font-weight="600" text-transform="uppercase" font-size="14px" font-family="Proxima Nova, system-ui, sans-serif" padding="0" inner-padding="8px 14px"> Complete Registration </mj-button>
         </mj-column>
       </mj-section>
     </mj-wrapper>
