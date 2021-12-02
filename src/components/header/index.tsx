@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, CSSProperties } from 'react';
 import "./styles/header.scss"
-import logoImg from "./assets/new-logo.svg"
+import Logo from "./assets/logo.svg"
 import arrowImg from "./assets/toggle-arrow.svg"
 import profileImg from "./assets/profile.svg"
 import logoutImg from "./assets/logout.svg"
@@ -8,7 +8,7 @@ import SVG from '../SVG'
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import { RootState } from "../../store";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { changeRoute } from "../../store/currentPage/actions";
 import { EditPassword } from '../edit-modal/edit-password';
 import { IUser, User } from 'types/edit-profile/types';
@@ -50,22 +50,23 @@ export const Header: React.FunctionComponent = (props) => {
         history.push(route)
     }
 
-    useEffect(() => {        
+    useEffect(() => {
         if (profileRef.current) {
             const calculatedWidth = 160 - profileRef.current.offsetWidth;
-            setSummaryWidth(calculatedWidth > 30 ? calculatedWidth : 30 )
+            setSummaryWidth(calculatedWidth > 30 ? calculatedWidth : 30)
         }
-    }, [profileRef.current, status ])
+    }, [profileRef.current, status])
 
     return (
         <header className="header">
-            <div className="header__logo">
-                <SVG icon={logoImg} name="logo" onClick={() => !!user ? history.push('/') : null} />
-                {status === AuthorizationStatus.Auth && (<Breadcrumbs className="header__breadcrumbs" />)}
-            </div>
+            <Link to='/' className="header__logo">
+                <Logo width="201" height="38" aria-label="Quantamatics logotype" />
+            </Link>
+
+            {status === AuthorizationStatus.Auth && (<Breadcrumbs className="header__breadcrumbs" />)}
 
             {status === AuthorizationStatus.Auth && (
-                <div className="header__right" style={{'--gap': summaryWidth + 'px' } as CSSProperties}>
+                <div className="header__right" style={{ '--gap': summaryWidth + 'px' } as CSSProperties}>
                     <a
                         className='header__excel'
                         href={EXCEL_PLUGIN} download
