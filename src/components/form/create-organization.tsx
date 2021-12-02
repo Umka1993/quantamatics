@@ -43,7 +43,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     return (
         <Form
             className="create-organization"
-            headline="Creating an Organization"
+            headline="Create an Organization"
             subtitle="Add a new organization to Quantamatics"
             onSubmit={registerOrganization}
             onReset={returnBack}
