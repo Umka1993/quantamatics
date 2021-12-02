@@ -30,7 +30,7 @@ const SignUp: FunctionComponent = () => {
     const { isSuccess: isTokenValid, isError: isExpiredToken } = useVerifyTokenQuery({ userName: String(email), token: token as string });
 
     useEffect(() => {
-        isExpiredToken && history.push(AppRoute.ExpiredPassword)
+        isExpiredToken && history.push(AppRoute.SignUpExpired)
     }, [isExpiredToken])
 
     const title = (<>Sign Up to <b>{organizationName}</b></>)
