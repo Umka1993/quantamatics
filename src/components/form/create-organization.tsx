@@ -44,7 +44,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         <Form
             className="create-organization"
             headline="Creating an Organization"
-            subtitle="Create an organization for the future admin"
+            subtitle="Add a new organization to Quantamatics"
             onSubmit={registerOrganization}
             onReset={returnBack}
             stopLoading={isError}

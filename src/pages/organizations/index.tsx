@@ -4,7 +4,7 @@ import AddIcon from "./assets/add.svg"
 import { OrganizationTable } from "../../components/table/OrganizationTable";
 import Button from "../../components/button";
 import { changeRoute } from "../../store/currentPage/actions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Headline from "../../components/page-title/index";
 
@@ -21,7 +21,7 @@ export const Organizations: React.FunctionComponent = (props) => {
         <section className="organization">
             <header className="organization__header">
                 <div className="organization__titles">
-                    <Headline>List of Organizations</Headline>
+                    <Headline>Organizations</Headline>
                     <p>Create and manage organizations and user accounts</p>
                 </div>
 
