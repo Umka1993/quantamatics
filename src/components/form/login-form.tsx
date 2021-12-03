@@ -129,11 +129,6 @@ const LoginForm: React.FunctionComponent = () => {
                     learn more?
                 </a>
             </p>
-
-            <iframe 
-                src="https://hub-k8s.dev.quantamatics.net/hub/logout" 
-                className='sr-only' aria-hidden={true} 
-            />
         </Form>
     );
 };
