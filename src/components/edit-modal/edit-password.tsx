@@ -67,7 +67,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
             <dl className="edit-account__list">
                 <div className="edit-account__row">
                     <dt className="edit-account__name">
-                        Name
+                        First Name
                     </dt>
                     <dd className="edit-account__value">
                         {user.firstName}
@@ -75,7 +75,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                 </div>
                 <div className="edit-account__row">
                     <dt className="edit-account__name">
-                        Surname
+                        Last Name
                     </dt>
                     <dd className="edit-account__value">
                         {user.lastName}

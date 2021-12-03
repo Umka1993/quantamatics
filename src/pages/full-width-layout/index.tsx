@@ -46,7 +46,7 @@ const FullWidthLayout: React.FunctionComponent = (props) => {
             break;
         case AppRoute.SignUpExpired:
             child = <ResetPasswordExpired
-                headline='The password reset link can only be used once'
+                headline='Set password link can only be used once'
                 subtitle='Please return to Sign in page and choose Forgot Password.'
             />;
             break;

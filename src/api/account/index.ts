@@ -20,11 +20,21 @@ const accountApi = baseApi.injectEndpoints({
                 method: "POST",
                 body,
             })
+        }),
+
+        verifyToken: build.query<void, {userName: string, token: string}> ({
+            query: (params) => ({
+                url: ApiRoute.VerifyToken,
+                method: "GET",
+                params
+            })
+            
         })
     })
 })
 
 export const {
     useRegisterUserMutation,
-    useLoginUserMutation
+    useLoginUserMutation,
+    useVerifyTokenQuery,
 } = accountApi;

@@ -71,8 +71,8 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
     return (
         <Form
             className="create-organization"
-            headline="Add User Accounts"
-            subtitle="Add users to your organization and manage them"
+            headline="Create a User Account"
+            subtitle="Add a new user account to your organization"
             onSubmit={addUserToOrg}
             stopLoading={isError}
         >
@@ -81,13 +81,13 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
                     externalSetter={setFirstName}
                     required
                     value={firstName}
-                    label='Name'
+                    label='First Name'
                 />
                 <Input
                     externalSetter={setLastName}
                     required
                     value={lastName}
-                    label='Surname'
+                    label='Last Name'
                 />
                 <Email
                     externalSetter={setEmail}

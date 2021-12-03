@@ -9,7 +9,6 @@ import OrganizationsIcon from "./assets/org.svg";
 import CogsIcon from "./assets/cogs.svg";
 import FilesIcon from "./assets/files.svg";
 import ShareIcon from "./assets/share.svg";
-import FavoritesIcon from "./assets/favorites.svg";
 
 import "./style/navbar.scss";
 import classNames from "classnames";
@@ -38,7 +37,6 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
     const subItems: NavLinkContent[] = [
         { href: AppRoute.Files, text: "My Files", icon: FilesIcon },
         { href: AppRoute.Shared, text: "Shared With Me", icon: ShareIcon },
-        { href: AppRoute.Favorites, text: "Favorites", icon: FavoritesIcon },
     ];
 
     return (

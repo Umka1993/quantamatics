@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { SideBar } from "../../components/side-bar";
 import { Organizations } from "../organizations";
 import { JupyterFrame } from "../../components/jupyter-frame";
@@ -9,7 +9,7 @@ import { CreateOrganizationForm, AddUserForm } from "../../components/form";
 import useUser from "../../hooks/useUser";
 import { UserRole, AppRoute } from "../../data/enum";
 
-export const LayoutSideBarPage: React.FunctionComponent = () => {
+export const LayoutSideBarPage: FunctionComponent = () => {
     const user = useUser();
 
     const isOrganizationAvailable =
@@ -22,11 +22,11 @@ export const LayoutSideBarPage: React.FunctionComponent = () => {
 
     const isCoherence = user?.userRoles.includes(UserRole.Coherence);
 
-    const HomePath = isOrganizationAvailable
-        ? "/apps/organizations/list"
-        : isEditOrgAvailable
-            ? `/apps/organizations/${user?.organizationId}`
-            : isCoherence ? AppRoute.Coherence : AppRoute.Files;
+    const isResearch = user?.userRoles.includes(UserRole.Research);
+
+    const HomePath = isResearch ? AppRoute.Files
+        : isCoherence ? AppRoute.Coherence :
+            isOrganizationAvailable ? "/apps/organizations/list" : `/apps/organizations/${user?.organizationId}`
 
     return (
         <div className="layout-page app__main">
@@ -39,11 +39,14 @@ export const LayoutSideBarPage: React.FunctionComponent = () => {
                             <Redirect push to={HomePath} />
                         </Route>
 
-                        <Route path="/research/my-files">
-
-                            <JupyterFrame type="files" />
-
+                        <Route path={AppRoute.Files}>
+                            {isResearch ? (
+                                <JupyterFrame type="files" />
+                            ) : (
+                                <Redirect to={AppRoute.Home} />
+                            )}
                         </Route>
+
 
                         <Route path={AppRoute.Coherence}>
                             {isCoherence ? (
