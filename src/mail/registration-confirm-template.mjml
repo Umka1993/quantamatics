@@ -32,13 +32,13 @@
 
       @media only screen and (min-width: 480px) {
         .button {
-          width: 200px !important;
-          max-width: 200px;
+          width: 205px !important;
+          max-width: 205px;
         }
 
         .footer {
-          width: 290px !important;
-          max-width: 290px;
+          width: 280px !important;
+          max-width: 280px;
           margin-right: 10px;
         }
       }
@@ -55,7 +55,7 @@
         <mj-column>
           <mj-image src="https://quantamatics-dev.dudka-api.com/img/logo_new.png" width="150px" height="30px" align="left" padding="0 0 42px"></mj-image>
           <mj-text font-weight="600" color="#017AEE" padding-bottom="8px">Alma Lawson,</mj-text>
-          <mj-text>Congratulations, you are only one step away from completing your registration. Please click "complete registration" to continue.</mj-text>
+          <mj-text line-height="140%">Congratulations, you are only one step away from completing your registration. Please click "complete registration" to continue.</mj-text>
           <mj-text font-size="21px" color="#017AEE" padding="10px 0 5px">...</mj-text>
           <mj-text padding-bottom="32px">The <a href="https://www.facteus.com/technology/quantamatics/" style="font-weight: 600;">Quantamatics</a> Team</mj-text>
         </mj-column>
