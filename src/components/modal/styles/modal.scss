@@ -1,30 +1,34 @@
 @import '../../../variables.scss';
 
-.modal-overlay {
-  background: transparentize(#263768, 0.2);
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  place-items: center;
-  cursor: pointer;
-}
-
-
 .modal {
   width: 775px;
   height: 602px;
+  width: fit-content;
   background: #FFFFFF;
   box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.2);
   border-radius: 4px;
   max-width: 775px;
   min-height: 602px;
   cursor: default;
-  
+  inset: 0;
   z-index: 200;
 
   margin: auto;
-  position: relative;
+  position: fixed;
+  border: none;
+
+  &:not([open]) {
+    display: none;
+  }
+
+  &::backdrop,
+  & + .backdrop {
+    background-color:  transparentize(#263768, 0.2);
+    position: fixed;
+    z-index: 180;
+    inset: 0;
+    cursor: pointer;
+  }
 
   &:focus {
     outline: none;
