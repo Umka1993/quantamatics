@@ -133,14 +133,14 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                             value={firstName}
                             name="firstName"
                             icon="edit"
-                            label='Name'
+                            label='First Name'
                         />
                         <AppInput
                             externalSetter={setSurname}
                             value={lastName}
                             name="lastName"
                             icon="edit"
-                            label='Surname'
+                            label='Last Name'
                         />
 
 
