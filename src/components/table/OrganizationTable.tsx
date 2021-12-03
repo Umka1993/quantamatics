@@ -164,8 +164,8 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
                             <button
                                 type="button"
                                 className="table__action"
-                                onClick={() => handleDeleteOrganization(organization.id, index)}
-                            // disabled
+                                // onClick={() => handleDeleteOrganization(organization.id, index)}
+                                disabled
                             >
                                 <DeleteSVG role="img" aria-label="delete" fill="currentColor" />
                             </button>

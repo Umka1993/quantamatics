@@ -10,12 +10,12 @@
         line-height: 1.125;
         color: $headlines;
         text-decoration: none;
-        padding-left: 32px;
-        padding-right: 28px;
+        padding: 18px var(--side);
         display: flex;
         align-items: center;
         position: relative;
         cursor: pointer;
+        transition: font-size 0.4s 0.2s;
 
         &::-webkit-details-marker {
             display: none;
@@ -55,7 +55,7 @@
     &__sublist {
         margin: 12px 0 12px 20px;
         height: 0;
-        transition: height .3s ease-in-out;
+        transition: height 0.3s ease-in-out;
         overflow-y: hidden;
     }
 
@@ -66,10 +66,39 @@
     }
 
     details[open] &__sublist {
-        height: 128px; 
+        height: 128px;
         /* TODO: Hardcoded val, need to rework for this: 
         https://css-tricks.com/how-to-animate-the-details-element/ 
-        */        
+        */
+    }
+
+    summary {
+        position: relative;
+        padding-right: 44px;
+        outline: none;
+        &::after {
+            content: "";
+            position: absolute;
+            width: 0.625em;
+            height: 0.375em;
+            transition: width 0.2s, height 0.2s;
+            background-color: $inactive;
+            right: 30px;
+            top: 0;
+            bottom: 0;
+            margin: auto 0;
+
+            clip-path: path(
+                "M5.551.251L9.78 4.666a.783.783 0 01.221.553.809.809 0 01-.221.554A.733.733 0 019.25 6a.733.733 0 01-.527-.227l-3.741-3.86-3.704 3.86A.733.733 0 01.752 6a.733.733 0 01-.528-.227A.782.782 0 010 5.22a.809.809 0 01.224-.553L4.452.25a.722.722 0 011.1 0z"
+            );
+            transition: transform 0.3s;
+            transform: rotate(180deg);
+        }
+    }
+
+    details[open] summary::after {
+        transform: none;
+        background-color: $accent;
     }
 
     details[open] summary &__icon,
@@ -86,15 +115,26 @@
         fill: $inactive;
         margin-right: 24px;
     }
-
-    details[open] &__marker {
-        transform: none;
+    &--collapsed {
+        summary::after {
+            display: none;
+        }
     }
 
-    &__marker {
-        fill: $inactive;
-        margin-left: auto;
-        transition: transform 0.3s;
-        transform: rotate(180deg);
+    &--collapsed &__item {
+        justify-content: center;
+        text-align: center;
+        font-size: 0;
+        padding-right: 0;
+        padding-left: 0;
+        transition: none;
+    }
+
+    &--collapsed &__icon {
+        margin-right: 0;
+    }
+
+    &--collapsed &__sublist {
+        margin-left: 0;
     }
 }

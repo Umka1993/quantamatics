@@ -5,6 +5,7 @@ import { LoginForm, ResetPasswordForm, ForgotPasswordForm, SignUpForm } from "..
 import "./style/full-width.scss";
 import { AppRoute } from "../../data/enum";
 import SuccessMessage from "../../components/success-message";
+import { SubscriptionExpired, ResetPasswordExpired } from "../../components/info-message/";
 
 type Param = { success: string };
 
@@ -33,6 +34,22 @@ const FullWidthLayout: React.FunctionComponent = (props) => {
             child = <SignUpForm />;
             break;
 
+        case AppRoute.Expired:
+            child = <SubscriptionExpired />;
+            break;
+
+        case AppRoute.ExpiredPassword:
+            child = <ResetPasswordExpired
+                headline='The password reset link can only be used once'
+                subtitle='Please return to Sign in page and choose Forgot Password.'
+            />;
+            break;
+        case AppRoute.SignUpExpired:
+            child = <ResetPasswordExpired
+                headline='The password reset link can only be used once'
+                subtitle='Please return to Sign in page and choose Forgot Password.'
+            />;
+            break;
         default:
             break;
     }

@@ -4,7 +4,7 @@
     "lint": "eslint --ext .tsx,.ts . --quiet",
     "build": "npm run clean && npm run lint && webpack --config config/webpack.dev.js",
     "buildStaging": "npm run clean && npm run lint && webpack --config config/webpack.stag.js",
-    "dev": "webpack-dev-server --config config/webpack.dev.js --open --https --env dev",
+    "dev": "webpack-dev-server --config config/webpack.dev.js --open --env dev",
     "stag": "webpack-dev-server --config config/webpack.stag.js --open --https"
   },
   "devDependencies": {
@@ -45,7 +45,7 @@
     "classnames": "^2.3.1",
     "connected-react-router": "^6.9.1",
     "react": "^17.0.2",
-    "react-datepicker": "^4.2.1",
+    "react-day-picker": "^7.4.10",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
     "react-router": "^5.2.1",

@@ -4,13 +4,16 @@ import React, {
     FormEventHandler,
     useRef,
     ChangeEventHandler,
+    CSSProperties,
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
 import CalendarIcon from "./assets/calendar.svg";
-import { checkDateInputSupport, formatToValue, formatToDummy } from "./utils/date-utils";
-// import SVG from '../SVG'
-import DatePicker from "react-datepicker";
+import { checkDateInputSupport, formatToValue } from "./utils/date-utils";
+import DayPickerInput from 'react-day-picker/DayPickerInput'
+import 'react-day-picker/lib/style.css';
+import dateFnsFormat from 'date-fns/format';
+// import dateFnsParse from 'date-fns/parse';
 
 interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
@@ -27,7 +30,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
     className,
     itemRef,
     required,
-    value,
+    label,
     valueAsDate,
     onChange,
     externalSetter,
@@ -38,18 +41,13 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
     ...other
 }) => {
     const isSupport = checkDateInputSupport();
-
-    const label = "Choose date";
+    const labelRef = useRef<HTMLSpanElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    const initialVal = value ? value : formatToValue(valueAsDate);
-    const initialDumb = valueAsDate ? formatToDummy(valueAsDate) : "Enter date";
-
-    const [innerValue, setInnerValue] = useState<string>(initialVal as string);
-    const [dummy, setDummy] = useState<string>(initialDumb);
 
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
     );
+
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
@@ -57,12 +55,19 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
     };
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        const { value, valueAsDate } = evt.target;
-
-        setInnerValue(value);
-        setDummy(formatToDummy(valueAsDate));
+        const { valueAsDate } = evt.target;
 
         externalSetter && externalSetter(valueAsDate ? valueAsDate : new Date());
+        onChange && onChange(evt);
+    };
+
+    const changeFallbackHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
+        const { value } = evt.currentTarget;
+
+        const formattedDate = new Date(value);
+
+        const isInvalidDate = isNaN(formattedDate.getTime())
+        !isInvalidDate && externalSetter && externalSetter(formattedDate);
         onChange && onChange(evt);
     };
 
@@ -73,8 +78,15 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
             })}
             ref={itemRef}
         >
-            {isSupport ? (
-                <div className="app-input__wrapper">
+            <div
+                className="app-input__wrapper"
+                style={
+                    {
+                        "--label-width": `${labelRef.current ? labelRef.current.offsetWidth + 25 : 100}px`,
+                    } as CSSProperties
+                }
+            >
+                {isSupport ? (
                     <input
                         className="app-input__field"
                         type="date"
@@ -83,7 +95,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                         placeholder={label}
                         required={required}
                         onChange={changeHandler}
-                        value={innerValue}
+                        defaultValue={formatToValue(valueAsDate)}
                         aria-required={required}
                         {...other}
                         ref={inputRef}
@@ -91,25 +103,36 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
                         min={minDate ? formatToValue(minDate) : min}
                         max={maxDate ? formatToValue(maxDate) : max}
                     />
-                    <span className={"app-input__dummy"} aria-hidden="true">
-                        {dummy}
-                        <CalendarIcon className="app-input__icon" />
-                    </span>
-                </div>
-            ) : (
-                <div className="app-input__wrapper">
-                    <DatePicker
-                        // placeholderText={placeholder}
-                        onChange={(date) => externalSetter && externalSetter(date as Date)}
-                        minDate={minDate}
-                        selected={valueAsDate}
-                        showDisabledMonthNavigation
-                        dateFormat="MM.dd.yyyy"
-                        className="app-input__field"
+                ) : (
+                    <DayPickerInput
+                        format='MM/dd/yyyy'
+                        formatDate={(date, format) => dateFnsFormat(date, format)}
+
+                        dayPickerProps={{
+                            disabledDays: [minDate && {
+                                before: minDate
+                            }, maxDate && {
+                                after: maxDate,
+                            }]
+                        }}
+                        placeholder=''
+
+                        value={valueAsDate || undefined}
+                        inputProps={{
+                            className: 'app-input__field',
+                            onChange: changeFallbackHandler,
+                        }}
+
                     />
-                    <CalendarIcon className="app-input__icon" />
-                </div>
-            )}
+                )}
+                <CalendarIcon className="app-input__icon" />
+                {label && (
+                    <span
+                        className="app-input__label app-input__label--icon app-input__label--shifted"                    >
+                        <span ref={labelRef}>{label}</span>
+                    </span>
+                )}
+            </div>
 
             {errorMessage && <p className="app-input__error">{errorMessage}</p>}
         </div>

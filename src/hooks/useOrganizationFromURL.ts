@@ -7,7 +7,6 @@ function useGetOrganizationFromURL() {
     const { id } = useParams<RouteParams>();
     const organizationReturnQuery = useGetOrganizationQuery(id);    
     return organizationReturnQuery;
-
 }
 
 export default useGetOrganizationFromURL;

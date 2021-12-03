@@ -22,7 +22,7 @@ export const Organizations: React.FunctionComponent = (props) => {
             <header className="organization__header">
                 <div className="organization__titles">
                     <Headline>List of Organizations</Headline>
-                    <p>Create and customize organizations for future owners</p>
+                    <p>Create and manage organizations and user accounts</p>
                 </div>
 
 

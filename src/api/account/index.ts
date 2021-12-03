@@ -1,5 +1,5 @@
-import { createOrganizationRequestBody } from "../../components/form/create-organization";
-import { Organization } from "types/organization/types";
+import { LoginResponse } from '../../types/loginResponse';
+
 import { ApiRoute } from "../../data/enum";
 import baseApi from "../index";
 
@@ -13,9 +13,18 @@ const accountApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: "Users", id: "list" }],
         }),
+
+        loginUser: build.mutation<LoginResponse, {email: string, password: string }>({
+            query: (body) => ({
+                url: ApiRoute.Login,
+                method: "POST",
+                body,
+            })
+        })
     })
 })
 
 export const {
-    useRegisterUserMutation
+    useRegisterUserMutation,
+    useLoginUserMutation
 } = accountApi;

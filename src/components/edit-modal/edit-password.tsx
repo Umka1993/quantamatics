@@ -6,7 +6,7 @@ import { IUser } from "../../types/edit-profile/types";
 
 import Modal from "../modal";
 import "./styles/edit-account.scss"
-import { adaptRoles, formatDate } from "../../services/baseService";
+import { adaptRoles } from "../../services/baseService";
 import KeyIcon from './assets/key.svg';
 import ComaList from '../coma-list';
 import { useDispatch } from "react-redux";
@@ -112,7 +112,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         Expiration Date
                     </dt>
                     <dd className="edit-account__value">
-                        {formatDate(user.subscriptionEndDate)}
+                        {user.subscriptionEndDate.split(' ')[0]}
                     </dd>
                 </div>
                 {!showEditForm && (

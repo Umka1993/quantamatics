@@ -11,11 +11,14 @@
 
     &__legend {
         color: inherit;
-        margin: 0 0 1em;
+        margin: 0;
         padding: 0;
+        float: left;
+        font-weight: inherit;
     }
     .check-block {
         flex-direction: row-reverse;
+        float: right;
         // color: $headlines
     }
 }

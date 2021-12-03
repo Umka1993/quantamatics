@@ -3,7 +3,7 @@ import "./styles/edit-organizations.scss";
 import AddIcon from "./assets/human-add.svg";
 import Button, { ResetButton } from "../button";
 import { UserTable } from "../table/UserTable";
-import { Input } from "../input";
+import Input from "../app-input/";
 import { useHistory, useParams } from "react-router-dom";
 import { changeRoute } from "../../store/currentPage/actions";
 import { useDispatch } from "react-redux";
@@ -18,7 +18,7 @@ import useUser from "../../hooks/useUser";
 import { UserRole } from "../../data/enum";
 import Loader from "../loader";
 
-export const EditOrganization: React.FunctionComponent = (props) => {
+export const EditOrganization: React.FunctionComponent = () => {
     const user = useUser();
     const [organizationName, setOrganizationName] = useState<string>("");
     const [customerID, setCustomerID] = useState<string>("");
@@ -128,32 +128,37 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                                     <div className="edit-organization__inputs">
                                         <div className="edit-organization__input">
                                             <Input
-                                                onChangeInput={(value) => setOrganizationName(value)}
+                                                externalSetter={setOrganizationName}
                                                 value={organizationName}
-                                                placeholder="Name of The Organization"
+                                                label='Org. Name'
+                                                maxLength={64}
                                             />
                                         </div>
                                         <div className="edit-organization__input">
                                             <Input
-                                                onChangeInput={(value) => setCustomerID(value)}
+                                                externalSetter={setCustomerID}
                                                 value={customerID}
-                                                placeholder="CRM Customer ID"
+                                                label='CRM Customer ID'
+                                                maxLength={32}
                                             />
                                         </div>
                                         <div className="edit-organization__input">
                                             <Input
-                                                onChangeInput={(value) => setCustomerLink(value)}
+                                                externalSetter={setCustomerLink}
                                                 value={customerLink}
-                                                placeholder="CRM Customer ID Link"
+                                                label='CRM Customer ID Link'
+                                                maxLength={64}
                                             />
                                         </div>
                                     </div>
                                     <div className="edit-organization__comments">
                                         <Input
-                                            onChangeInput={(value) => setComment(value)}
+                                            externalSetter={setComment}
                                             value={comment}
                                             placeholder="Comments"
-                                            limit={200}
+                                            label='Comments'
+                                            maxLength={200}
+                                            showLimit
                                         />
                                     </div>
                                 </>
@@ -162,7 +167,7 @@ export const EditOrganization: React.FunctionComponent = (props) => {
                     )}
                     <div className="edit-organization__user-list">
                         <div className="edit-organization__user-list-header">
-                            <h2 className="sub-headline">User List</h2>
+                            <h2 className="sub-headline">User Accounts</h2>
 
                             <Button
                                 className="edit-organization__user-list-add"
