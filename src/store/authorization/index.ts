@@ -34,9 +34,10 @@ const authorizationSlice = createSlice({
             dropToken()
             state.status = AuthorizationStatus.NoAuth;
             delete state.user;
-            window.location.href = AppRoute.Login;
             localStorage.clear()
             sessionStorage.clear()
+            document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/"); });
+            window.location.href = AppRoute.Login;
         },
     },
 });
