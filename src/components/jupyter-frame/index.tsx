@@ -21,8 +21,8 @@ export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = ({ type 
     }
 
     const user = useUser();
-    const filesUrl = 'https://hub-k8s.dev.quantamatics.net/user/' + user?.email + '/tree?'
-    const coherenceUrl = 'https://coherence-k8s.dev.quantamatics.net/user/' + user?.email + '/'
+    const filesUrl = `${process.env.HUB_URL}user/${user?.email}/tree`;
+    const coherenceUrl = `${filesUrl}/Coherence`;
     const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
 
     return (
