@@ -1,31 +1,23 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
-
 import Button from "../button";
 import { CheckBox } from "../../components/checkbox";
 import { Password, Email } from "../../components/app-input";
 import Form from "./form";
-
 import { AppRoute } from "../../data/enum";
-
 import "./styles/form.scss";
 import "./styles/login-page.scss";
 import { useLoginUserMutation } from "../../api/account";
 import IApiError from "../../types/api-error";
 import { login } from "../../store/authorization";
-import { saveToken } from "../../services/token";
-import pendoInitialize from "../../services/pendoInitialize";
+import { IUser } from "../../types/user";
+import { processLogin } from "../../services/processLogin";
 
 const LoginForm: React.FunctionComponent = () => {
-    const localUserName = localStorage.getItem("savedUsername") || "";
-    const localPassword = localStorage.getItem("savedPassword") || "";
-
-    const [email, setEmail] = useState<string>(localUserName);
-    const [password, setPassword] = useState<string>(localPassword);
-
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const [rememberMe, setRememberMe] = useState<boolean>(false);
-
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
     const history = useHistory();
@@ -55,24 +47,9 @@ const LoginForm: React.FunctionComponent = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
+            const setUserToStore = (user: IUser) => dispatch(login(user));
             setErrors(undefined);
-            pendoInitialize(data.user);
-            if (new Date(data.user.subscriptionEndDate) > new Date()) {
-                dispatch(login(data.user));
-                saveToken(data.token);
-                if (rememberMe) {
-                    localStorage.setItem("savedUsername", email);
-                    localStorage.setItem("savedPassword", password);
-                    localStorage.setItem("user", JSON.stringify(data.user));
-                } else {
-                    sessionStorage.setItem("savedUsername", email);
-                    sessionStorage.setItem("savedPassword", password);
-                    sessionStorage.setItem("user", JSON.stringify(data.user));
-                }
-                history.push(AppRoute.Home);
-            } else {
-                history.push(AppRoute.Expired);
-            }
+            processLogin(data, setUserToStore, history.push, rememberMe)
         }
     }, [isSuccess]);
 
