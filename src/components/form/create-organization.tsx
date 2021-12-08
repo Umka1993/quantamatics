@@ -1,6 +1,6 @@
 import React, { useEffect, useState, FunctionComponent } from "react";
 import "./styles/create-organization.scss";
-import Input, { InputURL } from "../app-input";
+import Input, { InputURL, Multiselect } from "../app-input";
 import { useHistory } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import { useDispatch } from "react-redux";
@@ -27,6 +27,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [customerCrmId, setCustomerCrmId] = useState<string>("");
     const [customerCrmLink, setCustomerCrmLink] = useState<string>("");
     const [comments, setComments] = useState<string | undefined>("");
+    const [datasets, setDatasets] = useState<string[]>([]);
 
     const returnBack = () => {
         dispatch(changeRoute("apps/organizations/list"));
@@ -84,6 +85,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     value={comments}
                     maxLength={200}
                     showLimit
+                />
+                <Multiselect 
+                    options={['Coherence', 'Research', 'Backtest - Enterprise', 'Enterprise', 'Backtest - Express', 'Express', 'Backtest - CPG', 'CPG', 'Backtest - Summary v3.1', 'Summary v3.1']} 
+                    label='Org. Datasets'
+                    selected={datasets}
+                    setSelected={setDatasets}
                 />
             </div>
 

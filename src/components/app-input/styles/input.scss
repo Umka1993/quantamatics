@@ -4,6 +4,7 @@ $text: #bcc4d8;
 
 .app-input {
   width: 100%;
+  position: relative;
 
   &__wrapper {
     display: block;
@@ -47,8 +48,7 @@ $text: #bcc4d8;
     font-size: 14px;
   }
 
-  &__field,
-  &__fallback-date {
+  &__field {
     accent-color: $accent;
     position: relative;
 
@@ -101,16 +101,6 @@ $text: #bcc4d8;
       &::-webkit-clear-button {
         z-index: 1;
       }
-    }
-  }
-
-  &__fallback-date {
-    &::placeholder {
-      color: $headlines;
-    }
-    &:active::placeholder,
-    &:focus::placeholder {
-      color: $accent;
     }
   }
 

@@ -164,7 +164,7 @@ export const EditProfile: React.FunctionComponent<IEditProfile> = ({
                                 // values={allOrganizations?.map(({id}) => id) as string[]}
                                 value={companyName}
                                 label='Organization'
-                                disabled
+                                // disabled
                             />}
                         <RoleCheckboxes
                             defaultRoles={userRoles}

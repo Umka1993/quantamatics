@@ -4,14 +4,16 @@ import React, {
     FunctionComponent,
     LabelHTMLAttributes,
     SetStateAction,
+    FormEventHandler
 } from "react";
 import "./style/checkbox.scss";
 import CheckIcon from "./assets/check.svg";
 
-interface CheckboxProps extends LabelHTMLAttributes<HTMLLabelElement> {
+interface CheckboxProps extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onInput'> {
     name?: string;
     checked?: boolean;
     externalSetter?: Dispatch<SetStateAction<boolean>>;
+    onInput?: FormEventHandler<HTMLInputElement>
 }
 
 const Checkbox: FunctionComponent<CheckboxProps> = ({
@@ -25,7 +27,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
 }) => {
     function inputHandler(evt: ChangeEvent<HTMLInputElement>) {
         externalSetter && externalSetter(evt.target.checked);
-        onInput && onInput(evt as any);
+        onInput && onInput(evt);
     }
     return (
         <label className={["check-block", className].join(" ")} {...other}>
