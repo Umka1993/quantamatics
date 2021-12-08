@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState, FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import Button from "../button";
@@ -14,7 +14,7 @@ import { login } from "../../store/authorization";
 import { IUser } from "../../types/user";
 import { processLogin } from "../../services/processLogin";
 
-const LoginForm: React.FunctionComponent = () => {
+const LoginForm: FunctionComponent = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [rememberMe, setRememberMe] = useState<boolean>(false);
@@ -30,8 +30,8 @@ const LoginForm: React.FunctionComponent = () => {
         errors && setErrors(undefined);
     }, [email, password]);
 
-    const handleLogin = (evt: FormEvent<HTMLFormElement>) => {
-        sendLogin({ email, password }).unwrap;
+    const handleLogin = () => {
+        sendLogin({ email, password }).unwrap();
     };
 
     useEffect(() => {

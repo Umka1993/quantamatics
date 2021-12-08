@@ -8,8 +8,7 @@ import Form from "./form";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
-import { resetPassword } from "../../store/reset-password/actions";
-import { useVerifyTokenQuery } from "../../api/account";
+import { useVerifyTokenQuery, useResetPasswordMutation } from "../../api/account";
 import Loader from "../loader";
 
 const ResetPassword: React.FunctionComponent = () => {
@@ -25,14 +24,13 @@ const ResetPassword: React.FunctionComponent = () => {
     const token = urlParams.get("token");
     const email = urlParams.get("email");
 
+    const [sendPassword, { isSuccess: isPasswordUpdated, isError: isPasswordError }] = useResetPasswordMutation();
+
     const { isSuccess: isTokenValid, isError: isExpiredToken } = useVerifyTokenQuery({ userName: String(email), token: token as string });
 
     useEffect(() => {
         isExpiredToken && history.push(AppRoute.ExpiredPassword)
     }, [isExpiredToken])
-
-    const onFinish = () => history.push(AppRoute.Login);
-    const onError = () => setFinish(true);
 
     const handleResetPassword = useCallback(() => {
         setFinish(false)
@@ -40,7 +38,7 @@ const ResetPassword: React.FunctionComponent = () => {
             setCompare("The passwords do not match");
             setFinish(true)
         } else {
-            dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError, false))
+            sendPassword({ email: (email as string), password, token: (token as string) }).unwrap()
         }
     }, [password, passwordConfirm]);
 
@@ -48,6 +46,13 @@ const ResetPassword: React.FunctionComponent = () => {
         compare && setCompare(undefined)
     }, [password, passwordConfirm])
 
+    useEffect(() => {
+        isPasswordUpdated && history.push(AppRoute.Login);
+    }, [isPasswordUpdated])
+
+    useEffect(() => {
+        isPasswordError && setFinish(true);
+    }, [isPasswordError])
 
     if (isTokenValid) {
         return (

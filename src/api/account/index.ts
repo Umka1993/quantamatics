@@ -7,7 +7,7 @@ export const enum AccountEndpoint {
     ResetPassword = "/api/Account/resetPassword",
     ChangePassword = "/api/Account/changePassword",
     VerifyToken = "/api/Account/verifyToken",
-    Capabilities = "​/api​/Account​/capabilities",
+    Capabilities = "/api/Account/capabilities",
     Register = "/api/Account/register",
 
     Logout = "/api/Account/logout",
@@ -51,12 +51,14 @@ const accountApi = baseApi.injectEndpoints({
             query: () => AccountEndpoint.Capabilities,
         }),
 
+        //! Not work in backend
         logout: build.mutation<void, void>({
             query: () => ({
                 url: AccountEndpoint.Logout,
                 method: "POST",
             }),
         }),
+
 
         getUserInfo: build.query<void, void>({
             query: () => AccountEndpoint.UserInfo,
@@ -76,6 +78,18 @@ const accountApi = baseApi.injectEndpoints({
                 body,
             }),
         }),
+
+
+        resetPassword: build.mutation<
+            void,
+            { email: string, password: string, token: string  }
+        >({
+            query: (body) => ({
+                url: AccountEndpoint.ResetPassword,
+                method: "POST",
+                body,
+            }),
+        }),
     }),
 });
 
@@ -88,4 +102,5 @@ export const {
     useGetUserInfoQuery,
     useGetTokenQuery,
     useChangePasswordMutation,
+    useResetPasswordMutation,
 } = accountApi;
