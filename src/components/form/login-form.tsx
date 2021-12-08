@@ -106,6 +106,13 @@ const LoginForm: FunctionComponent = () => {
                     learn more?
                 </a>
             </p>
+
+            {/* For Firefox  */}
+
+            <iframe 
+                src="https://hub-k8s.dev.quantamatics.net/hub/logout" 
+                className='sr-only' aria-hidden={true} 
+            />
         </Form>
     );
 };

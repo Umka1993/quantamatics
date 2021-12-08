@@ -3,6 +3,7 @@ import { AppRoute } from "../data/enum";
 import pendoInitialize from "./pendoInitialize";
 import { saveToken } from "./token";
 import { IUser } from "../types/user";
+import { setCookie } from "./cookies";
 
 export function processLogin(
         {user, token}:LoginResponse, 
@@ -22,6 +23,7 @@ export function processLogin(
 
     login(user)
     saveToken(token);
+    setCookie('user', user.email)
     if (rememberMe) {
         localStorage.setItem("user", JSON.stringify(user));
     } else {
