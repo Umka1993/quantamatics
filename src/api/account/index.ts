@@ -1,53 +1,91 @@
-import { LoginResponse } from '../../types/loginResponse';
+import { LoginResponse } from "../../types/loginResponse";
 import baseApi from "../index";
 
 export const enum AccountEndpoint {
-    Login = '/api/Account/login',
-    ResetPasswordMail = '/api/Account/sendPasswordReset',
+    Login = "/api/Account/login",
+    ResetPasswordMail = "/api/Account/sendPasswordReset",
     ResetPassword = "/api/Account/resetPassword",
-    ChangePassword = '/api/Account/changePassword',
-    VerifyToken = '/api/Account/verifyToken',
-    Capabilities = '​/api​/Account​/capabilities',
-    RegisterUser = '/api/Account/register',
+    ChangePassword = "/api/Account/changePassword",
+    VerifyToken = "/api/Account/verifyToken",
+    Capabilities = "​/api​/Account​/capabilities",
+    Register = "/api/Account/register",
+
+    Logout = "/api/Account/logout",
+    UserInfo = "/api/Account/userInfo",
+
+    GetToken = "/api/Account/getAPIToken",
+    GetNameFromAPI = "​/api​/Account​/userNameFromAPIKey​",
 }
 
 const accountApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         registerUser: build.mutation({
             query: (body: any) => ({
-                url: AccountEndpoint.RegisterUser,
+                url: AccountEndpoint.Register,
                 method: "POST",
                 body,
             }),
             invalidatesTags: [{ type: "Users", id: "list" }],
         }),
 
-        loginUser: build.mutation<LoginResponse, {email: string, password: string }>({
+        loginUser: build.mutation<
+            LoginResponse,
+            { email: string; password: string }
+        >({
             query: (body) => ({
                 url: AccountEndpoint.Login,
                 method: "POST",
                 body,
-            })
+            }),
         }),
 
-        verifyToken: build.query<void, {userName: string, token: string}> ({
+        verifyToken: build.query<void, { userName: string; token: string }>({
             query: (params) => ({
                 url: AccountEndpoint.VerifyToken,
                 method: "GET",
-                params
-            })
-            
+                params,
+            }),
         }),
 
-        capabilities: build.query<void, void> ({
-            query: () => (AccountEndpoint.Capabilities)
-        })
-    })
-})
+        capabilities: build.query<void, void>({
+            query: () => AccountEndpoint.Capabilities,
+        }),
+
+        logout: build.mutation<void, void>({
+            query: () => ({
+                url: AccountEndpoint.Logout,
+                method: "POST",
+            }),
+        }),
+
+        getUserInfo: build.query<void, void>({
+            query: () => AccountEndpoint.UserInfo,
+        }),
+
+        getToken: build.query<void, void>({
+            query: () => AccountEndpoint.GetToken,
+        }),
+
+        changePassword: build.mutation<
+            void,
+            { currentPassword: string; newPassword: string }
+        >({
+            query: (body) => ({
+                url: AccountEndpoint.ChangePassword,
+                method: "PUT",
+                body,
+            }),
+        }),
+    }),
+});
 
 export const {
     useRegisterUserMutation,
     useLoginUserMutation,
     useVerifyTokenQuery,
-    useCapabilitiesQuery
+    useCapabilitiesQuery,
+    useLogoutMutation,
+    useGetUserInfoQuery,
+    useGetTokenQuery,
+    useChangePasswordMutation,
 } = accountApi;
