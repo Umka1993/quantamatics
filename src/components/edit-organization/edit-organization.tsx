@@ -77,7 +77,7 @@ export const EditOrganization: React.FunctionComponent = () => {
     const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
         setInitialOrg();
-        
+
         if (isHaveAccessToOrgList) {
             dispatch(changeRoute("apps/organizations/list"));
             history.push("/apps/organizations/list");
@@ -85,103 +85,101 @@ export const EditOrganization: React.FunctionComponent = () => {
     }
 
     return (
-        <div className="content-wrapper">
-            <div className="edit-organization">
-                <header className="edit-organization__header">
-                    <Headline className="edit-organization__title">
-                        Edit Organization
-                    </Headline>
-                    <div className="edit-organization__buttons">
-                        <ResetButton
-                            onClick={
-                                ({ target }) => (target as HTMLButtonElement).blur()
-                            }
-                            form="edit-organization"
-                        >
-                            Cancel
-                        </ResetButton>
+        <div className="edit-organization">
+            <header className="edit-organization__header">
+                <Headline className="edit-organization__title">
+                    Edit Organization
+                </Headline>
+                <div className="edit-organization__buttons">
+                    <ResetButton
+                        onClick={
+                            ({ target }) => (target as HTMLButtonElement).blur()
+                        }
+                        form="edit-organization"
+                    >
+                        Cancel
+                    </ResetButton>
 
-                        <Button
-                            type="submit"
-                            form="edit-organization"
-                            className="edit-organization__save-btn"
-                            disabled={isUpdating}
-                        >
-                            Save
-                        </Button>
-                    </div>
-                </header>
-                <div className="edit-organization__body">
-                    {isError ? (
-                        <p>Error on loading data: {(error as IApiError).data} </p>
-                    ) : (
-                        <form
-                            className="edit-organization__info"
-                            id="edit-organization"
-                            onSubmit={submitHandler}
-                            onReset={resetHandler}
-                        >
-                            {isUpdating ? (
-                                <Loader />
-                            ) : (
-                                <>
-                                    <div className="edit-organization__inputs">
-                                        <div className="edit-organization__input">
-                                            <Input
-                                                externalSetter={setOrganizationName}
-                                                value={organizationName}
-                                                label='Org. Name'
-                                                maxLength={64}
-                                            />
-                                        </div>
-                                        <div className="edit-organization__input">
-                                            <Input
-                                                externalSetter={setCustomerID}
-                                                value={customerID}
-                                                label='CRM Customer ID'
-                                                maxLength={32}
-                                            />
-                                        </div>
-                                        <div className="edit-organization__input">
-                                            <Input
-                                                externalSetter={setCustomerLink}
-                                                value={customerLink}
-                                                label='CRM Customer ID Link'
-                                                maxLength={64}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="edit-organization__comments">
-                                        <Input
-                                            externalSetter={setComment}
-                                            value={comment}
-                                            placeholder="Comments"
-                                            label='Comments'
-                                            maxLength={200}
-                                            showLimit
-                                        />
-                                    </div>
-                                </>
-                            )}
-                        </form>
-                    )}
-                    <div className="edit-organization__user-list">
-                        <div className="edit-organization__user-list-header">
-                            <h2 className="sub-headline">User Accounts</h2>
-
-                            <Button
-                                className="edit-organization__user-list-add"
-                                href={`/apps/organizations/${id}/add-user`}
-                            >
-                                <AddIcon />
-                                Add New
-                            </Button>
-                        </div>
-
-                        <UserTable />
-                    </div>
+                    <Button
+                        type="submit"
+                        form="edit-organization"
+                        className="edit-organization__save-btn"
+                        disabled={isUpdating}
+                    >
+                        Save
+                    </Button>
                 </div>
-            </div>
+            </header>
+            {isError ? (
+                <p>Error on loading data: {(error as IApiError).data} </p>
+            ) : (
+                <form
+                    className="edit-organization__info"
+                    id="edit-organization"
+                    onSubmit={submitHandler}
+                    onReset={resetHandler}
+                >
+                    {isUpdating ? (
+                        <Loader />
+                    ) : (
+                        <>
+                            <div className="edit-organization__inputs">
+                                <div className="edit-organization__input">
+                                    <Input
+                                        externalSetter={setOrganizationName}
+                                        value={organizationName}
+                                        label='Org. Name'
+                                        maxLength={64}
+                                    />
+                                </div>
+                                <div className="edit-organization__input">
+                                    <Input
+                                        externalSetter={setCustomerID}
+                                        value={customerID}
+                                        label='CRM Customer ID'
+                                        maxLength={32}
+                                    />
+                                </div>
+                                <div className="edit-organization__input">
+                                    <Input
+                                        externalSetter={setCustomerLink}
+                                        value={customerLink}
+                                        label='CRM Customer ID Link'
+                                        maxLength={64}
+                                    />
+                                </div>
+                            </div>
+                            <div className="edit-organization__comments">
+                                <Input
+                                    externalSetter={setComment}
+                                    value={comment}
+                                    placeholder="Comments"
+                                    label='Comments'
+                                    maxLength={200}
+                                    showLimit
+                                />
+                            </div>
+                        </>
+                    )}
+                </form>
+            )}
+            <section className="edit-organization__user-list">
+                <div className="edit-organization__user-list-header">
+                    <h2 className="sub-headline">User Accounts</h2>
+
+                    <Button
+                        className="edit-organization__user-list-add"
+                        href={`/apps/organizations/${id}/add-user`}
+                    >
+                        <AddIcon />
+                        Add New
+                    </Button>
+                </div>
+
+                <UserTable />
+            </section>
         </div>
+
+
     );
 };

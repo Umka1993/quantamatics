@@ -50,6 +50,14 @@ const FullWidthLayout: React.FunctionComponent = (props) => {
                 subtitle='Please return to Sign in page and choose Forgot Password.'
             />;
             break;
+
+        case AppRoute.NoRoles:
+            child = <ResetPasswordExpired
+                headline='Your user account is in the process of being set up'
+                subtitle='Please try again later or start a chat session to get help live from someone on our team.'
+                returnBack={false}
+            />;
+            break;
         default:
             break;
     }

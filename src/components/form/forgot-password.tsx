@@ -37,7 +37,7 @@ const ForgotPassword: React.FunctionComponent = (props) => {
     return (
         <Form
             headline="Forgot Your Password?"
-            subtitle="To restore the password, enter your email"
+            subtitle='To reset your password, enter the email for your user account'
             onSubmit={sendPasswordResetRequest}
             stopLoading={finish}
             className='login-form'
@@ -47,7 +47,7 @@ const ForgotPassword: React.FunctionComponent = (props) => {
                     externalSetter={setForgotEmail}
                     value={forgotEmail}
                     name="email"
-                    placeholder={"Enter the email"}
+                    placeholder={"Email"}
                 />
             </div>
 

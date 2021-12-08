@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useState, FunctionComponent } from "react";
 import { Password } from "../../components/app-input/index";
 import Button from "../button";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppRoute } from "../../data/enum";
 import Form from "./form";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
-import { resetPassword } from "../../store/reset-password/actions";
-import { useVerifyTokenQuery } from "../../api/account";
+import { useLoginUserMutation, useResetPasswordMutation, useVerifyTokenQuery } from "../../api/account";
 import Loader from "../loader";
+import { processLogin } from "../../services/processLogin";
+import { useDispatch } from "react-redux";
+import { IUser } from "types/user";
+import { login } from "../../store/authorization";
 
 const SignUp: FunctionComponent = () => {
     const [password, setPassword] = useState<string>("");
@@ -20,12 +22,15 @@ const SignUp: FunctionComponent = () => {
     const [finish, setFinish] = useState<boolean>(false);
 
     const history = useHistory();
-    const dispatch = useDispatch();
 
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const email = urlParams.get("email");
     const organizationName = urlParams.get("orgName");
+    const dispatch = useDispatch()
+
+    const [sendPassword, { isSuccess: isPasswordUpdated, isError: isPasswordError }] = useResetPasswordMutation();
+    const [sendlogin, { isSuccess: isLogged, data: loggedData }] = useLoginUserMutation();
 
     const { isSuccess: isTokenValid, isError: isExpiredToken } = useVerifyTokenQuery({ userName: String(email), token: token as string });
 
@@ -35,22 +40,35 @@ const SignUp: FunctionComponent = () => {
 
     const title = (<>Sign Up to <b>{organizationName}</b></>)
 
-    const onFinish = () => history.push(AppRoute.Home);
-    const onError = () => setFinish(true);
-
     const handleResetPassword = useCallback(() => {
         setFinish(false)
         if (password !== passwordConfirm) {
             setCompare("The passwords do not match");
             setFinish(true)
         } else {
-            dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError))
+            sendPassword({ email: (email as string), password, token: (token as string) }).unwrap();
         }
-    }, [password, passwordConfirm,]);
+    }, [password, passwordConfirm]);
 
     useEffect(() => {
         compare && setCompare(undefined)
     }, [password, passwordConfirm])
+
+    useEffect(() => {
+        isPasswordError && setFinish(true)
+    }, [isPasswordError])
+
+    useEffect(() => {
+        if (isLogged && loggedData) {
+            const setUserToStore = (user: IUser) => dispatch(login(user));
+            history.push(processLogin(loggedData, setUserToStore, true))
+
+        }
+    }, [isLogged])
+
+    useEffect(() => {
+        isPasswordUpdated && sendlogin({ email: (email as string), password }).unwrap();
+    }, [isPasswordUpdated])
 
     if (isTokenValid) {
         return (
