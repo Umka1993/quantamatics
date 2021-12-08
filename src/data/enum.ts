@@ -20,7 +20,8 @@ export const enum AppRoute {
     Success = '/success-:success',
     Expired = '/expired',
     ExpiredPassword = '/expired-token',
-    SignUpExpired = '/expired-registration'
+    SignUpExpired = '/expired-registration',
+    NoRoles = '/account-setting-up'
 }
 
 export const enum ApiRoute {
@@ -28,9 +29,6 @@ export const enum ApiRoute {
 
     ResetPasswordMail = '/api/Account/sendPasswordReset',
     ResetPassword = "/api/Account/resetPassword",
-    ChangePassword = '/api/Account/changePassword',
-    VerifyToken = '/api/Account/verifyToken',
-    Capabilities = '​/api​/Account​/capabilities',
 
 
     OrganizationInfo = 'api/Organization/get',

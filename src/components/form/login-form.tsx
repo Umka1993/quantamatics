@@ -49,7 +49,7 @@ const LoginForm: FunctionComponent = () => {
         if (isSuccess && data) {
             const setUserToStore = (user: IUser) => dispatch(login(user));
             setErrors(undefined);
-            processLogin(data, setUserToStore, history.push, rememberMe)
+            history.push(processLogin(data, setUserToStore, rememberMe))
         }
     }, [isSuccess]);
 
