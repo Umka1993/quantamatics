@@ -1,10 +1,9 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getToken } from '../../services/token';
-import { ApiRoute } from '../../data/enum';
 
 
 const baseQuery = fetchBaseQuery({ 
-    baseUrl: ApiRoute.Base,
+    baseUrl: process.env.DATA_API_URL,
     prepareHeaders: (headers) => {
         const token = getToken()
 

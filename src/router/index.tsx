@@ -30,6 +30,8 @@ const AppRouter = () => (
         <Route path={AppRoute.Success} component={FullWidthLayout} />
         <UnLoggedRoute path={AppRoute.ExpiredPassword} component={FullWidthLayout} />
         <UnLoggedRoute path={AppRoute.SignUpExpired} component={FullWidthLayout} />
+        <UnLoggedRoute path={AppRoute.NoRoles} component={FullWidthLayout} />
+        
         <Route component={NotFoundPage} />
     </Switch>
 );

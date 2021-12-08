@@ -37,7 +37,7 @@ const authorizationSlice = createSlice({
             localStorage.clear()
             sessionStorage.clear()
             document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/"); });
-            window.location.href = 'https://hub-k8s.dev.quantamatics.net/hub/logout';
+            window.location.href = `${process.env.HUB_URL}hub/logout`;
             setTimeout(() => {
                 window.location.href = AppRoute.Login;
             }, 800)

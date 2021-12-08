@@ -19,12 +19,8 @@
     margin: 0;
   }
 
-  &__body {
-    padding: 40px;
-  }
-
   &__info {
-    margin-bottom: 60px;
+    padding: 30px 40px 40px;
     min-height: 142px;
     position: relative;
   }
@@ -54,6 +50,10 @@
 
   &__comments {
     flex-basis: 100%;
+  }
+
+  &__user-list {
+    padding: 0 40px 40px;
   }
 
   &__user-list-header {
