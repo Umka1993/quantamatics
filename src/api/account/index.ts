@@ -1,13 +1,21 @@
 import { LoginResponse } from '../../types/loginResponse';
-
-import { ApiRoute } from "../../data/enum";
 import baseApi from "../index";
+
+export const enum AccountEndpoint {
+    Login = '/api/Account/login',
+    ResetPasswordMail = '/api/Account/sendPasswordReset',
+    ResetPassword = "/api/Account/resetPassword",
+    ChangePassword = '/api/Account/changePassword',
+    VerifyToken = '/api/Account/verifyToken',
+    Capabilities = '​/api​/Account​/capabilities',
+    RegisterUser = '/api/Account/register',
+}
 
 const accountApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         registerUser: build.mutation({
             query: (body: any) => ({
-                url: ApiRoute.RegisterUser,
+                url: AccountEndpoint.RegisterUser,
                 method: "POST",
                 body,
             }),
@@ -16,7 +24,7 @@ const accountApi = baseApi.injectEndpoints({
 
         loginUser: build.mutation<LoginResponse, {email: string, password: string }>({
             query: (body) => ({
-                url: ApiRoute.Login,
+                url: AccountEndpoint.Login,
                 method: "POST",
                 body,
             })
@@ -24,11 +32,15 @@ const accountApi = baseApi.injectEndpoints({
 
         verifyToken: build.query<void, {userName: string, token: string}> ({
             query: (params) => ({
-                url: ApiRoute.VerifyToken,
+                url: AccountEndpoint.VerifyToken,
                 method: "GET",
                 params
             })
             
+        }),
+
+        capabilities: build.query<void, void> ({
+            query: () => (AccountEndpoint.Capabilities)
         })
     })
 })
@@ -37,4 +49,5 @@ export const {
     useRegisterUserMutation,
     useLoginUserMutation,
     useVerifyTokenQuery,
+    useCapabilitiesQuery
 } = accountApi;
