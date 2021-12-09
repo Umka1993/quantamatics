@@ -74,8 +74,8 @@ const SignUp: FunctionComponent = () => {
         return (
             <Form
                 headline={title}
-                headlineText={`Sign Up ${organizationName}`}
-                subtitle="Create a password to complete recovery"
+                headlineText={`Welcome to  ${organizationName}`}
+                subtitle="Set a password to complete your registration and sign in to Quantamatics"
                 onSubmit={handleResetPassword}
                 stopLoading={finish}
             >

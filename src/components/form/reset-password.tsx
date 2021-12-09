@@ -58,7 +58,7 @@ const ResetPassword: React.FunctionComponent = () => {
         return (
             <Form
                 headline="Reset Password"
-                subtitle="Create a password to complete recovery"
+                subtitle="Set a new password to sign in to Quantamatics"
                 onSubmit={handleResetPassword}
                 stopLoading={finish}
             >
