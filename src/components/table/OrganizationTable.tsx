@@ -15,6 +15,7 @@ import ISort from "../../types/sort-type";
 import { useGetAllOrganizationsQuery, useDeleteOrganizationMutation } from "../../api/organization";
 import Loader from "../loader/";
 import useUser from "../../hooks/useUser";
+import { initialSort } from "./utils/constants";
 
 interface ITable {
 }
@@ -33,10 +34,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
     const [localRows, setLocalRows] = useState<Organization[]>([]);
 
     const [itemDeleting, setItemDeleting] = useState<number | null>(null);
-    const [sort, setSort] = useState<ISort>({
-        name: "",
-        direction: SortDirection.Default,
-    });
+    const [sort, setSort] = useState<ISort>(initialSort);
 
     const handleEditRoute = (route: string, id: string) => {
         dispatch(changeRoute(route));

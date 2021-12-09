@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import EditSVG from "./assets/edit-row-icon.svg";
 import DeleteSVG from "./assets/delete-row-icon.svg";
@@ -16,6 +16,7 @@ import { RouteParams } from "types/route-params";
 import Loader from "../loader";
 
 import "./styles/table.scss";
+import { initialSort } from "./utils/constants";
 
 interface ITable {
 }
@@ -28,20 +29,32 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
     const [localRows, setLocalRows] = useState<IUser[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
 
-    const initialSort = { name: "", direction: SortDirection.Default }
     const [sort, setSort] = useState<ISort>(initialSort);
-
     const [user, setUser] = useState<IUser>();
 
-    useEffect(() => {        
+    const tableRef = useRef<HTMLTableElement>(null);
+
+    const [tableHeight, setTableHeight] = useState<number>(100)
+
+    useEffect(() => {
         if (isSuccess) {
             setLocalRows(data as IUser[]);
             setSort(initialSort);
         }
     }, [isSuccess, data])
 
-    /* const handleDeleteUser = (data: IUserRow) => {
-    }; */
+    useEffect(() => {
+        tableRef.current && setTableHeight(tableRef.current.offsetHeight)
+    }, [tableRef.current])
+
+
+    useEffect(() => {
+        if (isSuccess) {
+            setLocalRows(data as IUser[]);
+            setSort(initialSort);
+        }
+    }, [isSuccess, data])
+
 
     if (isLoading) {
         return (
@@ -58,7 +71,10 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
 
     return (
         <>
-            <table className="table table--user">
+            <table 
+                className="table table--user" ref={tableRef} 
+                style={{ minHeight: `${tableHeight}px` }}
+            >
                 <thead className="table__head">
                     <tr className="table__header">
                         {tableTitles.map((title: string, index: number) =>

@@ -1,6 +1,6 @@
 import { SortDirection } from "../../data/enum";
-import React from "react";
-import { sortTable } from "../../services/baseService";
+import React, { FunctionComponent } from "react";
+import sortTable from "./utils/sort";
 import SortIcon from "./assets/sort-icon.svg";
 import "./styles/sort-th.scss";
 
@@ -14,7 +14,7 @@ interface ISortTableHeader {
     className?: string;
 }
 
-export const SortTableHeader: React.FunctionComponent<ISortTableHeader> = ({
+export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
     name,
     sort,
     localRows,
