@@ -1,6 +1,4 @@
-import { OrganizationKey, SortDirection, UserKey } from "../../../data/enum";
-
-export const INITIAL_SORT = { name: "", direction: SortDirection.Default }
+import { OrganizationKey, UserKey } from "../../../data/enum";
 
 export const USER_HEADER = {
     titles: ["First Name", "Last Name", "Email", "Expiration Date", "Organization Role"],

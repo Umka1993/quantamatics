@@ -14,10 +14,14 @@ import { useParams } from "react-router";
 import { RouteParams } from "types/route-params";
 import Loader from "../loader";
 import "./styles/table.scss";
-import { INITIAL_SORT, USER_HEADER } from "./utils/constants";
+import { USER_HEADER } from "./utils/constants";
+import { SortDirection } from "../../data/enum";
 
 export const UserTable: FunctionComponent = () => {
     const { id } = useParams<RouteParams>();
+    
+    // ? Need to be in component to reset sort after update
+    const INITIAL_SORT = { name: "", direction: SortDirection.Default }
 
     const { data, isSuccess, isLoading } = useGetOrganizationUsersQuery(id);
 

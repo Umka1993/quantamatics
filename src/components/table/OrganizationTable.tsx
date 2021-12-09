@@ -12,7 +12,7 @@ import ISort from "../../types/sort-type";
 import { useGetAllOrganizationsQuery, useDeleteOrganizationMutation } from "../../api/organization";
 import Loader from "../loader/";
 import useUser from "../../hooks/useUser";
-import { INITIAL_SORT, ORG_HEADER } from "./utils/constants";
+import { ORG_HEADER } from "./utils/constants";
 import { Link } from 'react-router-dom'
 
 interface ITable {
@@ -20,6 +20,9 @@ interface ITable {
 
 export const OrganizationTable: React.FunctionComponent<ITable> = () => {
     const user = useUser();
+
+    // ? Need to be in component to reset sort after update
+    const INITIAL_SORT = { name: "", direction: SortDirection.Default }
 
     const { isLoading, data, isError, isSuccess, error } =
         useGetAllOrganizationsQuery();
@@ -41,10 +44,13 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
 
     }
     useEffect(() => {
-        isSuccess && sort.direction === SortDirection.Default
-            && setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]))
+        if (data && isSuccess) {
+            setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]))
+            setSort(INITIAL_SORT);
+        }
 
-    }, [sort, data, isSuccess]);
+
+    }, [data, isSuccess]);
 
     // ? For the future use
 
