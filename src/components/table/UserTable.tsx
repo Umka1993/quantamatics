@@ -7,14 +7,14 @@ import { EditProfile } from "../edit-modal/edit-profile";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
-import { IUser } from "../../types/user";
+import { IUpdateUser } from "../../types/user";
 import ISort from "../../types/sort-type";
-import { SortDirection, UserKey } from "../../data/enum";
+import { UserKey } from "../../data/enum";
 import { useGetOrganizationUsersQuery } from "../../api/user";
 import { useParams } from "react-router";
 import { RouteParams } from "types/route-params";
 import Loader from "../loader";
-
+import { format } from 'date-fns'
 import "./styles/table.scss";
 import { initialSort } from "./utils/constants";
 
@@ -26,11 +26,11 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
 
     const { data, isSuccess, isLoading } = useGetOrganizationUsersQuery(id);
 
-    const [localRows, setLocalRows] = useState<IUser[]>([]);
+    const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
 
     const [sort, setSort] = useState<ISort>(initialSort);
-    const [user, setUser] = useState<IUser>();
+    const [user, setUser] = useState<IUpdateUser>();
 
     const tableRef = useRef<HTMLTableElement>(null);
 
@@ -38,7 +38,7 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            setLocalRows(data as IUser[]);
+            setLocalRows(data as IUpdateUser[]);
             setSort(initialSort);
         }
     }, [isSuccess, data])
@@ -50,7 +50,7 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            setLocalRows(data as IUser[]);
+            setLocalRows(data as IUpdateUser[]);
             setSort(initialSort);
         }
     }, [isSuccess, data])
@@ -99,7 +99,7 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
                             <td className="table__cell">{user.lastName}</td>
                             <td className="table__cell">{user.email}</td>
                             <td className="table__cell">
-                                {user.subscriptionEndDate.split(' ')[0]}
+                                {format(user.subscriptionEndDate, 'MM/dd/yyyy')}
                             </td>
                             <td className="table__cell">
                                 <ComaList list={adaptRoles(user.userRoles)} />
@@ -134,7 +134,7 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
             </table>
             {showModal && (
                 <EditProfile
-                    user={user as IUser}
+                    user={user as IUpdateUser}
                     onClose={() => setShowModal(false)}
                 />
             )}

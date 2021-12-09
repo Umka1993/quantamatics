@@ -1,16 +1,24 @@
 import baseApi from "../index";
-import { ApiRoute, UserRole } from "../../data/enum";
+import { ApiRoute, UserKey, UserRole } from "../../data/enum";
 import { IUpdateUser, IUser } from "../../types/user";
 
 const usersApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
 
-        getOrganizationUsers: build.query<IUser[], string>({
+        getOrganizationUsers: build.query<IUpdateUser[] | undefined, string>({
             query: (orgId) => ({
                 url: ApiRoute.GetUsersByOrgID,
                 method: "GET",
                 params: { orgId },
             }),
+            transformResponse: (users: IUser[]) => {
+                if (users) {
+                    return users.map((user) => ({
+                        ...user, 
+                        [UserKey.SubscriptionEndDate]: new Date(user[UserKey.SubscriptionEndDate])
+                    }))
+                }
+            },
             providesTags: (result) =>
                 result
                     ? [

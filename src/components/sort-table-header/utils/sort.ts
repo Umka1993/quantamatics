@@ -71,7 +71,7 @@ const sortTable = (
 function normalizeCompare(item : any, name: string) {
     switch (name) {
         case "subscriptionEndDate":
-            return new Date(item[name]);
+            return item[name];
     
         case "userRoles":
             return item[name];
