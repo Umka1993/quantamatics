@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FunctionComponent } from "react";
+import React, { useEffect, useState, FunctionComponent, useRef } from "react";
 import { Link } from "react-router-dom";
 import Button from "../button";
 import { CheckBox } from "../../components/checkbox";
@@ -16,6 +16,7 @@ const LoginForm: FunctionComponent = () => {
     const [password, setPassword] = useState<string>('');
     const [rememberMe, setRememberMe] = useState<boolean>(false);
     const [errors, setErrors] = useState<string | undefined>(undefined);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const [sendLogin, { isError, isSuccess, isLoading, error, data }] =
         useLoginUserMutation();
@@ -39,8 +40,17 @@ const LoginForm: FunctionComponent = () => {
                     : "Something went wrong";
 
             setErrors(text);
+
+            formRef.current?.reportValidity()
         }
     }, [isError]);
+
+    useEffect(() => {        
+        if (errors && formRef.current) {
+            console.log(errors);
+            formRef.current.reportValidity();
+        }
+    }, [errors, formRef]);
 
     useEffect(() => {
         if (isSuccess && data) {
@@ -54,6 +64,7 @@ const LoginForm: FunctionComponent = () => {
             headline="Sign In"
             subtitle="Enter your email and password"
             stopLoading={isLoading ? undefined : true}
+            forwardRef={formRef}
         >
             <div className="login-page__inputs">
                 <Email
@@ -62,7 +73,7 @@ const LoginForm: FunctionComponent = () => {
                     name="email"
                     value={email}
                     error={errors}
-                    hideError={true}
+                    hideError
                 />
 
                 <Password

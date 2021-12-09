@@ -5,15 +5,15 @@ export default function getValidationMessage(
         return error;
     }
 
-    const { tooShort, patternMismatch } = validity;
+    const { tooShort, patternMismatch, tooLong } = validity;
 
     if (tooShort || patternMismatch) {
-        const textStart = "The password must contain at least ";
+        const textStart = "Password must be ";
         const requirements = [];
 
-        tooShort && requirements.push("8 characters");
+        (tooShort || tooLong) && requirements.push("8-32 characters");
         patternMismatch &&
-            requirements.push("1 uppercase letter, 1 digit and 1 special character");
+            requirements.push("and contain at least 1 number, 1 lower case character, 1 upper case character and 1 special character");
 
         return `${textStart} ${requirements.join(", ")}.`;
     }

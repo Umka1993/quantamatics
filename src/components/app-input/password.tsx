@@ -70,7 +70,7 @@ const Password: FunctionComponent<IPassword> = ({
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
-        setErrorMessage(inputRef.current?.validationMessage);
+        setErrorMessage(evt.currentTarget.validationMessage);
         onInvalid && onInvalid(evt);
     };
 
