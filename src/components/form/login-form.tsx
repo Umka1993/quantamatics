@@ -47,7 +47,6 @@ const LoginForm: FunctionComponent = () => {
 
     useEffect(() => {        
         if (errors && formRef.current) {
-            console.log(errors);
             formRef.current.reportValidity();
         }
     }, [errors, formRef]);
