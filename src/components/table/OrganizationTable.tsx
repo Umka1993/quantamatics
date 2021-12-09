@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from "react";
 import "./styles/table.scss";
-import { useHistory } from "react-router-dom";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import EditSVG from "./assets/edit-row-icon.svg";
 import DeleteSVG from "./assets/delete-row-icon.svg";
 
 import classNames from "classnames";
-import { useDispatch } from "react-redux";
-import { changeRoute } from "../../store/currentPage/actions";
 import { Organization } from "../../types/organization/types";
-import { OrganizationKey, SortDirection, UserRole } from "../../data/enum";
+import { SortDirection, UserRole } from "../../data/enum";
 import ISort from "../../types/sort-type";
 import { useGetAllOrganizationsQuery, useDeleteOrganizationMutation } from "../../api/organization";
 import Loader from "../loader/";
 import useUser from "../../hooks/useUser";
 import { INITIAL_SORT, ORG_HEADER } from "./utils/constants";
+import { Link } from 'react-router-dom'
 
 interface ITable {
 }
 
 export const OrganizationTable: React.FunctionComponent<ITable> = () => {
-    const history = useHistory();
-    const dispatch = useDispatch();
-
     const user = useUser();
 
     const { isLoading, data, isError, isSuccess, error } =
@@ -35,13 +30,6 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
 
     const [itemDeleting, setItemDeleting] = useState<number | null>(null);
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
-
-    const handleEditRoute = (route: string, id: string) => {
-        dispatch(changeRoute(route));
-        history.push("/");
-        history.push("/" + route + `/${id}`);
-    };
-
 
     function filterOrganizationToOrgAdmin(organizations: Organization[]): Organization[] {
         return user?.userRoles.includes(UserRole.Admin)
@@ -113,7 +101,8 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
                         <td className="table__cell">{organization.name}</td>
                         <td className="table__cell">{organization.customerCrmId}</td>
                         <td className="table__cell">
-                            <a
+                            <a 
+                                className="table__link"
                                 href={organization.customerCrmLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -125,15 +114,12 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
                             {organization.comments}
                         </td>
                         <td className="table__cell table__cell--actions">
-                            <button
-                                type="button"
+                            <Link
                                 className="table__action"
-                                onClick={() =>
-                                    handleEditRoute("apps/organizations", organization.id)
-                                }
+                                to={`/apps/organizations/${organization.id}`}
                             >
                                 <EditSVG role="img" aria-label="edit" fill="currentColor" />
-                            </button>
+                            </Link>
                             <button
                                 type="button"
                                 className="table__action"
