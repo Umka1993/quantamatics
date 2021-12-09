@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import EditSVG from "./assets/edit-row-icon.svg";
 import DeleteSVG from "./assets/delete-row-icon.svg";
@@ -9,14 +9,12 @@ import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
 import { IUpdateUser } from "../../types/user";
 import ISort from "../../types/sort-type";
-import { UserKey } from "../../data/enum";
 import { useGetOrganizationUsersQuery } from "../../api/user";
 import { useParams } from "react-router";
 import { RouteParams } from "types/route-params";
 import Loader from "../loader";
-import { format } from 'date-fns'
 import "./styles/table.scss";
-import { initialSort } from "./utils/constants";
+import { INITIAL_SORT, USER_HEADER } from "./utils/constants";
 
 interface ITable {
 }
@@ -29,29 +27,13 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
     const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
 
-    const [sort, setSort] = useState<ISort>(initialSort);
+    const [sort, setSort] = useState<ISort>(INITIAL_SORT);
     const [user, setUser] = useState<IUpdateUser>();
 
-    const tableRef = useRef<HTMLTableElement>(null);
-
-    const [tableHeight, setTableHeight] = useState<number>(100)
-
     useEffect(() => {
         if (isSuccess) {
             setLocalRows(data as IUpdateUser[]);
-            setSort(initialSort);
-        }
-    }, [isSuccess, data])
-
-    useEffect(() => {
-        tableRef.current && setTableHeight(tableRef.current.offsetHeight)
-    }, [tableRef.current])
-
-
-    useEffect(() => {
-        if (isSuccess) {
-            setLocalRows(data as IUpdateUser[]);
-            setSort(initialSort);
+            setSort(INITIAL_SORT);
         }
     }, [isSuccess, data])
 
@@ -63,25 +45,18 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
             </div>
         );
     }
-
-    const tableTitles = ["First Name", "Last Name", "Email", "Expiration Date", "Organization Role"];
-
-    const tableTitlesKeys = [UserKey.Name, UserKey.Surname, UserKey.Email, UserKey.SubscriptionEndDate, UserKey.UserRoles];
-
-
     return (
         <>
-            <table 
-                className="table table--user" ref={tableRef} 
-                style={{ minHeight: `${tableHeight}px` }}
+            <table
+                className="table table--user"
             >
                 <thead className="table__head">
                     <tr className="table__header">
-                        {tableTitles.map((title: string, index: number) =>
+                        {USER_HEADER.keys.map((key: string, index: number) =>
                         (<SortTableHeader
-                            key={title}
-                            name={tableTitlesKeys[index]}
-                            text={title}
+                            key={key}
+                            name={key}
+                            text={USER_HEADER.titles[index]}
                             sort={sort}
                             localRows={localRows}
                             setSort={setSort}
@@ -99,7 +74,7 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
                             <td className="table__cell">{user.lastName}</td>
                             <td className="table__cell">{user.email}</td>
                             <td className="table__cell">
-                                {format(user.subscriptionEndDate, 'MM/dd/yyyy')}
+                                {user.subscriptionEndDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
                             </td>
                             <td className="table__cell">
                                 <ComaList list={adaptRoles(user.userRoles)} />

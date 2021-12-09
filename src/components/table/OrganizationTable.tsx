@@ -15,7 +15,7 @@ import ISort from "../../types/sort-type";
 import { useGetAllOrganizationsQuery, useDeleteOrganizationMutation } from "../../api/organization";
 import Loader from "../loader/";
 import useUser from "../../hooks/useUser";
-import { initialSort } from "./utils/constants";
+import { INITIAL_SORT, ORG_HEADER } from "./utils/constants";
 
 interface ITable {
 }
@@ -34,7 +34,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
     const [localRows, setLocalRows] = useState<Organization[]>([]);
 
     const [itemDeleting, setItemDeleting] = useState<number | null>(null);
-    const [sort, setSort] = useState<ISort>(initialSort);
+    const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 
     const handleEditRoute = (route: string, id: string) => {
         dispatch(changeRoute(route));
@@ -50,7 +50,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
 
     }
     useEffect(() => {
-        isSuccess && sort.direction === SortDirection.Default 
+        isSuccess && sort.direction === SortDirection.Default
             && setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]))
 
     }, [sort, data, isSuccess]);
@@ -88,41 +88,16 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
         <table className="table table--organization">
             <thead className="table__head">
                 <tr className="table__header">
-                    <SortTableHeader
-                        name={OrganizationKey.Name}
-                        text="Organization Name"
-                        sort={sort}
-                        localRows={localRows}
-                        setSort={setSort}
-                        setLocalRows={setLocalRows}
-                    />
-
-                    <SortTableHeader
-                        name={OrganizationKey.IdCRM}
-                        text="CRM Customer ID "
-                        sort={sort}
-                        localRows={localRows}
-                        setSort={setSort}
-                        setLocalRows={setLocalRows}
-                    />
-
-                    <SortTableHeader
-                        name={OrganizationKey.LinkCRM}
-                        text="CRM Customer link"
-                        sort={sort}
-                        localRows={localRows}
-                        setSort={setSort}
-                        setLocalRows={setLocalRows}
-                    />
-
-                    <SortTableHeader
-                        name={OrganizationKey.Comment}
-                        text="Comments"
-                        sort={sort}
-                        localRows={localRows}
-                        setSort={setSort}
-                        setLocalRows={setLocalRows}
-                    />
+                    {ORG_HEADER.keys.map((key, index) =>
+                        <SortTableHeader
+                            key={key}
+                            name={key}
+                            text={ORG_HEADER.titles[index]}
+                            sort={sort}
+                            localRows={localRows}
+                            setSort={setSort}
+                            setLocalRows={setLocalRows}
+                        />)}
 
                     <th className="table__headline table__headline--hidden">Actions</th>
                 </tr>
