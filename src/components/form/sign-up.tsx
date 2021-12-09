@@ -36,7 +36,7 @@ const SignUp: FunctionComponent = () => {
         isExpiredToken && history.push(AppRoute.SignUpExpired)
     }, [isExpiredToken])
 
-    const title = (<>Sign Up to <b>{organizationName}</b></>)
+    const title = (<>Welcome to <b>{organizationName}</b></>)
 
     const handleResetPassword = useCallback(() => {
         sendPassword({ email: (email as string), password, token: (token as string) }).unwrap();
@@ -64,7 +64,7 @@ const SignUp: FunctionComponent = () => {
         return (
             <Form
                 headline={title}
-                headlineText={`Welcome to  ${organizationName}`}
+                headlineText={`Welcome to ${organizationName}`}
                 subtitle="Set a password to complete your registration and sign in to Quantamatics"
                 onSubmit={handleResetPassword}
                 stopLoading={finish ? finish : undefined}
