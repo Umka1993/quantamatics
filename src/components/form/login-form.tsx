@@ -1,6 +1,5 @@
-import React, { FormEvent, useEffect, useState, FunctionComponent } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory, Link } from "react-router-dom";
+import React, { useEffect, useState, FunctionComponent } from "react";
+import { Link } from "react-router-dom";
 import Button from "../button";
 import { CheckBox } from "../../components/checkbox";
 import { Password, Email } from "../../components/app-input";
@@ -10,9 +9,7 @@ import "./styles/form.scss";
 import "./styles/login-page.scss";
 import { useLoginUserMutation } from "../../api/account";
 import IApiError from "../../types/api-error";
-import { login } from "../../store/authorization";
-import { IUser } from "../../types/user";
-import { processLogin } from "../../services/processLogin";
+import useLogin from "../../hooks/useLogin";
 
 const LoginForm: FunctionComponent = () => {
     const [email, setEmail] = useState<string>('');
@@ -20,10 +17,10 @@ const LoginForm: FunctionComponent = () => {
     const [rememberMe, setRememberMe] = useState<boolean>(false);
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
-    const history = useHistory();
-    const dispatch = useDispatch();
     const [sendLogin, { isError, isSuccess, isLoading, error, data }] =
         useLoginUserMutation();
+
+    const loginProcess = useLogin();
 
     // hide errors on any input
     useEffect(() => {
@@ -47,9 +44,7 @@ const LoginForm: FunctionComponent = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
-            const setUserToStore = (user: IUser) => dispatch(login(user));
-            setErrors(undefined);
-            history.push(processLogin(data, setUserToStore, rememberMe))
+            loginProcess(data, rememberMe)
         }
     }, [isSuccess]);
 
@@ -107,7 +102,7 @@ const LoginForm: FunctionComponent = () => {
                 </a>
             </p>
 
-            {/* For Firefox  */}
+            {/* Logout from Jupiter For Firefox  */}
 
             <iframe 
                 src="https://hub-k8s.dev.quantamatics.net/hub/logout" 

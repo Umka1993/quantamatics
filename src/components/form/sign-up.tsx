@@ -9,10 +9,7 @@ import "./styles/form.scss";
 import "./styles/login-page.scss";
 import { useLoginUserMutation, useResetPasswordMutation, useVerifyTokenQuery } from "../../api/account";
 import Loader from "../loader";
-import { processLogin } from "../../services/processLogin";
-import { useDispatch } from "react-redux";
-import { IUser } from "types/user";
-import { login } from "../../store/authorization";
+import useLogin from "../../hooks/useLogin";
 
 const SignUp: FunctionComponent = () => {
     const [password, setPassword] = useState<string>("");
@@ -21,16 +18,17 @@ const SignUp: FunctionComponent = () => {
 
     const [finish, setFinish] = useState<boolean>(false);
 
+    const loginProcess = useLogin();
+
     const history = useHistory();
 
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const email = urlParams.get("email");
     const organizationName = urlParams.get("orgName");
-    const dispatch = useDispatch()
 
     const [sendPassword, { isSuccess: isPasswordUpdated, isError: isPasswordError }] = useResetPasswordMutation();
-    const [sendlogin, { isSuccess: isLogged, data: loggedData }] = useLoginUserMutation();
+    const [sendLogin, { isSuccess: isLogged, data: loggedData }] = useLoginUserMutation();
 
     const { isSuccess: isTokenValid, isError: isExpiredToken } = useVerifyTokenQuery({ userName: String(email), token: token as string });
 
@@ -60,14 +58,12 @@ const SignUp: FunctionComponent = () => {
 
     useEffect(() => {
         if (isLogged && loggedData) {
-            const setUserToStore = (user: IUser) => dispatch(login(user));
-            history.push(processLogin(loggedData, setUserToStore, true))
-
+            loginProcess(loggedData, true)
         }
     }, [isLogged])
 
     useEffect(() => {
-        isPasswordUpdated && sendlogin({ email: (email as string), password }).unwrap();
+        isPasswordUpdated && sendLogin({ email: (email as string), password }).unwrap();
     }, [isPasswordUpdated])
 
     if (isTokenValid) {
