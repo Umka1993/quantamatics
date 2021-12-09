@@ -5,34 +5,34 @@ import React, {
     InputHTMLAttributes,
     ChangeEventHandler,
     FormEventHandler,
+    FunctionComponent
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
 import EyeSVG from "./assets/eye.svg";
 import ClosedEyeSVG from "./assets/closed-eye.svg";
 import getValidationMessage from "./utils/passwordValidation";
-
-const PATTERN_PASSWORD =
-    "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*\\[\\]\\\\\"';:<_>., =+/-]).*$";
+import { RegExpValidation } from "../../data/enum";
 interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
     autoComplete?: "current-password" | "new-password";
     externalSetter?: (value: string) => void;
+    hideError?: boolean
 }
 
-const Password: React.FunctionComponent<IPassword> = ({
+const Password: FunctionComponent<IPassword> = ({
     className,
     label,
     placeholder,
     required,
-    pattern,
     name,
     value,
     onChange,
     onInvalid,
     autoComplete,
     externalSetter,
+    hideError,
     error,
     ...other
 }) => {
@@ -46,11 +46,6 @@ const Password: React.FunctionComponent<IPassword> = ({
     let labelText = label ? label : placeholder;
     labelText = labelText ? labelText : "Password input";
 
-    // check regexp
-    let regularExp =
-        autoComplete === "new-password" ? PATTERN_PASSWORD : undefined;
-    regularExp = pattern ? pattern : regularExp;
-
     // Show/hide pass
     useEffect(() => {
         if (inputRef.current) {
@@ -59,23 +54,19 @@ const Password: React.FunctionComponent<IPassword> = ({
     }, [showPassword]);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        const { value } = evt.target;
+        const { value } = evt.currentTarget;
         externalSetter && externalSetter(value);
         onChange && onChange(evt);
     };
 
     useEffect(() => {
         if (inputRef.current) {
-            const { validity } = inputRef.current;
-            inputRef.current.setCustomValidity(getValidationMessage(validity, error));
+            const message = getValidationMessage(inputRef.current.validity, error);
+            inputRef.current.setCustomValidity(message);
 
-            const { validationMessage } = inputRef.current;
-
-            error && inputRef.current.reportValidity();
-
-            !validationMessage.length && setErrorMessage(undefined);
+            errorMessage && setErrorMessage(undefined);
         }
-    }, [inputRef.current?.validity, error, value]);
+    }, [value, inputRef.current?.validity, error])
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
@@ -102,12 +93,14 @@ const Password: React.FunctionComponent<IPassword> = ({
                     placeholder={placeholder}
                     required={required}
                     aria-required={required}
-                    pattern={regularExp}
+                    pattern={autoComplete === "new-password" ? RegExpValidation.Password as string : undefined}
                     minLength={8}
+                    maxLength={32}
                     value={value || ''}
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
+                    
                 />
 
                 <button
@@ -127,7 +120,7 @@ const Password: React.FunctionComponent<IPassword> = ({
                 </button>
             </div>
 
-            {errorMessage && errorMessage !== " " && (
+            {errorMessage && !hideError && (
                 <p id={name ? name + "_error" : undefined} className="app-input__error">
                     {errorMessage}
                 </p>
