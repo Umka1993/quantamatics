@@ -1,27 +1,20 @@
 import { AppRoute, AuthorizationStatus } from '../data/enum';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 import { RouteProps } from 'react-router-dom';
 import { RootState } from '../store';
 import { getCookie } from '../services/cookies';
-import { logout } from '../store/authorization';
-
-interface IPrivateRoute extends RouteProps {
-}
+import useLogout from '../hooks/useLogout';
 
 function PrivateRoute({
     children,
     ...props
-}: IPrivateRoute): JSX.Element {
+}: RouteProps): JSX.Element {
 
-    const dispatch = useDispatch();
+    const logout = useLogout();
     useEffect(() => {
-
-        if (!getCookie('user')) {
-            dispatch(logout())
-        }
-
+        !getCookie('user') && logout();
     }, [document.cookie])
     const currentStatus = useSelector((state: RootState) => state.auth.status);
     return (

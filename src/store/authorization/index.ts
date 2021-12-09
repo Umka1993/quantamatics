@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { dropToken } from "../../services/token";
-import { AppRoute, AuthorizationStatus } from "../../data/enum";
+import {  AuthorizationStatus } from "../../data/enum";
 import { IUser } from "../../types/user";
 import pendoInitialize from "../../services/pendoInitialize";
-import { deleteAllCookies } from "../../services/cookies";
 
 export interface AuthState {
     status: AuthorizationStatus;
