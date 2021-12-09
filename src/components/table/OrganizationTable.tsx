@@ -32,9 +32,12 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 
     function filterOrganizationToOrgAdmin(organizations: Organization[]): Organization[] {
-        return user?.userRoles.includes(UserRole.Admin)
+        const filteredOrgs = user?.userRoles.includes(UserRole.Admin)
             ? organizations
             : organizations?.filter((organization) => organization.parentId === String(user?.organizationId))
+
+        sessionStorage.setItem('table-rows', JSON.stringify(filteredOrgs))
+        return filteredOrgs;
 
     }
     useEffect(() => {
@@ -101,7 +104,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
                         <td className="table__cell">{organization.name}</td>
                         <td className="table__cell">{organization.customerCrmId}</td>
                         <td className="table__cell">
-                            <a 
+                            <a
                                 className="table__link"
                                 href={organization.customerCrmLink}
                                 target="_blank"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, FunctionComponent } from "react";
 
 import EditSVG from "./assets/edit-row-icon.svg";
 import DeleteSVG from "./assets/delete-row-icon.svg";
@@ -7,7 +7,7 @@ import { EditProfile } from "../edit-modal/edit-profile";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
-import { IUser, IUpdateUser } from "../../types/user";
+import { IUpdateUser } from "../../types/user";
 import ISort from "../../types/sort-type";
 import { useGetOrganizationUsersQuery } from "../../api/user";
 import { useParams } from "react-router";
@@ -16,10 +16,7 @@ import Loader from "../loader";
 import "./styles/table.scss";
 import { INITIAL_SORT, USER_HEADER } from "./utils/constants";
 
-interface ITable {
-}
-
-export const UserTable: React.FunctionComponent<ITable> = () => {
+export const UserTable: FunctionComponent = () => {
     const { id } = useParams<RouteParams>();
 
     const { data, isSuccess, isLoading } = useGetOrganizationUsersQuery(id);
@@ -46,9 +43,11 @@ export const UserTable: React.FunctionComponent<ITable> = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
-            setLocalRows(data.map(user => (
+            const usersWithDate = data.map(user => (
                 { ...user, subscriptionEndDate: new Date(user.subscriptionEndDate) }
-            )));
+            ))
+            sessionStorage.setItem('table-rows', JSON.stringify(usersWithDate))
+            setLocalRows(usersWithDate);
             setSort(INITIAL_SORT);
         }
     }, [isSuccess, data])

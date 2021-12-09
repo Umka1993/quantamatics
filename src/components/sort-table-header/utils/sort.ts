@@ -32,7 +32,7 @@ const sortTable = (
 
     setSort({ name: newSort.name, direction: newSort.direction });
 
-    const newRows = [...localRows];
+    let newRows = [...localRows];
 
     switch (newSort.direction) {
         case SortDirection.Up:
@@ -58,9 +58,7 @@ const sortTable = (
             break;
 
         default:
-            /* newRows = localStorage.getItem("rows")
-                ? JSON.parse(localStorage.getItem("rows") as string)
-                : localRows; */
+            newRows = JSON.parse(sessionStorage.getItem('table-rows') as string);
             break;
     }
 
