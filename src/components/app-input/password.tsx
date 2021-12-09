@@ -61,9 +61,12 @@ const Password: FunctionComponent<IPassword> = ({
 
     useEffect(() => {
         if (inputRef.current) {
-            const message = getValidationMessage(inputRef.current.validity, error);
-            inputRef.current.setCustomValidity(message);
-
+            if (error) {
+                inputRef.current.setCustomValidity(error);
+            } else if (autoComplete === "new-password") {
+                const message = getValidationMessage(inputRef.current.validity);
+                inputRef.current.setCustomValidity(message);
+            }
             errorMessage && setErrorMessage(undefined);
         }
     }, [value, inputRef.current?.validity, error])
@@ -100,7 +103,7 @@ const Password: FunctionComponent<IPassword> = ({
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
-                    
+
                 />
 
                 <button

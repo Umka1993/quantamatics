@@ -1,9 +1,6 @@
 export default function getValidationMessage(
-    validity: ValidityState, error?: string
+    validity: ValidityState
 ): string {
-    if (error) {
-        return error;
-    }
 
     const { tooShort, patternMismatch, tooLong } = validity;
 
