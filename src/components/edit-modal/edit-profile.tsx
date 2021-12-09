@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState, FunctionComponent } from "react";
 
 import Button, { ResetButton } from "../button";
 import AppInput, { DatePick, Email } from "../app-input";
@@ -21,7 +21,7 @@ interface IEditProfile {
     user: IUpdateUser;
 }
 
-export const EditProfile: React.FunctionComponent<IEditProfile> = ({
+export const EditProfile: FunctionComponent<IEditProfile> = ({
     onClose,
     user,
 }) => {
