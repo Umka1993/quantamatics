@@ -42,6 +42,8 @@ const Password: FunctionComponent<IPassword> = ({
         undefined
     );
 
+    const isNewPassword = autoComplete === "new-password";
+
     // check if any label is provided
     let labelText = label ? label : placeholder;
     labelText = labelText ? labelText : "Password input";
@@ -63,7 +65,7 @@ const Password: FunctionComponent<IPassword> = ({
         if (inputRef.current) {
             if (error) {
                 inputRef.current.setCustomValidity(error);
-            } else if (autoComplete === "new-password") {
+            } else if (isNewPassword) {
                 const message = getValidationMessage(inputRef.current.validity);
                 inputRef.current.setCustomValidity(message);
             }
@@ -96,9 +98,9 @@ const Password: FunctionComponent<IPassword> = ({
                     placeholder={placeholder}
                     required={required}
                     aria-required={required}
-                    pattern={autoComplete === "new-password" ? RegExpValidation.Password as string : undefined}
-                    minLength={8}
-                    maxLength={32}
+                    pattern={isNewPassword ? RegExpValidation.Password as string : undefined}
+                    minLength={isNewPassword ? 8 : undefined}
+                    maxLength={isNewPassword ? 32 : undefined}
                     value={value || ''}
                     {...other}
                     ref={inputRef}
