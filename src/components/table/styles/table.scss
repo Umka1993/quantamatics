@@ -112,17 +112,17 @@ $design-table-w: 1038;
       gap: 14px;
       padding-right: 6px;
     }
+  }
 
-    a {
-      color: inherit;
-      outline-color: currentColor;
-      outline-offset: 0.4em;
-      border-radius: 0.2em;
+  &__link {
+    color: inherit;
+    outline-color: currentColor;
+    outline-offset: 0.4em;
+    border-radius: 0.2em;
 
-      &:focus-visible,
-      &:hover {
-        color: $accent;
-      }
+    &:focus-visible,
+    &:hover {
+      color: $accent;
     }
   }
 

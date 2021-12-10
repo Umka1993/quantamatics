@@ -5,34 +5,34 @@ import React, {
     InputHTMLAttributes,
     ChangeEventHandler,
     FormEventHandler,
+    FunctionComponent
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
 import EyeSVG from "./assets/eye.svg";
 import ClosedEyeSVG from "./assets/closed-eye.svg";
 import getValidationMessage from "./utils/passwordValidation";
-
-const PATTERN_PASSWORD =
-    "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*\\[\\]\\\\\"';:<_>., =+/-]).*$";
+import { RegExpValidation } from "../../data/enum";
 interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
     autoComplete?: "current-password" | "new-password";
     externalSetter?: (value: string) => void;
+    hideError?: boolean
 }
 
-const Password: React.FunctionComponent<IPassword> = ({
+const Password: FunctionComponent<IPassword> = ({
     className,
     label,
     placeholder,
     required,
-    pattern,
     name,
     value,
     onChange,
     onInvalid,
     autoComplete,
     externalSetter,
+    hideError,
     error,
     ...other
 }) => {
@@ -42,14 +42,11 @@ const Password: React.FunctionComponent<IPassword> = ({
         undefined
     );
 
+    const isNewPassword = autoComplete === "new-password";
+
     // check if any label is provided
     let labelText = label ? label : placeholder;
     labelText = labelText ? labelText : "Password input";
-
-    // check regexp
-    let regularExp =
-        autoComplete === "new-password" ? PATTERN_PASSWORD : undefined;
-    regularExp = pattern ? pattern : regularExp;
 
     // Show/hide pass
     useEffect(() => {
@@ -59,27 +56,29 @@ const Password: React.FunctionComponent<IPassword> = ({
     }, [showPassword]);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        const { value } = evt.target;
+        const { value } = evt.currentTarget;
         externalSetter && externalSetter(value);
         onChange && onChange(evt);
     };
 
     useEffect(() => {
         if (inputRef.current) {
-            const { validity } = inputRef.current;
-            inputRef.current.setCustomValidity(getValidationMessage(validity, error));
-
-            const { validationMessage } = inputRef.current;
-
-            error && inputRef.current.reportValidity();
-
-            !validationMessage.length && setErrorMessage(undefined);
+            if (error) {
+                inputRef.current.setCustomValidity(error);
+            } else {
+                inputRef.current.setCustomValidity('');
+                if (isNewPassword) {
+                    const message = getValidationMessage(inputRef.current.validity);
+                    inputRef.current.setCustomValidity(message);
+                }
+            }
+            errorMessage && setErrorMessage(undefined);
         }
-    }, [inputRef.current?.validity, error, value]);
+    }, [value, inputRef.current?.validity, error])
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
-        setErrorMessage(inputRef.current?.validationMessage);
+        setErrorMessage(evt.currentTarget.validationMessage);
         onInvalid && onInvalid(evt);
     };
 
@@ -102,12 +101,14 @@ const Password: React.FunctionComponent<IPassword> = ({
                     placeholder={placeholder}
                     required={required}
                     aria-required={required}
-                    pattern={regularExp}
-                    minLength={8}
+                    pattern={isNewPassword ? RegExpValidation.Password as string : undefined}
+                    minLength={isNewPassword ? 8 : undefined}
+                    maxLength={isNewPassword ? 32 : undefined}
                     value={value || ''}
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
+
                 />
 
                 <button
@@ -127,7 +128,7 @@ const Password: React.FunctionComponent<IPassword> = ({
                 </button>
             </div>
 
-            {errorMessage && errorMessage !== " " && (
+            {errorMessage && !hideError && (
                 <p id={name ? name + "_error" : undefined} className="app-input__error">
                     {errorMessage}
                 </p>
