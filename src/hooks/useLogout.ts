@@ -17,6 +17,6 @@ export default function useLogout() : () => void {
         window.location.href = 'https://hub-k8s.dev.quantamatics.net/hub/logout';
         setTimeout(() => {
             window.location.href = AppRoute.Login;
-        }, 200)
+        }, 800)
     }
 }
