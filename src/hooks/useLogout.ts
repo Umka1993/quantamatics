@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../store/authorization";
 import { dropToken } from "../services/token";
 import { deleteAllCookies } from "../services/cookies";
-import { AppRoute } from "../data/enum";
+import { logoutFromJupiter } from "../services/logoutFromJupiter";
 
 export default function useLogout() : () => void {
     const dispatch = useDispatch();
@@ -13,10 +13,9 @@ export default function useLogout() : () => void {
         localStorage.clear()
         sessionStorage.clear()
         deleteAllCookies();
-    
-        window.location.href = 'https://hub-k8s.dev.quantamatics.net/hub/logout';
-        setTimeout(() => {
-            window.location.href = AppRoute.Login;
-        }, 800)
+
+        logoutFromJupiter();
     }
 }
+
+
