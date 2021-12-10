@@ -65,9 +65,12 @@ const Password: FunctionComponent<IPassword> = ({
         if (inputRef.current) {
             if (error) {
                 inputRef.current.setCustomValidity(error);
-            } else if (isNewPassword) {
-                const message = getValidationMessage(inputRef.current.validity);
-                inputRef.current.setCustomValidity(message);
+            } else {
+                inputRef.current.setCustomValidity('');
+                if (isNewPassword) {
+                    const message = getValidationMessage(inputRef.current.validity);
+                    inputRef.current.setCustomValidity(message);
+                }
             }
             errorMessage && setErrorMessage(undefined);
         }
