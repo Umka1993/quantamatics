@@ -36,7 +36,7 @@ const LoginForm: FunctionComponent = () => {
         if (isError) {
             const text =
                 (error as IApiError).status >= 400
-                    ? "Incorrect username or password"
+                    ? "Incorrect email or password"
                     : "Something went wrong";
 
             setErrors(text);
