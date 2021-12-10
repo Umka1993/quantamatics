@@ -13,10 +13,18 @@ export default function useLogout() : () => void {
         localStorage.clear()
         sessionStorage.clear()
         deleteAllCookies();
-    
-        window.location.href = 'https://hub-k8s.dev.quantamatics.net/hub/logout';
-        setTimeout(() => {
-            window.location.href = AppRoute.Login;
-        }, 800)
+
+        logoutFromJupiter();
     }
+}
+
+
+function logoutFromJupiter() {
+    const JUPITER_LOGOUT = `${process.env.HUB_URL}hub/logout`
+
+    const logoutWindow : any = window.open(JUPITER_LOGOUT, 'Logout from Jupiter', 'toolbar=1,location=1,directories=1,status=1,menubar=1,scrollbars=1,resizable=1');
+    setTimeout(() => {
+            logoutWindow.blur();
+            logoutWindow.close();
+        }, 600)
 }
