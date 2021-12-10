@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, FunctionComponent } from "react";
+import React, { useState, useEffect, useMemo, FunctionComponent, useLayoutEffect } from "react";
 
 import EditSVG from "./assets/edit-row-icon.svg";
 import DeleteSVG from "./assets/delete-row-icon.svg";
@@ -19,7 +19,7 @@ import { SortDirection } from "../../data/enum";
 
 export const UserTable: FunctionComponent = () => {
     const { id } = useParams<RouteParams>();
-    
+
     // ? Need to be in component to reset sort after update
     const INITIAL_SORT = { name: "", direction: SortDirection.Default }
 
@@ -30,6 +30,8 @@ export const UserTable: FunctionComponent = () => {
 
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
     const [user, setUser] = useState<IUpdateUser>();
+
+    const [scrollY, setScrollY] = useState<number>(0);
 
     const endDates = useMemo(() => {
         if (data) {
@@ -56,6 +58,15 @@ export const UserTable: FunctionComponent = () => {
         }
     }, [isSuccess, data])
 
+    // ? Kludge for Chrome to remember scroll position after rerendering
+
+    useLayoutEffect(() => {
+        const scrollWrapper = document.querySelector('.layout-page__scroll')
+        if (scrollWrapper) {
+            scrollWrapper.scrollTop = scrollY;
+        }
+    }, [localRows])
+
 
     if (isLoading) {
         return (
@@ -81,6 +92,7 @@ export const UserTable: FunctionComponent = () => {
                             setSort={setSort}
                             setLocalRows={setLocalRows}
                             className="user"
+                            rememberScroll={setScrollY}
                         />))
                         }
                         <th className="table__headline table__headline--hidden">Actions</th>

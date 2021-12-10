@@ -1,5 +1,5 @@
 import { SortDirection } from "../../data/enum";
-import React, { FunctionComponent } from "react";
+import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
 import sortTable from "./utils/sort";
 import SortIcon from "./assets/sort-icon.svg";
 import "./styles/sort-th.scss";
@@ -12,6 +12,7 @@ interface ISortTableHeader {
     setLocalRows: any;
     text: string;
     className?: string;
+    rememberScroll?: Dispatch<SetStateAction<number>>
 }
 
 export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
@@ -22,6 +23,7 @@ export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
     setLocalRows,
     text,
     className,
+    rememberScroll
 }) => {
     return (
         <th
@@ -29,7 +31,13 @@ export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
             aria-sort={sort.name === name ? sort.direction : SortDirection.Default}
         >
             <button
-                onClick={() => sortTable(name, sort, localRows, setSort, setLocalRows)}
+                onClick={() => {
+                    if (rememberScroll) {
+                        const scrollWrapper = document.querySelector('.layout-page__scroll')
+                        scrollWrapper && rememberScroll(scrollWrapper.scrollTop)
+                    }
+                    sortTable(name, sort, localRows, setSort, setLocalRows)
+                }}
                 className='sort-table-header__button'
             >
                 {text}
