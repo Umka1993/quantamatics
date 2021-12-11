@@ -31,11 +31,15 @@ build:
     - npm ci
   script:
     - npm run build && mv publish dist-development
+    - npm run buildBeta && mv publish dist-development-beta
     - npm run buildStaging && mv publish dist-staging
+    - npm run buildStagingBeta && mv publish dist-staging-beta
   artifacts:
     paths:
       - dist-development/
+      - dist-development-beta/
       - dist-staging/
+      - dist-staging-beta/
       
 .deploy:
   dependencies:
@@ -54,6 +58,16 @@ deploy dev:
   only:
     - develop
 
+deploy dev beta:
+  stage: deploy-develop
+  extends: .deploy
+  variables:
+    ENV_SUFFIX: development-beta
+    STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+    DISTRIBUTION_ALIAS: beta.dev.quantamatics.net
+  only:
+    - develop
+
 deploy staging:
   stage: deploy-staging
   extends: .deploy
@@ -65,5 +79,19 @@ deploy staging:
     STACK_NAME: qmc-web-ui-$ENV_SUFFIX
     CERTIFICATE_ARN: arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526
     DISTRIBUTION_ALIAS: stag.quantamatics.net    
+  only:
+    - master
+
+deploy staging beta:
+  stage: deploy-staging
+  extends: .deploy
+  variables:
+    AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_STAG
+    AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_STAG
+    AWS_DEFAULT_REGION: us-east-1
+    ENV_SUFFIX: staging-beta
+    STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+    CERTIFICATE_ARN: arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526
+    DISTRIBUTION_ALIAS: beta.stag.quantamatics.net    
   only:
     - master
