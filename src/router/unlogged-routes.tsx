@@ -25,6 +25,7 @@ const UnLoggedRoutes: FunctionComponent = () => {
             </header>
             <main className={style.main}>
                 <Routes>
+                    <Route path="*" element={<Navigate to={AppRoute.Login} />} />
                     <Route path={AppRoute.Login} element={<LoginForm />} />
                     <Route path={AppRoute.ForgotPassword} element={<ForgotPasswordForm />} />
                     <Route path={AppRoute.ResetPassword} element={<ResetPasswordForm />} />
@@ -44,7 +45,8 @@ const UnLoggedRoutes: FunctionComponent = () => {
                         subtitle='Please try again later or start a chat session to get help live from someone on our team.'
                         returnBack={false}
                     />} />
-                    <Route element={<Navigate to={AppRoute.Login} />} />
+
+                    <Route path={AppRoute.Success} element={<SuccessMessage />} />
                 </Routes>
             </main>
 

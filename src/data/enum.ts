@@ -15,10 +15,10 @@ export const enum AppRoute {
     Organizations = '/apps/organizations/:path',
     SignUp = '/sign-up',
     ResetPassword = '/reset-password',
-    Login = 'login',
+    Login = '/login',
     ForgotPassword = '/forgot-password',
 
-    Success = '/success-:success',
+    Success = '/success',
     Expired = '/expired',
     ExpiredPassword = '/expired-token',
     SignUpExpired = '/expired-registration',
