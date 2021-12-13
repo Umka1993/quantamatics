@@ -5,22 +5,34 @@ import { saveToken } from "../services/token";
 import { setCookie } from "../services/cookies";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authorization";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { InfoMessage } from "../components/info-message/info-message";
 
 export default function useLogin() : (body: LoginResponse, rememberMe: boolean) => void  {
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate()
 
 
     return ({user, token}, rememberMe) => {
         pendoInitialize(user);
 
-        if (new Date(user.subscriptionEndDate) < new Date()) {
-            return history.push(AppRoute.Expired);
+        const isSubscriptionExpired  = new Date(user.subscriptionEndDate) < new Date();
+        const isHaveUserRoles = user.userRoles.length;
+
+        if (isSubscriptionExpired) {
+            return navigate(AppRoute.Expired, {state: {
+                headline: 'Your user account has reached its Expiration Date',
+                image: 'calendar',
+                subtitle: `Please contact your organization admin or us at <a href="mailto:support@quantamatics.com">support@quantamatics.com.</a>`,
+            } as InfoMessage});
         }
     
-        if (!user.userRoles.length) {
-            return history.push(AppRoute.NoRoles);
+        if (isHaveUserRoles) {
+            return navigate(AppRoute.NoRoles, {state: {
+                headline: 'Your user account is in the process of being set up',
+                image: 'man',
+                subtitle: 'Please try again later or start a chat session to get help live from someone on our team.',
+            } as InfoMessage});
         }
         dispatch(login(user))
         saveToken(token);
@@ -30,6 +42,6 @@ export default function useLogin() : (body: LoginResponse, rememberMe: boolean) 
         } else {
             sessionStorage.setItem("user", JSON.stringify(user));
         }
-        return history.push(AppRoute.Home);
+        return navigate(AppRoute.Home);
     }
 }

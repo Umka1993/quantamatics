@@ -1,15 +1,25 @@
-import React, { useCallback, useEffect, useState, FunctionComponent } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useState,
+    FunctionComponent,
+} from "react";
 import { Password } from "../../components/app-input/index";
 import Button from "../button";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AppRoute } from "../../data/enum";
 import Form from "./form";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
-import { useLoginUserMutation, useResetPasswordMutation, useVerifyTokenQuery } from "../../api/account";
+import {
+    useLoginUserMutation,
+    useResetPasswordMutation,
+    useVerifyTokenQuery,
+} from "../../api/account";
 import Loader from "../loader";
 import useLogin from "../../hooks/useLogin";
+import { InfoMessage } from "../info-message/info-message";
 
 const SignUp: FunctionComponent = () => {
     const [password, setPassword] = useState<string>("");
@@ -20,45 +30,68 @@ const SignUp: FunctionComponent = () => {
 
     const loginProcess = useLogin();
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const email = urlParams.get("email");
     const organizationName = urlParams.get("orgName");
 
-    const [sendPassword, { isSuccess: isPasswordUpdated, isError: isPasswordError }] = useResetPasswordMutation();
-    const [sendLogin, { isSuccess: isLogged, data: loggedData }] = useLoginUserMutation();
+    const [
+        sendPassword,
+        { isSuccess: isPasswordUpdated, isError: isPasswordError },
+    ] = useResetPasswordMutation();
+    const [sendLogin, { isSuccess: isLogged, data: loggedData }] =
+        useLoginUserMutation();
 
-    const { isSuccess: isTokenValid, isError: isExpiredToken } = useVerifyTokenQuery({ userName: String(email), token: token as string });
+    const { isSuccess: isTokenValid, isError: isExpiredToken } =
+        useVerifyTokenQuery({ userName: String(email), token: token as string });
 
     useEffect(() => {
-        isExpiredToken && history.push(AppRoute.SignUpExpired)
-    }, [isExpiredToken])
+        isExpiredToken &&
+            navigate(AppRoute.Expired, {
+                state: {
+                    headline: "Set password link can only be used once",
+                    subtitle: "Please return to Sign in page and choose Forgot Password.",
+                    returnBack: true,
+                } as InfoMessage,
+            });
+    }, [isExpiredToken]);
 
-    const title = (<>Welcome to <b>{organizationName}</b></>)
+    const title = (
+        <>
+            Welcome to <b>{organizationName}</b>
+        </>
+    );
 
     const handleResetPassword = useCallback(() => {
-        sendPassword({ email: (email as string), password, token: (token as string) }).unwrap();
+        sendPassword({
+            email: email as string,
+            password,
+            token: token as string,
+        }).unwrap();
     }, [password, passwordConfirm]);
 
     useEffect(() => {
-        setCompare(password !== passwordConfirm ? "The passwords do not match" : undefined);
-    }, [password, passwordConfirm])
+        setCompare(
+            password !== passwordConfirm ? "The passwords do not match" : undefined
+        );
+    }, [password, passwordConfirm]);
 
     useEffect(() => {
-        isPasswordError && setFinish(true)
-    }, [isPasswordError])
+        isPasswordError && setFinish(true);
+    }, [isPasswordError]);
 
     useEffect(() => {
         if (isLogged && loggedData) {
-            loginProcess(loggedData, true)
+            loginProcess(loggedData, true);
         }
-    }, [isLogged])
+    }, [isLogged]);
 
     useEffect(() => {
-        isPasswordUpdated && sendLogin({ email: (email as string), password }).unwrap();
-    }, [isPasswordUpdated])
+        isPasswordUpdated &&
+            sendLogin({ email: email as string, password }).unwrap();
+    }, [isPasswordUpdated]);
 
     if (isTokenValid) {
         return (
@@ -87,15 +120,18 @@ const SignUp: FunctionComponent = () => {
                     />
                 </div>
 
-                <Button className="login-page__btn" type="submit" disabled={!password || !passwordConfirm}>
+                <Button
+                    className="login-page__btn"
+                    type="submit"
+                    disabled={!password || !passwordConfirm}
+                >
                     Save
                 </Button>
             </Form>
         );
     } else {
-        return (<Loader />)
+        return <Loader />;
     }
-
 };
 
 export default SignUp;
