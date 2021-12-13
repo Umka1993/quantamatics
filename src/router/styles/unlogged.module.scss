@@ -12,6 +12,7 @@ $logo-height: 40px;
 .main {
     display: grid;
     place-items: center;
+    width: 100%;
     height: 100vh;
     $default-offset: $logo-top-offset * 2 + $logo-height;
     padding: $default-offset $element-gap $default-offset + 20px;
