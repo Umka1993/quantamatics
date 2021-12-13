@@ -1,21 +1,11 @@
 export default function getValidationMessage(
-    validity: ValidityState, error?: string
+    validity: ValidityState
 ): string {
-    if (error) {
-        return error;
-    }
 
-    const { tooShort, patternMismatch } = validity;
+    const { tooShort, patternMismatch, tooLong } = validity;
 
-    if (tooShort || patternMismatch) {
-        const textStart = "The password must contain at least ";
-        const requirements = [];
-
-        tooShort && requirements.push("8 characters");
-        patternMismatch &&
-            requirements.push("1 uppercase letter, 1 digit and 1 special character");
-
-        return `${textStart} ${requirements.join(", ")}.`;
+    if (tooShort || tooLong || patternMismatch) {
+        return 'Password must be 8-32 characters, and contain at least 1 number, 1 lower case character, 1 upper case character and 1 special character';
     }
 
     return "";

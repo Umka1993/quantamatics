@@ -1,84 +1,4 @@
-import { UserRole, SortDirection } from "../data/enum";
-
-export const sortTable = (
-    name: string,
-    sort: any,
-    localRows: any,
-    setSort: any,
-    setLocalRows: any
-) => {    
-    const newSort = sort;
-
-    if (name === sort.name) {
-        switch (sort.direction) {
-            case SortDirection.Up:
-                newSort.direction = SortDirection.Down;
-                break;
-            case SortDirection.Down:
-                newSort.direction = SortDirection.Default;
-                newSort.name = "";
-                break;
-
-            default:
-                newSort.direction = SortDirection.Up;
-                break;
-        }
-    } else {
-        newSort.direction = SortDirection.Up;
-        newSort.name = name;
-    }
-
-    setSort({ name: newSort.name, direction: newSort.direction });
-
-    const newRows = [...localRows];
-
-    switch (newSort.direction) {
-        case SortDirection.Up:
-            newRows.sort((a: any, b: any) => {
-                const first = normalizeCompare(a, name);
-                const second = normalizeCompare(b, name); 
-                
-                return first > second ? 1 : second > first ? -1 : 0;
-            });
-            break;
-
-        case SortDirection.Down:
-            newRows.sort((a: any, b: any) => {
-                const first = normalizeCompare(a, name);
-                const second = normalizeCompare(b, name); 
-                
-                return second > first
-                    ? 1
-                    : first > second
-                        ? -1
-                        : 0;
-            });
-            break;
-
-        default:
-            /* newRows = localStorage.getItem("rows")
-                ? JSON.parse(localStorage.getItem("rows") as string)
-                : localRows; */
-            break;
-    }
-
-    setSort({ name: newSort.name, direction: newSort.direction });
-    setLocalRows(newRows);
-};
-
-function normalizeCompare(item : any, name: string) {
-    switch (name) {
-        case "subscriptionEndDate":
-            return new Date(item[name]);
-    
-        case "userRoles":
-            return item[name];
-    
-        default:
-            return item[name].toUpperCase()
-    }      
-}
-
+import { UserRole } from "../data/enum";
 
 /**
  * A function to format server date to dot separated
@@ -102,7 +22,7 @@ export function formatDate(date: string): string {
 
 export function adaptRoles(array: string[]): string[] {
     const formattedArray = [...array];
-  
+
     replaceItemInArray(formattedArray, UserRole.OrgAdmin, 'Org. Admin')
     replaceItemInArray(formattedArray, UserRole.Admin, 'Super Admin')
     replaceItemInArray(formattedArray, UserRole.OrgOwner, 'Org. Owner')

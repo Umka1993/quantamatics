@@ -1,6 +1,6 @@
 import baseApi from "../index";
 import { ApiRoute, UserRole } from "../../data/enum";
-import { IUpdateUser, IUser } from "../../types/user";
+import { IUser, IUpdateUser } from "../../types/user";
 
 const usersApi = baseApi.injectEndpoints({
     endpoints: (build) => ({

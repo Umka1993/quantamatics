@@ -30,7 +30,7 @@ const ForgotPassword: React.FunctionComponent = (props) => {
     const onError = () => { setFinish(true); }
     const onFinish = () => { history.push("/success-restore-password"); }
 
-    const sendPasswordResetRequest = (evt: FormEvent<HTMLFormElement>) => {
+    const sendPasswordResetRequest = () => {
         dispatch(sendResetPasswordMail(forgotEmail, onFinish, onError))
     };
 
