@@ -1,7 +1,8 @@
 @import "../../../variables.scss";
 
 .form {
-  width: $form-width;
+  width: 100%;
+  max-width: $form-width;
   margin: auto;
   position: relative;
 

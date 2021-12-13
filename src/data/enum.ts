@@ -1,5 +1,6 @@
 export const enum AppInfo {
     Name = 'Quantamatics',
+    LogoPath = 'img/logo.svg'
 }
 
 export const enum AppRoute {
@@ -14,7 +15,7 @@ export const enum AppRoute {
     Organizations = '/apps/organizations/:path',
     SignUp = '/sign-up',
     ResetPassword = '/reset-password',
-    Login = '/login',
+    Login = 'login',
     ForgotPassword = '/forgot-password',
 
     Success = '/success-:success',
