@@ -11,18 +11,17 @@ import arrowImg from "./assets/toggle-arrow.svg";
 import profileImg from "./assets/profile.svg";
 import logoutImg from "./assets/logout.svg";
 import SVG from "../SVG";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import classNames from "classnames";
 import { RootState } from "../../store";
-import { useHistory, Link } from "react-router-dom";
-import { changeRoute } from "../../store/currentPage/actions";
+import { Link } from "react-router-dom";
 import { EditPassword } from "../edit-modal/edit-password";
 import { IUser } from "types/edit-profile/types";
-import { AppRoute, AuthorizationStatus } from "../../data/enum";
+import { AuthorizationStatus } from "../../data/enum";
 // import Breadcrumbs from '../breadcrumbs';
-import { logout } from "../../store/authorization";
 import { EXCEL_PLUGIN } from "../../data/constants";
 import DownLoadIcon from "./assets/download.svg";
+import useLogout from "../../hooks/useLogout";
 
 export const Header: FunctionComponent = () => {
     const { user, status } = useSelector((state: RootState) => state.auth);
@@ -31,9 +30,9 @@ export const Header: FunctionComponent = () => {
     const [showProfile, setShowProfile] = useState<boolean>(false);
 
     const profileRef = useRef<HTMLDivElement>(null);
-    const dispatch = useDispatch();
-    const history = useHistory();
     const [summaryWidth, setSummaryWidth] = useState<number>(54);
+
+    const logout = useLogout();
 
     const useOutsideClick = (ref: any, callback: any) => {
         useEffect(() => {
@@ -49,12 +48,6 @@ export const Header: FunctionComponent = () => {
         }, [ref]);
     };
     useOutsideClick(profileRef, setShowMenu);
-
-    const handleChangeRoute = (route: string) => {
-        dispatch(changeRoute(route));
-        route === AppRoute.Login && dispatch(logout());
-        history.push(route);
-    };
 
     useEffect(() => {
         if (profileRef.current) {
@@ -113,7 +106,7 @@ export const Header: FunctionComponent = () => {
                             </div>
                             <div
                                 className="profile__dropdown-item"
-                                onClick={() => handleChangeRoute(AppRoute.Login)}
+                                onClick={logout}
                             >
                                 <SVG icon={logoutImg} name="logoutImg" /> Log Out
                             </div>
