@@ -6,6 +6,7 @@ import { JupyterFrame } from "../components/jupyter-frame";
 import OrganizationList from "../components/organization-list";
 import { CreateOrganizationForm, AddUserForm } from "../components/form/";
 import { EditOrganization } from "../components/edit-organization/edit-organization";
+import SuccessMessage from "../components/success-message";
 
 export default function PrivateRoutes(): ReactElement {
     const user = useUser();
@@ -56,8 +57,11 @@ export default function PrivateRoutes(): ReactElement {
                 <>
                     <Route path="/apps/organizations/:id" element={<EditOrganization />} />
                     <Route path="/apps/organizations/:id/add-user" element={<AddUserForm />} />
+                    <Route path={AppRoute.Success} element={<SuccessMessage />} />
                 </>
             )}
+
+
         </Routes>
     );
 }
