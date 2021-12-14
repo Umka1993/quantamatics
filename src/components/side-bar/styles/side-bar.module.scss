@@ -82,6 +82,10 @@
   line-height: 16px;
   padding: 12px 0;
 
+  transition-property: font-size;
+  transition-duration: 0.2s;
+  transition-delay: 0.3s;
+
   color: $headlines;
 
   &::after {
@@ -116,6 +120,7 @@
     border-color: transparent;
     margin-left: 0;
     margin-right: 0;
+    font-size: 0;
     &::after {
       display: none;
     }

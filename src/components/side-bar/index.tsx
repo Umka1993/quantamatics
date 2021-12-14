@@ -34,7 +34,7 @@ export const SideBar: React.FunctionComponent = () => {
                 <ExelIcon aria-hidden="true" fill="#20744A" />
             </Button>
 
-            <UserMenu />
+            <UserMenu collapsed={collapsed} />
         </aside >
     );
 };

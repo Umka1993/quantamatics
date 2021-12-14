@@ -6,8 +6,12 @@ import LogoutIcon from './assets/logout.svg';
 import CrossIcon from './assets/cross.svg';
 import useLogout from '../../hooks/useLogout';
 import style from './user-menu.module.scss';
+import classnames from 'classnames';
 
-export default function UserMenu(): ReactElement {
+interface Props {
+    collapsed: boolean;
+}
+export default function UserMenu({ collapsed }: Props): ReactElement {
     const user = useUser();
     const logout = useLogout();
 
@@ -18,7 +22,7 @@ export default function UserMenu(): ReactElement {
         <>
             <button
                 aria-label='Open user menu'
-                className={style.trigger}
+                className={classnames(style.trigger, { [style['trigger--wide']]: !collapsed })}
                 onClick={() => setOpenDropdown(!openDropdown)}
             >
                 <ProfileIcon
@@ -26,7 +30,7 @@ export default function UserMenu(): ReactElement {
                     width={20} height={20}
                     fill='currentColor'
                 />
-                {user?.firstName} {user?.lastName}
+                {!collapsed && `${user?.firstName} ${user?.lastName}`}
             </button>
             {openDropdown &&
                 <div className={style.menu}>

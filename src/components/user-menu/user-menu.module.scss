@@ -25,6 +25,15 @@
     align-items: center;
     align-content: center;
     justify-content: center;
+
+    font-size: 0;
+    transition-property: font-size;
+    transition-duration: 0.2s;
+    transition-delay: 0.3s;
+
+    &--wide {
+        font-size: 14px;
+    }
 }
 
 .menu {
