@@ -1,9 +1,8 @@
 import React, { FunctionComponent, SVGProps } from "react";
-import { useHistory } from "react-router";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { AppRoute, UserRole } from "../../data/enum";
 
-import DocIcon from "./assets/doc.svg";
+import ZoomIcon from "./assets/zoom.svg";
 import CoherenceIcon from "./assets/coherence.svg";
 import OrganizationsIcon from "./assets/org.svg";
 import CogsIcon from "./assets/cogs.svg";
@@ -25,9 +24,7 @@ interface NavLinkContent {
 }
 
 const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
-    const {
-        location: { pathname },
-    } = useHistory();
+    const { pathname } = useLocation();
     const user = useUser();
 
     const isHaveAccessToOrgList =
@@ -44,18 +41,27 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
             {user?.userRoles.includes(UserRole.Research) && (
                 <details open={pathname.includes("/research") ? true : undefined}>
                     <summary className="navigation__item">
-                        <DocIcon aria-hidden="true" className="navigation__icon" />
+                        <ZoomIcon 
+                            aria-hidden="true" className="navigation__icon"
+                            width="16" height="16"
+                        />
                         Research
                     </summary>
                     <div className="navigation__sublist">
                         {subItems.map((item) => (
                             <NavLink
                                 to={item.href}
-                                className="navigation__item navigation__item--sub"
-                                activeClassName="navigation__item--active"
+                                className={({ isActive }) => {
+                                    const classes = ['navigation__item', 'navigation__item--sub']
+                                    isActive && classes.push('navigation__item--active');
+                                    return classes.join(' ');
+                                }}
                                 key={item.href}
                             >
-                                <item.icon aria-hidden="true" className="navigation__icon" />
+                                <item.icon 
+                                    aria-hidden="true" className="navigation__icon"
+                                    width="16" height="16"
+                                />
                                 {item.text}
                             </NavLink>
                         ))}
@@ -66,8 +72,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
             {user?.userRoles.includes(UserRole.Coherence) && (
                 <NavLink
                     to={AppRoute.Coherence}
-                    className="navigation__item"
-                    activeClassName="navigation__item--active"
+                    className={({ isActive }) => isActive ? 'navigation__item navigation__item--active' : 'navigation__item'}
                 >
                     <CoherenceIcon aria-hidden="true" className="navigation__icon" />
                     Coherence
@@ -77,12 +82,12 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
             {isHaveAccessToOrgList && (
                 <NavLink
                     to="/apps/organizations/list"
-                    className={classNames("navigation__item", {
+
+                    className={(isActive) => classNames("navigation__item", {
                         "navigation__item--active":
                             pathname.includes("/apps/organizations/") &&
                             !pathname.includes(`/apps/organizations/${user?.organizationId}`),
                     })}
-                    activeClassName="navigation__item--active"
                 >
                     <OrganizationsIcon aria-hidden="true" className="navigation__icon" />
                     Organizations
@@ -92,8 +97,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
             {user?.userRoles.includes(UserRole.OrgAdmin) && (
                 <NavLink
                     to={`/apps/organizations/${user?.organizationId}`}
-                    className="navigation__item"
-                    activeClassName="navigation__item--active"
+                    className={({ isActive }) => isActive ? 'navigation__item navigation__item--active' : 'navigation__item'}
                 >
                     <CogsIcon aria-hidden="true" className="navigation__icon" />
                     Settings

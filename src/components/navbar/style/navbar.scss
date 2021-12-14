@@ -16,6 +16,7 @@
         position: relative;
         cursor: pointer;
         transition: font-size 0.4s 0.2s;
+        letter-spacing: 0.01em;
 
         &::-webkit-details-marker {
             display: none;
