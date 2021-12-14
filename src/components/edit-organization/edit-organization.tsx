@@ -1,12 +1,10 @@
-import React, { FormEvent, useCallback, useEffect, useState } from "react";
+import React, { FormEvent, useCallback, useEffect, useState, FunctionComponent } from "react";
 import "./styles/edit-organizations.scss";
 import AddIcon from "./assets/human-add.svg";
 import Button, { ResetButton } from "../button";
 import { UserTable } from "../table/UserTable";
 import Input from "../app-input/";
-import { useHistory, useParams } from "react-router-dom";
-import { changeRoute } from "../../store/currentPage/actions";
-import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import Headline from "../page-title/index";
 import type { RouteParams } from "../../types/route-params";
 import {
@@ -18,7 +16,7 @@ import useUser from "../../hooks/useUser";
 import { UserRole } from "../../data/enum";
 import Loader from "../loader";
 
-export const EditOrganization: React.FunctionComponent = () => {
+export const EditOrganization: FunctionComponent = () => {
     const user = useUser();
     const [organizationName, setOrganizationName] = useState<string>("");
     const [customerID, setCustomerID] = useState<string>("");
@@ -26,11 +24,11 @@ export const EditOrganization: React.FunctionComponent = () => {
     const [comment, setComment] = useState<string | undefined>("");
 
     const { id } = useParams<RouteParams>();
-
+    const navigate = useNavigate();
     const [update, { isSuccess: isUpdated, isLoading: isUpdating }] =
         useUpdateOrganizationMutation();
 
-    const { data, isSuccess, isError, error } = useGetOrganizationQuery(id);
+    const { data, isSuccess, isError, error } = useGetOrganizationQuery(id as string);
     const isHaveAccessToOrgList =
         user?.userRoles.includes(UserRole.Admin) ||
         user?.userRoles.includes(UserRole.OrgOwner);
@@ -38,8 +36,7 @@ export const EditOrganization: React.FunctionComponent = () => {
     useEffect(() => {
         if (isUpdated) {
             if (isHaveAccessToOrgList) {
-                dispatch(changeRoute("apps/organizations/list"));
-                history.push("/apps/organizations/list");
+                navigate("/apps/organizations/list");
             }
         }
     }, [isUpdated]);
@@ -56,12 +53,8 @@ export const EditOrganization: React.FunctionComponent = () => {
     useEffect(() => {
         if (isSuccess && data) {
             setInitialOrg();
-            dispatch(changeRoute(`apps/organizations/${data.name}`));
         }
     }, [isSuccess]);
-
-    const dispatch = useDispatch();
-    const history = useHistory();
 
     const submitHandler = (evt: any) => {
         evt.preventDefault();
@@ -79,8 +72,7 @@ export const EditOrganization: React.FunctionComponent = () => {
         setInitialOrg();
 
         if (isHaveAccessToOrgList) {
-            dispatch(changeRoute("apps/organizations/list"));
-            history.push("/apps/organizations/list");
+            navigate("/apps/organizations/list");
         }
     }
 
@@ -169,17 +161,15 @@ export const EditOrganization: React.FunctionComponent = () => {
 
                     <Button
                         className="edit-organization__user-list-add"
-                        href={`/apps/organizations/${id}/add-user`}
+                        href='add-user'
                     >
                         <AddIcon />
                         Add New
                     </Button>
                 </div>
 
-                <UserTable />
+                <UserTable orgId={id as string} />
             </section>
         </div>
-
-
     );
 };

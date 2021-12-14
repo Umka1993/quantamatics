@@ -1,3 +1,9 @@
+.root {
+  display: grid;
+  align-items: start;
+  height: 100%;
+  grid-auto-rows: auto 1fr;
+}
 .header {
   padding: 40px 40px 12px;
 }
@@ -5,5 +11,5 @@
 .frame {
   border: none;
   width: 100%;
-  flex: 1 0 300px;
+  height: 100%;
 }

@@ -14,12 +14,12 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
 
     return (
-        <>
+        <div className={style.root}>
             <header className={style.header}>
                 <Headline>{type === 'files' ? 'My Files' : 'Coherence'}</Headline>
                 {type === 'files' && (<p>Manage and edit your files</p>)}
             </header>
             <iframe className={style.frame} name="jupyter-iframe" src={HUB_URL} />
-        </>
+        </div>
     )
 }
