@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .root {
   display: grid;
   align-items: start;
@@ -6,6 +8,13 @@
 }
 .header {
   padding: 40px 40px 12px;
+
+  :global .page-title {
+    margin: 0 0 12px;
+  }
+  p {
+    margin: 0;
+  }
 }
 
 .frame {
