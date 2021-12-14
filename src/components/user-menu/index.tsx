@@ -1,5 +1,5 @@
 import { EditPassword } from '../edit-modal/edit-password';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import useUser from '../../hooks/useUser';
 import ProfileIcon from './assets/profile.svg';
 import LogoutIcon from './assets/logout.svg';
@@ -17,6 +17,21 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
     const user = useUser();
     const logout = useLogout();
     const [openDropdown, setOpenDropdown] = useState<boolean>(false);
+    const firstItemRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        collapsed && setOpenDropdown(false)
+    }, [collapsed])
+
+    const closeModal = useCallback(() => setOpenDropdown(false), [openDropdown])
+    useEffect(() => {
+        if (openDropdown) {
+            firstItemRef.current && firstItemRef.current.focus();
+            document.addEventListener('click', closeModal)
+        }
+
+        return () => document.removeEventListener('click', closeModal)
+    }, [openDropdown])
 
     return (
         <>
@@ -33,7 +48,7 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
                 {!collapsed && `${user?.firstName} ${user?.lastName}`}
             </button>
             {openDropdown &&
-                <div className={style.menu}>
+                <div className={style.menu} onClick={(e) => e.stopPropagation()}>
                     <button
                         type='button'
                         onClick={() => setOpenDropdown(false)}
@@ -50,6 +65,7 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
                         type='button'
                         onClick={openModal}
                         className={style.button}
+                        ref={firstItemRef}
                     >
                         <ProfileIcon
                             aria-hidden={true}
@@ -71,7 +87,6 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
                         />
                         Log Out
                     </button>
-
                 </div>
             }
         </>

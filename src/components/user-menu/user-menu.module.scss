@@ -60,6 +60,7 @@
     top: 16px;
     right: 16px;
     color: $inactive;
+    z-index: 2;
 }
 
 .button {
@@ -73,10 +74,19 @@
     line-height: 18px;
     position: relative;
 
+    svg {
+        margin-right: 16px;
+        color: $inactive;
+    }
+
     &:hover,
-    &:focus-visible,
+    &:focus,
     &:active {
-        fill: currentColor;
+        color: $accent;
+        font-weight: 500;
+        svg {
+            color: currentColor;
+        }
 
         &::before {
             content: "";
@@ -85,12 +95,8 @@
             top: 12px;
             height: 22px;
             width: 2px;
-            background: $accent;
+            background-color: currentColor;
             border-radius: 0px 5px 5px 0px;
         }
-    }
-
-    svg {
-        margin-right: 16px;
     }
 }
