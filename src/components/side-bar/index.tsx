@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FunctionComponent } from "react";
 import style from "./styles/side-bar.module.scss";
 import NavBar from "../navbar";
 import LinesIcon from "./assets/lines.svg";
@@ -8,7 +8,11 @@ import Logo from "../logo";
 import Button from "../button";
 import UserMenu from "../user-menu";
 
-export const SideBar: React.FunctionComponent = () => {
+type SideBarProps = {
+    openModal: () => void; 
+}
+
+export const SideBar: FunctionComponent<SideBarProps> = ({openModal}) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
     return (
         <aside
@@ -34,7 +38,7 @@ export const SideBar: React.FunctionComponent = () => {
                 <ExelIcon aria-hidden="true" fill="#20744A" />
             </Button>
 
-            <UserMenu collapsed={collapsed} />
+            <UserMenu collapsed={collapsed} openModal={openModal} />
         </aside >
     );
 };

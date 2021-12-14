@@ -10,12 +10,12 @@ import classnames from 'classnames';
 
 interface Props {
     collapsed: boolean;
+    openModal: () => void; 
 }
-export default function UserMenu({ collapsed }: Props): ReactElement {
+
+export default function UserMenu({ collapsed, openModal }: Props): ReactElement {
     const user = useUser();
     const logout = useLogout();
-
-    const [showProfile, setShowProfile] = useState<boolean>(false);
     const [openDropdown, setOpenDropdown] = useState<boolean>(false);
 
     return (
@@ -48,9 +48,7 @@ export default function UserMenu({ collapsed }: Props): ReactElement {
                     </button>
                     <button
                         type='button'
-                        onClick={() => {
-                            setShowProfile(true);
-                        }}
+                        onClick={openModal}
                         className={style.button}
                     >
                         <ProfileIcon
@@ -75,15 +73,6 @@ export default function UserMenu({ collapsed }: Props): ReactElement {
                     </button>
 
                 </div>
-            }
-
-
-            {showProfile && user && (
-                <EditPassword
-                    user={user}
-                    onClose={() => setShowProfile(false)}
-                />
-            )
             }
         </>
     );
