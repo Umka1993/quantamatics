@@ -27,7 +27,7 @@ export default function useLogin() : (body: LoginResponse, rememberMe: boolean) 
             } as InfoMessage});
         }
     
-        if (isHaveUserRoles) {
+        if (!isHaveUserRoles) {
             return navigate(AppRoute.NoRoles, {state: {
                 headline: 'Your user account is in the process of being set up',
                 image: 'man',

@@ -1,15 +1,12 @@
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { createAPI } from "./services/api";
 
 import authorizationReducer from "./store/authorization";
-import quantamaticsApi from "./api";
-
-const api = createAPI();
+import api from "./api";
 
 const rootReducer = combineReducers({
   auth: authorizationReducer,
-  [quantamaticsApi.reducerPath]: quantamaticsApi.reducer
+  [api.reducerPath]: api.reducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>
@@ -17,10 +14,6 @@ export type RootState = ReturnType<typeof rootReducer>
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      thunk: {
-        extraArgument: api,
-      },
-    }).concat(quantamaticsApi.middleware),
+    getDefaultMiddleware().concat(api.middleware),
 });
 
