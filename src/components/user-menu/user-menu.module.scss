@@ -1,0 +1,87 @@
+@use "../../variables.scss" as *;
+
+.button,
+.close,
+.trigger {
+    background-color: transparent;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    color: $main-text;
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+        color: $accent;
+    }
+}
+
+.trigger {
+    border: none;
+    border-top: 1px solid transparentize($main-text, 0.9);
+    height: 52px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.menu {
+    position: fixed;
+    left: 0;
+    z-index: 1;
+    bottom: 52px;
+    width: 248px;
+    background-color: #fff;
+    box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.15);
+    display: grid;
+
+    transition: 0.3s ease-in-out;
+    padding: 22px 0 20px;
+
+    @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+        background: linear-gradient(149.05deg, rgba(255, 255, 255, 0.8) 3.23%, rgba(255, 255, 255, 0.7) 98.66%);
+        backdrop-filter: blur(10px);
+    }
+}
+
+.close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    color: $inactive;
+}
+
+.button {
+    text-align: left;
+    padding: 12px 26px;
+    display: flex;
+    align-items: center;
+
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 18px;
+    position: relative;
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+        fill: currentColor;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 12px;
+            height: 22px;
+            width: 2px;
+            background: $accent;
+            border-radius: 0px 5px 5px 0px;
+        }
+    }
+
+    svg {
+        margin-right: 16px;
+    }
+}
