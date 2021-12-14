@@ -5,6 +5,7 @@
   max-width: $form-width;
   margin: auto;
   position: relative;
+  z-index: -1;
 
   &__header {
     text-align: center;
