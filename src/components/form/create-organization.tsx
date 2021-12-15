@@ -1,12 +1,11 @@
 import React, { useEffect, useState, FunctionComponent } from "react";
 import "./styles/create-organization.scss";
-import Input, { InputURL } from "../app-input";
-import { useHistory } from "react-router-dom";
+import Input from "../app-input";
+import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
-import { useDispatch } from "react-redux";
-import { changeRoute } from "../../store/currentPage/actions";
 import Form from "./form";
 import { useAddOrganizationMutation } from "../../api/organization";
+import { AppRoute } from "../../data/enum";
 
 interface ICreateOrganization { }
 
@@ -18,8 +17,7 @@ export interface createOrganizationRequestBody {
 }
 
 const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
-    const history = useHistory();
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [register, { isError, isSuccess }] = useAddOrganizationMutation();
 
@@ -29,8 +27,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [comments, setComments] = useState<string | undefined>("");
 
     const returnBack = () => {
-        dispatch(changeRoute("apps/organizations/list"));
-        history.push("/apps/organizations/list");
+        navigate(AppRoute.OrganizationList);
     };
 
     useEffect(() => {

@@ -16,9 +16,7 @@ const Button: FunctionComponent<IButton> = ({
     ...other
 }) => {
     const buttonClasses = classNames("button", className);
-
-
-
+    
     return href ? (
         <Link to={href} className={buttonClasses}>
             {children}

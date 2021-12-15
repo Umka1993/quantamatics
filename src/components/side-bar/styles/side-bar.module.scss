@@ -1,0 +1,132 @@
+@use "../../../variables.scss" as *;
+
+@keyframes fromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.root {
+  --side: 32px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  flex: 0 0 250px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  transition: flex-basis 0.4s;
+  padding: 32px 0 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  border-right: 1px solid transparentize(#162265, 0.75);
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 24px;
+  padding-right: 20px;
+  padding-bottom: 48px;
+}
+
+.switcher {
+  border: none;
+  background-color: transparent;
+  line-height: 1.125;
+  color: $inactive;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  cursor: pointer;
+  font-weight: normal;
+  color: $inactive
+
+  svg {
+    transition: transform 0.5s;
+  }
+
+  &[aria-checked]:hover,
+  &[aria-checked]:focus-visible {
+    color: $accent
+  }
+  &[aria-checked="true"] {
+    justify-content: center;
+  
+    svg {
+      transform: scale(-1, 1);
+    }
+  }
+}
+
+.plugin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+
+  margin: auto 24px 32px;
+  border: 1px solid $inactive;
+  border-radius: 2px;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 12px 0;
+
+  transition-property: font-size;
+  transition-duration: 0.2s;
+  transition-delay: 0.3s;
+
+  color: $headlines;
+
+  &::after {
+    content: attr(aria-label);
+    margin-left: 8px;
+  }
+
+  &:hover,
+  &:focus-visible,
+  &:active {
+    background-color: #20744a;
+    color: #fff;
+    svg {
+      fill: #fff;
+      transition: fill 0.3s;
+    }
+
+    :global .exel_svg__exel-plugin {
+      fill: #20744a;
+    }
+  }
+}
+
+.collapsed {
+  flex-basis: 80px;
+  --side: 0;
+
+  .header {
+    padding: 0 0 48px;
+    justify-content: center;
+    justify-items: center;
+  }
+
+  .plugin {
+    border-color: transparent;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 0;
+    &::after {
+      display: none;
+    }
+  }
+}

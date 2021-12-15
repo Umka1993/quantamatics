@@ -12,12 +12,14 @@ export const enum AppRoute {
     Settings = '/settings',
 
     Organizations = '/apps/organizations/:path',
+    OrganizationList = '/apps/organizations/list',
+    CreateOrganization = '/apps/organizations/new-organization',
     SignUp = '/sign-up',
     ResetPassword = '/reset-password',
     Login = '/login',
     ForgotPassword = '/forgot-password',
 
-    Success = '/success-:success',
+    Success = '/success',
     Expired = '/expired',
     ExpiredPassword = '/expired-token',
     SignUpExpired = '/expired-registration',

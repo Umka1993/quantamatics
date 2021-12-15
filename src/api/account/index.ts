@@ -79,7 +79,13 @@ const accountApi = baseApi.injectEndpoints({
             }),
         }),
 
-
+        sendResetPasswordMail: build.mutation<void, string>({
+            query: (email) => ({
+                url: AccountEndpoint.ResetPasswordMail,
+                method: "POST",
+                params: {email}
+            })
+        }),
         resetPassword: build.mutation<
             void,
             { email: string, password: string, token: string  }
@@ -103,4 +109,5 @@ export const {
     useGetTokenQuery,
     useChangePasswordMutation,
     useResetPasswordMutation,
+    useSendResetPasswordMailMutation,
 } = accountApi;

@@ -1,24 +1,19 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, FunctionComponent, useRef } from "react";
 import "./styles/create-organization.scss";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Input, { DatePick, Email } from "../app-input/";
-import { useDispatch } from "react-redux";
-import { changeRoute } from "../../store/currentPage/actions";
 import Form from "./form";
 import RoleCheckboxes from "../role-checkboxes";
-import { UserRole } from "../../data/enum";
+import { AppRoute, UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
 import { useGetOrganizationQuery } from "../../api/organization";
 
-interface ICreateOrganization { }
 
-const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
+const InviteUserForm: FunctionComponent = () => {
+    const { id: organizationId } = useParams();
 
-) => {
-    const { id: organizationId } = useParams<{ id: string }>();
-
-    const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(organizationId);
+    const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(organizationId as string);
 
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
@@ -32,6 +27,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
     const [userRoles, setRoles] = useState<UserRole[]>([]);
 
     const [register, { isSuccess, isError, error }] = useRegisterUserMutation();
+    const formRef = useRef<HTMLFormElement>(null);
 
 
     useEffect(() => {
@@ -39,22 +35,28 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
             && setErrors("The user with such email already exists")
     }, [isError])
 
+    const backLink = `/apps/organizations/${company?.id}`;
 
     useEffect(() => {
-        isSuccess && history.push("/success-invitation");
+        isSuccess && navigate(AppRoute.Success, {
+            state: {
+                headline: "An invitation email has been sent to the user",
+                linkText: "Go Back",
+                link: backLink
+            }
+        });
     }, [isSuccess])
 
 
-    const history = useHistory();
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(changeRoute(`organizations/${company?.name}/add-user`));
-    }, [isOrgLoaded])
+    const navigate = useNavigate();
 
     useEffect(() => {
         errors && setErrors(undefined);
     }, [email]);
+
+    useEffect(() => {
+        errors && formRef.current && formRef.current.reportValidity();
+    }, [errors, formRef.current]);
 
     const addUserToOrg = useCallback(() => {
         register({
@@ -75,6 +77,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
             subtitle="Add a new user account to your organization"
             onSubmit={addUserToOrg}
             stopLoading={isError}
+            forwardRef={formRef}
         >
             <div className="create-organization__fields">
                 <Input
@@ -117,7 +120,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
 
             <ResetButton
                 className="create-organization__cancel"
-                href={`/apps/organizations/${company?.id}`}
+                href={backLink}
             >
                 Cancel
             </ResetButton>
@@ -125,4 +128,4 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
     );
 };
 
-export default CreateOrganization;
+export default InviteUserForm;
