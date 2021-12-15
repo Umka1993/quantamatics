@@ -1,9 +1,8 @@
 import React, { DetailsHTMLAttributes, FunctionComponent, ReactElement, SyntheticEvent, useState } from 'react';
-import classnames from 'classnames';
 import './style/accordion.scss'
 import { useRef } from 'react';
 import { useEffect } from 'react';
-import { MouseEventHandler } from 'react';
+import classNames from 'classnames';
 
 interface AccordionProps extends DetailsHTMLAttributes<HTMLDetailsElement> {
   summary: ReactElement | string,
@@ -11,10 +10,11 @@ interface AccordionProps extends DetailsHTMLAttributes<HTMLDetailsElement> {
   wrapperClass?: string,
 }
 
-const Accordion: FunctionComponent<AccordionProps> = ({ summary, summaryClass, wrapperClass, children, ...other }) => {
+const Accordion: FunctionComponent<AccordionProps> = ({ summary, className, summaryClass, wrapperClass, open, children, ...other }) => {
   // const [isClosing, setIsClosing] = useState(false);
   const summaryRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const accordionRef = useRef<HTMLDetailsElement>(null);
   const [expendedHeight, setExpendedHeight] = useState('500px');
   const [summaryHeight, setSummaryHeight] = useState('56px');
 
@@ -27,17 +27,23 @@ const Accordion: FunctionComponent<AccordionProps> = ({ summary, summaryClass, w
     easing: 'ease-out'
   }
 
+  function closeAccordion() {
+    if (accordionRef.current) {
+      accordionRef.current?.animate({
+        height: [expendedHeight, summaryHeight]
+      }, ANIMATION_OPTIONS)
+
+      accordionRef.current.open = false;
+    }
+  }
+
   function handleSummary(evt: SyntheticEvent<HTMLElement, MouseEvent>) {
     evt.preventDefault();
 
     const accordion = evt.currentTarget.parentElement as HTMLDetailsElement;
 
     if (accordion.open) {
-      accordion.animate({
-        height: [expendedHeight, summaryHeight]
-      }, ANIMATION_OPTIONS)
-
-      accordion.open = false;
+      closeAccordion();
     }
     else {
       accordion.open = true;
@@ -53,10 +59,14 @@ const Accordion: FunctionComponent<AccordionProps> = ({ summary, summaryClass, w
     }
   }
 
+  useEffect(() => {
+    !open && closeAccordion();
+  }, [open])
+
   return (
-    <details {...other} className='accordion'>
+    <details open={open} className={classNames('accordion', className)} {...other} ref={accordionRef} >
       <summary className={summaryClass} ref={summaryRef} onClick={handleSummary}>{summary}</summary>
-      <div className={classnames('accordion__content', wrapperClass)} ref={contentRef}>
+      <div className={classNames('accordion__content', wrapperClass)} ref={contentRef}>
         {children}
       </div>
     </details >
