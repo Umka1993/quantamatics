@@ -10,20 +10,20 @@ import ComaList from "../coma-list";
 import { IUpdateUser } from "../../types/user";
 import ISort from "../../types/sort-type";
 import { useGetOrganizationUsersQuery } from "../../api/user";
-import { useParams } from "react-router";
-import { RouteParams } from "types/route-params";
 import Loader from "../loader";
 import "./styles/table.scss";
 import { USER_HEADER } from "./utils/constants";
 import { SortDirection } from "../../data/enum";
 
-export const UserTable: FunctionComponent = () => {
-    const { id } = useParams<RouteParams>();
+interface UserTableProps {
+    orgId: string;
+}
 
+export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
     // ? Need to be in component to reset sort after update
     const INITIAL_SORT = { name: "", direction: SortDirection.Default }
 
-    const { data, isSuccess, isLoading } = useGetOrganizationUsersQuery(id);
+    const { data, isSuccess, isLoading } = useGetOrganizationUsersQuery(orgId);
 
     const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -31,7 +31,7 @@ export const UserTable: FunctionComponent = () => {
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
     const [user, setUser] = useState<IUpdateUser>();
 
-    const [scrollY, setScrollY] = useState<number>(0);
+    const [scrollY, setScrollY] = useState<number>(0); 
 
     const endDates = useMemo(() => {
         if (data) {
@@ -61,7 +61,7 @@ export const UserTable: FunctionComponent = () => {
     // ? Kludge for Chrome to remember scroll position after rerendering
 
     useLayoutEffect(() => {
-        const scrollWrapper = document.querySelector('.layout-page__scroll')
+        const scrollWrapper = document.querySelector('main')
         if (scrollWrapper) {
             scrollWrapper.scrollTop = scrollY;
         }

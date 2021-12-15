@@ -1,19 +1,12 @@
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { createAPI } from "./services/api";
 
-import { currentPageReducer } from "./store/currentPage/reducer";
 import authorizationReducer from "./store/authorization";
-import quantamaticsApi from "./api";
-// import { breadcrumbsReducer, LinkData } from './store/breadcrumbs/reducer';
-
-const api = createAPI();
+import api from "./api";
 
 const rootReducer = combineReducers({
-  currentPage: currentPageReducer,
   auth: authorizationReducer,
-  [quantamaticsApi.reducerPath]: quantamaticsApi.reducer
-  // breadcrumbs: breadcrumbsReducer
+  [api.reducerPath]: api.reducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>
@@ -21,10 +14,6 @@ export type RootState = ReturnType<typeof rootReducer>
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      thunk: {
-        extraArgument: api,
-      },
-    }).concat(quantamaticsApi.middleware),
+    getDefaultMiddleware().concat(api.middleware),
 });
 

@@ -1,35 +1,23 @@
 import React, { FunctionComponent } from "react";
-import { useHistory } from "react-router";
+import { Navigate, useLocation } from "react-router-dom";
+import { AppRoute } from "../../data/enum";
 import Button from "../button";
 import CheckIcon from "./assets/check.svg";
-import './style/success.scss'
+import style from "./style/success.module.scss";
 
-interface Props {
-    title: string;
-    linkText: string;
-    path?: string;
-    go?: number;
-}
+const SuccessMessage: FunctionComponent = () => {
+    const { state } = useLocation();
 
-const SuccessMessage: FunctionComponent<Props> = ({
-    title,
-    linkText,
-    path,
-    go
-}) => {
-    const history = useHistory();
-
-    return (
-        <article className="success">
-            <h1 className="success__title">
+    return state ? (
+        <article className={style.success}>
+            <h1 className={style.title}>
                 <CheckIcon aria-hidden="true" fill="currentColor" />
-                {title}
+                {state.headline}
             </h1>
-
-            <Button href={path} onClick={go ? () => history.go(go) : undefined }>
-                {linkText}
-            </Button>
+            <Button className={style.button} href={state.link}>{state.linkText}</Button>
         </article>
+    ) : (
+        <Navigate to={AppRoute.Home} />
     );
 };
 

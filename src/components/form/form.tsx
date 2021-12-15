@@ -1,4 +1,4 @@
-import React, { FormEvent, FormHTMLAttributes, ForwardedRef, FunctionComponent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, FormHTMLAttributes, ForwardedRef, FunctionComponent, useEffect, useState } from "react";
 import "./styles/form.scss";
 import { Loader } from "../../components/loader";
 import Headline from '../page-title/index'
@@ -26,8 +26,8 @@ const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit
             if (isValid) {
                 setLoading(true);
                 onSubmit(evt)
-            } 
-            
+            }
+
         }
     }
 
@@ -39,10 +39,16 @@ const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit
 
     return (
         <form className={["form", className].join(' ')} onSubmit={handleSubmit} ref={forwardRef}
-        {...other}
+            {...other}
         >
             <header className="form__header">
-                <Headline className="form__title" pageTitle={headlineText}>{headline}</Headline>
+                <Headline
+                    className="form__title"
+                    pageTitle={headlineText}
+                    style={{ fontWeight: 400 }}
+                >
+                    {headline}
+                </Headline>
                 <p className="form__subtitle">{subtitle}</p>
             </header>
 

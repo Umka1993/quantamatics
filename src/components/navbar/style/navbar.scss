@@ -1,4 +1,4 @@
-@import "../../../variables.scss";
+@use "../../../variables.scss" as *;
 
 .navigation {
     $block: &;
@@ -8,7 +8,7 @@
         font-weight: 300;
         font-size: 16px;
         line-height: 1.125;
-        color: $headlines;
+        color: $main-text;
         text-decoration: none;
         padding: 18px var(--side);
         display: flex;
@@ -16,6 +16,7 @@
         position: relative;
         cursor: pointer;
         transition: font-size 0.4s 0.2s;
+        letter-spacing: 0.01em;
 
         &::-webkit-details-marker {
             display: none;
@@ -42,8 +43,7 @@
 
         &--sub {
             height: 18px + 24px;
-            padding-left: 25px;
-            padding-right: 10px;
+            padding: 9px 10px 9px 25px;
             background-color: transparent;
 
             &::before {
@@ -53,23 +53,14 @@
     }
 
     &__sublist {
-        margin: 12px 0 12px 20px;
-        height: 0;
-        transition: height 0.3s ease-in-out;
-        overflow-y: hidden;
+        padding-left: 12px;
+        padding-bottom: 12px;
     }
 
     details[open] > &__item {
         background-color: #f2f8fe;
         font-weight: 500;
         color: $accent;
-    }
-
-    details[open] &__sublist {
-        height: 42px*2 + 10px ;
-        /* TODO: Hardcoded val, need to rework for this: 
-        https://css-tricks.com/how-to-animate-the-details-element/ 
-        */
     }
 
     summary {
@@ -96,11 +87,23 @@
         }
     }
 
-    details[open] summary::after {
-        transform: none;
-        background-color: $accent;
+    details[open] summary {
+        position: relative;
+        &::before {
+            content: "";
+            width: 2px;
+            height: 100%;
+            background-color: $accent;
+            border-radius: 0px 5px 5px 0px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        &::after {
+            transform: none;
+            background-color: $accent;
+        }
     }
-
     details[open] summary &__icon,
     &__item:hover &__icon,
     &__item--active &__icon {
@@ -135,6 +138,6 @@
     }
 
     &--collapsed &__sublist {
-        margin-left: 0;
+        padding-left: 0;
     }
 }
