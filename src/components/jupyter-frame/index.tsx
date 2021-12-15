@@ -23,8 +23,6 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
         formRef.current && formRef.current.submit();
     }, [formRef.current])
 
-    logoutFromJupiter()
-
     return (
         <div className={style.root}>
             <header className={style.header}>
