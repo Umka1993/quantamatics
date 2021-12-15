@@ -5,8 +5,8 @@ import LinesIcon from "./assets/lines.svg";
 import ExelIcon from "./assets/exel.svg";
 import classNames from "classnames";
 import Logo from "../logo";
-import Button from "../button";
 import UserMenu from "../user-menu";
+import { EXCEL_PLUGIN } from "../../data/constants";
 
 type SideBarProps = {
     openModal: () => void; 
@@ -34,9 +34,9 @@ export const SideBar: FunctionComponent<SideBarProps> = ({openModal}) => {
 
             <NavBar collapsed={collapsed} />
 
-            <Button className={style.plugin} aria-label='Get Excel Plug-in'>
+            <a href={EXCEL_PLUGIN} className={style.plugin} aria-label='Get Excel Plug-in' download>
                 <ExelIcon aria-hidden="true" fill="#20744A" />
-            </Button>
+            </a>
 
             <UserMenu collapsed={collapsed} openModal={openModal} />
         </aside >
