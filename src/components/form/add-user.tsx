@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, FunctionComponent, useRef } from "react";
 import "./styles/create-organization.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
@@ -9,11 +9,8 @@ import { AppRoute, UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
 import { useGetOrganizationQuery } from "../../api/organization";
 
-interface ICreateOrganization { }
 
-const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
-
-) => {
+const InviteUserForm: FunctionComponent = () => {
     const { id: organizationId } = useParams();
 
     const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(organizationId as string);
@@ -30,6 +27,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
     const [userRoles, setRoles] = useState<UserRole[]>([]);
 
     const [register, { isSuccess, isError, error }] = useRegisterUserMutation();
+    const formRef = useRef<HTMLFormElement>(null);
 
 
     useEffect(() => {
@@ -56,6 +54,10 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
         errors && setErrors(undefined);
     }, [email]);
 
+    useEffect(() => {
+        errors && formRef.current && formRef.current.reportValidity();
+    }, [errors, formRef.current]);
+
     const addUserToOrg = useCallback(() => {
         register({
             firstName,
@@ -75,6 +77,7 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
             subtitle="Add a new user account to your organization"
             onSubmit={addUserToOrg}
             stopLoading={isError}
+            forwardRef={formRef}
         >
             <div className="create-organization__fields">
                 <Input
@@ -125,4 +128,4 @@ const CreateOrganization: React.FunctionComponent<ICreateOrganization> = (
     );
 };
 
-export default CreateOrganization;
+export default InviteUserForm;
