@@ -13,12 +13,10 @@ import Form from "./form";
 import "./styles/form.scss";
 import "./styles/login-page.scss";
 import {
-    useLoginUserMutation,
     useResetPasswordMutation,
     useVerifyTokenQuery,
 } from "../../api/account";
 import Loader from "../loader";
-import useLogin from "../../hooks/useLogin";
 import { InfoMessage } from "../info-message/info-message";
 
 const SignUp: FunctionComponent = () => {
@@ -27,8 +25,6 @@ const SignUp: FunctionComponent = () => {
     const [compare, setCompare] = useState<string | undefined>(undefined);
 
     const [finish, setFinish] = useState<boolean>(false);
-
-    const loginProcess = useLogin();
 
     const navigate = useNavigate();
 
@@ -41,8 +37,6 @@ const SignUp: FunctionComponent = () => {
         sendPassword,
         { isSuccess: isPasswordUpdated, isError: isPasswordError },
     ] = useResetPasswordMutation();
-    const [sendLogin, { isSuccess: isLogged, data: loggedData }] =
-        useLoginUserMutation();
 
     const { isSuccess: isTokenValid, isError: isExpiredToken } =
         useVerifyTokenQuery({ userName: String(email), token: token as string });
@@ -83,15 +77,9 @@ const SignUp: FunctionComponent = () => {
     }, [isPasswordError]);
 
     useEffect(() => {
-        if (isLogged && loggedData) {
-            loginProcess(loggedData, true);
-        }
-    }, [isLogged]);
-
-    useEffect(() => {
-        isPasswordUpdated &&
-            sendLogin({ email: email as string, password }).unwrap();
+        isPasswordUpdated && navigate(AppRoute.Login);
     }, [isPasswordUpdated]);
+
 
     if (isTokenValid) {
         return (
