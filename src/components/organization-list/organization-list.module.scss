@@ -7,7 +7,7 @@
 .header {
     padding: 0;
     display: flex;
-    align-items: center;
+    align-items: start;
     flex-wrap: wrap;
     justify-content: space-between;
 }
@@ -19,11 +19,15 @@
 }
 
 .titles {
+    h1 {
+        margin: 0 0 12;
+    }
     p {
         font-style: normal;
         font-weight: normal;
         font-size: 16px;
         line-height: 18px;
+        margin: 0;
 
         color: #7182a6;
     }
