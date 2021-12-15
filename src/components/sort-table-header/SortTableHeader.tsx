@@ -33,7 +33,7 @@ export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
             <button
                 onClick={() => {
                     if (rememberScroll) {
-                        const scrollWrapper = document.querySelector('.layout-page__scroll')
+                        const scrollWrapper = document.querySelector('main')
                         scrollWrapper && rememberScroll(scrollWrapper.scrollTop)
                     }
                     sortTable(name, sort, localRows, setSort, setLocalRows)

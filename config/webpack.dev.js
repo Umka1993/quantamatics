@@ -40,13 +40,24 @@ module.exports = {
                     {
                         loader: 'css-loader',
                         options: {
+                            importLoaders: 1,
                             modules: {
-                                localIdentName: '[local]'
+                                localIdentName: "[name]__[local]--[hash:base64:5]",
                             }
-                        }
+                        },
                     },
                     'sass-loader'
-                ]
+                ],
+                include: /\.module$/
+            },
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ],
+                exclude: /\.module\.css$/
             },
             {
                 test: /\.svg$/,

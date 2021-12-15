@@ -1,4 +1,4 @@
-import { createOrganizationRequestBody } from "../../components/form/create-organization";
+// import { createOrganizationRequestBody } from "../../components/form/create-organization";
 import { Organization } from "types/organization/types";
 import { ApiRoute } from "../../data/enum";
 import baseApi from "../index";
@@ -20,7 +20,7 @@ const organizationsApi = baseApi.injectEndpoints({
         }),
 
         addOrganization: build.mutation({
-            query: (body: createOrganizationRequestBody) => ({
+            query: (body: any) => ({
                 url: ApiRoute.OrganizationCreate,
                 method: "POST",
                 body,
