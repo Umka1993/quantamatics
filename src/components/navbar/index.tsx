@@ -73,8 +73,8 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
                             <item.icon
                                 aria-hidden="true"
                                 className="navigation__icon"
-                                width="16"
-                                height="16"
+                                width={16}
+                                height={16}
                             />
                             {item.text}
                         </NavLink>
@@ -91,7 +91,12 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
                             : "navigation__item"
                     }
                 >
-                    <CoherenceIcon aria-hidden="true" className="navigation__icon" />
+                    <CoherenceIcon 
+                        aria-hidden={true}
+                        className="navigation__icon"
+                        width={16}
+                        height={16}
+                    />
                     Coherence
                 </NavLink>
             )}
@@ -109,7 +114,12 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
                         })
                     }
                 >
-                    <OrganizationsIcon aria-hidden="true" className="navigation__icon" />
+                    <OrganizationsIcon
+                        aria-hidden={true}
+                        className="navigation__icon"
+                        width={16}
+                        height={16}
+                    />
                     Organizations
                 </NavLink>
             )}
@@ -123,7 +133,12 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
                             : "navigation__item"
                     }
                 >
-                    <CogsIcon aria-hidden="true" className="navigation__icon" />
+                    <CogsIcon
+                        aria-hidden={true}
+                        className="navigation__icon"
+                        width={16}
+                        height={16}
+                    />
                     Settings
                 </NavLink>
             )}

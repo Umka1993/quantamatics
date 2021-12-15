@@ -28,14 +28,14 @@ export const SideBar: FunctionComponent<SideBarProps> = ({openModal}) => {
                     aria-checked={collapsed}
                     onClick={() => setCollapsed(!collapsed)}
                 >
-                    <LinesIcon width={16} height={16} aria-hidden="true" fill="#BCC4D8" />
+                    <LinesIcon width={16} height={16} aria-hidden="true" />
                 </button>
             </div>
 
             <NavBar collapsed={collapsed} />
 
             <a href={EXCEL_PLUGIN} className={style.plugin} aria-label='Get Excel Plug-in' download>
-                <ExelIcon aria-hidden="true" fill="#20744A" />
+                <ExelIcon aria-hidden="true" fill="#20744A" width={20} height={20} />
             </a>
 
             <UserMenu collapsed={collapsed} openModal={openModal} />
