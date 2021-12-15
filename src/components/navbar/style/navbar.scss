@@ -10,7 +10,7 @@
         line-height: 1.125;
         color: $main-text;
         text-decoration: none;
-        padding: 5px var(--side);
+        padding: 18px var(--side);
         display: flex;
         align-items: center;
         position: relative;
@@ -43,8 +43,7 @@
 
         &--sub {
             height: 18px + 24px;
-            padding-left: 25px;
-            padding-right: 10px;
+            padding: 9px 10px 9px 25px;
             background-color: transparent;
 
             &::before {
