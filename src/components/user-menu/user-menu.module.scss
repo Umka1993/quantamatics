@@ -80,13 +80,12 @@
     }
 
     &:hover,
-    &:focus,
+    &:focus-visible,
     &:active {
-        color: $accent;
         font-weight: 500;
         svg {
             color: currentColor;
-        }
+    }
 
         &::before {
             content: "";
