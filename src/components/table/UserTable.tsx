@@ -61,7 +61,7 @@ export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
     // ? Kludge for Chrome to remember scroll position after rerendering
 
     useLayoutEffect(() => {
-        const scrollWrapper = document.querySelector('.layout-page__scroll')
+        const scrollWrapper = document.querySelector('main')
         if (scrollWrapper) {
             scrollWrapper.scrollTop = scrollY;
         }
