@@ -17,7 +17,6 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
     const user = useUser();
     const logout = useLogout();
     const [openDropdown, setOpenDropdown] = useState<boolean>(false);
-    const firstItemRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         collapsed && setOpenDropdown(false)
@@ -26,7 +25,6 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
     const closeModal = useCallback(() => setOpenDropdown(false), [openDropdown])
     useEffect(() => {
         if (openDropdown) {
-            firstItemRef.current && firstItemRef.current.focus();
             document.addEventListener('click', closeModal)
         }
 
@@ -63,9 +61,8 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
                     </button>
                     <button
                         type='button'
-                        onClick={openModal}
+                        onClick={() => {openModal(); setOpenDropdown(false)}}
                         className={style.button}
-                        ref={firstItemRef}
                     >
                         <ProfileIcon
                             aria-hidden={true}

@@ -3,6 +3,7 @@ import style from "./styles/jupyter-frame.module.scss"
 import Headline from "../../components/page-title/index";
 import useUser from "../../hooks/useUser";
 import { getToken } from "../../services/token";
+import { logoutFromJupiter } from "../../services/logoutFromJupiter";
 
 interface JupyterFrameProps {
     type: 'coherence' | 'files',
@@ -21,6 +22,8 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     useEffect(() => {
         formRef.current && formRef.current.submit();
     }, [formRef.current])
+
+    logoutFromJupiter()
 
     return (
         <div className={style.root}>

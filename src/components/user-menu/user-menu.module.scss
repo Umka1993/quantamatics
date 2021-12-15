@@ -52,6 +52,7 @@
     @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
         background: linear-gradient(149.05deg, rgba(255, 255, 255, 0.8) 3.23%, rgba(255, 255, 255, 0.7) 98.66%);
         backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
 }
 
