@@ -6,7 +6,7 @@
     "buildBeta": "npm run clean && npm run lint && webpack --config config/webpack.dev-beta.js",
     "buildStaging": "npm run clean && npm run lint && webpack --config config/webpack.stag.js",
     "buildStagingBeta": "npm run clean && npm run lint && webpack --config config/webpack.stag-beta.js",
-    "dev": "webpack-dev-server --config config/webpack.dev.js --open --env dev",
+    "dev": "webpack-dev-server --config config/webpack.dev.js --open --https --env dev",
     "stag": "webpack-dev-server --config config/webpack.stag.js --open --https"
   },
   "devDependencies": {
