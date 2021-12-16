@@ -1,36 +1,48 @@
-import React, { DetailsHTMLAttributes, FunctionComponent, ReactElement, SyntheticEvent, useLayoutEffect, useState } from 'react';
-import './style/accordion.scss'
-import { useRef } from 'react';
-import { useEffect } from 'react';
-import classNames from 'classnames';
+import React, {
+  DetailsHTMLAttributes,
+  FunctionComponent,
+  ReactElement,
+  SyntheticEvent,
+  useState,
+} from "react";
+import "./style/accordion.scss";
+import { useRef } from "react";
+import { useEffect } from "react";
+import classNames from "classnames";
 
 interface AccordionProps extends DetailsHTMLAttributes<HTMLDetailsElement> {
-  summary: ReactElement | string,
-  summaryClass?: string,
-  wrapperClass?: string,
+  summary: ReactElement | string;
+  summaryClass?: string;
+  wrapperClass?: string;
 }
 
-const Accordion: FunctionComponent<AccordionProps> = ({ summary, className, summaryClass, wrapperClass, open, children, ...other }) => {
-  // const [isClosing, setIsClosing] = useState(false);
+const Accordion: FunctionComponent<AccordionProps> = ({
+  summary,
+  className,
+  summaryClass,
+  wrapperClass,
+  open,
+  children,
+  ...other
+}) => {
   const summaryRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const accordionRef = useRef<HTMLDetailsElement>(null);
-  const [expendedHeight, setExpendedHeight] = useState('152px');
-  const [summaryHeight, setSummaryHeight] = useState('56px');
+  const [summaryHeight, setSummaryHeight] = useState("56px");
 
   const [isClosing, setIsClosing] = useState(false);
   const [isExpanding, setIsExpanding] = useState(false);
-  // const animationRef = useRef<Animation>
   const [animation, setAnimation] = useState<Animation | undefined>();
 
   useEffect(() => {
-    summaryRef.current && setSummaryHeight(`${summaryRef.current.offsetHeight}px`)
-  }, [summaryRef.current])
+    summaryRef.current &&
+      setSummaryHeight(`${summaryRef.current.offsetHeight}px`);
+  }, [summaryRef.current]);
 
   const ANIMATION_OPTIONS = {
     duration: 200,
-    easing: 'ease-out'
-  }
+    easing: "ease-out",
+  };
 
   function openAccordion() {
     if (accordionRef.current) {
@@ -41,39 +53,34 @@ const Accordion: FunctionComponent<AccordionProps> = ({ summary, className, summ
       accordionRef.current.open = true;
 
       // Wait for the next frame to call the expand function
-      window.requestAnimationFrame(() => expandAccordion());
+      window.requestAnimationFrame(expandAccordion);
     }
   }
 
   function expandAccordion() {
-    setIsExpanding(true);
+    if (accordionRef.current) {
+      setIsExpanding(true);
+      const endHeight = calcExpanded();
+      animation && animation.cancel();
 
-    const endHeight = calcExpanded();
+      // Start a WAAPI animation
+      const currentAnimation = accordionRef.current.animate(
+        {
+          height: [summaryHeight, endHeight],
+        },
+        ANIMATION_OPTIONS
+      );
 
-    if (animation) {
-      (animation as Animation).cancel();
-    }
-
-    // Start a WAAPI animation
-    const currentAnimation = accordionRef.current?.animate(
-      {
-        height: [summaryHeight, endHeight]
-      },
-      ANIMATION_OPTIONS);
-
-
-    if (currentAnimation) {
       currentAnimation.onfinish = () => handleAnimationFinish(true);
       currentAnimation.oncancel = () => setIsExpanding(false);
+      setAnimation(currentAnimation);
     }
-
-    setAnimation(currentAnimation);
   }
 
   function handleAnimationFinish(open: boolean) {
     if (accordionRef.current) {
       accordionRef.current.open = open;
-      accordionRef.current.style.height = '';
+      accordionRef.current.style.height = "";
     }
 
     setAnimation(undefined);
@@ -82,21 +89,23 @@ const Accordion: FunctionComponent<AccordionProps> = ({ summary, className, summ
   }
 
   function shrinkAccordion() {
-
     if (accordionRef.current) {
       setIsClosing(true);
       const startHeight = `${accordionRef.current.offsetHeight}px`;
 
       animation && animation.cancel();
 
-      const currentAnimation = accordionRef.current.animate({
-        height: [startHeight, summaryHeight]
-      }, ANIMATION_OPTIONS)
+      const currentAnimation = accordionRef.current.animate(
+        {
+          height: [startHeight, summaryHeight],
+        },
+        ANIMATION_OPTIONS
+      );
 
       currentAnimation.onfinish = () => handleAnimationFinish(false);
       currentAnimation.oncancel = () => setIsClosing(true);
 
-      setAnimation(currentAnimation)
+      setAnimation(currentAnimation);
     }
   }
 
@@ -106,37 +115,48 @@ const Accordion: FunctionComponent<AccordionProps> = ({ summary, className, summ
     const accordion = evt.currentTarget.parentElement as HTMLDetailsElement;
 
     if (isClosing || !accordion.open) {
-      openAccordion()
+      openAccordion();
     }
 
     if (isExpanding || accordion.open) {
-      shrinkAccordion()
+      shrinkAccordion();
     }
   }
-
-  useEffect(() => {
-    !open && shrinkAccordion();
-  }, [open])
 
   function calcExpanded(): string {
     if (contentRef.current && summaryRef.current) {
-      return `${contentRef.current.offsetHeight + summaryRef.current.offsetHeight}px`;
+      return `${contentRef.current.offsetHeight + summaryRef.current.offsetHeight
+        }px`;
     }
-    return '152px';
+    return "152px";
   }
 
-  useLayoutEffect(() => {
-    open ? openAccordion() : shrinkAccordion()
-  }, [open])
+  useEffect(() => {
+    open ? openAccordion() : shrinkAccordion();
+  }, [open]);
 
   return (
-    <details open={open} className={classNames('accordion', className)} {...other} ref={accordionRef} >
-      <summary className={summaryClass} ref={summaryRef} onClick={handleSummary}>{summary}</summary>
-      <div className={classNames('accordion__content', wrapperClass)} ref={contentRef}>
+    <details
+      open={open}
+      className={classNames("accordion", className)}
+      {...other}
+      ref={accordionRef}
+    >
+      <summary
+        className={summaryClass}
+        ref={summaryRef}
+        onClick={handleSummary}
+      >
+        {summary}
+      </summary>
+      <div
+        className={classNames("accordion__content", wrapperClass)}
+        ref={contentRef}
+      >
         {children}
       </div>
-    </details >
+    </details>
   );
-}
+};
 
 export default Accordion;
