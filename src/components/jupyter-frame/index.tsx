@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import style from "./styles/jupyter-frame.module.scss"
 import Headline from "../../components/page-title/index";
 import useUser from "../../hooks/useUser";
@@ -13,6 +13,9 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
 
     const BASE_USER_URL = `${process.env.HUB_URL}user/${user?.email}`
     const FILES_URL = `${BASE_USER_URL}/tree`;
+    /**   
+     * ? use notebook link because "/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0" don't work on Dev hubspot. Should be double checked on stage
+    */
     const COHERENCE_URL = `${BASE_USER_URL}/notebooks/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
     const HUB_URL = type === 'files' ? FILES_URL : COHERENCE_URL;
 
@@ -20,8 +23,16 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     const formRef = useRef<HTMLFormElement>(null)
     const token = getToken();
 
+    
     useEffect(() => {
-        formRef.current && formRef.current.submit();
+        /**   
+         * * submit form on every component's mount will reset COHERENCE link
+         * That why we need to store the logged state 
+        */
+        if (!localStorage.getItem('jupiter-logged')) {
+            formRef.current && formRef.current.submit();
+            localStorage.setItem('jupiter-logged', 'true')
+        }
     }, [formRef.current])
 
     return (
