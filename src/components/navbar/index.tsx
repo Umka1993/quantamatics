@@ -45,7 +45,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
         >
             {user?.userRoles.includes(UserRole.Research) && (
                 <Accordion
-                    isOpened={pathname.includes("/research") ? true : undefined}
+                    isOpened={pathname.includes("/research")}
                     summaryClass="navigation__item"
                     summary={
                         <>

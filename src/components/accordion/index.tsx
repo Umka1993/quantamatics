@@ -34,6 +34,7 @@ const Accordion: FunctionComponent<AccordionProps> = ({
   const [isClosing, setIsClosing] = useState(false);
   const [isExpanding, setIsExpanding] = useState(false);
   const [animation, setAnimation] = useState<Animation | undefined>();
+  const [innerOpened, setInnerOpened] = useState(false);
 
   useEffect(() => {
     summaryRef.current &&
@@ -83,7 +84,7 @@ const Accordion: FunctionComponent<AccordionProps> = ({
       accordionRef.current.open = open;
       accordionRef.current.style.height = "";
     }
-
+    setInnerOpened(open);
     setAnimation(undefined);
     setIsExpanding(false);
     setIsClosing(false);
@@ -134,13 +135,11 @@ const Accordion: FunctionComponent<AccordionProps> = ({
 
   useEffect(() => {
     if (isOpened) {
-      if (accordionRef.current) {
-        accordionRef.current.open = true;
-      }
+      !innerOpened && openAccordion();
     } else {
       shrinkAccordion();
     }
-  }, [isOpened]);
+  }, [isOpened, accordionRef.current]);
 
   return (
     <details
