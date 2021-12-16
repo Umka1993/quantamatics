@@ -14,6 +14,7 @@ interface AccordionProps extends DetailsHTMLAttributes<HTMLDetailsElement> {
   summary: ReactElement | string;
   summaryClass?: string;
   wrapperClass?: string;
+  isOpened?: boolean;
 }
 
 const Accordion: FunctionComponent<AccordionProps> = ({
@@ -21,7 +22,7 @@ const Accordion: FunctionComponent<AccordionProps> = ({
   className,
   summaryClass,
   wrapperClass,
-  open,
+  isOpened,
   children,
   ...other
 }) => {
@@ -132,15 +133,21 @@ const Accordion: FunctionComponent<AccordionProps> = ({
   }
 
   useEffect(() => {
-    !open && shrinkAccordion();
-  }, [open]);
+    if (isOpened) {
+      if (accordionRef.current) {
+        accordionRef.current.open = true;
+      }
+    } else {
+      shrinkAccordion();
+    }
+  }, [isOpened]);
 
   return (
     <details
-      open={open}
       className={classNames("accordion", className)}
       {...other}
       ref={accordionRef}
+      onToggle={(evt) => evt.preventDefault()}
     >
       <summary
         className={summaryClass}
