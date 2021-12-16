@@ -14,6 +14,7 @@ interface AccordionProps extends DetailsHTMLAttributes<HTMLDetailsElement> {
   summary: ReactElement | string;
   summaryClass?: string;
   wrapperClass?: string;
+  isOpened?: boolean;
 }
 
 const Accordion: FunctionComponent<AccordionProps> = ({
@@ -21,7 +22,7 @@ const Accordion: FunctionComponent<AccordionProps> = ({
   className,
   summaryClass,
   wrapperClass,
-  open,
+  isOpened,
   children,
   ...other
 }) => {
@@ -33,6 +34,7 @@ const Accordion: FunctionComponent<AccordionProps> = ({
   const [isClosing, setIsClosing] = useState(false);
   const [isExpanding, setIsExpanding] = useState(false);
   const [animation, setAnimation] = useState<Animation | undefined>();
+  const [innerOpened, setInnerOpened] = useState(false);
 
   useEffect(() => {
     summaryRef.current &&
@@ -82,7 +84,7 @@ const Accordion: FunctionComponent<AccordionProps> = ({
       accordionRef.current.open = open;
       accordionRef.current.style.height = "";
     }
-
+    setInnerOpened(open);
     setAnimation(undefined);
     setIsExpanding(false);
     setIsClosing(false);
@@ -132,15 +134,19 @@ const Accordion: FunctionComponent<AccordionProps> = ({
   }
 
   useEffect(() => {
-    !open && shrinkAccordion();
-  }, [open]);
+    if (isOpened) {
+      !innerOpened && openAccordion();
+    } else {
+      shrinkAccordion();
+    }
+  }, [isOpened, accordionRef.current]);
 
   return (
     <details
-      open={open}
       className={classNames("accordion", className)}
       {...other}
       ref={accordionRef}
+      onToggle={(evt) => evt.preventDefault()}
     >
       <summary
         className={summaryClass}
