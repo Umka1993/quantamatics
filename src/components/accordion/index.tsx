@@ -1,4 +1,4 @@
-import React, { DetailsHTMLAttributes, FunctionComponent, ReactElement, SyntheticEvent, useState } from 'react';
+import React, { DetailsHTMLAttributes, FunctionComponent, ReactElement, SyntheticEvent, useLayoutEffect, useState } from 'react';
 import './style/accordion.scss'
 import { useRef } from 'react';
 import { useEffect } from 'react';
@@ -15,8 +15,13 @@ const Accordion: FunctionComponent<AccordionProps> = ({ summary, className, summ
   const summaryRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const accordionRef = useRef<HTMLDetailsElement>(null);
-  const [expendedHeight, setExpendedHeight] = useState('500px');
+  const [expendedHeight, setExpendedHeight] = useState('152px');
   const [summaryHeight, setSummaryHeight] = useState('56px');
+
+  const [isClosing, setIsClosing] = useState(false);
+  const [isExpanding, setIsExpanding] = useState(false);
+  // const animationRef = useRef<Animation>
+  const [animation, setAnimation] = useState<Animation | undefined>();
 
   useEffect(() => {
     summaryRef.current && setSummaryHeight(`${summaryRef.current.offsetHeight}px`)
@@ -27,13 +32,71 @@ const Accordion: FunctionComponent<AccordionProps> = ({ summary, className, summ
     easing: 'ease-out'
   }
 
-  function closeAccordion() {
+  function openAccordion() {
     if (accordionRef.current) {
-      accordionRef.current?.animate({
-        height: [expendedHeight, summaryHeight]
+      // Apply a fixed height on the element
+      accordionRef.current.style.height = summaryHeight;
+
+      // Force the [open] attribute on the details element
+      accordionRef.current.open = true;
+
+      // Wait for the next frame to call the expand function
+      window.requestAnimationFrame(() => expandAccordion());
+    }
+  }
+
+  function expandAccordion() {
+    setIsExpanding(true);
+
+    const endHeight = calcExpanded();
+
+    if (animation) {
+      (animation as Animation).cancel();
+    }
+
+    // Start a WAAPI animation
+    const currentAnimation = accordionRef.current?.animate(
+      {
+        height: [summaryHeight, endHeight]
+      },
+      ANIMATION_OPTIONS);
+
+
+    if (currentAnimation) {
+      currentAnimation.onfinish = () => handleAnimationFinish(true);
+      currentAnimation.oncancel = () => setIsExpanding(false);
+    }
+
+    setAnimation(currentAnimation);
+  }
+
+  function handleAnimationFinish(open: boolean) {
+    if (accordionRef.current) {
+      accordionRef.current.open = open;
+      accordionRef.current.style.height = '';
+    }
+
+    setAnimation(undefined);
+    setIsExpanding(false);
+    setIsClosing(false);
+  }
+
+  function shrinkAccordion() {
+
+    if (accordionRef.current) {
+      setIsClosing(true);
+      const startHeight = `${accordionRef.current.offsetHeight}px`;
+
+      animation && animation.cancel();
+
+      const currentAnimation = accordionRef.current.animate({
+        height: [startHeight, summaryHeight]
       }, ANIMATION_OPTIONS)
 
-      accordionRef.current.open = false;
+      currentAnimation.onfinish = () => handleAnimationFinish(false);
+      currentAnimation.oncancel = () => setIsClosing(true);
+
+      setAnimation(currentAnimation)
     }
   }
 
@@ -42,25 +105,28 @@ const Accordion: FunctionComponent<AccordionProps> = ({ summary, className, summ
 
     const accordion = evt.currentTarget.parentElement as HTMLDetailsElement;
 
-    if (accordion.open) {
-      closeAccordion();
+    if (isClosing || !accordion.open) {
+      openAccordion()
     }
-    else {
-      accordion.open = true;
 
-      if (contentRef.current && summaryRef.current) {
-        const finishHeight = `${contentRef.current.offsetHeight + summaryRef.current.offsetHeight}px`
-
-        accordion.animate({
-          height: [summaryHeight, finishHeight]
-        }, ANIMATION_OPTIONS)
-        setExpendedHeight(finishHeight);
-      }
+    if (isExpanding || accordion.open) {
+      shrinkAccordion()
     }
   }
 
   useEffect(() => {
-    !open && closeAccordion();
+    !open && shrinkAccordion();
+  }, [open])
+
+  function calcExpanded(): string {
+    if (contentRef.current && summaryRef.current) {
+      return `${contentRef.current.offsetHeight + summaryRef.current.offsetHeight}px`;
+    }
+    return '152px';
+  }
+
+  useLayoutEffect(() => {
+    open ? openAccordion() : shrinkAccordion()
   }, [open])
 
   return (
