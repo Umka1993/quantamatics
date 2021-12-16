@@ -14,7 +14,7 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     const BASE_USER_URL = `${process.env.HUB_URL}user/${user?.email}`
     const FILES_URL = `${BASE_USER_URL}/tree`;
     /**   
-     * ? use notebook link because "/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0" don't work on Dev hubspot. Should be double checked on stage
+     * ? use notebook link because "/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0" doesn't work on Dev hubspot. Should be double checked on stage
     */
     const COHERENCE_URL = `${BASE_USER_URL}/notebooks/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
     const HUB_URL = type === 'files' ? FILES_URL : COHERENCE_URL;
@@ -23,7 +23,7 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     const formRef = useRef<HTMLFormElement>(null)
     const token = getToken();
 
-    
+
     useEffect(() => {
         /**   
          * * submit form on every component's mount will reset COHERENCE link
@@ -32,7 +32,12 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
         if (!localStorage.getItem('jupiter-logged')) {
             formRef.current && formRef.current.submit();
             localStorage.setItem('jupiter-logged', 'true')
+
+            if (type === 'files' && frameRef.current) {
+                frameRef.current.src = HUB_URL;
+            }
         }
+
     }, [formRef.current])
 
     return (
