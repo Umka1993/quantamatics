@@ -34,11 +34,11 @@ export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
 
             <NavBar collapsed={collapsed} className={style.navbar} />
 
-            {!collapsed && 
-            <small className={style.copyright}>
-                © Copyright 2021 Facteus. All rights reserved.
-                <a href="https://www.facteus.com/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-            </small>}
+            {!collapsed &&
+                <small className={style.copyright}>
+                    © Copyright 2021 Facteus. All <br />rights reserved. {' '}
+                    <a href="https://www.facteus.com/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                </small>}
 
             <a href={EXCEL_PLUGIN} className={style.plugin} aria-label='Get Excel Plug-in' download>
                 <ExelIcon aria-hidden="true" fill="#20744A" width={20} height={20} />
