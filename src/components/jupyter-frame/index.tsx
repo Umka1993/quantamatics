@@ -3,7 +3,6 @@ import style from "./styles/jupyter-frame.module.scss"
 import Headline from "../../components/page-title/index";
 import useUser from "../../hooks/useUser";
 import { getToken } from "../../services/token";
-import { logoutFromJupiter } from "../../services/logoutFromJupiter";
 
 interface JupyterFrameProps {
     type: 'coherence' | 'files',
@@ -11,9 +10,11 @@ interface JupyterFrameProps {
 
 export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => {
     const user = useUser();
-    const filesUrl = `${process.env.HUB_URL}user/${user?.email}/tree`;
-    const coherenceUrl = `${filesUrl}/Coherence`;
-    const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
+
+    const BASE_USER_URL = `${process.env.HUB_URL}user/${user?.email}`
+    const FILES_URL = `${BASE_USER_URL}/tree`;
+    const COHERENCE_URL = `${BASE_USER_URL}/notebooks/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
+    const HUB_URL = type === 'files' ? FILES_URL : COHERENCE_URL;
 
     const frameRef = useRef<HTMLIFrameElement>(null);
     const formRef = useRef<HTMLFormElement>(null)
