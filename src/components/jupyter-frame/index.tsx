@@ -14,9 +14,10 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     const BASE_USER_URL = `${process.env.HUB_URL}user/${user?.email}`
     const FILES_URL = `${BASE_USER_URL}/tree`;
     /**   
-     * ? use notebook link because "/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0" doesn't work on Dev hubspot. Should be double checked on stage
+     * ? probably it's better change 'apps' 'notebooks'
+     * At least, for Dev Hubspot it's correct, but the apps link we recieved form Geoff Maggi
     */
-    const COHERENCE_URL = `${BASE_USER_URL}/notebooks/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
+    const COHERENCE_URL = `${BASE_USER_URL}/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
     const HUB_URL = type === 'files' ? FILES_URL : COHERENCE_URL;
 
     const frameRef = useRef<HTMLIFrameElement>(null);
