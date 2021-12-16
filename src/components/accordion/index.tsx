@@ -132,7 +132,7 @@ const Accordion: FunctionComponent<AccordionProps> = ({
   }
 
   useEffect(() => {
-    open ? openAccordion() : shrinkAccordion();
+    !open && shrinkAccordion();
   }, [open]);
 
   return (
