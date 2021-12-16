@@ -16,6 +16,7 @@ import Accordion from "../accordion";
 
 interface NavBarProps {
     collapsed: boolean;
+    className?: string,
 }
 
 interface NavLinkContent {
@@ -24,7 +25,7 @@ interface NavLinkContent {
     icon: FunctionComponent<SVGProps<SVGSVGElement>>;
 }
 
-const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
+const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
     const { pathname } = useLocation();
     const user = useUser();
 
@@ -39,7 +40,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ collapsed }) => {
 
     return (
         <nav
-            className={classNames("navigation", {
+            className={classNames("navigation", className, {
                 "navigation--collapsed": collapsed,
             })}
         >

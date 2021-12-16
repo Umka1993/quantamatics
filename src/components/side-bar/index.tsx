@@ -9,10 +9,10 @@ import UserMenu from "../user-menu";
 import { EXCEL_PLUGIN } from "../../data/constants";
 
 type SideBarProps = {
-    openModal: () => void; 
+    openModal: () => void;
 }
 
-export const SideBar: FunctionComponent<SideBarProps> = ({openModal}) => {
+export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
     return (
         <aside
@@ -32,7 +32,13 @@ export const SideBar: FunctionComponent<SideBarProps> = ({openModal}) => {
                 </button>
             </div>
 
-            <NavBar collapsed={collapsed} />
+            <NavBar collapsed={collapsed} className={style.navbar} />
+
+            {!collapsed && 
+            <small className={style.copyright}>
+                © Copyright 2021 Facteus. All rights reserved.
+                <a href="https://www.facteus.com/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+            </small>}
 
             <a href={EXCEL_PLUGIN} className={style.plugin} aria-label='Get Excel Plug-in' download>
                 <ExelIcon aria-hidden="true" fill="#20744A" width={20} height={20} />
