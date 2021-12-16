@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require("copy-webpack-plugin");
+const { MODULE_STYLE_LOADERS, DEFAULT_STYLE_LOADERS } = require('./_const.js');
 
 module.exports = {
     devServer: {
@@ -33,32 +34,7 @@ module.exports = {
                 test: /\.tsx?$/,
                 use: ['ts-loader']
             },
-            {
-                test: /\.(sa|sc|c)ss$/,
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 1,
-                            modules: {
-                                localIdentName: "[name]__[local]--[hash:base64:5]",
-                            }
-                        },
-                    },
-                    'sass-loader'
-                ],
-                include: /\.module$/
-            },
-            {
-                test: /\.(sa|sc|c)ss$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
-                ],
-                exclude: /\.module\.css$/
-            },
+            MODULE_STYLE_LOADERS, DEFAULT_STYLE_LOADERS,
             {
                 test: /\.svg$/,
                 use: ['@svgr/webpack'],
