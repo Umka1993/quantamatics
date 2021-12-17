@@ -15,7 +15,6 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
     externalSetter?: (value: string) => void;
-    hideError?: boolean,
     icon?: string;
     showLimit?: boolean;
 }
@@ -30,7 +29,6 @@ const Input: React.FunctionComponent<IInput> = ({
     onInvalid,
     autoComplete,
     externalSetter,
-    hideError = false,
     error,
     icon,
     maxLength,
@@ -121,7 +119,7 @@ const Input: React.FunctionComponent<IInput> = ({
                 )}
             </label>
 
-            {errorMessage && errorMessage.length && !hideError && (
+            {errorMessage && errorMessage.length && (
                 <p className="app-input__error">{errorMessage}</p>
             )}
         </div>
