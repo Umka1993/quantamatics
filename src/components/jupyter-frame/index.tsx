@@ -23,7 +23,6 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
 
     useEffect(() => {
         if (!localStorage.getItem('jupiter-logged')) {
-            alert("submitting form");
             formRef.current && formRef.current.submit();
             localStorage.setItem('jupiter-logged', 'true')
 
