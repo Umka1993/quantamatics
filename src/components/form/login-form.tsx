@@ -2,6 +2,7 @@ import React, { useEffect, useState, FunctionComponent, useRef } from "react";
 import { Link } from "react-router-dom";
 import Button from "../button";
 import { CheckBox } from "../../components/checkbox";
+import Input from "../../components/app-input";
 import { Password, Email } from "../../components/app-input";
 import Form from "./form";
 import { AppRoute } from "../../data/enum";
@@ -69,10 +70,11 @@ const LoginForm: FunctionComponent = () => {
             forwardRef={formRef}
         >
             <div className="login-page__inputs">
-                <Email
+                <Input
                     externalSetter={setEmail}
                     placeholder="Email"
                     name="email"
+                    required
                     value={email}
                     error={errors}
                     hideError
