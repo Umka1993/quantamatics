@@ -24,7 +24,7 @@ const assetApi = baseApi.injectEndpoints({
             })
         }),
 
-        createAssets: build.mutation<any, void>({
+        createAssets: build.query<any, any>({
             query: (body) => ({
                 url: AssetEndpoint.Create,
                 method: 'POST',
@@ -61,4 +61,5 @@ const assetApi = baseApi.injectEndpoints({
 export const {
     useGetAllAssetsQuery,
     useGetAssetsByIDQuery,
+    useCreateAssetsQuery
 } = assetApi;
