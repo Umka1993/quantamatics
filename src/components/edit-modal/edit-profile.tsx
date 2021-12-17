@@ -129,6 +129,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             name="firstName"
                             icon="edit"
                             label='First Name'
+                            maxLength={100}
                             required
                         />
                         <AppInput
@@ -137,6 +138,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             name="lastName"
                             icon="edit"
                             label='Last Name'
+                            maxLength={100}
                             required
                         />
 
@@ -147,6 +149,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             error={emailError}
                             icon="edit"
                             label='Email'
+                            maxLength={100}
                             required
                         />
                         <DatePick
