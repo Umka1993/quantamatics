@@ -88,11 +88,11 @@ const LoginForm: FunctionComponent = () => {
                 />
             </div>
             <div className="login-page__wrap">
-                <CheckBox
+                {/* <CheckBox
                     checked={rememberMe}
                     externalSetter={setRememberMe}
                     label={"Remember Me"}
-                />
+                /> */}
                 <Link to={AppRoute.ForgotPassword} className="login-page__forgot">
                     Forgot Password?
                 </Link>

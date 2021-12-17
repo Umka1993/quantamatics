@@ -22,7 +22,15 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     const token = getToken();
 
     useEffect(() => {
-        formRef.current && formRef.current.submit();
+        if (!localStorage.getItem('jupiter-logged')) {
+            alert("submitting form");
+            formRef.current && formRef.current.submit();
+            localStorage.setItem('jupiter-logged', 'true')
+
+            if (frameRef.current) {
+                frameRef.current.src = HUB_URL;
+            }
+        }
     }, [formRef.current])
 
     return (
@@ -40,7 +48,7 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
                     ref={formRef}
                     hidden
                 >
-                    <input name='token' value={token} />
+                    <input name='token' value={token} readOnly />
                 </form>
             }
 
