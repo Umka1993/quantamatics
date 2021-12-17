@@ -1,9 +1,8 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import style from "./styles/jupyter-frame.module.scss"
 import Headline from "../../components/page-title/index";
 import useUser from "../../hooks/useUser";
 import { getToken } from "../../services/token";
-import { logoutFromJupiter } from "../../services/logoutFromJupiter";
 
 interface JupyterFrameProps {
     type: 'coherence' | 'files',
@@ -11,16 +10,35 @@ interface JupyterFrameProps {
 
 export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => {
     const user = useUser();
-    const filesUrl = `${process.env.HUB_URL}user/${user?.email}/tree`;
-    const coherenceUrl = `${filesUrl}/Coherence`;
-    const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
+
+    const BASE_USER_URL = `${process.env.HUB_URL}user/${user?.email}`
+    const FILES_URL = `${BASE_USER_URL}/tree`;
+    /**   
+     * ? probably it's better change 'apps' 'notebooks'
+     * At least, for Dev Hubspot it's correct, but the apps link we recieved form Geoff Maggi
+    */
+    const COHERENCE_URL = `${BASE_USER_URL}/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
+    const HUB_URL = type === 'files' ? FILES_URL : COHERENCE_URL;
 
     const frameRef = useRef<HTMLIFrameElement>(null);
     const formRef = useRef<HTMLFormElement>(null)
     const token = getToken();
 
+
     useEffect(() => {
-        formRef.current && formRef.current.submit();
+        /**   
+         * * submit form on every component's mount will reset COHERENCE link
+         * That why we need to store the logged state 
+        */
+        if (!localStorage.getItem('jupiter-logged')) {
+            formRef.current && formRef.current.submit();
+            localStorage.setItem('jupiter-logged', 'true')
+
+            if (type === 'files' && frameRef.current) {
+                frameRef.current.src = HUB_URL;
+            }
+        }
+
     }, [formRef.current])
 
     return (
