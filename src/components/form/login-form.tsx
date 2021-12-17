@@ -76,8 +76,6 @@ const LoginForm: FunctionComponent = () => {
                     name="email"
                     required
                     value={email}
-                    error={errors}
-                    hideError
                 />
 
                 <Password
