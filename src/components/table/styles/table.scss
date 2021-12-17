@@ -1,9 +1,10 @@
-@import "../../../variables.scss";
+@use "../../../variables.scss" as *;
+@use "sass:math";
+
 
 $design-table-w: 1038;
 
 .table {
-  // margin-top: 40px - 11px;
   width: 100%;
   border-collapse: collapse;
 
@@ -11,6 +12,8 @@ $design-table-w: 1038;
     position: sticky;
     top: 0;
     background-color: #fff;
+    padding: 0 40px;
+    z-index: 0;
   }
 
   &__header {
@@ -28,7 +31,7 @@ $design-table-w: 1038;
       font: inherit;
       text-align: left;
       padding-top: 40px;
-      padding-top: clamp(10px, 40 / 1440 * 100vw, 40px);
+      padding-top: clamp(10px, #{math.div(40, 1440) * 100vw}, 40px);
       padding-right: 20px;
       padding-bottom: 11px;
       vertical-align: top;
@@ -43,9 +46,9 @@ $design-table-w: 1038;
     tr {
       display: grid;
       grid-template-columns:
-        226 / $design-table-w * 100%
-        192 / $design-table-w * 100%
-        260 / $design-table-w * 100%
+        #{math.div(226, $design-table-w) * 100%}
+        #{math.div(192, $design-table-w) * 100%}
+        #{math.div(260, $design-table-w) * 100%}
         1fr
         60px;
     }
@@ -56,10 +59,10 @@ $design-table-w: 1038;
     tr {
       display: grid;
       grid-template-columns:
-        123 / $design-table-w * 100%
-        158 / $design-table-w * 100%
-        253 / $design-table-w * 100%
-        200 / $design-table-w * 100%
+        #{math.div(123, $design-table-w) * 100%}
+        #{math.div(158, $design-table-w) * 100%}
+        #{math.div(253, $design-table-w) * 100%}
+        #{math.div(200, $design-table-w) * 100%}
         1fr
         60px;
     }
@@ -113,17 +116,17 @@ $design-table-w: 1038;
       gap: 14px;
       padding-right: 6px;
     }
+  }
 
-    a {
-      color: inherit;
-      outline-color: currentColor;
-      outline-offset: 0.4em;
-      border-radius: 0.2em;
+  &__link {
+    color: inherit;
+    outline-color: currentColor;
+    outline-offset: 0.4em;
+    border-radius: 0.2em;
 
-      &:focus-visible,
-      &:hover {
-        color: $accent;
-      }
+    &:focus-visible,
+    &:hover {
+      color: $accent;
     }
   }
 

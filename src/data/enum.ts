@@ -12,15 +12,18 @@ export const enum AppRoute {
     Settings = '/settings',
 
     Organizations = '/apps/organizations/:path',
+    OrganizationList = '/apps/organizations/list',
+    CreateOrganization = '/apps/organizations/new-organization',
     SignUp = '/sign-up',
     ResetPassword = '/reset-password',
     Login = '/login',
     ForgotPassword = '/forgot-password',
 
-    Success = '/success-:success',
+    Success = '/success',
     Expired = '/expired',
     ExpiredPassword = '/expired-token',
-    SignUpExpired = '/expired-registration'
+    SignUpExpired = '/expired-registration',
+    NoRoles = '/account-setting-up'
 }
 
 export const enum ApiRoute {
@@ -28,9 +31,6 @@ export const enum ApiRoute {
 
     ResetPasswordMail = '/api/Account/sendPasswordReset',
     ResetPassword = "/api/Account/resetPassword",
-    ChangePassword = '/api/Account/changePassword',
-    VerifyToken = '/api/Account/verifyToken',
-    Capabilities = '​/api​/Account​/capabilities',
 
 
     OrganizationInfo = 'api/Organization/get',
@@ -96,4 +96,10 @@ export const enum SortDirection {
     Down = "descending",
     Up = "ascending",
     Default = "none",
+}
+
+export const enum RegExpValidation {
+    Password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*\\[\\]\\\\\"';:<_>., =+/-]).*$",
+    Email = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$",
+    URL = '(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,})\r\n'
 }

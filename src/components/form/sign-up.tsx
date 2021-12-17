@@ -1,16 +1,23 @@
-import React, { useCallback, useEffect, useState, FunctionComponent } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useState,
+    FunctionComponent,
+} from "react";
 import { Password } from "../../components/app-input/index";
 import Button from "../button";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AppRoute } from "../../data/enum";
 import Form from "./form";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
-import { resetPassword } from "../../store/reset-password/actions";
-import { useVerifyTokenQuery } from "../../api/account";
+import {
+    useResetPasswordMutation,
+    useVerifyTokenQuery,
+} from "../../api/account";
 import Loader from "../loader";
+import { InfoMessage } from "../info-message/info-message";
 
 const SignUp: FunctionComponent = () => {
     const [password, setPassword] = useState<string>("");
@@ -19,47 +26,69 @@ const SignUp: FunctionComponent = () => {
 
     const [finish, setFinish] = useState<boolean>(false);
 
-    const history = useHistory();
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const email = urlParams.get("email");
     const organizationName = urlParams.get("orgName");
 
-    const { isSuccess: isTokenValid, isError: isExpiredToken } = useVerifyTokenQuery({ userName: String(email), token: token as string });
+    const [
+        sendPassword,
+        { isSuccess: isPasswordUpdated, isError: isPasswordError },
+    ] = useResetPasswordMutation();
+
+    const { isSuccess: isTokenValid, isError: isExpiredToken } =
+        useVerifyTokenQuery({ userName: String(email), token: token as string });
 
     useEffect(() => {
-        isExpiredToken && history.push(AppRoute.SignUpExpired)
-    }, [isExpiredToken])
+        isExpiredToken &&
+            navigate(AppRoute.Expired, {
+                state: {
+                    headline: "Set password link can only be used once",
+                    subtitle: "Please return to Sign in page and choose Forgot Password.",
+                    returnBack: true,
+                } as InfoMessage,
+            });
+    }, [isExpiredToken]);
 
-    const title = (<>Sign Up to <b>{organizationName}</b></>)
-
-    const onFinish = () => history.push(AppRoute.Home);
-    const onError = () => setFinish(true);
+    const title = (
+        <>
+            Welcome to <b>{organizationName}</b>
+        </>
+    );
 
     const handleResetPassword = useCallback(() => {
-        setFinish(false)
-        if (password !== passwordConfirm) {
-            setCompare("The passwords do not match");
-            setFinish(true)
-        } else {
-            dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError))
-        }
-    }, [password, passwordConfirm,]);
+        sendPassword({
+            email: email as string,
+            password,
+            token: token as string,
+        }).unwrap();
+    }, [password, passwordConfirm]);
 
     useEffect(() => {
-        compare && setCompare(undefined)
-    }, [password, passwordConfirm])
+        setCompare(
+            password !== passwordConfirm ? "The passwords do not match" : undefined
+        );
+    }, [password, passwordConfirm]);
+
+    useEffect(() => {
+        isPasswordError && setFinish(true);
+    }, [isPasswordError]);
+
+    useEffect(() => {
+        isPasswordUpdated && navigate(AppRoute.Login);
+    }, [isPasswordUpdated]);
+
 
     if (isTokenValid) {
         return (
             <Form
                 headline={title}
-                headlineText={`Sign Up ${organizationName}`}
-                subtitle="Create a password to complete recovery"
+                headlineText={`Welcome to ${organizationName}`}
+                subtitle="Set a password to complete your registration and sign in to Quantamatics"
                 onSubmit={handleResetPassword}
-                stopLoading={finish}
+                stopLoading={finish ? finish : undefined}
             >
                 <div className="login-page__inputs">
                     <Password
@@ -67,6 +96,8 @@ const SignUp: FunctionComponent = () => {
                         value={password}
                         externalSetter={setPassword}
                         placeholder="New Password"
+                        error={compare}
+                        hideError
                     />
                     <Password
                         autoComplete="new-password"
@@ -77,15 +108,18 @@ const SignUp: FunctionComponent = () => {
                     />
                 </div>
 
-                <Button className="login-page__btn" type="submit" disabled={!password || !passwordConfirm}>
+                <Button
+                    className="login-page__btn"
+                    type="submit"
+                    disabled={!password || !passwordConfirm}
+                >
                     Save
                 </Button>
             </Form>
         );
     } else {
-        return (<Loader />)
+        return <Loader />;
     }
-
 };
 
 export default SignUp;

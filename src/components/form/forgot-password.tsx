@@ -1,45 +1,43 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Email } from "../../components/app-input/index";
 import Button, { ResetButton } from "../button";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { RootState } from "../../store";
+import { useNavigate } from "react-router-dom";
 import { AppRoute } from "../../data/enum";
-import { sendResetPasswordMail } from "../../store/reset-password/actions";
 import Form from "./form";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
+import { useSendResetPasswordMailMutation } from "../../api/account";
 
-
-const ForgotPassword: React.FunctionComponent = (props) => {
-    const user = useSelector<RootState>((state) => state.auth.user?.firstName);
-    const localUserName = localStorage.getItem("savedUsername") || "";
-
+const ForgotPassword: FunctionComponent = () => {
     const [finish, setFinish] = useState<boolean>(false);
+    const [forgotEmail, setForgotEmail] = useState<string>('');
+    const [sendEmail, { isSuccess, isError }] = useSendResetPasswordMailMutation();
 
-    const [forgotEmail, setForgotEmail] = useState<string>(localUserName);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!!user) history.push("/research/my-files");
-    }, [user]);
-    const history = useHistory();
+        if (isSuccess) {
+            navigate(AppRoute.Success, {
+                state: {
+                    headline: 'A reset password email was sent to the email entered',
+                    linkText: 'Go to Log in Page',
+                    link: AppRoute.Login
+                }
+            });
+        }
+    }, [isSuccess])
 
-    const dispatch = useDispatch();
-
-    const onError = () => { setFinish(true); }
-    const onFinish = () => { history.push("/success-restore-password"); }
-
-    const sendPasswordResetRequest = (evt: FormEvent<HTMLFormElement>) => {
-        dispatch(sendResetPasswordMail(forgotEmail, onFinish, onError))
-    };
+    useEffect(() => {
+        isError && setFinish(true)
+    }, [isError])
 
     return (
         <Form
             headline="Forgot Your Password?"
-            subtitle="To restore the password, enter your email"
-            onSubmit={sendPasswordResetRequest}
-            stopLoading={finish}
+            subtitle='To reset your password, enter the email for your user account'
+            onSubmit={() => sendEmail(forgotEmail).unwrap()}
+            stopLoading={finish ? finish : undefined}
             className='login-form'
         >
             <div className="login-page__inputs">
@@ -47,7 +45,7 @@ const ForgotPassword: React.FunctionComponent = (props) => {
                     externalSetter={setForgotEmail}
                     value={forgotEmail}
                     name="email"
-                    placeholder={"Enter the email"}
+                    placeholder={"Email"}
                 />
             </div>
 

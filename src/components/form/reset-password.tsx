@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Password } from "../../components/app-input/index";
 import Button from "../button";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AppRoute } from "../../data/enum";
 import Form from "./form";
 
 import "./styles/form.scss";
 import "./styles/login-page.scss";
-import { resetPassword } from "../../store/reset-password/actions";
-import { useVerifyTokenQuery } from "../../api/account";
+import {
+    useVerifyTokenQuery,
+    useResetPasswordMutation,
+} from "../../api/account";
 import Loader from "../loader";
+import { InfoMessage } from "../info-message/info-message";
 
 const ResetPassword: React.FunctionComponent = () => {
     const [password, setPassword] = useState<string>("");
@@ -18,44 +20,61 @@ const ResetPassword: React.FunctionComponent = () => {
     const [compare, setCompare] = useState<string | undefined>(undefined);
 
     const [finish, setFinish] = useState<boolean>(false);
-    const history = useHistory();
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const email = urlParams.get("email");
 
-    const { isSuccess: isTokenValid, isError: isExpiredToken } = useVerifyTokenQuery({ userName: String(email), token: token as string });
+    const [
+        sendPassword,
+        { isSuccess: isPasswordUpdated, isError: isPasswordError },
+    ] = useResetPasswordMutation();
+
+    const { isSuccess: isTokenValid, isError: isExpiredToken } =
+        useVerifyTokenQuery({ userName: String(email), token: token as string });
 
     useEffect(() => {
-        isExpiredToken && history.push(AppRoute.ExpiredPassword)
-    }, [isExpiredToken])
-
-    const onFinish = () => history.push(AppRoute.Login);
-    const onError = () => setFinish(true);
+        isExpiredToken &&
+            navigate(AppRoute.Expired, {
+                
+                state: {
+                    headline: "The password reset link can only be used once",
+                    subtitle: "Please return to Sign in page and choose Forgot Password.",
+                    returnBack: true,
+                } as InfoMessage,
+            });
+    }, [isExpiredToken]);
 
     const handleResetPassword = useCallback(() => {
-        setFinish(false)
-        if (password !== passwordConfirm) {
-            setCompare("The passwords do not match");
-            setFinish(true)
-        } else {
-            dispatch(resetPassword(password, (token as string), (email as string), onFinish, onError, false))
-        }
+        sendPassword({
+            email: email as string,
+            password,
+            token: token as string,
+        }).unwrap();
     }, [password, passwordConfirm]);
 
     useEffect(() => {
-        compare && setCompare(undefined)
-    }, [password, passwordConfirm])
+        setCompare(
+            password !== passwordConfirm ? "The passwords do not match" : undefined
+        );
+    }, [password, passwordConfirm]);
 
+    useEffect(() => {
+        isPasswordUpdated && navigate(AppRoute.Login);
+    }, [isPasswordUpdated]);
+
+    useEffect(() => {
+        isPasswordError && setFinish(true);
+    }, [isPasswordError]);
 
     if (isTokenValid) {
         return (
             <Form
                 headline="Reset Password"
-                subtitle="Create a password to complete recovery"
+                subtitle="Set a new password to sign in to Quantamatics"
                 onSubmit={handleResetPassword}
-                stopLoading={finish}
+                stopLoading={finish ? finish : undefined}
             >
                 <div className="login-page__inputs">
                     <Password
@@ -63,6 +82,8 @@ const ResetPassword: React.FunctionComponent = () => {
                         value={password}
                         externalSetter={setPassword}
                         placeholder="New Password"
+                        error={compare}
+                        hideError
                     />
                     <Password
                         autoComplete="new-password"
@@ -73,13 +94,17 @@ const ResetPassword: React.FunctionComponent = () => {
                     />
                 </div>
 
-                <Button className="login-page__btn" type="submit" disabled={!password || !passwordConfirm}>
+                <Button
+                    className="login-page__btn"
+                    type="submit"
+                    disabled={!password || !passwordConfirm}
+                >
                     Save
                 </Button>
             </Form>
         );
     } else {
-        return (<Loader />)
+        return <Loader />;
     }
 };
 

@@ -1,39 +1,66 @@
-import React, { FunctionComponent } from "react";
-import "./styles/jupyter-frame.scss"
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { changeRoute } from "../../store/currentPage/actions";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import style from "./styles/jupyter-frame.module.scss"
 import Headline from "../../components/page-title/index";
-import { getToken } from "../../services/token";
 import useUser from "../../hooks/useUser";
+import { getToken } from "../../services/token";
 
 interface JupyterFrameProps {
     type: 'coherence' | 'files',
 }
 
-export const JupyterFrame: React.FunctionComponent<JupyterFrameProps> = ({ type }) => {
-    const dispatch = useDispatch();
-
-    if (type === 'files') {
-        dispatch(changeRoute('research/my-files'))
-    } else {
-        dispatch(changeRoute('apps/coherence/my-files'))
-    }
-
+export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => {
     const user = useUser();
-    const filesUrl = `${process.env.HUB_URL}user/${user?.email}/tree`;
-    const coherenceUrl = `${filesUrl}/Coherence`;
-    const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
+
+    const BASE_USER_URL = `${process.env.HUB_URL}user/${user?.email}`
+    const FILES_URL = `${BASE_USER_URL}/tree`;
+    /**   
+     * ? probably it's better change 'apps' 'notebooks'
+     * At least, for Dev Hubspot it's correct, but the apps link we recieved form Geoff Maggi
+    */
+    const COHERENCE_URL = `${BASE_USER_URL}/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
+    const HUB_URL = type === 'files' ? FILES_URL : COHERENCE_URL;
+
+    const frameRef = useRef<HTMLIFrameElement>(null);
+    const formRef = useRef<HTMLFormElement>(null)
+    const token = getToken();
+
+
+    useEffect(() => {
+        /**   
+         * * submit form on every component's mount will reset COHERENCE link
+         * That why we need to store the logged state 
+        */
+        if (!localStorage.getItem('jupiter-logged')) {
+            formRef.current && formRef.current.submit();
+            localStorage.setItem('jupiter-logged', 'true')
+
+            if (type === 'files' && frameRef.current) {
+                frameRef.current.src = HUB_URL;
+            }
+        }
+
+    }, [formRef.current])
 
     return (
-        <div className="jupyter-frame">
-            <header className='jupyter-frame__header'>
+        <div className={style.root}>
+            <header className={style.header}>
                 <Headline>{type === 'files' ? 'My Files' : 'Coherence'}</Headline>
                 {type === 'files' && (<p>Manage and edit your files</p>)}
             </header>
-            <iframe name="jupyter-iframe" src={HUB_URL}>
 
-            </iframe>
+            {token &&
+                <form
+                    method='POST'
+                    target="jupyter-iframe"
+                    action={`${process.env.HUB_URL}hub/login`}
+                    ref={formRef}
+                    hidden
+                >
+                    <input name='token' defaultValue={token} />
+                </form>
+            }
+
+            <iframe className={style.frame} name="jupyter-iframe" src={HUB_URL} ref={frameRef} />
         </div>
     )
 }

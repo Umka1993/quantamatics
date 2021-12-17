@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState, FunctionComponent } from "react";
 
 import Button, { ResetButton } from "../button";
 import AppInput, { DatePick, Email } from "../app-input";
@@ -7,7 +7,7 @@ import Modal from "../modal";
 import RoleCheckboxes from "../role-checkboxes";
 import { OrganizationKey, UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
-import { IUpdateUser, IUser } from "../../types/user";
+import { IUpdateUser } from "../../types/user";
 import { useUpdateUserMutation, useUpdateUserRolesMutation } from "../../api/user";
 import { useGetAllOrganizationsQuery } from "../../api/organization";
 import IApiError from "../../types/api-error";
@@ -18,23 +18,18 @@ import Loader from "../loader";
 import "./styles/edit-account.scss";
 interface IEditProfile {
     onClose: () => void;
-    user: IUser;
+    user: IUpdateUser;
 }
 
-export const EditProfile: React.FunctionComponent<IEditProfile> = ({
+export const EditProfile: FunctionComponent<IEditProfile> = ({
     onClose,
     user,
 }) => {
-    const initialExp = user.subscriptionEndDate
-        ? new Date(user.subscriptionEndDate.split(".").join("/"))
-        : new Date();
-
-
     const [firstName, setName] = useState<string>(user.firstName);
     const [lastName, setSurname] = useState<string>(user.lastName);
     const [companyName, setOrganization] = useState<string>(user.companyName);
     const [email, setEmail] = useState<string>(user.email);
-    const [subscriptionEndDate, setExpiration] = useState<Date>(initialExp);
+    const [subscriptionEndDate, setExpiration] = useState<Date>(user.subscriptionEndDate);
 
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);

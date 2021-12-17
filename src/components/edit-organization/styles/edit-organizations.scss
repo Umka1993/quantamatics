@@ -6,25 +6,19 @@
 .edit-organization {
   &__header {
     background: #ffffff;
-    box-shadow: 0px 12px 26px rgba(16, 30, 115, 0.06);
     border-radius: 4px 4px 0px 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 40px;
-    height: 102px;
+    padding: 40px;
   }
 
   &__title {
     margin: 0;
   }
 
-  &__body {
-    padding: 40px;
-  }
-
   &__info {
-    margin-bottom: 60px;
+    padding: 0 40px 40px;
     min-height: 142px;
     position: relative;
   }
@@ -54,6 +48,10 @@
 
   &__comments {
     flex-basis: 100%;
+  }
+
+  &__user-list {
+    padding: 0 40px 40px;
   }
 
   &__user-list-header {

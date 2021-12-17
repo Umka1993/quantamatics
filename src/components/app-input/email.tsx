@@ -11,6 +11,7 @@ import "./styles/input.scss";
 import classNames from "classnames";
 import EditIcon from "./assets/edit.svg";
 import getValidationMessage from "./utils/emailValidation";
+import { RegExpValidation } from "../../data/enum";
 
 interface IEmail extends InputHTMLAttributes<HTMLInputElement> {
     error?: string,
@@ -20,8 +21,6 @@ interface IEmail extends InputHTMLAttributes<HTMLInputElement> {
     icon?: string,
     showLimit?: boolean,
 }
-
-const EMAIL_REG_EXP = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$";
 
 const Email: React.FunctionComponent<IEmail> = ({
     className,
@@ -55,14 +54,9 @@ const Email: React.FunctionComponent<IEmail> = ({
     useEffect(() => {
         reCalcLabelWidth();
         if (inputRef.current) {
-            const { validity } = inputRef.current;
-            inputRef.current.setCustomValidity(getValidationMessage(validity, error));
-
+            const message = getValidationMessage(inputRef.current.validity, error);            
+            inputRef.current.setCustomValidity(message);
             const { validationMessage } = inputRef.current;
-
-            error &&
-                errorMessage !== validationMessage &&
-                setErrorMessage(validationMessage);
 
             !validationMessage.length && setErrorMessage(undefined);
         }
@@ -70,7 +64,7 @@ const Email: React.FunctionComponent<IEmail> = ({
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
-        setErrorMessage(inputRef.current?.validationMessage);
+        setErrorMessage(evt.currentTarget.validationMessage);
         onInvalid && onInvalid(evt);
     };
 
@@ -116,7 +110,7 @@ const Email: React.FunctionComponent<IEmail> = ({
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
-                    pattern={EMAIL_REG_EXP}
+                    pattern={RegExpValidation.Email as string}
                 />
 
                 {icon === "edit" && <EditIcon className="app-input__icon" />}

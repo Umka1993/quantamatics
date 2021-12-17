@@ -1,78 +1,62 @@
-import React, { FormEvent, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory, Link } from "react-router-dom";
-
+import React, { useEffect, useState, FunctionComponent, useRef } from "react";
+import { Link } from "react-router-dom";
 import Button from "../button";
 import { CheckBox } from "../../components/checkbox";
 import { Password, Email } from "../../components/app-input";
 import Form from "./form";
-
 import { AppRoute } from "../../data/enum";
-
 import "./styles/form.scss";
 import "./styles/login-page.scss";
 import { useLoginUserMutation } from "../../api/account";
 import IApiError from "../../types/api-error";
-import { login } from "../../store/authorization";
-import { saveToken } from "../../services/token";
-import pendoInitialize from "../../services/pendoInitialize";
+import useLogin from "../../hooks/useLogin";
 
-const LoginForm: React.FunctionComponent = () => {
-    const localUserName = localStorage.getItem("savedUsername") || "";
-    const localPassword = localStorage.getItem("savedPassword") || "";
-
-    const [email, setEmail] = useState<string>(localUserName);
-    const [password, setPassword] = useState<string>(localPassword);
-
+const LoginForm: FunctionComponent = () => {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const [rememberMe, setRememberMe] = useState<boolean>(false);
-
     const [errors, setErrors] = useState<string | undefined>(undefined);
+    const formRef = useRef<HTMLFormElement>(null);
+    
+    const HUB_URL = process.env.HUB_URL;
+    const JUPYTER_LOGOUT = HUB_URL + 'hub/logout';
 
-    const history = useHistory();
-    const dispatch = useDispatch();
     const [sendLogin, { isError, isSuccess, isLoading, error, data }] =
         useLoginUserMutation();
+
+    const loginProcess = useLogin();
 
     // hide errors on any input
     useEffect(() => {
         errors && setErrors(undefined);
     }, [email, password]);
 
-    const handleLogin = (evt: FormEvent<HTMLFormElement>) => {
-        sendLogin({ email, password }).unwrap;
+    const handleLogin = () => {
+        sendLogin({ email, password }).unwrap();
     };
 
     useEffect(() => {
         if (isError) {
             const text =
                 (error as IApiError).status >= 400
-                    ? "Incorrect username or password"
+                    ? "Incorrect email or password"
                     : "Something went wrong";
 
             setErrors(text);
+
+            formRef.current?.reportValidity()
         }
     }, [isError]);
 
+    useEffect(() => {        
+        if (errors && formRef.current) {
+            formRef.current.reportValidity();
+        }
+    }, [errors, formRef]);
+
     useEffect(() => {
         if (isSuccess && data) {
-            setErrors(undefined);
-            pendoInitialize(data.user);
-            if (new Date(data.user.subscriptionEndDate) > new Date()) {
-                dispatch(login(data.user));
-                saveToken(data.token);
-                if (rememberMe) {
-                    localStorage.setItem("savedUsername", email);
-                    localStorage.setItem("savedPassword", password);
-                    localStorage.setItem("user", JSON.stringify(data.user));
-                } else {
-                    sessionStorage.setItem("savedUsername", email);
-                    sessionStorage.setItem("savedPassword", password);
-                    sessionStorage.setItem("user", JSON.stringify(data.user));
-                }
-                history.push(AppRoute.Home);
-            } else {
-                history.push(AppRoute.Expired);
-            }
+            loginProcess(data, rememberMe)
         }
     }, [isSuccess]);
 
@@ -82,6 +66,7 @@ const LoginForm: React.FunctionComponent = () => {
             headline="Sign In"
             subtitle="Enter your email and password"
             stopLoading={isLoading ? undefined : true}
+            forwardRef={formRef}
         >
             <div className="login-page__inputs">
                 <Email
@@ -90,7 +75,7 @@ const LoginForm: React.FunctionComponent = () => {
                     name="email"
                     value={email}
                     error={errors}
-                    hideError={true}
+                    hideError
                 />
 
                 <Password
@@ -129,6 +114,13 @@ const LoginForm: React.FunctionComponent = () => {
                     learn more?
                 </a>
             </p>
+
+            {/* Logout from Jupiter For Firefox  */}
+
+            <iframe 
+                src={JUPYTER_LOGOUT} 
+                className='sr-only' aria-hidden={true} 
+            />
         </Form>
     );
 };
