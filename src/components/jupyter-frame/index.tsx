@@ -56,7 +56,7 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
                     ref={formRef}
                     hidden
                 >
-                    <input name='token' value={token} />
+                    <input name='token' value={token} readOnly />
                 </form>
             }
 
