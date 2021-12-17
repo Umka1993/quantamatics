@@ -24,11 +24,11 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     useEffect(() => {
         if (!localStorage.getItem('jupiter-logged')) {
             formRef.current && formRef.current.submit();
-            localStorage.setItem('jupiter-logged', 'true')
+            localStorage.setItem('jupiter-logged', 'true');
 
-            if (frameRef.current) {
-                frameRef.current.src = HUB_URL;
-            }
+            // if (frameRef.current) {
+            //     frameRef.current.src = HUB_URL;
+            // }
         }
     }, [formRef.current])
 
