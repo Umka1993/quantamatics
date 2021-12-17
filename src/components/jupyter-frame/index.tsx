@@ -11,9 +11,11 @@ interface JupyterFrameProps {
 
 export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => {
     const user = useUser();
-    const filesUrl = `${process.env.HUB_URL}user/${user?.email}/tree`;
-    const coherenceUrl = `${process.env.HUB_URL}user/${user?.email}/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
-    const HUB_URL = type === 'files' ? filesUrl : coherenceUrl
+    const BASE_USER_URL = `${process.env.HUB_URL}user/${user?.email}`
+    const FILES_URL = `${BASE_USER_URL}/tree`;
+    const COHERENCE_URL = `${BASE_USER_URL}/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
+
+    const HUB_URL = type === 'files' ? FILES_URL : COHERENCE_URL
 
     const frameRef = useRef<HTMLIFrameElement>(null);
     const formRef = useRef<HTMLFormElement>(null)
