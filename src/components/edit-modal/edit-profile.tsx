@@ -129,6 +129,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             name="firstName"
                             icon="edit"
                             label='First Name'
+                            required
                         />
                         <AppInput
                             externalSetter={setSurname}
@@ -136,6 +137,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             name="lastName"
                             icon="edit"
                             label='Last Name'
+                            required
                         />
 
 
@@ -145,11 +147,13 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             error={emailError}
                             icon="edit"
                             label='Email'
+                            required
                         />
                         <DatePick
                             externalSetter={setExpiration}
                             valueAsDate={subscriptionEndDate}
                             label='Expiration Date'
+                            required
                         />
                         {allOrganizations &&
                             <SelectorInput
