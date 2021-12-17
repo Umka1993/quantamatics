@@ -17,9 +17,6 @@ const LoginForm: FunctionComponent = () => {
     const [rememberMe, setRememberMe] = useState<boolean>(false);
     const [errors, setErrors] = useState<string | undefined>(undefined);
     const formRef = useRef<HTMLFormElement>(null);
-    
-    const HUB_URL = process.env.HUB_URL;
-    const JUPYTER_LOGOUT = HUB_URL + 'hub/logout';
 
     const [sendLogin, { isError, isSuccess, isLoading, error, data }] =
         useLoginUserMutation();
@@ -114,13 +111,6 @@ const LoginForm: FunctionComponent = () => {
                     learn more?
                 </a>
             </p>
-
-            {/* Logout from Jupiter For Firefox  */}
-
-            <iframe 
-                src={JUPYTER_LOGOUT} 
-                className='sr-only' aria-hidden={true} 
-            />
         </Form>
     );
 };
