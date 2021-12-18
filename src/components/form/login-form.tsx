@@ -117,10 +117,11 @@ const LoginForm: FunctionComponent = () => {
 
             {/* Logout from Jupiter For Firefox  */}
 
-            <iframe 
+            { // Commenting this out for now, once we properly redirect logged in users we can add it back in if desired
+            /* <iframe 
                 src={JUPYTER_LOGOUT} 
                 className='sr-only' aria-hidden={true} 
-            />
+            /> */}
         </Form>
     );
 };
