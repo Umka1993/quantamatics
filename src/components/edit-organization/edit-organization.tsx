@@ -25,7 +25,7 @@ export const EditOrganization: FunctionComponent = () => {
 
     const { id } = useParams<RouteParams>();
     const navigate = useNavigate();
-    const [update, { isSuccess: isUpdated, isLoading: isUpdating }] =
+    const [update, { isSuccess: isUpdated, isLoading: isUpdating, isError: isUpdateError, error: updateError }] =
         useUpdateOrganizationMutation();
 
     const { data, isSuccess, isError, error } = useGetOrganizationQuery(id as string);
@@ -40,6 +40,12 @@ export const EditOrganization: FunctionComponent = () => {
             }
         }
     }, [isUpdated]);
+
+    useEffect(() => {
+        if (isUpdateError) {
+            alert(JSON.stringify((updateError as any).data?.errors));
+        }
+    }, [isUpdateError])
 
     const setInitialOrg = useCallback(() => {
         if (data) {
