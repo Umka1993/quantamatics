@@ -122,6 +122,7 @@ export const EditOrganization: FunctionComponent = () => {
                                         value={organizationName}
                                         label='Org. Name'
                                         maxLength={64}
+                                        required
                                     />
                                 </div>
                                 <div className="edit-organization__input">

@@ -107,6 +107,7 @@ const Email: React.FunctionComponent<IEmail> = ({
                     required={required}
                     aria-required={required}
                     value={value || ""}
+                    maxLength={maxLength}
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}

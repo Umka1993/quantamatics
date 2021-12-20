@@ -84,18 +84,21 @@ const InviteUserForm: FunctionComponent = () => {
                     externalSetter={setFirstName}
                     required
                     value={firstName}
+                    maxLength={100}
                     label='First Name'
                 />
                 <Input
                     externalSetter={setLastName}
                     required
                     value={lastName}
+                    maxLength={100}
                     label='Last Name'
                 />
                 <Email
                     externalSetter={setEmail}
                     required
                     value={email}
+                    maxLength={100}
                     error={errors}
                     label='Email Address'
                 />
