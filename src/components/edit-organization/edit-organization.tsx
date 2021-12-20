@@ -54,7 +54,7 @@ export const EditOrganization: FunctionComponent = () => {
         if (isSuccess && data) {
             setInitialOrg();
         }
-    }, [isSuccess]);
+    }, [isSuccess, data]);
 
     const submitHandler = (evt: any) => {
         evt.preventDefault();
