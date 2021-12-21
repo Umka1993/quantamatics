@@ -23,7 +23,6 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     const token = getToken();
 
     useEffect(() => {
-        console.log(HUB_URL);
         if (!localStorage.getItem('jupiter-logged')) {
             formRef.current && formRef.current.submit();
             localStorage.setItem('jupiter-logged', 'true');
