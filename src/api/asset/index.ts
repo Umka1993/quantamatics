@@ -1,22 +1,27 @@
+import { AssetServerResponse, NewAssetRequest, UpdateAssetRequest } from "../../types/asset";
 import baseApi from "../index";
 
 const enum AssetEndpoint {
-    GetAll = '/api/Asset/getAll',
-    GetByID = '/api/Asset/get',
-    Create = '​/api​/Asset​/create',
-    AddLink = '/api/Asset/AddLink',
-    Update = '​/api​/Asset​/update',
-    Delete = '/api/Asset/delete'
+    GetAll = 'api/Asset/getAll',
+    GetByID = 'api/Asset/get',
+    Create =  'api/Asset/create',
+    AddLink =  'api/Asset/AddLink',
+    Update = 'api/Asset/update',
+    Delete = 'api/Asset/delete',
 }
 
 
 const assetApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getAllAssets: build.query<any, void>({
-            query: () => AssetEndpoint.GetAll
+        getAllAssets: build.query<any, string>({
+            query: (orgId) => ({
+                url: AssetEndpoint.GetAll,
+                method: 'GET',
+                params: {orgId}
+            })
         }),
 
-        getAssetsByID: build.query<number, void>({
+        getAssetsByID: build.query<AssetServerResponse, number>({
             query: (id) => ({
                 url: AssetEndpoint.GetByID,
                 method: 'GET',
@@ -24,7 +29,7 @@ const assetApi = baseApi.injectEndpoints({
             })
         }),
 
-        createAssets: build.query<any, any>({
+        createAssets: build.mutation<AssetServerResponse, NewAssetRequest>({
             query: (body) => ({
                 url: AssetEndpoint.Create,
                 method: 'POST',
@@ -40,7 +45,7 @@ const assetApi = baseApi.injectEndpoints({
             })
         }),
 
-        updateAssets: build.mutation<any, void>({
+        updateAssets: build.mutation<void, UpdateAssetRequest>({
             query: (body) => ({
                 url: AssetEndpoint.Update,
                 method: 'PUT',
@@ -48,9 +53,9 @@ const assetApi = baseApi.injectEndpoints({
             })
         }),
 
-        deleteAssets: build.mutation<number, void>({
+        deleteAssets: build.mutation<void, number>({
             query: (id) => ({
-                url: AssetEndpoint.Update,
+                url: AssetEndpoint.Delete,
                 method: 'DELETE',
                 params: {id}
             })
@@ -61,5 +66,7 @@ const assetApi = baseApi.injectEndpoints({
 export const {
     useGetAllAssetsQuery,
     useGetAssetsByIDQuery,
-    useCreateAssetsQuery
+    useCreateAssetsMutation,
+    useDeleteAssetsMutation,
+    useUpdateAssetsMutation
 } = assetApi;

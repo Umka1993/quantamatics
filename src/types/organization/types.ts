@@ -1,6 +1,8 @@
 import { OrganizationKey } from "../../data/enum";
+
+export type OrganizationID = string;
 export interface Organization {
-    [ OrganizationKey.Id ]: string,
+    [ OrganizationKey.Id ]: OrganizationID,
     [ OrganizationKey.Parent ]: string,
     [ OrganizationKey.Name ]: string,
     [ OrganizationKey.IdCRM ]: string,
