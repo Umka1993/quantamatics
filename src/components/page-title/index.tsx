@@ -20,7 +20,7 @@ const Headline: FunctionComponent<HeadlineProps> = ({ pageTitle, children, class
         return () => {
             document.title = oldTitle;
         };
-    });
+    }, [headlineRef.current]);
     return (
         <h1
             className={["page-title", className].join(" ")}
