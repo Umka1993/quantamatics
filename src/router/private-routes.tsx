@@ -46,6 +46,13 @@ export default function PrivateRoutes(): ReactElement {
                 />
             )}
 
+            {isCoherence && (
+                <Route
+                    path={AppRoute.ExcelLibrary}
+                    element={<JupyterFrame type="excelLibrary" />}
+                />
+            )}
+
             {isOrganizationAvailable && (
                 <>
                     <Route path="/apps/organizations/list" element={<OrganizationList />} />
