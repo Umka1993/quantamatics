@@ -4,6 +4,7 @@ import { AppRoute, UserRole } from "../../data/enum";
 
 import ZoomIcon from "./assets/zoom.svg";
 import CoherenceIcon from "./assets/coherence.svg";
+import ExcelIcon from "./assets/excel.svg";
 import OrganizationsIcon from "./assets/org.svg";
 import CogsIcon from "./assets/cogs.svg";
 import FilesIcon from "./assets/files.svg";
@@ -99,6 +100,25 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                         height={16}
                     />
                     Coherence
+                </NavLink>
+            )}
+
+            {user?.userRoles.includes(UserRole.Coherence) && (
+                <NavLink
+                    to={AppRoute.ExcelLibrary}
+                    className={({ isActive }) =>
+                        isActive
+                            ? "navigation__item navigation__item--active"
+                            : "navigation__item"
+                    }
+                    >
+                    <ExcelIcon 
+                        aria-hidden={true}
+                        className="navigation__icon"
+                        width={16}
+                        height={16}
+                    />
+                    Excel Library
                 </NavLink>
             )}
 

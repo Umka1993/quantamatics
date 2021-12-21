@@ -6,7 +6,7 @@ import { getToken } from "../../services/token";
 import { logoutFromJupiter } from "../../services/logoutFromJupiter";
 
 interface JupyterFrameProps {
-    type: 'coherence' | 'files',
+    type: 'coherence' | 'files' | 'excelLibrary',
 }
 
 export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => {
@@ -14,8 +14,9 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     const BASE_USER_URL = `${process.env.HUB_URL}user/${user?.email}`
     const FILES_URL = `${BASE_USER_URL}/tree`;
     const COHERENCE_URL = `${BASE_USER_URL}/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
+    const EXCEL_LIB_URL = `${FILES_URL}/FacteusData/Excel%20Library`;
 
-    const HUB_URL = type === 'files' ? FILES_URL : COHERENCE_URL
+    const HUB_URL = type === 'files' ? FILES_URL : type === 'coherence' ? COHERENCE_URL : EXCEL_LIB_URL;
 
     const frameRef = useRef<HTMLIFrameElement>(null);
     const formRef = useRef<HTMLFormElement>(null)
@@ -35,7 +36,7 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     return (
         <div className={style.root}>
             <header className={style.header}>
-                <Headline>{type === 'files' ? 'My Files' : 'Coherence'}</Headline>
+                <Headline>{type === 'files' ? 'My Files' : type === 'coherence' ? 'Coherence' : 'Excel Library'}</Headline>
                 {type === 'files' && (<p>Manage and edit your files</p>)}
             </header>
 
