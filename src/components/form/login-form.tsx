@@ -15,7 +15,6 @@ import useLogin from "../../hooks/useLogin";
 const LoginForm: FunctionComponent = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [rememberMe, setRememberMe] = useState<boolean>(false);
     const [errors, setErrors] = useState<string | undefined>(undefined);
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -54,7 +53,7 @@ const LoginForm: FunctionComponent = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
-            loginProcess(data, rememberMe)
+            loginProcess(data)
         }
     }, [isSuccess]);
 
@@ -85,11 +84,6 @@ const LoginForm: FunctionComponent = () => {
                 />
             </div>
             <div className="login-page__wrap">
-                {/* <CheckBox
-                    checked={rememberMe}
-                    externalSetter={setRememberMe}
-                    label={"Remember Me"}
-                /> */}
                 <Link to={AppRoute.ForgotPassword} className="login-page__forgot">
                     Forgot Password?
                 </Link>

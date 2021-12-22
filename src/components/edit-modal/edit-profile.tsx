@@ -82,9 +82,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                 };
                 dispatch(login(normalizedNewData));
 
-                localStorage.getItem("user")
-                    ? localStorage.setItem("user", JSON.stringify(normalizedNewData))
-                    : sessionStorage.setItem("user", JSON.stringify(normalizedNewData));
+                localStorage.setItem("user", JSON.stringify(normalizedNewData));
             }
 
         }
