@@ -8,12 +8,12 @@ import { login } from "../store/authorization";
 import { useNavigate } from "react-router-dom";
 import { InfoMessage } from "../components/info-message/info-message";
 
-export default function useLogin() : (body: LoginResponse, rememberMe: boolean) => void  {
+export default function useLogin() : (body: LoginResponse) => void  {
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
 
-    return ({user, token}, rememberMe) => {
+    return ({user, token}) => {
         pendoInitialize(user);
 
         const isSubscriptionExpired  = new Date(user.subscriptionEndDate) < new Date();
@@ -37,11 +37,7 @@ export default function useLogin() : (body: LoginResponse, rememberMe: boolean) 
         dispatch(login(user))
         saveToken(token);
         setCookie('user', user.email)
-        if (rememberMe) {
-            localStorage.setItem("user", JSON.stringify(user));
-        } else {
-            sessionStorage.setItem("user", JSON.stringify(user));
-        }
+        localStorage.setItem("user", JSON.stringify(user));
         return navigate(AppRoute.Home);
     }
 }
