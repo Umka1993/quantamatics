@@ -5,11 +5,22 @@ const enum AssetEndpoint {
     GetAll = 'api/Asset/getAll',
     GetByID = 'api/Asset/get',
     Create =  'api/Asset/create',
-    AddLink =  'api/Asset/AddLink',
+    
+    LinkOrganization =  'api/Asset/addOrgLink',
+    LinkUser =  'api/Asset/addUserLink',
+
     Update = 'api/Asset/update',
     Delete = 'api/Asset/delete',
 }
+interface LinkOrganizationParameters {
+    assetId: number | string, 
+    orgId: number | string
+}
 
+interface LinkUserParameters {
+    assetId: number | string, 
+    userId: number | string
+}
 
 const assetApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -37,11 +48,19 @@ const assetApi = baseApi.injectEndpoints({
             })
         }),
 
-        addAssetsLink: build.mutation<any, void>({
-            query: (body) => ({
-                url: AssetEndpoint.AddLink,
+        linkAssetToOrg: build.mutation<any, LinkOrganizationParameters>({
+            query: (params) => ({
+                url: AssetEndpoint.LinkOrganization,
                 method: 'POST',
-                body
+                params
+            })
+        }),
+
+        linkAssetToUser: build.mutation<any, LinkUserParameters>({
+            query: (params) => ({
+                url: AssetEndpoint.LinkUser,
+                method: 'POST',
+                params
             })
         }),
 
@@ -68,5 +87,7 @@ export const {
     useGetAssetsByIDQuery,
     useCreateAssetsMutation,
     useDeleteAssetsMutation,
-    useUpdateAssetsMutation
+    useUpdateAssetsMutation,
+    useLinkAssetToOrgMutation,
+    useLinkAssetToUserMutation
 } = assetApi;
