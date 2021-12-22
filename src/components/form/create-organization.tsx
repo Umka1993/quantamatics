@@ -36,7 +36,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 
     useEffect(() => {
         if (isError) {
-            alert(JSON.stringify((updateError)));
+            alert(JSON.stringify((error as any).data?.errors));
         }
     }, [isError])
 

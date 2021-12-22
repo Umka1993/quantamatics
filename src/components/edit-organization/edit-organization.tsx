@@ -43,7 +43,7 @@ export const EditOrganization: FunctionComponent = () => {
 
     useEffect(() => {
         if (isUpdateError) {
-            alert(JSON.stringify((updateError)));
+            alert(JSON.stringify((updateError as any).data?.errors));
         }
     }, [isUpdateError])
 
