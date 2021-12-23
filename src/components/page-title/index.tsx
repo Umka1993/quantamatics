@@ -15,12 +15,14 @@ const Headline: FunctionComponent<HeadlineProps> = ({ pageTitle, children, class
         document.title = pageTitle
             ? pageTitle
             : `${String(children)} | ${AppInfo.Name}`;
-        headlineRef.current?.focus();
+        
+        // GM: Commenting this out as I am unsure why it is needed
+        // headlineRef.current?.focus();
 
         return () => {
             document.title = oldTitle;
         };
-    }, []);
+    }, [headlineRef.current]);
     return (
         <h1
             className={["page-title", className].join(" ")}
