@@ -69,7 +69,7 @@ const LoginForm: FunctionComponent = () => {
             forwardRef={formRef}
         >
             <div className="login-page__inputs">
-                <Email
+                <Input
                     externalSetter={setEmail}
                     placeholder="Email"
                     name="email"
