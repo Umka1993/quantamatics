@@ -56,16 +56,15 @@ const Input: React.FunctionComponent<IInput> = ({
 
             const isOnlySpaces = /^\s+$/.test(value);
 
-            required && (validity.valueMissing || isOnlySpaces) && inputRef.current.setCustomValidity(`This is not valid ${label ? label : ''}`)
-
+            if (required && (validity.valueMissing || isOnlySpaces)) {
+                inputRef.current.setCustomValidity(`This is not valid ${label ? label : ''}`)
+            } else {
+                inputRef.current.setCustomValidity('')
+            }
             error && inputRef.current.setCustomValidity(error);
-
-
             !validationMessage.length && setErrorMessage(undefined);
-
             if (!validationMessage.length) {
-                !inputRef.current.validationMessage.length &&
-                    setErrorMessage(undefined);
+                setErrorMessage(undefined);
             }
         }
     }, [inputRef.current?.validity, error, value]);
