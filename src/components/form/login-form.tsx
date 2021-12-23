@@ -1,8 +1,6 @@
 import React, { useEffect, useState, FunctionComponent, useRef } from "react";
 import { Link } from "react-router-dom";
 import Button from "../button";
-import { CheckBox } from "../../components/checkbox";
-import Input from "../../components/app-input";
 import { Password, Email } from "../../components/app-input";
 import Form from "./form";
 import { AppRoute } from "../../data/enum";
@@ -13,8 +11,8 @@ import IApiError from "../../types/api-error";
 import useLogin from "../../hooks/useLogin";
 
 const LoginForm: FunctionComponent = () => {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     const [errors, setErrors] = useState<string | undefined>(undefined);
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -34,18 +32,23 @@ const LoginForm: FunctionComponent = () => {
 
     useEffect(() => {
         if (isError) {
-            const text =
-                (error as IApiError).status >= 400
-                    ? "Incorrect email or password"
-                    : "Something went wrong";
+            if ((error as IApiError).status >= 400) {
+                console.log(error);
 
-            setErrors(text);
+                (error as IApiError).data === "User locked out"
+                    ? setErrors(
+                        "User account locked due to several failed login attempts. Please try again later."
+                    )
+                    : setErrors("Incorrect email or password");
+            } else {
+                setErrors("Something went wrong");
+            }
 
-            formRef.current?.reportValidity()
+            formRef.current?.reportValidity();
         }
     }, [isError]);
 
-    useEffect(() => {        
+    useEffect(() => {
         if (errors && formRef.current) {
             formRef.current.reportValidity();
         }
@@ -53,7 +56,7 @@ const LoginForm: FunctionComponent = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
-            loginProcess(data)
+            loginProcess(data);
         }
     }, [isSuccess]);
 
@@ -66,7 +69,7 @@ const LoginForm: FunctionComponent = () => {
             forwardRef={formRef}
         >
             <div className="login-page__inputs">
-                <Input
+                <Email
                     externalSetter={setEmail}
                     placeholder="Email"
                     name="email"
