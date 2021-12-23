@@ -1,7 +1,6 @@
 import React, { useEffect, useState, FunctionComponent, useRef } from "react";
 import { Link } from "react-router-dom";
 import Button from "../button";
-import { CheckBox } from "../../components/checkbox";
 import Input from "../../components/app-input";
 import { Password, Email } from "../../components/app-input";
 import Form from "./form";
@@ -13,14 +12,10 @@ import IApiError from "../../types/api-error";
 import useLogin from "../../hooks/useLogin";
 
 const LoginForm: FunctionComponent = () => {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [rememberMe, setRememberMe] = useState<boolean>(false);
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     const [errors, setErrors] = useState<string | undefined>(undefined);
     const formRef = useRef<HTMLFormElement>(null);
-    
-    const HUB_URL = process.env.HUB_URL;
-    const JUPYTER_LOGOUT = HUB_URL + 'hub/logout';
 
     const [sendLogin, { isError, isSuccess, isLoading, error, data }] =
         useLoginUserMutation();
@@ -38,18 +33,23 @@ const LoginForm: FunctionComponent = () => {
 
     useEffect(() => {
         if (isError) {
-            const text =
-                (error as IApiError).status >= 400
-                    ? "Incorrect email or password"
-                    : "Something went wrong";
+            if ((error as IApiError).status >= 400) {
+                console.log(error);
 
-            setErrors(text);
+                (error as IApiError).data === "User locked out"
+                    ? setErrors(
+                        "User account locked due to several failed login attempts. Please try again later."
+                    )
+                    : setErrors("Incorrect email or password");
+            } else {
+                setErrors("Something went wrong");
+            }
 
-            formRef.current?.reportValidity()
+            formRef.current?.reportValidity();
         }
     }, [isError]);
 
-    useEffect(() => {        
+    useEffect(() => {
         if (errors && formRef.current) {
             formRef.current.reportValidity();
         }
@@ -57,7 +57,7 @@ const LoginForm: FunctionComponent = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
-            loginProcess(data, rememberMe)
+            loginProcess(data);
         }
     }, [isSuccess]);
 
@@ -88,11 +88,6 @@ const LoginForm: FunctionComponent = () => {
                 />
             </div>
             <div className="login-page__wrap">
-                {/* <CheckBox
-                    checked={rememberMe}
-                    externalSetter={setRememberMe}
-                    label={"Remember Me"}
-                /> */}
                 <Link to={AppRoute.ForgotPassword} className="login-page__forgot">
                     Forgot Password?
                 </Link>
@@ -114,13 +109,6 @@ const LoginForm: FunctionComponent = () => {
                     learn more?
                 </a>
             </p>
-
-            {/* Logout from Jupiter For Firefox  */}
-
-            <iframe 
-                src={JUPYTER_LOGOUT} 
-                className='sr-only' aria-hidden={true} 
-            />
         </Form>
     );
 };

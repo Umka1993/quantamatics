@@ -36,7 +36,6 @@ const Input: React.FunctionComponent<IInput> = ({
     onFocus,
     ...other
 }) => {
-    // const [innerValue, setInnerValue] = useState<string>(value as string);
     const inputRef = useRef<HTMLInputElement>(null);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -53,11 +52,19 @@ const Input: React.FunctionComponent<IInput> = ({
     useEffect(() => {
         reCalcLabelWidth();
         if (inputRef.current) {
-            error && inputRef.current.setCustomValidity(error);
+            const { validationMessage, validity, value, required } = inputRef.current;
 
-            if (value && Boolean(String(value).length)) {
-                !inputRef.current.validationMessage.length &&
-                    setErrorMessage(undefined);
+            const isOnlySpaces = /^\s+$/.test(value);
+
+            if (required && (validity.valueMissing || isOnlySpaces)) {
+                inputRef.current.setCustomValidity(`This is not valid ${label ? label : ''}`)
+            } else {
+                inputRef.current.setCustomValidity('')
+            }
+            error && inputRef.current.setCustomValidity(error);
+            !validationMessage.length && setErrorMessage(undefined);
+            if (!validationMessage.length) {
+                setErrorMessage(undefined);
             }
         }
     }, [inputRef.current?.validity, error, value]);

@@ -3,7 +3,6 @@ import style from "./styles/jupyter-frame.module.scss"
 import Headline from "../../components/page-title/index";
 import useUser from "../../hooks/useUser";
 import { getToken } from "../../services/token";
-import { logoutFromJupiter } from "../../services/logoutFromJupiter";
 
 interface JupyterFrameProps {
     type: 'coherence' | 'files' | 'excelLibrary',
@@ -25,12 +24,13 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     useEffect(() => {
         if (!localStorage.getItem('jupiter-logged')) {
             formRef.current && formRef.current.submit();
-            localStorage.setItem('jupiter-logged', 'true');
+            localStorage.setItem('jupiter-logged', 'true')
 
-            // if (frameRef.current) {
-            //     frameRef.current.src = HUB_URL;
-            // }
+            if (type === 'coherence' && frameRef.current) {
+                frameRef.current.src = HUB_URL;
+            }
         }
+
     }, [formRef.current])
 
     return (
@@ -48,7 +48,11 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
                     ref={formRef}
                     hidden
                 >
-                    <input name='token' value={token} readOnly />
+                    <input
+                        name='token'
+                        value={token}
+                        readOnly
+                    />
                 </form>
             }
 

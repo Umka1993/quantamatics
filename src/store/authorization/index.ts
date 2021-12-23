@@ -9,10 +9,7 @@ export interface AuthState {
 }
 
 const user: IUser = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user") as string)
-    : sessionStorage.getItem("user")
-        ? JSON.parse(sessionStorage.getItem("user") as string)
-        : undefined;
+    ? JSON.parse(localStorage.getItem("user") as string): undefined;
 
 user && pendoInitialize(user);
 
