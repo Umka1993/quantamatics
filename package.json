@@ -2,11 +2,11 @@
   "scripts": {
     "clean": "rimraf publish",
     "lint": "eslint --ext .tsx,.ts . --quiet",
-    "build": "npm run clean && npm run lint && webpack --config config/webpack.dev.js",
+    "build": "npm run clean && npm run lint && cross-env NODE_ENV=production webpack --config config/webpack.dev.js",
     "buildBeta": "npm run clean && npm run lint && webpack --config config/webpack.dev-beta.js",
     "buildStaging": "npm run clean && npm run lint && webpack --config config/webpack.stag.js",
     "buildStagingBeta": "npm run clean && npm run lint && webpack --config config/webpack.stag-beta.js",
-    "dev": "webpack-dev-server --config config/webpack.dev.js --open --https --env dev",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.dev.js --open --https --env dev",
     "stag": "webpack-dev-server --config config/webpack.stag.js --open --https"
   },
   "devDependencies": {
@@ -24,6 +24,7 @@
     "@typescript-eslint/parser": "^4.32.0",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^10.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "dotenv-webpack": "^7.0.3",
     "eslint": "^7.32.0",
