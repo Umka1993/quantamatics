@@ -1,12 +1,12 @@
 import React, { useEffect, useState, FunctionComponent } from "react";
 import "./styles/create-organization.scss";
-import Input, { Multiselect } from "../app-input";
+import Input from "../app-input";
 import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
 import { useAddOrganizationMutation } from "../../api/organization";
 import { AppRoute } from "../../data/enum";
-import { useCreateAssetsQuery,useGetAllAssetsQuery } from "../../api/asset";
+import { useCreateAssetsMutation } from "../../api/asset";
 
 interface ICreateOrganization { }
 
@@ -20,7 +20,7 @@ export interface createOrganizationRequestBody {
 const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const navigate = useNavigate();
 
-    const [register, { isError, isSuccess }] = useAddOrganizationMutation();
+    const [register, { isError, isSuccess, data }] = useAddOrganizationMutation();
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerCrmId] = useState<string>("");
@@ -28,19 +28,25 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [comments, setComments] = useState<string | undefined>("");
     const [datasets, setDatasets] = useState<string[]>([]);
 
-    useGetAllAssetsQuery()
-    const createAsset = useCreateAssetsQuery({name: 'Coherence'})
+    const [createAsset, { isLoading }] = useCreateAssetsMutation();
 
     const returnBack = () => {
         navigate(AppRoute.OrganizationList);
     };
 
     useEffect(() => {
-        isSuccess && returnBack();
+        if (isSuccess && data) {
+            datasets.forEach(asset => createAsset({
+                name: asset,
+                ownerOrganizationId: data.id,
+                version: 1
+            }))
+        }
     }, [isSuccess]);
 
-    const registerOrganization = () =>
-        register({ name, customerCrmId, customerCrmLink, comments, organizationAssets: datasets }).unwrap();
+    const registerOrganization = () => {
+        register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
+    }
 
     return (
         <Form
@@ -87,12 +93,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     maxLength={200}
                     showLimit
                 />
-                <Multiselect
+                {/* <Multiselect
                     options={['Coherence', 'Research', 'Backtest - Enterprise', 'Enterprise', 'Backtest - Express', 'Express', 'Backtest - CPG', 'CPG', 'Backtest - Summary v3.1', 'Summary v3.1']}
                     label='Org. Datasets'
                     selected={datasets}
                     setSelected={setDatasets}
-                />
+                /> */}
             </div>
 
             <Button

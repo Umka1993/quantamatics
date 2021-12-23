@@ -2,12 +2,14 @@ import Button, { ResetButton } from '../button';
 import React, { FormEvent, FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { Organization } from 'types/organization/types';
 import Headline from '../page-title'
-import Input from '../app-input';
+import Input, { Multiselect } from '../app-input';
 
 import style from './styles/edit-organization.module.scss'
 import { useNavigate } from 'react-router-dom';
 import { useUpdateOrganizationMutation } from '../../api/organization';
 import Loader from "../loader";
+import { AppRoute } from '../../data/enum';
+import * as assetsHooks from "../../api/asset";
 
 interface EditOrganizationFormProps {
     organization?: Organization,
@@ -21,20 +23,46 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
     const [update, { isSuccess: isUpdated, isLoading: isUpdating }] =
         useUpdateOrganizationMutation();
 
-    const [organizationName, setOrganizationName] = useState<string>("");
-    const [customerID, setCustomerID] = useState<string>("");
-    const [customerLink, setCustomerLink] = useState<string>("");
-    const [comment, setComment] = useState<string | undefined>("");
+    const [name, setName] = useState<string>("");
+    const [customerCrmId, setCustomerID] = useState<string>("");
+    const [customerCrmLink, setCustomerLink] = useState<string>("");
+    const [comments, setComment] = useState<string | undefined>("");
+    const [datasets, setDatasets] = useState<string[]>([]);
+
+    const { data: assets } = assetsHooks.useGetAllAssetsQuery(organization?.id as string);
+    const [deleteAsset] = assetsHooks.useDeleteAssetsMutation();
+    const [createAsset] = assetsHooks.useCreateAssetsMutation();
+    const [updateAsset] = assetsHooks.useUpdateAssetsMutation();
+    const [linkAsset] = assetsHooks.useLinkAssetToOrgMutation();
+    const [getAssetInfo] = assetsHooks.useGetAssetByIDMutation();
 
     const setInitialOrg = useCallback(() => {
         if (organization) {
-            setOrganizationName(organization.name);
+            setName(organization.name);
             setCustomerID(organization.customerCrmId);
             setCustomerLink(organization.customerCrmLink);
             setComment(organization.comments);
         }
+
     }, [organization]);
 
+    useEffect(() => {
+        const tempArray: string[] = [];
+        // assets && assets.length && assets.forEach(({ assetId }: any) => {
+        //     getAssetInfo(assetId).unwrap().then(fulfilled => tempArray.push(fulfilled.name))
+
+        // });
+
+        // setDatasets(tempArray)
+
+    }, [assets])
+
+    /*  useEffect(() => {
+         result && console.log(result);
+ 
+         // isSuccess && asset && setDatasets([...datasets].push(asset.id))
+     }, [result])
+  */
     useEffect(() => {
         organization && setInitialOrg();
     }, [organization]);
@@ -44,26 +72,21 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
         evt.preventDefault();
         update({
             ...organization,
-            name: organizationName,
-            customerCrmId: customerID,
-            customerCrmLink: customerLink,
-            comments: comment
+            name,
+            customerCrmId,
+            customerCrmLink,
+            comments
         });
     }
-
-
 
     const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
         setInitialOrg();
-
-        if (isHaveAccessToOrgList) {
-            navigate("/apps/organizations/list");
-        }
+        isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);
     }
 
     useEffect(() => {
-        isUpdated && isHaveAccessToOrgList && navigate("/apps/organizations/list");
+        isUpdated && isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);
     }, [isUpdated]);
 
     return (<form className={style.root}
@@ -95,8 +118,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
 
         {(isUpdating || externalLoad) ? <Loader /> : <>
             <Input
-                externalSetter={setOrganizationName}
-                value={organizationName}
+                externalSetter={setName}
+                value={name}
                 label='Org. Name'
                 maxLength={64}
                 required
@@ -104,7 +127,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
             />
             <Input
                 externalSetter={setCustomerID}
-                value={customerID}
+                value={customerCrmId}
                 label='CRM Customer ID'
                 maxLength={32}
                 className={style.input}
@@ -112,15 +135,22 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
 
             <Input
                 externalSetter={setCustomerLink}
-                value={customerLink}
+                value={customerCrmLink}
                 label='CRM Customer ID Link'
                 maxLength={64}
                 className={style.input}
             />
 
+            <Multiselect
+                options={['Coherence', 'Research', 'Backtest - Enterprise', 'Enterprise', 'Backtest - Express', 'Express', 'Backtest - CPG', 'CPG', 'Backtest - Summary v3.1', 'Summary v3.1']}
+                label='Org. Datasets'
+                selected={datasets}
+                setSelected={setDatasets}
+            />
+
             <Input
                 externalSetter={setComment}
-                value={comment}
+                value={comments}
                 placeholder="Comments"
                 label='Comments'
                 maxLength={200}

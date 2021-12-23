@@ -1,4 +1,4 @@
-import { AssetServerResponse, NewAssetRequest, UpdateAssetRequest } from "../../types/asset";
+import { AssetServerResponse, NewAssetRequest } from "../../types/asset";
 import baseApi from "../index";
 
 const enum AssetEndpoint {
@@ -32,12 +32,12 @@ const assetApi = baseApi.injectEndpoints({
             })
         }),
 
-        getAssetsByID: build.query<AssetServerResponse, number>({
+        getAssetByID: build.mutation<AssetServerResponse, number>({
             query: (id) => ({
                 url: AssetEndpoint.GetByID,
                 method: 'GET',
                 params: {id}
-            })
+            }),
         }),
 
         createAssets: build.mutation<AssetServerResponse, NewAssetRequest>({
@@ -64,7 +64,7 @@ const assetApi = baseApi.injectEndpoints({
             })
         }),
 
-        updateAssets: build.mutation<void, UpdateAssetRequest>({
+        updateAssets: build.mutation<void, AssetServerResponse>({
             query: (body) => ({
                 url: AssetEndpoint.Update,
                 method: 'PUT',
@@ -84,7 +84,7 @@ const assetApi = baseApi.injectEndpoints({
 
 export const {
     useGetAllAssetsQuery,
-    useGetAssetsByIDQuery,
+    useGetAssetByIDMutation,
     useCreateAssetsMutation,
     useDeleteAssetsMutation,
     useUpdateAssetsMutation,
