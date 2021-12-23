@@ -13,6 +13,7 @@ import "./styles/input.scss";
 import "./styles/multiselect.scss";
 import Checkbox from "../app-checkbox/checkbox";
 import ComaList from '../coma-list';
+import useCloseModal from "../../hooks/useCloseModal";
 
 interface IInput extends SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
@@ -47,19 +48,13 @@ const Multiselect: FunctionComponent<IInput> = ({
     function handleFocus(evt: FormEvent<HTMLInputElement>) {
         reCalcLabelWidth();
         setShowOptions(true);
-        document.addEventListener(
-            'focusin', ({target}) => {
-                console.log(rootElement.current && rootElement.current.contains(target as Node))
-            }
-        )
         onFocus && onFocus(evt as any);
     }
 
-    useEffect(() => {
-        console.log(document.activeElement);
-    }, [document.activeElement])
+    useCloseModal(showOptions, setShowOptions);
+
     return (
-        <div className="app-input multiselect" ref={rootElement}>
+        <div className="app-input multiselect" ref={rootElement} onClick={(e) => e.stopPropagation()}>
             <label
                 className="app-input__wrapper multiselect__search_wrap"
                 style={
@@ -91,12 +86,16 @@ const Multiselect: FunctionComponent<IInput> = ({
                             name={option}
                             key={option}
                             onInput={({ currentTarget }) => {
-                                if (currentTarget.checked) {
+                                if ((currentTarget as any).checked) {
                                     setSelected([...selected, option]);
                                 } else {
-                                    setSelected(selected.splice(selected.indexOf(option), 1));
+                                    const deletedIndex = selected.indexOf(option)
+                                    const tempArray = [...selected]
+                                    tempArray.splice(deletedIndex, 1)
+                                    setSelected(tempArray);
                                 }
                             }}
+                            
                         >
                             {option}
                         </Checkbox>
