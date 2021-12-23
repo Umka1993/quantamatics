@@ -16,7 +16,7 @@ module.exports = {
         path: path.resolve(__dirname, '../publish'),
         publicPath: '/'
     },
-    mode: "development",
+    mode: process.env.NODE_ENV,
     resolve: {
         extensions: ['.js', '.ts', '.tsx']
     },
