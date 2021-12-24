@@ -20,7 +20,7 @@ export interface createOrganizationRequestBody {
 const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const navigate = useNavigate();
 
-    const [register, { isError, isSuccess, data }] = useAddOrganizationMutation();
+    const [register, { isError, isSuccess, error, data }] = useAddOrganizationMutation();
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerCrmId] = useState<string>("");
@@ -43,6 +43,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
             }))
         }
     }, [isSuccess]);
+
+    useEffect(() => {
+        if (isError) {
+            console.log((error as any).data?.errors);
+        }
+    }, [isError])
 
     const registerOrganization = () => {
         register({ name, customerCrmId, customerCrmLink, comments }).unwrap();

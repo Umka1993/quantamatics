@@ -9,6 +9,7 @@ export const enum AppRoute {
     Favorites = '/research/favorites',
     AddUser = '/add-user',
     Coherence = '/coherence',
+    ExcelLibrary = '/excel-library',
     Settings = '/settings',
 
     Organizations = '/apps/organizations/:path',

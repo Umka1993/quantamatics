@@ -94,8 +94,10 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     useEffect(() => {
         if (isError) {
-            (error as IApiError).data.includes(" already taken")
-                && setEmailError("The user with such email already exists")
+            if ((typeof((error as IApiError).data)) == "string" && (error as IApiError).data?.includes(" already taken"))
+                setEmailError("The user with such email already exists");
+            else
+                alert(JSON.stringify((error as any).data?.errors));
         }
     }, [isError])
 

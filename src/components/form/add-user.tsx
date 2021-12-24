@@ -31,8 +31,11 @@ const InviteUserForm: FunctionComponent = () => {
 
 
     useEffect(() => {
-        isError && (error as any).data[0].code === "DuplicateUserName"
-            && setErrors("The user with such email already exists")
+        if (isError) {
+            if ((error as any).data[0]?.code === "DuplicateUserName")
+                setErrors("The user with such email already exists");
+            else alert(JSON.stringify((error as any).data?.errors));
+        }
     }, [isError])
 
     const backLink = `/apps/organizations/${company?.id}`;
