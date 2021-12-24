@@ -14,6 +14,7 @@ import "./styles/multiselect.scss";
 import Checkbox from "../app-checkbox/checkbox";
 import ComaList from '../coma-list';
 import useCloseModal from "../../hooks/useCloseModal";
+import MultiselectOptions from './multiselect-options'
 
 interface IInput extends SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
@@ -38,6 +39,7 @@ const Multiselect: FunctionComponent<IInput> = ({
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const rootElement = useRef<HTMLDivElement>(null)
 
+    
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
             const { offsetWidth } = labelRef.current;
@@ -55,6 +57,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     return (
         <div className="app-input multiselect" ref={rootElement} onClick={(e) => e.stopPropagation()}>
+            {!!selected.length && <ComaList list={selected} />}
             <label
                 className="app-input__wrapper multiselect__search_wrap"
                 style={
@@ -79,29 +82,8 @@ const Multiselect: FunctionComponent<IInput> = ({
                     </span>
                 )}
             </label>
-            {showOptions && (
-                <div className="multiselect__options">
-                    {Array.from(options).map((option) => (
-                        <Checkbox
-                            name={option}
-                            key={option}
-                            onInput={({ currentTarget }) => {
-                                if ((currentTarget as any).checked) {
-                                    setSelected([...selected, option]);
-                                } else {
-                                    const deletedIndex = selected.indexOf(option)
-                                    const tempArray = [...selected]
-                                    tempArray.splice(deletedIndex, 1)
-                                    setSelected(tempArray);
-                                }
-                            }}
-                            
-                        >
-                            {option}
-                        </Checkbox>
-                    ))}
-                </div>
-            )}
+            {showOptions && <MultiselectOptions options={options} selected={selected} setSelected={setSelected} />
+            }
         </div>
     );
 };
