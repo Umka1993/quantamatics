@@ -20,7 +20,7 @@ interface EditOrganizationFormProps {
 const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ organization, isHaveAccessToOrgList, externalLoad }) => {
 
     const navigate = useNavigate();
-    const [update, { isSuccess: isUpdated, isLoading: isUpdating }] =
+    const [update, { isSuccess: isUpdated, isLoading: isUpdating, isError: isUpdateError, error: updateError }] =
         useUpdateOrganizationMutation();
 
     const [name, setName] = useState<string>("");
@@ -34,7 +34,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
     const [createAsset] = assetsHooks.useCreateAssetsMutation();
     const [updateAsset] = assetsHooks.useUpdateAssetsMutation();
     const [linkAsset] = assetsHooks.useLinkAssetToOrgMutation();
-    const [getAssetInfo] = assetsHooks.useGetAssetByIDMutation();
+    const [getAssetInfo, { data: asset }] = assetsHooks.useGetAssetByIDMutation();
 
     const setInitialOrg = useCallback(() => {
         if (organization) {
@@ -46,23 +46,43 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
 
     }, [organization]);
 
+    const addDataset = useCallback((newDataset: string) => setDatasets([...datasets, newDataset]), [setDatasets, datasets])
+
     useEffect(() => {
         const tempArray: string[] = [];
-        // assets && assets.length && assets.forEach(({ assetId }: any) => {
-        //     getAssetInfo(assetId).unwrap().then(fulfilled => tempArray.push(fulfilled.name))
+        if (assets && assets.length) {
+            assets.map(async ({ assetId }: any, index: number) => {
+                const res = await getAssetInfo(assetId).unwrap().then(({ name }: any) => name);
 
-        // });
+                setTimeout(() => {
+                    
+                    console.log(res);
+                    console.log(datasets);
+                    console.log(index);
 
-        // setDatasets(tempArray)
+                    setDatasets([...datasets, res ])
+
+
+                }, 400 * (index + 1))
+                // console.log(res);
+
+            }
+            );
+
+        }
+
+        console.log(tempArray);
+
+        // tempArray.length && setDatasets(tempArray)
 
     }, [assets])
 
     /*  useEffect(() => {
-         result && console.log(result);
- 
+        asset && console.log(asset);
+     
          // isSuccess && asset && setDatasets([...datasets].push(asset.id))
-     }, [result])
-  */
+     }, [asset]) */
+
     useEffect(() => {
         organization && setInitialOrg();
     }, [organization]);
@@ -84,6 +104,12 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
         setInitialOrg();
         isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);
     }
+
+    useEffect(() => {
+        if (isUpdateError) {
+            alert((updateError as any).data?.errors);
+        }
+    }, [isUpdateError])
 
     useEffect(() => {
         isUpdated && isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);

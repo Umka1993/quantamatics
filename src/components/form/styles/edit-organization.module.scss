@@ -1,10 +1,12 @@
 .root {
     min-height: 142px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
 
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     flex-wrap: wrap;
-    gap: 0 40px;
+    gap: 10px 36px;
     position: relative;
 }
 
@@ -13,7 +15,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
-    flex-basis: 100%;
+    grid-column: 1 / -1;
 }
 
 .buttons {
@@ -28,6 +30,6 @@
     height: 40px;
 }
 
-.input {
-    flex: 1 0 317px;
+.input:last-child {
+    grid-column: 1 / -1;
 }
