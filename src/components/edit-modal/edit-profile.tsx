@@ -16,6 +16,7 @@ import { login } from "../../store/authorization";
 import Loader from "../loader";
 
 import "./styles/edit-account.scss";
+import { Organization } from "types/organization/types";
 interface IEditProfile {
     onClose: () => void;
     user: IUpdateUser;
@@ -94,7 +95,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     useEffect(() => {
         if (isError) {
-            if ((typeof((error as IApiError).data)) == "string" && (error as IApiError).data?.includes(" already taken"))
+            if ((error as IApiError).data?.includes(" already taken"))
                 setEmailError("The user with such email already exists");
             else
                 alert(JSON.stringify((error as any).data?.errors));
@@ -160,13 +161,13 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                         />
                         {allOrganizations &&
                             <SelectorInput
-                                options={allOrganizations?.map(org => org[OrganizationKey.Name]) as string[]}
+                                options={allOrganizations?.map((org: Organization) => org[OrganizationKey.Name]) as string[]}
                                 // valueSetter={setOrganizationId}
                                 optionSetter={setOrganization}
                                 // values={allOrganizations?.map(({id}) => id) as string[]}
                                 value={companyName}
                                 label='Organization'
-                                // disabled
+                                disabled
                             />}
                         <RoleCheckboxes
                             defaultRoles={userRoles}
