@@ -12,8 +12,11 @@ const initialState :AssetsState = []
 const assetsSlice = createSlice({name: 'asset', initialState, reducers: {
     addAsset(state, action: PayloadAction<Asset>) {
         state.push(action.payload)
+    },
+    clearAssets() {
+        return []
     }
 } })
 
-export const {addAsset} = assetsSlice.actions;
+export const {addAsset, clearAssets} = assetsSlice.actions;
 export default assetsSlice.reducer;
