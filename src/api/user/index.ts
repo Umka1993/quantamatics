@@ -22,7 +22,7 @@ const usersApi = baseApi.injectEndpoints({
                     : [{ type: "Users", id: "list" }],
         }),
 
-        getUser: build.query<IUser, string>({
+        getUser: build.query<IUser, string | number>({
             query: (id) => ({
                 url: ApiRoute.GetUserByID,
                 method: "GET",
