@@ -86,31 +86,31 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
         if (datasets.length) {
 
-            if (assets) {
-                assets.forEach((asset) => {
-                    /* Delete unselected assets */
+            // if (assets) {
+            //     assets.forEach((asset) => {
+            //         /* Delete unselected assets */
 
-                    datasets.indexOf(asset.name) < 0 && deleteAsset(asset.assetId);
+            //         datasets.indexOf(asset.name) < 0 && deleteAsset(asset.assetId);
 
-                });
+            //     });
 
-                datasets.forEach((dataset) => {
-                    const foundedAsset = assets.find((asset) => asset.name === dataset);
-                    /* Create new and select to org assets */
-                    if (foundedAsset === undefined && organization) {
-                        createAsset({
-                            name: dataset,
-                            ownerOrganizationId: organization.id,
-                            version: 1,
-                        })
-                            .unwrap()
-                            .then(({ id: assetId }) =>
-                                linkAsset({ assetId, orgId: organization.id })
-                            );
-                    }
-                });
+            //     datasets.forEach((dataset) => {
+            //         const foundedAsset = assets.find((asset) => asset.name === dataset);
+            //         /* Create new and select to org assets */
+            //         if (foundedAsset === undefined && organization) {
+            //             createAsset({
+            //                 name: dataset,
+            //                 ownerOrganizationId: organization.id,
+            //                 version: 1,
+            //             })
+            //                 .unwrap()
+            //                 .then(({ id: assetId }) =>
+            //                     linkAsset({ assetId, orgId: organization.id })
+            //                 );
+            //         }
+            //     });
 
-            }
+            // }
 
 
             if (
@@ -126,6 +126,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     customerCrmId,
                     customerCrmLink,
                     comments,
+                    organizationAssets: datasets
                 });
             }
 
@@ -188,7 +189,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 isLinkingAsset ? (
                 <Loader />
             ) : (
-                <>
+                <div className={style.inputs}>
                     <Input
                         externalSetter={setName}
                         value={name}
@@ -231,6 +232,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         setSelected={setDatasets}
                         errorMessage='Select asset permissions to assign to the organization.'
                         showError={assetError}
+                        className={style.input}
                     />
 
                     <Input
@@ -242,7 +244,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         showLimit
                         className={style.input}
                     />
-                </>
+                </div>
             )}
         </form>
     );

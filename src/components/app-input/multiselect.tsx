@@ -16,7 +16,7 @@ import Checkbox from "../app-checkbox/checkbox";
 import ComaList from "../coma-list";
 import useCloseModal from "../../hooks/useCloseModal";
 import MultiselectOptions from "./multiselect-options";
-
+import classNames from 'classnames'
 interface IInput extends SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
@@ -37,7 +37,8 @@ const Multiselect: FunctionComponent<IInput> = ({
     setSelected,
     selected,
     errorMessage,
-    showError
+    showError,
+    className
 }) => {
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
@@ -65,7 +66,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     return (
         <div
-            className="app-input multiselect"
+            className={classNames("classapp-input multiselect", className)}
             ref={rootElement}
             onClick={(e) => e.stopPropagation()}
         >
