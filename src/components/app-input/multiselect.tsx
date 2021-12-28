@@ -8,13 +8,14 @@ import React, {
     Dispatch,
     SetStateAction,
     useEffect,
+    useCallback,
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
 import Checkbox from "../app-checkbox/checkbox";
-import ComaList from '../coma-list';
+import ComaList from "../coma-list";
 import useCloseModal from "../../hooks/useCloseModal";
-import MultiselectOptions from './multiselect-options'
+import MultiselectOptions from "./multiselect-options";
 
 interface IInput extends SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
@@ -37,9 +38,8 @@ const Multiselect: FunctionComponent<IInput> = ({
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
-    const rootElement = useRef<HTMLDivElement>(null)
+    const rootElement = useRef<HTMLDivElement>(null);
 
-    
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
             const { offsetWidth } = labelRef.current;
@@ -47,7 +47,9 @@ const Multiselect: FunctionComponent<IInput> = ({
         }
     };
 
-    function handleFocus(evt: FormEvent<HTMLInputElement>) {
+    const openOptions = useCallback(() => setShowOptions(true), [setShowOptions])
+
+    function handleFocus(evt: any) {
         reCalcLabelWidth();
         setShowOptions(true);
         onFocus && onFocus(evt as any);
@@ -56,8 +58,11 @@ const Multiselect: FunctionComponent<IInput> = ({
     useCloseModal(showOptions, setShowOptions);
 
     return (
-        <div className="app-input multiselect" ref={rootElement} onClick={(e) => e.stopPropagation()}>
-            {!!selected.length && <ComaList list={selected} />}
+        <div
+            className="app-input multiselect"
+            ref={rootElement}
+            onClick={(e) => e.stopPropagation()}
+        >
             <label
                 className="app-input__wrapper multiselect__search_wrap"
                 style={
@@ -68,13 +73,19 @@ const Multiselect: FunctionComponent<IInput> = ({
                         : undefined
                 }
             >
-                <input
+                <div
                     className="app-input__field"
-                    type="search"
-                    placeholder={label ? " " : placeholder}
-                    onFocus={handleFocus}
-                    value={selected.join(', ')}
-                />
+                    tabIndex={0}
+                    onFocus={openOptions}
+                    onClick={openOptions}
+                    style={{
+                        cursor: 'pointer'
+                    }}
+                >
+                    {selected && Boolean(selected.length) && (
+                        <ComaList list={selected} style={{ pointerEvents: 'none' }} />
+                    )}
+                </div>
 
                 {label && (
                     <span className="app-input__label app-input__label--icon">
@@ -82,8 +93,13 @@ const Multiselect: FunctionComponent<IInput> = ({
                     </span>
                 )}
             </label>
-            {showOptions && <MultiselectOptions options={options} selected={selected} setSelected={setSelected} />
-            }
+            {showOptions && (
+                <MultiselectOptions
+                    options={options}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+            )}
         </div>
     );
 };
