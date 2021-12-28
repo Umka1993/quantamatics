@@ -4,7 +4,6 @@ import React, {
     FunctionComponent,
     useCallback,
     useEffect,
-    useLayoutEffect,
     useState,
 } from "react";
 import { Organization } from "types/organization/types";
@@ -17,10 +16,6 @@ import { useUpdateOrganizationMutation } from "../../api/organization";
 import Loader from "../loader";
 import { AppRoute } from "../../data/enum";
 import * as assetsHooks from "../../api/asset";
-import { useDispatch, useSelector } from "react-redux";
-import { AssetServerResponse } from "../../types/asset";
-import { addAsset, clearAssets } from "../../store/assets";
-import { RootState } from "store";
 
 interface EditOrganizationFormProps {
     organization?: Organization;
@@ -34,6 +29,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     externalLoad,
 }) => {
     const navigate = useNavigate();
+    const [assetError, setAssetError] = useState(false)
     const [
         update,
         {
@@ -44,16 +40,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         },
     ] = useUpdateOrganizationMutation();
 
-    const dispatch = useDispatch();
-    const storedAssets = useSelector((state: RootState) => state.assets);
-
-    useLayoutEffect(() => { dispatch(clearAssets()) }, [])
-
-    useEffect(() => {
-        storedAssets.length ?
-            setDatasets(storedAssets.map((asset) => asset.name)) :
-            setDatasets([])
-    }, [storedAssets]);
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
@@ -69,10 +55,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         assetsHooks.useDeleteAssetsMutation();
     const [createAsset, { isLoading: isCreatingAsset }] =
         assetsHooks.useCreateAssetsMutation();
-    const [updateAsset] = assetsHooks.useUpdateAssetsMutation();
     const [linkAsset, { isLoading: isLinkingAsset }] =
         assetsHooks.useLinkAssetToOrgMutation();
-    const [getAssetInfo] = assetsHooks.useGetAssetByIDMutation();
 
     const setInitialOrg = useCallback(() => {
         if (organization) {
@@ -85,15 +69,11 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }, [organization]);
 
     useEffect(() => {
-        if (assets && assets.length) {
-            assets.map(async ({ assetId }: { assetId: number }) => {
-                await getAssetInfo(assetId)
-                    .unwrap()
-                    .then(({ name, id }: AssetServerResponse) =>
-                        dispatch(addAsset({ id, name }))
-                    );
-            });
+        if (assets) {
+            const onlyNamesArray = assets.map((asset) => asset.name);
+            setDatasets(onlyNamesArray)
         }
+
     }, [assets]);
 
     useEffect(() => {
@@ -103,47 +83,58 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     function submitHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();
         setLoading(true);
-        storedAssets.forEach((asset) => {
-            /* Delete unselected assets */
 
-            if (datasets.indexOf(asset.name) < 0) {
-                deleteAsset(asset.id);
+        if (datasets.length) {
+
+            if (assets) {
+                assets.forEach((asset) => {
+                    /* Delete unselected assets */
+
+                    datasets.indexOf(asset.name) < 0 && deleteAsset(asset.assetId);
+
+                });
+
+                datasets.forEach((dataset) => {
+                    const foundedAsset = assets.find((asset) => asset.name === dataset);
+                    /* Create new and select to org assets */
+                    if (foundedAsset === undefined && organization) {
+                        createAsset({
+                            name: dataset,
+                            ownerOrganizationId: organization.id,
+                            version: 1,
+                        })
+                            .unwrap()
+                            .then(({ id: assetId }) =>
+                                linkAsset({ assetId, orgId: organization.id })
+                            );
+                    }
+                });
+
             }
-        });
 
-        datasets.forEach((dataset) => {
-            const foundedAsset = storedAssets.find((asset) => asset.name === dataset);
 
-            if (foundedAsset === undefined && organization) {
-                createAsset({
-                    name: dataset,
-                    ownerOrganizationId: organization.id,
-                    version: 1,
-                })
-                    .unwrap()
-                    .then(({ id: assetId }) =>
-                        linkAsset({ assetId, orgId: organization.id })
-                    );
+            if (
+                organization &&
+                (organization.name !== name ||
+                    organization.customerCrmId !== customerCrmId ||
+                    organization.customerCrmLink !== customerCrmLink ||
+                    organization.comments !== comments)
+            ) {
+                update({
+                    ...organization,
+                    name,
+                    customerCrmId,
+                    customerCrmLink,
+                    comments,
+                });
             }
-        });
 
-        if (
-            organization &&
-            (organization.name !== name ||
-                organization.customerCrmId !== customerCrmId ||
-                organization.customerCrmLink !== customerCrmLink ||
-                organization.comments !== comments)
-        ) {
-            update({
-                ...organization,
-                name,
-                customerCrmId,
-                customerCrmLink,
-                comments,
-            });
+            setLoading(false);
+
+        } else {
+            setAssetError(true)
+            setLoading(false);
         }
-
-        setLoading(false);
     }
 
     const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
@@ -238,6 +229,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         label="Org. Datasets"
                         selected={datasets}
                         setSelected={setDatasets}
+                        errorMessage='Select asset permissions to assign to the organization.'
+                        showError={assetError}
                     />
 
                     <Input

@@ -22,9 +22,15 @@ interface LinkUserParameters {
     userId: number | string
 }
 
+interface AssetListItem {
+    assetId: number | string, 
+    name:  string
+}
+
+
 const assetApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getAllAssets: build.query<any, string>({
+        getAllAssets: build.query<AssetListItem[], string>({
             query: (orgId) => ({
                 url: AssetEndpoint.GetAll,
                 method: 'GET',
@@ -72,7 +78,7 @@ const assetApi = baseApi.injectEndpoints({
             })
         }),
 
-        deleteAssets: build.mutation<void, number>({
+        deleteAssets: build.mutation<void, number | string>({
             query: (id) => ({
                 url: AssetEndpoint.Delete,
                 method: 'DELETE',
