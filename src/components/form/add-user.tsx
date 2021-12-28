@@ -2,18 +2,26 @@ import React, { useState, useCallback, useEffect, FunctionComponent, useRef } fr
 import "./styles/create-organization.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
-import Input, { DatePick, Email } from "../app-input/";
+import Input, { DatePick, Email, Multiselect } from "../app-input/";
 import Form from "./form";
 import RoleCheckboxes from "../role-checkboxes";
 import { AppRoute, UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
 import { useGetOrganizationQuery } from "../../api/organization";
+import { useGetAllAssetsQuery, useLinkAssetToUserMutation } from "../../api/asset";
 
 
 const InviteUserForm: FunctionComponent = () => {
     const { id: organizationId } = useParams();
 
     const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(organizationId as string);
+
+    const { data: assets } = useGetAllAssetsQuery(
+        organizationId as string
+    );
+    const [datasets, setDatasets] = useState<string[]>([]);
+    const [assetError, setAssetError] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
@@ -26,10 +34,12 @@ const InviteUserForm: FunctionComponent = () => {
 
     const [userRoles, setRoles] = useState<UserRole[]>([]);
 
-    const [register, { isSuccess, isError, error }] = useRegisterUserMutation();
+    const [register, { isSuccess: isUserRegistered, isError, error, data: registeredUser }] = useRegisterUserMutation();
     const formRef = useRef<HTMLFormElement>(null);
 
+    const [linkAsset] = useLinkAssetToUserMutation();
 
+    
     useEffect(() => {
         if (isError) {
             if ((error as any).data[0]?.code === "DuplicateUserName")
@@ -41,19 +51,32 @@ const InviteUserForm: FunctionComponent = () => {
     const backLink = `/apps/organizations/${company?.id}`;
 
     useEffect(() => {
-        isSuccess && navigate(AppRoute.Success, {
-            state: {
-                headline: "An invitation email has been sent to the user",
-                linkText: "Go Back",
-                link: backLink
-            }
-        });
-    }, [isSuccess])
+        if (isUserRegistered && registeredUser && assets) {
+            datasets.forEach((selectedAsset) => {
+                const foundedAsset = assets.find(element => element.name === selectedAsset)
+
+                foundedAsset && linkAsset({
+                    assetId: foundedAsset.assetId, userId: (registeredUser as any).id,
+                })
+            })
+
+
+            navigate(AppRoute.Success, {
+                state: {
+                    headline: "An invitation email has been sent to the user",
+                    linkText: "Go Back",
+                    link: backLink
+                }
+            });
+        }
+
+    }, [isUserRegistered])
 
 
     const navigate = useNavigate();
 
     useEffect(() => {
+
         errors && setErrors(undefined);
     }, [email]);
 
@@ -61,17 +84,23 @@ const InviteUserForm: FunctionComponent = () => {
         errors && formRef.current && formRef.current.reportValidity();
     }, [errors, formRef.current]);
 
-    const addUserToOrg = useCallback(() => {
-        register({
-            firstName,
-            lastName,
-            email,
-            organizationId: company?.id,
-            companyName: company?.name,
-            subscriptionEndDate,
-            userRoles: userRoles
-        })
-    }, [firstName, lastName, email, subscriptionEndDate, userRoles, company]);
+    const addUserToOrg = () => {
+
+        if (datasets.length) {
+            setLoading(true)
+            register({
+                firstName,
+                lastName,
+                email,
+                organizationId: company?.id,
+                companyName: company?.name,
+                subscriptionEndDate,
+                userRoles: userRoles
+            })
+        } else {
+            setAssetError(true)
+        }
+    }
 
     return (
         <Form
@@ -79,7 +108,7 @@ const InviteUserForm: FunctionComponent = () => {
             headline="Create a User Account"
             subtitle="Add a new user account to your organization"
             onSubmit={addUserToOrg}
-            stopLoading={isError}
+            stopLoading={isError || assetError || loading}
             forwardRef={formRef}
         >
             <div className="create-organization__fields">
@@ -111,6 +140,14 @@ const InviteUserForm: FunctionComponent = () => {
                     minDate={new Date()}
                     required
                     label='Expiration Date'
+                />
+                <Multiselect
+                    options={assets?.map((asset) => asset.name) || []}
+                    selected={datasets}
+                    setSelected={setDatasets}
+                    label="Account Datasets"
+                    errorMessage='Select asset permissions to assign to the user account.'
+                    showError={assetError}
                 />
                 <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
             </div>
