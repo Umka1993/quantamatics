@@ -1,6 +1,6 @@
 import React, { useEffect, useState, FunctionComponent } from "react";
 import "./styles/create-organization.scss";
-import Input from "../app-input";
+import Input, { Multiselect } from "../app-input";
 import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
@@ -14,7 +14,8 @@ export interface createOrganizationRequestBody {
     name: string;
     comments?: string;
     customerCrmId?: string;
-    customerCrmLink?: string;
+    customerCrmLink?: string,
+
 }
 
 const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
@@ -28,6 +29,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [comments, setComments] = useState<string | undefined>("");
     const [datasets, setDatasets] = useState<string[]>([]);
 
+    const [assetError, setAssetError] = useState(false)
     const [createAsset, { isLoading }] = useCreateAssetsMutation();
 
     const returnBack = () => {
@@ -36,10 +38,13 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
-            datasets.forEach(asset => createAsset({
+            datasets.forEach((asset, index) => createAsset({
                 name: asset,
                 ownerOrganizationId: data.id,
                 version: 1
+            }).unwrap().then(() => {
+                const isLast = index === datasets.length - 1
+                isLast && returnBack()
             }))
         }
     }, [isSuccess]);
@@ -50,18 +55,24 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         }
     }, [isError])
 
-    const registerOrganization = () => {
-        register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
+    const hadnleSumbit = () => {
+        if (datasets.length) {
+            register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
+        } else {
+            setAssetError(true)
+        }
+
     }
+
 
     return (
         <Form
             className="create-organization"
             headline="Create an Organization"
             subtitle="Add a new organization to Quantamatics"
-            onSubmit={registerOrganization}
+            onSubmit={hadnleSumbit}
             onReset={returnBack}
-            stopLoading={isError}
+            stopLoading={isError || assetError}
         >
             <div className="create-organization__fields">
                 <Input
@@ -78,12 +89,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     value={customerCrmId}
                     maxLength={32}
                 />
-
-                {/* <InputURL 
-                    externalSetter={setCustomerCrmLink} value={customerCrmLink}
-                    placeholder='CRM Customer ID Link' maxLength={32}
-                /> */}
-
                 <Input
                     externalSetter={setCustomerCrmLink}
                     label="CRM Customer ID Link"
@@ -99,12 +104,15 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     maxLength={200}
                     showLimit
                 />
-                {/* <Multiselect
+
+                <Multiselect
                     options={['Coherence', 'Research', 'Backtest - Enterprise', 'Enterprise', 'Backtest - Express', 'Express', 'Backtest - CPG', 'CPG', 'Backtest - Summary v3.1', 'Summary v3.1']}
                     label='Org. Datasets'
                     selected={datasets}
                     setSelected={setDatasets}
-                /> */}
+                    errorMessage='Select asset permissions to assign to the organization.'
+                    showError={assetError}
+                />
             </div>
 
             <Button

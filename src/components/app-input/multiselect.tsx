@@ -25,6 +25,8 @@ interface IInput extends SelectHTMLAttributes<HTMLSelectElement> {
     options: string[];
     selected: string[];
     setSelected: Dispatch<SetStateAction<string[]>>;
+    errorMessage?: string,
+    showError?: boolean,
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -34,11 +36,15 @@ const Multiselect: FunctionComponent<IInput> = ({
     onFocus,
     setSelected,
     selected,
+    errorMessage,
+    showError
 }) => {
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const rootElement = useRef<HTMLDivElement>(null);
+
+    const [hideError, setHideError] = useState(false);
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
@@ -46,6 +52,10 @@ const Multiselect: FunctionComponent<IInput> = ({
             setRightOffset(offsetWidth + 25);
         }
     };
+
+    useEffect(() => {
+        Boolean(selected.length) ? setHideError(true) : setHideError(false)
+    }, [selected])
 
     const openOptions = useCallback(() => setShowOptions(true), [setShowOptions])
 
@@ -89,6 +99,9 @@ const Multiselect: FunctionComponent<IInput> = ({
                     </span>
                 )}
             </label>
+            {showError && !hideError && <p className="app-input__error">{errorMessage}</p>}
+
+
             {showOptions && (
                 <MultiselectOptions
                     options={options}
