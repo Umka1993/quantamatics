@@ -49,11 +49,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     const openOptions = useCallback(() => setShowOptions(true), [setShowOptions])
 
-    function handleFocus(evt: any) {
-        reCalcLabelWidth();
-        setShowOptions(true);
-        onFocus && onFocus(evt as any);
-    }
+    const toggleOptions = useCallback(() => setShowOptions(!showOptions), [showOptions, setShowOptions])
 
     useCloseModal(showOptions, setShowOptions);
 
@@ -77,7 +73,7 @@ const Multiselect: FunctionComponent<IInput> = ({
                     className="app-input__field"
                     tabIndex={0}
                     onFocus={openOptions}
-                    onClick={openOptions}
+                    onClick={toggleOptions}
                     style={{
                         cursor: 'pointer'
                     }}

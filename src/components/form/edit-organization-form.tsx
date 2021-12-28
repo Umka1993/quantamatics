@@ -10,6 +10,10 @@ import { useUpdateOrganizationMutation } from '../../api/organization';
 import Loader from "../loader";
 import { AppRoute } from '../../data/enum';
 import * as assetsHooks from "../../api/asset";
+import { useDispatch, useSelector } from 'react-redux';
+import { AssetServerResponse } from '../../types/asset';
+import { addAsset } from '../../store/assets';
+import { RootState } from 'store';
 
 interface EditOrganizationFormProps {
     organization?: Organization,
@@ -23,18 +27,26 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
     const [update, { isSuccess: isUpdated, isLoading: isUpdating, isError: isUpdateError, error: updateError }] =
         useUpdateOrganizationMutation();
 
+    const dispatch = useDispatch();
+    const storedAssets = useSelector((state: RootState) => state.assets)
+
+    useEffect(() => {
+        storedAssets.length && setDatasets(storedAssets.map(asset => asset.name))
+    }, [storedAssets]);
+
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
     const [customerCrmLink, setCustomerLink] = useState<string>("");
     const [comments, setComment] = useState<string | undefined>("");
     const [datasets, setDatasets] = useState<string[]>([]);
+    const [loading, setLoading] = useState(false);
 
     const { data: assets } = assetsHooks.useGetAllAssetsQuery(organization?.id as string);
-    const [deleteAsset] = assetsHooks.useDeleteAssetsMutation();
-    const [createAsset] = assetsHooks.useCreateAssetsMutation();
+    const [deleteAsset, { isLoading: isDeletingAsset }] = assetsHooks.useDeleteAssetsMutation();
+    const [createAsset, { isLoading: isCreatingAsset }] = assetsHooks.useCreateAssetsMutation();
     const [updateAsset] = assetsHooks.useUpdateAssetsMutation();
-    const [linkAsset] = assetsHooks.useLinkAssetToOrgMutation();
-    const [getAssetInfo, { data: asset }] = assetsHooks.useGetAssetByIDMutation();
+    const [linkAsset, { isLoading: isLinkingAsset }] = assetsHooks.useLinkAssetToOrgMutation();
+    const [getAssetInfo] = assetsHooks.useGetAssetByIDMutation();
 
     const setInitialOrg = useCallback(() => {
         if (organization) {
@@ -43,45 +55,16 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
             setCustomerLink(organization.customerCrmLink);
             setComment(organization.comments);
         }
-
     }, [organization]);
 
-    const addDataset = useCallback((newDataset: string) => setDatasets([...datasets, newDataset]), [setDatasets, datasets])
-
     useEffect(() => {
-        const tempArray: string[] = [];
         if (assets && assets.length) {
-            assets.map(async ({ assetId }: any, index: number) => {
-                const res = await getAssetInfo(assetId).unwrap().then(({ name }: any) => name);
-
-                setTimeout(() => {
-                    
-                    console.log(res);
-                    console.log(datasets);
-                    console.log(index);
-
-                    setDatasets([...datasets, res ])
-
-
-                }, 400 * (index + 1))
-                // console.log(res);
-
+            assets.map(async ({ assetId }: { assetId: number }) => {
+                await getAssetInfo(assetId).unwrap().then(({ name, id }: AssetServerResponse) => dispatch(addAsset({ id, name })));
             }
             );
-
         }
-
-        console.log(tempArray);
-
-        // tempArray.length && setDatasets(tempArray)
-
     }, [assets])
-
-    /*  useEffect(() => {
-        asset && console.log(asset);
-     
-         // isSuccess && asset && setDatasets([...datasets].push(asset.id))
-     }, [asset]) */
 
     useEffect(() => {
         organization && setInitialOrg();
@@ -90,13 +73,51 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
 
     function submitHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();
-        update({
-            ...organization,
-            name,
-            customerCrmId,
-            customerCrmLink,
-            comments
-        });
+        setLoading(true);
+        storedAssets.forEach(asset => {
+            /* Delete unselected assets */
+
+            if (datasets.indexOf(asset.name) < 0) {
+                deleteAsset(asset.id)
+            }
+
+        })
+
+        datasets.forEach(dataset => {
+            const foundedAsset = storedAssets.find(asset => asset.name === dataset)
+
+            if (foundedAsset === undefined && organization) {
+                createAsset({
+                    name: dataset,
+                    ownerOrganizationId: organization.id,
+                    version: 1
+                }).unwrap().then(({ id: assetId }) => linkAsset({ assetId, orgId: organization.id }))
+
+
+            }
+
+        })
+
+
+
+        if (organization &&
+            (organization.name !== name ||
+                organization.customerCrmId !== customerCrmId ||
+                organization.customerCrmLink !== customerCrmLink ||
+                organization.comments !== comments)
+        ) {
+            update({
+                ...organization,
+                name,
+                customerCrmId,
+                customerCrmLink,
+                comments,
+            });
+        }
+
+
+
+        setLoading(false);
     }
 
     const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
@@ -142,7 +163,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({ or
             </div>
         </header>
 
-        {(isUpdating || externalLoad) ? <Loader /> : <>
+        {(isUpdating || externalLoad || loading || isDeletingAsset || isCreatingAsset || isLinkingAsset) ? <Loader /> : <>
             <Input
                 externalSetter={setName}
                 value={name}
