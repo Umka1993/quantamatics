@@ -1,6 +1,8 @@
-@import "../../../variables.scss";
+@use "sass:math";
+@use "../../../variables.scss" as *;
 
 .multiselect {
+    position: relative;
     &:focus-within &__search_wrap::after {
         transform: none;
     }
@@ -19,7 +21,7 @@
 
         font-size: 14px;
         line-height: 16px;
-        gap: 16px 14%;
+        gap: 16px math.div(24, 402) * 100%;
 
         position: absolute;
         top: calc(100% + 10px);
@@ -46,6 +48,17 @@
             bottom: 0;
             left: calc(50% - 2px);
             margin: 22px 0;
+        }
+
+
+        &--ods {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: normal;
+            &::after {
+                display: none;
+            }
         }
     }
 

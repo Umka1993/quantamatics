@@ -4,6 +4,7 @@ import React, {
     SetStateAction,
 } from "react";
 import Checkbox from "../app-checkbox/checkbox";
+import classNames from 'classnames';
 
 interface Options {
     options: string[];
@@ -18,7 +19,9 @@ const MultiselectOptions: FunctionComponent<Options> = ({
     selected,
 }) => {
     return (
-        <div className="multiselect__options">
+        <div className={classNames("multiselect__options", {
+            'multiselect__options--ods': options.length % 2 !== 0
+        })}>
             {Array.from(options).map((option) => (
                 <Checkbox
                     name={option}

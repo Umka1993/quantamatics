@@ -66,7 +66,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     return (
         <div
-            className={classNames("classapp-input multiselect", className)}
+            className={classNames("app-input multiselect", className)}
             ref={rootElement}
             onClick={(e) => e.stopPropagation()}
         >
@@ -90,7 +90,15 @@ const Multiselect: FunctionComponent<IInput> = ({
                     }}
                 >
                     {selected && Boolean(selected.length) && (
-                        <ComaList list={selected} style={{ pointerEvents: 'none' }} />
+                        <ComaList list={selected} style={{
+                            pointerEvents: 'none',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            maxWidth: '80%',
+                            display: 'block'
+                            
+                        }} />
                     )}
                 </div>
 

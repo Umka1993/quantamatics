@@ -25,6 +25,10 @@
 .input {
     flex: 1 1 500px;
     margin: 5px 18px;
+
+    @media (max-width: 900px) {
+        flex-basis: auto;
+    }
 }
 
 .inputs {
