@@ -10,7 +10,7 @@
 
     &__custom {
         display: flex;
-        align-items: center;
+        align-items: start;
 
         &::before {
             content: "";
@@ -21,6 +21,7 @@
             border: 0.0625em solid transparentize($main-text, 0.7);
             box-shadow: inset 0px 0.125em 0.4375em transparentize($main-text, 0.9);
             border-radius: 2px;
+            flex-shrink: 0;
         }
     }
 
