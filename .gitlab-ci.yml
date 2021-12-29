@@ -22,7 +22,7 @@ validate template:
   script:
   - aws cloudformation validate-template --template-body file://$TEMPLATE_PATH
 
-build:
+.build:
   image: node:lts
   dependencies:
     - validate template
@@ -30,35 +30,59 @@ build:
   before_script:
     - npm ci
   script:
-    - npm run build && mv publish dist-development
-    - npm run buildBeta && mv publish dist-development-beta
-    - npm run buildStaging && mv publish dist-staging
-    - npm run buildStagingBeta && mv publish dist-staging-beta
+    - npm run "$BUILD_COMMAND" && mv publish dist
   artifacts:
     paths:
-      - dist-development/
-      - dist-development-beta/
-      - dist-staging/
-      - dist-staging-beta/
-      
+      - dist
+
+build dev:
+  extends: .build
+  variables:
+    BUILD_COMMAND: build
+  only:
+    - develop
+
+build dev beta:
+  extends: .build
+  variables:
+    BUILD_COMMAND: buildBeta
+  only:
+    - develop
+
+build staging:
+  extends: .build
+  variables:
+    BUILD_COMMAND: buildStaging
+  only:
+    - master
+
+build staging beta:
+  extends: .build
+  variables:
+    BUILD_COMMAND: buildStagingBeta
+  only:
+    - master
+
 .deploy:
-  dependencies:
-    - build
   script:
     - aws cloudformation deploy --stack-name $STACK_NAME --template-file $TEMPLATE_PATH --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides "CertificateArn=$CERTIFICATE_ARN" "DistributionAlias=$DISTRIBUTION_ALIAS"
-    - aws s3 sync ./dist-$ENV_SUFFIX s3://$STACK_NAME --acl public-read
+    - aws s3 sync ./dist s3://$STACK_NAME --acl public-read
     - export DISTRIBUTION_ID=`aws cloudformation describe-stack-resource --stack-name $STACK_NAME --logical-resource-id CloudFrontDistribution | jq -r '.StackResourceDetail.PhysicalResourceId'`
     - invalidation_id=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*" | jq -r '.Invalidation.Id')
     - echo $invalidation_id
     - aws cloudfront wait invalidation-completed --distribution-id $DISTRIBUTION_ID --id $invalidation_id
 
 deploy dev:
+  dependencies:
+    - build dev
   stage: deploy-develop
   extends: .deploy
   only:
     - develop
 
 deploy dev beta:
+  dependencies:
+    - build dev beta
   stage: deploy-develop
   extends: .deploy
   variables:
@@ -69,6 +93,8 @@ deploy dev beta:
     - develop
 
 deploy staging:
+  dependencies:
+    - build staging
   stage: deploy-staging
   extends: .deploy
   variables:
@@ -83,6 +109,8 @@ deploy staging:
     - master
 
 deploy staging beta:
+  dependencies:
+    - build staging beta
   stage: deploy-staging
   extends: .deploy
   variables:
