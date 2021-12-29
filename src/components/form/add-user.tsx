@@ -52,13 +52,13 @@ const InviteUserForm: FunctionComponent = () => {
 
     useEffect(() => {
         if (isUserRegistered && registeredUser && assets) {
-            datasets.forEach((selectedAsset) => {
+            /* datasets.forEach((selectedAsset) => {
                 const foundedAsset = assets.find(element => element.name === selectedAsset)
 
                 foundedAsset && linkAsset({
                     assetId: foundedAsset.assetId, userId: (registeredUser as any).id,
                 })
-            })
+            }) */
 
 
             navigate(AppRoute.Success, {
