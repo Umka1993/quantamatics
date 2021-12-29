@@ -4,6 +4,7 @@ import React, {
     FunctionComponent,
     useCallback,
     useEffect,
+    useRef,
     useState,
 } from "react";
 import { Organization } from "types/organization/types";
@@ -12,7 +13,7 @@ import Input, { Multiselect } from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
 import { useNavigate } from "react-router-dom";
-import { useUpdateOrganizationMutation } from "../../api/organization";
+import { useGetAllOrganizationsQuery, useUpdateOrganizationMutation } from "../../api/organization";
 import Loader from "../loader";
 import { AppRoute } from "../../data/enum";
 import * as assetsHooks from "../../api/asset";
@@ -22,6 +23,12 @@ interface EditOrganizationFormProps {
     isHaveAccessToOrgList?: boolean;
     externalLoad?: boolean;
 }
+
+const enum UniqueError {
+    Name = "Organization Name must be unique",
+    ID = "Organization CRM Customer ID must be unique"
+}
+
 
 const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     organization,
@@ -40,6 +47,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         },
     ] = useUpdateOrganizationMutation();
 
+    const { data: allOrganizations } =
+        useGetAllOrganizationsQuery();
+
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
@@ -47,6 +57,12 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [comments, setComment] = useState<string | undefined>("");
     const [datasets, setDatasets] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
+
+    const formRef = useRef<HTMLFormElement>(null);
+
+
+    const [duplicateOrgError, setDuplicateOrgError] = useState<undefined | UniqueError.Name>(undefined);
+    const [duplicateIdError, setDuplicateIdError] = useState<undefined | UniqueError.ID>(undefined);
 
     const { data: assets } = assetsHooks.useGetAllAssetsQuery(
         organization?.id as string
@@ -80,62 +96,94 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         organization && setInitialOrg();
     }, [organization]);
 
+    useEffect(() => {
+        duplicateOrgError && formRef.current?.reportValidity();
+    }, [duplicateOrgError, formRef.current]);
+
+    useEffect(() => {
+        duplicateIdError && formRef.current?.reportValidity();
+    }, [duplicateIdError, formRef.current]);
+
+    useEffect(() => {
+        duplicateOrgError && setDuplicateOrgError(undefined);
+    }, [name]);
+
+    useEffect(() => {
+        customerCrmId && setDuplicateIdError(undefined);
+    }, [customerCrmId]);
+
+
     function submitHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();
         setLoading(true);
 
-        if (datasets.length) {
-
-            // if (assets) {
-            //     assets.forEach((asset) => {
-            //         /* Delete unselected assets */
-
-            //         datasets.indexOf(asset.name) < 0 && deleteAsset(asset.assetId);
-
-            //     });
-
-            //     datasets.forEach((dataset) => {
-            //         const foundedAsset = assets.find((asset) => asset.name === dataset);
-            //         /* Create new and select to org assets */
-            //         if (foundedAsset === undefined && organization) {
-            //             createAsset({
-            //                 name: dataset,
-            //                 ownerOrganizationId: organization.id,
-            //                 version: 1,
-            //             })
-            //                 .unwrap()
-            //                 .then(({ id: assetId }) =>
-            //                     linkAsset({ assetId, orgId: organization.id })
-            //                 );
-            //         }
-            //     });
-
-            // }
-
-
-            if (
-                organization &&
-                (organization.name !== name ||
-                    organization.customerCrmId !== customerCrmId ||
-                    organization.customerCrmLink !== customerCrmLink ||
-                    organization.comments !== comments)
-            ) {
-                update({
-                    ...organization,
-                    name,
-                    customerCrmId,
-                    customerCrmLink,
-                    comments,
-                    // organizationAssets: datasets
-                });
-            }
-
-            setLoading(false);
-
-        } else {
+        if (!datasets.length) {
             setAssetError(true)
-            setLoading(false);
+            return setLoading(false);
         }
+
+        /** Check if new name is unique */
+        if (name !== organization?.name) {
+            const duplicatedOrganization = allOrganizations?.find(org => org.name === name)
+            if (duplicatedOrganization) {
+                setDuplicateOrgError(UniqueError.Name)
+                return setLoading(false);
+            }
+        }
+
+
+        /** Check if new id is unique */
+        if (customerCrmId !== organization?.customerCrmId) {
+            const duplicatedOrganization = allOrganizations?.find(org => org.customerCrmId === customerCrmId)
+            if (duplicatedOrganization) {
+                setDuplicateIdError(UniqueError.ID)
+                return setLoading(false);
+            }
+        }
+
+
+
+        // if (assets) {
+        //     assets.forEach((asset) => {
+        //         /* Delete unselected assets */
+
+        //         datasets.indexOf(asset.name) < 0 && deleteAsset(asset.assetId);
+
+        //     });
+
+        //     datasets.forEach((dataset) => {
+        //         const foundedAsset = assets.find((asset) => asset.name === dataset);
+        //         /* Create new and select to org assets */
+        //         if (foundedAsset === undefined && organization) {
+        //             createAsset({
+        //                 name: dataset,
+        //                 ownerOrganizationId: organization.id,
+        //                 version: 1,
+        //             })
+        //                 .unwrap()
+        //                 .then(({ id: assetId }) =>
+        //                     linkAsset({ assetId, orgId: organization.id })
+        //                 );
+        //         }
+        //     });
+
+        // }
+
+
+
+        update({
+            ...organization,
+            name,
+            customerCrmId,
+            customerCrmLink,
+            comments,
+            // organizationAssets: datasets
+        });
+
+
+        setLoading(false);
+
+
     }
 
     const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
@@ -150,6 +198,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         }
     }, [isUpdateError]);
 
+
+
     useEffect(() => {
         isUpdated && isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);
     }, [isUpdated]);
@@ -159,6 +209,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             className={style.root}
             onSubmit={submitHandler}
             onReset={resetHandler}
+            ref={formRef}
         >
             <header className={style.header}>
                 <Headline className="edit-organization__title" style={{ margin: 0 }}>
@@ -197,6 +248,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         maxLength={64}
                         required
                         className={style.input}
+                        error={duplicateOrgError}
                     />
                     <Input
                         externalSetter={setCustomerID}
@@ -204,6 +256,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         label="CRM Customer ID"
                         maxLength={32}
                         className={style.input}
+                        error={duplicateIdError}
                     />
 
                     <Input

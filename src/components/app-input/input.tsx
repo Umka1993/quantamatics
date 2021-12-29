@@ -61,8 +61,8 @@ const Input: React.FunctionComponent<IInput> = ({
             } else {
                 inputRef.current.setCustomValidity('')
             }
-            error && inputRef.current.setCustomValidity(error);
-            !validationMessage.length && setErrorMessage(undefined);
+            error ? inputRef.current.setCustomValidity(error) : setErrorMessage(undefined);
+
             if (!validationMessage.length) {
                 setErrorMessage(undefined);
             }
@@ -126,7 +126,7 @@ const Input: React.FunctionComponent<IInput> = ({
                 )}
             </label>
 
-            {errorMessage && errorMessage.length && (
+            {errorMessage && (
                 <p className="app-input__error">{errorMessage}</p>
             )}
         </div>
