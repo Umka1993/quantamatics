@@ -2,7 +2,6 @@ image: registry.gitlab.com/facteus/platform-team/shared-infra/images/dotnet-ci-i
 
 stages:
   - pre-deploy
-  - build
   - deploy-develop
   - deploy-staging
   - deploy-production
@@ -24,9 +23,7 @@ validate template:
 
 .build:
   image: node:lts
-  dependencies:
-    - validate template
-  stage: build
+  stage: pre-deploy
   before_script:
     - npm ci
   script:
