@@ -33,6 +33,8 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [assetError, setAssetError] = useState(false)
     const [createAsset, { isLoading }] = useCreateAssetsMutation();
 
+    const [stopLoading, setStopLoading] = useState<true | undefined>(undefined)
+
     const formRef = useRef<HTMLFormElement>(null);
     const [duplicateOrgError, duplicateIdError, checkNameDuplicate, checkIdDuplicate] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
@@ -61,17 +63,23 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         }
     }, [isError])
 
+    useEffect(() => {
+        stopLoading && setStopLoading(undefined)
+    }, [stopLoading])
+
     const handleSubmit = () => {
         if (!datasets.length) {
-            return setAssetError(true)
+            setAssetError(true)
+            return setStopLoading(true)
         }
 
 
         let duplicate = checkNameDuplicate()
-        duplicate = checkIdDuplicate() || duplicate
+        duplicate = (customerCrmId && checkIdDuplicate()) || duplicate
 
-
-        if (!duplicate) {
+        if (duplicate) {
+            return setStopLoading(true)
+        } else {
             register({ name, customerCrmId, customerCrmLink, comments }).unwrap().then(returnBack);
         }
     }
@@ -84,7 +92,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
             subtitle="Add a new organization to Quantamatics"
             onSubmit={handleSubmit}
             onReset={returnBack}
-            stopLoading={isError || assetError || Boolean(duplicateOrgError) || Boolean(duplicateIdError)}
+            stopLoading={isError || stopLoading}
             forwardRef={formRef}
         >
             <div className="create-organization__fields">
