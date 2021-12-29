@@ -39,22 +39,19 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
                 <Headline>{type === 'files' ? 'My Files' : type === 'coherence' ? 'Coherence' : 'Excel Library'}</Headline>
                 {type === 'files' && (<p>Manage and edit your files</p>)}
             </header>
-
-            {token &&
-                <form
-                    method='POST'
-                    target="jupyter-iframe"
-                    action={`${process.env.HUB_URL}hub/login`}
-                    ref={formRef}
-                    hidden
-                >
-                    <input
-                        name='token'
-                        value={token}
-                        readOnly
-                    />
-                </form>
-            }
+            <form
+                method='POST'
+                target="jupyter-iframe"
+                action={`${process.env.HUB_URL}hub/login`}
+                ref={formRef}
+                hidden
+            >
+            <input
+                    name='token'
+                    value={token}
+                    readOnly
+                />
+            </form>
 
             <iframe className={style.frame} name="jupyter-iframe" src={HUB_URL} ref={frameRef} />
         </div>
