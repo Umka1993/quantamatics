@@ -6,6 +6,8 @@
     "buildBeta": "npm run clean && npm run lint && webpack --config config/webpack.dev-beta.js",
     "buildStaging": "npm run clean && npm run lint && webpack --config config/webpack.stag.js",
     "buildStagingBeta": "npm run clean && npm run lint && webpack --config config/webpack.stag-beta.js",
+    "buildProduction": "npm run clean && npm run lint && webpack --config config/webpack.prod.js",
+    "buildProductionBeta": "npm run clean && npm run lint && webpack --config config/webpack.prod-beta.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.dev.js --open --https --env dev",
     "stag": "webpack-dev-server --config config/webpack.stag.js --open --https"
   },
@@ -33,7 +35,7 @@
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.2",
     "redux": "^4.1.2",
-    "sass": "^1.45.0",
+    "sass": "^1.45.1",
     "sass-loader": "^12.1.0",
     "style-loader": "^3.2.1",
     "ts-loader": "^9.2.5",
@@ -41,7 +43,7 @@
     "typescript": "^4.3.5",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.0.0"
+    "webpack-dev-server": "^4.7.1"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",

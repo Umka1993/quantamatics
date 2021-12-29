@@ -84,7 +84,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                 </Accordion>
             )}
 
-            {user?.userRoles.includes(UserRole.Coherence) && (
+            {/* {user?.userRoles.includes(UserRole.Coherence) && (
                 <NavLink
                     to={AppRoute.Coherence}
                     className={({ isActive }) =>
@@ -101,7 +101,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                     />
                     Coherence
                 </NavLink>
-            )}
+            )} */}
 
             {user?.userRoles.includes(UserRole.Coherence) && (
                 <NavLink

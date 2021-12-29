@@ -1,5 +1,4 @@
-import { EditPassword } from '../edit-modal/edit-password';
-import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import useUser from '../../hooks/useUser';
 import ProfileIcon from './assets/profile.svg';
 import LogoutIcon from './assets/logout.svg';
@@ -7,6 +6,7 @@ import CrossIcon from './assets/cross.svg';
 import useLogout from '../../hooks/useLogout';
 import style from './user-menu.module.scss';
 import classnames from 'classnames';
+import useCloseModal from '../../hooks/useCloseModal';
 
 interface Props {
     collapsed: boolean;
@@ -22,14 +22,7 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
         collapsed && setOpenDropdown(false)
     }, [collapsed])
 
-    const closeModal = useCallback(() => setOpenDropdown(false), [openDropdown])
-    useEffect(() => {
-        if (openDropdown) {
-            document.addEventListener('click', closeModal)
-        }
-
-        return () => document.removeEventListener('click', closeModal)
-    }, [openDropdown])
+    useCloseModal(openDropdown, setOpenDropdown)
 
     return (
         <>

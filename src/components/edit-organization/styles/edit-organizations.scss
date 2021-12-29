@@ -4,55 +4,9 @@
 }
 
 .edit-organization {
-  &__header {
-    background: #ffffff;
-    border-radius: 4px 4px 0px 0px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 40px;
-  }
-
-  &__title {
-    margin: 0;
-  }
-
-  &__info {
-    padding: 0 40px 40px;
-    min-height: 142px;
-    position: relative;
-  }
-
-  &__buttons {
-    display: flex;
-    align-items: center;
-    width: 229px;
-    justify-content: space-between;
-  }
-
-  &__save-btn {
-    width: 140px;
-    height: 40px;
-  }
-
-  &__inputs {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0 40px;
-  }
-
-  &__input {
-    flex: 1 0 317px;
-  }
-
-  &__comments {
-    flex-basis: 100%;
-  }
-
-  &__user-list {
-    padding: 0 40px 40px;
-  }
+  padding: 40px;
+  display: grid;
+  gap: 40px;
 
   &__user-list-header {
     display: flex;
@@ -64,4 +18,8 @@
     width: 140px;
     height: 40px;
   }
+}
+
+.sub-headline {
+  margin: 0;
 }

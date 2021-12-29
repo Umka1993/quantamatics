@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import "../../../variables.scss";
 
 .role-checkboxes {
     display: flex;
@@ -15,10 +15,5 @@
         padding: 0;
         float: left;
         font-weight: inherit;
-    }
-    .check-block {
-        flex-direction: row-reverse;
-        float: right;
-        // color: $headlines
     }
 }

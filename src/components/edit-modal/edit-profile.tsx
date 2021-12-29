@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useRef, useState, FunctionComponent } from "react";
 
 import Button, { ResetButton } from "../button";
-import AppInput, { DatePick, Email } from "../app-input";
+import AppInput, { DatePick, Email, Multiselect } from "../app-input";
 import { SelectorInput } from "../selector-input";
 import Modal from "../modal";
 import RoleCheckboxes from "../role-checkboxes";
@@ -16,6 +16,9 @@ import { login } from "../../store/authorization";
 import Loader from "../loader";
 
 import "./styles/edit-account.scss";
+import { Organization } from "types/organization/types";
+import { useGetAllAssetsQuery, useLinkAssetToUserMutation } from "../../api/asset";
+import { useParams } from "react-router-dom";
 interface IEditProfile {
     onClose: () => void;
     user: IUpdateUser;
@@ -25,6 +28,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     onClose,
     user,
 }) => {
+    const { id: organizationID } = useParams();
     const [firstName, setName] = useState<string>(user.firstName);
     const [lastName, setSurname] = useState<string>(user.lastName);
     const [companyName, setOrganization] = useState<string>(user.companyName);
@@ -46,6 +50,17 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     const { data: allOrganizations } = useGetAllOrganizationsQuery();
 
+
+    const { data: assets } = useGetAllAssetsQuery(
+        organizationID as string
+    );
+    const [linkAsset] = useLinkAssetToUserMutation()
+
+
+    const [datasets, setDatasets] = useState<string[]>([]);
+    const [assetError, setAssetError] = useState(false)
+    const [loading, setLoading] = useState(false)
+
     const sendNewUser = (validate: any) => {
         const newUserData: IUpdateUser = {
             ...user,
@@ -59,13 +74,14 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     };
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
+
         evt.preventDefault();
-        setValidate(true);
-
-        const isValid = formRef.current?.reportValidity();
-
-        if (isValid) {
-            sendNewUser(validate);
+        if (datasets.length || true) { // Ignore Asset errors for now
+            setValidate(true);
+            const isValid = formRef.current?.reportValidity();
+            isValid && sendNewUser(validate)
+        } else {
+            setAssetError(true)
         }
     };
 
@@ -85,6 +101,14 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                 localStorage.setItem("user", JSON.stringify(normalizedNewData));
             }
 
+            datasets.forEach((selectedAsset) => {
+                const foundedAsset = assets?.find(element => element.name === selectedAsset)
+
+                foundedAsset && linkAsset({
+                    assetId: foundedAsset.assetId, userId: user.id,
+                })
+            })
+
         }
     }, [isSuccess])
 
@@ -94,11 +118,13 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     useEffect(() => {
         if (isError) {
-            if ((typeof((error as IApiError).data)) == "string" && (error as IApiError).data?.includes(" already taken"))
+            if ((error as IApiError).data?.includes(" already taken"))
                 setEmailError("The user with such email already exists");
             else
                 alert(JSON.stringify((error as any).data?.errors));
         }
+
+
     }, [isError])
 
 
@@ -160,7 +186,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                         />
                         {allOrganizations &&
                             <SelectorInput
-                                options={allOrganizations?.map(org => org[OrganizationKey.Name]) as string[]}
+                                options={allOrganizations?.map((org: Organization) => org[OrganizationKey.Name]) as string[]}
                                 // valueSetter={setOrganizationId}
                                 optionSetter={setOrganization}
                                 // values={allOrganizations?.map(({id}) => id) as string[]}
@@ -168,6 +194,15 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                                 label='Organization'
                                 disabled
                             />}
+
+                        {/* <Multiselect
+                            options={assets?.map((asset) => asset.name) || []}
+                            selected={datasets}
+                            setSelected={setDatasets}
+                            label="Account Datasets"
+                            errorMessage='Select asset permissions to assign to the user account.'
+                            showError={assetError}
+                        /> */}
                         <RoleCheckboxes
                             defaultRoles={userRoles}
                             externalSetter={setRoles}

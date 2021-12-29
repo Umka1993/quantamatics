@@ -4,6 +4,7 @@ $text: #bcc4d8;
 
 .app-input {
   width: 100%;
+  position: relative;
 
   &__wrapper {
     display: block;
@@ -45,10 +46,15 @@ $text: #bcc4d8;
   &__field:focus ~ &__label {
     width: 100%;
     font-size: 14px;
+    
   }
 
-  &__field,
-  &__fallback-date {
+  &__label--initial {
+    font: inherit !important;
+    width: 0 !important;
+  }
+
+  &__field {
     accent-color: $accent;
     position: relative;
 
@@ -104,17 +110,8 @@ $text: #bcc4d8;
     }
   }
 
-  &__fallback-date {
-    &::placeholder {
-      color: $headlines;
-    }
-    &:active::placeholder,
-    &:focus::placeholder {
-      color: $accent;
-    }
-  }
-
-  &--validate &__field:not(:placeholder-shown):invalid {
+  &--validate &__field:not(:placeholder-shown):invalid,
+  &__field--error {
     border-bottom: 1px solid #ff5757;
   }
 

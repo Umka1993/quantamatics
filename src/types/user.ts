@@ -1,4 +1,5 @@
 import { UserKey, UserRole } from "../data/enum";
+import { OrganizationID } from "./organization/types";
 
 export interface IUser {
     [UserKey.Id]: number,
@@ -14,7 +15,7 @@ export interface IUser {
     [UserKey.Expiration]: string,
     [UserKey.Avatar]: string,
     [UserKey.UserRoles]: Array<UserRole>,
-    [UserKey.OrganizationId]: string,
+    [UserKey.OrganizationId]: OrganizationID,
 }
 
 export interface IUpdateUser extends Omit<IUser, UserKey.SubscriptionEndDate>  {

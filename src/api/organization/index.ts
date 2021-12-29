@@ -19,8 +19,8 @@ const organizationsApi = baseApi.injectEndpoints({
                     : [{ type: "Organizations", id: "list" }],
         }),
 
-        addOrganization: build.mutation({
-            query: (body: any) => ({
+        addOrganization: build.mutation<Organization, any>({
+            query: (body) => ({
                 url: ApiRoute.OrganizationCreate,
                 method: "POST",
                 body,

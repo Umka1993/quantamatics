@@ -32,9 +32,7 @@ const Form: FunctionComponent<IForm> = ({ headline, subtitle, children, onSubmit
     }
 
     useEffect(() => {
-        if (stopLoading) {
-            setLoading(false)
-        }
+        stopLoading && setLoading(false)
     }, [stopLoading])
 
     return (

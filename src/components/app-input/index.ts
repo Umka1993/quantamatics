@@ -1,12 +1,7 @@
-import Input from "./input";
-import PasswordComponent from "./password";
-import EmailComponent from "./email";
-import DatePickComponent from "./datepick";
-import InputURLComponent from "./url";
+export { default } from "./input";
+export { default as Password } from "./password";
+export { default as Email } from "./email";
+export { default as DatePick } from "./datepick";
+export { default as InputURL } from "./url";
+export { default as Multiselect } from "./multiselect";
 
-export default Input;
-
-export const Password = PasswordComponent;
-export const Email = EmailComponent;
-export const DatePick = DatePickComponent;
-export const InputURL = InputURLComponent
