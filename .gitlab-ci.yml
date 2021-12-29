@@ -95,3 +95,31 @@ deploy staging beta:
     DISTRIBUTION_ALIAS: beta.stag.quantamatics.net    
   only:
     - master
+
+deploy production:
+  stage: deploy-staging
+  extends: .deploy
+  variables:
+    AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_PROD
+    AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_PROD
+    AWS_DEFAULT_REGION: us-east-1
+    ENV_SUFFIX: production
+    STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+    CERTIFICATE_ARN: arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526
+    DISTRIBUTION_ALIAS: stag.quantamatics.net    
+  only:
+    - master
+
+deploy production beta:
+  stage: deploy-staging
+  extends: .deploy
+  variables:
+    AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_PROD
+    AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_PROD
+    AWS_DEFAULT_REGION: us-east-1
+    ENV_SUFFIX: production-beta
+    STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+    CERTIFICATE_ARN: arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526
+    DISTRIBUTION_ALIAS: beta.stag.quantamatics.net    
+  only:
+    - master
