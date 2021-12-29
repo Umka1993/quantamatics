@@ -74,13 +74,14 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     };
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
+
         evt.preventDefault();
-        setValidate(true);
-
-        const isValid = formRef.current?.reportValidity();
-
-        if (isValid) {
-            sendNewUser(validate);
+        if (datasets.length) {
+            setValidate(true);
+            const isValid = formRef.current?.reportValidity();
+            isValid && sendNewUser(validate)
+        } else {
+            setAssetError(true)
         }
     };
 
@@ -122,6 +123,8 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
             else
                 alert(JSON.stringify((error as any).data?.errors));
         }
+
+
     }, [isError])
 
 
