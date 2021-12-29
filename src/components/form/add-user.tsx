@@ -87,7 +87,7 @@ const InviteUserForm: FunctionComponent = () => {
 
     const addUserToOrg = () => {
         // setLoading(true)
-        if (datasets.length) {
+        if (datasets.length || true) { // Ignore Asset errors for now
             
             register({
                 firstName,
@@ -145,14 +145,14 @@ const InviteUserForm: FunctionComponent = () => {
                     required
                     label='Expiration Date'
                 />
-                <Multiselect
+                {/* <Multiselect
                     options={assets?.map((asset) => asset.name) || []}
                     selected={datasets}
                     setSelected={setDatasets}
                     label="Account Datasets"
                     errorMessage='Select asset permissions to assign to the user account.'
                     showError={assetError}
-                />
+                /> */}
                 <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
             </div>
             <Button

@@ -68,10 +68,10 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     }, [stopLoading])
 
     const handleSubmit = () => {
-        if (!datasets.length) {
-            setAssetError(true)
-            return setStopLoading(true)
-        }
+        // if (!datasets.length) {
+        //     setAssetError(true)
+        //     return setStopLoading(true)
+        // }
 
 
         let duplicate = checkNameDuplicate()
@@ -128,14 +128,14 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     showLimit
                 />
 
-                <Multiselect
+                {/* <Multiselect
                     options={['Coherence', 'Research', 'Backtest - Enterprise', 'Enterprise', 'Backtest - Express', 'Express', 'Backtest - CPG', 'CPG', 'Backtest - Summary v3.1', 'Summary v3.1']}
                     label='Org. Datasets'
                     selected={datasets}
                     setSelected={setDatasets}
                     errorMessage='Select asset permissions to assign to the organization.'
                     showError={assetError}
-                />
+                /> */}
             </div>
 
             <Button

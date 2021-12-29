@@ -76,7 +76,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
 
         evt.preventDefault();
-        if (datasets.length) {
+        if (datasets.length || true) { // Ignore Asset errors for now
             setValidate(true);
             const isValid = formRef.current?.reportValidity();
             isValid && sendNewUser(validate)
@@ -195,14 +195,14 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                                 disabled
                             />}
 
-                        <Multiselect
+                        {/* <Multiselect
                             options={assets?.map((asset) => asset.name) || []}
                             selected={datasets}
                             setSelected={setDatasets}
                             label="Account Datasets"
                             errorMessage='Select asset permissions to assign to the user account.'
                             showError={assetError}
-                        />
+                        /> */}
                         <RoleCheckboxes
                             defaultRoles={userRoles}
                             externalSetter={setRoles}

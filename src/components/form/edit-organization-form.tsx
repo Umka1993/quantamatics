@@ -97,10 +97,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         evt.preventDefault();
         setLoading(true);
 
-        if (!datasets.length) {
-            setAssetError(true)
-            return setLoading(false);
-        }
+        // if (!datasets.length) {
+        //     setAssetError(true)
+        //     return setLoading(false);
+        // }
         let duplicate = false
 
         if (name !== organization?.name) {
@@ -241,7 +241,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         className={style.input}
                     />
 
-                    <Multiselect
+                    {/* <Multiselect
                         options={[
                             "Coherence",
                             "Research",
@@ -260,7 +260,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         errorMessage='Select asset permissions to assign to the organization.'
                         showError={assetError}
                         className={style.input}
-                    />
+                    /> */}
 
                     <Input
                         externalSetter={setComment}
