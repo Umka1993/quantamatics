@@ -59,6 +59,19 @@
                 margin: 8px 8px;
             }
         }
+
+        .check-block__custom {
+            font-size: 14px;
+        }
+
+        .check-block__custom::before,
+        .check-block__check {
+            font-size: 16px;
+        }
+
+        .check-block__input:checked ~ .check-block__custom {
+            color: $accent;
+        }
     }
 
     &__search_wrap {

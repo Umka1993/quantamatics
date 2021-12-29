@@ -27,6 +27,7 @@ const RoleCheckboxes: FunctionComponent<RoleCheckboxesProps> = ({ defaultRoles =
                 name="org-admin"
                 checked={orgAdmin}
                 externalSetter={setOrgAdmin}
+                align='right'
             >
                 Organization Admin
             </Checkbox>
