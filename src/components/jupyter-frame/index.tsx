@@ -25,8 +25,12 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
         if (!localStorage.getItem('jupiter-logged')) {
             formRef.current && formRef.current.submit();
             localStorage.setItem('jupiter-logged', 'true')
+
+            if (type === 'coherence' && frameRef.current) {
+                frameRef.current.src = HUB_URL;
+            }
         }
-        if(frameRef.current) frameRef.current.src = HUB_URL;
+
     }, [formRef.current])
 
     return (
@@ -35,21 +39,24 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
                 <Headline>{type === 'files' ? 'My Files' : type === 'coherence' ? 'Coherence' : 'Excel Library'}</Headline>
                 {type === 'files' && (<p>Manage and edit your files</p>)}
             </header>
-            <form
-                method='POST'
-                target="jupyter-iframe"
-                action={`${process.env.HUB_URL}hub/login`}
-                ref={formRef}
-                hidden
-            >
-            <input
-                    name='token'
-                    value={token}
-                    readOnly
-                />
-            </form>
 
-            <iframe className={style.frame} name="jupyter-iframe" src={`${process.env.HUB_URL}hub/login`} ref={frameRef} />
+            {token &&
+                <form
+                    method='POST'
+                    target="jupyter-iframe"
+                    action={`${process.env.HUB_URL}hub/login`}
+                    ref={formRef}
+                    hidden
+                >
+                    <input
+                        name='token'
+                        value={token}
+                        readOnly
+                    />
+                </form>
+            }
+
+            <iframe className={style.frame} name="jupyter-iframe" src={HUB_URL} ref={frameRef} />
         </div>
     )
 }

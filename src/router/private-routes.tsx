@@ -26,7 +26,7 @@ export default function PrivateRoutes(): ReactElement {
     const HomePath = isResearch
         ? AppRoute.Files
         : isCoherence
-            ? AppRoute.Coherence
+            ? AppRoute.ExcelLibrary
             : isOrganizationAvailable
                 ? "/apps/organizations/list"
                 : `/apps/organizations/${user?.organizationId}`;
