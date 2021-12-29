@@ -126,7 +126,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     customerCrmId,
                     customerCrmLink,
                     comments,
-                    organizationAssets: datasets
+                    // organizationAssets: datasets
                 });
             }
 

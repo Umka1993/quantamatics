@@ -46,6 +46,12 @@ $text: #bcc4d8;
   &__field:focus ~ &__label {
     width: 100%;
     font-size: 14px;
+    
+  }
+
+  &__label--initial {
+    font: inherit !important;
+    width: 0 !important;
   }
 
   &__field {

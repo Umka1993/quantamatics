@@ -56,6 +56,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     useEffect(() => {
         Boolean(selected.length) ? setHideError(true) : setHideError(false)
+        reCalcLabelWidth();
     }, [selected])
 
     const openOptions = useCallback(() => setShowOptions(true), [setShowOptions])
@@ -71,7 +72,9 @@ const Multiselect: FunctionComponent<IInput> = ({
             onClick={(e) => e.stopPropagation()}
         >
             <label
-                className="app-input__wrapper multiselect__search_wrap"
+                className={classNames("app-input__wrapper multiselect__search_wrap", {
+                    'multiselect__search_wrap--opened': showOptions
+                })}
                 style={
                     label
                         ? ({
@@ -80,30 +83,25 @@ const Multiselect: FunctionComponent<IInput> = ({
                         : undefined
                 }
             >
-                <div
+                <input
                     className="app-input__field"
-                    tabIndex={0}
+                    type="text"
+                    placeholder={label ? " " : placeholder}
+
+                    value={selected.join(', ')}
                     onFocus={openOptions}
                     onClick={toggleOptions}
+                    readOnly
+
                     style={{
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                     }}
-                >
-                    {selected && Boolean(selected.length) && (
-                        <ComaList list={selected} style={{
-                            pointerEvents: 'none',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            maxWidth: '80%',
-                            display: 'block'
-                            
-                        }} />
-                    )}
-                </div>
+                />
 
                 {label && (
-                    <span className="app-input__label app-input__label--icon">
+                    <span className={classNames("app-input__label app-input__label--icon", {
+                        'app-input__label--initial': !Boolean(selected.length)
+                    })}>
                         <span ref={labelRef}>{label}</span>
                     </span>
                 )}
