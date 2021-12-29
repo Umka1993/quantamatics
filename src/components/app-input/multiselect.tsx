@@ -84,7 +84,9 @@ const Multiselect: FunctionComponent<IInput> = ({
                 }
             >
                 <input
-                    className="app-input__field"
+                    className={classNames("app-input__field", {
+                        "app-input__field--error": showError && !hideError && !Boolean(selected.length)
+                    })}
                     type="text"
                     placeholder={label ? " " : placeholder}
 

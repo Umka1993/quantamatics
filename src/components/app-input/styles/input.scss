@@ -110,7 +110,8 @@ $text: #bcc4d8;
     }
   }
 
-  &--validate &__field:not(:placeholder-shown):invalid {
+  &--validate &__field:not(:placeholder-shown):invalid,
+  &__field--error {
     border-bottom: 1px solid #ff5757;
   }
 
