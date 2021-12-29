@@ -101,17 +101,18 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setAssetError(true)
             return setLoading(false);
         }
+        let duplicate = false
 
         if (name !== organization?.name) {
-            if (checkNameDuplicate()) {
-                return setLoading(false);
-            }
+            duplicate = checkNameDuplicate()
         }
 
         if (customerCrmId !== organization?.customerCrmId) {
-            if (checkIdDuplicate()) {
-                return setLoading(false);
-            }
+            duplicate = checkIdDuplicate() || duplicate
+        }
+
+        if (duplicate) {
+            return setLoading(false)
         }
 
 

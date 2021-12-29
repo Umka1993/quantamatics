@@ -67,7 +67,11 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         }
 
 
-        if (!checkNameDuplicate() && !checkIdDuplicate()) {
+        let duplicate = checkNameDuplicate()
+        duplicate = checkIdDuplicate() || duplicate
+
+
+        if (!duplicate) {
             register({ name, customerCrmId, customerCrmLink, comments }).unwrap().then(returnBack);
         }
     }
