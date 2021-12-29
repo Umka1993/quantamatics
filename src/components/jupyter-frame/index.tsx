@@ -25,12 +25,8 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
         if (!localStorage.getItem('jupiter-logged')) {
             formRef.current && formRef.current.submit();
             localStorage.setItem('jupiter-logged', 'true')
-
-            if (type === 'coherence' && frameRef.current) {
-                frameRef.current.src = HUB_URL;
-            }
         }
-
+        if(frameRef.current) frameRef.current.src = HUB_URL;
     }, [formRef.current])
 
     return (
@@ -53,7 +49,7 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
                 />
             </form>
 
-            <iframe className={style.frame} name="jupyter-iframe" src={HUB_URL} ref={frameRef} />
+            <iframe className={style.frame} name="jupyter-iframe" src={`${process.env.HUB_URL}hub/login`} ref={frameRef} />
         </div>
     )
 }
