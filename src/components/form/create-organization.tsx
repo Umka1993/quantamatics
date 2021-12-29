@@ -1,12 +1,13 @@
-import React, { useEffect, useState, FunctionComponent } from "react";
+import React, { useEffect, useState, FunctionComponent, useRef } from "react";
 import "./styles/create-organization.scss";
 import Input, { Multiselect } from "../app-input";
 import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
-import { useAddOrganizationMutation } from "../../api/organization";
+import { useAddOrganizationMutation, useGetAllOrganizationsQuery } from "../../api/organization";
 import { AppRoute } from "../../data/enum";
 import { useCreateAssetsMutation } from "../../api/asset";
+import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 
 interface ICreateOrganization { }
 
@@ -32,22 +33,27 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [assetError, setAssetError] = useState(false)
     const [createAsset, { isLoading }] = useCreateAssetsMutation();
 
+    const formRef = useRef<HTMLFormElement>(null);
+    const [duplicateOrgError, duplicateIdError, checkNameDuplicate, checkIdDuplicate] = useDuplicatedOrgValues(formRef, name, customerCrmId);
+
     const returnBack = () => {
         navigate(AppRoute.OrganizationList);
     };
 
-    useEffect(() => {
-        if (isSuccess && data) {
-            datasets.forEach((asset, index) => createAsset({
-                name: asset,
-                ownerOrganizationId: data.id,
-                version: 1
-            }).unwrap().then(() => {
-                const isLast = index === datasets.length - 1
-                isLast && returnBack()
-            }))
-        }
-    }, [isSuccess]);
+    /*    useEffect(() => {
+           // if (isSuccess && data) {
+           //     datasets.forEach((asset, index) => createAsset({
+           //         name: asset,
+           //         ownerOrganizationId: data.id,
+           //         version: 1
+           //     }).unwrap().then(() => {
+           //         const isLast = index === datasets.length - 1
+           //         isLast && returnBack()
+           //     }))
+           // }
+   
+           isSuccess && returnBack();
+       }, [isSuccess]); */
 
     useEffect(() => {
         if (isError) {
@@ -55,13 +61,15 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         }
     }, [isError])
 
-    const hadnleSumbit = () => {
-        if (datasets.length) {
-            register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
-        } else {
-            setAssetError(true)
+    const handleSubmit = () => {
+        if (!datasets.length) {
+            return setAssetError(true)
         }
 
+
+        if (!checkNameDuplicate() && !checkIdDuplicate()) {
+            register({ name, customerCrmId, customerCrmLink, comments }).unwrap().then(returnBack);
+        }
     }
 
 
@@ -70,9 +78,10 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
             className="create-organization"
             headline="Create an Organization"
             subtitle="Add a new organization to Quantamatics"
-            onSubmit={hadnleSumbit}
+            onSubmit={handleSubmit}
             onReset={returnBack}
-            stopLoading={isError || assetError}
+            stopLoading={isError || assetError || Boolean(duplicateOrgError) || Boolean(duplicateIdError)}
+            forwardRef={formRef}
         >
             <div className="create-organization__fields">
                 <Input
@@ -81,6 +90,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     required
                     value={name}
                     maxLength={64}
+                    error={duplicateOrgError}
                 />
 
                 <Input
@@ -88,6 +98,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     label="CRM Customer ID"
                     value={customerCrmId}
                     maxLength={32}
+                    error={duplicateIdError}
                 />
                 <Input
                     externalSetter={setCustomerCrmLink}

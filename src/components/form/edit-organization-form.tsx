@@ -17,6 +17,7 @@ import { useGetAllOrganizationsQuery, useUpdateOrganizationMutation } from "../.
 import Loader from "../loader";
 import { AppRoute } from "../../data/enum";
 import * as assetsHooks from "../../api/asset";
+import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 
 interface EditOrganizationFormProps {
     organization?: Organization;
@@ -24,10 +25,7 @@ interface EditOrganizationFormProps {
     externalLoad?: boolean;
 }
 
-const enum UniqueError {
-    Name = "Organization Name must be unique",
-    ID = "Organization CRM Customer ID must be unique"
-}
+
 
 
 const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
@@ -50,7 +48,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const { data: allOrganizations } =
         useGetAllOrganizationsQuery();
 
-
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
     const [customerCrmLink, setCustomerLink] = useState<string>("");
@@ -60,9 +57,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
     const formRef = useRef<HTMLFormElement>(null);
 
-
-    const [duplicateOrgError, setDuplicateOrgError] = useState<undefined | UniqueError.Name>(undefined);
-    const [duplicateIdError, setDuplicateIdError] = useState<undefined | UniqueError.ID>(undefined);
+    const [duplicateOrgError, duplicateIdError, checkNameDuplicate, checkIdDuplicate] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
     const { data: assets } = assetsHooks.useGetAllAssetsQuery(
         organization?.id as string
@@ -96,21 +91,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         organization && setInitialOrg();
     }, [organization]);
 
-    useEffect(() => {
-        duplicateOrgError && formRef.current?.reportValidity();
-    }, [duplicateOrgError, formRef.current]);
-
-    useEffect(() => {
-        duplicateIdError && formRef.current?.reportValidity();
-    }, [duplicateIdError, formRef.current]);
-
-    useEffect(() => {
-        duplicateOrgError && setDuplicateOrgError(undefined);
-    }, [name]);
-
-    useEffect(() => {
-        customerCrmId && setDuplicateIdError(undefined);
-    }, [customerCrmId]);
 
 
     function submitHandler(evt: FormEvent<HTMLFormElement>) {
@@ -122,21 +102,14 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             return setLoading(false);
         }
 
-        /** Check if new name is unique */
         if (name !== organization?.name) {
-            const duplicatedOrganization = allOrganizations?.find(org => org.name === name)
-            if (duplicatedOrganization) {
-                setDuplicateOrgError(UniqueError.Name)
+            if (checkNameDuplicate()) {
                 return setLoading(false);
             }
         }
 
-
-        /** Check if new id is unique */
         if (customerCrmId !== organization?.customerCrmId) {
-            const duplicatedOrganization = allOrganizations?.find(org => org.customerCrmId === customerCrmId)
-            if (duplicatedOrganization) {
-                setDuplicateIdError(UniqueError.ID)
+            if (checkIdDuplicate()) {
                 return setLoading(false);
             }
         }
