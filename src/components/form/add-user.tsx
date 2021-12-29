@@ -41,6 +41,7 @@ const InviteUserForm: FunctionComponent = () => {
 
     
     useEffect(() => {
+        setLoading(false)
         if (isError) {
             if ((error as any).data[0]?.code === "DuplicateUserName")
                 setErrors("The user with such email already exists");
@@ -51,7 +52,7 @@ const InviteUserForm: FunctionComponent = () => {
     const backLink = `/apps/organizations/${company?.id}`;
 
     useEffect(() => {
-        if (isUserRegistered && registeredUser && assets) {
+        if (isUserRegistered) {
             /* datasets.forEach((selectedAsset) => {
                 const foundedAsset = assets.find(element => element.name === selectedAsset)
 
@@ -85,9 +86,9 @@ const InviteUserForm: FunctionComponent = () => {
     }, [errors, formRef.current]);
 
     const addUserToOrg = () => {
-
+        // setLoading(true)
         if (datasets.length) {
-            setLoading(true)
+            
             register({
                 firstName,
                 lastName,
@@ -98,6 +99,9 @@ const InviteUserForm: FunctionComponent = () => {
                 userRoles: userRoles
             })
         } else {
+            console.log('asdsa');
+            
+            setLoading(false)
             setAssetError(true)
         }
     }
@@ -108,7 +112,7 @@ const InviteUserForm: FunctionComponent = () => {
             headline="Create a User Account"
             subtitle="Add a new user account to your organization"
             onSubmit={addUserToOrg}
-            stopLoading={isError || assetError || loading}
+            stopLoading={isError || assetError}
             forwardRef={formRef}
         >
             <div className="create-organization__fields">
@@ -154,9 +158,9 @@ const InviteUserForm: FunctionComponent = () => {
             <Button
                 className="create-organization__submit"
                 type="submit"
-                disabled={
-                    !Boolean(firstName && lastName && email && subscriptionEndDate)
-                }
+                // disabled={
+                //     !Boolean(firstName && lastName && email && subscriptionEndDate)
+                // }
             >
                 Save
             </Button>
