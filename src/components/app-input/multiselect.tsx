@@ -59,9 +59,9 @@ const Multiselect: FunctionComponent<IInput> = ({
         reCalcLabelWidth();
     }, [selected])
 
-    const openOptions = useCallback(() => setShowOptions(true), [setShowOptions])
+    /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
 
-    const toggleOptions = useCallback(() => setShowOptions(!showOptions), [showOptions, setShowOptions])
+    const toggleOptions = () => setShowOptions(!showOptions)
 
     useCloseModal(showOptions, setShowOptions);
 
@@ -89,7 +89,7 @@ const Multiselect: FunctionComponent<IInput> = ({
                     placeholder={label ? " " : placeholder}
 
                     value={selected.join(', ')}
-                    onFocus={openOptions}
+                    // onFocus={openOptions}
                     onClick={toggleOptions}
                     readOnly
 
