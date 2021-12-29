@@ -21,16 +21,22 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
     const formRef = useRef<HTMLFormElement>(null)
     const token = getToken();
 
-    useEffect(() => {
+    // Catch jupyter redirect and redirect to correct page
+    const frameLoaded = () => {
         if (!localStorage.getItem('jupiter-logged')) {
-            formRef.current && formRef.current.submit();
             localStorage.setItem('jupiter-logged', 'true')
 
-            if (type === 'coherence' && frameRef.current) {
+            // Jupyter defaults to files so no need to redirect if already there
+            if (type !== 'files' && frameRef.current) {
                 frameRef.current.src = HUB_URL;
             }
         }
+    };
 
+    useEffect(() => {
+        if (!localStorage.getItem('jupiter-logged')) {
+            formRef.current && formRef.current.submit();
+        }
     }, [formRef.current])
 
     return (
@@ -56,7 +62,7 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
                 </form>
             }
 
-            <iframe className={style.frame} name="jupyter-iframe" src={HUB_URL} ref={frameRef} />
+            <iframe className={style.frame} name="jupyter-iframe" src={HUB_URL} ref={frameRef} onLoad={frameLoaded}/>
         </div>
     )
 }
