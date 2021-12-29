@@ -199,7 +199,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     <Button
                         type="submit"
                         className={style.save}
-                        disabled={isUpdating || externalLoad}
+                        disabled={isUpdating || externalLoad || Boolean(duplicateOrgError) || Boolean(duplicateIdError)}
                     >
                         Save
                     </Button>
