@@ -1,15 +1,16 @@
 import React from 'react';
-require('./global.scss')
-import {BrowserRouter} from "react-router-dom"
-import {App} from "./app"
+import './global.scss';
+import { BrowserRouter } from "react-router-dom"
+import { store } from "./store";
 import ReactDOM from 'react-dom';
-import {Header} from "./components/header";
-
+import { Provider } from "react-redux";
+import BaseLayout from './layouts'
 
 ReactDOM.render(
     <BrowserRouter>
-        <Header/>
-        <App/>
+        <Provider store={store}>
+            <BaseLayout />
+        </Provider>
     </BrowserRouter>,
     document.getElementById("root")
 );

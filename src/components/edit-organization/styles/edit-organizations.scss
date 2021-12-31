@@ -1,0 +1,25 @@
+.content-wrapper {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.edit-organization {
+  padding: 40px;
+  display: grid;
+  gap: 40px;
+
+  &__user-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__user-list-add {
+    width: 140px;
+    height: 40px;
+  }
+}
+
+.sub-headline {
+  margin: 0;
+}

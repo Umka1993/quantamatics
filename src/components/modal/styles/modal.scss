@@ -1,0 +1,51 @@
+@import '../../../variables.scss';
+
+.modal-overlay {
+  background: transparentize(#263768, 0.2);
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  place-items: center;
+  cursor: pointer;
+}
+
+
+.modal {
+  width: 775px;
+  height: 602px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.2);
+  border-radius: 4px;
+  max-width: 775px;
+  min-height: 602px;
+  cursor: default;
+  
+  z-index: 200;
+
+  margin: auto;
+  position: relative;
+
+  &:focus {
+    outline: none;
+  }
+
+  &__close {
+    all: unset;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    color: #BCC4D8;
+    
+    padding: 24px;
+    cursor: pointer;
+    &:hover, &:focus-visible {
+      color: $accent;
+    }
+
+    &:active {
+      color: darken($accent, 20)
+    }
+  }
+}

@@ -1,0 +1,63 @@
+@import "../../../variables.scss";
+
+.check-block {
+    font: inherit;
+    display: inline-flex;
+    gap: 0.625em;
+    cursor: pointer;
+    align-items: center;
+    position: relative;
+
+    &__custom {
+        display: flex;
+        align-items: start;
+
+        &::before {
+            content: "";
+            width: 1em;
+            height: 1em;
+            margin-right: 0.625em;
+            background-color: #fff;
+            border: 0.0625em solid transparentize($main-text, 0.7);
+            box-shadow: inset 0px 0.125em 0.4375em transparentize($main-text, 0.9);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+    }
+
+    &--right &__custom::before {
+        order: 1;
+        margin-right: 0;
+        margin-left: 0.625em;
+    }
+
+    &--right &__check {
+        left: auto;
+        right: 0.1875em;
+    }
+
+    &__input {
+        -webkit-appearance: none;
+        appearance: none;
+        position: absolute;
+    }
+
+    &__input:checked ~ &__custom::after {
+        display: block;
+    }
+
+    &__input:checked + &__check {
+        display: block;
+    }
+
+    &__check {
+        position: absolute;
+        left: 0.1875em;
+        top: 0.3125em;
+
+        fill: $accent;
+        width: 0.625em;
+        height: 0.4375em;
+        display: none;
+    }
+}

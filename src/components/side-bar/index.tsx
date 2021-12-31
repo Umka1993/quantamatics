@@ -1,32 +1,50 @@
-import React from "react";
-import "./styles/side-bar.scss"
-const classNames = require('classnames');
+import React, { useState, FunctionComponent } from "react";
+import style from "./styles/side-bar.module.scss";
+import NavBar from "../navbar";
+import LinesIcon from "./assets/lines.svg";
+import ExelIcon from "./assets/exel.svg";
+import classNames from "classnames";
+import Logo from "../logo";
+import UserMenu from "../user-menu";
+import { EXCEL_PLUGIN } from "../../data/constants";
 
-import {SideBarItem} from "./service/side-bar-service";
-
-
-interface ISideBar {
-    items: Array<SideBarItem>
+type SideBarProps = {
+    openModal: () => void;
 }
 
-export const SideBar: React.FunctionComponent<ISideBar> = (props) => {
-    const itemsList = props.items.map((item) => {
-        const itemClasses: any = classNames({
-            'side-bar__item': true,
-            'side-bar__item_active': item.active
-        })
-        return (
-            <div className={itemClasses}>
-                <img src={item.image} className={"side-bar__item-img"}/>
-                <div className="side-bar__item-name">
-                    {item.name}
-                </div>
+export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
+    const [collapsed, setCollapsed] = useState<boolean>(false);
+    return (
+        <aside
+            className={classNames(style.root, { [style.collapsed]: collapsed })}
+        >
+            <div className={style.header}>
+                {!collapsed && <Logo width={161} height={31} />}
+                <button
+                    className={style.switcher}
+                    type="button"
+                    role="switch"
+                    aria-label="Hide Menu"
+                    aria-checked={collapsed}
+                    onClick={() => setCollapsed(!collapsed)}
+                >
+                    <LinesIcon width={16} height={16} aria-hidden="true" />
+                </button>
             </div>
-        )
-    })
-    return(
-        <div className="side-bar">
-            {itemsList}
-        </div>
-    )
-}
+
+            <NavBar collapsed={collapsed} className={style.navbar} />
+
+            {!collapsed &&
+                <small className={style.copyright}>
+                    © Copyright 2021 Facteus. All <br />rights reserved. {' '}
+                    <a href="https://www.facteus.com/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                </small>}
+
+            <a href={EXCEL_PLUGIN} className={style.plugin} aria-label='Get Excel Plug-in' download>
+                <ExelIcon aria-hidden="true" fill="#20744A" width={20} height={20} />
+            </a>
+
+            <UserMenu collapsed={collapsed} openModal={openModal} />
+        </aside >
+    );
+};

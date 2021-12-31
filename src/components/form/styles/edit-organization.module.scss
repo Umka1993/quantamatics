@@ -1,0 +1,38 @@
+.root {
+    min-height: 142px;
+    position: relative;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    width: 229px;
+    justify-content: space-between;
+}
+
+.save {
+    width: 140px;
+    height: 40px;
+}
+
+.input {
+    flex: 1 1 500px;
+    margin: 5px 18px;
+
+    @media (max-width: 900px) {
+        flex-basis: auto;
+    }
+}
+
+.inputs {
+    display: flex;
+    margin: -5px -18px;
+    flex-wrap: wrap;
+}
