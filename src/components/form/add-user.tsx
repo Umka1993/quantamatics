@@ -5,7 +5,7 @@ import Button, { ResetButton } from "../button";
 import Input, { DatePick, Email, Multiselect } from "../app-input/";
 import Form from "./form";
 import RoleCheckboxes from "../role-checkboxes";
-import { AppRoute, UserRole } from "../../data/enum";
+import { AppRoute, Error, UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
 import { useGetOrganizationQuery } from "../../api/organization";
 import { useGetAllAssetsQuery, useLinkAssetToUserMutation } from "../../api/asset";
@@ -44,7 +44,7 @@ const InviteUserForm: FunctionComponent = () => {
         setLoading(false)
         if (isError) {
             if ((error as any).data[0]?.code === "DuplicateUserName")
-                setErrors("The user with such email already exists");
+                setErrors(Error.DuplicateUser);
             else alert(JSON.stringify((error as any).data?.errors));
         }
     }, [isError])

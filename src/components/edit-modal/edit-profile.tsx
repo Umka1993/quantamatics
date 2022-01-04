@@ -5,7 +5,7 @@ import AppInput, { DatePick, Email, Multiselect } from "../app-input";
 import { SelectorInput } from "../selector-input";
 import Modal from "../modal";
 import RoleCheckboxes from "../role-checkboxes";
-import { OrganizationKey, UserRole } from "../../data/enum";
+import { Error, OrganizationKey, UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
 import { IUpdateUser } from "../../types/user";
 import { useUpdateUserMutation, useUpdateUserRolesMutation } from "../../api/user";
@@ -119,7 +119,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     useEffect(() => {
         if (isError) {
             if ((error as IApiError).data?.includes(" already taken"))
-                setEmailError("The user with such email already exists");
+                setEmailError(Error.DuplicateUser);
             else
                 alert(JSON.stringify((error as any).data?.errors));
         }
