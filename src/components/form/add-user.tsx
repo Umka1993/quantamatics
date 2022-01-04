@@ -149,7 +149,7 @@ const InviteUserForm: FunctionComponent = () => {
                     options={assets?.map((asset) => asset.name) || []}
                     selected={datasets}
                     setSelected={setDatasets}
-                    label="Account Datasets"
+                    label="Account Assets"
                     errorMessage='Select asset permissions to assign to the user account.'
                     showError={assetError}
                 /> */}

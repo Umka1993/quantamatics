@@ -130,7 +130,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 
                 {/* <Multiselect
                     options={['Coherence', 'Research', 'Backtest - Enterprise', 'Enterprise', 'Backtest - Express', 'Express', 'Backtest - CPG', 'CPG', 'Backtest - Summary v3.1', 'Summary v3.1']}
-                    label='Org. Datasets'
+                    label='Org. Assets'
                     selected={datasets}
                     setSelected={setDatasets}
                     errorMessage='Select asset permissions to assign to the organization.'
