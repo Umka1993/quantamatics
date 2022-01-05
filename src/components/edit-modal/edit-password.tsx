@@ -109,7 +109,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                         <div className="edit-account__row">
                             <dt className="edit-account__name">Assigned Assets</dt>
 
-                            {Boolean(userAsset.length) && (
+                            {userAsset && Boolean(userAsset.length) && (
                                 <dd className="edit-account__value">
                                     <ComaList
                                         list={userAsset.map(
