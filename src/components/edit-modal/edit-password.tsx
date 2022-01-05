@@ -11,6 +11,8 @@ import KeyIcon from "./assets/key.svg";
 import ComaList from "../coma-list";
 import { useChangePasswordMutation } from "../../api/account";
 import Loader from "../loader";
+import { useGetAllUserAssetsQuery } from "../../api/asset";
+import { AssetServerResponse } from "../../types/asset";
 
 interface IEditProfile {
     onClose: () => void;
@@ -32,6 +34,8 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
     const [compare, setCompare] = useState<string | undefined>(undefined);
 
     const formRef = useRef<HTMLFormElement>(null);
+
+    const { data: userAsset } = useGetAllUserAssetsQuery();
 
     const [updatePassword, { isSuccess, isError, error, isLoading }] =
         useChangePasswordMutation();
@@ -101,6 +105,19 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                             <dd className="edit-account__value">
                                 <ComaList list={adaptRoles(user.userRoles)} />
                             </dd>
+                        </div>
+                        <div className="edit-account__row">
+                            <dt className="edit-account__name">Assigned Assets</dt>
+
+                            {Boolean(userAsset.length) && (
+                                <dd className="edit-account__value">
+                                    <ComaList
+                                        list={userAsset.map(
+                                            ({ name }: AssetServerResponse) => name
+                                        )}
+                                    />
+                                </dd>
+                            )}
                         </div>
                         <div className="edit-account__row">
                             <dt className="edit-account__name">Email</dt>

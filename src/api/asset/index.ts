@@ -3,6 +3,7 @@ import baseApi from "../index";
 
 const enum AssetEndpoint {
     GetAll = 'api/Asset/getAll',
+    GetAllUser = 'api/Asset/getAllUser',
     GetByID = 'api/Asset/get',
     Create =  'api/Asset/create',
     
@@ -12,6 +13,7 @@ const enum AssetEndpoint {
     Update = 'api/Asset/update',
     Delete = 'api/Asset/delete',
 }
+
 interface LinkOrganizationParameters {
     assetId: number | string, 
     orgId: number | string
@@ -36,6 +38,10 @@ const assetApi = baseApi.injectEndpoints({
                 method: 'GET',
                 params: {orgId}
             })
+        }),
+
+        getAllUserAssets: build.query<any, void>({
+            query: () => (AssetEndpoint.GetAllUser)
         }),
 
         getAssetByID: build.mutation<AssetServerResponse, number>({
@@ -90,6 +96,7 @@ const assetApi = baseApi.injectEndpoints({
 
 export const {
     useGetAllAssetsQuery,
+    useGetAllUserAssetsQuery,
     useGetAssetByIDMutation,
     useCreateAssetsMutation,
     useDeleteAssetsMutation,
