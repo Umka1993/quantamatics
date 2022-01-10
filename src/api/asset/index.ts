@@ -4,39 +4,59 @@ import baseApi from "../index";
 const enum AssetEndpoint {
     GetAll = 'api/Asset/getAll',
     GetAllUser = 'api/Asset/getAllUser',
-    GetByID = 'api/Asset/get',
-    Create =  'api/Asset/create',
-    
-    LinkOrganization =  'api/Asset/addOrgLink',
-    LinkUser =  'api/Asset/addUserLink',
+    getUserAssets = 'api/Asset/getAllUserAdmin',
 
-    Update = 'api/Asset/update',
-    Delete = 'api/Asset/delete',
+    GetByID = 'api/Asset/get',
+
+    LinkOrganization = 'api/Asset/addOrgLink',
+    LinkUser = 'api/Asset/addUserLink',
+
+    UnLinkOrganization = 'api/Asset/removeOrgLink',
+    UnLinkUser = 'api/Asset/removeUserLink',
+
+    //* Removed
+    // Create =  'api/Asset/create',
+    // Update = 'api/Asset/update',
+    // Delete = 'api/Asset/delete',
 }
 
 interface LinkOrganizationParameters {
-    assetId: number | string, 
+    assetId: number | string,
     orgId: number | string
 }
 
 interface LinkUserParameters {
-    assetId: number | string, 
+    assetId: number | string,
     userId: number | string
 }
 
 interface AssetListItem {
-    assetId: number | string, 
-    name:  string
+    assetId: number | string,
+    name: string
 }
 
 
 const assetApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
+        getUserAssets: build.query<AssetServerResponse[], string | number >({
+            query: (userId) => ({
+                url: AssetEndpoint.getUserAssets,
+                method: 'GET',
+                params: { userId }
+            }),
+            // providesTags: (result) => result
+            //         ? [
+            //             ...result.map(({ id }) => ({ type: 'Assets' as const, id })),
+            //             { type: 'Assets', id: 'User' },
+            //         ]
+            //         : [{ type: 'Assets', id: 'User' }],
+        }),
+
         getAllAssets: build.query<AssetListItem[], string>({
             query: (orgId) => ({
                 url: AssetEndpoint.GetAll,
                 method: 'GET',
-                params: {orgId}
+                params: { orgId }
             })
         }),
 
@@ -44,20 +64,13 @@ const assetApi = baseApi.injectEndpoints({
             query: () => (AssetEndpoint.GetAllUser)
         }),
 
+
         getAssetByID: build.mutation<AssetServerResponse, number>({
             query: (id) => ({
                 url: AssetEndpoint.GetByID,
                 method: 'GET',
-                params: {id}
+                params: { id }
             }),
-        }),
-
-        createAssets: build.mutation<AssetServerResponse, NewAssetRequest>({
-            query: (body) => ({
-                url: AssetEndpoint.Create,
-                method: 'POST',
-                body
-            })
         }),
 
         linkAssetToOrg: build.mutation<any, LinkOrganizationParameters>({
@@ -68,29 +81,31 @@ const assetApi = baseApi.injectEndpoints({
             })
         }),
 
-        linkAssetToUser: build.mutation<any, LinkUserParameters>({
+        unlinkAssetToOrg: build.mutation<any, LinkOrganizationParameters>({
             query: (params) => ({
-                url: AssetEndpoint.LinkUser,
+                url: AssetEndpoint.UnLinkOrganization,
                 method: 'POST',
                 params
             })
         }),
 
-        updateAssets: build.mutation<void, AssetServerResponse>({
-            query: (body) => ({
-                url: AssetEndpoint.Update,
-                method: 'PUT',
-                body
+        linkAssetToUser: build.mutation<any, LinkUserParameters>({
+            query: (params) => ({
+                url: AssetEndpoint.LinkUser,
+                method: 'POST',
+                params
+            }),
+            // invalidatesTags: [{ type: 'Assets', id: 'User' }],
+        }),
+
+        unlinkAssetToUser: build.mutation<any, LinkUserParameters>({
+            query: (params) => ({
+                url: AssetEndpoint.UnLinkUser,
+                method: 'POST',
+                params
             })
         }),
 
-        deleteAssets: build.mutation<void, number | string>({
-            query: (id) => ({
-                url: AssetEndpoint.Delete,
-                method: 'DELETE',
-                params: {id}
-            })
-        }),
     }),
 });
 
@@ -98,9 +113,9 @@ export const {
     useGetAllAssetsQuery,
     useGetAllUserAssetsQuery,
     useGetAssetByIDMutation,
-    useCreateAssetsMutation,
-    useDeleteAssetsMutation,
-    useUpdateAssetsMutation,
     useLinkAssetToOrgMutation,
-    useLinkAssetToUserMutation
+    useUnlinkAssetToOrgMutation,
+    useLinkAssetToUserMutation,
+    useUnlinkAssetToUserMutation,
+    useGetUserAssetsQuery
 } = assetApi;

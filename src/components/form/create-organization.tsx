@@ -4,9 +4,9 @@ import Input, { Multiselect } from "../app-input";
 import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
-import { useAddOrganizationMutation, useGetAllOrganizationsQuery } from "../../api/organization";
+import { useAddOrganizationMutation } from "../../api/organization";
 import { AppRoute } from "../../data/enum";
-import { useCreateAssetsMutation } from "../../api/asset";
+// import { } from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 
 interface ICreateOrganization { }
@@ -31,7 +31,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [datasets, setDatasets] = useState<string[]>([]);
 
     const [assetError, setAssetError] = useState(false)
-    const [createAsset, { isLoading }] = useCreateAssetsMutation();
 
     const [stopLoading, setStopLoading] = useState<true | undefined>(undefined)
 
@@ -68,10 +67,10 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     }, [stopLoading])
 
     const handleSubmit = () => {
-        // if (!datasets.length) {
-        //     setAssetError(true)
-        //     return setStopLoading(true)
-        // }
+        if (!datasets.length) {
+            setAssetError(true)
+            return setStopLoading(true)
+        }
 
 
         let duplicate = checkNameDuplicate()
@@ -128,14 +127,14 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     showLimit
                 />
 
-                {/* <Multiselect
+                <Multiselect
                     options={['Coherence', 'Research', 'Backtest - Enterprise', 'Enterprise', 'Backtest - Express', 'Express', 'Backtest - CPG', 'CPG', 'Backtest - Summary v3.1', 'Summary v3.1']}
                     label='Org. Assets'
                     selected={datasets}
                     setSelected={setDatasets}
                     errorMessage='Select asset permissions to assign to the organization.'
                     showError={assetError}
-                /> */}
+                />
             </div>
 
             <Button

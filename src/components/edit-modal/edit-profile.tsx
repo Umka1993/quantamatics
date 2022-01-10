@@ -17,7 +17,7 @@ import Loader from "../loader";
 
 import "./styles/edit-account.scss";
 import { Organization } from "types/organization/types";
-import { useGetAllAssetsQuery, useLinkAssetToUserMutation } from "../../api/asset";
+import { useGetAllAssetsQuery, useGetUserAssetsQuery, useLinkAssetToUserMutation, useUnlinkAssetToUserMutation } from "../../api/asset";
 import { useParams } from "react-router-dom";
 interface IEditProfile {
     onClose: () => void;
@@ -38,12 +38,12 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
     const [userRoles, setRoles] = useState<UserRole[]>(user.userRoles)
-    // const [organizationId, setOrganizationId] = useState<string>('')
     const dispatch = useDispatch()
 
     const formRef = useRef<HTMLFormElement>(null);
 
     const loggedUser = useUser();
+    const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } = useGetUserAssetsQuery(user.id)
 
     const [update, { isSuccess, isError, error, isLoading }] = useUpdateUserMutation();
     const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] = useUpdateUserRolesMutation();
@@ -55,6 +55,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
         organizationID as string
     );
     const [linkAsset] = useLinkAssetToUserMutation()
+    const [unlinkAsset] = useUnlinkAssetToUserMutation()
 
 
     const [datasets, setDatasets] = useState<string[]>([]);
@@ -73,10 +74,16 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
         update(newUserData).unwrap();
     };
 
+    useEffect(() => {
+        if (isAssetsLoaded && serverSelectedAssets) {
+            setDatasets([...serverSelectedAssets.map(({ name }) => name)])
+        }
+    }, [isAssetsLoaded])
+
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
 
         evt.preventDefault();
-        if (datasets.length || true) { // Ignore Asset errors for now
+        if (datasets.length) { // Ignore Asset errors for now
             setValidate(true);
             const isValid = formRef.current?.reportValidity();
             isValid && sendNewUser(validate)
@@ -101,11 +108,26 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                 localStorage.setItem("user", JSON.stringify(normalizedNewData));
             }
 
+            //? Link new assets to user
             datasets.forEach((selectedAsset) => {
-                const foundedAsset = assets?.find(element => element.name === selectedAsset)
+                const alreadySelectedAsset = serverSelectedAssets?.find(element => element.name === selectedAsset)
 
-                foundedAsset && linkAsset({
-                    assetId: foundedAsset.assetId, userId: user.id,
+                if (alreadySelectedAsset === undefined) {
+                    const assetId = assets?.find(element => element.name === selectedAsset)?.assetId
+
+                    assetId && linkAsset({
+                        assetId, userId: user.id,
+                    })
+                }
+
+            })
+
+            //? Unlink old assets from user
+            serverSelectedAssets?.forEach((alreadySelectedAsset) => {
+                const foundedAsset = datasets.find(el => el === alreadySelectedAsset.name)
+
+                foundedAsset === undefined && unlinkAsset({
+                    assetId: alreadySelectedAsset.id, userId: user.id
                 })
             })
 
@@ -195,14 +217,14 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                                 disabled
                             />}
 
-                        {/* <Multiselect
+                        <Multiselect
                             options={assets?.map((asset) => asset.name) || []}
                             selected={datasets}
                             setSelected={setDatasets}
                             label="Account Assets"
                             errorMessage='Select asset permissions to assign to the user account.'
                             showError={assetError}
-                        /> */}
+                        />
                         <RoleCheckboxes
                             defaultRoles={userRoles}
                             externalSetter={setRoles}

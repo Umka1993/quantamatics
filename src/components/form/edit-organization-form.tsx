@@ -62,12 +62,11 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const { data: assets } = assetsHooks.useGetAllAssetsQuery(
         organization?.id as string
     );
-    const [deleteAsset, { isLoading: isDeletingAsset }] =
-        assetsHooks.useDeleteAssetsMutation();
-    const [createAsset, { isLoading: isCreatingAsset }] =
-        assetsHooks.useCreateAssetsMutation();
     const [linkAsset, { isLoading: isLinkingAsset }] =
         assetsHooks.useLinkAssetToOrgMutation();
+
+    const [unlinkAsset, { isLoading: isUnLinking }] =
+        assetsHooks.useUnlinkAssetToOrgMutation();
 
     const setInitialOrg = useCallback(() => {
         if (organization) {
@@ -97,10 +96,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         evt.preventDefault();
         setLoading(true);
 
-        // if (!datasets.length) {
-        //     setAssetError(true)
-        //     return setLoading(false);
-        // }
+        if (!datasets.length) {
+            setAssetError(true)
+            return setLoading(false);
+        }
         let duplicate = false
 
         if (name !== organization?.name) {
@@ -115,33 +114,31 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             return setLoading(false)
         }
 
+        if (assets && organization) {
+            assets.forEach((asset) => {
+                /* Delete unselected assets */
 
+                datasets.indexOf(asset.name) < 0 && unlinkAsset({ assetId: asset.assetId, orgId: organization.id });
 
-        // if (assets) {
-        //     assets.forEach((asset) => {
-        //         /* Delete unselected assets */
+            });
 
-        //         datasets.indexOf(asset.name) < 0 && deleteAsset(asset.assetId);
+            //     datasets.forEach((dataset) => {
+            //         const foundedAsset = assets.find((asset) => asset.name === dataset);
+            //         /* Create new and select to org assets */
+            //         if (foundedAsset === undefined && organization) {
+            //             createAsset({
+            //                 name: dataset,
+            //                 ownerOrganizationId: organization.id,
+            //                 version: 1,
+            //             })
+            //                 .unwrap()
+            //                 .then(({ id: assetId }) =>
+            //                     linkAsset({ assetId, orgId: organization.id })
+            //                 );
+            //         }
+            //     });
 
-        //     });
-
-        //     datasets.forEach((dataset) => {
-        //         const foundedAsset = assets.find((asset) => asset.name === dataset);
-        //         /* Create new and select to org assets */
-        //         if (foundedAsset === undefined && organization) {
-        //             createAsset({
-        //                 name: dataset,
-        //                 ownerOrganizationId: organization.id,
-        //                 version: 1,
-        //             })
-        //                 .unwrap()
-        //                 .then(({ id: assetId }) =>
-        //                     linkAsset({ assetId, orgId: organization.id })
-        //                 );
-        //         }
-        //     });
-
-        // }
+        }
 
 
 
@@ -209,8 +206,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             {isUpdating ||
                 externalLoad ||
                 loading ||
-                isDeletingAsset ||
-                isCreatingAsset ||
                 isLinkingAsset ? (
                 <Loader />
             ) : (
@@ -241,7 +236,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         className={style.input}
                     />
 
-                    {/* <Multiselect
+                    <Multiselect
                         options={[
                             "Coherence",
                             "Research",
@@ -260,7 +255,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         errorMessage='Select asset permissions to assign to the organization.'
                         showError={assetError}
                         className={style.input}
-                    /> */}
+                    />
 
                     <Input
                         externalSetter={setComment}

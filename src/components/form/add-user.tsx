@@ -39,7 +39,7 @@ const InviteUserForm: FunctionComponent = () => {
 
     const [linkAsset] = useLinkAssetToUserMutation();
 
-    
+
     useEffect(() => {
         setLoading(false)
         if (isError) {
@@ -53,13 +53,14 @@ const InviteUserForm: FunctionComponent = () => {
 
     useEffect(() => {
         if (isUserRegistered) {
-            /* datasets.forEach((selectedAsset) => {
-                const foundedAsset = assets.find(element => element.name === selectedAsset)
 
-                foundedAsset && linkAsset({
-                    assetId: foundedAsset.assetId, userId: (registeredUser as any).id,
+            //? Link new assets to user
+            datasets.forEach((selectedAsset) => {
+                const assetId = assets?.find(element => element.name === selectedAsset)?.assetId
+                assetId && linkAsset({
+                    assetId, userId: registeredUser.id,
                 })
-            }) */
+            })
 
 
             navigate(AppRoute.Success, {
@@ -87,8 +88,8 @@ const InviteUserForm: FunctionComponent = () => {
 
     const addUserToOrg = () => {
         // setLoading(true)
-        if (datasets.length || true) { // Ignore Asset errors for now
-            
+        if (datasets.length) {
+
             register({
                 firstName,
                 lastName,
@@ -99,8 +100,6 @@ const InviteUserForm: FunctionComponent = () => {
                 userRoles: userRoles
             })
         } else {
-            console.log('asdsa');
-            
             setLoading(false)
             setAssetError(true)
         }
@@ -145,22 +144,22 @@ const InviteUserForm: FunctionComponent = () => {
                     required
                     label='Expiration Date'
                 />
-                {/* <Multiselect
+                <Multiselect
                     options={assets?.map((asset) => asset.name) || []}
                     selected={datasets}
                     setSelected={setDatasets}
                     label="Account Assets"
                     errorMessage='Select asset permissions to assign to the user account.'
                     showError={assetError}
-                /> */}
+                />
                 <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
             </div>
             <Button
                 className="create-organization__submit"
                 type="submit"
-                // disabled={
-                //     !Boolean(firstName && lastName && email && subscriptionEndDate)
-                // }
+            // disabled={
+            //     !Boolean(firstName && lastName && email && subscriptionEndDate)
+            // }
             >
                 Save
             </Button>
