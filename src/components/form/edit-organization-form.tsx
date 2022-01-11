@@ -13,21 +13,21 @@ import Input, { Multiselect } from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
 import { useNavigate } from "react-router-dom";
-import { useGetAllOrganizationsQuery, useUpdateOrganizationMutation } from "../../api/organization";
+import {
+    useGetAllOrganizationsQuery,
+    useUpdateOrganizationMutation,
+} from "../../api/organization";
 import Loader from "../loader";
 import { AppRoute } from "../../data/enum";
 import * as assetsHooks from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetListItem } from "../../types/asset";
-import useUser from '../../hooks/useUser'
+import useUser from "../../hooks/useUser";
 interface EditOrganizationFormProps {
     organization?: Organization;
     isHaveAccessToOrgList?: boolean;
     externalLoad?: boolean;
 }
-
-
-
 
 const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     organization,
@@ -36,7 +36,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 }) => {
     const user = useUser();
     const navigate = useNavigate();
-    const [assetError, setAssetError] = useState(false)
+    const [assetError, setAssetError] = useState(false);
     const [
         update,
         {
@@ -47,8 +47,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         },
     ] = useUpdateOrganizationMutation();
 
-    const { data: allOrganizations } =
-        useGetAllOrganizationsQuery();
+    const { data: allOrganizations } = useGetAllOrganizationsQuery();
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
@@ -59,7 +58,12 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const [duplicateOrgError, duplicateIdError, checkNameDuplicate, checkIdDuplicate] = useDuplicatedOrgValues(formRef, name, customerCrmId);
+    const [
+        duplicateOrgError,
+        duplicateIdError,
+        checkNameDuplicate,
+        checkIdDuplicate,
+    ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
     // Load all assets that are available for logged user
     const { data: allAvailableAsset } = assetsHooks.useGetAllAssetsQuery(
@@ -83,55 +87,54 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setCustomerLink(organization.customerCrmLink);
             setComment(organization.comments);
         }
-
     }, [organization]);
 
     useEffect(() => {
-        selectedAssets && setDatasets(selectedAssets)
+        selectedAssets && setDatasets(selectedAssets);
     }, [selectedAssets]);
 
     useEffect(() => {
         organization && setInitialOrg();
     }, [organization]);
 
-
-
     function submitHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();
         setLoading(true);
 
         if (!datasets.length) {
-            setAssetError(true)
+            setAssetError(true);
             return setLoading(false);
         }
-        let duplicate = false
+        let duplicate = false;
 
         if (name !== organization?.name) {
-            duplicate = checkNameDuplicate()
+            duplicate = checkNameDuplicate();
         }
 
         if (customerCrmId !== organization?.customerCrmId) {
-            duplicate = checkIdDuplicate() || duplicate
+            duplicate = checkIdDuplicate() || duplicate;
         }
 
         if (duplicate) {
-            return setLoading(false)
+            return setLoading(false);
         }
-
 
         if (selectedAssets && organization) {
             const orgId = organization.id;
             /* Unlink unselected assets */
             selectedAssets.forEach(({ assetId }) => {
-                datasets.findIndex((set) => set.assetId === assetId) < 0 && unlinkAsset({ assetId, orgId });
+                datasets.findIndex((set) => set.assetId === assetId) < 0 &&
+                    unlinkAsset({ assetId, orgId });
             });
 
             /* Link new assets */
             datasets.forEach(({ assetId }) => {
-                selectedAssets.findIndex(asset => asset.assetId === assetId) < 0 && linkAsset({
-                    assetId, orgId
-                })
-            })
+                selectedAssets.findIndex((asset) => asset.assetId === assetId) < 0 &&
+                    linkAsset({
+                        assetId,
+                        orgId,
+                    });
+            });
         }
 
         update({
@@ -155,8 +158,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             alert((updateError as any).data?.errors);
         }
     }, [isUpdateError]);
-
-
 
     useEffect(() => {
         isUpdated && isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);
@@ -183,17 +184,19 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     <Button
                         type="submit"
                         className={style.save}
-                        disabled={isUpdating || externalLoad || Boolean(duplicateOrgError) || Boolean(duplicateIdError)}
+                        disabled={
+                            isUpdating ||
+                            externalLoad ||
+                            Boolean(duplicateOrgError) ||
+                            Boolean(duplicateIdError)
+                        }
                     >
                         Save
                     </Button>
                 </div>
             </header>
 
-            {isUpdating ||
-                externalLoad ||
-                loading ||
-                isLinkingAsset ? (
+            {isUpdating || externalLoad || loading || isLinkingAsset ? (
                 <Loader />
             ) : (
                 <div className={style.inputs}>
@@ -223,16 +226,17 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         className={style.input}
                     />
 
-                    {selectedAssets && <Multiselect
-                        options={allAvailableAsset ? allAvailableAsset : selectedAssets}
-                        label="Org. Assets"
-                        selected={datasets}
-                        setSelected={setDatasets}
-                        errorMessage='Select asset permissions to assign to the organization.'
-                        showError={assetError}
-                        className={style.input}
-                    />
-                    }
+                    {allAvailableAsset && (
+                        <Multiselect
+                            options={allAvailableAsset}
+                            label="Org. Assets"
+                            selected={datasets}
+                            setSelected={setDatasets}
+                            errorMessage="Select asset permissions to assign to the organization."
+                            showError={assetError}
+                            className={style.input}
+                        />
+                    )}
 
                     <Input
                         externalSetter={setComment}
