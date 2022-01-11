@@ -1,4 +1,4 @@
-import { AssetServerResponse, NewAssetRequest } from "../../types/asset";
+import { AssetServerResponse, NewAssetRequest, AssetListItem } from "../../types/asset";
 import baseApi from "../index";
 
 const enum AssetEndpoint {
@@ -29,12 +29,6 @@ interface LinkUserParameters {
     assetId: number | string,
     userId: number | string
 }
-
-interface AssetListItem {
-    assetId: number | string,
-    name: string
-}
-
 
 const assetApi = baseApi.injectEndpoints({
     endpoints: (build) => ({

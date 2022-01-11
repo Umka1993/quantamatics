@@ -4,6 +4,7 @@ export type OrganizationID = string;
 export interface Organization {
     [ OrganizationKey.Id ]: OrganizationID,
     [ OrganizationKey.Parent ]: string,
+    parentOrganization: string
     [ OrganizationKey.Name ]: string,
     [ OrganizationKey.IdCRM ]: string,
     [ OrganizationKey.LinkCRM ]: string,
