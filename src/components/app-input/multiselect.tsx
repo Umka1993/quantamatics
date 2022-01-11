@@ -4,27 +4,25 @@ import React, {
     FunctionComponent,
     SelectHTMLAttributes,
     CSSProperties,
-    FormEvent,
     Dispatch,
     SetStateAction,
     useEffect,
-    useCallback,
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
-import Checkbox from "../app-checkbox/checkbox";
 import ComaList from "../coma-list";
 import useCloseModal from "../../hooks/useCloseModal";
 import MultiselectOptions from "./multiselect-options";
 import classNames from 'classnames'
+import { AssetListItem } from "../../types/asset";
 interface IInput extends SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
     showLimit?: boolean;
-    options: string[];
-    selected: string[];
-    setSelected: Dispatch<SetStateAction<string[]>>;
+    options: AssetListItem[];
+    selected: AssetListItem[];
+    setSelected: Dispatch<SetStateAction<AssetListItem[]>>;
     errorMessage?: string,
     showError?: boolean,
 }
@@ -90,7 +88,7 @@ const Multiselect: FunctionComponent<IInput> = ({
                     type="text"
                     placeholder={label ? " " : placeholder}
 
-                    value={selected.join(', ')}
+                    value={[...selected.map(selectedItem => selectedItem.name)].join(', ')}
                     // onFocus={openOptions}
                     onClick={toggleOptions}
                     readOnly

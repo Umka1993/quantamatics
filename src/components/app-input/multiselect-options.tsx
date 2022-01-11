@@ -5,11 +5,12 @@ import React, {
 } from "react";
 import Checkbox from "../app-checkbox/checkbox";
 import classNames from 'classnames';
+import { AssetListItem } from "../../types/asset";
 
 interface Options {
-    options: string[];
-    selected: string[];
-    setSelected: Dispatch<SetStateAction<string[]>>;
+    options: AssetListItem[];
+    selected: AssetListItem[];
+    setSelected: Dispatch<SetStateAction<AssetListItem[]>>;
 }
 
 const MultiselectOptions: FunctionComponent<Options> = ({
@@ -20,12 +21,14 @@ const MultiselectOptions: FunctionComponent<Options> = ({
 }) => {
     return (
         <div className={classNames("multiselect__options", {
-            'multiselect__options--ods': options.length % 2 !== 0
+            // 'multiselect__options--ods': options.length % 2 !== 0
         })}>
-            {Array.from(options).map((option) => (
+            {Array.from(options).map((option) => {
+                
+                return (
                 <Checkbox
-                    name={option}
-                    key={option}
+                    name={option.name}
+                    key={option.assetId}
                     onInput={({ currentTarget }) => {
                         if ((currentTarget as any).checked) {
                             setSelected([...selected, option]);
@@ -36,12 +39,13 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                             setSelected(tempArray);
                         }
                     }}
-                    checked={selected.includes(option)}
+                    checked={selected.findIndex(asset => asset.assetId === option.assetId) >= 0}
+                    // value={option.assetId}
 
                 >
-                    {option}
+                    {option.name}
                 </Checkbox>
-            ))}
+            )})}
         </div>
 
     );
