@@ -18,7 +18,8 @@ import Loader from "../loader";
 import { AppRoute } from "../../data/enum";
 import * as assetsHooks from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
-
+import { AssetListItem } from "../../types/asset";
+import useUser from '../../hooks/useUser'
 interface EditOrganizationFormProps {
     organization?: Organization;
     isHaveAccessToOrgList?: boolean;
@@ -33,6 +34,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     isHaveAccessToOrgList,
     externalLoad,
 }) => {
+    const user = useUser();
     const navigate = useNavigate();
     const [assetError, setAssetError] = useState(false)
     const [
@@ -52,16 +54,22 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [customerCrmId, setCustomerID] = useState<string>("");
     const [customerCrmLink, setCustomerLink] = useState<string>("");
     const [comments, setComment] = useState<string | undefined>("");
-    const [datasets, setDatasets] = useState<string[]>([]);
+    const [datasets, setDatasets] = useState<AssetListItem[]>([]);
     const [loading, setLoading] = useState(false);
 
     const formRef = useRef<HTMLFormElement>(null);
 
     const [duplicateOrgError, duplicateIdError, checkNameDuplicate, checkIdDuplicate] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
-    const { data: assets } = assetsHooks.useGetAllAssetsQuery(
+    // Load all assets that are available for logged user
+    const { data: allAvailableAsset } = assetsHooks.useGetAllAssetsQuery(
+        user?.organizationId as string
+    );
+    // Load all assets that are already linked to org
+    const { data: selectedAssets } = assetsHooks.useGetAllAssetsQuery(
         organization?.id as string
     );
+
     const [linkAsset, { isLoading: isLinkingAsset }] =
         assetsHooks.useLinkAssetToOrgMutation();
 
@@ -79,12 +87,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }, [organization]);
 
     useEffect(() => {
-        if (assets) {
-            const onlyNamesArray = assets.map((asset) => asset.name);
-            setDatasets(onlyNamesArray)
-        }
-
-    }, [assets]);
+        selectedAssets && setDatasets(selectedAssets)
+    }, [selectedAssets]);
 
     useEffect(() => {
         organization && setInitialOrg();
@@ -114,33 +118,21 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             return setLoading(false)
         }
 
-        if (assets && organization) {
-            assets.forEach((asset) => {
-                /* Delete unselected assets */
 
-                datasets.indexOf(asset.name) < 0 && unlinkAsset({ assetId: asset.assetId, orgId: organization.id });
-
+        if (selectedAssets && organization) {
+            const orgId = organization.id;
+            /* Unlink unselected assets */
+            selectedAssets.forEach(({ assetId }) => {
+                datasets.findIndex((set) => set.assetId === assetId) < 0 && unlinkAsset({ assetId, orgId });
             });
 
-            //     datasets.forEach((dataset) => {
-            //         const foundedAsset = assets.find((asset) => asset.name === dataset);
-            //         /* Create new and select to org assets */
-            //         if (foundedAsset === undefined && organization) {
-            //             createAsset({
-            //                 name: dataset,
-            //                 ownerOrganizationId: organization.id,
-            //                 version: 1,
-            //             })
-            //                 .unwrap()
-            //                 .then(({ id: assetId }) =>
-            //                     linkAsset({ assetId, orgId: organization.id })
-            //                 );
-            //         }
-            //     });
-
+            /* Link new assets */
+            datasets.forEach(({ assetId }) => {
+                selectedAssets.findIndex(asset => asset.assetId === assetId) < 0 && linkAsset({
+                    assetId, orgId
+                })
+            })
         }
-
-
 
         update({
             ...organization,
@@ -148,13 +140,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             customerCrmId,
             customerCrmLink,
             comments,
-            // organizationAssets: datasets
         });
-
-
         setLoading(false);
-
-
     }
 
     const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
@@ -184,7 +171,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         >
             <header className={style.header}>
                 <Headline className="edit-organization__title" style={{ margin: 0 }}>
-                    Edit Organization
+                    Edit Organization {organization?.parentOrganization}
                 </Headline>
                 <div className={style.buttons}>
                     <ResetButton
@@ -236,19 +223,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         className={style.input}
                     />
 
-                    <Multiselect
-                        options={[
-                            "Coherence",
-                            "Research",
-                            "Backtest - Enterprise",
-                            "Enterprise",
-                            "Backtest - Express",
-                            "Express",
-                            "Backtest - CPG",
-                            "CPG",
-                            "Backtest - Summary v3.1",
-                            "Summary v3.1",
-                        ]}
+                    {selectedAssets && <Multiselect
+                        options={allAvailableAsset ? allAvailableAsset : selectedAssets}
                         label="Org. Assets"
                         selected={datasets}
                         setSelected={setDatasets}
@@ -256,6 +232,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         showError={assetError}
                         className={style.input}
                     />
+                    }
 
                     <Input
                         externalSetter={setComment}
