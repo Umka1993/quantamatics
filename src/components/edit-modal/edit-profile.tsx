@@ -19,6 +19,7 @@ import "./styles/edit-account.scss";
 import { Organization } from "types/organization/types";
 import { useGetAllAssetsQuery, useGetUserAssetsQuery, useLinkAssetToUserMutation, useUnlinkAssetToUserMutation } from "../../api/asset";
 import { useParams } from "react-router-dom";
+import { AssetListItem } from "../../types/asset";
 interface IEditProfile {
     onClose: () => void;
     user: IUpdateUser;
@@ -58,7 +59,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     const [unlinkAsset] = useUnlinkAssetToUserMutation()
 
 
-    const [datasets, setDatasets] = useState<string[]>([]);
+    const [datasets, setDatasets] = useState<AssetListItem[]>([]);
     const [assetError, setAssetError] = useState(false)
     const [loading, setLoading] = useState(false)
 
@@ -76,7 +77,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     useEffect(() => {
         if (isAssetsLoaded && serverSelectedAssets) {
-            setDatasets([...serverSelectedAssets.map(({ name }) => name)])
+            setDatasets([...serverSelectedAssets.map(({ id, name }) => ({ assetId: id, name, sharedByDefault: false }))])
         }
     }, [isAssetsLoaded])
 
@@ -108,15 +109,15 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                 localStorage.setItem("user", JSON.stringify(normalizedNewData));
             }
 
+
+
             //? Link new assets to user
             datasets.forEach((selectedAsset) => {
-                const alreadySelectedAsset = serverSelectedAssets?.find(element => element.name === selectedAsset)
+                const alreadySelectedAsset = serverSelectedAssets?.find(element => element.id === selectedAsset.assetId)
 
                 if (alreadySelectedAsset === undefined) {
-                    const assetId = assets?.find(element => element.name === selectedAsset)?.assetId
-
-                    assetId && linkAsset({
-                        assetId, userId: user.id,
+                    linkAsset({
+                        assetId: selectedAsset.assetId, userId: user.id,
                     })
                 }
 
@@ -124,7 +125,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
             //? Unlink old assets from user
             serverSelectedAssets?.forEach((alreadySelectedAsset) => {
-                const foundedAsset = datasets.find(el => el === alreadySelectedAsset.name)
+                const foundedAsset = datasets.find(el => el.assetId === alreadySelectedAsset.id)
 
                 foundedAsset === undefined && unlinkAsset({
                     assetId: alreadySelectedAsset.id, userId: user.id
@@ -217,14 +218,18 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                                 disabled
                             />}
 
-                        <Multiselect
-                            options={assets?.map((asset) => asset.name) || []}
-                            selected={datasets}
-                            setSelected={setDatasets}
-                            label="Account Assets"
-                            errorMessage='Select asset permissions to assign to the user account.'
-                            showError={assetError}
-                        />
+                        {assets &&
+                            <Multiselect
+                                options={assets}
+                                selected={datasets}
+                                setSelected={setDatasets}
+                                label="Account Assets"
+                                errorMessage='Select asset permissions to assign to the user account.'
+                                showError={assetError}
+                            />
+
+                        }
+
                         <RoleCheckboxes
                             defaultRoles={userRoles}
                             externalSetter={setRoles}
