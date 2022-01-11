@@ -8,6 +8,12 @@ import { useAddOrganizationMutation } from "../../api/organization";
 import { AppRoute } from "../../data/enum";
 // import { } from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
+import useUser from "../../hooks/useUser";
+import {
+    useGetAllAssetsQuery,
+    useLinkAssetToOrgMutation,
+} from "../../api/asset";
+import { AssetListItem } from "../../types/asset";
 
 interface ICreateOrganization { }
 
@@ -15,74 +21,86 @@ export interface createOrganizationRequestBody {
     name: string;
     comments?: string;
     customerCrmId?: string;
-    customerCrmLink?: string,
-
+    customerCrmLink?: string;
 }
 
 const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
+    const user = useUser();
     const navigate = useNavigate();
-
-    const [register, { isError, isSuccess, error, data }] = useAddOrganizationMutation();
+    const [register, { isError, isSuccess, error, data }] =
+        useAddOrganizationMutation();
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerCrmId] = useState<string>("");
     const [customerCrmLink, setCustomerCrmLink] = useState<string>("");
     const [comments, setComments] = useState<string | undefined>("");
-    const [datasets, setDatasets] = useState<string[]>([]);
+    const [datasets, setDatasets] = useState<AssetListItem[]>([]);
 
-    const [assetError, setAssetError] = useState(false)
+    const [assetError, setAssetError] = useState(false);
 
-    const [stopLoading, setStopLoading] = useState<true | undefined>(undefined)
+    const [stopLoading, setStopLoading] = useState<true | undefined>(undefined);
 
     const formRef = useRef<HTMLFormElement>(null);
-    const [duplicateOrgError, duplicateIdError, checkNameDuplicate, checkIdDuplicate] = useDuplicatedOrgValues(formRef, name, customerCrmId);
+    const [
+        duplicateOrgError,
+        duplicateIdError,
+        checkNameDuplicate,
+        checkIdDuplicate,
+    ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
+
+    // Load all assets that are available for logged user
+    const { data: allAvailableAsset } = useGetAllAssetsQuery(
+        user?.organizationId as string
+    );
+
+    const [linkAsset, { isLoading: isLinkingAsset }] =
+        useLinkAssetToOrgMutation();
 
     const returnBack = () => {
         navigate(AppRoute.OrganizationList);
     };
 
-    /*    useEffect(() => {
-           // if (isSuccess && data) {
-           //     datasets.forEach((asset, index) => createAsset({
-           //         name: asset,
-           //         ownerOrganizationId: data.id,
-           //         version: 1
-           //     }).unwrap().then(() => {
-           //         const isLast = index === datasets.length - 1
-           //         isLast && returnBack()
-           //     }))
-           // }
-   
-           isSuccess && returnBack();
-       }, [isSuccess]); */
+    useEffect(() => {
+        if (isSuccess && data) {
+            datasets.forEach(({ assetId }, index) =>
+                linkAsset({
+                    assetId,
+                    orgId: data.id,
+                })
+                    .unwrap()
+                    .then(() => {
+                        const isLast = index === datasets.length - 1;
+                        isLast && returnBack();
+                    })
+            );
+        }
+    }, [isSuccess]);
 
     useEffect(() => {
         if (isError) {
             console.log((error as any).data?.errors);
         }
-    }, [isError])
+    }, [isError]);
 
     useEffect(() => {
-        stopLoading && setStopLoading(undefined)
-    }, [stopLoading])
+        stopLoading && setStopLoading(undefined);
+    }, [stopLoading]);
 
     const handleSubmit = () => {
         if (!datasets.length) {
-            setAssetError(true)
-            return setStopLoading(true)
+            setAssetError(true);
+            return setStopLoading(true);
         }
 
-
-        let duplicate = checkNameDuplicate()
-        duplicate = (customerCrmId && checkIdDuplicate()) || duplicate
+        let duplicate = checkNameDuplicate();
+        duplicate = (customerCrmId && checkIdDuplicate()) || duplicate;
 
         if (duplicate) {
-            return setStopLoading(true)
+            return setStopLoading(true);
         } else {
-            register({ name, customerCrmId, customerCrmLink, comments }).unwrap().then(returnBack);
+            register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
         }
-    }
-
+    };
 
     return (
         <Form
@@ -127,14 +145,16 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     showLimit
                 />
 
-                <Multiselect
-                    options={['Coherence', 'Research', 'Backtest - Enterprise', 'Enterprise', 'Backtest - Express', 'Express', 'Backtest - CPG', 'CPG', 'Backtest - Summary v3.1', 'Summary v3.1']}
-                    label='Org. Assets'
-                    selected={datasets}
-                    setSelected={setDatasets}
-                    errorMessage='Select asset permissions to assign to the organization.'
-                    showError={assetError}
-                />
+                {allAvailableAsset && (
+                    <Multiselect
+                        options={allAvailableAsset}
+                        label="Org. Assets"
+                        selected={datasets}
+                        setSelected={setDatasets}
+                        errorMessage="Select asset permissions to assign to the organization."
+                        showError={assetError}
+                    />
+                )}
             </div>
 
             <Button

@@ -47,8 +47,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         },
     ] = useUpdateOrganizationMutation();
 
-    const { data: allOrganizations } = useGetAllOrganizationsQuery();
-
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
     const [customerCrmLink, setCustomerLink] = useState<string>("");
