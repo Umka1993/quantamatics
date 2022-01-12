@@ -7,12 +7,14 @@ interface Options {
     options: AssetListItem[];
     selected: AssetListItem[];
     setSelected: Dispatch<SetStateAction<AssetListItem[]>>;
+    disabled?: boolean;
 }
 
 const MultiselectOptions: FunctionComponent<Options> = ({
     options,
     setSelected,
     selected,
+    disabled
 }) => {
     return (
         <div
@@ -39,6 +41,8 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                             selected.findIndex((asset) => asset.assetId === option.assetId) >=
                             0
                         }
+                        disabled={disabled}
+                        highlightOnChecked
                     // value={option.assetId}
                     >
                         {option.name}

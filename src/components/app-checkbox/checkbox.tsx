@@ -18,6 +18,7 @@ interface CheckboxProps extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onI
     onInput?: FormEventHandler<HTMLInputElement>;
     align?: 'right' | 'left';
     disabled?: boolean;
+    highlightOnChecked?: boolean;
 }
 
 const Checkbox: FunctionComponent<CheckboxProps> = ({
@@ -29,6 +30,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
     externalSetter,
     align = "left",
     disabled,
+    highlightOnChecked,
     ...other
 }) => {
     function inputHandler(evt: ChangeEvent<HTMLInputElement>) {
@@ -37,7 +39,8 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
     }
     return (
         <label className={classNames("check-block", {
-            'check-block--right': align === "right"
+            'check-block--right': align === "right",
+            'check-block--highlight': highlightOnChecked
         }, className)} {...other}>
             <input
                 type="checkbox"

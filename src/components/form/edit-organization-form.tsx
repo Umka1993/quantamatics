@@ -13,12 +13,9 @@ import Input, { Multiselect } from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
 import { useNavigate } from "react-router-dom";
-import {
-    useGetAllOrganizationsQuery,
-    useUpdateOrganizationMutation,
-} from "../../api/organization";
+import { useUpdateOrganizationMutation } from "../../api/organization";
 import Loader from "../loader";
-import { AppRoute } from "../../data/enum";
+import { AppRoute, UserRole } from "../../data/enum";
 import * as assetsHooks from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetListItem } from "../../types/asset";
@@ -46,6 +43,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             error: updateError,
         },
     ] = useUpdateOrganizationMutation();
+
+    const isHaveAccessToEditAsset = user?.userRoles.includes(UserRole.OrgOwner) || user?.userRoles.includes(UserRole.Admin)
+    
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
@@ -233,6 +233,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                             errorMessage="Select asset permissions to assign to the organization."
                             showError={assetError}
                             className={style.input}
+                            disabled={!isHaveAccessToEditAsset}
                         />
                     )}
 

@@ -36,7 +36,8 @@ const Multiselect: FunctionComponent<IInput> = ({
     selected,
     errorMessage,
     showError,
-    className
+    className,
+    disabled
 }) => {
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
@@ -44,6 +45,7 @@ const Multiselect: FunctionComponent<IInput> = ({
     const rootElement = useRef<HTMLDivElement>(null);
 
     const [hideError, setHideError] = useState(false);
+    const [list, setList] = useState('');
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
@@ -53,8 +55,16 @@ const Multiselect: FunctionComponent<IInput> = ({
     };
 
     useEffect(() => {
-        Boolean(selected.length) ? setHideError(true) : setHideError(false)
+        if (Boolean(selected.length)) {
+            setHideError(true)
+            setList([...selected.map(selectedItem => selectedItem.name)].join(', '))
+        } else {
+            setHideError(false)
+            setList('')
+        }
         reCalcLabelWidth();
+
+
     }, [selected])
 
     /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
@@ -88,7 +98,7 @@ const Multiselect: FunctionComponent<IInput> = ({
                     type="text"
                     placeholder={label ? " " : placeholder}
 
-                    value={[...selected.map(selectedItem => selectedItem.name)].join(', ')}
+                    value={list}
                     // onFocus={openOptions}
                     onClick={toggleOptions}
                     readOnly
@@ -114,6 +124,7 @@ const Multiselect: FunctionComponent<IInput> = ({
                     options={options}
                     selected={selected}
                     setSelected={setSelected}
+                    disabled={disabled}
                 />
             )}
         </div>

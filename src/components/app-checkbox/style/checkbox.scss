@@ -42,6 +42,10 @@
         position: absolute;
     }
 
+    &--highlight &__input:not(:disabled):checked ~ &__custom {
+        color: $accent;
+    }
+
     &__input:checked ~ &__custom::after {
         display: block;
     }
@@ -68,6 +72,7 @@
         &::after {
             background-color: transparentize($main-text, 0.75);
             box-shadow: inset 0px 2px 7px rgba(134, 146, 166, 0.1);
+            border-color: transparent;
         }
     }
 
