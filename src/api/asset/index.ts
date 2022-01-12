@@ -1,4 +1,4 @@
-import { AssetServerResponse, NewAssetRequest, AssetListItem } from "../../types/asset";
+import { AssetServerResponse, AssetListItem } from "../../types/asset";
 import baseApi from "../index";
 
 const enum AssetEndpoint {
@@ -14,10 +14,6 @@ const enum AssetEndpoint {
     UnLinkOrganization = 'api/Asset/removeOrgLink',
     UnLinkUser = 'api/Asset/removeUserLink',
 
-    //* Removed
-    // Create =  'api/Asset/create',
-    // Update = 'api/Asset/update',
-    // Delete = 'api/Asset/delete',
 }
 
 interface LinkOrganizationParameters {
@@ -38,12 +34,12 @@ const assetApi = baseApi.injectEndpoints({
                 method: 'GET',
                 params: { userId }
             }),
-            // providesTags: (result) => result
-            //         ? [
-            //             ...result.map(({ id }) => ({ type: 'Assets' as const, id })),
-            //             { type: 'Assets', id: 'User' },
-            //         ]
-            //         : [{ type: 'Assets', id: 'User' }],
+            providesTags: (result) => result
+                    ? [
+                        ...result.map(({ id }) => ({ type: 'Assets' as const, id })),
+                        { type: 'Assets', id: 'User' },
+                    ]
+                    : [{ type: 'Assets', id: 'User' }],
         }),
 
         getAllAssets: build.query<AssetListItem[], string>({
@@ -51,7 +47,8 @@ const assetApi = baseApi.injectEndpoints({
                 url: AssetEndpoint.GetAll,
                 method: 'GET',
                 params: { orgId }
-            })
+            }),
+            providesTags: (result, _error, id) =>  result ? [{ type: 'Assets', id }, { type: 'Assets', id: 'Organization' }] : [{ type: 'Assets', id: 'Organization' }]
         }),
 
         getAllUserAssets: build.query<any, void>({
@@ -72,7 +69,8 @@ const assetApi = baseApi.injectEndpoints({
                 url: AssetEndpoint.LinkOrganization,
                 method: 'POST',
                 params
-            })
+            }),
+            invalidatesTags: [{ type: 'Assets', id: 'Organization' }],
         }),
 
         unlinkAssetToOrg: build.mutation<any, LinkOrganizationParameters>({
@@ -80,7 +78,8 @@ const assetApi = baseApi.injectEndpoints({
                 url: AssetEndpoint.UnLinkOrganization,
                 method: 'POST',
                 params
-            })
+            }),
+            invalidatesTags: [{ type: 'Assets', id: 'Organization' }],
         }),
 
         linkAssetToUser: build.mutation<any, LinkUserParameters>({
@@ -89,7 +88,7 @@ const assetApi = baseApi.injectEndpoints({
                 method: 'POST',
                 params
             }),
-            // invalidatesTags: [{ type: 'Assets', id: 'User' }],
+            invalidatesTags: [{ type: 'Assets', id: 'User' }],
         }),
 
         unlinkAssetToUser: build.mutation<any, LinkUserParameters>({
@@ -97,7 +96,8 @@ const assetApi = baseApi.injectEndpoints({
                 url: AssetEndpoint.UnLinkUser,
                 method: 'POST',
                 params
-            })
+            }),
+            invalidatesTags: [{ type: 'Assets', id: 'User' }],
         }),
 
     }),
