@@ -31,10 +31,7 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                             if ((currentTarget as any).checked) {
                                 setSelected([...selected, option]);
                             } else {
-                                const deletedIndex = selected.indexOf(option);
-                                const tempArray = [...selected];
-                                tempArray.splice(deletedIndex, 1);
-                                setSelected(tempArray);
+                                setSelected([...selected.filter(asset => asset.assetId !== option.assetId)])
                             }
                         }}
                         checked={
@@ -43,7 +40,7 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                         }
                         disabled={disabled}
                         highlightOnChecked
-                    // value={option.assetId}
+                        value={option.assetId}
                     >
                         {option.name}
                     </Checkbox>

@@ -19,6 +19,7 @@ interface CheckboxProps extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onI
     align?: 'right' | 'left';
     disabled?: boolean;
     highlightOnChecked?: boolean;
+    value?: string | number;
 }
 
 const Checkbox: FunctionComponent<CheckboxProps> = ({
@@ -31,6 +32,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
     align = "left",
     disabled,
     highlightOnChecked,
+    value,
     ...other
 }) => {
     function inputHandler(evt: ChangeEvent<HTMLInputElement>) {
@@ -49,6 +51,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                 onInput={inputHandler}
                 className="check-block__input"
                 disabled={disabled}
+                value={value}
             />
 
             <CheckIcon
