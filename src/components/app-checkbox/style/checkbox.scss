@@ -60,4 +60,18 @@
         height: 0.4375em;
         display: none;
     }
+
+    &__input:disabled ~ &__custom {
+        color: $main-text;
+        cursor: default;
+
+        &::after {
+            background-color: transparentize($main-text, 0.75);
+            box-shadow: inset 0px 2px 7px rgba(134, 146, 166, 0.1);
+        }
+    }
+
+    &__input:disabled + &__check {
+        fill: $main-text
+    }
 }
