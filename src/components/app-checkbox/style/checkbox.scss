@@ -50,10 +50,6 @@
         display: block;
     }
 
-    &__input:checked + &__check {
-        display: block;
-    }
-
     &__check {
         position: absolute;
         left: 0.1875em;
@@ -63,6 +59,15 @@
         width: 0.625em;
         height: 0.4375em;
         display: none;
+    }
+
+    &__input:checked + &__check,
+    &__input[checked] + &__check  {
+        display: block;
+    }
+
+    &__input:disabled + &__check {
+        fill: $main-text
     }
 
     &__input:disabled ~ &__custom {
@@ -76,7 +81,5 @@
         }
     }
 
-    &__input:disabled + &__check {
-        fill: $main-text
-    }
+    
 }

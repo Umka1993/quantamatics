@@ -25,6 +25,8 @@ interface IInput extends SelectHTMLAttributes<HTMLSelectElement> {
     setSelected: Dispatch<SetStateAction<AssetListItem[]>>;
     errorMessage?: string,
     showError?: boolean,
+    setAssetsToUpdateShared?: Dispatch<SetStateAction<string[]>>;
+    assetsToUpdateShared?: string[];
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -37,7 +39,9 @@ const Multiselect: FunctionComponent<IInput> = ({
     errorMessage,
     showError,
     className,
-    disabled
+    disabled,
+    setAssetsToUpdateShared,
+    assetsToUpdateShared
 }) => {
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
@@ -125,6 +129,8 @@ const Multiselect: FunctionComponent<IInput> = ({
                 setSelected={setSelected}
                 hidden={!showOptions}
                 disabled={disabled}
+                setAssetsToUpdateShared={setAssetsToUpdateShared}
+                assetsToUpdateShared={assetsToUpdateShared}
             />
 
         </div>

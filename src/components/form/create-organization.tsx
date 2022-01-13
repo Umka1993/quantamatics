@@ -49,7 +49,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
     // Load all assets that are available for logged user
-    const { data: allAvailableAsset } = useGetAllAssetsQuery(
+    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } = useGetAllAssetsQuery(
         user?.organizationId as string
     );
 
@@ -85,6 +85,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     useEffect(() => {
         stopLoading && setStopLoading(undefined);
     }, [stopLoading]);
+
+
+    useEffect(() => {
+        isAllAssetLoaded && allAvailableAsset && setDatasets([...allAvailableAsset.filter(asset => asset.sharedByDefault)]);
+    }, [isAllAssetLoaded]);
+
 
     const handleSubmit = () => {
         if (!datasets.length) {

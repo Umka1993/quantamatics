@@ -25,7 +25,6 @@
         z-index: 1;
         transition: opacity 0.2s;
 
-
         &[hidden] {
             opacity: 0;
             pointer-events: none;
@@ -79,7 +78,43 @@
         .check-block__check {
             font-size: 16px;
         }
+    }
 
+    &__option--label {
+        position: relative;
+        &::after {
+            position: absolute;
+            left: calc(-50% + 16px);
+            background: linear-gradient(88.76deg, rgba(113, 130, 166, 0.85) 2.12%, rgba(85, 98, 126, 0.95) 97.88%);
+            backdrop-filter: blur(2px);
+            color: white;
+    
+            border-radius: 2px;
+            bottom: calc(100% + 8px);
+            padding: 6px 8px;
+            width: max-content;
+            content: attr(aria-label);
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 1;
+        }
+
+        &:hover::after,
+        &:focus-visible {
+            opacity: 1;
+        }
+    
+    }
+
+    &__option--pinned {
+        display: grid;
+        grid-template-columns: 16px 1fr;
+        gap: 6px;
+        align-items: start;
+
+        .check-block {
+            grid-column: 2 / 3;
+        }
     }
 
     &__search_wrap {

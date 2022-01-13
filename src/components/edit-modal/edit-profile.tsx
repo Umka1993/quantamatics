@@ -76,10 +76,11 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     };
 
     useEffect(() => {
-        if (isAssetsLoaded && serverSelectedAssets) {
-            setDatasets([...serverSelectedAssets.map(({ id, name }) => ({ assetId: id, name, sharedByDefault: false }))])
+        if (isAssetsLoaded && serverSelectedAssets && assets) {
+            const filteredArray = [...serverSelectedAssets.map(({ id }) => assets.find(({ assetId }) => assetId === id))]
+            setDatasets(filteredArray as AssetListItem[])
         }
-    }, [isAssetsLoaded])
+    }, [isAssetsLoaded, assets])
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
 

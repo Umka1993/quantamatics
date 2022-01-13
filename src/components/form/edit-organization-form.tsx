@@ -45,7 +45,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     ] = useUpdateOrganizationMutation();
 
     const isHaveAccessToEditAsset = user?.userRoles.includes(UserRole.OrgOwner) || user?.userRoles.includes(UserRole.Admin)
-    
+
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
@@ -53,6 +53,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [comments, setComment] = useState<string | undefined>("");
     const [datasets, setDatasets] = useState<AssetListItem[]>([]);
     const [loading, setLoading] = useState(false);
+
+    const [assetsToUpdateShared, setAssetsToUpdateShared] = useState<string[]>([]);
 
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -77,6 +79,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
     const [unlinkAsset, { isLoading: isUnLinking }] =
         assetsHooks.useUnlinkAssetToOrgMutation();
+
+    const [toggleAssetShared] =  assetsHooks.useToggleAssetSharedMutation()
 
     const setInitialOrg = useCallback(() => {
         if (organization) {
@@ -134,6 +138,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     });
             });
         }
+
+        assetsToUpdateShared.forEach(assetId => toggleAssetShared(assetId))
 
         update({
             ...organization,
@@ -233,6 +239,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                             errorMessage="Select asset permissions to assign to the organization."
                             showError={assetError}
                             className={style.input}
+                            assetsToUpdateShared={assetsToUpdateShared}
+                            setAssetsToUpdateShared={setAssetsToUpdateShared}
                             disabled={!isHaveAccessToEditAsset}
                         />
                     )}

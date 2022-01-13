@@ -14,6 +14,7 @@ const enum AssetEndpoint {
     UnLinkOrganization = 'api/Asset/removeOrgLink',
     UnLinkUser = 'api/Asset/removeUserLink',
 
+    ToggleShared = 'api/Asset/toggleAssetSharedByDefault'
 }
 
 interface LinkOrganizationParameters {
@@ -48,7 +49,7 @@ const assetApi = baseApi.injectEndpoints({
                 method: 'GET',
                 params: { orgId }
             }),
-            providesTags: (result, _error, id) =>  result ? [{ type: 'Assets', id }, { type: 'Assets', id: 'Organization' }] : [{ type: 'Assets', id: 'Organization' }]
+            providesTags: (result, _error, id) =>  result ? [{ type: 'Assets', id }, { type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${id}` }] : [{ type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${id}` }]
         }),
 
         getAllUserAssets: build.query<any, void>({
@@ -70,7 +71,7 @@ const assetApi = baseApi.injectEndpoints({
                 method: 'POST',
                 params
             }),
-            invalidatesTags: [{ type: 'Assets', id: 'Organization' }],
+            invalidatesTags: (_res, _err, arg) => [{ type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${arg.assetId}` }],
         }),
 
         unlinkAssetToOrg: build.mutation<any, LinkOrganizationParameters>({
@@ -79,7 +80,7 @@ const assetApi = baseApi.injectEndpoints({
                 method: 'POST',
                 params
             }),
-            invalidatesTags: [{ type: 'Assets', id: 'Organization' }],
+            invalidatesTags: (_res, _err, arg) => [{ type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${arg.assetId}` }],
         }),
 
         linkAssetToUser: build.mutation<any, LinkUserParameters>({
@@ -100,6 +101,16 @@ const assetApi = baseApi.injectEndpoints({
             invalidatesTags: [{ type: 'Assets', id: 'User' }],
         }),
 
+
+        toggleAssetShared: build.mutation<any, number | string>({
+            query: (assetId) => ({
+                url: AssetEndpoint.ToggleShared,
+                method: 'POST',
+                params: {assetId}
+            }),
+            invalidatesTags: (res, err, id) => [{ type: 'Assets', id }],
+        }),
+
     }),
 });
 
@@ -111,5 +122,6 @@ export const {
     useUnlinkAssetToOrgMutation,
     useLinkAssetToUserMutation,
     useUnlinkAssetToUserMutation,
-    useGetUserAssetsQuery
+    useGetUserAssetsQuery,
+    useToggleAssetSharedMutation
 } = assetApi;

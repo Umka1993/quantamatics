@@ -39,6 +39,12 @@ const InviteUserForm: FunctionComponent = () => {
         new Date()
     );
 
+    useEffect(() => {
+        if (assets) {
+            setDatasets(assets.filter(asset => asset.sharedByDefault))
+        }
+    }, [assets])
+
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
     const [userRoles, setRoles] = useState<UserRole[]>([]);
@@ -65,7 +71,7 @@ const InviteUserForm: FunctionComponent = () => {
     useEffect(() => {
         if (isUserRegistered) {
             //? Link new assets to user
-            datasets.forEach(({assetId}) => {
+            datasets.forEach(({ assetId }) => {
                 linkAsset({
                     assetId,
                     userId: registeredUser.id,
