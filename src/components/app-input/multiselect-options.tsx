@@ -8,19 +8,23 @@ interface Options {
     selected: AssetListItem[];
     setSelected: Dispatch<SetStateAction<AssetListItem[]>>;
     disabled?: boolean;
+    hidden?: boolean
 }
 
 const MultiselectOptions: FunctionComponent<Options> = ({
     options,
     setSelected,
     selected,
-    disabled
+    disabled,
+    hidden
 }) => {
     return (
         <div
             className={classNames("multiselect__options", {
                 // 'multiselect__options--ods': options.length % 2 !== 0
             })}
+            hidden={hidden}
+            aria-hidden={hidden}
         >
             {Array.from(options).map((option) => {
                 return (

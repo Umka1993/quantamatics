@@ -119,14 +119,14 @@ const Multiselect: FunctionComponent<IInput> = ({
             {showError && !hideError && <p className="app-input__error">{errorMessage}</p>}
 
 
-            {showOptions && (
-                <MultiselectOptions
-                    options={options}
-                    selected={selected}
-                    setSelected={setSelected}
-                    disabled={disabled}
-                />
-            )}
+            <MultiselectOptions
+                options={options}
+                selected={selected}
+                setSelected={setSelected}
+                hidden={!showOptions}
+                disabled={disabled}
+            />
+
         </div>
     );
 };
