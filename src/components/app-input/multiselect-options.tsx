@@ -36,24 +36,24 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                 const isSharedWillBeUpdated = assetsToUpdateShared?.includes(
                     option.assetId as string
                 );
-
                 const showLabel = !isOrganizationMode && option.sharedByDefault;
+
+                const isPinChecked = isSharedWillBeUpdated
+                    ? !option.sharedByDefault
+                    : option.sharedByDefault
                 return (
                     <div
                         className={classNames("multiselect__option", {
                             "multiselect__option--pinned": isOrganizationMode,
-                            "multiselect__option--label": showLabel
+                            "multiselect__option--label": showLabel,
+                            "multiselect__option--hide-pin": isOrganizationMode && !isPinChecked
                         })}
                         key={option.assetId}
                         aria-label={showLabel ? 'Is set as default' : undefined}
                     >
                         {isOrganizationMode && (
                             <PinButton
-                                checked={
-                                    isSharedWillBeUpdated
-                                        ? !option.sharedByDefault
-                                        : option.sharedByDefault
-                                }
+                                checked={isPinChecked}
                                 onClick={() => {
                                     isSharedWillBeUpdated
                                         ? setAssetsToUpdateShared([

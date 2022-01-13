@@ -88,7 +88,7 @@
             background: linear-gradient(88.76deg, rgba(113, 130, 166, 0.85) 2.12%, rgba(85, 98, 126, 0.95) 97.88%);
             backdrop-filter: blur(2px);
             color: white;
-    
+
             border-radius: 2px;
             bottom: calc(100% + 8px);
             padding: 6px 8px;
@@ -103,7 +103,18 @@
         &:focus-visible {
             opacity: 1;
         }
-    
+    }
+
+    &__option--hide-pin {
+        .pin-button {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        &:focus-visible .pin-button,
+        &:hover .pin-button {
+            opacity: 1;
+        }
     }
 
     &__option--pinned {
