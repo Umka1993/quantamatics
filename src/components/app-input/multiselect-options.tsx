@@ -83,9 +83,9 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                                 }
                             }}
                             checked={
-                                selected.findIndex(
+                                !(selected.findIndex(
                                     (asset) => asset.assetId === option.assetId
-                                ) >= 0
+                                ) < 0)
                             }
                             disabled={isOrganizationMode ? disabled : option.sharedByDefault}
                             highlightOnChecked
