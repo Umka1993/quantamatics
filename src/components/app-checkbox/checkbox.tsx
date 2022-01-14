@@ -10,6 +10,8 @@ import React, {
 import "./style/checkbox.scss";
 import CheckIcon from "./assets/check.svg";
 import classNames from 'classnames'
+import { useEffect } from "react";
+import { useRef } from "react";
 
 interface CheckboxProps extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onInput'> {
     name?: string;
@@ -32,13 +34,24 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
     align = "left",
     disabled,
     highlightOnChecked,
+    defaultChecked,
     value,
     ...other
 }) => {
+    const inputRef = useRef<HTMLInputElement>(null)
     function inputHandler(evt: ChangeEvent<HTMLInputElement>) {
         externalSetter && externalSetter(evt.target.checked);
         onInput && onInput(evt);
     }
+
+    useEffect(() => {
+        if (inputRef.current && checked) {
+            console.log(checked);
+            
+            inputRef.current.checked = checked
+        }
+
+    }, [checked, inputRef.current])
     return (
         <label className={classNames("check-block", {
             'check-block--right': align === "right",
@@ -52,6 +65,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                 className="check-block__input"
                 disabled={disabled}
                 value={value}
+                ref={inputRef}
             />
 
             <CheckIcon

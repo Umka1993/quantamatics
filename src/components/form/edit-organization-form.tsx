@@ -80,7 +80,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [unlinkAsset, { isLoading: isUnLinking }] =
         assetsHooks.useUnlinkAssetToOrgMutation();
 
-    const [toggleAssetShared] =  assetsHooks.useToggleAssetSharedMutation()
+    const [toggleAssetShared] = assetsHooks.useToggleAssetSharedMutation()
 
     const setInitialOrg = useCallback(() => {
         if (organization) {

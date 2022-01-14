@@ -42,8 +42,18 @@
         position: absolute;
     }
 
-    &--highlight &__input:not(:disabled):checked ~ &__custom {
+    &--highlight &__input:not(:disabled):checked ~ &__custom,
+    &--highlight:hover &__custom,
+    &--highlight:focus-visible &__custom {
         color: $accent;
+    }
+
+    &__input:focus {
+        outline: none;
+    }
+    &--highlight &__input:focus ~ &__custom::before,
+    &--highlight &__check:hover ~ &__custom::before {
+        border-color: $accent;
     }
 
     &__input:checked ~ &__custom::after {
@@ -62,12 +72,12 @@
     }
 
     &__input:checked + &__check,
-    &__input[checked] + &__check  {
+    &__input[checked] + &__check {
         display: block;
     }
 
     &__input:disabled + &__check {
-        fill: $main-text
+        fill: $main-text;
     }
 
     &__input:disabled ~ &__custom {
@@ -80,6 +90,4 @@
             border-color: transparent;
         }
     }
-
-    
 }

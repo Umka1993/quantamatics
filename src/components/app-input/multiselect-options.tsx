@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Dispatch, SetStateAction } from "react";
+import React, { FunctionComponent, Dispatch, SetStateAction, useCallback } from "react";
 import Checkbox from "../app-checkbox/checkbox";
 import classNames from "classnames";
 import { AssetListItem } from "../../types/asset";
@@ -40,32 +40,60 @@ const MultiselectOptions: FunctionComponent<Options> = ({
 
                 const isPinChecked = isSharedWillBeUpdated
                     ? !option.sharedByDefault
-                    : option.sharedByDefault
+                    : option.sharedByDefault;
+
+                const addToSelected = () => setSelected([...selected, option]);
+                const removeFromSelected = () => setSelected([
+                    ...selected.filter(
+                        ({ assetId }) => assetId !== option.assetId
+                    ),
+                ]);
+
+                const unpinAsset = useCallback(() => {
+                    if (setAssetsToUpdateShared && assetsToUpdateShared) {
+                        return setAssetsToUpdateShared([
+                            ...assetsToUpdateShared.filter(
+                                (item) => item !== option.assetId
+                            )])
+                    }
+                }, [setAssetsToUpdateShared]);
+
+                const togglePin = useCallback(() => {
+                    if (assetsToUpdateShared && setAssetsToUpdateShared) {
+                        if (isSharedWillBeUpdated) {
+                            setAssetsToUpdateShared([
+                                ...assetsToUpdateShared.filter(
+                                    (item) => item !== option.assetId
+                                )])
+                        } else {
+                            setAssetsToUpdateShared(
+                                [...assetsToUpdateShared, option.assetId as string])
+
+                            !isSelected && addToSelected();
+                        }
+                    }
+                }, [setAssetsToUpdateShared])
+
+                const isSelected = selected.findIndex(
+                    (asset) => asset.assetId === option.assetId
+                ) !== -1
+
+
                 return (
                     <div
                         className={classNames("multiselect__option", {
                             "multiselect__option--pinned": isOrganizationMode,
                             "multiselect__option--label": showLabel,
-                            "multiselect__option--hide-pin": isOrganizationMode && !isPinChecked
+                            "multiselect__option--hide-pin":
+                                isOrganizationMode && !isPinChecked,
                         })}
                         key={option.assetId}
-                        aria-label={showLabel ? 'Is set as default' : undefined}
+                        aria-label={showLabel ? "Is set as default" : undefined}
                     >
                         {isOrganizationMode && (
                             <PinButton
                                 checked={isPinChecked}
-                                onClick={() => {
-                                    isSharedWillBeUpdated
-                                        ? setAssetsToUpdateShared([
-                                            ...assetsToUpdateShared.filter(
-                                                (item) => item !== option.assetId
-                                            ),
-                                        ])
-                                        : setAssetsToUpdateShared([
-                                            ...assetsToUpdateShared,
-                                            option.assetId as string,
-                                        ]);
-                                }}
+                                onClick={togglePin}
                                 aria-label="Set as default for all user accounts"
                             />
                         )}
@@ -73,20 +101,14 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                             name={option.name}
                             onInput={({ currentTarget }) => {
                                 if ((currentTarget as any).checked) {
-                                    setSelected([...selected, option]);
+                                    addToSelected()
                                 } else {
-                                    setSelected([
-                                        ...selected.filter(
-                                            (asset) => asset.assetId !== option.assetId
-                                        ),
-                                    ]);
+                                    removeFromSelected()
+                                    isPinChecked && togglePin()
                                 }
-                            }}
-                            checked={
-                                !(selected.findIndex(
-                                    (asset) => asset.assetId === option.assetId
-                                ) < 0)
                             }
+                            }
+                            checked={isSelected}
                             disabled={isOrganizationMode ? disabled : option.sharedByDefault}
                             highlightOnChecked
                             value={option.assetId}
@@ -96,7 +118,7 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                     </div>
                 );
             })}
-        </div>
+        </div >
     );
 };
 
