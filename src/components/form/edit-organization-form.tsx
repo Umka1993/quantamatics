@@ -79,21 +79,18 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
     useEffect(() => {
         if (selectedAssets && allAvailableAsset) {
-            const selectedAssetsID = selectedAssets.map(({ assetId }) => assetId)
-
-            setAssignedAssets(new Set(selectedAssetsID))
-        }
-    }, [selectedAssets])
-
-    useEffect(() => {
-        if (assignedAssets.size && allAvailableAsset && isSelectedAssetsLoaded) {
             const onlySharedAssets = allAvailableAsset.filter(({ sharedByDefault }) => sharedByDefault);
 
+            const selectedAssetsIDs = new Set(selectedAssets.map(({ assetId }) => assetId))
+
             onlySharedAssets.forEach(({ sharedByDefault, assetId }) => {
-                sharedByDefault && !assignedAssets.has(assetId) && organization && linkAsset({ assetId, orgId: organization.id })
+                sharedByDefault && !selectedAssetsIDs.has(assetId) && organization && linkAsset({ assetId, orgId: organization.id })
             })
+
+            setAssignedAssets(selectedAssetsIDs)
         }
-    }, [assignedAssets, allAvailableAsset, isSelectedAssetsLoaded])
+    }, [selectedAssets, allAvailableAsset, isSelectedAssetsLoaded])
+
 
     const [linkAsset, { isLoading: isLinkingAsset }] =
         assetsHooks.useLinkAssetToOrgMutation();
