@@ -44,14 +44,13 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
         onInput && onInput(evt);
     }
 
-    useEffect(() => {
-        if (inputRef.current && checked) {
-            console.log(checked);
-            
-            inputRef.current.checked = checked
-        }
+    // useEffect(() => {
+    //     if (inputRef.current && checked) {
 
-    }, [checked, inputRef.current])
+    //         inputRef.current.checked = checked
+    //     }
+
+    // }, [checked, inputRef.current])
     return (
         <label className={classNames("check-block", {
             'check-block--right': align === "right",

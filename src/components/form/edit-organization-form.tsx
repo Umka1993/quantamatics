@@ -51,10 +51,11 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [customerCrmId, setCustomerID] = useState<string>("");
     const [customerCrmLink, setCustomerLink] = useState<string>("");
     const [comments, setComment] = useState<string | undefined>("");
-    const [datasets, setDatasets] = useState<AssetListItem[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const [assetsToUpdateShared, setAssetsToUpdateShared] = useState<string[]>([]);
+    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(new Set())
+
+    const [assetsToUpdateShared, setAssetsToUpdateShared] = useState<Set<string | number>>(new Set())
 
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -66,13 +67,23 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
     // Load all assets that are available for logged user
-    const { data: allAvailableAsset } = assetsHooks.useGetAllAssetsQuery(
+    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } = assetsHooks.useGetAllAssetsQuery(
         user?.organizationId as string
     );
     // Load all assets that are already linked to org
     const { data: selectedAssets } = assetsHooks.useGetAllAssetsQuery(
         organization?.id as string
     );
+
+    useEffect(() => {
+        if (selectedAssets && allAvailableAsset) {
+            const onlySharedAssets = allAvailableAsset.filter(({ sharedByDefault }) => sharedByDefault);
+            const onlySharedAssetsID = onlySharedAssets.map(({ assetId }) => assetId)
+
+            const selectedAssetsID = selectedAssets.map(({ assetId }) => assetId)
+            setAssignedAssets(new Set([...selectedAssetsID, ...onlySharedAssetsID]))
+        }
+    }, [allAvailableAsset, selectedAssets])
 
     const [linkAsset, { isLoading: isLinkingAsset }] =
         assetsHooks.useLinkAssetToOrgMutation();
@@ -92,10 +103,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }, [organization]);
 
     useEffect(() => {
-        selectedAssets && setDatasets(selectedAssets);
-    }, [selectedAssets]);
-
-    useEffect(() => {
         organization && setInitialOrg();
     }, [organization]);
 
@@ -103,7 +110,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         evt.preventDefault();
         setLoading(true);
 
-        if (!datasets.length) {
+        if (!assignedAssets.size) {
             setAssetError(true);
             return setLoading(false);
         }
@@ -125,12 +132,11 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             const orgId = organization.id;
             /* Unlink unselected assets */
             selectedAssets.forEach(({ assetId }) => {
-                datasets.findIndex((set) => set.assetId === assetId) < 0 &&
-                    unlinkAsset({ assetId, orgId });
+                !assignedAssets.has(assetId) && unlinkAsset({ assetId, orgId });
             });
 
             /* Link new assets */
-            datasets.forEach(({ assetId }) => {
+            assignedAssets.forEach(assetId => {
                 selectedAssets.findIndex((asset) => asset.assetId === assetId) < 0 &&
                     linkAsset({
                         assetId,
@@ -234,14 +240,15 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         <Multiselect
                             options={allAvailableAsset}
                             label="Org. Assets"
-                            selected={datasets}
-                            setSelected={setDatasets}
+                            selected={assignedAssets}
+                            setSelected={setAssignedAssets}
                             errorMessage="Select asset permissions to assign to the organization."
                             showError={assetError}
                             className={style.input}
                             assetsToUpdateShared={assetsToUpdateShared}
                             setAssetsToUpdateShared={setAssetsToUpdateShared}
                             disabled={!isHaveAccessToEditAsset}
+                            type='edit-organization'
                         />
                     )}
 
