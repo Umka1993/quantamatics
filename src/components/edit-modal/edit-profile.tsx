@@ -77,10 +77,20 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     };
 
     useEffect(() => {
-        if (serverSelectedAssets) {
-            setAssignedAssets(new Set(serverSelectedAssets.map(({ id }) => id)))
+        if (serverSelectedAssets && assets) {
+            serverSelectedAssets.forEach(userAsset => {
+                assets?.findIndex((orgAsset) => orgAsset.assetId !== userAsset.id) === -1 && unlinkAsset({ assetId: userAsset.id, userId: user.id })
+            })
+
+            const selectedAssets: Set<string | number> = new Set(serverSelectedAssets.map(({ id }) => id))
+            
+            assets?.forEach(({ assetId, sharedByDefault }) => {
+                sharedByDefault && !selectedAssets.has(assetId) && linkAsset({ assetId, userId: user.id })
+            })
+
+            setAssignedAssets(selectedAssets)
         }
-    }, [serverSelectedAssets])
+    }, [serverSelectedAssets, assets])
 
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
 
