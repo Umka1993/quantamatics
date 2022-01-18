@@ -71,19 +71,29 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         user?.organizationId as string
     );
     // Load all assets that are already linked to org
-    const { data: selectedAssets } = assetsHooks.useGetAllAssetsQuery(
+    const { data: selectedAssets, isSuccess: isSelectedAssetsLoaded } = assetsHooks.useGetAllAssetsQuery(
         organization?.id as string
     );
 
+    const [toggleAssetShared] = assetsHooks.useToggleAssetSharedMutation()
+
     useEffect(() => {
         if (selectedAssets && allAvailableAsset) {
-            const onlySharedAssets = allAvailableAsset.filter(({ sharedByDefault }) => sharedByDefault);
-            const onlySharedAssetsID = onlySharedAssets.map(({ assetId }) => assetId)
-
             const selectedAssetsID = selectedAssets.map(({ assetId }) => assetId)
-            setAssignedAssets(new Set([...selectedAssetsID, ...onlySharedAssetsID]))
+
+            setAssignedAssets(new Set(selectedAssetsID))
         }
-    }, [allAvailableAsset, selectedAssets])
+    }, [selectedAssets])
+
+    useEffect(() => {
+        if (assignedAssets.size && allAvailableAsset && isSelectedAssetsLoaded) {
+            const onlySharedAssets = allAvailableAsset.filter(({ sharedByDefault }) => sharedByDefault);
+
+            onlySharedAssets.forEach(({ sharedByDefault, assetId }) => {
+                sharedByDefault && !assignedAssets.has(assetId) && organization && linkAsset({ assetId, orgId: organization.id })
+            })
+        }
+    }, [assignedAssets, allAvailableAsset, isSelectedAssetsLoaded])
 
     const [linkAsset, { isLoading: isLinkingAsset }] =
         assetsHooks.useLinkAssetToOrgMutation();
@@ -91,7 +101,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [unlinkAsset, { isLoading: isUnLinking }] =
         assetsHooks.useUnlinkAssetToOrgMutation();
 
-    const [toggleAssetShared] = assetsHooks.useToggleAssetSharedMutation()
 
     const setInitialOrg = useCallback(() => {
         if (organization) {
