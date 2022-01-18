@@ -34,7 +34,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [customerCrmId, setCustomerCrmId] = useState<string>("");
     const [customerCrmLink, setCustomerCrmLink] = useState<string>("");
     const [comments, setComments] = useState<string | undefined>("");
-    const [datasets, setDatasets] = useState<AssetListItem[]>([]);
+    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(new Set())
 
     const [assetError, setAssetError] = useState(false);
 
@@ -62,17 +62,13 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 
     useEffect(() => {
         if (isSuccess && data) {
-            datasets.forEach(({ assetId }, index) =>
+            assignedAssets.forEach((assetId) =>
                 linkAsset({
                     assetId,
                     orgId: data.id,
                 })
-                    .unwrap()
-                    .then(() => {
-                        const isLast = index === datasets.length - 1;
-                        isLast && returnBack();
-                    })
             );
+            returnBack();
         }
     }, [isSuccess]);
 
@@ -87,13 +83,9 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     }, [stopLoading]);
 
 
-    useEffect(() => {
-        isAllAssetLoaded && allAvailableAsset && setDatasets([...allAvailableAsset.filter(asset => asset.sharedByDefault)]);
-    }, [isAllAssetLoaded]);
-
 
     const handleSubmit = () => {
-        if (!datasets.length) {
+        if (!assignedAssets.size) {
             setAssetError(true);
             return setStopLoading(true);
         }
@@ -155,8 +147,8 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     <Multiselect
                         options={allAvailableAsset}
                         label="Org. Assets"
-                        selected={datasets}
-                        setSelected={setDatasets}
+                        selected={assignedAssets}
+                        setSelected={setAssignedAssets}
                         errorMessage="Select asset permissions to assign to the organization."
                         showError={assetError}
                     />

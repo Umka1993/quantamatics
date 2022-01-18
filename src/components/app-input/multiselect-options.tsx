@@ -12,7 +12,7 @@ export interface Options {
     hidden?: boolean;
     setAssetsToUpdateShared?: Dispatch<SetStateAction<Set<string | number>>>;
     assetsToUpdateShared?: Set<string | number>;
-    type?: string;
+    type?: 'edit-organization' | 'user';
 }
 
 const MultiselectOptions: FunctionComponent<Options> = ({
@@ -23,8 +23,10 @@ const MultiselectOptions: FunctionComponent<Options> = ({
     hidden,
     setAssetsToUpdateShared,
     assetsToUpdateShared,
+    type
 }) => {
-    const isOrganizationMode = assetsToUpdateShared && setAssetsToUpdateShared;
+    const isOrganizationMode = type === 'edit-organization'
+    const isUserMode = type === 'user'
     return (
         <div
             className={classNames("multiselect__options", {
@@ -37,7 +39,8 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                 const isSharedWillBeUpdated = assetsToUpdateShared?.has(
                     option.assetId as string
                 );
-                const showLabel = !isOrganizationMode && option.sharedByDefault;
+
+                const showLabel = isUserMode && option.sharedByDefault;
 
                 const isPinChecked = isSharedWillBeUpdated
                     ? !option.sharedByDefault
@@ -93,7 +96,7 @@ const MultiselectOptions: FunctionComponent<Options> = ({
                                 }
                             }}
                             checked={isSelected}
-                            disabled={isOrganizationMode ? disabled : option.sharedByDefault}
+                            disabled={isUserMode ? option.sharedByDefault : disabled}
                             highlightOnChecked
                             value={option.assetId}
                         >

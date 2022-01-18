@@ -18,7 +18,6 @@ import {
     useGetAllAssetsQuery,
     useLinkAssetToUserMutation,
 } from "../../api/asset";
-import { AssetListItem } from "../../types/asset";
 
 const InviteUserForm: FunctionComponent = () => {
     const { id: organizationId } = useParams();
@@ -28,7 +27,6 @@ const InviteUserForm: FunctionComponent = () => {
     );
 
     const { data: assets } = useGetAllAssetsQuery(organizationId as string);
-    const [datasets, setDatasets] = useState<AssetListItem[]>([]);
     const [assetError, setAssetError] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -39,9 +37,14 @@ const InviteUserForm: FunctionComponent = () => {
         new Date()
     );
 
+    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(new Set())
+
     useEffect(() => {
         if (assets) {
-            setDatasets(assets.filter(asset => asset.sharedByDefault))
+            const sharedAssets = assets.filter(asset => asset.sharedByDefault);
+            console.log(sharedAssets)
+            const sharedAssetsIDs = sharedAssets.map(({ assetId }) => assetId)
+            setAssignedAssets(new Set(sharedAssetsIDs))
         }
     }, [assets])
 
@@ -71,7 +74,7 @@ const InviteUserForm: FunctionComponent = () => {
     useEffect(() => {
         if (isUserRegistered) {
             //? Link new assets to user
-            datasets.forEach(({ assetId }) => {
+            assignedAssets.forEach(assetId => {
                 linkAsset({
                     assetId,
                     userId: registeredUser.id,
@@ -99,8 +102,8 @@ const InviteUserForm: FunctionComponent = () => {
     }, [errors, formRef.current]);
 
     const addUserToOrg = () => {
-        // setLoading(true)
-        if (datasets.length || true) {
+        setLoading(true)
+        if (assignedAssets.size) {
             register({
                 firstName,
                 lastName,
@@ -158,11 +161,12 @@ const InviteUserForm: FunctionComponent = () => {
                 {assets && (
                     <Multiselect
                         options={assets}
-                        selected={datasets}
-                        setSelected={setDatasets}
+                        selected={assignedAssets}
+                        setSelected={setAssignedAssets}
                         label="Account Assets"
                         errorMessage="Select asset permissions to assign to the user account."
                         showError={assetError}
+                        type='user'
                     />
                 )}
                 <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
