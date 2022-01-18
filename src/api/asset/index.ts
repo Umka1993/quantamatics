@@ -49,7 +49,7 @@ const assetApi = baseApi.injectEndpoints({
                 method: 'GET',
                 params: { orgId }
             }),
-            providesTags: (result, _error, id) =>  result ? [{ type: 'Assets', id }, { type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${id}` }] : [{ type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${id}` }]
+            providesTags: (_result, _error, id) =>  [{ type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${id}` }]
         }),
 
         getAllUserAssets: build.query<any, void>({
