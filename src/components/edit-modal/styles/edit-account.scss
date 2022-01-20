@@ -3,10 +3,10 @@
 .edit-account {
     padding: 40px;
     width: 100%;
-    max-width: 440px;
-    min-height: 624px; 
-    height: auto;
-    max-height: 98vh;
+    max-width: 480px;
+    min-height: 650px; 
+    height: calc(100vh - 80px);
+    max-height: 720px;
     overflow: auto;
     scrollbar-width: thin;
     scrollbar-gutter: stable;
