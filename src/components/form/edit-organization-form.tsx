@@ -44,8 +44,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         },
     ] = useUpdateOrganizationMutation();
 
-    const isHaveAccessToEditAsset = user?.userRoles.includes(UserRole.OrgOwner) || user?.userRoles.includes(UserRole.Admin)
-
+    const isHaveAccessToEditAsset =
+        user?.userRoles.includes(UserRole.OrgOwner) ||
+        user?.userRoles.includes(UserRole.Admin);
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
@@ -53,9 +54,13 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [comments, setComment] = useState<string | undefined>("");
     const [loading, setLoading] = useState(false);
 
-    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(new Set())
+    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
+        new Set()
+    );
 
-    const [assetsToUpdateShared, setAssetsToUpdateShared] = useState<Set<string | number>>(new Set())
+    const [assetsToUpdateShared, setAssetsToUpdateShared] = useState<
+        Set<string | number>
+    >(new Set());
 
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -67,37 +72,51 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
     // Load all assets that are available for logged user
-    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } = assetsHooks.useGetAllAssetsQuery(
-        user?.organizationId as string
-    );
+    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
+        assetsHooks.useGetAllAssetsQuery(user?.organizationId as string);
     // Load all assets that are already linked to org
-    const { data: selectedAssets, isSuccess: isSelectedAssetsLoaded } = assetsHooks.useGetAllAssetsQuery(
-        organization?.id as string
-    );
+    const { data: selectedAssets, isSuccess: isSelectedAssetsLoaded } =
+        assetsHooks.useGetAllAssetsQuery(organization?.id as string);
 
-    const [toggleAssetShared] = assetsHooks.useToggleAssetSharedMutation()
+    const [toggleAssetShared] = assetsHooks.useToggleAssetSharedMutation();
+
+    const [options, setOptions] = useState<AssetListItem[]>([]);
 
     useEffect(() => {
         if (selectedAssets && allAvailableAsset) {
-            const onlySharedAssets = allAvailableAsset.filter(({ sharedByDefault }) => sharedByDefault);
+            const onlySharedAssets = selectedAssets.filter(
+                ({ sharedByDefault }) => sharedByDefault
+            );
+            const selectedAssetsIDs = new Set(
+                selectedAssets.map(({ assetId }) => assetId)
+            );
 
-            const selectedAssetsIDs = new Set(selectedAssets.map(({ assetId }) => assetId))
+            setOptions(
+                [...allAvailableAsset].map((asset) => ({
+                    ...asset,
+                    sharedByDefault:
+                        onlySharedAssets.findIndex(
+                            ({ assetId }) => assetId === asset.assetId
+                        ) !== -1,
+                }))
+            );
 
             onlySharedAssets.forEach(({ sharedByDefault, assetId }) => {
-                sharedByDefault && !selectedAssetsIDs.has(assetId) && organization && linkAsset({ assetId, orgId: organization.id })
-            })
+                sharedByDefault &&
+                    !selectedAssetsIDs.has(assetId) &&
+                    organization &&
+                    linkAsset({ assetId, orgId: organization.id });
+            });
 
-            setAssignedAssets(selectedAssetsIDs)
+            setAssignedAssets(selectedAssetsIDs);
         }
-    }, [selectedAssets, allAvailableAsset, isSelectedAssetsLoaded])
-
+    }, [selectedAssets, allAvailableAsset, isSelectedAssetsLoaded]);
 
     const [linkAsset, { isLoading: isLinkingAsset }] =
         assetsHooks.useLinkAssetToOrgMutation();
 
     const [unlinkAsset, { isLoading: isUnLinking }] =
         assetsHooks.useUnlinkAssetToOrgMutation();
-
 
     const setInitialOrg = useCallback(() => {
         if (organization) {
@@ -134,32 +153,36 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             return setLoading(false);
         }
 
-        if (selectedAssets && organization) {
-            const orgId = organization.id;
-            /* Unlink unselected assets */
-            selectedAssets.forEach(({ assetId }) => {
-                !assignedAssets.has(assetId) && unlinkAsset({ assetId, orgId });
-            });
+        if (organization) {
+            if (selectedAssets) {
+                const orgId = organization.id;
+                /* Unlink unselected assets */
+                selectedAssets.forEach(({ assetId }) => {
+                    !assignedAssets.has(assetId) && unlinkAsset({ assetId, orgId });
+                });
 
-            /* Link new assets */
-            assignedAssets.forEach(assetId => {
-                selectedAssets.findIndex((asset) => asset.assetId === assetId) < 0 &&
-                    linkAsset({
-                        assetId,
-                        orgId,
-                    });
+                /* Link new assets */
+                assignedAssets.forEach((assetId) => {
+                    selectedAssets.findIndex((asset) => asset.assetId === assetId) < 0 &&
+                        linkAsset({
+                            assetId,
+                            orgId,
+                        });
+                });
+            }
+
+            assetsToUpdateShared.forEach((assetId) =>
+                toggleAssetShared({ assetId, passedOrgID: organization.id })
+            );
+
+            update({
+                ...organization,
+                name,
+                customerCrmId,
+                customerCrmLink,
+                comments,
             });
         }
-
-        assetsToUpdateShared.forEach(assetId => toggleAssetShared(assetId))
-
-        update({
-            ...organization,
-            name,
-            customerCrmId,
-            customerCrmLink,
-            comments,
-        });
         setLoading(false);
     }
 
@@ -242,9 +265,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         className={style.input}
                     />
 
-                    {allAvailableAsset && (
+                    {!!options.length && (
                         <Multiselect
-                            options={allAvailableAsset}
+                            options={options}
                             label="Org. Assets"
                             selected={assignedAssets}
                             setSelected={setAssignedAssets}
@@ -254,7 +277,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                             assetsToUpdateShared={assetsToUpdateShared}
                             setAssetsToUpdateShared={setAssetsToUpdateShared}
                             disabled={!isHaveAccessToEditAsset}
-                            type='edit-organization'
+                            type="edit-organization"
                         />
                     )}
 

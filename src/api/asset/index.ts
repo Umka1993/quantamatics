@@ -2,115 +2,131 @@ import { AssetServerResponse, AssetListItem } from "../../types/asset";
 import baseApi from "../index";
 
 const enum AssetEndpoint {
-    GetAll = 'api/Asset/getAll',
-    GetAllUser = 'api/Asset/getAllUser',
-    getUserAssets = 'api/Asset/getAllUserAdmin',
+    GetAll = "api/Asset/getAll",
+    GetAllUser = "api/Asset/getAllUser",
+    getUserAssets = "api/Asset/getAllUserAdmin",
 
-    GetByID = 'api/Asset/get',
+    GetByID = "api/Asset/get",
 
-    LinkOrganization = 'api/Asset/addOrgLink',
-    LinkUser = 'api/Asset/addUserLink',
+    LinkOrganization = "api/Asset/addOrgLink",
+    LinkUser = "api/Asset/addUserLink",
 
-    UnLinkOrganization = 'api/Asset/removeOrgLink',
-    UnLinkUser = 'api/Asset/removeUserLink',
+    UnLinkOrganization = "api/Asset/removeOrgLink",
+    UnLinkUser = "api/Asset/removeUserLink",
 
-    ToggleShared = 'api/Asset/toggleAssetSharedByDefault'
+    ToggleShared = "api/Asset/toggleAssetSharedByDefault",
 }
 
 interface LinkOrganizationParameters {
-    assetId: number | string,
-    orgId: number | string
+    assetId: number | string;
+    orgId: number | string;
 }
 
 interface LinkUserParameters {
-    assetId: number | string,
-    userId: number | string
+    assetId: number | string;
+    userId: number | string;
+}
+
+interface ToggleSharesParams {
+    assetId: number | string;
+    passedOrgID: number | string;
 }
 
 const assetApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getUserAssets: build.query<AssetServerResponse[], string | number >({
+        getUserAssets: build.query<AssetServerResponse[], string | number>({
             query: (userId) => ({
                 url: AssetEndpoint.getUserAssets,
-                method: 'GET',
-                params: { userId }
+                method: "GET",
+                params: { userId },
             }),
-            providesTags: (result) => result
+            providesTags: (result) =>
+                result
                     ? [
-                        ...result.map(({ id }) => ({ type: 'Assets' as const, id })),
-                        { type: 'Assets', id: 'User' },
+                        ...result.map(({ id }) => ({ type: "Assets" as const, id })),
+                        { type: "Assets", id: "User" },
                     ]
-                    : [{ type: 'Assets', id: 'User' }],
+                    : [{ type: "Assets", id: "User" }],
         }),
 
         getAllAssets: build.query<AssetListItem[], string>({
             query: (orgId) => ({
                 url: AssetEndpoint.GetAll,
-                method: 'GET',
-                params: { orgId }
+                method: "GET",
+                params: { orgId },
             }),
-            providesTags: (_result, _error, id) =>  [{ type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${id}` }]
+            providesTags: (_result, _error, id) => [
+                { type: "Assets", id: "Organization" },
+                { type: "Assets", id: `Org-${id}` },
+            ],
         }),
 
         getAllUserAssets: build.query<any, void>({
-            query: () => (AssetEndpoint.GetAllUser)
+            query: () => AssetEndpoint.GetAllUser,
         }),
-
 
         getAssetByID: build.mutation<AssetServerResponse, number>({
             query: (id) => ({
                 url: AssetEndpoint.GetByID,
-                method: 'GET',
-                params: { id }
+                method: "GET",
+                params: { id },
             }),
         }),
 
         linkAssetToOrg: build.mutation<any, LinkOrganizationParameters>({
             query: (params) => ({
                 url: AssetEndpoint.LinkOrganization,
-                method: 'POST',
-                params
+                method: "POST",
+                params,
             }),
-            invalidatesTags: (_res, _err, arg) => [{ type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${arg.assetId}` }],
+            invalidatesTags: (_res, _err, arg) => [
+                { type: "Assets", id: "Organization" },
+                { type: "Assets", id: `Org-${arg.assetId}` },
+            ],
         }),
 
         unlinkAssetToOrg: build.mutation<any, LinkOrganizationParameters>({
             query: (params) => ({
                 url: AssetEndpoint.UnLinkOrganization,
-                method: 'POST',
-                params
+                method: "POST",
+                params,
             }),
-            invalidatesTags: (_res, _err, arg) => [{ type: 'Assets', id: 'Organization' }, { type: 'Assets', id: `Org-${arg.assetId}` }],
+            invalidatesTags: (_res, _err, arg) => [
+                { type: "Assets", id: "Organization" },
+                { type: "Assets", id: `Org-${arg.assetId}` },
+            ],
         }),
 
         linkAssetToUser: build.mutation<any, LinkUserParameters>({
             query: (params) => ({
                 url: AssetEndpoint.LinkUser,
-                method: 'POST',
-                params
+                method: "POST",
+                params,
             }),
-            invalidatesTags: [{ type: 'Assets', id: 'User' }],
+            invalidatesTags: [{ type: "Assets", id: "User" }],
         }),
 
         unlinkAssetToUser: build.mutation<any, LinkUserParameters>({
             query: (params) => ({
                 url: AssetEndpoint.UnLinkUser,
-                method: 'POST',
-                params
+                method: "POST",
+                params,
             }),
-            invalidatesTags: [{ type: 'Assets', id: 'User' }],
+            invalidatesTags: [{ type: "Assets", id: "User" }],
         }),
 
-
-        toggleAssetShared: build.mutation<any, number | string>({
-            query: (assetId) => ({
+        toggleAssetShared: build.mutation<any, ToggleSharesParams>({
+            query: (params) => ({
                 url: AssetEndpoint.ToggleShared,
-                method: 'POST',
-                params: {assetId}
+                method: "POST",
+                params,
             }),
-            invalidatesTags: (res, err, id) => [{ type: 'Assets', id }],
+            invalidatesTags: (res, err, { assetId, passedOrgID }) => [
+                { type: "Assets", id: assetId },
+                { type: "Assets", id: `Org-${passedOrgID}` },
+                { type: "Assets", id: "Organization" },
+            ],
         }),
-
     }),
 });
 
@@ -123,5 +139,5 @@ export const {
     useLinkAssetToUserMutation,
     useUnlinkAssetToUserMutation,
     useGetUserAssetsQuery,
-    useToggleAssetSharedMutation
+    useToggleAssetSharedMutation,
 } = assetApi;
