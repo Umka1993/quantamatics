@@ -42,7 +42,7 @@ const InviteUserForm: FunctionComponent = () => {
     useEffect(() => {
         if (assets) {
             const sharedAssets = assets.filter(asset => asset.sharedByDefault);
-            console.log(sharedAssets)
+
             const sharedAssetsIDs = sharedAssets.map(({ assetId }) => assetId)
             setAssignedAssets(new Set(sharedAssetsIDs))
         }
@@ -91,6 +91,8 @@ const InviteUserForm: FunctionComponent = () => {
         }
     }, [isUserRegistered]);
 
+    useEffect(() => { assignedAssets.size && setAssetError(false) }, [assignedAssets])
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -103,6 +105,7 @@ const InviteUserForm: FunctionComponent = () => {
 
     const addUserToOrg = () => {
         setLoading(true)
+        setAssetError(false);
         if (assignedAssets.size) {
             register({
                 firstName,
@@ -174,9 +177,9 @@ const InviteUserForm: FunctionComponent = () => {
             <Button
                 className="create-organization__submit"
                 type="submit"
-            // disabled={
-            //     !Boolean(firstName && lastName && email && subscriptionEndDate)
-            // }
+                disabled={
+                    !Boolean(firstName && lastName && email && subscriptionEndDate && !assetError)
+                }
             >
                 Save
             </Button>
