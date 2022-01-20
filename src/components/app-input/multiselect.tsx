@@ -9,16 +9,24 @@ import React, {
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
 import useCloseModal from "../../hooks/useCloseModal";
-import MultiselectOptions, { Options } from "./multiselect-options";
 import classNames from "classnames";
-interface IInput extends Options, SelectHTMLAttributes<HTMLSelectElement> {
+import MultiselectAssetOption, {
+    MultiselectAssetOptionProps,
+} from "./multiselect-asset-option";
+import { AssetListItem } from "../../types/asset";
+interface IInput
+    extends Omit<MultiselectAssetOptionProps, "option" | "selected">,
+    SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
     showLimit?: boolean;
+    selected: Set<string | number>;
 
     errorMessage?: string;
     showError?: boolean;
+
+    options: AssetListItem[];
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -121,15 +129,24 @@ const Multiselect: FunctionComponent<IInput> = ({
             )}
 
             {showOptions && (
-                <MultiselectOptions
-                    options={options}
-                    selected={selected}
-                    setSelected={setSelected}
-                    disabled={disabled}
-                    setAssetsToUpdateShared={setAssetsToUpdateShared}
-                    assetsToUpdateShared={assetsToUpdateShared}
-                    type={type}
-                />
+                <div
+                    className={classNames("multiselect__options", {
+                        // 'multiselect__options--ods': options.length % 2 !== 0
+                    })}
+                >
+                    {Array.from(options).map((option) => (
+                        <MultiselectAssetOption
+                            key={option.assetId}
+                            option={option}
+                            selected={selected.has(option.assetId)}
+                            setSelected={setSelected}
+                            disabled={disabled}
+                            setAssetsToUpdateShared={setAssetsToUpdateShared}
+                            assetsToUpdateShared={assetsToUpdateShared}
+                            type={type}
+                        />
+                    ))}
+                </div>
             )}
         </div>
     );

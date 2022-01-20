@@ -5,19 +5,17 @@ import React, {
     LabelHTMLAttributes,
     SetStateAction,
     FormEventHandler,
-    InputHTMLAttributes
+    useEffect
 } from "react";
 import "./style/checkbox.scss";
 import CheckIcon from "./assets/check.svg";
 import classNames from 'classnames'
-import { useEffect } from "react";
 import { useRef } from "react";
 
 interface CheckboxProps extends Omit<LabelHTMLAttributes<HTMLLabelElement>, 'onInput'> {
     name?: string;
-    checked?: boolean;
+    checked: boolean;
     externalSetter?: Dispatch<SetStateAction<boolean>>;
-    onInput?: FormEventHandler<HTMLInputElement>;
     align?: 'right' | 'left';
     disabled?: boolean;
     highlightOnChecked?: boolean;
@@ -29,7 +27,6 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
     checked,
     className,
     name,
-    onInput,
     externalSetter,
     align = "left",
     disabled,
@@ -40,10 +37,14 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
 }) => {
     const inputRef = useRef<HTMLInputElement>(null)
     function inputHandler(evt: ChangeEvent<HTMLInputElement>) {
-        externalSetter && externalSetter(evt.target.checked);
-        onInput && onInput(evt);
+        externalSetter && externalSetter(value => !value);
     }
 
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.checked = checked
+        }
+    }, [checked, inputRef.current])
     return (
         <label className={classNames("check-block", {
             'check-block--right': align === "right",
@@ -53,7 +54,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                 type="checkbox"
                 name={name}
                 defaultChecked={checked}
-                onInput={inputHandler}
+                onChange={inputHandler}
                 className="check-block__input"
                 disabled={disabled}
                 value={value}
