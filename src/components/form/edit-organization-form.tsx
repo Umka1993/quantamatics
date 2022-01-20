@@ -91,6 +91,15 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 selectedAssets.map(({ assetId }) => assetId)
             );
 
+            onlySharedAssets.forEach(({ sharedByDefault, assetId }) => {
+                sharedByDefault &&
+                    !selectedAssetsIDs.has(assetId) &&
+                    organization &&
+                    linkAsset({ assetId, orgId: organization.id });
+            });
+
+            setAssignedAssets(selectedAssetsIDs);
+
             setOptions(
                 [...allAvailableAsset].map((asset) => ({
                     ...asset,
@@ -100,15 +109,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         ) !== -1,
                 }))
             );
-
-            onlySharedAssets.forEach(({ sharedByDefault, assetId }) => {
-                sharedByDefault &&
-                    !selectedAssetsIDs.has(assetId) &&
-                    organization &&
-                    linkAsset({ assetId, orgId: organization.id });
-            });
-
-            setAssignedAssets(selectedAssetsIDs);
         }
     }, [selectedAssets, allAvailableAsset, isSelectedAssetsLoaded]);
 
