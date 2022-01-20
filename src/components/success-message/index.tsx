@@ -5,6 +5,12 @@ import Button from "../button";
 import CheckIcon from "./assets/check.svg";
 import style from "./style/success.module.scss";
 
+interface Message {
+    headline: string;
+    linkText: string;
+    link: string;
+}
+
 const SuccessMessage: FunctionComponent = () => {
     const { state } = useLocation();
 
@@ -12,9 +18,11 @@ const SuccessMessage: FunctionComponent = () => {
         <article className={style.success}>
             <h1 className={style.title}>
                 <CheckIcon aria-hidden="true" fill="currentColor" />
-                {state.headline}
+                {(state as Message).headline}
             </h1>
-            <Button className={style.button} href={state.link}>{state.linkText}</Button>
+            <Button className={style.button} href={(state as Message).link}>
+                {(state as Message).linkText}
+            </Button>
         </article>
     ) : (
         <Navigate to={AppRoute.Home} />
