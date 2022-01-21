@@ -163,17 +163,28 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
                 /* Link new assets */
                 assignedAssets.forEach((assetId) => {
-                    selectedAssets.findIndex((asset) => asset.assetId === assetId) < 0 &&
+
+                    /* Toggle only selected values (unselected toggled to false on backend) */
+                    const toggleShareByDefaultIfSelected = () => {
+                        if (assignedAssets.has(assetId)) toggleAssetShared({ assetId, passedOrgID: organization.id })
+                    }
+
+                    /* Toggle after linking, if asset already linking order doesn't matter  */
+                    if (selectedAssets.findIndex((asset) => asset.assetId === assetId) < 0) {
                         linkAsset({
                             assetId,
                             orgId,
-                        });
+                        }).unwrap().then(() => toggleShareByDefaultIfSelected())
+                    } else toggleShareByDefaultIfSelected()
                 });
             }
 
-            assetsToUpdateShared.forEach((assetId) =>
-                toggleAssetShared({ assetId, passedOrgID: organization.id })
-            );
+
+            // assetsToUpdateShared.forEach((assetId) =>
+
+            // );
+
+
 
             update({
                 ...organization,
