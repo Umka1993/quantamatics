@@ -57,6 +57,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
         new Set()
     );
+    const [initialSelectedAssets, setInitialSelectedAssets] = useState<
+        Set<string | number>
+    >(new Set());
 
     const [assetsToUpdateShared, setAssetsToUpdateShared] = useState<
         Set<string | number>
@@ -71,55 +74,45 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         checkIdDuplicate,
     ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
-    const [loadOrgAssets] =
-        assetsHooks.useGetAllAssetsOrgMutation();
-
-    // Load all assets that are available for logged user
-    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
-        assetsHooks.useGetAllAssetsQuery(user?.organizationId as string);
-    // Load all assets that are already linked to org
-    const { data: selectedAssets, isSuccess: isSelectedAssetsLoaded } =
-        assetsHooks.useGetAllAssetsQuery(organization?.id as string);
+    const [loadOrgAssets] = assetsHooks.useGetAllAssetsOrgMutation();
 
     const [toggleAssetShared] = assetsHooks.useToggleAssetSharedMutation();
 
     const [options, setOptions] = useState<AssetListItem[]>([]);
 
     useEffect(() => {
-        loadOrgAssets(organization?.id as string).then(
-            
-        )
-    }, [organization])
+        organization &&
+            user &&
+            loadOrgAssets(organization.id)
+                .unwrap()
+                .then((selectedAssets) => {
+                    const onlySharedAssets = selectedAssets.filter(
+                        ({ sharedByDefault }) => sharedByDefault
+                    );
 
-    useEffect(() => {
-        if (selectedAssets && allAvailableAsset) {
-            const onlySharedAssets = selectedAssets.filter(
-                ({ sharedByDefault }) => sharedByDefault
-            );
-            const selectedAssetsIDs = new Set(
-                selectedAssets.map(({ assetId }) => assetId)
-            );
+                    const selectedAssetsIDs = new Set(
+                        selectedAssets.map(({ assetId }) => assetId)
+                    );
 
-            onlySharedAssets.forEach(({ sharedByDefault, assetId }) => {
-                sharedByDefault &&
-                    !selectedAssetsIDs.has(assetId) &&
-                    organization &&
-                    linkAsset({ assetId, orgId: organization.id });
-            });
+                    setInitialSelectedAssets(selectedAssetsIDs);
 
-            setAssignedAssets(selectedAssetsIDs);
+                    setAssignedAssets(selectedAssetsIDs);
 
-            setOptions(
-                [...allAvailableAsset].map((asset) => ({
-                    ...asset,
-                    sharedByDefault:
-                        onlySharedAssets.findIndex(
-                            ({ assetId }) => assetId === asset.assetId
-                        ) !== -1,
-                }))
-            );
-        }
-    }, [selectedAssets, allAvailableAsset, isSelectedAssetsLoaded]);
+                    loadOrgAssets(user?.organizationId as string)
+                        .unwrap()
+                        .then((allAssets) =>
+                            setOptions(
+                                [...allAssets].map((asset) => ({
+                                    ...asset,
+                                    sharedByDefault:
+                                        onlySharedAssets.findIndex(
+                                            ({ assetId }) => assetId === asset.assetId
+                                        ) !== -1,
+                                }))
+                            )
+                        );
+                });
+    }, [organization, user]);
 
     const [linkAsset, { isLoading: isLinkingAsset }] =
         assetsHooks.useLinkAssetToOrgMutation();
@@ -163,30 +156,33 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         }
 
         if (organization) {
-            if (selectedAssets) {
-                const orgId = organization.id;
-                /* Unlink unselected assets */
-                selectedAssets.forEach(({ assetId }) => {
-                    !assignedAssets.has(assetId) && unlinkAsset({ assetId, orgId });
-                });
+            const orgId = organization.id;
+            /* Unlink unselected assets */
+            initialSelectedAssets.forEach((assetId) => {
+                !assignedAssets.has(assetId) && unlinkAsset({ assetId, orgId });
+            });
 
-                /* Link new assets */
-                assignedAssets.forEach((assetId) => {
+            /* Link new assets */
+            assignedAssets.forEach((assetId) => {
+                /* Toggle only selected values (unselected toggled to false on backend) */
+                const toggleShareByDefaultIfSelected = () => {
+                    if (assetsToUpdateShared.has(assetId))
+                        toggleAssetShared({ assetId, passedOrgID: organization.id });
+                };
 
-                    /* Toggle only selected values (unselected toggled to false on backend) */
-                    const toggleShareByDefaultIfSelected = () => {
-                        if (assignedAssets.has(assetId)) toggleAssetShared({ assetId, passedOrgID: organization.id })
-                    }
+                /* Toggle after linking, if asset already linking order doesn't matter  */
+                if (initialSelectedAssets.has(assetId)) {
+                    toggleShareByDefaultIfSelected();
+                } else {
+                    linkAsset({
+                        assetId,
+                        orgId,
+                    })
+                        .unwrap()
+                        .then(() => toggleShareByDefaultIfSelected());
+                }
+            });
 
-                    /* Toggle after linking, if asset already linking order doesn't matter  */
-                    if (selectedAssets.findIndex((asset) => asset.assetId === assetId) < 0) {
-                        linkAsset({
-                            assetId,
-                            orgId,
-                        }).unwrap().then(() => toggleShareByDefaultIfSelected())
-                    } else toggleShareByDefaultIfSelected()
-                });
-            }
             update({
                 ...organization,
                 name,
