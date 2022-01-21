@@ -71,6 +71,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         checkIdDuplicate,
     ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
+    const [loadOrgAssets] =
+        assetsHooks.useGetAllAssetsOrgMutation();
+
     // Load all assets that are available for logged user
     const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
         assetsHooks.useGetAllAssetsQuery(user?.organizationId as string);
@@ -81,6 +84,12 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [toggleAssetShared] = assetsHooks.useToggleAssetSharedMutation();
 
     const [options, setOptions] = useState<AssetListItem[]>([]);
+
+    useEffect(() => {
+        loadOrgAssets(organization?.id as string).then(
+            
+        )
+    }, [organization])
 
     useEffect(() => {
         if (selectedAssets && allAvailableAsset) {
@@ -178,14 +187,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     } else toggleShareByDefaultIfSelected()
                 });
             }
-
-
-            // assetsToUpdateShared.forEach((assetId) =>
-
-            // );
-
-
-
             update({
                 ...organization,
                 name,
@@ -276,7 +277,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         className={style.input}
                     />
 
-                    {!!options.length && (
+                    {Boolean(options.length) && (
                         <Multiselect
                             options={options}
                             label="Org. Assets"
