@@ -51,7 +51,7 @@
     &__input:focus {
         outline: none;
     }
-    &--highlight &__input:focus ~ &__custom::before,
+    &--highlight &__input:focus-visible ~ &__custom::before,
     &--highlight &__check:hover ~ &__custom::before {
         border-color: $accent;
     }
