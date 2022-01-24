@@ -128,26 +128,25 @@ const Multiselect: FunctionComponent<IInput> = ({
                 <p className="app-input__error">{errorMessage}</p>
             )}
 
-            {showOptions && (
-                <div
-                    className={classNames("multiselect__options", {
-                        // 'multiselect__options--ods': options.length % 2 !== 0
-                    })}
-                >
-                    {Array.from(options).map((option) => (
-                        <MultiselectAssetOption
-                            key={option.assetId}
-                            option={option}
-                            selected={selected.has(option.assetId)}
-                            setSelected={setSelected}
-                            disabled={disabled}
-                            setAssetsToUpdateShared={setAssetsToUpdateShared}
-                            assetsToUpdateShared={assetsToUpdateShared}
-                            type={type}
-                        />
-                    ))}
-                </div>
-            )}
+            <div
+                className={classNames("multiselect__options", {
+                    // 'multiselect__options--ods': options.length % 2 !== 0
+                })}
+                hidden={!showOptions}
+            >
+                {Array.from(options).map((option) => (
+                    <MultiselectAssetOption
+                        key={option.assetId}
+                        option={option}
+                        selected={selected.has(option.assetId)}
+                        setSelected={setSelected}
+                        disabled={disabled}
+                        setAssetsToUpdateShared={setAssetsToUpdateShared}
+                        assetsToUpdateShared={assetsToUpdateShared}
+                        type={type}
+                    />
+                ))}
+            </div>
         </div>
     );
 };
