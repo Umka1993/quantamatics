@@ -18,7 +18,7 @@ import Loader from "../loader";
 import { AppRoute, UserRole } from "../../data/enum";
 import * as assetsHooks from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
-import { AssetListItem } from "../../types/asset";
+import { AssetListItem, AssetServerResponse } from "../../types/asset";
 import useUser from "../../hooks/useUser";
 interface EditOrganizationFormProps {
     organization?: Organization;
@@ -81,8 +81,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [options, setOptions] = useState<AssetListItem[]>([]);
 
     useEffect(() => {
-        organization &&
-            user &&
+        if (organization && user) {
             loadOrgAssets(organization.id)
                 .unwrap()
                 .then((selectedAssets) => {
@@ -98,20 +97,40 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
                     setAssignedAssets(selectedAssetsIDs);
 
-                    loadOrgAssets(user?.organizationId as string)
-                        .unwrap()
-                        .then((allAssets) =>
-                            setOptions(
-                                [...allAssets].map((asset) => ({
-                                    ...asset,
-                                    sharedByDefault:
-                                        onlySharedAssets.findIndex(
-                                            ({ assetId }) => assetId === asset.assetId
-                                        ) !== -1,
-                                }))
-                            )
+                    const prepareOptions = (allAssets: AssetListItem[]) =>
+                        setOptions(
+                            [...allAssets].map((asset) => ({
+                                ...asset,
+                                sharedByDefault:
+                                    onlySharedAssets.findIndex(
+                                        ({ assetId }) => assetId === asset.assetId
+                                    ) !== -1,
+                            }))
                         );
+
+                    // check if organization has some assets that parent org doesn't has
+                    organization.parentId &&
+                        loadOrgAssets(organization.parentId)
+                            .unwrap()
+                            .then((allAssets) => {
+                                selectedAssetsIDs.forEach(
+                                    (assetId) =>
+                                        allAssets.findIndex(
+                                            (asset) => asset.assetId === assetId
+                                        ) === -1 && unlinkAsset({ assetId, orgId: organization.id })
+                                );
+
+                                organization.parentId === user.organizationId &&
+                                    prepareOptions(allAssets);
+                            });
+
+                    // Prepare data for multiselect
+                    organization.parentId !== user.organizationId &&
+                        loadOrgAssets(user?.organizationId as string)
+                            .unwrap()
+                            .then((allAssets) => prepareOptions(allAssets));
                 });
+        }
     }, [organization, user]);
 
     const [linkAsset, { isLoading: isLinkingAsset }] =
