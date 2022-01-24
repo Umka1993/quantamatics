@@ -262,7 +262,11 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 </div>
             </header>
 
-            {isUpdating || externalLoad || loading || isLinkingAsset ? (
+            {isUpdating ||
+                externalLoad ||
+                loading ||
+                isLinkingAsset ||
+                !options.length ? (
                 <Loader />
             ) : (
                 <div className={style.inputs}>
@@ -292,21 +296,19 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         className={style.input}
                     />
 
-                    {Boolean(options.length) && (
-                        <Multiselect
-                            options={options}
-                            label="Org. Assets"
-                            selected={assignedAssets}
-                            setSelected={setAssignedAssets}
-                            errorMessage="Select asset permissions to assign to the organization."
-                            showError={assetError}
-                            className={style.input}
-                            assetsToUpdateShared={assetsToUpdateShared}
-                            setAssetsToUpdateShared={setAssetsToUpdateShared}
-                            disabled={!isHaveAccessToEditAsset}
-                            type="edit-organization"
-                        />
-                    )}
+                    <Multiselect
+                        options={options}
+                        label="Org. Assets"
+                        selected={assignedAssets}
+                        setSelected={setAssignedAssets}
+                        errorMessage="Select asset permissions to assign to the organization."
+                        showError={assetError}
+                        className={style.input}
+                        assetsToUpdateShared={assetsToUpdateShared}
+                        setAssetsToUpdateShared={setAssetsToUpdateShared}
+                        disabled={!isHaveAccessToEditAsset}
+                        type="edit-organization"
+                    />
 
                     <Input
                         externalSetter={setComment}
