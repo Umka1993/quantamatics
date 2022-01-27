@@ -235,6 +235,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         isUpdated && isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);
     }, [isUpdated]);
 
+    useEffect(() => setCustomerID(customerCrmId.trim()), [customerCrmId])
+
     return (
         <form
             className={style.root}
