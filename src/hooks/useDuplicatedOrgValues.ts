@@ -1,10 +1,8 @@
+import { UniqueError } from "../data/enum";
 import { RefObject, useEffect, useState } from "react";
 import { useGetAllOrganizationsQuery } from "../api/organization";
 
-const enum UniqueError {
-    Name = "Organization Name must be unique",
-    ID = "Organization CRM Customer ID must be unique",
-}
+
 
 export default function useDuplicatedOrgValues(
     formRef: RefObject<HTMLFormElement>,
@@ -38,7 +36,7 @@ export default function useDuplicatedOrgValues(
 
     function checkNameDuplicate(): boolean {
         const duplicatedOrganization = allOrganizations?.find(
-            (org) => org.name === name
+            (org) => org.name.toLocaleLowerCase() === name.toLocaleLowerCase()
         );
         if (duplicatedOrganization) {
             setDuplicateOrgError(UniqueError.Name);

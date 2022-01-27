@@ -108,3 +108,8 @@ export const enum RegExpValidation {
 export const enum Error {
     DuplicateUser = 'A user account with this email already exists'
 }
+
+export const enum UniqueError {
+    Name = "Organization Name must be unique",
+    ID = "Organization CRM Customer ID must be unique",
+}
