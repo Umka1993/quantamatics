@@ -236,6 +236,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }, [isUpdated]);
 
     useEffect(() => setCustomerID(customerCrmId.replace(/\s/g, '')), [customerCrmId])
+    useEffect(() => organization && setCustomerID(organization.customerCrmId), [organization])
 
     return (
         <form

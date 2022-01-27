@@ -11,7 +11,6 @@ import {
     useGetAllAssetsQuery,
     useLinkAssetToOrgMutation,
 } from "../../api/asset";
-import { AssetListItem } from "../../types/asset";
 
 interface ICreateOrganization { }
 
