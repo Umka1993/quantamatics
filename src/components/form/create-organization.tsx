@@ -99,6 +99,9 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         }
     };
 
+    useEffect(() => setCustomerCrmId(customerCrmId.replace(/\s/g, '')), [customerCrmId])
+
+
     return (
         <Form
             className="create-organization"
