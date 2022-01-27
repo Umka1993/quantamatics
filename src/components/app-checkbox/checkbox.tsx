@@ -21,6 +21,7 @@ interface CheckboxProps
     disabled?: boolean;
     highlightOnChecked?: boolean;
     value?: string | number;
+    textTitle?: string;
 }
 
 const Checkbox: FunctionComponent<CheckboxProps> = ({
@@ -34,6 +35,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
     highlightOnChecked,
     defaultChecked,
     value,
+    textTitle,
     ...other
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -78,7 +80,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                 />
             </span>
 
-            <span className="check-block__text">{children}</span>
+            <span className="check-block__text" title={textTitle}>{children}</span>
         </label>
     );
 };

@@ -1,3 +1,13 @@
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 .root {
     min-height: 142px;
     position: relative;
@@ -35,4 +45,6 @@
     display: flex;
     margin: -5px -18px;
     flex-wrap: wrap;
+    // opacity: 0;
+    // animation: fadeIn 0.2s ease-in 0.8s forwards;
 }

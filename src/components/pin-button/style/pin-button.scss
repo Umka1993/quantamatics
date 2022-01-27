@@ -12,7 +12,8 @@
         position: absolute;
         background: linear-gradient(90.76deg, rgba(113, 130, 166, 0.85) 0%, rgba(85, 98, 126, 0.95) 100%);
         backdrop-filter: blur(2px);
-        /* Note: backdrop-filter has minimal browser support */
+        z-index: 2;
+        font-size: 12px;
 
         border-radius: 2px;
         padding: 6px 8px;

@@ -108,7 +108,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                             }))
                         );
 
-                    // check if organization has some assets that parent org doesn't has
+                // check if organization has some assets that parent org doesn't has
                     organization.parentId &&
                         loadOrgAssets(organization.parentId)
                             .unwrap()
@@ -122,14 +122,18 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
                                 organization.parentId === user.organizationId &&
                                     prepareOptions(allAssets);
-                            });
+                            }); 
 
                     // Prepare data for multiselect
-                    organization.parentId !== user.organizationId &&
+                    organization.parentId !== user.organizationId
                         loadOrgAssets(user?.organizationId as string)
                             .unwrap()
                             .then((allAssets) => prepareOptions(allAssets));
                 });
+
+                
+
+                // return () => setTimeout(() => setLoading(false), 500)
         }
     }, [organization, user]);
 
@@ -208,6 +212,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 customerCrmId,
                 customerCrmLink,
                 comments,
+
+                organizationAssets: options
             });
         }
         setLoading(false);

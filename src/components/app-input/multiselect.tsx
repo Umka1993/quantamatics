@@ -5,6 +5,7 @@ import React, {
     SelectHTMLAttributes,
     CSSProperties,
     useEffect,
+    useLayoutEffect,
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
@@ -58,6 +59,8 @@ const Multiselect: FunctionComponent<IInput> = ({
             setRightOffset(offsetWidth + 25);
         }
     };
+
+    // useLayoutEffect(reCalcLabelWidth, [selected, labelRef.current])
 
     useEffect(() => {
         if (Boolean(selected.size)) {

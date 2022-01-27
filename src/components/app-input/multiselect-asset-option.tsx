@@ -92,7 +92,7 @@ const MultiselectAssetOption: FunctionComponent<
                     disabled={isUserMode ? option.sharedByDefault : disabled}
                     highlightOnChecked
                     value={option.assetId}
-                    title={option.name}
+                    textTitle={option.name}
                 >
                     {option.name}
                 </Checkbox>

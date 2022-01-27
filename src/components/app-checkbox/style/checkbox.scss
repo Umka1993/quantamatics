@@ -19,6 +19,8 @@
         border: 0.0625em solid transparentize($main-text, 0.7);
         box-shadow: inset 0px 0.125em 0.4375em transparentize($main-text, 0.9);
         border-radius: 2px;
+
+        transition: border-color 0.2s ease-in;
     }
 
     &--right &__custom {
@@ -31,6 +33,9 @@
         position: absolute;
     }
 
+    &__text {
+        transition: color 0.2s ease-in;
+    }
     &--highlight &__input:not(:disabled):checked ~ &__text,
     &--highlight:hover &__text,
     &--highlight:focus-visible &__text {
@@ -40,6 +45,7 @@
     &__input:focus {
         outline: none;
     }
+
     &--highlight &__input:focus-visible ~ &__custom,
     &--highlight:hover &__input:not(:disabled) ~ &__custom {
         border-color: $accent;
