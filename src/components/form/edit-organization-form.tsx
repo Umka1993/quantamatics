@@ -18,7 +18,7 @@ import Loader from "../loader";
 import { AppRoute, UserRole } from "../../data/enum";
 import * as assetsHooks from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
-import { AssetListItem, AssetServerResponse } from "../../types/asset";
+import { AssetListItem } from "../../types/asset";
 import useUser from "../../hooks/useUser";
 interface EditOrganizationFormProps {
     organization?: Organization;
@@ -80,7 +80,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
     const [options, setOptions] = useState<AssetListItem[]>([]);
 
-    useEffect(() => {
+
+    // init options
+    function prepareOptions() {
         if (organization && user) {
             loadOrgAssets(organization.id)
                 .unwrap()
@@ -108,7 +110,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                             }))
                         );
 
-                // check if organization has some assets that parent org doesn't has
+                    // check if organization has some assets that parent org doesn't has
                     organization.parentId &&
                         loadOrgAssets(organization.parentId)
                             .unwrap()
@@ -122,20 +124,19 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
                                 organization.parentId === user.organizationId &&
                                     prepareOptions(allAssets);
-                            }); 
+                            });
 
                     // Prepare data for multiselect
                     organization.parentId !== user.organizationId
-                        loadOrgAssets(user?.organizationId as string)
-                            .unwrap()
-                            .then((allAssets) => prepareOptions(allAssets));
+                    loadOrgAssets(user?.organizationId as string)
+                        .unwrap()
+                        .then((allAssets) => prepareOptions(allAssets));
                 });
-
-                
-
-                // return () => setTimeout(() => setLoading(false), 500)
+            // return () => setTimeout(() => setLoading(false), 500)
         }
-    }, [organization, user]);
+    }
+
+    useEffect(prepareOptions, [organization, user]);
 
     const [linkAsset, { isLoading: isLinkingAsset }] =
         assetsHooks.useLinkAssetToOrgMutation();
@@ -232,7 +233,13 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }, [isUpdateError]);
 
     useEffect(() => {
-        isUpdated && isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);
+        if (isUpdated) {
+            if (isHaveAccessToOrgList) { navigate(AppRoute.OrganizationList) }
+            else {
+                setOptions([])
+                prepareOptions()
+            }
+        }
     }, [isUpdated]);
 
     useEffect(() => setCustomerID(customerCrmId.replace(/\s/g, '')), [customerCrmId])
