@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
 import { useAddOrganizationMutation } from "../../api/organization";
-import { AppRoute, UniqueError } from "../../data/enum";
+import { AppRoute } from "../../data/enum";
 import useUser from "../../hooks/useUser";
 import {
     useGetAllAssetsQuery,
     useLinkAssetToOrgMutation,
 } from "../../api/asset";
+import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 
 interface ICreateOrganization { }
 
@@ -41,29 +42,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const [duplicateOrgError, setDuplicateOrgError] = useState<
-        undefined | UniqueError.Name
-    >(undefined);
-    const [duplicateIdError, setDuplicateIdError] = useState<
-        undefined | UniqueError.ID
-    >(undefined);
-
-    useEffect(() => {
-        duplicateOrgError && formRef.current?.reportValidity();
-    }, [duplicateOrgError, formRef.current]);
-
-    useEffect(() => {
-        duplicateIdError && formRef.current?.reportValidity();
-    }, [duplicateIdError, formRef.current]);
-
-    useEffect(() => {
-        duplicateOrgError && setDuplicateOrgError(undefined);
-    }, [name]);
-
-    useEffect(() => {
-        customerCrmId && setDuplicateIdError(undefined);
-    }, [customerCrmId]);
-
+    const [
+        duplicateOrgError,
+        duplicateIdError,
+        checkNameDuplicate,
+        checkIdDuplicate,
+    ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
     // Load all assets that are available for logged user
     const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
         useGetAllAssetsQuery(user?.organizationId as string);
@@ -91,10 +75,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         if (isError) {
             const text = (error as any).data.errors;
             console.log(text);
-            text.includes("Organization with name ") &&
-                setDuplicateOrgError(UniqueError.Name);
-            text.includes("Organization with CRM Id already exists") &&
-                setDuplicateIdError(UniqueError.ID);
+    
         }
     }, [isError]);
 
@@ -107,7 +88,15 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
             setAssetError(true);
             return setStopLoading(true);
         }
-        register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
+
+        let duplicate = checkNameDuplicate();
+        duplicate = (customerCrmId && checkIdDuplicate()) || duplicate;
+
+        if (duplicate) {
+            return setStopLoading(true);
+        } else {
+            register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
+        }
     };
 
     // Remove spaces from CRM ID
