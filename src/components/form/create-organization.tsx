@@ -34,7 +34,9 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [customerCrmId, setCustomerCrmId] = useState<string>("");
     const [customerCrmLink, setCustomerCrmLink] = useState<string>("");
     const [comments, setComments] = useState<string | undefined>("");
-    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(new Set())
+    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
+        new Set()
+    );
 
     const [assetError, setAssetError] = useState(false);
 
@@ -49,9 +51,8 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
 
     // Load all assets that are available for logged user
-    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } = useGetAllAssetsQuery(
-        user?.organizationId as string
-    );
+    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
+        useGetAllAssetsQuery(user?.organizationId as string);
 
     const [linkAsset, { isLoading: isLinkingAsset }] =
         useLinkAssetToOrgMutation();
@@ -81,8 +82,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     useEffect(() => {
         stopLoading && setStopLoading(undefined);
     }, [stopLoading]);
-
-
 
     const handleSubmit = () => {
         if (!assignedAssets.size) {
@@ -158,7 +157,11 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
             <Button
                 className="create-organization__submit"
                 type="submit"
-                disabled={!name}
+                disabled={
+                    !name ||
+                    duplicateOrgError !== undefined ||
+                    duplicateIdError !== undefined
+                }
             >
                 Save
             </Button>
