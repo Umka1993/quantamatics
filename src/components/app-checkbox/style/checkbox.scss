@@ -1,4 +1,4 @@
-@import "../../../variables.scss";
+@import "../../../sass/variables";
 
 .check-block {
     font: inherit;
@@ -37,7 +37,10 @@
         transition: color 0.2s ease-in;
     }
     &--highlight &__input:not(:disabled):checked ~ &__text,
-    &--highlight:hover &__text,
+    &--highlight:hover &__text {
+        color: $accent;
+    }
+
     &--highlight:focus-visible &__text {
         color: $accent;
     }
@@ -46,7 +49,9 @@
         outline: none;
     }
 
-    &--highlight &__input:focus-visible ~ &__custom,
+    &--highlight &__input:focus-visible ~ &__custom {
+        border-color: $accent;
+    }
     &--highlight:hover &__input:not(:disabled) ~ &__custom {
         border-color: $accent;
     }

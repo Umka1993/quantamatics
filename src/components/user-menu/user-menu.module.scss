@@ -1,4 +1,4 @@
-@use "../../variables.scss" as *;
+@use "../../sass/variables" as *;
 
 .button,
 .close,
@@ -10,8 +10,11 @@
     color: $main-text;
 
     &:hover,
-    &:focus-visible,
     &:active {
+        color: $accent;
+    }
+
+    &:focus-visible {
         color: $accent;
     }
 }
@@ -82,12 +85,29 @@
     }
 
     &:hover,
-    &:focus-visible,
     &:active {
         font-weight: 500;
         svg {
             color: currentColor;
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 12px;
+            height: 22px;
+            width: 2px;
+            background-color: currentColor;
+            border-radius: 0px 5px 5px 0px;
+        }
     }
+
+    &:focus-visible {
+        font-weight: 500;
+        svg {
+            color: currentColor;
+        }
 
         &::before {
             content: "";

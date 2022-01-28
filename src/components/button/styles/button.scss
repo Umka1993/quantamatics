@@ -1,4 +1,5 @@
-@import "../../../variables.scss";
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
 
 .button {
   font: inherit;
@@ -30,9 +31,8 @@
     margin-right: 7px;
   }
 
-  &:hover,
-  &:focus-visible {
-    background: #017aee;
+  @include hover-focus {
+    background: $accent;
     color: #ffffff;
   }
 

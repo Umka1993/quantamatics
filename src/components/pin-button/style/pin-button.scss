@@ -27,7 +27,10 @@
         left: 50%;
     }
 
-    &:hover::after,
+    &:hover::after {
+        opacity: 1;
+    }
+
     &:focus-visible::after {
         opacity: 1;
     }
