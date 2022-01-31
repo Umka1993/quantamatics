@@ -12,7 +12,7 @@
         backdrop-filter: blur(10px);
 
         border-radius: 2px;
-        padding: 24px;
+        padding: 32px;
 
         font-size: 14px;
         line-height: 16px;
@@ -123,7 +123,10 @@
             transition: opacity 0.2s;
         }
 
-        &:focus-within .pin-button,
+        &:focus-within .pin-button {
+            opacity: 1;
+        }
+
         &:hover .pin-button {
             opacity: 1;
         }
