@@ -72,7 +72,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     duplicateIdError,
     checkNameDuplicate,
     checkIdDuplicate,
-  ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
+  ] = useDuplicatedOrgValues(formRef, name, customerCrmId, setName, setCustomerID);
 
   const [loadOrgAssets] = assetsHooks.useGetAllAssetsOrgMutation();
 
@@ -243,12 +243,14 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }
   }, [isUpdated]);
 
+
   useEffect(
-    () => setCustomerID(customerCrmId.replace(/\s/g, "")),
-    [customerCrmId]
-  );
-  useEffect(
-    () => organization && setCustomerID(organization.customerCrmId),
+    () => {
+      if (organization) {
+        setName(organization.name)
+        setCustomerID(organization.customerCrmId)
+      }
+    },
     [organization]
   );
 
@@ -286,10 +288,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
       </header>
 
       {isUpdating ||
-      externalLoad ||
-      loading ||
-      isLinkingAsset ||
-      !options.length ? (
+        externalLoad ||
+        loading ||
+        isLinkingAsset ||
+        !options.length ? (
         <Loader />
       ) : (
         <div className={style.inputs}>

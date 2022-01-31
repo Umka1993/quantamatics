@@ -1,13 +1,14 @@
 import { UniqueError } from "../data/enum";
-import { RefObject, useEffect, useState } from "react";
+import { RefObject, useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useGetAllOrganizationsQuery } from "../api/organization";
-
 
 
 export default function useDuplicatedOrgValues(
     formRef: RefObject<HTMLFormElement>,
     name: string,
-    customerCrmId: string
+    customerCrmId: string,
+    setName: Dispatch<SetStateAction<string>>,
+    setCustomerCrmId: Dispatch<SetStateAction<string>>
 ) {
     const { data: allOrganizations } = useGetAllOrganizationsQuery();
 
@@ -28,17 +29,24 @@ export default function useDuplicatedOrgValues(
 
     useEffect(() => {
         duplicateOrgError && setDuplicateOrgError(undefined);
+        // Delete spaces from start and end string. 
+        setName(name.trim())
     }, [name]);
 
     useEffect(() => {
         customerCrmId && setDuplicateIdError(undefined);
+
+        // Remove spaces from CRM ID
+        setCustomerCrmId(customerCrmId.replace(/\s/g, ""));
     }, [customerCrmId]);
 
+
+
     /** 
-     * Delete spaces from start and end string. Duplicate spaces transform to one
+     * Duplicate spaces transform to one
     */
     function prepareStringToCompare(string: string) : string {
-        return string.toLocaleLowerCase().trim().replace(/\s\s+/g, ' ')
+        return string.toLocaleLowerCase().replace(/\s\s+/g, ' ')
     }
 
     function checkNameDuplicate(): boolean {

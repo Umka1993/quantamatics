@@ -47,7 +47,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         duplicateIdError,
         checkNameDuplicate,
         checkIdDuplicate,
-    ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
+    ] = useDuplicatedOrgValues(formRef, name, customerCrmId, setName, setCustomerCrmId);
     // Load all assets that are available for logged user
     const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
         useGetAllAssetsQuery(user?.organizationId as string);
@@ -98,12 +98,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
             register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
         }
     };
-
-    // Remove spaces from CRM ID
-    useEffect(
-        () => setCustomerCrmId(customerCrmId.replace(/\s/g, "")),
-        [customerCrmId]
-    );
 
     return (
         <Form
