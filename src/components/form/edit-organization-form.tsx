@@ -81,7 +81,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
   const [options, setOptions] = useState<AssetListItem[]>([]);
 
   // init options
-  function prepareOptions() {
+  function initOptions() {
     if (organization && user) {
       loadOrgAssets(organization.id)
         .unwrap()
@@ -131,11 +131,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             .unwrap()
             .then((allAssets) => prepareOptions(allAssets));
         });
-      // return () => setTimeout(() => setLoading(false), 500)
     }
   }
 
-  useEffect(prepareOptions, [organization, user]);
+  useEffect(initOptions, [organization, user]);
 
   const [linkAsset, { isLoading: isLinkingAsset }] =
     assetsHooks.useLinkAssetToOrgMutation();
@@ -208,8 +207,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         setAssetsToUpdateShared(new Set([]));
       });
 
-
-
       update({
         ...organization,
         name,
@@ -241,7 +238,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         navigate(AppRoute.OrganizationList);
       } else {
         setOptions([]);
-        prepareOptions();
+        initOptions();
       }
     }
   }, [isUpdated]);
@@ -289,10 +286,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
       </header>
 
       {isUpdating ||
-        externalLoad ||
-        loading ||
-        isLinkingAsset ||
-        !options.length ? (
+      externalLoad ||
+      loading ||
+      isLinkingAsset ||
+      !options.length ? (
         <Loader />
       ) : (
         <div className={style.inputs}>

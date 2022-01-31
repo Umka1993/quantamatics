@@ -34,9 +34,16 @@ export default function useDuplicatedOrgValues(
         customerCrmId && setDuplicateIdError(undefined);
     }, [customerCrmId]);
 
+    /** 
+     * Delete spaces from start and end string. Duplicate spaces transform to one
+    */
+    function prepareStringToCompare(string: string) : string {
+        return string.toLocaleLowerCase().trim().replace(/\s\s+/g, ' ')
+    }
+
     function checkNameDuplicate(): boolean {
         const duplicatedOrganization = allOrganizations?.find(
-            (org) => org.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+            (org) => prepareStringToCompare(org.name) === prepareStringToCompare(name)
         );
         if (duplicatedOrganization) {
             setDuplicateOrgError(UniqueError.Name);
