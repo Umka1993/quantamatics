@@ -7,6 +7,7 @@ import {
     SetStateAction,
 } from "react";
 import { useGetAllOrganizationsQuery } from "../api/organization";
+import normalizeName from "../services/normalize-name";
 
 export default function useDuplicatedOrgValues(
     formRef: RefObject<HTMLFormElement>,
@@ -53,7 +54,7 @@ export default function useDuplicatedOrgValues(
     }, [customerCrmId]);
 
     function checkNameDuplicate(): boolean {
-        const normalizedName = name.trim().replace(/\s\s+/g, " ");
+        const normalizedName = normalizeName(name);
         normalizedName !== name && setName(normalizedName);
 
         const duplicatedOrganization = allOrganizations?.find(

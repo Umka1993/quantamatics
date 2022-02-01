@@ -20,6 +20,7 @@ import * as assetsHooks from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetListItem } from "../../types/asset";
 import useUser from "../../hooks/useUser";
+import normalizeName from "../../services/normalize-name";
 interface EditOrganizationFormProps {
   organization?: Organization;
   isHaveAccessToOrgList?: boolean;
@@ -165,7 +166,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }
     let duplicate = false;
 
-    if (name !== organization?.name) {
+    if (normalizeName(name) !== organization?.name) {
       duplicate = checkNameDuplicate();
     }
 
