@@ -12,6 +12,7 @@ import {
     useLinkAssetToOrgMutation,
 } from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
+import normalizeName from "../../services/normalize-name";
 
 interface ICreateOrganization { }
 
@@ -75,7 +76,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         if (isError) {
             const text = (error as any).data.errors;
             console.log(text);
-    
+
         }
     }, [isError]);
 
@@ -95,7 +96,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         if (duplicate) {
             return setStopLoading(true);
         } else {
-            register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
+            register({ name: normalizeName(name), customerCrmId, customerCrmLink, comments }).unwrap();
         }
     };
 
