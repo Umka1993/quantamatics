@@ -84,7 +84,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
             })
 
             const selectedAssets: Set<string | number> = new Set(serverSelectedAssets.map(({ id }) => id))
-            
+
             assets?.forEach(({ assetId, sharedByDefault }) => {
                 sharedByDefault && !selectedAssets.has(assetId) && linkAsset({ assetId, userId: user.id })
             })
@@ -239,6 +239,10 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                                 errorMessage='Select asset permissions to assign to the user account.'
                                 showError={assetError}
                                 type='user'
+                                inputList=
+                                {[...assets.filter(({ assetId }) => assignedAssets.has(assetId))]
+                                    .map(({ name }) => name)
+                                    .join(", ")}
                             />
 
                         }

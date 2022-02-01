@@ -175,6 +175,9 @@ const InviteUserForm: FunctionComponent = () => {
                         errorMessage="Select asset permissions to assign to the user account."
                         showError={assetError}
                         type="user"
+                        inputList={[...assets.filter(({ assetId }) => assignedAssets.has(assetId))]
+                            .map(({ name }) => name)
+                            .join(", ")}
                     />
                 )}
                 <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
