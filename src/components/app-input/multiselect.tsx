@@ -28,6 +28,7 @@ interface IInput
     showError?: boolean;
 
     options: AssetListItem[];
+    inputList?: string
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -43,6 +44,7 @@ const Multiselect: FunctionComponent<IInput> = ({
     disabled,
     setAssetsToUpdateShared,
     assetsToUpdateShared,
+    inputList = '',
     type,
 }) => {
     const [rightOffset, setRightOffset] = useState<number>(20);
@@ -51,7 +53,7 @@ const Multiselect: FunctionComponent<IInput> = ({
     const rootElement = useRef<HTMLDivElement>(null);
 
     const [hideError, setHideError] = useState(false);
-    const [list, setList] = useState("");
+    const [list, setList] = useState(inputList);
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
@@ -65,17 +67,19 @@ const Multiselect: FunctionComponent<IInput> = ({
     useEffect(() => {
         if (Boolean(selected.size)) {
             setHideError(true);
-            setList(
-                [...options.filter(({ assetId }) => selected.has(assetId))]
-                    .map(({ name }) => name)
-                    .join(", ")
-            );
         } else {
             setHideError(false);
-            setList("");
         }
         reCalcLabelWidth();
     }, [selected]);
+
+    useLayoutEffect(() => {
+        Boolean(selected.size) ? setList(
+            [...options.filter(({ assetId }) => selected.has(assetId))]
+                .map(({ name }) => name)
+                .join(", ")
+        ) : setList("");
+    }, [selected])
 
     /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
 

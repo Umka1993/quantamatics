@@ -336,6 +336,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setAssetsToUpdateShared={setAssetsToUpdateShared}
             disabled={!isHaveAccessToEditAsset}
             type="edit-organization"
+            inputList=
+            {[...options.filter(({ assetId }) => assignedAssets.has(assetId))]
+              .map(({ name }) => name)
+              .join(", ")}
           />
 
           <Input
