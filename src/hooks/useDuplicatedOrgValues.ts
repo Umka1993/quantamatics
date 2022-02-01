@@ -1,7 +1,12 @@
 import { UniqueError } from "../data/enum";
-import { RefObject, useEffect, useState, Dispatch, SetStateAction } from "react";
+import {
+    RefObject,
+    useEffect,
+    useState,
+    Dispatch,
+    SetStateAction,
+} from "react";
 import { useGetAllOrganizationsQuery } from "../api/organization";
-
 
 export default function useDuplicatedOrgValues(
     formRef: RefObject<HTMLFormElement>,
@@ -19,6 +24,8 @@ export default function useDuplicatedOrgValues(
         undefined | UniqueError.ID
     >(undefined);
 
+    const [checkNameTrigger, setCheckNameTrigger] = useState(false);
+
     useEffect(() => {
         duplicateOrgError && formRef.current?.reportValidity();
     }, [duplicateOrgError, formRef.current]);
@@ -28,10 +35,15 @@ export default function useDuplicatedOrgValues(
     }, [duplicateIdError, formRef.current]);
 
     useEffect(() => {
-        duplicateOrgError && setDuplicateOrgError(undefined);
-        // Delete spaces from start and end string. 
-        setName(name.trim())
+        if (checkNameTrigger) {
+            duplicateOrgError && setDuplicateOrgError(undefined);
+            setCheckNameTrigger(false);
+        }
     }, [name]);
+
+    useEffect(() => {
+        duplicateOrgError && setCheckNameTrigger(true);
+    }, [duplicateOrgError]);
 
     useEffect(() => {
         customerCrmId && setDuplicateIdError(undefined);
@@ -40,18 +52,13 @@ export default function useDuplicatedOrgValues(
         setCustomerCrmId(customerCrmId.replace(/\s/g, ""));
     }, [customerCrmId]);
 
-
-
-    /** 
-     * Duplicate spaces transform to one
-    */
-    function prepareStringToCompare(string: string) : string {
-        return string.toLocaleLowerCase().replace(/\s\s+/g, ' ')
-    }
-
     function checkNameDuplicate(): boolean {
+        const normalizedName = name.trim().replace(/\s\s+/g, " ");
+        normalizedName !== name && setName(normalizedName);
+
         const duplicatedOrganization = allOrganizations?.find(
-            (org) => prepareStringToCompare(org.name) === prepareStringToCompare(name)
+            (org) =>
+                org.name.toLocaleLowerCase() === normalizedName.toLocaleLowerCase()
         );
         if (duplicatedOrganization) {
             setDuplicateOrgError(UniqueError.Name);
