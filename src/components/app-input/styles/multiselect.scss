@@ -79,44 +79,6 @@
         }
     }
 
-    &__option--label {
-        position: relative;
-        &::after {
-            position: absolute;
-            background-image: linear-gradient(
-                88.76deg,
-                rgba(113, 130, 166, 0.85) 2.12%,
-                rgba(85, 98, 126, 0.95) 97.88%
-            );
-            // ! Bug. In chrome all text is blured
-            // backdrop-filter: blur(2px);
-
-            left: 8px;
-            bottom: calc(100% + 8px);
-
-            transform: translateX(-50%);
-            color: white;
-            border-radius: 2px;
-            padding: 6px 8px;
-            width: max-content;
-            content: attr(aria-label);
-            opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 2;
-
-            pointer-events: none;
-            font-size: 12px;
-        }
-
-        &:hover::after {
-            opacity: 1;
-        }
-
-        &:focus-visible {
-            opacity: 1;
-        }
-    }
-
     &__option--hide-pin {
         .pin-button {
             opacity: 0;

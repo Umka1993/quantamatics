@@ -22,6 +22,7 @@ interface CheckboxProps
     highlightOnChecked?: boolean;
     value?: string | number;
     textTitle?: string;
+    labelCheckbox?: string;
 }
 
 const Checkbox: FunctionComponent<CheckboxProps> = ({
@@ -36,6 +37,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
     defaultChecked,
     value,
     textTitle,
+    labelCheckbox,
     ...other
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -69,8 +71,8 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                 disabled={disabled}
                 value={value}
                 ref={inputRef}
+                aria-describedby={`${name}-desc`}
             />
-
             <span className="check-block__custom">
                 <CheckIcon
                     width="16"
@@ -80,7 +82,15 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                 />
             </span>
 
-            <span className="check-block__text" title={textTitle}>{children}</span>
+            {labelCheckbox && (
+                <span id={`${name}-desc`} className="check-block__desc">
+                    {labelCheckbox}
+                </span>
+            )}
+
+            <span className="check-block__text" title={textTitle}>
+                {children}
+            </span>
         </label>
     );
 };

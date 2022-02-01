@@ -68,11 +68,9 @@ const MultiselectAssetOption: FunctionComponent<
             <div
                 className={classNames("multiselect__option", {
                     "multiselect__option--pinned": isOrganizationMode,
-                    "multiselect__option--label": showLabel,
                     "multiselect__option--hide-pin": isOrganizationMode && !isPinned,
                 })}
                 key={option.assetId}
-                aria-label={showLabel ? "Is set as default" : undefined}
             >
                 {isOrganizationMode && (
                     <PinButton
@@ -93,6 +91,7 @@ const MultiselectAssetOption: FunctionComponent<
                     highlightOnChecked
                     value={option.assetId}
                     textTitle={option.name}
+                    labelCheckbox={showLabel ? "Is set as default" : undefined}
                 >
                     {option.name}
                 </Checkbox>
