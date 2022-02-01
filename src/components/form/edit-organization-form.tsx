@@ -166,7 +166,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }
     let duplicate = false;
 
-    if (normalizeName(name) !== organization?.name) {
+    const normalizedName = normalizeName(name);
+
+    if (normalizedName !== organization?.name) {
       duplicate = checkNameDuplicate();
     }
 
@@ -210,7 +212,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
       update({
         ...organization,
-        name,
+        name: normalizedName,
         customerCrmId,
         customerCrmLink,
         comments,
