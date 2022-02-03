@@ -6,6 +6,8 @@ import React, {
     CSSProperties,
     useEffect,
     useLayoutEffect,
+    Dispatch,
+    SetStateAction,
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
@@ -14,21 +16,29 @@ import classNames from "classnames";
 import MultiselectAssetOption, {
     MultiselectAssetOptionProps,
 } from "./multiselect-asset-option";
-import { AssetListItem } from "../../types/asset";
+import { AssetInOrganization, AssetListItem } from "../../types/asset";
+import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 interface IInput
-    extends Omit<MultiselectAssetOptionProps, "option" | "selected">,
+    extends Omit<
+    MultiselectAssetOptionProps,
+    "option" | "selected" | "setSelected"
+    >,
     SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
     showLimit?: boolean;
-    selected: Set<string | number>;
+    selected: Set<string | number> | AssetInOrganization[];
+
+    setSelected:
+    | Dispatch<SetStateAction<Set<string | number>>>
+    | Dispatch<SetStateAction<AssetInOrganization[]>>;
 
     errorMessage?: string;
     showError?: boolean;
 
-    options: AssetListItem[];
-    inputList?: string
+    options: AssetListItem[] | AssetInOrganization[];
+    inputList?: string;
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -42,11 +52,10 @@ const Multiselect: FunctionComponent<IInput> = ({
     showError,
     className,
     disabled,
-    setAssetsToUpdateShared,
-    assetsToUpdateShared,
-    inputList = '',
+    inputList = "",
     type,
 }) => {
+    const isEditOrganization = Array.isArray(selected);
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -65,21 +74,32 @@ const Multiselect: FunctionComponent<IInput> = ({
     // useLayoutEffect(reCalcLabelWidth, [selected, labelRef.current])
 
     useEffect(() => {
-        if (Boolean(selected.size)) {
-            setHideError(true);
-        } else {
-            setHideError(false);
-        }
+        setHideError(
+            isEditOrganization ? Boolean(selected.length) : Boolean(selected.size)
+        );
+
         reCalcLabelWidth();
     }, [selected]);
 
     useLayoutEffect(() => {
-        Boolean(selected.size) ? setList(
-            [...options.filter(({ assetId }) => selected.has(assetId))]
-                .map(({ name }) => name)
-                .join(", ")
-        ) : setList("");
-    }, [selected])
+        if (isEditOrganization) {
+            Boolean(selected.length)
+                ? setList([...selected].map((asset) => asset.asset.name).join(", "))
+                : setList("");
+        } else {
+            Boolean(selected.size)
+                ? setList(
+                    [
+                        ...(options as AssetListItem[]).filter(({ assetId }) =>
+                            selected.has(assetId)
+                        ),
+                    ]
+                        .map(({ name }) => name)
+                        .join(", ")
+                )
+                : setList("");
+        }
+    }, [selected]);
 
     /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
 
@@ -108,7 +128,11 @@ const Multiselect: FunctionComponent<IInput> = ({
                 <input
                     className={classNames("app-input__field", {
                         "app-input__field--error":
-                            showError && !hideError && !Boolean(selected.size),
+                            showError &&
+                            !hideError &&
+                            !(isEditOrganization
+                                ? Boolean(selected.length)
+                                : Boolean(selected.size)),
                     })}
                     type="text"
                     placeholder={label ? " " : placeholder}
@@ -123,9 +147,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 
                 {label && (
                     <span
-                        className={classNames("app-input__label app-input__label--icon", {
-                            "app-input__label--initial": !Boolean(selected.size),
-                        })}
+                        className={classNames("app-input__label app-input__label--icon")}
                     >
                         <span ref={labelRef}>{label}</span>
                     </span>
@@ -141,18 +163,26 @@ const Multiselect: FunctionComponent<IInput> = ({
                 })}
                 hidden={!showOptions}
             >
-                {Array.from(options).map((option) => (
-                    <MultiselectAssetOption
-                        key={option.assetId}
-                        option={option}
-                        selected={selected.has(option.assetId)}
-                        setSelected={setSelected}
-                        disabled={disabled}
-                        setAssetsToUpdateShared={setAssetsToUpdateShared}
-                        assetsToUpdateShared={assetsToUpdateShared}
-                        type={type}
-                    />
-                ))}
+                {options.map((option: any) =>
+                    isEditOrganization ? (
+                        <MultiselectAssetOrgOption
+                            key={option.assetId}
+                            option={option}
+                            selected={selected as any}
+                            setSelected={setSelected as any}
+                            disabled={disabled}
+                        />
+                    ) : (
+                        <MultiselectAssetOption
+                            key={option.assetId}
+                            option={option}
+                            selected={(selected as any).has(option.assetId)}
+                            setSelected={setSelected as any}
+                            disabled={disabled}
+                            type={type}
+                        />
+                    )
+                )}
             </div>
         </div>
     );

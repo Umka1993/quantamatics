@@ -73,7 +73,7 @@ export const enum OrganizationKey {
     IdCRM = 'customerCrmId',
     LinkCRM = 'customerCrmLink',
     Comment = 'comments',
-    Assets = 'assets',
+    Assets = 'organizationAssets',
 }
 
 export const enum UserKey {

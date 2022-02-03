@@ -6,18 +6,13 @@ import React, {
     useEffect,
 } from "react";
 import Checkbox from "../app-checkbox/checkbox";
-import classNames from "classnames";
 import { AssetListItem } from "../../types/asset";
-import PinButton from "../pin-button";
-
 export interface MultiselectAssetOptionProps {
     selected: boolean;
-    setSelected: Dispatch<SetStateAction<Set<string | number>>>;
+    setSelected: Dispatch<SetStateAction<Set<string | number >>> 
     option: AssetListItem;
     type?: "edit-organization" | "user";
 
-    setAssetsToUpdateShared?: Dispatch<SetStateAction<Set<string | number>>>;
-    assetsToUpdateShared?: Set<string | number>;
     disabled?: boolean;
 }
 
@@ -28,15 +23,11 @@ const MultiselectAssetOption: FunctionComponent<
     option,
     type,
     setSelected,
-    setAssetsToUpdateShared,
-    assetsToUpdateShared,
     disabled
 }) => {
-        const isOrganizationMode = type === "edit-organization";
         const isUserMode = type === "user";
 
         const [isSelected, setIsSelected] = useState(selected);
-        const [isPinned, setIsPinned] = useState(option.sharedByDefault);
 
         const showLabel = isUserMode && option.sharedByDefault;
 
@@ -50,39 +41,12 @@ const MultiselectAssetOption: FunctionComponent<
 
         useEffect(() => {
             isSelected ? addToSelected() : removeFromSelected();
-        }, [isSelected]);
-
-        useEffect(() => {
-            !isSelected && isPinned && setIsPinned(false)
-        }, [isPinned, isSelected]);
-
-        const updateWillToggleSharedByDefault = () => {
-            if (assetsToUpdateShared && setAssetsToUpdateShared) {
-                assetsToUpdateShared.has(option.assetId as string)
-                    ? setAssetsToUpdateShared(removeAssetIdFromState)
-                    : setAssetsToUpdateShared(addAssetIdToState);
-            }
-        };
+        }, [isSelected]);  
 
         return (
             <div
-                className={classNames("multiselect__option", {
-                    "multiselect__option--pinned": isOrganizationMode,
-                    "multiselect__option--hide-pin": isOrganizationMode && !isPinned,
-                })}
-                key={option.assetId}
+                className="multiselect__option"
             >
-                {isOrganizationMode && (
-                    <PinButton
-                        checked={isPinned}
-                        onClick={() => {
-                            !isPinned && setIsSelected(true)
-                            setIsPinned((prevVal) => !prevVal);
-                            updateWillToggleSharedByDefault();
-                        }}
-                        aria-label="Set as default for all user accounts"
-                    />
-                )}
                 <Checkbox
                     name={option.name}
                     externalSetter={setIsSelected}

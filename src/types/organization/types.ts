@@ -1,3 +1,4 @@
+import { AssetInOrganization } from "../asset";
 import { OrganizationKey } from "../../data/enum";
 
 export type OrganizationID = string;
@@ -9,5 +10,5 @@ export interface Organization {
     [ OrganizationKey.IdCRM ]: string,
     [ OrganizationKey.LinkCRM ]: string,
     [ OrganizationKey.Comment ]: string,
-    [ OrganizationKey.Assets ]: any,
+    [ OrganizationKey.Assets ]: AssetInOrganization[],
 }
