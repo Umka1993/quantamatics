@@ -24,6 +24,8 @@ import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetInOrganization, AssetListItem } from "../../types/asset";
 import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
+// import useUpdateOrgUserAssets from "../../hooks/useUpdateOrgUserAssets";
+import { useGetOrganizationUsersQuery } from "../../api/user";
 interface EditOrganizationFormProps {
   organization?: Organization;
   isHaveAccessToOrgList?: boolean;
@@ -47,6 +49,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
       error: updateError,
     },
   ] = useUpdateOrganizationMutation();
+
+  const { data: orgUsers } = useGetOrganizationUsersQuery(
+    organization?.id as string
+  );
 
   const isHaveAccessToEditAsset =
     user?.userRoles.includes(UserRole.OrgOwner) ||
@@ -90,13 +96,14 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
               ({ assetId }) => assetId === asset.assetId
             );
             return alreadySelectedAsset === undefined
-              ? asset
+              ? { ...asset, organizationId: organization.id }
               : alreadySelectedAsset;
           })
         );
       };
 
       // check if organization has some assets that parent org doesn't has
+      // ! It will be waste if we start update all child organizations on updating org
       organization.parentId &&
         getInfoOrg(organization.parentId)
           .unwrap()
@@ -106,7 +113,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             organization.organizationAssets.forEach(
               ({ assetId }) =>
                 allAssets.findIndex((asset) => asset.assetId === assetId) ===
-                -1 && unlinkAsset({ assetId, orgId: organization.id })
+                  -1 && unlinkAsset({ assetId, orgId: organization.id })
             );
 
             organization.parentId === user.organizationId &&
@@ -130,6 +137,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
   const [unlinkAsset, { isLoading: isUnLinking }] =
     assetsHooks.useUnlinkAssetToOrgMutation();
+
+  const [linkAssetToUser] = assetsHooks.useLinkAssetToUserMutation();
+  const [unlinkAssetFromUser] = assetsHooks.useUnlinkAssetToUserMutation();
 
   const setInitialOrg = useCallback(() => {
     if (organization) {
@@ -170,6 +180,26 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }
 
     if (organization) {
+      /**
+       * ! Manually iterate in all org users and unlink unselected assets and link shared by default
+      */
+      /* if (orgUsers) {
+        organization.organizationAssets.forEach(asset => {
+          const foundedNewAsset = assignedAssets.find(newAsset => newAsset.assetId === asset.assetId)
+
+          if (foundedNewAsset === undefined) {
+            orgUsers.forEach(user =>
+              unlinkAssetFromUser({ assetId: asset.assetId, userId: user.id })
+            )
+          } else {
+            foundedNewAsset.sharedByDefault && orgUsers.forEach(user =>
+              linkAssetToUser({ assetId: asset.assetId, userId: user.id })
+            )
+          }
+        });
+
+      } */
+
       update({
         ...organization,
         name: normalizedName,
@@ -247,10 +277,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
       </header>
 
       {isUpdating ||
-        externalLoad ||
-        loading ||
-        isLinkingAsset ||
-        !options.length ? (
+      externalLoad ||
+      loading ||
+      isLinkingAsset ||
+      !options.length ? (
         <Loader />
       ) : (
         <div className={style.inputs}>

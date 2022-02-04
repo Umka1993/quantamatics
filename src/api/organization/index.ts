@@ -34,7 +34,7 @@ const organizationsApi = baseApi.injectEndpoints({
                 method: "PUT",
                 body,
             }),
-            invalidatesTags: (_res, _err, org ) => [{ type: "Organizations", id: "list" }, { type: "Organizations", id: `org-${org.id}` }, { type: "Organizations", id: "selected" }, ],
+            invalidatesTags: (_res, _err, org ) => [{ type: "Organizations", id: "list" }, { type: "Organizations", id: `org-${org.id}` }, { type: "Organizations", id: "selected" }, { type: "Assets", id: "User" }],
         }),
 
         deleteOrganization: build.mutation({
