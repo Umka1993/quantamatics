@@ -39,12 +39,12 @@ export default function PrivateRoutes(): ReactElement {
                 <Route path={AppRoute.Files} element={<JupyterFrame type="files" />} />
             )}
 
-            {/* {isCoherence && (
+            {isCoherence && (
                 <Route
                     path={AppRoute.Coherence}
                     element={<JupyterFrame type="coherence" />}
                 />
-            )} */}
+            )}
 
             {isCoherence && (
                 <Route
