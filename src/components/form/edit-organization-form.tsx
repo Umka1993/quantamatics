@@ -95,9 +95,24 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             const alreadySelectedAsset = organization.organizationAssets.find(
               ({ assetId }) => assetId === asset.assetId
             );
+            // ! try change “00000000-0000-0000-0000-000000000000” to orgId. It's still responds error when we try add new asset on update
+
             return alreadySelectedAsset === undefined
-              ? { ...asset, organizationId: organization.id }
-              : alreadySelectedAsset;
+              ? {
+                  ...asset,
+                  organizationId: organization.id,
+                  asset: {
+                    ...asset.asset,
+                    ownerOrganizationId: organization.id,
+                  },
+                }
+              : {
+                  ...alreadySelectedAsset,
+                  asset: {
+                    ...alreadySelectedAsset.asset,
+                    ownerOrganizationId: organization.id,
+                  },
+                };
           })
         );
       };
@@ -108,8 +123,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         getInfoOrg(organization.parentId)
           .unwrap()
           .then(({ organizationAssets: allAssets }) => {
-            console.log(allAssets);
-
             organization.organizationAssets.forEach(
               ({ assetId }) =>
                 allAssets.findIndex((asset) => asset.assetId === assetId) ===
@@ -182,7 +195,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     if (organization) {
       /**
        * ! Manually iterate in all org users and unlink unselected assets and link shared by default
-      */
+       */
       /* if (orgUsers) {
         organization.organizationAssets.forEach(asset => {
           const foundedNewAsset = assignedAssets.find(newAsset => newAsset.assetId === asset.assetId)
@@ -239,7 +252,14 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     if (organization) {
       setName(organization.name);
       setCustomerID(organization.customerCrmId);
-      setAssignedAssets(organization.organizationAssets);
+      setAssignedAssets(organization.organizationAssets)
+      // ! try change “00000000-0000-0000-0000-000000000000” to orgId and even already assigned assets fail on updating
+      // setAssignedAssets([
+      //   ...organization.organizationAssets.map((asset) => ({
+      //     ...asset,
+      //     asset: { ...asset.asset, ownerOrganizationId: organization.id },
+      //   })),
+      // ]);
     }
   }, [organization]);
 
