@@ -97,7 +97,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             );
             // ! try change “00000000-0000-0000-0000-000000000000” to orgId. It's still responds error when we try add new asset on update
 
-            return alreadySelectedAsset === undefined
+            return alreadySelectedAsset === undefined ? { ...asset, organizationId: organization.id }
+              : alreadySelectedAsset;
+            /* return alreadySelectedAsset === undefined
               ? {
                   ...asset,
                   organizationId: organization.id,
@@ -111,8 +113,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                   asset: {
                     ...alreadySelectedAsset.asset,
                     ownerOrganizationId: organization.id,
-                  },
-                };
+                  }, 
+                };*/
           })
         );
       };
@@ -126,7 +128,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             organization.organizationAssets.forEach(
               ({ assetId }) =>
                 allAssets.findIndex((asset) => asset.assetId === assetId) ===
-                  -1 && unlinkAsset({ assetId, orgId: organization.id })
+                -1 && unlinkAsset({ assetId, orgId: organization.id })
             );
 
             organization.parentId === user.organizationId &&
@@ -219,7 +221,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         customerCrmId,
         customerCrmLink,
         comments,
-        organizationAssets: assignedAssets,
+        organizationAssets: [...assignedAssets].map(asset => ({ ...asset, asset: null })),
       });
     }
     setLoading(false);
@@ -297,10 +299,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
       </header>
 
       {isUpdating ||
-      externalLoad ||
-      loading ||
-      isLinkingAsset ||
-      !options.length ? (
+        externalLoad ||
+        loading ||
+        isLinkingAsset ||
+        !options.length ? (
         <Loader />
       ) : (
         <div className={style.inputs}>

@@ -36,6 +36,6 @@ export interface AssetInOrganization {
         type: number;
         userAssets: null;
         organizationAssets: null;
-    };
+    } | any;
     sharedByDefault: boolean;
 }
