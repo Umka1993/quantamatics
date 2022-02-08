@@ -79,18 +79,8 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     useEffect(() => {
         if (serverSelectedAssets && assets) {
-            serverSelectedAssets.forEach(userAsset => {
-                assets?.findIndex((orgAsset) => orgAsset.assetId !== userAsset.id) === -1 && unlinkAsset({ assetId: userAsset.id, userId: user.id })
-            })
-
             const selectedAssets: Set<string | number> = new Set(serverSelectedAssets.map(({ id }) => id))
-
-            assets?.forEach(({ assetId, sharedByDefault }) => {
-                sharedByDefault && !selectedAssets.has(assetId) && linkAsset({ assetId, userId: user.id })
-            })
-
             setAssignedAssets(selectedAssets)
-
             setAssetPrepared(true)
         }
     }, [serverSelectedAssets, assets])
@@ -144,9 +134,6 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                     assetId: alreadySelectedAsset.id, userId: user.id
                 })
             })
-
-
-
         }
     }, [isSuccess])
 
