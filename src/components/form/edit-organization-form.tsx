@@ -19,13 +19,10 @@ import {
 } from "../../api/organization";
 import Loader from "../loader";
 import { AppRoute, UserRole } from "../../data/enum";
-import * as assetsHooks from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
-import { AssetInOrganization, AssetListItem } from "../../types/asset";
+import { AssetInOrganization } from "../../types/asset";
 import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
-// import useUpdateOrgUserAssets from "../../hooks/useUpdateOrgUserAssets";
-import { useGetOrganizationUsersQuery } from "../../api/user";
 interface EditOrganizationFormProps {
   organization?: Organization;
   isHaveAccessToOrgList?: boolean;
@@ -50,9 +47,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     },
   ] = useUpdateOrganizationMutation();
 
-  const { data: orgUsers } = useGetOrganizationUsersQuery(
-    organization?.id as string
-  );
 
   const isHaveAccessToEditAsset =
     user?.userRoles.includes(UserRole.OrgOwner) ||
@@ -95,66 +89,25 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             const alreadySelectedAsset = organization.organizationAssets.find(
               ({ assetId }) => assetId === asset.assetId
             );
-            // ! try change “00000000-0000-0000-0000-000000000000” to orgId. It's still responds error when we try add new asset on update
 
             return alreadySelectedAsset === undefined ? { ...asset, organizationId: organization.id }
               : alreadySelectedAsset;
-            /* return alreadySelectedAsset === undefined
-              ? {
-                  ...asset,
-                  organizationId: organization.id,
-                  asset: {
-                    ...asset.asset,
-                    ownerOrganizationId: organization.id,
-                  },
-                }
-              : {
-                  ...alreadySelectedAsset,
-                  asset: {
-                    ...alreadySelectedAsset.asset,
-                    ownerOrganizationId: organization.id,
-                  }, 
-                };*/
+
           })
         );
       };
 
-      // check if organization has some assets that parent org doesn't has
-      // ! It will be waste if we start update all child organizations on updating org
-      organization.parentId &&
-        getInfoOrg(organization.parentId)
-          .unwrap()
-          .then(({ organizationAssets: allAssets }) => {
-            organization.organizationAssets.forEach(
-              ({ assetId }) =>
-                allAssets.findIndex((asset) => asset.assetId === assetId) ===
-                -1 && unlinkAsset({ assetId, orgId: organization.id })
-            );
 
-            organization.parentId === user.organizationId &&
-              prepareOptions(allAssets);
-          });
-
-      // Prepare data for multiselect
-      organization.parentId !== user.organizationId &&
-        getInfoOrg(user.organizationId as string)
-          .unwrap()
-          .then(({ organizationAssets: allAssets }) =>
-            prepareOptions(allAssets)
-          );
+      getInfoOrg(user.organizationId as string)
+        .unwrap()
+        .then(({ organizationAssets: allAssets }) =>
+          prepareOptions(allAssets)
+        );
     }
   }
 
   useEffect(initOptions, [organization, user]);
 
-  const [linkAsset, { isLoading: isLinkingAsset }] =
-    assetsHooks.useLinkAssetToOrgMutation();
-
-  const [unlinkAsset, { isLoading: isUnLinking }] =
-    assetsHooks.useUnlinkAssetToOrgMutation();
-
-  const [linkAssetToUser] = assetsHooks.useLinkAssetToUserMutation();
-  const [unlinkAssetFromUser] = assetsHooks.useUnlinkAssetToUserMutation();
 
   const setInitialOrg = useCallback(() => {
     if (organization) {
@@ -195,26 +148,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     }
 
     if (organization) {
-      /**
-       * ! Manually iterate in all org users and unlink unselected assets and link shared by default
-       */
-      /* if (orgUsers) {
-        organization.organizationAssets.forEach(asset => {
-          const foundedNewAsset = assignedAssets.find(newAsset => newAsset.assetId === asset.assetId)
-
-          if (foundedNewAsset === undefined) {
-            orgUsers.forEach(user =>
-              unlinkAssetFromUser({ assetId: asset.assetId, userId: user.id })
-            )
-          } else {
-            foundedNewAsset.sharedByDefault && orgUsers.forEach(user =>
-              linkAssetToUser({ assetId: asset.assetId, userId: user.id })
-            )
-          }
-        });
-
-      } */
-
       update({
         ...organization,
         name: normalizedName,
@@ -245,7 +178,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         navigate(AppRoute.OrganizationList);
       } else {
         setOptions([]);
-        // initOptions();
+        initOptions();
       }
     }
   }, [isUpdated]);
@@ -255,13 +188,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
       setName(organization.name);
       setCustomerID(organization.customerCrmId);
       setAssignedAssets(organization.organizationAssets)
-      // ! try change “00000000-0000-0000-0000-000000000000” to orgId and even already assigned assets fail on updating
-      // setAssignedAssets([
-      //   ...organization.organizationAssets.map((asset) => ({
-      //     ...asset,
-      //     asset: { ...asset.asset, ownerOrganizationId: organization.id },
-      //   })),
-      // ]);
     }
   }, [organization]);
 
@@ -301,7 +227,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
       {isUpdating ||
         externalLoad ||
         loading ||
-        isLinkingAsset ||
         !options.length ? (
         <Loader />
       ) : (
