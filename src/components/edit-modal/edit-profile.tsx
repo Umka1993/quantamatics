@@ -125,7 +125,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
 
             // ! It will be waste if we start update all users on updating org
-            /*
+
             //? Link new assets to user
             assignedAssets.forEach((assetId) => {
                 const alreadySelectedAsset = serverSelectedAssets?.find(element => element.id === assetId)
@@ -145,7 +145,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                 })
             })
 
-            */
+
 
         }
     }, [isSuccess])
