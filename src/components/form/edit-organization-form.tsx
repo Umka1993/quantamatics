@@ -14,7 +14,7 @@ import Input, { Multiselect } from "../app-input";
 import style from "./styles/edit-organization.module.scss";
 import { useNavigate } from "react-router-dom";
 import {
-  useGetOrganizationInfoMutation,
+  useLazyGetOrganizationQuery,
   useUpdateOrganizationMutation,
 } from "../../api/organization";
 import Loader from "../loader";
@@ -47,7 +47,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     },
   ] = useUpdateOrganizationMutation();
 
-
   const isHaveAccessToEditAsset =
     user?.userRoles.includes(UserRole.OrgOwner) ||
     user?.userRoles.includes(UserRole.Admin);
@@ -64,7 +63,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [getInfoOrg] = useGetOrganizationInfoMutation();
+  const [getInfoOrg] = useLazyGetOrganizationQuery();
 
   const [
     duplicateOrgError,
@@ -90,24 +89,20 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
               ({ assetId }) => assetId === asset.assetId
             );
 
-            return alreadySelectedAsset === undefined ? { ...asset, organizationId: organization.id }
+            return alreadySelectedAsset === undefined
+              ? { ...asset, organizationId: organization.id }
               : alreadySelectedAsset;
-
           })
         );
       };
 
-
       getInfoOrg(user.organizationId as string)
         .unwrap()
-        .then(({ organizationAssets: allAssets }) =>
-          prepareOptions(allAssets)
-        );
+        .then(({ organizationAssets: allAssets }) => prepareOptions(allAssets));
     }
   }
 
   useEffect(initOptions, [organization, user]);
-
 
   const setInitialOrg = useCallback(() => {
     if (organization) {
@@ -154,7 +149,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         customerCrmId,
         customerCrmLink,
         comments,
-        organizationAssets: [...assignedAssets].map(asset => ({ ...asset, asset: null })),
+        organizationAssets: [...assignedAssets].map((asset) => ({
+          ...asset,
+          asset: null,
+        })),
       });
     }
     setLoading(false);
@@ -187,7 +185,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     if (organization) {
       setName(organization.name);
       setCustomerID(organization.customerCrmId);
-      setAssignedAssets(organization.organizationAssets)
+      setAssignedAssets(organization.organizationAssets);
     }
   }, [organization]);
 
@@ -224,10 +222,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         </div>
       </header>
 
-      {isUpdating ||
-        externalLoad ||
-        loading ||
-        !options.length ? (
+      {isUpdating || externalLoad || loading || !options.length ? (
         <Loader />
       ) : (
         <div className={style.inputs}>

@@ -60,14 +60,6 @@ const organizationsApi = baseApi.injectEndpoints({
                     ]
                     : [{ type: "Organizations", id: "selected" }],
         }),
-
-        getOrganizationInfo: build.mutation<Organization, string>({
-            query: (id) => ({
-                url: ApiRoute.OrganizationInfo,
-                method: "GET",
-                params: { id },
-            }),
-        }),
     }),
 });
 
@@ -75,7 +67,7 @@ export const {
     useGetAllOrganizationsQuery,
     useAddOrganizationMutation,
     useGetOrganizationQuery,
+    useLazyGetOrganizationQuery,
     useDeleteOrganizationMutation,
     useUpdateOrganizationMutation,
-    useGetOrganizationInfoMutation
 } = organizationsApi;

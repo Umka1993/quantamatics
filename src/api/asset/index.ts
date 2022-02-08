@@ -139,6 +139,7 @@ const assetApi = baseApi.injectEndpoints({
 
 export const {
     useGetAllAssetsQuery,
+    useLazyGetAllAssetsQuery,
     useGetAllAssetsOrgMutation,
     useGetAllUserAssetsQuery,
     useGetAssetByIDMutation,
