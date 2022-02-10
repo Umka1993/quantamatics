@@ -1,12 +1,13 @@
-@import "../../../variables.scss";
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
 
 .edit-account {
     padding: 40px;
     width: 100%;
-    max-width: 440px;
-    min-height: 624px; 
-    height: auto;
-    max-height: 98vh;
+    max-width: 480px;
+    min-height: 650px;
+    height: calc(100vh - 80px);
+    max-height: 720px;
     overflow: auto;
     scrollbar-width: thin;
     scrollbar-gutter: stable;
@@ -62,8 +63,7 @@
             margin-left: 6px;
         }
 
-        &:hover,
-        &:focus-visible {
+        @include hover-focus {
             color: $accent;
         }
     }
@@ -85,9 +85,9 @@
                     margin-top: 0.43em;
                 }
             }
-        } 
+        }
     }
-    &__form--pass  &__button--cancel {
+    &__form--pass &__button--cancel {
         position: absolute;
         right: 1.4em;
         top: 0.45em;
@@ -114,6 +114,6 @@
     }
 
     .check-block {
-        color: $headlines
+        color: $headlines;
     }
 }

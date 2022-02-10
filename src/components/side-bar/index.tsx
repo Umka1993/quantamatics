@@ -6,7 +6,6 @@ import ExelIcon from "./assets/exel.svg";
 import classNames from "classnames";
 import Logo from "../logo";
 import UserMenu from "../user-menu";
-import { EXCEL_PLUGIN } from "../../data/constants";
 
 type SideBarProps = {
     openModal: () => void;
@@ -40,7 +39,7 @@ export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
                     <a href="https://www.facteus.com/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
                 </small>}
 
-            <a href={EXCEL_PLUGIN} className={style.plugin} aria-label='Get Excel Plug-in' download>
+            <a href={process.env.EXCEL_PLUGIN_DOWNLOAD_URL} className={style.plugin} aria-label='Get Excel Plug-in' download>
                 <ExelIcon aria-hidden="true" fill="#20744A" width={20} height={20} />
             </a>
 

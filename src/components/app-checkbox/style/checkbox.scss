@@ -1,39 +1,30 @@
-@import "../../../variables.scss";
+@import "../../../sass/variables";
 
 .check-block {
     font: inherit;
-    display: inline-flex;
+    display: inline-grid;
+    grid-auto-flow: column;
     gap: 0.625em;
     cursor: pointer;
     align-items: center;
+    justify-content: start;
     position: relative;
 
     &__custom {
-        display: flex;
-        align-items: start;
+        display: grid;
+        place-items: center;
+        width: 1em;
+        height: 1em;
+        background-color: #fff;
+        border: 0.0625em solid transparentize($main-text, 0.7);
+        box-shadow: inset 0px 0.125em 0.4375em transparentize($main-text, 0.9);
+        border-radius: 2px;
 
-        &::before {
-            content: "";
-            width: 1em;
-            height: 1em;
-            margin-right: 0.625em;
-            background-color: #fff;
-            border: 0.0625em solid transparentize($main-text, 0.7);
-            box-shadow: inset 0px 0.125em 0.4375em transparentize($main-text, 0.9);
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
+        transition: border-color 0.2s ease-in;
     }
 
-    &--right &__custom::before {
+    &--right &__custom {
         order: 1;
-        margin-right: 0;
-        margin-left: 0.625em;
-    }
-
-    &--right &__check {
-        left: auto;
-        right: 0.1875em;
     }
 
     &__input {
@@ -42,22 +33,81 @@
         position: absolute;
     }
 
-    &__input:checked ~ &__custom::after {
-        display: block;
+    &__text {
+        transition: color 0.2s ease-in;
+    }
+    &--highlight &__input:not(:disabled):checked ~ &__text,
+    &--highlight:hover &__text {
+        color: $accent;
     }
 
-    &__input:checked + &__check {
-        display: block;
+    &--highlight:focus-visible &__text {
+        color: $accent;
+    }
+
+    &__input:focus {
+        outline: none;
+    }
+
+    &--highlight &__input:focus-visible ~ &__custom {
+        border-color: $accent;
+    }
+    &--highlight:hover &__input:not(:disabled) ~ &__custom {
+        border-color: $accent;
     }
 
     &__check {
-        position: absolute;
-        left: 0.1875em;
-        top: 0.3125em;
-
         fill: $accent;
         width: 0.625em;
         height: 0.4375em;
-        display: none;
+        opacity: 0;
+        transition: opacity 0.1s;
+    }
+
+    &__input:checked + &__custom &__check,
+    &__input[checked] + &__custom &__check {
+        opacity: 1;
+    }
+
+    &__input:disabled + &__custom &__check {
+        fill: $main-text;
+    }
+
+    &__input:disabled ~ &__text {
+        color: $main-text;
+        cursor: default;
+    }
+
+    &__input:disabled ~ &__custom {
+        border-color: transparent;
+        background-color: transparentize(rgb(188, 196, 216), 0.75);
+
+        box-shadow: inset 0px 2px 7px rgba(134, 146, 166, 0.1);
+    }
+
+    &__desc {
+        position: absolute;
+        background-image: linear-gradient(88.76deg, rgba(113, 130, 166, 0.85) 2.12%, rgba(85, 98, 126, 0.95) 97.88%);
+
+        left: 8px;
+        bottom: calc(100% + 8px);
+
+        transform: translateX(-50%);
+        color: white;
+        border-radius: 2px;
+        padding: 6px 8px;
+        width: max-content;
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+        font-size: 12px;
+    }
+
+    &__custom:hover ~ &__desc {
+        opacity: 1;
+    }
+
+    &__input:focus-visible ~ &__desc {
+        opacity: 1;
     }
 }

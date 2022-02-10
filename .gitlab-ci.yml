@@ -2,7 +2,6 @@ image: registry.gitlab.com/facteus/platform-team/shared-infra/images/dotnet-ci-i
 
 stages:
   - pre-deploy
-  - build
   - deploy-develop
   - deploy-staging
   - deploy-production
@@ -22,43 +21,79 @@ validate template:
   script:
   - aws cloudformation validate-template --template-body file://$TEMPLATE_PATH
 
-build:
+.build:
   image: node:lts
-  dependencies:
-    - validate template
-  stage: build
+  stage: pre-deploy
   before_script:
     - npm ci
   script:
-    - npm run build && mv publish dist-development
-    - npm run buildBeta && mv publish dist-development-beta
-    - npm run buildStaging && mv publish dist-staging
-    - npm run buildStagingBeta && mv publish dist-staging-beta
+    - npm run "$BUILD_COMMAND" && mv publish dist
   artifacts:
     paths:
-      - dist-development/
-      - dist-development-beta/
-      - dist-staging/
-      - dist-staging-beta/
-      
+      - dist
+
+build dev:
+  extends: .build
+  variables:
+    BUILD_COMMAND: build
+  only:
+    - develop
+
+build dev beta:
+  extends: .build
+  variables:
+    BUILD_COMMAND: buildBeta
+  only:
+    - develop
+
+build staging:
+  extends: .build
+  variables:
+    BUILD_COMMAND: buildStaging
+  only:
+    - master
+
+build staging beta:
+  extends: .build
+  variables:
+    BUILD_COMMAND: buildStagingBeta
+  only:
+    - master
+
+build production:
+  extends: .build
+  variables:
+    BUILD_COMMAND: buildProduction
+  only:
+    - master
+
+build production beta:
+  extends: .build
+  variables:
+    BUILD_COMMAND: buildProductionBeta
+  only:
+    - master
+
 .deploy:
-  dependencies:
-    - build
   script:
     - aws cloudformation deploy --stack-name $STACK_NAME --template-file $TEMPLATE_PATH --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides "CertificateArn=$CERTIFICATE_ARN" "DistributionAlias=$DISTRIBUTION_ALIAS"
-    - aws s3 sync ./dist-$ENV_SUFFIX s3://$STACK_NAME --acl public-read
+    - aws s3 sync ./dist s3://$STACK_NAME --acl public-read
     - export DISTRIBUTION_ID=`aws cloudformation describe-stack-resource --stack-name $STACK_NAME --logical-resource-id CloudFrontDistribution | jq -r '.StackResourceDetail.PhysicalResourceId'`
     - invalidation_id=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*" | jq -r '.Invalidation.Id')
     - echo $invalidation_id
     - aws cloudfront wait invalidation-completed --distribution-id $DISTRIBUTION_ID --id $invalidation_id
 
 deploy dev:
+  dependencies:
+    - build dev
   stage: deploy-develop
   extends: .deploy
   only:
     - develop
 
 deploy dev beta:
+  dependencies:
+    - build dev beta
   stage: deploy-develop
   extends: .deploy
   variables:
@@ -69,6 +104,8 @@ deploy dev beta:
     - develop
 
 deploy staging:
+  dependencies:
+    - build staging
   stage: deploy-staging
   extends: .deploy
   variables:
@@ -83,6 +120,8 @@ deploy staging:
     - master
 
 deploy staging beta:
+  dependencies:
+    - build staging beta
   stage: deploy-staging
   extends: .deploy
   variables:
@@ -95,3 +134,37 @@ deploy staging beta:
     DISTRIBUTION_ALIAS: beta.stag.quantamatics.net    
   only:
     - master
+
+deploy production:
+  dependencies:
+    - build production
+  stage: deploy-production
+  extends: .deploy
+  variables:
+    AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_PROD
+    AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_PROD
+    AWS_DEFAULT_REGION: us-east-1
+    ENV_SUFFIX: production
+    STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+    CERTIFICATE_ARN: arn:aws:acm:us-east-1:695033446027:certificate/6967410a-8283-47bc-a0d8-120d03843e70
+    DISTRIBUTION_ALIAS: app.quantamatics.com    
+  only:
+    - master
+  when: manual
+
+deploy production beta:
+  dependencies:
+    - build production beta
+  stage: deploy-production
+  extends: .deploy
+  variables:
+    AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_PROD
+    AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_PROD
+    AWS_DEFAULT_REGION: us-east-1
+    ENV_SUFFIX: production-beta
+    STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+    CERTIFICATE_ARN: arn:aws:acm:us-east-1:695033446027:certificate/6967410a-8283-47bc-a0d8-120d03843e70
+    DISTRIBUTION_ALIAS: beta.quantamatics.com    
+  only:
+    - master
+  when: manual

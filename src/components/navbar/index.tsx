@@ -45,7 +45,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                 "navigation--collapsed": collapsed,
             })}
         >
-            {user?.userRoles.includes(UserRole.Research) && (
+            {/* {user?.userRoles.includes(UserRole.Research) && (
                 <Accordion
                     isOpened={pathname.includes("/research")}
                     summaryClass="navigation__item"
@@ -82,8 +82,28 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                         </NavLink>
                     ))}
                 </Accordion>
-            )}
+            )} */}
 
+            {/* Research with no sub-nav*/}
+            {user?.userRoles.includes(UserRole.Research) && (
+                <NavLink
+                    to={AppRoute.Files}
+                    className={({ isActive }) =>
+                        isActive
+                            ? "navigation__item navigation__item--active"
+                            : "navigation__item"
+                    }
+                >
+                    <ZoomIcon
+                        aria-hidden="true"
+                        className="navigation__icon"
+                        width="16"
+                        height="16"
+                    />
+                    Research
+                </NavLink>
+            )}
+            
             {user?.userRoles.includes(UserRole.Coherence) && (
                 <NavLink
                     to={AppRoute.Coherence}

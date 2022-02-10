@@ -15,9 +15,8 @@ export interface InfoMessage {
 
 const InfoMessage: FunctionComponent = () => {
     const { state } = useLocation();
-
     if (state as InfoMessage) {
-        const isCalendarPic = state.image === "calendar";
+        const isCalendarPic = (state as InfoMessage).image === "calendar";
         return (
             <article className="info">
                 {isCalendarPic ? (
@@ -43,14 +42,14 @@ const InfoMessage: FunctionComponent = () => {
                         "info__title--pass": !isCalendarPic,
                     })}
                 >
-                    {state.headline}
+                    {(state as InfoMessage).headline}
                 </Headline>
                 <p
                     className="info__text"
-                    dangerouslySetInnerHTML={{ __html: state.subtitle }}
+                    dangerouslySetInnerHTML={{ __html: (state as InfoMessage).subtitle }}
                 />
 
-                {state.returnBack && (
+                {(state as InfoMessage).returnBack && (
                     <Button href={AppRoute.Login} className="info__back">
                         Return to Sign In
                     </Button>
