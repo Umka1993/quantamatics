@@ -3,7 +3,7 @@ import "./styles/table.scss";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import EditSVG from "./assets/edit-row-icon.svg";
-import DeleteSVG from "./assets/delete-row-icon.svg";
+// import DeleteSVG from "./assets/delete-row-icon.svg";
 
 import classNames from "classnames";
 import { Organization } from "../../types/organization/types";
@@ -54,10 +54,10 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
 
     // ? For the future use
 
-    const handleDeleteOrganization = (id: string, index: number) => {
+    /*    const handleDeleteOrganization = (id: string, index: number) => {
         setItemDeleting(index)
         deleteOrg(id).unwrap()
-    }
+       } */
 
     useEffect(() => {
         if (isDeleted) {
@@ -129,14 +129,14 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
                             >
                                 <EditSVG role="img" aria-label="edit" fill="currentColor" />
                             </Link>
-                            <button
+                            {/* <button
                                 type="button"
                                 className="table__action"
-                                // onClick={() => handleDeleteOrganization(organization.id, index)}
+                                onClick={() => handleDeleteOrganization(organization.id, index)}
                                 disabled
                             >
                                 <DeleteSVG role="img" aria-label="delete" fill="currentColor" />
-                            </button>
+                            </button> */}
                         </td>
                     </tr>
                 ))}
