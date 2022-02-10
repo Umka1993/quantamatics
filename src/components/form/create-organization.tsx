@@ -1,6 +1,6 @@
 import React, { useEffect, useState, FunctionComponent, useRef } from "react";
 import "./styles/create-organization.scss";
-import Input, { Multiselect } from "../app-input";
+import Input, { Multiselect, InputURL } from "../app-input";
 import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
@@ -127,7 +127,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     maxLength={32}
                     error={duplicateIdError}
                 />
-                <Input
+                <InputURL
                     externalSetter={setCustomerCrmLink}
                     label="CRM Customer ID Link"
                     value={customerCrmLink}

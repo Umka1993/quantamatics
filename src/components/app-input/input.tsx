@@ -71,8 +71,11 @@ const Input: React.FunctionComponent<IInput> = ({
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
+
         setErrorMessage(inputRef.current?.validationMessage);
         onInvalid && onInvalid(evt);
+
+        
     };
 
     const reCalcLabelWidth = () => {

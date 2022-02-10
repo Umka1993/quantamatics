@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { Organization } from "types/organization/types";
 import Headline from "../page-title";
-import Input, { Multiselect } from "../app-input";
+import Input, { Multiselect, InputURL } from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
 import { useNavigate } from "react-router-dom";
@@ -244,7 +244,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             error={duplicateIdError}
           />
 
-          <Input
+          <InputURL
             externalSetter={setCustomerLink}
             value={customerCrmLink}
             label="CRM Customer ID Link"
