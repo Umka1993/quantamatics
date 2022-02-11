@@ -79,7 +79,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
   const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
   function initOptions() {
-    if (organization && user) {
+    if (organization && user) {      
       const prepareOptions = (allAssets: AssetInOrganization[]) => {
         setOptions(
           [...allAssets].map((asset) => {
@@ -94,9 +94,14 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         );
       };
 
-      getInfoOrg(user.organizationId as string)
-        .unwrap()
-        .then(({ organizationAssets: allAssets }) => prepareOptions(allAssets));
+      if (isUserOrganization) {
+        setOptions(organization.organizationAssets)
+      } else {
+        getInfoOrg(user.organizationId as string)
+          .unwrap()
+          .then(({ organizationAssets: allAssets }) => prepareOptions(allAssets));
+      }
+
     }
   }
 
