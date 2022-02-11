@@ -47,9 +47,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     },
   ] = useUpdateOrganizationMutation();
 
-  const isHaveAccessToEditAsset =
-    user?.userRoles.includes(UserRole.OrgOwner) ||
-    user?.userRoles.includes(UserRole.Admin);
+  const isUserOrganization = user?.organizationId === organization?.id
 
   const [name, setName] = useState<string>("");
   const [customerCrmId, setCustomerID] = useState<string>("");
@@ -260,7 +258,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             errorMessage="Select asset permissions to assign to the organization."
             showError={assetError}
             className={style.input}
-            disabled={!isHaveAccessToEditAsset}
+            disabled={isUserOrganization}
             type="edit-organization"
             inputList={[...assignedAssets]
               .map((asset) => asset.asset.name)
