@@ -4,29 +4,41 @@ import React, {
     FunctionComponent,
     SelectHTMLAttributes,
     CSSProperties,
-    FormEvent,
+    useEffect,
+    useLayoutEffect,
     Dispatch,
     SetStateAction,
-    useEffect,
-    useCallback,
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
-import Checkbox from "../app-checkbox/checkbox";
-import ComaList from "../coma-list";
 import useCloseModal from "../../hooks/useCloseModal";
-import MultiselectOptions from "./multiselect-options";
-import classNames from 'classnames'
-interface IInput extends SelectHTMLAttributes<HTMLSelectElement> {
+import classNames from "classnames";
+import MultiselectAssetOption, {
+    MultiselectAssetOptionProps,
+} from "./multiselect-asset-option";
+import { AssetInOrganization, AssetListItem } from "../../types/asset";
+import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
+interface IInput
+    extends Omit<
+    MultiselectAssetOptionProps,
+    "option" | "selected" | "setSelected"
+    >,
+    SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
     showLimit?: boolean;
-    options: string[];
-    selected: string[];
-    setSelected: Dispatch<SetStateAction<string[]>>;
-    errorMessage?: string,
-    showError?: boolean,
+    selected: Set<string | number> | AssetInOrganization[];
+
+    setSelected:
+    | Dispatch<SetStateAction<Set<string | number>>>
+    | Dispatch<SetStateAction<AssetInOrganization[]>>;
+
+    errorMessage?: string;
+    showError?: boolean;
+
+    options: AssetListItem[] | AssetInOrganization[];
+    inputList?: string;
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -38,14 +50,19 @@ const Multiselect: FunctionComponent<IInput> = ({
     selected,
     errorMessage,
     showError,
-    className
+    className,
+    disabled,
+    inputList = "",
+    type,
 }) => {
+    const isEditOrganization = Array.isArray(selected);
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const rootElement = useRef<HTMLDivElement>(null);
 
     const [hideError, setHideError] = useState(false);
+    const [list, setList] = useState(inputList);
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
@@ -53,15 +70,39 @@ const Multiselect: FunctionComponent<IInput> = ({
             setRightOffset(offsetWidth + 25);
         }
     };
+    // useLayoutEffect(reCalcLabelWidth, [selected, labelRef.current])
 
     useEffect(() => {
-        Boolean(selected.length) ? setHideError(true) : setHideError(false)
+        setHideError(
+            isEditOrganization ? Boolean(selected.length) : Boolean(selected.size)
+        );
+
         reCalcLabelWidth();
-    }, [selected])
+    }, [selected]);
+
+    useLayoutEffect(() => {
+        if (isEditOrganization) {
+            Boolean(selected.length)
+                ? setList([...selected].map((asset) => asset.asset.name).join(", "))
+                : setList("");
+        } else {
+            Boolean(selected.size)
+                ? setList(
+                    [
+                        ...(options as AssetListItem[]).filter(({ assetId }) =>
+                            selected.has(assetId)
+                        ),
+                    ]
+                        .map(({ name }) => name)
+                        .join(", ")
+                )
+                : setList("");
+        }
+    }, [selected]);
 
     /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
 
-    const toggleOptions = () => setShowOptions(!showOptions)
+    const toggleOptions = () => setShowOptions(!showOptions);
 
     useCloseModal(showOptions, setShowOptions);
 
@@ -73,7 +114,7 @@ const Multiselect: FunctionComponent<IInput> = ({
         >
             <label
                 className={classNames("app-input__wrapper multiselect__search_wrap", {
-                    'multiselect__search_wrap--opened': showOptions
+                    "multiselect__search_wrap--opened": showOptions,
                 })}
                 style={
                     label
@@ -85,39 +126,63 @@ const Multiselect: FunctionComponent<IInput> = ({
             >
                 <input
                     className={classNames("app-input__field", {
-                        "app-input__field--error": showError && !hideError && !Boolean(selected.length)
+                        "app-input__field--error":
+                            showError &&
+                            !hideError &&
+                            !(isEditOrganization
+                                ? Boolean(selected.length)
+                                : Boolean(selected.size)),
                     })}
                     type="text"
                     placeholder={label ? " " : placeholder}
-
-                    value={selected.join(', ')}
+                    value={list}
                     // onFocus={openOptions}
                     onClick={toggleOptions}
                     readOnly
-
                     style={{
-                        cursor: 'pointer',
+                        cursor: "pointer",
                     }}
                 />
 
                 {label && (
-                    <span className={classNames("app-input__label app-input__label--icon", {
-                        'app-input__label--initial': !Boolean(selected.length)
-                    })}>
+                    <span
+                        className={classNames("app-input__label app-input__label--icon")}
+                    >
                         <span ref={labelRef}>{label}</span>
                     </span>
                 )}
             </label>
-            {showError && !hideError && <p className="app-input__error">{errorMessage}</p>}
-
-
-            {showOptions && (
-                <MultiselectOptions
-                    options={options}
-                    selected={selected}
-                    setSelected={setSelected}
-                />
+            {showError && !hideError && (
+                <p className="app-input__error">{errorMessage}</p>
             )}
+
+            <div
+                className={classNames("multiselect__options", {
+                    // 'multiselect__options--ods': options.length % 2 !== 0
+                })}
+                hidden={!showOptions}
+            >
+                {options.map((option: any) =>
+                    isEditOrganization ? (
+                        <MultiselectAssetOrgOption
+                            key={option.assetId}
+                            option={option}
+                            selected={selected as any}
+                            setSelected={setSelected as any}
+                            disabled={disabled}
+                        />
+                    ) : (
+                        <MultiselectAssetOption
+                            key={option.assetId}
+                            option={option}
+                            selected={(selected as any).has(option.assetId)}
+                            setSelected={setSelected as any}
+                            disabled={disabled}
+                            type={type}
+                        />
+                    )
+                )}
+            </div>
         </div>
     );
 };

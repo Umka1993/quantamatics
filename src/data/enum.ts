@@ -73,7 +73,7 @@ export const enum OrganizationKey {
     IdCRM = 'customerCrmId',
     LinkCRM = 'customerCrmLink',
     Comment = 'comments',
-    Assets = 'assets',
+    Assets = 'organizationAssets',
 }
 
 export const enum UserKey {
@@ -103,4 +103,13 @@ export const enum RegExpValidation {
     Password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*\\[\\]\\\\\"';:<_>., =+/-]).*$",
     Email = "^(([^<>()[\\]\\\\.,;:\\s@\"]+(\\.[^<>()[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
     URL = '(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,})\r\n'
+}
+
+export const enum Error {
+    DuplicateUser = 'A user account with this email already exists'
+}
+
+export const enum UniqueError {
+    Name = "Organization Name must be unique",
+    ID = "Organization CRM Customer ID must be unique",
 }

@@ -1,4 +1,6 @@
-@import "../../../variables.scss";
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
+
 .info {
     text-align: center;
     &__title {
@@ -16,8 +18,7 @@
         a {
             color: $accent;
             text-decoration: none;
-            &:hover,
-            &:focus-visible {
+            @include hover-focus {
                 color: darken($accent, 5);
                 text-decoration: underline;
             }

@@ -1,28 +1,33 @@
 @use "sass:math";
-@use "../../../variables.scss" as *;
+@use "../../../sass/variables" as *;
 
 .multiselect {
     position: relative;
     &__options {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 8%;
 
         background-color: #fff;
         box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.1);
         backdrop-filter: blur(10px);
 
         border-radius: 2px;
-        padding: 24px 8%;
+        padding: 32px;
 
         font-size: 14px;
         line-height: 16px;
-        gap: 16px math.div(24, 402) * 100%;
+        gap: 16px 60px;
 
         position: absolute;
         top: calc(100% + 10px);
         width: 100%;
         z-index: 1;
+        transition: opacity 0.2s;
+
+        &[hidden] {
+            opacity: 0;
+            pointer-events: none;
+        }
 
         @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
             background-color: transparent;
@@ -46,7 +51,7 @@
             margin: 22px 0;
         }
 
-        &--ods {
+        /*       &--ods {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
@@ -58,6 +63,10 @@
             & > * {
                 margin: 8px 8px;
             }
+        } */
+
+        .check-block {
+            align-items: start;
         }
 
         .check-block__custom {
@@ -68,10 +77,38 @@
         .check-block__check {
             font-size: 16px;
         }
+    }
 
-        .check-block__input:checked ~ .check-block__custom {
-            color: $accent;
+    &__option--hide-pin {
+        .pin-button {
+            opacity: 0;
+            transition: opacity 0.2s;
         }
+
+        .pin-button:focus-visible {
+            opacity: 1;
+        }
+
+        &:hover .pin-button {
+            opacity: 1;
+        }
+    }
+
+    &__option--pinned {
+        display: grid;
+        grid-template-columns: 16px 1fr;
+        gap: 6px;
+        align-items: start;
+
+        .check-block {
+            grid-column: 2 / 3;
+        }
+    }
+
+    &__option .check-block__text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &__search_wrap {

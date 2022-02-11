@@ -5,7 +5,7 @@ import AppInput, { DatePick, Email, Multiselect } from "../app-input";
 import { SelectorInput } from "../selector-input";
 import Modal from "../modal";
 import RoleCheckboxes from "../role-checkboxes";
-import { OrganizationKey, UserRole } from "../../data/enum";
+import { Error, OrganizationKey, UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
 import { IUpdateUser } from "../../types/user";
 import { useUpdateUserMutation, useUpdateUserRolesMutation } from "../../api/user";
@@ -17,8 +17,9 @@ import Loader from "../loader";
 
 import "./styles/edit-account.scss";
 import { Organization } from "types/organization/types";
-import { useGetAllAssetsQuery, useLinkAssetToUserMutation } from "../../api/asset";
+import { useGetAllAssetsQuery, useGetUserAssetsQuery, useLinkAssetToUserMutation, useUnlinkAssetToUserMutation } from "../../api/asset";
 import { useParams } from "react-router-dom";
+import { AssetListItem } from "../../types/asset";
 interface IEditProfile {
     onClose: () => void;
     user: IUpdateUser;
@@ -38,12 +39,12 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
     const [userRoles, setRoles] = useState<UserRole[]>(user.userRoles)
-    // const [organizationId, setOrganizationId] = useState<string>('')
     const dispatch = useDispatch()
 
     const formRef = useRef<HTMLFormElement>(null);
 
     const loggedUser = useUser();
+    const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } = useGetUserAssetsQuery(user.id)
 
     const [update, { isSuccess, isError, error, isLoading }] = useUpdateUserMutation();
     const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] = useUpdateUserRolesMutation();
@@ -55,11 +56,14 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
         organizationID as string
     );
     const [linkAsset] = useLinkAssetToUserMutation()
+    const [unlinkAsset] = useUnlinkAssetToUserMutation()
 
 
-    const [datasets, setDatasets] = useState<string[]>([]);
+    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(new Set())
+
     const [assetError, setAssetError] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [assetPrepared, setAssetPrepared] = useState(false);
 
     const sendNewUser = (validate: any) => {
         const newUserData: IUpdateUser = {
@@ -73,10 +77,18 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
         update(newUserData).unwrap();
     };
 
+    useEffect(() => {
+        if (serverSelectedAssets && assets) {
+            const selectedAssets: Set<string | number> = new Set(serverSelectedAssets.map(({ id }) => id))
+            setAssignedAssets(selectedAssets)
+            setAssetPrepared(true)
+        }
+    }, [serverSelectedAssets, assets])
+
     const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
 
         evt.preventDefault();
-        if (datasets.length || true) { // Ignore Asset errors for now
+        if (assignedAssets.size) {
             setValidate(true);
             const isValid = formRef.current?.reportValidity();
             isValid && sendNewUser(validate)
@@ -101,14 +113,27 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                 localStorage.setItem("user", JSON.stringify(normalizedNewData));
             }
 
-            datasets.forEach((selectedAsset) => {
-                const foundedAsset = assets?.find(element => element.name === selectedAsset)
 
-                foundedAsset && linkAsset({
-                    assetId: foundedAsset.assetId, userId: user.id,
-                })
+            // ! It will be waste if we start update all users on updating org
+
+            //? Link new assets to user
+            assignedAssets.forEach((assetId) => {
+                const alreadySelectedAsset = serverSelectedAssets?.find(element => element.id === assetId)
+
+                if (alreadySelectedAsset === undefined) {
+                    linkAsset({
+                        assetId, userId: user.id,
+                    })
+                }
+
             })
 
+            //? Unlink old assets from user
+            serverSelectedAssets?.forEach((alreadySelectedAsset) => {
+                !assignedAssets.has(alreadySelectedAsset.id) && unlinkAsset({
+                    assetId: alreadySelectedAsset.id, userId: user.id
+                })
+            })
         }
     }, [isSuccess])
 
@@ -119,7 +144,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     useEffect(() => {
         if (isError) {
             if ((error as IApiError).data?.includes(" already taken"))
-                setEmailError("The user with such email already exists");
+                setEmailError(Error.DuplicateUser);
             else
                 alert(JSON.stringify((error as any).data?.errors));
         }
@@ -195,14 +220,23 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                                 disabled
                             />}
 
-                        {/* <Multiselect
-                            options={assets?.map((asset) => asset.name) || []}
-                            selected={datasets}
-                            setSelected={setDatasets}
-                            label="Account Datasets"
-                            errorMessage='Select asset permissions to assign to the user account.'
-                            showError={assetError}
-                        /> */}
+                        {assets && assetPrepared &&
+                            <Multiselect
+                                options={assets}
+                                selected={assignedAssets}
+                                setSelected={setAssignedAssets}
+                                label="Account Assets"
+                                errorMessage='Select asset permissions to assign to the user account.'
+                                showError={assetError}
+                                type='user'
+                                inputList=
+                                {[...assets.filter(({ assetId }) => assignedAssets.has(assetId))]
+                                    .map(({ name }) => name)
+                                    .join(", ")}
+                            />
+
+                        }
+
                         <RoleCheckboxes
                             defaultRoles={userRoles}
                             externalSetter={setRoles}
