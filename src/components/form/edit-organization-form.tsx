@@ -79,7 +79,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
   const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
   function initOptions() {
-    if (organization && user) {      
+    if (organization && user) {
       const prepareOptions = (allAssets: AssetInOrganization[]) => {
         setOptions(
           [...allAssets].map((asset) => {
@@ -189,8 +189,15 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
       setName(organization.name);
       setCustomerID(organization.customerCrmId);
       setAssignedAssets(organization.organizationAssets);
+      setCustomerLink(organization.customerCrmLink);
+      setComment(organization.comments)
     }
   }, [organization]);
+
+  useEffect(() => {
+    assignedAssets.length && console.log(`Is setted: ${assignedAssets[0].sharedByDefault}`);
+    
+  }, [assignedAssets])
 
   return (
     <form
