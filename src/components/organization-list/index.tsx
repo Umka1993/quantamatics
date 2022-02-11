@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import style from "./organization-list.module.scss";
 import AddIcon from "./assets/add.svg";
 import { OrganizationTable } from "../table/OrganizationTable";
@@ -8,6 +8,7 @@ import { AppRoute } from "../../data/enum";
 import SearchIcon from "./assets/search.svg";
 
 export default function OrganizationList(): ReactElement {
+    const [search, setSearch] = useState('')
     return (
         <div className={style.root}>
             <header className={style.header}>
@@ -25,6 +26,8 @@ export default function OrganizationList(): ReactElement {
                         type="search"
                         name="search"
                         placeholder="Search organization..."
+                        value={search}
+                        onInput={({ currentTarget: { value } }) => setSearch(value)}
                     />
                 </label>
 
@@ -33,7 +36,7 @@ export default function OrganizationList(): ReactElement {
                     Add New
                 </Button>
             </header>
-            <OrganizationTable />
+            <OrganizationTable search={search} />
         </div>
     );
 }

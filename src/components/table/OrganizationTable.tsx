@@ -16,6 +16,7 @@ import { ORG_HEADER } from "./utils/constants";
 import { Link } from 'react-router-dom'
 
 interface ITable {
+    search?: string;
 }
 
 export const OrganizationTable: React.FunctionComponent<ITable> = () => {
@@ -70,7 +71,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
     if (isError) {
         console.log(error);
 
-        return <div>Something went wrong</div>;
+        return <p>Something went wrong</p>;
     }
 
     if (isLoading) {
