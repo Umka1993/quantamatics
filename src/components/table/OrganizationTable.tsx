@@ -76,6 +76,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
             setLocalRows(filteredOrgs);
         } else {
             setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
+            setSort(INITIAL_SORT);
         }
     }, [search]);
 
