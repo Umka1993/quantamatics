@@ -24,4 +24,9 @@
 .subtitle {
     color: $main-text;
     margin: 0;
+
+    a {
+        font-weight: 500;
+        text-decoration: none;
+    }
 }

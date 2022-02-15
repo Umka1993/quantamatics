@@ -18,7 +18,7 @@ import {
   useUpdateOrganizationMutation,
 } from "../../api/organization";
 import Loader from "../loader";
-import { AppRoute, UserRole } from "../../data/enum";
+import {  UserRole } from "../../data/enum";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetInOrganization } from "../../types/asset";
 import useUser from "../../hooks/useUser";
