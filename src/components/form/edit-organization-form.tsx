@@ -164,7 +164,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
   const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setInitialOrg();
-    isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);
   };
 
   useEffect(() => {
