@@ -45,17 +45,17 @@
 
         color: $accent;
         border-color: currentColor;
-
-        input {
-            color: $headlines;
-        }
     }
 
     input {
         border: none;
         font: inherit;
         outline: none;
-        color: inherit;
+        color: $headlines;
         width: 100%;
+
+        &:placeholder-shown {
+            color: $inactive;
+        }
     }
 }
