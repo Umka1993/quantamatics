@@ -23,6 +23,7 @@ import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetInOrganization } from "../../types/asset";
 import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
+import CheckSVG from "./assets/check.svg";
 interface EditOrganizationFormProps {
   organization?: Organization;
   isHaveAccessToOrgList?: boolean;
@@ -60,6 +61,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
   const [assignedAssets, setAssignedAssets] = useState<AssetInOrganization[]>(
     organization?.organizationAssets || []
   );
+
+  const [isSavedMessageActive, setSavedMessageActive] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -172,14 +175,18 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
   useEffect(() => {
     if (isUpdated) {
-      if (isHaveAccessToOrgList) {
-        navigate(AppRoute.OrganizationList);
-      } else {
-        setOptions([]);
-        initOptions();
-      }
+      setOptions([]);
+      initOptions();
+
+      setSavedMessageActive(true);
     }
   }, [isUpdated]);
+
+  useEffect(() => {
+    if (isSavedMessageActive) {
+      setTimeout(() => setSavedMessageActive(false), 2000)
+    }
+  }, [isSavedMessageActive]);
 
   useEffect(() => {
     if (organization) {
@@ -216,8 +223,21 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
               Boolean(duplicateOrgError) ||
               Boolean(duplicateIdError)
             }
+            variant={isSavedMessageActive ? "valid" : undefined}
           >
-            Save
+            {isSavedMessageActive ? (
+              <>
+                <CheckSVG
+                  aria-hidden="true"
+                  width={17}
+                  height={17}
+                  fill="currentColor"
+                />
+                Saved
+              </>
+            ) : (
+              "Save"
+            )}
           </Button>
         </div>
       </header>
