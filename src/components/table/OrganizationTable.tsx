@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./styles/table.scss";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
@@ -9,21 +9,26 @@ import classNames from "classnames";
 import { Organization } from "../../types/organization/types";
 import { SortDirection, UserRole } from "../../data/enum";
 import ISort from "../../types/sort-type";
-import { useGetAllOrganizationsQuery, useDeleteOrganizationMutation } from "../../api/organization";
+import {
+    useGetAllOrganizationsQuery,
+    useDeleteOrganizationMutation,
+} from "../../api/organization";
 import Loader from "../loader/";
 import useUser from "../../hooks/useUser";
 import { ORG_HEADER } from "./utils/constants";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 interface ITable {
     search?: string;
 }
 
-export const OrganizationTable: React.FunctionComponent<ITable> = () => {
+export const OrganizationTable: React.FunctionComponent<ITable> = ({
+    search,
+}) => {
     const user = useUser();
 
     // ? Need to be in component to reset sort after update
-    const INITIAL_SORT = { name: "", direction: SortDirection.Default }
+    const INITIAL_SORT = { name: "", direction: SortDirection.Default };
 
     const { isLoading, data, isError, isSuccess, error } =
         useGetAllOrganizationsQuery();
@@ -35,36 +40,50 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
     const [itemDeleting, setItemDeleting] = useState<number | null>(null);
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 
-    function filterOrganizationToOrgAdmin(organizations: Organization[]): Organization[] {
-        const filteredOrgs = user?.userRoles.includes(UserRole.Admin)
-            ? organizations
-            : organizations?.filter((organization) => organization.parentId === String(user?.organizationId))
+    const filterOrganizationToOrgAdmin = useCallback(
+        (organizations: Organization[]) => {
+            const filteredOrgs = user?.userRoles.includes(UserRole.Admin)
+                ? organizations
+                : organizations?.filter(
+                    (organization) =>
+                        organization.parentId === String(user?.organizationId)
+                );
 
-        sessionStorage.setItem('table-rows', JSON.stringify(filteredOrgs))
-        return filteredOrgs;
-
-    }
+            sessionStorage.setItem("table-rows", JSON.stringify(filteredOrgs));
+            return filteredOrgs;
+        },
+        [user?.userRoles]
+    );
     useEffect(() => {
         if (data && isSuccess) {
-            setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]))
+            setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
             setSort(INITIAL_SORT);
         }
-
-
     }, [data, isSuccess]);
 
-    // ? For the future use
+    useEffect(() => {
+        if (localRows.length && search?.length) {
+            const normalizedSearchQuery = search.toLocaleLowerCase();
 
-    /*    const handleDeleteOrganization = (id: string, index: number) => {
-        setItemDeleting(index)
-        deleteOrg(id).unwrap()
-       } */
+            const filteredOrgs = localRows.filter(
+                ({ name, customerCrmId, customerCrmLink, comments }) =>
+                    name.toLocaleLowerCase().includes(normalizedSearchQuery) ||
+                    customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
+                    customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
+                    comments.toLocaleLowerCase().includes(normalizedSearchQuery)
+            );
+
+            setLocalRows(filteredOrgs);
+        } else {
+            setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
+        }
+    }, [search]);
 
     useEffect(() => {
         if (isDeleted) {
             setItemDeleting(null);
         }
-    }, [isDeleted])
+    }, [isDeleted]);
 
     if (!localRows) return null;
 
@@ -86,7 +105,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
         <table className="table table--organization">
             <thead className="table__head">
                 <tr className="table__header">
-                    {ORG_HEADER.keys.map((key, index) =>
+                    {ORG_HEADER.keys.map((key, index) => (
                         <SortTableHeader
                             key={key}
                             name={key}
@@ -95,7 +114,8 @@ export const OrganizationTable: React.FunctionComponent<ITable> = () => {
                             localRows={localRows}
                             setSort={setSort}
                             setLocalRows={setLocalRows}
-                        />)}
+                        />
+                    ))}
 
                     <th className="table__headline table__headline--hidden">Actions</th>
                 </tr>
