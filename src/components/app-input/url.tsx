@@ -47,14 +47,11 @@ const Input: React.FunctionComponent<IInput> = ({
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         let normalizedValue = evt.currentTarget.value;
 
-        const startWithHTTP = /^http[s]?:\/\//.test(normalizedValue);
-
-        console.log(startWithHTTP);
-
-
         normalizedValue = normalizedValue.replace(/(http[s]?:\/\/){2,}/gm, 'https://')
 
-        if (normalizedValue.length && !startWithHTTP) {
+        const isNeedToAddHTTP =  normalizedValue.length <= 4 && !'http'.includes(normalizedValue)
+
+        if (isNeedToAddHTTP) {
             normalizedValue = 'https://' + normalizedValue
         }
 
@@ -104,9 +101,7 @@ const Input: React.FunctionComponent<IInput> = ({
     }
 
     const focusHandler: FocusEventHandler<HTMLInputElement> = (evt) => {
-        const startWithHTTP = /^http[s]?:\/\//.test(evt.currentTarget.value);
-
-        if (!startWithHTTP) {
+        if (!evt.currentTarget.value.startsWith('http')) {
             if (externalSetter) {
                 externalSetter('https://' + evt.currentTarget.value)
             } else evt.currentTarget.value = 'https://' + evt.currentTarget.value;
