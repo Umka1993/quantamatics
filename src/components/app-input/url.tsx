@@ -6,11 +6,11 @@ import React, {
     ChangeEventHandler,
     FormEventHandler,
     CSSProperties,
-    FocusEventHandler,
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
 import EditIcon from "./assets/edit.svg";
+import { IMaskInput } from "react-imask";
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
@@ -47,18 +47,22 @@ const Input: React.FunctionComponent<IInput> = ({
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
         let normalizedValue = evt.currentTarget.value;
 
-        normalizedValue = normalizedValue.replace(/(http[s]?:\/\/){2,}/gm, 'https://')
+        normalizedValue = normalizedValue.replace(
+            /(http[s]?:\/\/){2,}/gm,
+            "https://"
+        );
 
-        const isNeedToAddHTTP =  normalizedValue.length <= 4 && !'http'.includes(normalizedValue)
+        const isNeedToAddHTTP =
+            normalizedValue.length <= 4 && !"http".includes(normalizedValue);
 
         if (isNeedToAddHTTP) {
-            normalizedValue = 'https://' + normalizedValue
+            normalizedValue = "https://" + normalizedValue;
         }
 
         if (externalSetter) {
-            externalSetter(normalizedValue)
+            externalSetter(normalizedValue);
         } else {
-            evt.currentTarget.value = normalizedValue
+            evt.currentTarget.value = normalizedValue;
         }
 
         onChange && onChange(evt);
@@ -67,16 +71,22 @@ const Input: React.FunctionComponent<IInput> = ({
     useEffect(() => {
         reCalcLabelWidth();
         if (inputRef.current) {
+            console.log(inputRef.current);
+
             const { validationMessage, validity, value, required } = inputRef.current;
 
             const isOnlySpaces = /^\s+$/.test(value);
 
             if (required && (validity.valueMissing || isOnlySpaces)) {
-                inputRef.current.setCustomValidity(`This is not valid ${label ? label : ''}`)
+                inputRef.current.setCustomValidity(
+                    `This is not valid ${label ? label : ""}`
+                );
             } else {
-                inputRef.current.setCustomValidity('')
+                inputRef.current.setCustomValidity("");
             }
-            error ? inputRef.current.setCustomValidity(error) : setErrorMessage(undefined);
+            error
+                ? inputRef.current.setCustomValidity(error)
+                : setErrorMessage(undefined);
 
             if (!validationMessage.length) {
                 setErrorMessage(undefined);
@@ -89,35 +99,14 @@ const Input: React.FunctionComponent<IInput> = ({
 
         setErrorMessage(inputRef.current?.validationMessage);
         onInvalid && onInvalid(evt);
-
-
     };
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
             const { offsetWidth } = labelRef.current;
-            setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5)
+            setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5);
         }
-    }
-
-    const focusHandler: FocusEventHandler<HTMLInputElement> = (evt) => {
-        if (!evt.currentTarget.value.startsWith('http')) {
-            if (externalSetter) {
-                externalSetter('https://' + evt.currentTarget.value)
-            } else evt.currentTarget.value = 'https://' + evt.currentTarget.value;
-        }
-        reCalcLabelWidth();
-        onFocus && onFocus(evt);
-    }
-
-    const blurHandler: FocusEventHandler<HTMLInputElement> = (evt) => {
-        if (evt.currentTarget.value === 'https://') {
-            if (externalSetter) {
-                externalSetter('')
-            } else evt.currentTarget.value = '';
-        }
-
-    }
+    };
 
     return (
         <div
@@ -128,16 +117,19 @@ const Input: React.FunctionComponent<IInput> = ({
             <label
                 className="app-input__wrapper"
                 style={
-                    label ?
-                        {
+                    label
+                        ? ({
                             "--label-width": `${rightOffset}px`,
-                        } as CSSProperties
+                        } as CSSProperties)
                         : undefined
                 }
             >
-                <input
+                <IMaskInput
+                    mask="{http}[s]://`*[***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************]"
+                    definitions={{
+                        s: /s/,
+                    }}
                     className="app-input__field"
-                    onChange={changeHandler}
                     aria-invalid={!!errorMessage}
                     autoComplete={autoComplete}
                     placeholder={label ? " " : placeholder}
@@ -145,29 +137,37 @@ const Input: React.FunctionComponent<IInput> = ({
                     aria-required={required}
                     value={value || ""}
                     maxLength={maxLength}
-                    onFocus={focusHandler}
-                    type='url'
-                    onBlur={blurHandler}
+                    type="url"
                     {...other}
-                    ref={inputRef}
                     onInvalid={invalidHandler}
+                    onAccept={(value, _mask) => {
+                        //* delete duplicate http
+                        const normalizedValue = (value as string).replace(
+                            /(http[s]?:\/\/){2,}/gm,
+                            "https://"
+                        );
+                        externalSetter && externalSetter(normalizedValue);
+                    }}
                 />
+
                 {icon === "edit" && <EditIcon className="app-input__icon" />}
                 {label && (
                     <span
                         className={classNames("app-input__label", {
-                            'app-input__label--icon': icon
+                            "app-input__label--icon": icon,
                         })}
-
                     >
-                        <span ref={labelRef}>{label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}</span>
+                        <span ref={labelRef}>
+                            {label}
+                            {showLimit &&
+                                maxLength &&
+                                ` (${(value as string)?.length} / ${maxLength})`}
+                        </span>
                     </span>
                 )}
             </label>
 
-            {errorMessage && (
-                <p className="app-input__error">{errorMessage}</p>
-            )}
+            {errorMessage && <p className="app-input__error">{errorMessage}</p>}
         </div>
     );
 };

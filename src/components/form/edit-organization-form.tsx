@@ -270,7 +270,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             externalSetter={setCustomerLink}
             value={customerCrmLink}
             label="CRM Customer ID Link"
-            maxLength={64}
+            maxLength={72}
             className={style.input}
             disabled={isUpdating}
           />

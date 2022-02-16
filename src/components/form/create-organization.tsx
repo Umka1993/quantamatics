@@ -132,7 +132,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     label="CRM Customer ID Link"
                     value={customerCrmLink}
                     type="url"
-                    maxLength={64}
+                    maxLength={72}
                 />
 
                 <Input
