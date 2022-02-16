@@ -209,7 +209,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         <div className={style.buttons}>
           <ResetButton
             onClick={({ target }) => (target as HTMLButtonElement).blur()}
-            disabled
+            disabled={isUpdating}
           >
             Cancel
           </ResetButton>

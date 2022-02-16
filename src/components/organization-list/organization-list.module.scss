@@ -53,8 +53,8 @@
         outline: none;
         color: $headlines;
         width: 100%;
-
-        &:placeholder-shown {
+        
+        &::placeholder {
             color: $inactive;
         }
     }
