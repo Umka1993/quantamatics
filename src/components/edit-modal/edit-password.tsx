@@ -1,18 +1,19 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, {FormEvent, useEffect, useRef, useState} from "react";
 
-import Button, { ResetButton } from "../button";
+import Button, {ResetButton} from "../button";
 import Password from "../app-input/password";
-import { IUser } from "../../types/edit-profile/types";
+import {IUser} from "../../types/edit-profile/types";
 
 import Modal from "../modal";
 import "./styles/edit-account.scss";
-import { adaptRoles } from "../../services/baseService";
+import {adaptRoles} from "../../services/baseService";
 import KeyIcon from "./assets/key.svg";
 import ComaList from "../coma-list";
-import { useChangePasswordMutation } from "../../api/account";
+import {useChangePasswordMutation} from "../../api/account";
 import Loader from "../loader";
-import { useGetAllUserAssetsQuery } from "../../api/asset";
-import { AssetServerResponse } from "../../types/asset";
+import {useGetAllUserAssetsQuery} from "../../api/asset";
+import {AssetServerResponse} from "../../types/asset";
+import {UserRole} from "../../data/enum";
 
 interface IEditProfile {
     onClose: () => void;
@@ -20,13 +21,14 @@ interface IEditProfile {
 }
 
 export const EditPassword: React.FunctionComponent<IEditProfile> = ({
-    onClose,
-    user,
-}) => {
+                                                                        onClose,
+                                                                        user,
+                                                                    }) => {
     const [showEditForm, setShowEditForm] = useState(false);
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
 
     const [wrongCurrent, setWrongCurrent] = useState<string | undefined>(
         undefined
@@ -35,9 +37,9 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const { data: userAsset } = useGetAllUserAssetsQuery();
+    const {data: userAsset} = useGetAllUserAssetsQuery();
 
-    const [updatePassword, { isSuccess, isError, error, isLoading }] =
+    const [updatePassword, {isSuccess, isError, error, isLoading}] =
         useChangePasswordMutation();
 
     useEffect(() => {
@@ -78,12 +80,13 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 
     useEffect(() => {
         isSuccess && onClose();
+
     }, [isSuccess]);
 
     return (
         <Modal onClose={onClose} className="edit-account" headline="My Account">
             {isLoading ? (
-                <Loader />
+                <Loader/>
             ) : (
                 <>
                     <dl className="edit-account__list">
@@ -103,7 +106,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                             <dt className="edit-account__name">Organization Role</dt>
 
                             <dd className="edit-account__value">
-                                <ComaList list={adaptRoles(user.userRoles)} />
+                                <ComaList list={adaptRoles(user.userRoles)}/>
                             </dd>
                         </div>
                         <div className="edit-account__row">
@@ -113,7 +116,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                                 <dd className="edit-account__value">
                                     <ComaList
                                         list={userAsset.map(
-                                            ({ name }: AssetServerResponse) => name
+                                            ({name}: AssetServerResponse) => name
                                         )}
                                     />
                                 </dd>
@@ -129,7 +132,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                                 {user.subscriptionEndDate.split(" ")[0]}
                             </dd>
                         </div>
-                        {!showEditForm && (
+                        {!showEditForm && !user.userRoles.includes(UserRole.Demo) && (
                             <div className="edit-account__row edit-account__row--inactive">
                                 <dt className="edit-account__name">Current Password</dt>
                                 <dd className="edit-account__value">
@@ -139,7 +142,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
                                         onClick={() => setShowEditForm(true)}
                                     >
                                         change
-                                        <KeyIcon aria-hidden="true" fill="currentColor" />
+                                        <KeyIcon aria-hidden="true" fill="currentColor"/>
                                     </button>
                                 </dd>
                             </div>
