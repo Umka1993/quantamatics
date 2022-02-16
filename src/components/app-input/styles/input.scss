@@ -87,6 +87,7 @@ $text: #bcc4d8;
     &:disabled {
       color: $inactive;
       border-color: $inactive;
+      background-color: transparent;
     }
 
     &[type="date"] {
