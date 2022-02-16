@@ -18,7 +18,7 @@ import {
   useUpdateOrganizationMutation,
 } from "../../api/organization";
 import Loader from "../loader";
-import {  UserRole } from "../../data/enum";
+import { UserRole } from "../../data/enum";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetInOrganization } from "../../types/asset";
 import useUser from "../../hooks/useUser";
@@ -183,7 +183,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
   useEffect(() => {
     if (isSavedMessageActive) {
-      setTimeout(() => setSavedMessageActive(false), 2000)
+      setTimeout(() => setSavedMessageActive(false), 2000);
     }
   }, [isSavedMessageActive]);
 
@@ -209,6 +209,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         <div className={style.buttons}>
           <ResetButton
             onClick={({ target }) => (target as HTMLButtonElement).blur()}
+            disabled
           >
             Cancel
           </ResetButton>
@@ -241,7 +242,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         </div>
       </header>
 
-      {isUpdating || externalLoad || loading || !options.length ? (
+      {externalLoad || loading || !options.length ? (
         <Loader />
       ) : (
         <div className={style.inputs}>
@@ -253,6 +254,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             required
             className={style.input}
             error={duplicateOrgError}
+            disabled={isUpdating}
           />
           <Input
             externalSetter={setCustomerID}
@@ -261,6 +263,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             maxLength={32}
             className={style.input}
             error={duplicateIdError}
+            disabled={isUpdating}
           />
 
           <InputURL
@@ -269,6 +272,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             label="CRM Customer ID Link"
             maxLength={64}
             className={style.input}
+            disabled={isUpdating}
           />
 
           <Multiselect
@@ -284,6 +288,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             inputList={[...assignedAssets]
               .map((asset) => asset.asset.name)
               .join(", ")}
+            fullDisabled={isUpdating}
           />
 
           <Input
@@ -294,6 +299,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             maxLength={200}
             showLimit
             className={style.input}
+            disabled={isUpdating}
           />
         </div>
       )}
