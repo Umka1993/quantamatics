@@ -3,16 +3,10 @@ import "./styles/table.scss";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import EditSVG from "./assets/edit-row-icon.svg";
-// import DeleteSVG from "./assets/delete-row-icon.svg";
-
-import classNames from "classnames";
 import { Organization } from "../../types/organization/types";
 import { SortDirection, UserRole } from "../../data/enum";
 import ISort from "../../types/sort-type";
-import {
-    useGetAllOrganizationsQuery,
-    useDeleteOrganizationMutation,
-} from "../../api/organization";
+import { useGetAllOrganizationsQuery } from "../../api/organization";
 import Loader from "../loader/";
 import useUser from "../../hooks/useUser";
 import { ORG_HEADER } from "./utils/constants";
@@ -34,11 +28,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
     const { isLoading, data, isError, isSuccess, error } =
         useGetAllOrganizationsQuery();
 
-    const [deleteOrg, { isSuccess: isDeleted }] = useDeleteOrganizationMutation();
-
     const [localRows, setLocalRows] = useState<Organization[]>([]);
-
-    const [itemDeleting, setItemDeleting] = useState<number | null>(null);
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 
     const filterOrganizationToOrgAdmin = useCallback(
@@ -63,7 +53,8 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
     }, [data, isSuccess]);
 
     useEffect(() => {
-        if (localRows.length && search?.length) {
+
+        if (sessionStorage.getItem("table-rows") && search?.length) {
             const normalizedSearchQuery = search.toLocaleLowerCase();
 
             const filteredOrgs = localRows.filter(
@@ -80,12 +71,6 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
             setSort(INITIAL_SORT);
         }
     }, [search]);
-
-    useEffect(() => {
-        if (isDeleted) {
-            setItemDeleting(null);
-        }
-    }, [isDeleted]);
 
     if (!localRows) return null;
 
@@ -125,12 +110,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
                 </thead>
                 <tbody className="table__body">
                     {localRows.map((organization, index) => (
-                        <tr
-                            className={classNames("table__row", {
-                                deleting: index === itemDeleting,
-                            })}
-                            key={index}
-                        >
+                        <tr className="table__row" key={index}>
                             <td className="table__cell">{organization.name}</td>
                             <td className="table__cell">{organization.customerCrmId}</td>
                             <td className="table__cell">
@@ -153,14 +133,6 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
                                 >
                                     <EditSVG role="img" aria-label="edit" fill="currentColor" />
                                 </Link>
-                                {/* <button
-                                type="button"
-                                className="table__action"
-                                onClick={() => handleDeleteOrganization(organization.id, index)}
-                                disabled
-                            >
-                                <DeleteSVG role="img" aria-label="delete" fill="currentColor" />
-                            </button> */}
                             </td>
                         </tr>
                     ))}
@@ -168,6 +140,6 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
             </table>
         );
     } else {
-        return <NoResultsMessage query={search as string} />
+        return <NoResultsMessage query={search as string} />;
     }
 };
