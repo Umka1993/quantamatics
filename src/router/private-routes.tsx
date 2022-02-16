@@ -11,13 +11,13 @@ import SuccessMessage from "../components/success-message";
 export default function PrivateRoutes(): ReactElement {
     const user = useUser();
 
-    const isOrganizationAvailable =
+    const isOrganizationsAvailable =
         user &&
         (user.userRoles.includes(UserRole.Admin) ||
             user.userRoles.includes(UserRole.OrgOwner));
 
     const isEditOrgAvailable =
-        isOrganizationAvailable || user?.userRoles.includes(UserRole.OrgAdmin);
+        isOrganizationsAvailable || user?.userRoles.includes(UserRole.OrgAdmin);
 
     const isCoherence = user?.userRoles.includes(UserRole.Coherence);
 
@@ -27,14 +27,16 @@ export default function PrivateRoutes(): ReactElement {
         ? AppRoute.Files
         : isCoherence
             ? AppRoute.ExcelLibrary
-            : isOrganizationAvailable
-                ? "/apps/organizations/list"
-                : `/apps/organizations/${user?.organizationId}`;
+            : isOrganizationsAvailable
+                ? "appsOrganizationsList"
+                : isEditOrgAvailable
+                    ? `/apps/organizations/${user?.organizationId}`
+                    : "/demo";
 
     return (
         <Routes>
             <Route path="*" element={<Navigate to={HomePath} />} />
-
+            <Route path="/demo" element={<h1>Demo Page</h1>} />
             {isResearch && (
                 <Route path={AppRoute.Files} element={<JupyterFrame type="files" />} />
             )}
@@ -53,22 +55,32 @@ export default function PrivateRoutes(): ReactElement {
                 />
             )}
 
-            {isOrganizationAvailable && (
+            {isOrganizationsAvailable && (
                 <>
-                    <Route path="/apps/organizations/list" element={<OrganizationList />} />
-                    <Route path="/apps/organizations/new-organization" element={<CreateOrganizationForm />} />
+                    <Route
+                        path="/apps/organizations/list"
+                        element={<OrganizationList />}
+                    />
+                    <Route
+                        path="/apps/organizations/new-organization"
+                        element={<CreateOrganizationForm />}
+                    />
                 </>
             )}
 
             {isEditOrgAvailable && (
                 <>
-                    <Route path="/apps/organizations/:id" element={<EditOrganization />} />
-                    <Route path="/apps/organizations/:id/add-user" element={<AddUserForm />} />
+                    <Route
+                        path="/apps/organizations/:id"
+                        element={<EditOrganization />}
+                    />
+                    <Route
+                        path="/apps/organizations/:id/add-user"
+                        element={<AddUserForm />}
+                    />
                     <Route path={AppRoute.Success} element={<SuccessMessage />} />
                 </>
             )}
-
-
         </Routes>
     );
 }
