@@ -6,6 +6,7 @@ import React, {
     ChangeEventHandler,
     FormEventHandler,
     CSSProperties,
+    FocusEventHandler,
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
@@ -108,6 +109,25 @@ const Input: React.FunctionComponent<IInput> = ({
         }
     };
 
+    const focusHandler: FocusEventHandler<HTMLInputElement> = (evt) => {
+        const input = evt.currentTarget;
+        if (!input.value.length) {
+            if (externalSetter) {
+                externalSetter("https://");
+            } else input.value = "https://";
+        }
+        reCalcLabelWidth();
+        onFocus && onFocus(evt);
+    };
+
+    const blurHandler: FocusEventHandler<HTMLInputElement> = (evt) => {
+        if (evt.currentTarget.value === "https://") {
+            if (externalSetter) {
+                externalSetter("");
+            } else evt.currentTarget.value = "";
+        }
+    };
+
     return (
         <div
             className={classNames("app-input", className, {
@@ -138,10 +158,13 @@ const Input: React.FunctionComponent<IInput> = ({
                     value={value || ""}
                     maxLength={maxLength}
                     type="url"
+                    onFocus={focusHandler}
                     {...other}
                     onInvalid={invalidHandler}
-                    onAccept={(value, _mask) => {
+                    onBlur={blurHandler}
+                    onAccept={(value) => {
                         //* delete duplicate http
+
                         const normalizedValue = (value as string).replace(
                             /(http[s]?:\/\/){2,}/gm,
                             "https://"
