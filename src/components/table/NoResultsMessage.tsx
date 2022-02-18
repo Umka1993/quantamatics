@@ -12,7 +12,9 @@ const NoResultsMessage: FunctionComponent<NoResultsMessageProps> = ({
     return (
         <article className={style.root}>
             <h1 className={style.headline}>
-                Oops. No results for {`"${query}"`} were found
+                Oops. No results for{" "}
+                {query.length > 32 ? `"${query.slice(0, 32)}…"` : `"${query}"`} were
+                found
             </h1>
             <p className={style.subtitle}>
                 Make sure the writing is correct. You can contact us at{" "}
