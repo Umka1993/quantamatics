@@ -63,6 +63,7 @@ export const enum UserRole {
     OrgAdmin = "OrgAdmin",
     Research = "Research",
     Coherence = "Coherence",
+    Demo = "Demo"
 }
 
 

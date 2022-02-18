@@ -85,7 +85,7 @@
             transition: opacity 0.2s;
         }
 
-        &:focus-within .pin-button {
+        .pin-button:focus-visible {
             opacity: 1;
         }
 
