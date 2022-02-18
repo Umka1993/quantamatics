@@ -1,13 +1,12 @@
-import React, { useEffect, useState, FunctionComponent, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import Button from "../button";
-import Input from "../../components/app-input";
-import { Password, Email } from "../../components/app-input";
+import Input, {Password} from "../../components/app-input";
 import Form from "./form";
-import { AppRoute } from "../../data/enum";
+import {AppRoute} from "../../data/enum";
 import "./styles/form.scss";
 import "./styles/login-page.scss";
-import { useLoginUserMutation } from "../../api/account";
+import {useLoginUserMutation} from "../../api/account";
 import IApiError from "../../types/api-error";
 import useLogin from "../../hooks/useLogin";
 
@@ -17,10 +16,12 @@ const LoginForm: FunctionComponent = () => {
     const [errors, setErrors] = useState<string | undefined>(undefined);
     const formRef = useRef<HTMLFormElement>(null);
 
-    const [sendLogin, { isError, isSuccess, isLoading, error, data }] =
+    const [sendLogin, {isError, isSuccess, isLoading, error, data}] =
         useLoginUserMutation();
 
     const loginProcess = useLogin();
+
+    const navigate = useNavigate();
 
     // hide errors on any input
     useEffect(() => {
@@ -28,23 +29,38 @@ const LoginForm: FunctionComponent = () => {
     }, [email, password]);
 
     const handleLogin = () => {
-        sendLogin({ email, password }).unwrap();
+        sendLogin({email, password}).unwrap();
     };
 
+
+    const handleUserError = () => {
+        const {status, data} = (error as IApiError)
+        switch (status) {
+            case 401 :
+                navigate(AppRoute.Expired, {
+                    state: {
+                        headline: 'Your user account has reached its Expiration Date',
+                        image: 'calendar',
+                        subtitle: `Please contact your organization admin or send us an email at <a href="mailto:support@quantamatics.com">support@quantamatics.com.</a>`,
+                    }
+                })
+                break;
+            default:
+                console.log(error);
+        }
+        switch (data) {
+            case "User locked out":
+                setErrors(
+                    "User account locked due to several failed login attempts. Please try again later."
+                )
+                break;
+            default :
+                setErrors("Incorrect email or password");
+        }
+    }
     useEffect(() => {
         if (isError) {
-            if ((error as IApiError).status >= 400) {
-                console.log(error);
-
-                (error as IApiError).data === "User locked out"
-                    ? setErrors(
-                        "User account locked due to several failed login attempts. Please try again later."
-                    )
-                    : setErrors("Incorrect email or password");
-            } else {
-                setErrors("Something went wrong");
-            }
-
+            handleUserError()
             formRef.current?.reportValidity();
         }
     }, [isError]);
