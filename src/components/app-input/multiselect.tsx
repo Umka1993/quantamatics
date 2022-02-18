@@ -70,7 +70,6 @@ const Multiselect: FunctionComponent<IInput> = ({
             setRightOffset(offsetWidth + 25);
         }
     };
-
     // useLayoutEffect(reCalcLabelWidth, [selected, labelRef.current])
 
     useEffect(() => {

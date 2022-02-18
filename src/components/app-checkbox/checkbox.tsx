@@ -6,6 +6,7 @@ import React, {
     SetStateAction,
     FormEventHandler,
     useEffect,
+    ChangeEventHandler,
 } from "react";
 import "./style/checkbox.scss";
 import CheckIcon from "./assets/check.svg";
@@ -13,7 +14,7 @@ import classNames from "classnames";
 import { useRef } from "react";
 
 interface CheckboxProps
-    extends Omit<LabelHTMLAttributes<HTMLLabelElement>, "onInput"> {
+    extends Omit<LabelHTMLAttributes<HTMLLabelElement>, "onChange"> {
     name?: string;
     checked: boolean;
     externalSetter?: Dispatch<SetStateAction<boolean>>;
@@ -23,6 +24,7 @@ interface CheckboxProps
     value?: string | number;
     textTitle?: string;
     labelCheckbox?: string;
+    onChange?: ChangeEventHandler<HTMLInputElement>
 }
 
 const Checkbox: FunctionComponent<CheckboxProps> = ({
@@ -38,11 +40,13 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
     value,
     textTitle,
     labelCheckbox,
+    onChange,
     ...other
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
     function inputHandler(evt: ChangeEvent<HTMLInputElement>) {
         externalSetter && externalSetter((value) => !value);
+        onChange && onChange(evt)
     }
 
     useEffect(() => {

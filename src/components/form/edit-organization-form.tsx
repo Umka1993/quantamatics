@@ -47,9 +47,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     },
   ] = useUpdateOrganizationMutation();
 
-  const isHaveAccessToEditAsset =
-    user?.userRoles.includes(UserRole.OrgOwner) ||
-    user?.userRoles.includes(UserRole.Admin);
+  const isUserOrganization = user?.organizationId === organization?.id
 
   const [name, setName] = useState<string>("");
   const [customerCrmId, setCustomerID] = useState<string>("");
@@ -96,9 +94,14 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         );
       };
 
-      getInfoOrg(user.organizationId as string)
-        .unwrap()
-        .then(({ organizationAssets: allAssets }) => prepareOptions(allAssets));
+      if (isUserOrganization) {
+        setOptions(organization.organizationAssets)
+      } else {
+        getInfoOrg(user.organizationId as string)
+          .unwrap()
+          .then(({ organizationAssets: allAssets }) => prepareOptions(allAssets));
+      }
+
     }
   }
 
@@ -186,8 +189,15 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
       setName(organization.name);
       setCustomerID(organization.customerCrmId);
       setAssignedAssets(organization.organizationAssets);
+      setCustomerLink(organization.customerCrmLink);
+      setComment(organization.comments)
     }
   }, [organization]);
+
+  useEffect(() => {
+    assignedAssets.length && console.log(`Is setted: ${assignedAssets[0].sharedByDefault}`);
+    
+  }, [assignedAssets])
 
   return (
     <form
@@ -260,7 +270,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             errorMessage="Select asset permissions to assign to the organization."
             showError={assetError}
             className={style.input}
-            disabled={!isHaveAccessToEditAsset}
+            disabled={isUserOrganization}
             type="edit-organization"
             inputList={[...assignedAssets]
               .map((asset) => asset.asset.name)
