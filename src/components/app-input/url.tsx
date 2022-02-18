@@ -110,18 +110,18 @@ const Input: React.FunctionComponent<IInput> = ({
     };
 
     const focusHandler: FocusEventHandler<HTMLInputElement> = (evt) => {
-        const input = evt.currentTarget;
-        if (!input.value.length) {
-            if (externalSetter) {
-                externalSetter("https://");
-            } else input.value = "https://";
-        }
         reCalcLabelWidth();
         onFocus && onFocus(evt);
     };
 
     const blurHandler: FocusEventHandler<HTMLInputElement> = (evt) => {
-        if (evt.currentTarget.value === "https://") {
+        const { value } = evt.currentTarget;
+        if (
+            value === "https://" ||
+            value === "http://" ||
+            (value.length < 6 && "https".includes(value)) ||
+            (value.length < 5 && "http".includes(value))
+        ) {
             if (externalSetter) {
                 externalSetter("");
             } else evt.currentTarget.value = "";
@@ -164,7 +164,6 @@ const Input: React.FunctionComponent<IInput> = ({
                     onBlur={blurHandler}
                     onAccept={(value) => {
                         //* delete duplicate http
-
                         const normalizedValue = (value as string).replace(
                             /(http[s]?:\/\/){2,}/gm,
                             "https://"
