@@ -20,6 +20,7 @@ import { Organization } from "types/organization/types";
 import { useGetAllAssetsQuery, useGetUserAssetsQuery, useLinkAssetToUserMutation, useUnlinkAssetToUserMutation } from "../../api/asset";
 import { useParams } from "react-router-dom";
 import { AssetListItem } from "../../types/asset";
+import RolesMultiselect from "../app-input/roles-multiselect";
 interface IEditProfile {
     onClose: () => void;
     user: IUpdateUser;
@@ -236,10 +237,15 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             />
 
                         }
-
-                        <RoleCheckboxes
-                            defaultRoles={userRoles}
-                            externalSetter={setRoles}
+                        <RolesMultiselect
+                            options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
+                            selected={Array.from(userRoles).sort()}
+                            setSelected={setRoles}
+                            label="Organization Role"
+                            errorMessage="Select asset permissions to assign to the user account."
+                            showError={assetError}
+                            type="user"
+                            inputList={Array.from(userRoles).sort().join(", ")}
                         />
                     </form>
 
