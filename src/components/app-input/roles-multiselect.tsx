@@ -17,6 +17,7 @@ import {MultiselectAssetOptionProps,} from "./multiselect-asset-option";
 import {UserRole} from "../../data/enum";
 import RolesOption from "./roles-option";
 import useUser from "../../hooks/useUser";
+import {useClickOutside} from "../../hooks/useClickOutside";
 
 
 interface IInput
@@ -56,8 +57,6 @@ const RolesMultiselect: FunctionComponent<IInput> = ({
     inputList = "",
     type,
 }) => {
-    const currentUser = useUser();
-    const isSuperAdmin = currentUser?.userRoles.includes(UserRole.Admin)
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -66,10 +65,6 @@ const RolesMultiselect: FunctionComponent<IInput> = ({
 
     const [hideError, setHideError] = useState(false);
     const [list, setList] = useState(inputList);
-    const [allowedOptions, setAllowedOptions] = useState(isSuperAdmin ?
-        options :
-        options.filter(option => option !== UserRole.OrgOwner)
-    );
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
@@ -105,8 +100,8 @@ const RolesMultiselect: FunctionComponent<IInput> = ({
 
     const toggleOptions = () => setShowOptions(!showOptions);
 
-    useCloseModal(showOptions, setShowOptions);
-
+    // useCloseModal(showOptions, setShowOptions);
+    useClickOutside(rootElement, () => setShowOptions(false), showOptions)
     return (
         <div
             className={classNames("app-input multiselect", className)}
@@ -161,7 +156,7 @@ const RolesMultiselect: FunctionComponent<IInput> = ({
                 })}
                 hidden={!showOptions}
             >
-                {allowedOptions.map((option: any, index) =>
+                {options.map((option: any, index) =>
                     <RolesOption
                         key={index}
                         option={option}
