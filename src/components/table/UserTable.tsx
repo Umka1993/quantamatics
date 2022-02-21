@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, FunctionComponent, useLayoutEffect } from "react";
 
 import EditSVG from "./assets/edit-row-icon.svg";
-import DeleteSVG from "./assets/delete-row-icon.svg";
+// import DeleteSVG from "./assets/delete-row-icon.svg";
 
 import { EditProfile } from "../edit-modal/edit-profile";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
@@ -121,10 +121,10 @@ export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
                                 >
                                     <EditSVG role="img" aria-label="edit" fill="currentColor" />
                                 </button>
-                                <button
+                                {/* <button
                                     type="button"
                                     className="table__action"
-                                    // onClick={() => { handleDeleteUser(row) }}
+                                    onClick={() => { handleDeleteUser(row) }}
                                     disabled
                                 >
                                     <DeleteSVG
@@ -132,7 +132,7 @@ export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
                                         aria-label="delete"
                                         fill="currentColor"
                                     />
-                                </button>
+                                </button> */}
                             </td>
                         </tr>
                     ))}
