@@ -1,14 +1,14 @@
 {
   "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.dev.js --open --https --env dev",
+    "build": "npm run clean && npm run lint && cross-env NODE_ENV=production webpack --config config/webpack.dev.js",
     "clean": "rimraf publish",
     "lint": "eslint --ext .tsx,.ts . --quiet",
-    "build": "npm run clean && npm run lint && cross-env NODE_ENV=production webpack --config config/webpack.dev.js",
     "buildBeta": "npm run clean && npm run lint && webpack --config config/webpack.dev-beta.js",
     "buildStaging": "npm run clean && npm run lint && webpack --config config/webpack.stag.js",
     "buildStagingBeta": "npm run clean && npm run lint && webpack --config config/webpack.stag-beta.js",
     "buildProduction": "npm run clean && npm run lint && webpack --config config/webpack.prod.js",
     "buildProductionBeta": "npm run clean && npm run lint && webpack --config config/webpack.prod-beta.js",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.dev.js --open --https --env dev",
     "stag": "webpack-dev-server --config config/webpack.stag.js --open --https"
   },
   "devDependencies": {

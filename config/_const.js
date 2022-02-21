@@ -12,7 +12,7 @@ exports.MODULE_STYLE_LOADERS = {
             options: {
                 importLoaders: 1,
                 modules: true,
-                localIdentName: "[name]__[local]___[hash:base64:5]",
+                localIdentName: "[name]__[local]__[hash:base64:5]",
             },
         },
         "sass-loader",

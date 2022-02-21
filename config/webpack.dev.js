@@ -4,6 +4,9 @@ const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require("copy-webpack-plugin");
 const { MODULE_STYLE_LOADERS, DEFAULT_STYLE_LOADERS } = require('./_const.js');
 
+const isDev = process.env.NODE_ENV === 'development'
+const isProd = !isDev
+
 module.exports = {
     devServer: {
         static: path.resolve(__dirname, '../publish'),
@@ -53,5 +56,5 @@ module.exports = {
         new Dotenv({
             path: '.env.dev',
         }),
-    ]
+    ],
 };
