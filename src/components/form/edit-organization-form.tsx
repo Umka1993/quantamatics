@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { Organization } from "types/organization/types";
 import Headline from "../page-title";
-import Input, { Multiselect } from "../app-input";
+import Input, { Multiselect, InputURL } from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
 import { useNavigate } from "react-router-dom";
@@ -18,11 +18,13 @@ import {
   useUpdateOrganizationMutation,
 } from "../../api/organization";
 import Loader from "../loader";
-import { AppRoute, UserRole } from "../../data/enum";
+import { UserRole } from "../../data/enum";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetInOrganization } from "../../types/asset";
 import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
+import CheckSVG from "./assets/check.svg";
+import addHTTPtoURL from "../../services/addHTTPtoURL";
 interface EditOrganizationFormProps {
   organization?: Organization;
   isHaveAccessToOrgList?: boolean;
@@ -58,6 +60,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
   const [assignedAssets, setAssignedAssets] = useState<AssetInOrganization[]>(
     organization?.organizationAssets || []
   );
+
+  const [isSavedMessageActive, setSavedMessageActive] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -150,7 +154,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         ...organization,
         name: normalizedName,
         customerCrmId,
-        customerCrmLink,
+        customerCrmLink: addHTTPtoURL(customerCrmLink),
         comments,
         organizationAssets: [...assignedAssets].map((asset) => ({
           ...asset,
@@ -164,7 +168,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
   const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setInitialOrg();
-    isHaveAccessToOrgList && navigate(AppRoute.OrganizationList);
   };
 
   useEffect(() => {
@@ -175,14 +178,18 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
   useEffect(() => {
     if (isUpdated) {
-      if (isHaveAccessToOrgList) {
-        navigate(AppRoute.OrganizationList);
-      } else {
-        setOptions([]);
-        initOptions();
-      }
+      setOptions([]);
+      initOptions();
+
+      setSavedMessageActive(true);
     }
   }, [isUpdated]);
+
+  useEffect(() => {
+    if (isSavedMessageActive) {
+      setTimeout(() => setSavedMessageActive(false), 2000);
+    }
+  }, [isSavedMessageActive]);
 
   useEffect(() => {
     if (organization) {
@@ -213,6 +220,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         <div className={style.buttons}>
           <ResetButton
             onClick={({ target }) => (target as HTMLButtonElement).blur()}
+            disabled={isUpdating}
           >
             Cancel
           </ResetButton>
@@ -226,13 +234,26 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
               Boolean(duplicateOrgError) ||
               Boolean(duplicateIdError)
             }
+            variant={isSavedMessageActive ? "valid" : undefined}
           >
-            Save
+            {isSavedMessageActive ? (
+              <>
+                <CheckSVG
+                  aria-hidden="true"
+                  width={17}
+                  height={17}
+                  fill="currentColor"
+                />
+                Saved
+              </>
+            ) : (
+              "Save"
+            )}
           </Button>
         </div>
       </header>
 
-      {isUpdating || externalLoad || loading || !options.length ? (
+      {externalLoad || loading || !options.length ? (
         <Loader />
       ) : (
         <div className={style.inputs}>
@@ -244,6 +265,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             required
             className={style.input}
             error={duplicateOrgError}
+            disabled={isUpdating}
           />
           <Input
             externalSetter={setCustomerID}
@@ -252,14 +274,16 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             maxLength={32}
             className={style.input}
             error={duplicateIdError}
+            disabled={isUpdating}
           />
 
-          <Input
+          <InputURL
             externalSetter={setCustomerLink}
             value={customerCrmLink}
             label="CRM Customer ID Link"
-            maxLength={64}
+            maxLength={72}
             className={style.input}
+            disabled={isUpdating}
           />
 
           <Multiselect
@@ -275,6 +299,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             inputList={[...assignedAssets]
               .map((asset) => asset.asset.name)
               .join(", ")}
+            fullDisabled={isUpdating}
           />
 
           <Input
@@ -285,6 +310,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             maxLength={200}
             showLimit
             className={style.input}
+            disabled={isUpdating}
           />
         </div>
       )}

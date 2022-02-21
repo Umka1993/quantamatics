@@ -6,6 +6,7 @@ import classNames from "classnames";
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
     href?: string;
     mod?: string;
+    variant?: 'valid'
 }
 
 const Button: FunctionComponent<IButton> = ({
@@ -13,10 +14,11 @@ const Button: FunctionComponent<IButton> = ({
     className,
     href,
     children,
+    variant,
     ...other
 }) => {
-    const buttonClasses = classNames("button", className);
-    
+    const buttonClasses = classNames(className, "button", { "button--valid": variant === "valid" });
+
     return href ? (
         <Link to={href} className={buttonClasses}>
             {children}
