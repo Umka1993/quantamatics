@@ -1,19 +1,19 @@
 import React, { useEffect, useState, FunctionComponent, useRef } from "react";
 import "./styles/create-organization.scss";
-import Input, { Multiselect } from "../app-input";
+import Input, { Multiselect, InputURL } from "../app-input";
 import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
 import { useAddOrganizationMutation } from "../../api/organization";
 import { AppRoute } from "../../data/enum";
-// import { } from "../../api/asset";
-import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import useUser from "../../hooks/useUser";
 import {
     useGetAllAssetsQuery,
     useLinkAssetToOrgMutation,
 } from "../../api/asset";
-import { AssetListItem } from "../../types/asset";
+import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
+import normalizeName from "../../services/normalize-name";
+import addHTTPtoURL from "../../services/addHTTPtoURL";
 
 interface ICreateOrganization { }
 
@@ -34,24 +34,31 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     const [customerCrmId, setCustomerCrmId] = useState<string>("");
     const [customerCrmLink, setCustomerCrmLink] = useState<string>("");
     const [comments, setComments] = useState<string | undefined>("");
-    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(new Set())
+    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
+        new Set()
+    );
 
     const [assetError, setAssetError] = useState(false);
 
     const [stopLoading, setStopLoading] = useState<true | undefined>(undefined);
 
     const formRef = useRef<HTMLFormElement>(null);
+
     const [
         duplicateOrgError,
         duplicateIdError,
         checkNameDuplicate,
         checkIdDuplicate,
-    ] = useDuplicatedOrgValues(formRef, name, customerCrmId);
-
-    // Load all assets that are available for logged user
-    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } = useGetAllAssetsQuery(
-        user?.organizationId as string
+    ] = useDuplicatedOrgValues(
+        formRef,
+        name,
+        customerCrmId,
+        setName,
+        setCustomerCrmId
     );
+    // Load all assets that are available for logged user
+    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
+        useGetAllAssetsQuery(user?.organizationId as string);
 
     const [linkAsset, { isLoading: isLinkingAsset }] =
         useLinkAssetToOrgMutation();
@@ -74,15 +81,14 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 
     useEffect(() => {
         if (isError) {
-            console.log((error as any).data?.errors);
+            const text = (error as any).data.errors;
+            console.log(text);
         }
     }, [isError]);
 
     useEffect(() => {
         stopLoading && setStopLoading(undefined);
     }, [stopLoading]);
-
-
 
     const handleSubmit = () => {
         if (!assignedAssets.size) {
@@ -96,7 +102,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         if (duplicate) {
             return setStopLoading(true);
         } else {
-            register({ name, customerCrmId, customerCrmLink, comments }).unwrap();
+            register({
+                name: normalizeName(name),
+                customerCrmId,
+                customerCrmLink: addHTTPtoURL(customerCrmLink),
+                comments,
+            }).unwrap();
         }
     };
 
@@ -127,12 +138,11 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     maxLength={32}
                     error={duplicateIdError}
                 />
-                <Input
+                <InputURL
                     externalSetter={setCustomerCrmLink}
                     label="CRM Customer ID Link"
                     value={customerCrmLink}
-                    type="url"
-                    maxLength={64}
+                    maxLength={72}
                 />
 
                 <Input
@@ -158,7 +168,11 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
             <Button
                 className="create-organization__submit"
                 type="submit"
-                disabled={!name}
+                disabled={
+                    !name ||
+                    duplicateOrgError !== undefined ||
+                    duplicateIdError !== undefined
+                }
             >
                 Save
             </Button>

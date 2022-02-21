@@ -1,5 +1,4 @@
 @use "variables" as *;
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 
 *,
 *::before,
@@ -12,18 +11,14 @@ html {
   line-height: 1.15; /* Correct the line height in all browsers. */
   -webkit-text-size-adjust: 100%; /* Prevent adjustments of font size after orientation changes in iOS. */
 
-  /* Smooth scrolling IF user doesn't have a preference due to motion sensitivities */
-  @media screen and (prefers-reduced-motion: no-preference) {
-    html {
-      scroll-behavior: smooth;
-    }
-  }
-}
-
-html {
   /* Firefox scrollbar */
   scrollbar-color: $accent #fff;
   scrollbar-width: thin;
+
+  /* Smooth scrolling IF user doesn't have a preference due to motion sensitivities */
+  @media screen and (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -39,8 +34,10 @@ body {
 }
 
 .app {
-  height: 100%;
+  min-height: 100%;
   display: flex;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
 }
 
 /* Blink/Webkit scrollbar */

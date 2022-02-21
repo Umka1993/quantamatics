@@ -63,6 +63,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     const [assetError, setAssetError] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [assetPrepared, setAssetPrepared] = useState(false);
 
     const sendNewUser = (validate: any) => {
         const newUserData: IUpdateUser = {
@@ -78,17 +79,9 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     useEffect(() => {
         if (serverSelectedAssets && assets) {
-            serverSelectedAssets.forEach(userAsset => {
-                assets?.findIndex((orgAsset) => orgAsset.assetId !== userAsset.id) === -1 && unlinkAsset({ assetId: userAsset.id, userId: user.id })
-            })
-
             const selectedAssets: Set<string | number> = new Set(serverSelectedAssets.map(({ id }) => id))
-            
-            assets?.forEach(({ assetId, sharedByDefault }) => {
-                sharedByDefault && !selectedAssets.has(assetId) && linkAsset({ assetId, userId: user.id })
-            })
-
             setAssignedAssets(selectedAssets)
+            setAssetPrepared(true)
         }
     }, [serverSelectedAssets, assets])
 
@@ -121,6 +114,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
             }
 
 
+            // ! It will be waste if we start update all users on updating org
 
             //? Link new assets to user
             assignedAssets.forEach((assetId) => {
@@ -140,7 +134,6 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                     assetId: alreadySelectedAsset.id, userId: user.id
                 })
             })
-
         }
     }, [isSuccess])
 
@@ -227,7 +220,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                                 disabled
                             />}
 
-                        {assets &&
+                        {assets && assetPrepared &&
                             <Multiselect
                                 options={assets}
                                 selected={assignedAssets}
@@ -236,6 +229,10 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                                 errorMessage='Select asset permissions to assign to the user account.'
                                 showError={assetError}
                                 type='user'
+                                inputList=
+                                {[...assets.filter(({ assetId }) => assignedAssets.has(assetId))]
+                                    .map(({ name }) => name)
+                                    .join(", ")}
                             />
 
                         }

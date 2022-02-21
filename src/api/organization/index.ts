@@ -34,7 +34,13 @@ const organizationsApi = baseApi.injectEndpoints({
                 method: "PUT",
                 body,
             }),
-            invalidatesTags: [{ type: "Organizations", id: "list" }, { type: "Organizations", id: "selected" } ],
+            invalidatesTags: (_res, _err, org) => [
+                { type: "Organizations", id: "list" },
+                { type: "Organizations", id: `org-${org.id}` },
+                { type: "Organizations", id: "selected" },
+                { type: "Assets", id: "User" },
+                { type: "Assets", id: `Org-${org.id}` },
+            ],
         }),
 
         deleteOrganization: build.mutation({
@@ -52,10 +58,10 @@ const organizationsApi = baseApi.injectEndpoints({
                 method: "GET",
                 params: { id },
             }),
-            providesTags: (result) =>
+            providesTags: (result, _err, id) =>
                 result
                     ? [
-                        { type: "Organizations", id: result.id },
+                        { type: "Organizations", id: `org-${id}` },
                         { type: "Organizations", id: "selected" },
                     ]
                     : [{ type: "Organizations", id: "selected" }],
@@ -67,6 +73,7 @@ export const {
     useGetAllOrganizationsQuery,
     useAddOrganizationMutation,
     useGetOrganizationQuery,
+    useLazyGetOrganizationQuery,
     useDeleteOrganizationMutation,
-    useUpdateOrganizationMutation
+    useUpdateOrganizationMutation,
 } = organizationsApi;

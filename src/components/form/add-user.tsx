@@ -36,17 +36,20 @@ const InviteUserForm: FunctionComponent = () => {
     const [subscriptionEndDate, setSubscriptionEndDate] = useState<Date>(
         new Date()
     );
+    const [assetPrepared, setAssetPrepared] = useState(false);
 
-    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(new Set())
+    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
+        new Set()
+    );
 
     useEffect(() => {
         if (assets) {
-            const sharedAssets = assets.filter(asset => asset.sharedByDefault);
-
-            const sharedAssetsIDs = sharedAssets.map(({ assetId }) => assetId)
-            setAssignedAssets(new Set(sharedAssetsIDs))
+            const sharedAssets = assets.filter((asset) => asset.sharedByDefault);
+            const sharedAssetsIDs = sharedAssets.map(({ assetId }) => assetId);
+            setAssignedAssets(new Set(sharedAssetsIDs));
+            setAssetPrepared(true);
         }
-    }, [assets])
+    }, [assets]);
 
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
@@ -74,7 +77,7 @@ const InviteUserForm: FunctionComponent = () => {
     useEffect(() => {
         if (isUserRegistered) {
             //? Link new assets to user
-            assignedAssets.forEach(assetId => {
+            assignedAssets.forEach((assetId) => {
                 linkAsset({
                     assetId,
                     userId: registeredUser.id,
@@ -91,7 +94,9 @@ const InviteUserForm: FunctionComponent = () => {
         }
     }, [isUserRegistered]);
 
-    useEffect(() => { assignedAssets.size && setAssetError(false) }, [assignedAssets])
+    useEffect(() => {
+        assignedAssets.size && setAssetError(false);
+    }, [assignedAssets]);
 
     const navigate = useNavigate();
 
@@ -104,7 +109,7 @@ const InviteUserForm: FunctionComponent = () => {
     }, [errors, formRef.current]);
 
     const addUserToOrg = () => {
-        setLoading(true)
+        setLoading(true);
         setAssetError(false);
         if (assignedAssets.size) {
             register({
@@ -161,7 +166,7 @@ const InviteUserForm: FunctionComponent = () => {
                     required
                     label="Expiration Date"
                 />
-                {assets && (
+                {assetPrepared && assets && (
                     <Multiselect
                         options={assets}
                         selected={assignedAssets}
@@ -169,7 +174,10 @@ const InviteUserForm: FunctionComponent = () => {
                         label="Account Assets"
                         errorMessage="Select asset permissions to assign to the user account."
                         showError={assetError}
-                        type='user'
+                        type="user"
+                        inputList={[...assets.filter(({ assetId }) => assignedAssets.has(assetId))]
+                            .map(({ name }) => name)
+                            .join(", ")}
                     />
                 )}
                 <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
@@ -178,7 +186,9 @@ const InviteUserForm: FunctionComponent = () => {
                 className="create-organization__submit"
                 type="submit"
                 disabled={
-                    !Boolean(firstName && lastName && email && subscriptionEndDate && !assetError)
+                    !Boolean(
+                        firstName && lastName && email && subscriptionEndDate && !assetError
+                    )
                 }
             >
                 Save

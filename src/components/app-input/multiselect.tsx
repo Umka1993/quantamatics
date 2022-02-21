@@ -5,6 +5,9 @@ import React, {
     SelectHTMLAttributes,
     CSSProperties,
     useEffect,
+    useLayoutEffect,
+    Dispatch,
+    SetStateAction,
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
@@ -13,20 +16,31 @@ import classNames from "classnames";
 import MultiselectAssetOption, {
     MultiselectAssetOptionProps,
 } from "./multiselect-asset-option";
-import { AssetListItem } from "../../types/asset";
+import { AssetInOrganization, AssetListItem } from "../../types/asset";
+import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 interface IInput
-    extends Omit<MultiselectAssetOptionProps, "option" | "selected">,
+    extends Omit<
+    MultiselectAssetOptionProps,
+    "option" | "selected" | "setSelected"
+    >,
     SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
     showLimit?: boolean;
-    selected: Set<string | number>;
+    selected: Set<string | number> | AssetInOrganization[];
+
+    setSelected:
+    | Dispatch<SetStateAction<Set<string | number>>>
+    | Dispatch<SetStateAction<AssetInOrganization[]>>;
 
     errorMessage?: string;
     showError?: boolean;
 
-    options: AssetListItem[];
+    options: AssetListItem[] | AssetInOrganization[];
+    inputList?: string;
+
+    fullDisabled?: boolean;
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -40,17 +54,18 @@ const Multiselect: FunctionComponent<IInput> = ({
     showError,
     className,
     disabled,
-    setAssetsToUpdateShared,
-    assetsToUpdateShared,
+    inputList = "",
     type,
+    fullDisabled,
 }) => {
+    const isEditOrganization = Array.isArray(selected);
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const rootElement = useRef<HTMLDivElement>(null);
 
     const [hideError, setHideError] = useState(false);
-    const [list, setList] = useState("");
+    const [list, setList] = useState(inputList);
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
@@ -58,20 +73,34 @@ const Multiselect: FunctionComponent<IInput> = ({
             setRightOffset(offsetWidth + 25);
         }
     };
+    // useLayoutEffect(reCalcLabelWidth, [selected, labelRef.current])
 
     useEffect(() => {
-        if (Boolean(selected.size)) {
-            setHideError(true);
-            setList(
-                [...options.filter(({ assetId }) => selected.has(assetId))]
-                    .map(({ name }) => name)
-                    .join(", ")
-            );
-        } else {
-            setHideError(false);
-            setList("");
-        }
+        setHideError(
+            isEditOrganization ? Boolean(selected.length) : Boolean(selected.size)
+        );
+
         reCalcLabelWidth();
+    }, [selected]);
+
+    useLayoutEffect(() => {
+        if (isEditOrganization) {
+            Boolean(selected.length)
+                ? setList([...selected].map((asset) => asset.asset.name).join(", "))
+                : setList("");
+        } else {
+            Boolean(selected.size)
+                ? setList(
+                    [
+                        ...(options as AssetListItem[]).filter(({ assetId }) =>
+                            selected.has(assetId)
+                        ),
+                    ]
+                        .map(({ name }) => name)
+                        .join(", ")
+                )
+                : setList("");
+        }
     }, [selected]);
 
     /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
@@ -101,7 +130,11 @@ const Multiselect: FunctionComponent<IInput> = ({
                 <input
                     className={classNames("app-input__field", {
                         "app-input__field--error":
-                            showError && !hideError && !Boolean(selected.size),
+                            showError &&
+                            !hideError &&
+                            !(isEditOrganization
+                                ? Boolean(selected.length)
+                                : Boolean(selected.size)),
                     })}
                     type="text"
                     placeholder={label ? " " : placeholder}
@@ -112,13 +145,12 @@ const Multiselect: FunctionComponent<IInput> = ({
                     style={{
                         cursor: "pointer",
                     }}
+                    disabled={fullDisabled}
                 />
 
                 {label && (
                     <span
-                        className={classNames("app-input__label app-input__label--icon", {
-                            "app-input__label--initial": !Boolean(selected.size),
-                        })}
+                        className={classNames("app-input__label app-input__label--icon")}
                     >
                         <span ref={labelRef}>{label}</span>
                     </span>
@@ -128,26 +160,33 @@ const Multiselect: FunctionComponent<IInput> = ({
                 <p className="app-input__error">{errorMessage}</p>
             )}
 
-            {showOptions && (
-                <div
-                    className={classNames("multiselect__options", {
-                        // 'multiselect__options--ods': options.length % 2 !== 0
-                    })}
-                >
-                    {Array.from(options).map((option) => (
+            <div
+                className={classNames("multiselect__options", {
+                    // 'multiselect__options--ods': options.length % 2 !== 0
+                })}
+                hidden={!showOptions}
+            >
+                {options.map((option: any) =>
+                    isEditOrganization ? (
+                        <MultiselectAssetOrgOption
+                            key={option.assetId}
+                            option={option}
+                            selected={selected as any}
+                            setSelected={setSelected as any}
+                            disabled={disabled}
+                        />
+                    ) : (
                         <MultiselectAssetOption
                             key={option.assetId}
                             option={option}
-                            selected={selected.has(option.assetId)}
-                            setSelected={setSelected}
+                            selected={(selected as any).has(option.assetId)}
+                            setSelected={setSelected as any}
                             disabled={disabled}
-                            setAssetsToUpdateShared={setAssetsToUpdateShared}
-                            assetsToUpdateShared={assetsToUpdateShared}
                             type={type}
                         />
-                    ))}
-                </div>
-            )}
+                    )
+                )}
+            </div>
         </div>
     );
 };

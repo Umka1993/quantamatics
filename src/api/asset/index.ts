@@ -56,7 +56,17 @@ const assetApi = baseApi.injectEndpoints({
                 params: { orgId },
             }),
             providesTags: (_result, _error, id) => [
-                { type: "Assets", id: "Organization" },
+                { type: "Assets", id: `Org-${id}` },
+            ],
+        }),
+
+        getAllAssetsOrg: build.mutation<AssetListItem[], string>({
+            query: (orgId) => ({
+                url: AssetEndpoint.GetAll,
+                method: "GET",
+                params: { orgId },
+            }),
+            invalidatesTags: (_result, _error, id) => [
                 { type: "Assets", id: `Org-${id}` },
             ],
         }),
@@ -80,7 +90,6 @@ const assetApi = baseApi.injectEndpoints({
                 params,
             }),
             invalidatesTags: (_res, _err, arg) => [
-                { type: "Assets", id: "Organization" },
                 { type: "Assets", id: `Org-${arg.assetId}` },
             ],
         }),
@@ -92,7 +101,6 @@ const assetApi = baseApi.injectEndpoints({
                 params,
             }),
             invalidatesTags: (_res, _err, arg) => [
-                { type: "Assets", id: "Organization" },
                 { type: "Assets", id: `Org-${arg.assetId}` },
             ],
         }),
@@ -124,7 +132,6 @@ const assetApi = baseApi.injectEndpoints({
             invalidatesTags: (res, err, { assetId, passedOrgID }) => [
                 { type: "Assets", id: assetId },
                 { type: "Assets", id: `Org-${passedOrgID}` },
-                { type: "Assets", id: "Organization" },
             ],
         }),
     }),
@@ -132,6 +139,8 @@ const assetApi = baseApi.injectEndpoints({
 
 export const {
     useGetAllAssetsQuery,
+    useLazyGetAllAssetsQuery,
+    useGetAllAssetsOrgMutation,
     useGetAllUserAssetsQuery,
     useGetAssetByIDMutation,
     useLinkAssetToOrgMutation,

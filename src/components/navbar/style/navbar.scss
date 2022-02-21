@@ -1,4 +1,4 @@
-@use "../../../variables.scss" as *;
+@use "../../../sass/variables" as *;
 
 .navigation {
     $block: &;
@@ -28,9 +28,7 @@
             color: $accent;
         }
 
-        &:focus-visible::before,
-        &:hover::before,
-        &--active::before {
+        &::before {
             content: "";
             width: 2px;
             height: 100%;
@@ -39,6 +37,16 @@
             position: absolute;
             left: 0;
             top: 0;
+            visibility: hidden;
+        }
+
+        &:hover::before,
+        &--active {
+            visibility: visible;
+        }
+
+        &:focus-visible::before {
+            visibility: visible;
         }
 
         &--sub {

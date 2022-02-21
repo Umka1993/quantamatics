@@ -1,4 +1,5 @@
-@import '../../../variables.scss';
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
 
 .modal-overlay {
   background: transparentize(#263768, 0.2);
@@ -10,17 +11,16 @@
   cursor: pointer;
 }
 
-
 .modal {
   width: 775px;
   height: 602px;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.2);
   border-radius: 4px;
   max-width: 775px;
   min-height: 602px;
   cursor: default;
-  
+
   z-index: 200;
 
   margin: auto;
@@ -36,16 +36,17 @@
     right: 0;
     top: 0;
 
-    color: #BCC4D8;
-    
+    color: #bcc4d8;
+
     padding: 24px;
     cursor: pointer;
-    &:hover, &:focus-visible {
+
+    @include hover-focus {
       color: $accent;
     }
 
     &:active {
-      color: darken($accent, 20)
+      color: darken($accent, 20);
     }
   }
 }

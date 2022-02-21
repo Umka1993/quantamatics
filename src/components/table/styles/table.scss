@@ -1,4 +1,5 @@
-@use "../../../variables.scss" as *;
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
 @use "sass:math";
 
 
@@ -124,8 +125,7 @@ $design-table-w: 1038;
     outline-offset: 0.4em;
     border-radius: 0.2em;
 
-    &:focus-visible,
-    &:hover {
+    @include hover-focus {
       color: $accent;
     }
   }
@@ -142,8 +142,7 @@ $design-table-w: 1038;
       outline-width: 1px;
     }
 
-    &:focus-visible,
-    &:hover {
+    @include hover-focus {
       color: $accent;
     }
 
@@ -152,30 +151,6 @@ $design-table-w: 1038;
       color: transparentize($inactive, 0.6);
     }
   }
-  /*  
-
-        .dot {
-          width: 4px;
-          height: 4px;
-          background: rgba(113, 130, 166, 0.3);
-          margin-right: 2px;
-          border-radius: 50%;
-          &:last-child {
-            margin-right: 0;
-          }
-        }
-      }
-
-
-      }
-      
-    }
-
-
-  
-      }
-    }
-  } */
 
   .table-edit-organization-modal {
     &__title {
