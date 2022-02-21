@@ -13,6 +13,7 @@ import {
 } from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import normalizeName from "../../services/normalize-name";
+import addHTTPtoURL from "../../services/addHTTPtoURL";
 
 interface ICreateOrganization { }
 
@@ -48,7 +49,13 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         duplicateIdError,
         checkNameDuplicate,
         checkIdDuplicate,
-    ] = useDuplicatedOrgValues(formRef, name, customerCrmId, setName, setCustomerCrmId);
+    ] = useDuplicatedOrgValues(
+        formRef,
+        name,
+        customerCrmId,
+        setName,
+        setCustomerCrmId
+    );
     // Load all assets that are available for logged user
     const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
         useGetAllAssetsQuery(user?.organizationId as string);
@@ -76,7 +83,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         if (isError) {
             const text = (error as any).data.errors;
             console.log(text);
-
         }
     }, [isError]);
 
@@ -96,7 +102,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         if (duplicate) {
             return setStopLoading(true);
         } else {
-            register({ name: normalizeName(name), customerCrmId, customerCrmLink, comments }).unwrap();
+            register({
+                name: normalizeName(name),
+                customerCrmId,
+                customerCrmLink: addHTTPtoURL(customerCrmLink),
+                comments,
+            }).unwrap();
         }
     };
 
@@ -131,7 +142,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     externalSetter={setCustomerCrmLink}
                     label="CRM Customer ID Link"
                     value={customerCrmLink}
-                    type="url"
                     maxLength={72}
                 />
 

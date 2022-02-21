@@ -11,7 +11,6 @@ import React, {
 import "./styles/input.scss";
 import classNames from "classnames";
 import EditIcon from "./assets/edit.svg";
-import { IMaskInput } from "react-imask";
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
@@ -35,7 +34,6 @@ const Input: React.FunctionComponent<IInput> = ({
     icon,
     maxLength,
     showLimit,
-    onFocus,
     ...other
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -46,39 +44,21 @@ const Input: React.FunctionComponent<IInput> = ({
     const [rightOffset, setRightOffset] = useState<number>(20);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        let normalizedValue = evt.currentTarget.value;
-
-        normalizedValue = normalizedValue.replace(
-            /(http[s]?:\/\/){2,}/gm,
-            "https://"
-        );
-
-        const isNeedToAddHTTP =
-            normalizedValue.length <= 4 && !"http".includes(normalizedValue);
-
-        if (isNeedToAddHTTP) {
-            normalizedValue = "https://" + normalizedValue;
-        }
-
-        if (externalSetter) {
-            externalSetter(normalizedValue);
-        } else {
-            evt.currentTarget.value = normalizedValue;
-        }
-
+        externalSetter && externalSetter(evt.currentTarget.value)
         onChange && onChange(evt);
     };
 
     useEffect(() => {
         reCalcLabelWidth();
         if (inputRef.current) {
-            console.log(inputRef.current);
-
             const { validationMessage, validity, value, required } = inputRef.current;
 
             const isOnlySpaces = /^\s+$/.test(value);
 
-            if (required && (validity.valueMissing || isOnlySpaces)) {
+            if (
+                (required && (validity.valueMissing || isOnlySpaces)) ||
+                (!validity.valueMissing && validity.patternMismatch)
+            ) {
                 inputRef.current.setCustomValidity(
                     `This is not valid ${label ? label : ""}`
                 );
@@ -109,25 +89,6 @@ const Input: React.FunctionComponent<IInput> = ({
         }
     };
 
-    const focusHandler: FocusEventHandler<HTMLInputElement> = (evt) => {
-        reCalcLabelWidth();
-        onFocus && onFocus(evt);
-    };
-
-    const blurHandler: FocusEventHandler<HTMLInputElement> = (evt) => {
-        const { value } = evt.currentTarget;
-        if (
-            value === "https://" ||
-            value === "http://" ||
-            (value.length < 6 && "https".includes(value)) ||
-            (value.length < 5 && "http".includes(value))
-        ) {
-            if (externalSetter) {
-                externalSetter("");
-            } else evt.currentTarget.value = "";
-        }
-    };
-
     return (
         <div
             className={classNames("app-input", className, {
@@ -144,12 +105,9 @@ const Input: React.FunctionComponent<IInput> = ({
                         : undefined
                 }
             >
-                <IMaskInput
-                    mask="{http}[s]://`*[***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************]"
-                    definitions={{
-                        s: /s/,
-                    }}
+                <input
                     className="app-input__field"
+                    onChange={changeHandler}
                     aria-invalid={!!errorMessage}
                     autoComplete={autoComplete}
                     placeholder={label ? " " : placeholder}
@@ -157,21 +115,12 @@ const Input: React.FunctionComponent<IInput> = ({
                     aria-required={required}
                     value={value || ""}
                     maxLength={maxLength}
-                    type="url"
-                    onFocus={focusHandler}
+                    type="text"
+                    pattern='.{1,}\..{1,}'
                     {...other}
+                    ref={inputRef}
                     onInvalid={invalidHandler}
-                    onBlur={blurHandler}
-                    onAccept={(value) => {
-                        //* delete duplicate http
-                        const normalizedValue = (value as string).replace(
-                            /(http[s]?:\/\/){2,}/gm,
-                            "https://"
-                        );
-                        externalSetter && externalSetter(normalizedValue);
-                    }}
                 />
-
                 {icon === "edit" && <EditIcon className="app-input__icon" />}
                 {label && (
                     <span

@@ -24,6 +24,7 @@ import { AssetInOrganization } from "../../types/asset";
 import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
 import CheckSVG from "./assets/check.svg";
+import addHTTPtoURL from "../../services/addHTTPtoURL";
 interface EditOrganizationFormProps {
   organization?: Organization;
   isHaveAccessToOrgList?: boolean;
@@ -153,7 +154,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         ...organization,
         name: normalizedName,
         customerCrmId,
-        customerCrmLink,
+        customerCrmLink: addHTTPtoURL(customerCrmLink),
         comments,
         organizationAssets: [...assignedAssets].map((asset) => ({
           ...asset,
