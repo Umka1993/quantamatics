@@ -10,9 +10,13 @@ import {useGetOrganizationQuery} from "../../api/organization";
 import {useGetAllAssetsQuery, useLinkAssetToUserMutation,} from "../../api/asset";
 import RolesMultiselect from "../app-input/roles-multiselect";
 import RoleCheckboxes from "../role-checkboxes";
+import useUser from "../../hooks/useUser";
 
 const InviteUserForm: FunctionComponent = () => {
     const { id: organizationId } = useParams();
+
+    const loggedUser = useUser();
+    const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin)
 
     const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(
         organizationId as string
@@ -172,7 +176,7 @@ const InviteUserForm: FunctionComponent = () => {
                             .join(", ")}
                     />
                 )}
-                <RolesMultiselect
+                {isSuperAdmin ? <RolesMultiselect
                     options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
                     selected={Array.from(userRoles).sort()}
                     setSelected={setRoles}
@@ -181,7 +185,12 @@ const InviteUserForm: FunctionComponent = () => {
                     showError={assetError}
                     type="user"
                     inputList={Array.from(userRoles).sort().join(", ")}
-                />
+                /> :
+                    <RoleCheckboxes
+                        defaultRoles={userRoles}
+                        externalSetter={setRoles}
+                    />
+                }
             </div>
             <Button
                 className="create-organization__submit"

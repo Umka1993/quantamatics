@@ -45,6 +45,8 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     const formRef = useRef<HTMLFormElement>(null);
 
     const loggedUser = useUser();
+    const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin)
+
     const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } = useGetUserAssetsQuery(user.id)
 
     const [update, { isSuccess, isError, error, isLoading }] = useUpdateUserMutation();
@@ -237,7 +239,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             />
 
                         }
-                        <RolesMultiselect
+                        {isSuperAdmin ? <RolesMultiselect
                             options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
                             selected={Array.from(userRoles).sort()}
                             setSelected={setRoles}
@@ -246,7 +248,12 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             showError={assetError}
                             type="user"
                             inputList={Array.from(userRoles).sort().join(", ")}
-                        />
+                        /> :
+                            <RoleCheckboxes
+                                defaultRoles={userRoles}
+                                externalSetter={setRoles}
+                            />
+                        }
                     </form>
 
                     <footer className="edit-account__footer">
