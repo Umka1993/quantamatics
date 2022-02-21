@@ -53,9 +53,15 @@
         outline: none;
         color: $headlines;
         width: 100%;
-        
+        padding-right: 10px;
+
         &::placeholder {
             color: $inactive;
+        }
+
+        &::-webkit-search-cancel-button {
+            position: relative;
+            left: 12px;
         }
     }
 }
