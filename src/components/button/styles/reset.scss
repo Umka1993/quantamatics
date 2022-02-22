@@ -7,15 +7,15 @@
     cursor: pointer;
     font-size: 16px;
     line-height: 18px;
-    display: inline-flex;
     text-align: center;
-
+    width: 100%;
     color: $inactive;
     display: flex;
-    text-decoration: none;
+    justify-content: center;
     text-decoration: underline dotted;
     text-underline-offset: 4px;
     text-decoration-thickness: 1.5px;
+
 
     // TODO: circe underline
     // background-image: radial-gradient(circle, $inactive 50%, transparent 50%);

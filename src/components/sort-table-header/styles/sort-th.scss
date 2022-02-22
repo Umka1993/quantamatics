@@ -9,6 +9,7 @@
 
         &:hover, &:focus-visible {
             color: $accent;
+            cursor: pointer;
         }
     }
 

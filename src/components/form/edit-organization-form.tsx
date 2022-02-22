@@ -1,30 +1,19 @@
-import Button, { ResetButton } from "../button";
-import React, {
-  FormEvent,
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { Organization } from "types/organization/types";
+import Button, {ResetButton} from "../button";
+import React, {FormEvent, FunctionComponent, useCallback, useEffect, useRef, useState,} from "react";
+import {Organization} from "types/organization/types";
 import Headline from "../page-title";
-import Input, { Multiselect, InputURL } from "../app-input";
+import Input, {InputURL, Multiselect} from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
-import { useNavigate } from "react-router-dom";
-import {
-  useLazyGetOrganizationQuery,
-  useUpdateOrganizationMutation,
-} from "../../api/organization";
-import Loader from "../loader";
-import { UserRole } from "../../data/enum";
+import {useNavigate} from "react-router-dom";
+import {useLazyGetOrganizationQuery, useUpdateOrganizationMutation,} from "../../api/organization";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
-import { AssetInOrganization } from "../../types/asset";
+import {AssetInOrganization} from "../../types/asset";
 import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
 import CheckSVG from "./assets/check.svg";
 import addHTTPtoURL from "../../services/addHTTPtoURL";
+
 interface EditOrganizationFormProps {
   organization?: Organization;
   isHaveAccessToOrgList?: boolean;
@@ -252,10 +241,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
           </Button>
         </div>
       </header>
-
-      {externalLoad || loading || !options.length ? (
-        <Loader />
-      ) : (
         <div className={style.inputs}>
           <Input
             externalSetter={setName}
@@ -313,7 +298,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             disabled={isUpdating}
           />
         </div>
-      )}
     </form>
   );
 };
