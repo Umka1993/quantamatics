@@ -26,7 +26,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
     const INITIAL_SORT = { name: "", direction: SortDirection.Default };
 
     const { isLoading, data, isError, isSuccess, error } =
-        useGetAllOrganizationsQuery();
+        useGetAllOrganizationsQuery(user?.id as number);
 
     const [localRows, setLocalRows] = useState<Organization[]>([]);
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);

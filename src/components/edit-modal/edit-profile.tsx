@@ -52,7 +52,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     const [update, { isSuccess, isError, error, isLoading }] = useUpdateUserMutation();
     const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] = useUpdateUserRolesMutation();
 
-    const { data: allOrganizations } = useGetAllOrganizationsQuery();
+    const { data: allOrganizations } = useGetAllOrganizationsQuery(undefined);
 
 
     const { data: assets } = useGetAllAssetsQuery(
