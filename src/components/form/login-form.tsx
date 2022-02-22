@@ -35,8 +35,8 @@ const LoginForm: FunctionComponent = () => {
 
     const handleUserError = () => {
         const {status, data} = (error as IApiError)
-        switch (status) {
-            case 401 :
+        if(status === 401) {
+            if(data === "User subscription has ended") {
                 navigate(AppRoute.Expired, {
                     state: {
                         headline: 'Your user account has reached its Expiration Date',
@@ -44,19 +44,37 @@ const LoginForm: FunctionComponent = () => {
                         subtitle: `Please contact your organization admin or send us an email at <a href="mailto:support@quantamatics.com">support@quantamatics.com.</a>`,
                     }
                 })
-                break;
-            default:
-                console.log(error);
-        }
-        switch (data) {
-            case "User locked out":
-                setErrors(
-                    "User account locked due to several failed login attempts. Please try again later."
-                )
-                break;
-            default :
+            }
+            else if(data === "User locked out") {
+                setErrors("User account locked due to several failed login attempts. Please try again later.")
+            }
+            else {
                 setErrors("Incorrect email or password");
+            }
         }
+
+        // switch (status) {
+        //     case 401 :
+        //         navigate(AppRoute.Expired, {
+        //             state: {
+        //                 headline: 'Your user account has reached its Expiration Date',
+        //                 image: 'calendar',
+        //                 subtitle: `Please contact your organization admin or send us an email at <a href="mailto:support@quantamatics.com">support@quantamatics.com.</a>`,
+        //             }
+        //         })
+        //         break;
+        //     default:
+        //         console.log(error);
+        // }
+        // switch (data) {
+        //     case "User locked out":
+        //         setErrors(
+        //             "User account locked due to several failed login attempts. Please try again later."
+        //         )
+        //         break;
+        //     default :
+        //         setErrors("Incorrect email or password");
+        // }
     }
     useEffect(() => {
         if (isError) {
