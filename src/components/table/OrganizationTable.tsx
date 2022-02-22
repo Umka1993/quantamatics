@@ -140,6 +140,6 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
             </table>
         );
     } else {
-        return <NoResultsMessage query={search as string} />;
+        return <NoResultsMessage dataPresent={!!data?.length} query={search as string} />;
     }
 };
