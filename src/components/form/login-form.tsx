@@ -33,34 +33,43 @@ const LoginForm: FunctionComponent = () => {
         sendLogin({ email, password }).unwrap();
     };
 
-    const handleUserError = () => {
-        const { data } = error as IApiError;
-        switch (data) {
-            case "User subscription has ended":
-                return navigate(AppRoute.Expired, {
-                    state: {
-                        headline: "Your user account has reached its Expiration Date",
-                        image: "calendar",
-                        subtitle: `Please contact your organization admin or send us an email at <a href="mailto:support@quantamatics.com">support@quantamatics.com.</a>`,
-                    } as InfoMessage,
-                });
+    const handleResponseError = () => {
+        if (isError) {
+            const { status, data } = error as IApiError;
+            if (status === 401) {
+                switch (data) {
+                    case "Failed sign in":
+                        return navigate(AppRoute.NoRoles, {
+                            state: {
+                                headline: "Your user account is in the process of being set up",
+                                image: "man",
+                                subtitle:
+                                    "Please try again later or start a chat session to get help live from someone on our team.",
+                            } as InfoMessage,
+                        });
 
-            case "User locked out":
-                setErrors(
-                    "User account locked due to several failed login attempts. Please try again later."
-                );
-                break;
-            default:
-                setErrors("Incorrect email or password");
+                    case "User subscription has ended":
+                        return navigate(AppRoute.Expired, {
+                            state: {
+                                headline: "Your user account is in the process of being set up",
+                                image: "man",
+                                subtitle:
+                                    "Please try again later or start a chat session to get help live from someone on our team.",
+                            } as InfoMessage,
+                        });
+
+                    case "User locked out":
+                        setErrors(
+                            "User account locked due to several failed login attempts. Please try again later."
+                        );
+                        break;
+                    default:
+                        setErrors("Incorrect email or password");
+                }
+            }
         }
     };
-
-    useEffect(() => {
-        if (isError) {
-            handleUserError();
-            formRef.current?.reportValidity();
-        }
-    }, [isError]);
+    useEffect(handleResponseError, [isError]);
 
     useEffect(() => {
         if (errors && formRef.current) {
