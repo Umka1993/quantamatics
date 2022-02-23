@@ -9,8 +9,7 @@
     height: calc(100vh - 80px);
     max-height: 720px;
     overflow: auto;
-    scrollbar-width: thin;
-    scrollbar-gutter: stable;
+    scrollbar-gutter: stable both-edges;
 
     display: flex;
     flex-direction: column;
@@ -89,8 +88,8 @@
     }
     &__form--pass &__button--cancel {
         position: absolute;
-        right: 1.4em;
-        top: 0.45em;
+        right: 1.66em;
+        top: 0.55em;
         z-index: 2;
     }
 

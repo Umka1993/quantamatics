@@ -23,12 +23,12 @@
 .buttons {
     display: flex;
     align-items: center;
-    width: 229px;
+    width: 230px;
     justify-content: space-between;
 }
 
 .save {
-    width: 140px;
+    min-width: 140px;
     height: 40px;
 }
 

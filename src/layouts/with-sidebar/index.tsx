@@ -27,9 +27,7 @@ export default function WithSideBarLayout(): ReactElement {
         <>
             <SideBar openModal={() => setShowProfile(true)}/>
             <main className={style.main}>
-                {isLoading ? <Loader/> :
                     <PrivateRoutes/>
-                }
             </main>
 
 

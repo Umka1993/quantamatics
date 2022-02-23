@@ -73,7 +73,7 @@
     color: $accent;
     outline-color: currentColor;
     @include hover-focus {
-      color: $accent;
+      color: $headlines
     }
   }
 
