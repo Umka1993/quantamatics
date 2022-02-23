@@ -17,9 +17,11 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     externalSetter?: (value: string) => void;
     icon?: string;
     showLimit?: boolean;
+    invalid?: boolean;
 }
 
 const Input: React.FunctionComponent<IInput> = ({
+<<<<<<< HEAD
                                                     className,
                                                     label,
                                                     placeholder,
@@ -36,6 +38,25 @@ const Input: React.FunctionComponent<IInput> = ({
                                                     onFocus,
                                                     ...other
                                                 }) => {
+=======
+    className,
+    label,
+    placeholder,
+    required,
+    value,
+    onChange,
+    onInvalid,
+    autoComplete,
+    externalSetter,
+    error,
+    icon,
+    maxLength,
+    showLimit,
+    invalid,
+    onFocus,
+    ...other
+}) => {
+>>>>>>> develop
     const inputRef = useRef<HTMLInputElement>(null);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -57,11 +78,15 @@ const Input: React.FunctionComponent<IInput> = ({
             const isOnlySpaces = /^\s+$/.test(value);
 
             if (required && (validity.valueMissing || isOnlySpaces)) {
-                inputRef.current.setCustomValidity(`This is not valid ${label ? label : ''}`)
+                inputRef.current.setCustomValidity(
+                    `This is not valid ${label ? label : ""}`
+                );
             } else {
-                inputRef.current.setCustomValidity('')
+                inputRef.current.setCustomValidity("");
             }
-            error ? inputRef.current.setCustomValidity(error) : setErrorMessage(undefined);
+            error
+                ? inputRef.current.setCustomValidity(error)
+                : setErrorMessage(undefined);
 
             if (!validationMessage.length) {
                 setErrorMessage(undefined);
@@ -74,16 +99,24 @@ const Input: React.FunctionComponent<IInput> = ({
 
         setErrorMessage(inputRef.current?.validationMessage);
         onInvalid && onInvalid(evt);
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> develop
     };
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
+<<<<<<< HEAD
             const {offsetWidth} = labelRef.current;
             setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5)
+=======
+            const { offsetWidth } = labelRef.current;
+            setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5);
+>>>>>>> develop
         }
-    }
+    };
 
     return (
         <div
@@ -94,15 +127,17 @@ const Input: React.FunctionComponent<IInput> = ({
             <label
                 className="app-input__wrapper"
                 style={
-                    label ?
-                        {
+                    label
+                        ? ({
                             "--label-width": `${rightOffset}px`,
-                        } as CSSProperties
+                        } as CSSProperties)
                         : undefined
                 }
             >
                 <input
-                    className="app-input__field"
+                    className={classNames("app-input__field", {
+                        "app-input__field--error": invalid,
+                    })}
                     onChange={changeHandler}
                     aria-invalid={!!errorMessage}
                     autoComplete={autoComplete}
@@ -116,26 +151,36 @@ const Input: React.FunctionComponent<IInput> = ({
                     onInvalid={invalidHandler}
                     onFocus={(evt) => {
                         reCalcLabelWidth();
+<<<<<<< HEAD
                         onFocus && onFocus(evt)
+=======
+                        onFocus && onFocus(evt);
+>>>>>>> develop
                     }}
                 />
                 {icon === "edit" && <EditIcon className="app-input__icon"/>}
                 {label && (
                     <span
                         className={classNames("app-input__label", {
-                            'app-input__label--icon': icon
+                            "app-input__label--icon": icon,
                         })}
-
                     >
+<<<<<<< HEAD
                         <span
                             ref={labelRef}>{label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}</span>
+=======
+                        <span ref={labelRef}>
+                            {label}
+                            {showLimit &&
+                                maxLength &&
+                                ` (${(value as string)?.length} / ${maxLength})`}
+                        </span>
+>>>>>>> develop
                     </span>
                 )}
             </label>
 
-            {errorMessage && (
-                <p className="app-input__error">{errorMessage}</p>
-            )}
+            {errorMessage && <p className="app-input__error">{errorMessage}</p>}
         </div>
     );
 };
