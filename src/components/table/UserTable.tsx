@@ -113,18 +113,18 @@ export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
                                 >
                                     <EditSVG role="img" aria-label="edit" fill="currentColor" />
                                 </button>
-                                <button
-                                    type="button"
-                                    className="table__action"
-                                    // onClick={() => { handleDeleteUser(row) }}
-                                    disabled
-                                >
-                                    <DeleteSVG
-                                        role="img"
-                                        aria-label="delete"
-                                        fill="currentColor"
-                                    />
-                                </button>
+                                {/*<button*/}
+                                {/*    type="button"*/}
+                                {/*    className="table__action"*/}
+                                {/*    // onClick={() => { handleDeleteUser(row) }}*/}
+                                {/*    disabled*/}
+                                {/*>*/}
+                                {/*    <DeleteSVG*/}
+                                {/*        role="img"*/}
+                                {/*        aria-label="delete"*/}
+                                {/*        fill="currentColor"*/}
+                                {/*    />*/}
+                                {/*</button>*/}
                             </td>
                         </tr>
                     ))}
