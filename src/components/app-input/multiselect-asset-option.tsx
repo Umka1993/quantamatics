@@ -1,12 +1,6 @@
-import React, {
-    useState,
-    FunctionComponent,
-    Dispatch,
-    SetStateAction,
-    useEffect,
-} from "react";
+import React, {Dispatch, FunctionComponent, SetStateAction, useEffect, useState,} from "react";
 import Checkbox from "../app-checkbox/checkbox";
-import { AssetListItem } from "../../types/asset";
+import {AssetListItem} from "../../types/asset";
 export interface MultiselectAssetOptionProps {
     selected: boolean;
     setSelected: Dispatch<SetStateAction<Set<string | number >>> 
@@ -41,7 +35,7 @@ const MultiselectAssetOption: FunctionComponent<
 
         useEffect(() => {
             isSelected ? addToSelected() : removeFromSelected();
-        }, [isSelected]);  
+        }, [isSelected]);
 
         return (
             <div

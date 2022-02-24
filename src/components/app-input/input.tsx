@@ -21,24 +21,6 @@ interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input: React.FunctionComponent<IInput> = ({
-<<<<<<< HEAD
-                                                    className,
-                                                    label,
-                                                    placeholder,
-                                                    required,
-                                                    value,
-                                                    onChange,
-                                                    onInvalid,
-                                                    autoComplete,
-                                                    externalSetter,
-                                                    error,
-                                                    icon,
-                                                    maxLength,
-                                                    showLimit,
-                                                    onFocus,
-                                                    ...other
-                                                }) => {
-=======
     className,
     label,
     placeholder,
@@ -56,7 +38,7 @@ const Input: React.FunctionComponent<IInput> = ({
     onFocus,
     ...other
 }) => {
->>>>>>> develop
+
     const inputRef = useRef<HTMLInputElement>(null);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -99,22 +81,15 @@ const Input: React.FunctionComponent<IInput> = ({
 
         setErrorMessage(inputRef.current?.validationMessage);
         onInvalid && onInvalid(evt);
-<<<<<<< HEAD
 
-
-=======
->>>>>>> develop
     };
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
-<<<<<<< HEAD
-            const {offsetWidth} = labelRef.current;
-            setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5)
-=======
+
             const { offsetWidth } = labelRef.current;
             setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5);
->>>>>>> develop
+
         }
     };
 
@@ -151,11 +126,8 @@ const Input: React.FunctionComponent<IInput> = ({
                     onInvalid={invalidHandler}
                     onFocus={(evt) => {
                         reCalcLabelWidth();
-<<<<<<< HEAD
-                        onFocus && onFocus(evt)
-=======
+
                         onFocus && onFocus(evt);
->>>>>>> develop
                     }}
                 />
                 {icon === "edit" && <EditIcon className="app-input__icon"/>}
@@ -165,17 +137,13 @@ const Input: React.FunctionComponent<IInput> = ({
                             "app-input__label--icon": icon,
                         })}
                     >
-<<<<<<< HEAD
-                        <span
-                            ref={labelRef}>{label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}</span>
-=======
+
                         <span ref={labelRef}>
                             {label}
                             {showLimit &&
                                 maxLength &&
                                 ` (${(value as string)?.length} / ${maxLength})`}
                         </span>
->>>>>>> develop
                     </span>
                 )}
             </label>
