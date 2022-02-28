@@ -191,7 +191,7 @@ const InviteUserForm: FunctionComponent = () => {
                     )
                 }
             >
-                Save
+                Create
             </Button>
 
             <ResetButton className="create-organization__cancel" href={backLink}>
