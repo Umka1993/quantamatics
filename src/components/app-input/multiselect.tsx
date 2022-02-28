@@ -39,6 +39,8 @@ interface IInput
 
     options: AssetListItem[] | AssetInOrganization[];
     inputList?: string;
+
+    fullDisabled?: boolean;
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -54,6 +56,7 @@ const Multiselect: FunctionComponent<IInput> = ({
     disabled,
     inputList = "",
     type,
+    fullDisabled,
 }) => {
     const isEditOrganization = Array.isArray(selected);
     const [rightOffset, setRightOffset] = useState<number>(20);
@@ -142,6 +145,7 @@ const Multiselect: FunctionComponent<IInput> = ({
                     style={{
                         cursor: "pointer",
                     }}
+                    disabled={fullDisabled}
                 />
 
                 {label && (
