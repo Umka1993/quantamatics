@@ -20,6 +20,7 @@ import { Organization } from "types/organization/types";
 import { useGetAllAssetsQuery, useGetUserAssetsQuery, useLinkAssetToUserMutation, useUnlinkAssetToUserMutation } from "../../api/asset";
 import { useParams } from "react-router-dom";
 import { AssetListItem } from "../../types/asset";
+import RolesMultiselect from "../app-input/roles-multiselect";
 interface IEditProfile {
     onClose: () => void;
     user: IUpdateUser;
@@ -44,12 +45,14 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     const formRef = useRef<HTMLFormElement>(null);
 
     const loggedUser = useUser();
+    const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin)
+
     const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } = useGetUserAssetsQuery(user.id)
 
     const [update, { isSuccess, isError, error, isLoading }] = useUpdateUserMutation();
     const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] = useUpdateUserRolesMutation();
 
-    const { data: allOrganizations } = useGetAllOrganizationsQuery();
+    const { data: allOrganizations } = useGetAllOrganizationsQuery(undefined);
 
 
     const { data: assets } = useGetAllAssetsQuery(
@@ -236,11 +239,21 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             />
 
                         }
-
-                        <RoleCheckboxes
-                            defaultRoles={userRoles}
-                            externalSetter={setRoles}
-                        />
+                        {isSuperAdmin ? <RolesMultiselect
+                            options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
+                            selected={Array.from(userRoles).sort()}
+                            setSelected={setRoles}
+                            label="Organization Role"
+                            errorMessage="Select asset permissions to assign to the user account."
+                            showError={assetError}
+                            type="user"
+                            inputList={Array.from(userRoles).sort().join(", ")}
+                        /> :
+                            <RoleCheckboxes
+                                defaultRoles={userRoles}
+                                externalSetter={setRoles}
+                            />
+                        }
                     </form>
 
                     <footer className="edit-account__footer">
