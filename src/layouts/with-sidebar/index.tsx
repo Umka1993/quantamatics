@@ -5,13 +5,13 @@ import { SideBar } from '../../components/side-bar';
 import style from './with-sidebar.module.scss';
 import PrivateRoutes from '../../router/private-routes';
 import { EditPassword } from '../../components/edit-modal/edit-password';
-import useUser from '../../hooks/useUser';
+
 import { useLocation } from 'react-router-dom';
 
 export default function WithSideBarLayout(): ReactElement {
     const logout = useLogout();
     const { pathname } = useLocation();
-    const user = useUser();
+
     const [showProfile, setShowProfile] = useState<boolean>(false);
 
     useEffect(() => {
@@ -25,9 +25,8 @@ export default function WithSideBarLayout(): ReactElement {
                 <PrivateRoutes />
             </main>
 
-            {showProfile && user &&
+            {showProfile &&
                 <EditPassword
-                    user={user}
                     onClose={() => setShowProfile(false)}
                 />
             }
