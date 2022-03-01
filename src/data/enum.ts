@@ -66,6 +66,11 @@ export const enum UserRole {
     Demo = "Demo"
 }
 
+export const UserRoleLabel: any = {
+    [UserRole.OrgOwner]: 'Org. Owner',
+    [UserRole.OrgAdmin]: 'Org. Admin',
+}
+
 
 export const enum OrganizationKey {
     Id = 'id',

@@ -28,7 +28,7 @@ export default function PrivateRoutes(): ReactElement {
         : isCoherence
             ? AppRoute.ExcelLibrary
             : isOrganizationsAvailable
-                ? "appsOrganizationsList"
+                ? AppRoute.OrganizationList
                 : isEditOrgAvailable
                     ? `/apps/organizations/${user?.organizationId}`
                     : "/demo";

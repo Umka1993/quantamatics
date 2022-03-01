@@ -18,6 +18,7 @@ import MultiselectAssetOption, {
 } from "./multiselect-asset-option";
 import { AssetInOrganization, AssetListItem } from "../../types/asset";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
+import {useClickOutside} from "../../hooks/useClickOutside";
 interface IInput
     extends Omit<
     MultiselectAssetOptionProps,
@@ -107,7 +108,8 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     const toggleOptions = () => setShowOptions(!showOptions);
 
-    useCloseModal(showOptions, setShowOptions);
+    // useCloseModal(showOptions, setShowOptions);
+    useClickOutside(rootElement, () => setShowOptions(false), showOptions)
 
     return (
         <div
