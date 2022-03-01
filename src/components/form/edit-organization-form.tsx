@@ -190,6 +190,23 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         }
     }, [organization]);
 
+    const [isChanged, setIsChanged] = useState(true)
+
+
+    useEffect(() => {
+        if (organization) {
+            if (organization.name !== name ||
+                organization.customerCrmId !== customerCrmId ||
+                organization.customerCrmLink !== customerCrmLink ||
+                organization.comments !== comments) {
+                setIsChanged(false)
+            } else {
+                setIsChanged(true)
+            }
+        }
+
+    }, [name, customerCrmId, customerCrmLink, comments])
+
     const assignedAssetsReset = (target: HTMLButtonElement) => {
         target.blur()
         if (organization) {
@@ -223,6 +240,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         type="submit"
                         className={style.save}
                         disabled={
+                            isChanged ||
                             isUpdating ||
                             externalLoad ||
                             Boolean(duplicateOrgError) ||
