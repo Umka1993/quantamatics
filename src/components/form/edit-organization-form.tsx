@@ -12,13 +12,11 @@ import Headline from "../page-title";
 import Input, { Multiselect, InputURL } from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
-import { useNavigate } from "react-router-dom";
 import {
   useLazyGetOrganizationQuery,
   useUpdateOrganizationMutation,
 } from "../../api/organization";
 import Loader from "../loader";
-import { UserRole } from "../../data/enum";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetInOrganization } from "../../types/asset";
 import useUser from "../../hooks/useUser";
@@ -33,11 +31,9 @@ interface EditOrganizationFormProps {
 
 const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
   organization,
-  isHaveAccessToOrgList,
   externalLoad,
 }) => {
   const user = useUser();
-  const navigate = useNavigate();
   const [assetError, setAssetError] = useState(false);
   const [
     update,
