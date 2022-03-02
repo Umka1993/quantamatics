@@ -38,6 +38,7 @@ const Input: React.FunctionComponent<IInput> = ({
     onFocus,
     ...other
 }) => {
+
     const inputRef = useRef<HTMLInputElement>(null);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -46,7 +47,7 @@ const Input: React.FunctionComponent<IInput> = ({
     const [rightOffset, setRightOffset] = useState<number>(20);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        const { value } = evt.target;
+        const {value} = evt.target;
         externalSetter && externalSetter(value);
         onChange && onChange(evt);
     };
@@ -54,7 +55,7 @@ const Input: React.FunctionComponent<IInput> = ({
     useEffect(() => {
         reCalcLabelWidth();
         if (inputRef.current) {
-            const { validationMessage, validity, value, required } = inputRef.current;
+            const {validationMessage, validity, value, required} = inputRef.current;
 
             const isOnlySpaces = /^\s+$/.test(value);
 
@@ -80,12 +81,15 @@ const Input: React.FunctionComponent<IInput> = ({
 
         setErrorMessage(inputRef.current?.validationMessage);
         onInvalid && onInvalid(evt);
+
     };
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
+
             const { offsetWidth } = labelRef.current;
             setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5);
+
         }
     };
 
@@ -122,16 +126,18 @@ const Input: React.FunctionComponent<IInput> = ({
                     onInvalid={invalidHandler}
                     onFocus={(evt) => {
                         reCalcLabelWidth();
+
                         onFocus && onFocus(evt);
                     }}
                 />
-                {icon === "edit" && <EditIcon className="app-input__icon" />}
+                {icon === "edit" && <EditIcon className="app-input__icon"/>}
                 {label && (
                     <span
                         className={classNames("app-input__label", {
                             "app-input__label--icon": icon,
                         })}
                     >
+
                         <span ref={labelRef}>
                             {label}
                             {showLimit &&

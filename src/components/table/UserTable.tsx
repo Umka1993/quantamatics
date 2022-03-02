@@ -1,19 +1,18 @@
-import React, { useState, useEffect, useMemo, FunctionComponent, useLayoutEffect } from "react";
+import React, {FunctionComponent, useEffect, useLayoutEffect, useMemo, useState} from "react";
 
 import EditSVG from "./assets/edit-row-icon.svg";
-// import DeleteSVG from "./assets/delete-row-icon.svg";
+import DeleteSVG from "./assets/delete-row-icon.svg";
 
-import { EditProfile } from "../edit-modal/edit-profile";
-import { SortTableHeader } from "../sort-table-header/SortTableHeader";
-import { adaptRoles } from "../../services/baseService";
+import {EditProfile} from "../edit-modal/edit-profile";
+import {SortTableHeader} from "../sort-table-header/SortTableHeader";
+import {adaptRoles} from "../../services/baseService";
 import ComaList from "../coma-list";
-import { IUpdateUser } from "../../types/user";
+import {IUpdateUser} from "../../types/user";
 import ISort from "../../types/sort-type";
-import { useGetOrganizationUsersQuery } from "../../api/user";
-import Loader from "../loader";
+import {useGetOrganizationUsersQuery} from "../../api/user";
 import "./styles/table.scss";
-import { USER_HEADER } from "./utils/constants";
-import { SortDirection } from "../../data/enum";
+import {USER_HEADER} from "./utils/constants";
+import {SortDirection} from "../../data/enum";
 
 interface UserTableProps {
     orgId: string;
@@ -23,7 +22,7 @@ export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
     // ? Need to be in component to reset sort after update
     const INITIAL_SORT = { name: "", direction: SortDirection.Default }
 
-    const { data, isSuccess, isLoading } = useGetOrganizationUsersQuery(orgId);
+    const { data, isSuccess } = useGetOrganizationUsersQuery(orgId);
 
     const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -68,13 +67,6 @@ export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
     }, [localRows])
 
 
-    if (isLoading) {
-        return (
-            <div className="user-table-loader">
-                <Loader />
-            </div>
-        );
-    }
     return (
         <>
             <table
@@ -121,18 +113,18 @@ export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
                                 >
                                     <EditSVG role="img" aria-label="edit" fill="currentColor" />
                                 </button>
-                                {/* <button
-                                    type="button"
-                                    className="table__action"
-                                    onClick={() => { handleDeleteUser(row) }}
-                                    disabled
-                                >
-                                    <DeleteSVG
-                                        role="img"
-                                        aria-label="delete"
-                                        fill="currentColor"
-                                    />
-                                </button> */}
+                                {/*<button*/}
+                                {/*    type="button"*/}
+                                {/*    className="table__action"*/}
+                                {/*    // onClick={() => { handleDeleteUser(row) }}*/}
+                                {/*    disabled*/}
+                                {/*>*/}
+                                {/*    <DeleteSVG*/}
+                                {/*        role="img"*/}
+                                {/*        aria-label="delete"*/}
+                                {/*        fill="currentColor"*/}
+                                {/*    />*/}
+                                {/*</button>*/}
                             </td>
                         </tr>
                     ))}
