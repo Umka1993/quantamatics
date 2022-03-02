@@ -191,7 +191,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setCustomerLink(organization.customerCrmLink);
             setComment(organization.comments)
         }
-    }, [organization]);
+    }, [organization, isSavedMessageActive]);
 
     useEffect(() => {
         if (organization) {
