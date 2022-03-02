@@ -4,6 +4,7 @@ stages:
   - pre-deploy
   - deploy-develop
   - deploy-staging
+  - deploy-uat
   - deploy-production
 
 variables:
