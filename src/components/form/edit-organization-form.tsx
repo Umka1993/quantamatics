@@ -52,6 +52,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
     const [isSavedMessageActive, setSavedMessageActive] = useState(false);
 
+    const [isChanged, setIsChanged] = useState(true)
+
     const formRef = useRef<HTMLFormElement>(null);
 
     const [getInfoOrg] = useLazyGetOrganizationQuery();
@@ -177,6 +179,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     useEffect(() => {
         if (isSavedMessageActive) {
             setTimeout(() => setSavedMessageActive(false), 2000);
+            setTimeout(() => setIsChanged(true), 2000);
         }
     }, [isSavedMessageActive]);
 
@@ -189,9 +192,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setComment(organization.comments)
         }
     }, [organization]);
-
-    const [isChanged, setIsChanged] = useState(true)
-
 
     useEffect(() => {
         if (organization) {
