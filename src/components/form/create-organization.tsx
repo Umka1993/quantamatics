@@ -130,7 +130,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     maxLength={64}
                     error={duplicateOrgError}
                 />
-
                 <Input
                     externalSetter={setCustomerCrmId}
                     label="CRM Customer ID"
@@ -144,15 +143,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     value={customerCrmLink}
                     maxLength={72}
                 />
-
-                <Input
-                    externalSetter={setComments}
-                    label="Comments"
-                    value={comments}
-                    maxLength={200}
-                    showLimit
-                />
-
                 {allAvailableAsset && (
                     <Multiselect
                         options={allAvailableAsset}
@@ -163,8 +153,14 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                         showError={assetError}
                     />
                 )}
+                <Input
+                    externalSetter={setComments}
+                    label="Comments"
+                    value={comments}
+                    maxLength={200}
+                    showLimit
+                />
             </div>
-
             <Button
                 className="create-organization__submit"
                 type="submit"
@@ -174,7 +170,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     duplicateIdError !== undefined
                 }
             >
-                Save
+                Create
             </Button>
             <ResetButton className="create-organization__cancel">Cancel</ResetButton>
         </Form>
