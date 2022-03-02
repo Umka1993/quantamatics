@@ -53,6 +53,13 @@ build staging:
   only:
     - master
 
+build uat:
+  extends: .build
+  variables:
+    BUILD_COMMAND: buildUAT
+  only:
+    - master
+
 # build staging beta:
 #   extends: .build
 #   variables:
@@ -118,6 +125,23 @@ deploy staging:
     DISTRIBUTION_ALIAS: stag.quantamatics.net    
   only:
     - master
+
+deploy uat:
+  dependencies:
+    - build uat
+  stage: deploy-uat
+  extends: .deploy
+  variables:
+    AWS_ACCESS_KEY_ID: $QMC_DEPLOY_USER_ACCESS_KEY_ID_UAT
+    AWS_SECRET_ACCESS_KEY: $QMC_DEPLOY_USER_SECRET_ACCESS_KEY_UAT
+    AWS_DEFAULT_REGION: us-east-1
+    ENV_SUFFIX: uat
+    STACK_NAME: qmc-web-ui-$ENV_SUFFIX
+    CERTIFICATE_ARN: arn:aws:acm:us-east-1:494904037583:certificate/683f57fe-53ab-4edf-b3af-5bcee5e3d679
+    DISTRIBUTION_ALIAS: uat.quantamatics.net    
+  only:
+    - master
+  when: manual
 
 # deploy staging beta:
 #   dependencies:
