@@ -62,9 +62,7 @@
         }
 
         &::-webkit-search-cancel-button {
-            position: relative;
-            left: 5px;
-            cursor: pointer;
+            display: none;
         }
     }
 }
