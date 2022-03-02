@@ -170,7 +170,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     duplicateIdError !== undefined
                 }
             >
-                Save
+                Create
             </Button>
             <ResetButton className="create-organization__cancel">Cancel</ResetButton>
         </Form>
