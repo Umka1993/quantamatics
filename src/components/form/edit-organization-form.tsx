@@ -161,6 +161,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         setInitialOrg();
     };
 
+
+
     useEffect(() => {
         if (isUpdateError) {
             alert((updateError as any).data?.errors);
@@ -197,7 +199,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         if (organization) {
             if (organization.name !== name ||
                 organization.customerCrmId !== customerCrmId ||
-                organization.organizationAssets !== assignedAssets ||
+                organization.organizationAssets.length !== assignedAssets.length ||
                 organization.customerCrmLink !== customerCrmLink ||
                 organization.comments !== comments) {
                 setIsChanged(false)
@@ -206,7 +208,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             }
         }
 
-    }, [name, customerCrmId, customerCrmLink, comments,assignedAssets])
+    }, [name, customerCrmId, customerCrmLink, comments, assignedAssets])
 
     const assignedAssetsReset = (target: HTMLButtonElement) => {
         target.blur()
