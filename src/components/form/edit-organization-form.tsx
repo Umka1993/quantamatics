@@ -197,6 +197,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         if (organization) {
             if (organization.name !== name ||
                 organization.customerCrmId !== customerCrmId ||
+                organization.organizationAssets !== assignedAssets ||
                 organization.customerCrmLink !== customerCrmLink ||
                 organization.comments !== comments) {
                 setIsChanged(false)
@@ -205,7 +206,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             }
         }
 
-    }, [name, customerCrmId, customerCrmLink, comments])
+    }, [name, customerCrmId, customerCrmLink, comments,assignedAssets])
 
     const assignedAssetsReset = (target: HTMLButtonElement) => {
         target.blur()
