@@ -18,7 +18,7 @@ import MultiselectAssetOption, {
 } from "./multiselect-asset-option";
 import {AssetInOrganization, AssetListItem} from "../../types/asset";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
-import {useClickOutside} from "../../hooks/useClickOutside";
+import { useClickOutside } from "../../hooks/useClickOutside";
 interface IInput
     extends Omit<MultiselectAssetOptionProps,
         "option" | "selected" | "setSelected">,
@@ -40,25 +40,27 @@ interface IInput
     inputList?: string;
 
     fullDisabled?: boolean;
+    variant?: "squared";
     setPinned?: (arg: boolean) => void
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
-                                                    options,
-                                                    label,
-                                                    placeholder,
-                                                    onFocus,
-                                                    setSelected,
-                                                    selected,
-                                                    errorMessage,
-                                                    showError,
-                                                    className,
-                                                    disabled,
-                                                    inputList = "",
-                                                    type,
-                                                    fullDisabled,
+    options,
+    label,
+    placeholder,
+    onFocus,
+    setSelected,
+    selected,
+    errorMessage,
+    showError,
+    className,
+    disabled,
+    inputList = "",
+    type,
+    variant,
+    fullDisabled,
                                                     setPinned,
-                                                }) => {
+}) => {
     const isEditOrganization = Array.isArray(selected);
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
@@ -111,11 +113,15 @@ const Multiselect: FunctionComponent<IInput> = ({
     };
 
     // useCloseModal(showOptions, setShowOptions);
-    useClickOutside(rootElement, () => setShowOptions(false), showOptions)
+    useClickOutside(rootElement, () => setShowOptions(false), showOptions);
 
     return (
         <div
-            className={classNames("app-input multiselect", className)}
+            className={classNames(
+                "app-input multiselect",
+                { "app-input--squared": variant === "squared" },
+                className
+            )}
             ref={rootElement}
             onClick={(e) => e.stopPropagation()}
         >

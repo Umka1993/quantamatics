@@ -292,6 +292,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     className={style.input}
                     error={duplicateOrgError}
                     disabled={isUpdating}
+                    variant='squared'
                 />
                 <Input
                     externalSetter={setCustomerID}
@@ -301,6 +302,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     className={style.input}
                     error={duplicateIdError}
                     disabled={isUpdating}
+                    variant='squared'
                 />
 
                 <InputURL
@@ -310,6 +312,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     maxLength={72}
                     className={style.input}
                     disabled={isUpdating}
+                    variant='squared'
                 />
 
                 <Multiselect
@@ -326,6 +329,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         .map((asset) => asset.asset.name)
                         .join(", ")}
                     fullDisabled={isUpdating}
+                    variant='squared'
                     setPinned={setPinned}
                 />
 
@@ -338,6 +342,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     showLimit
                     className={style.input}
                     disabled={isUpdating}
+                    variant='squared'
                 />
             </div>
         </form>
