@@ -18,11 +18,8 @@ import MultiselectAssetOption, {
 } from "./multiselect-asset-option";
 import {AssetInOrganization, AssetListItem} from "../../types/asset";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
-<<<<<<< HEAD
 
-=======
 import {useClickOutside} from "../../hooks/useClickOutside";
->>>>>>> develop
 interface IInput
     extends Omit<MultiselectAssetOptionProps,
         "option" | "selected" | "setSelected">,
