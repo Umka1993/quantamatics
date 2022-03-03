@@ -2,7 +2,6 @@
 @use "../../../sass/mixins" as *;
 @use "sass:math";
 
-
 $design-table-w: 1038;
 
 .table {
@@ -19,12 +18,11 @@ $design-table-w: 1038;
 
   &__header {
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 12px;
     line-height: 1.167;
-    letter-spacing: 0.083em;
-    text-transform: uppercase;
-    color: $inactive;
+    letter-spacing: 0.04em;
+    color: $headlines;
     border-bottom: 1.5px solid transparentize($main-text, 0.7);
 
     th,
