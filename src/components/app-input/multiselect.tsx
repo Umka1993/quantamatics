@@ -16,14 +16,13 @@ import classNames from "classnames";
 import MultiselectAssetOption, {
     MultiselectAssetOptionProps,
 } from "./multiselect-asset-option";
-import { AssetInOrganization, AssetListItem } from "../../types/asset";
+import {AssetInOrganization, AssetListItem} from "../../types/asset";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
+
 interface IInput
-    extends Omit<
-    MultiselectAssetOptionProps,
-    "option" | "selected" | "setSelected"
-    >,
-    SelectHTMLAttributes<HTMLSelectElement> {
+    extends Omit<MultiselectAssetOptionProps,
+        "option" | "selected" | "setSelected">,
+        SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
@@ -31,8 +30,8 @@ interface IInput
     selected: Set<string | number> | AssetInOrganization[];
 
     setSelected:
-    | Dispatch<SetStateAction<Set<string | number>>>
-    | Dispatch<SetStateAction<AssetInOrganization[]>>;
+        | Dispatch<SetStateAction<Set<string | number>>>
+        | Dispatch<SetStateAction<AssetInOrganization[]>>;
 
     errorMessage?: string;
     showError?: boolean;
@@ -41,23 +40,25 @@ interface IInput
     inputList?: string;
 
     fullDisabled?: boolean;
+    setPinned?: (arg: boolean) => void
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
-    options,
-    label,
-    placeholder,
-    onFocus,
-    setSelected,
-    selected,
-    errorMessage,
-    showError,
-    className,
-    disabled,
-    inputList = "",
-    type,
-    fullDisabled,
-}) => {
+                                                    options,
+                                                    label,
+                                                    placeholder,
+                                                    onFocus,
+                                                    setSelected,
+                                                    selected,
+                                                    errorMessage,
+                                                    showError,
+                                                    className,
+                                                    disabled,
+                                                    inputList = "",
+                                                    type,
+                                                    fullDisabled,
+                                                    setPinned,
+                                                }) => {
     const isEditOrganization = Array.isArray(selected);
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
@@ -69,7 +70,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
-            const { offsetWidth } = labelRef.current;
+            const {offsetWidth} = labelRef.current;
             setRightOffset(offsetWidth + 25);
         }
     };
@@ -92,11 +93,11 @@ const Multiselect: FunctionComponent<IInput> = ({
             Boolean(selected.size)
                 ? setList(
                     [
-                        ...(options as AssetListItem[]).filter(({ assetId }) =>
+                        ...(options as AssetListItem[]).filter(({assetId}) =>
                             selected.has(assetId)
                         ),
                     ]
-                        .map(({ name }) => name)
+                        .map(({name}) => name)
                         .join(", ")
                 )
                 : setList("");
@@ -105,7 +106,9 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
 
-    const toggleOptions = () => setShowOptions(!showOptions);
+    const toggleOptions = () => {
+        setShowOptions(!showOptions)
+    };
 
     useCloseModal(showOptions, setShowOptions);
 
@@ -174,6 +177,7 @@ const Multiselect: FunctionComponent<IInput> = ({
                             selected={selected as any}
                             setSelected={setSelected as any}
                             disabled={disabled}
+                            setPinned={setPinned}
                         />
                     ) : (
                         <MultiselectAssetOption

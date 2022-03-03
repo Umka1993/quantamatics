@@ -49,6 +49,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [assignedAssets, setAssignedAssets] = useState<AssetInOrganization[]>(
         organization?.organizationAssets || []
     );
+    const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
     const [isSavedMessageActive, setSavedMessageActive] = useState(false);
 
@@ -71,7 +72,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         setCustomerID
     );
 
-    const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
     function initOptions() {
         if (organization && user) {
@@ -181,7 +181,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     useEffect(() => {
         if (isSavedMessageActive) {
             setTimeout(() => setSavedMessageActive(false), 2000);
-            setTimeout(() => setIsChanged(true), 2000);
+            setIsChanged(true)
         }
     }, [isSavedMessageActive]);
 
@@ -193,7 +193,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setCustomerLink(organization.customerCrmLink);
             setComment(organization.comments)
         }
-    }, [organization, isSavedMessageActive]);
+    }, [organization]);
+
+    const [pinned, setPinned] = useState<boolean | undefined>()
 
     useEffect(() => {
         if (organization) {
@@ -201,14 +203,15 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 organization.customerCrmId !== customerCrmId ||
                 organization.organizationAssets.length !== assignedAssets.length ||
                 organization.customerCrmLink !== customerCrmLink ||
-                organization.comments !== comments) {
+                organization.comments !== comments ||
+                pinned ) {
                 setIsChanged(false)
             } else {
-                setIsChanged(true)
+                setIsChanged(true);
             }
         }
 
-    }, [name, customerCrmId, customerCrmLink, comments, assignedAssets])
+    }, [name, customerCrmId, customerCrmLink, comments, assignedAssets.length, pinned])
 
     const assignedAssetsReset = (target: HTMLButtonElement) => {
         target.blur()
@@ -311,6 +314,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         .map((asset) => asset.asset.name)
                         .join(", ")}
                     fullDisabled={isUpdating}
+                    setPinned={setPinned}
                 />
 
                 <Input

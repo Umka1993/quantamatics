@@ -1,13 +1,7 @@
-import React, {
-    useState,
-    FunctionComponent,
-    Dispatch,
-    SetStateAction,
-    useEffect,
-} from "react";
+import React, {Dispatch, FunctionComponent, SetStateAction, useEffect, useState,} from "react";
 import Checkbox from "../app-checkbox/checkbox";
 import classNames from "classnames";
-import { AssetInOrganization, AssetListItem } from "../../types/asset";
+import {AssetInOrganization} from "../../types/asset";
 import PinButton from "../pin-button";
 
 export interface MultiselectAssetOptionProps {
@@ -15,23 +9,33 @@ export interface MultiselectAssetOptionProps {
     setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
     option: AssetInOrganization;
     disabled?: boolean;
+    setPinned?: (arg: boolean) => void
 }
 
-const MultiselectAssetOrgOption: FunctionComponent<
-    MultiselectAssetOptionProps
-> = ({ selected, option, setSelected, disabled }) => {
+const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> = ({
+                                                                                       selected,
+                                                                                       option,
+                                                                                       setSelected,
+                                                                                       disabled,
+                                                                                       setPinned,
+
+                                                                                   }) => {
     const selectedID = selected.findIndex(
-        ({ assetId }) => assetId === option.assetId
+        ({assetId}) => assetId === option.assetId
     );
     const isSelected = selectedID !== -1;
     const isPinned = isSelected ? selected[selectedID].sharedByDefault : false;
 
     const addToSelected = (sharedByDefault: boolean) =>
-        setSelected([...selected, { ...option, sharedByDefault }]);
+        setSelected([...selected, {...option, sharedByDefault}]);
     const removeFromSelected = () =>
         setSelected(
-            [...selected].filter(({ assetId }) => assetId !== option.assetId)
+            [...selected].filter(({assetId}) => assetId !== option.assetId)
         );
+    
+    useEffect( ()=>{
+        setPinned && setPinned(isPinned)
+    },[isPinned])
 
     return (
         <div
