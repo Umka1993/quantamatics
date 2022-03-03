@@ -1,7 +1,7 @@
 import { OrganizationKey, UserKey } from "../../../data/enum";
 
 export const USER_HEADER = {
-    titles: ["Name", "Surname", "Email Address", "Expiration Date", "Organization Role"],
+    titles: ["First Name", "Last Name", "Email", "Expiration Date", "Organization Role"],
     keys: [UserKey.Name, UserKey.Surname, UserKey.Email, UserKey.SubscriptionEndDate, UserKey.UserRoles]
 }
 
