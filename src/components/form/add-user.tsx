@@ -1,26 +1,22 @@
-import React, {
-    useState,
-    useCallback,
-    useEffect,
-    FunctionComponent,
-    useRef,
-} from "react";
+import React, {FunctionComponent, useEffect, useRef, useState,} from "react";
 import "./styles/create-organization.scss";
-import { useNavigate, useParams } from "react-router-dom";
-import Button, { ResetButton } from "../button";
-import Input, { DatePick, Email, Multiselect } from "../app-input/";
+import {useNavigate, useParams} from "react-router-dom";
+import Button, {ResetButton} from "../button";
+import Input, {DatePick, Email, Multiselect} from "../app-input/";
 import Form from "./form";
+import {AppRoute, Error, UserRole} from "../../data/enum";
+import {useRegisterUserMutation} from "../../api/account";
+import {useGetOrganizationQuery} from "../../api/organization";
+import {useGetAllAssetsQuery, useLinkAssetToUserMutation,} from "../../api/asset";
+import RolesMultiselect from "../app-input/roles-multiselect";
 import RoleCheckboxes from "../role-checkboxes";
-import { AppRoute, Error, UserRole } from "../../data/enum";
-import { useRegisterUserMutation } from "../../api/account";
-import { useGetOrganizationQuery } from "../../api/organization";
-import {
-    useGetAllAssetsQuery,
-    useLinkAssetToUserMutation,
-} from "../../api/asset";
+import useUser from "../../hooks/useUser";
 
 const InviteUserForm: FunctionComponent = () => {
     const { id: organizationId } = useParams();
+
+    const loggedUser = useUser();
+    const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin)
 
     const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(
         organizationId as string
@@ -180,7 +176,21 @@ const InviteUserForm: FunctionComponent = () => {
                             .join(", ")}
                     />
                 )}
-                <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
+                {isSuperAdmin ? <RolesMultiselect
+                    options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
+                    selected={Array.from(userRoles).sort()}
+                    setSelected={setRoles}
+                    label="Organization Role"
+                    errorMessage="Select asset permissions to assign to the user account."
+                    showError={assetError}
+                    type="user"
+                    inputList={Array.from(userRoles).sort().join(", ")}
+                /> :
+                    <RoleCheckboxes
+                        defaultRoles={userRoles}
+                        externalSetter={setRoles}
+                    />
+                }
             </div>
             <Button
                 className="create-organization__submit"
@@ -191,7 +201,7 @@ const InviteUserForm: FunctionComponent = () => {
                     )
                 }
             >
-                Save
+                Create
             </Button>
 
             <ResetButton className="create-organization__cancel" href={backLink}>
