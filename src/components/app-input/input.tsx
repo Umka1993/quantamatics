@@ -11,13 +11,14 @@ import "./styles/input.scss";
 import classNames from "classnames";
 import EditIcon from "./assets/edit.svg";
 
-interface IInput extends InputHTMLAttributes<HTMLInputElement> {
+export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
     externalSetter?: (value: string) => void;
     icon?: string;
     showLimit?: boolean;
     invalid?: boolean;
+    variant?: "squared";
 }
 
 const Input: React.FunctionComponent<IInput> = ({
@@ -36,9 +37,9 @@ const Input: React.FunctionComponent<IInput> = ({
     showLimit,
     invalid,
     onFocus,
+    variant,
     ...other
 }) => {
-
     const inputRef = useRef<HTMLInputElement>(null);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -47,7 +48,7 @@ const Input: React.FunctionComponent<IInput> = ({
     const [rightOffset, setRightOffset] = useState<number>(20);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        const {value} = evt.target;
+        const { value } = evt.target;
         externalSetter && externalSetter(value);
         onChange && onChange(evt);
     };
@@ -55,7 +56,7 @@ const Input: React.FunctionComponent<IInput> = ({
     useEffect(() => {
         reCalcLabelWidth();
         if (inputRef.current) {
-            const {validationMessage, validity, value, required} = inputRef.current;
+            const { validationMessage, validity, value, required } = inputRef.current;
 
             const isOnlySpaces = /^\s+$/.test(value);
 
@@ -81,15 +82,12 @@ const Input: React.FunctionComponent<IInput> = ({
 
         setErrorMessage(inputRef.current?.validationMessage);
         onInvalid && onInvalid(evt);
-
     };
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
-
             const { offsetWidth } = labelRef.current;
             setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5);
-
         }
     };
 
@@ -97,6 +95,7 @@ const Input: React.FunctionComponent<IInput> = ({
         <div
             className={classNames("app-input", className, {
                 "app-input--validate": errorMessage,
+                "app-input--squared": variant === "squared",
             })}
         >
             <label
@@ -130,14 +129,13 @@ const Input: React.FunctionComponent<IInput> = ({
                         onFocus && onFocus(evt);
                     }}
                 />
-                {icon === "edit" && <EditIcon className="app-input__icon"/>}
+                {icon === "edit" && <EditIcon className="app-input__icon" />}
                 {label && (
                     <span
                         className={classNames("app-input__label", {
                             "app-input__label--icon": icon,
                         })}
                     >
-
                         <span ref={labelRef}>
                             {label}
                             {showLimit &&
