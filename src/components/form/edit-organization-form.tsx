@@ -210,15 +210,25 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 organization.customerCrmId !== customerCrmId ||
                 organization.organizationAssets.length !== assignedAssets.length ||
                 organization.customerCrmLink !== customerCrmLink ||
+<<<<<<< HEAD
                 organization.comments !== comments ||
                 pinned ) {
                 setIsChanged(false)
+=======
+                organization.comments !== comments
+            ) {
+                setIsChanged(false);
+>>>>>>> develop
             } else {
                 setIsChanged(true);
             }
         }
+<<<<<<< HEAD
 
     }, [name, customerCrmId, customerCrmLink, comments, assignedAssets.length, pinned])
+=======
+    }, [name, customerCrmId, customerCrmLink, comments, assignedAssets]);
+>>>>>>> develop
 
     const assignedAssetsReset = (target: HTMLButtonElement) => {
         target.blur();
