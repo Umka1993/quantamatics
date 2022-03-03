@@ -179,8 +179,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         if (isUpdated) {
             setOptions([]);
             initOptions();
-
             setSavedMessageActive(true);
+            if(organization) {
+                setCustomerLink(addHTTPtoURL(organization.customerCrmLink))
+            }
         }
     }, [isUpdated]);
 

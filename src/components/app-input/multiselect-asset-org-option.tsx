@@ -32,10 +32,7 @@ const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> 
         setSelected(
             [...selected].filter(({assetId}) => assetId !== option.assetId)
         );
-    
-    useEffect( ()=>{
-        setPinned && setPinned(isPinned)
-    },[isPinned])
+
 
     return (
         <div
@@ -57,6 +54,7 @@ const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> 
                             sharedByDefault: !isPinned,
                         };
                         setSelected(copySelected);
+                        setPinned && setPinned(copySelected[selectedID].sharedByDefault)
                     } else {
                         !isPinned && addToSelected(true)
                     }
