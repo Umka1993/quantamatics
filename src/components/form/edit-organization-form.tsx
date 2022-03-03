@@ -180,9 +180,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setOptions([]);
             initOptions();
             setSavedMessageActive(true);
-            if(organization) {
-                setCustomerLink(addHTTPtoURL(organization.customerCrmLink))
-            }
+
         }
     }, [isUpdated]);
 
@@ -190,6 +188,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         if (isSavedMessageActive) {
             setTimeout(() => setSavedMessageActive(false), 2000);
             setIsChanged(true)
+            setCustomerLink(addHTTPtoURL(customerCrmLink))
         }
     }, [isSavedMessageActive]);
 
@@ -198,13 +197,12 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setName(organization.name);
             setCustomerID(organization.customerCrmId);
             setAssignedAssets(organization.organizationAssets);
-            setCustomerLink(organization.customerCrmLink);
+            setCustomerLink(addHTTPtoURL(organization.customerCrmLink));
             setComment(organization.comments);
         }
     }, [organization]);
 
     const [pinned, setPinned] = useState<boolean | undefined>()
-
     useEffect(() => {
         if (organization) {
             if (
@@ -212,15 +210,18 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 organization.customerCrmId !== customerCrmId ||
                 organization.organizationAssets.length !== assignedAssets.length ||
                 organization.customerCrmLink !== customerCrmLink ||
-                organization.comments !== comments ||
-                pinned ) {
+                organization.comments !== comments ) {
                 setIsChanged(false)
             } else {
                 setIsChanged(true);
             }
         }
 
-    }, [name, customerCrmId, customerCrmLink, comments, assignedAssets.length, pinned])
+    }, [name, customerCrmId, customerCrmLink, comments, assignedAssets.length])
+
+    useEffect( ()=> {
+        setIsChanged(prevState => !prevState)
+    }, [pinned])
 
     const assignedAssetsReset = (target: HTMLButtonElement) => {
         target.blur();

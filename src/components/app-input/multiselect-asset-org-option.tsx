@@ -54,7 +54,7 @@ const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> 
                             sharedByDefault: !isPinned,
                         };
                         setSelected(copySelected);
-                        setPinned && setPinned(copySelected[selectedID].sharedByDefault)
+                        setPinned && setPinned(copySelected[selectedID].sharedByDefault);
                     } else {
                         !isPinned && addToSelected(true)
                     }
