@@ -1,42 +1,57 @@
 @import "../../../sass/variables";
 
 .reset {
-    font: inherit;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 18px;
-    display: inline-flex;
-    text-align: center;
-
+  font: inherit;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 18px;
+  text-align: center;
+  width: 100%;
+  color: $inactive;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  text-decoration: none;
+  &:after {
+    position: absolute;
+    content: '............';
+    width: 100%;
+    height: 0;
+    bottom: 13px;
+    left: 1px;
     color: $inactive;
-    display: flex;
+    background: white;
+  }
+
+
+
+  // TODO: circe underline
+  // background-image: radial-gradient(circle, $inactive 50%, transparent 50%);
+  // background-repeat: space;
+  // background-size: auto;
+  // background-position: bottom;
+  // padding-bottom: 1px;
+
+  // border-bottom-width: 2px;
+  // border-image: 0 url("data:image/svg+xml,%3Csvg width='7' height='3' viewBox='0 0 7 3' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1.98975' cy='1.01703' r='1' fill='%23EE0C0C'/%3E%3C/svg%3E%0A") 2px 6px;
+
+  &:not(:disabled):hover {
+    color: $accent;
     text-decoration: none;
-    text-decoration: underline dotted;
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1.5px;
-
-    // TODO: circe underline
-    // background-image: radial-gradient(circle, $inactive 50%, transparent 50%);
-    // background-repeat: space;
-    // background-size: auto;
-    // background-position: bottom;
-    // padding-bottom: 1px;
-
-    // border-bottom-width: 2px;
-    // border-image: 0 url("data:image/svg+xml,%3Csvg width='7' height='3' viewBox='0 0 7 3' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1.98975' cy='1.01703' r='1' fill='%23EE0C0C'/%3E%3C/svg%3E%0A") 2px 6px;
-
-    &:not(:disabled):hover {
-        color: $accent;
-        text-decoration: none;
+    &:after {
+      content: '';
+      z-index: -9999999;
     }
-    &:focus-within {
-        color: $accent;
-        text-decoration: none;
-    }
+  }
 
-    &:disabled {
-        cursor: default;
-    }
+  &:focus-within {
+    color: $accent;
+    text-decoration: none;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
 }

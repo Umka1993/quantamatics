@@ -53,6 +53,7 @@ const usersApi = baseApi.injectEndpoints({
 export const {
     useGetOrganizationUsersQuery,
     useGetUserQuery,
+    useLazyGetUserQuery,
     useUpdateUserMutation,
     useUpdateUserRolesMutation
 } = usersApi;

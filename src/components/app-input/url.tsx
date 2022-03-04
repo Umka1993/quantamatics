@@ -2,25 +2,18 @@ import React, {
     useState,
     useEffect,
     useRef,
-    InputHTMLAttributes,
     ChangeEventHandler,
     FormEventHandler,
     CSSProperties,
-    FocusEventHandler,
+    FunctionComponent
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
 import EditIcon from "./assets/edit.svg";
+import { IInput } from "./input";
 
-interface IInput extends InputHTMLAttributes<HTMLInputElement> {
-    error?: string;
-    label?: string;
-    externalSetter?: (value: string) => void;
-    icon?: string;
-    showLimit?: boolean;
-}
 
-const Input: React.FunctionComponent<IInput> = ({
+const Input: FunctionComponent<IInput> = ({
     className,
     label,
     placeholder,
@@ -34,6 +27,8 @@ const Input: React.FunctionComponent<IInput> = ({
     icon,
     maxLength,
     showLimit,
+    variant,
+    invalid,
     ...other
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -93,6 +88,7 @@ const Input: React.FunctionComponent<IInput> = ({
         <div
             className={classNames("app-input", className, {
                 "app-input--validate": errorMessage,
+                "app-input--squared": variant === "squared"
             })}
         >
             <label
@@ -106,7 +102,9 @@ const Input: React.FunctionComponent<IInput> = ({
                 }
             >
                 <input
-                    className="app-input__field"
+                    className={classNames("app-input__field", {
+                        "app-input__field--error": invalid,
+                    })}
                     onChange={changeHandler}
                     aria-invalid={!!errorMessage}
                     autoComplete={autoComplete}

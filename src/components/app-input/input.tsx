@@ -11,13 +11,14 @@ import "./styles/input.scss";
 import classNames from "classnames";
 import EditIcon from "./assets/edit.svg";
 
-interface IInput extends InputHTMLAttributes<HTMLInputElement> {
+export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
     error?: string;
     label?: string;
     externalSetter?: (value: string) => void;
     icon?: string;
     showLimit?: boolean;
     invalid?: boolean;
+    variant?: "squared";
 }
 
 const Input: React.FunctionComponent<IInput> = ({
@@ -36,6 +37,7 @@ const Input: React.FunctionComponent<IInput> = ({
     showLimit,
     invalid,
     onFocus,
+    variant,
     ...other
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -93,6 +95,7 @@ const Input: React.FunctionComponent<IInput> = ({
         <div
             className={classNames("app-input", className, {
                 "app-input--validate": errorMessage,
+                "app-input--squared": variant === "squared",
             })}
         >
             <label
@@ -122,6 +125,7 @@ const Input: React.FunctionComponent<IInput> = ({
                     onInvalid={invalidHandler}
                     onFocus={(evt) => {
                         reCalcLabelWidth();
+
                         onFocus && onFocus(evt);
                     }}
                 />

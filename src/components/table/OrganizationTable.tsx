@@ -53,7 +53,6 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
     }, [data, isSuccess]);
 
     useEffect(() => {
-
         if (sessionStorage.getItem("table-rows") && search?.length) {
             const normalizedSearchQuery = search.toLocaleLowerCase();
 
@@ -64,7 +63,6 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
                     customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
                     comments.toLocaleLowerCase().includes(normalizedSearchQuery)
             );
-
             setLocalRows(filteredOrgs);
         } else {
             setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
@@ -140,6 +138,8 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
             </table>
         );
     } else {
-        return <NoResultsMessage dataPresent={!!data?.length} query={search as string} />;
+        return (
+            <NoResultsMessage dataPresent={!!data?.length} query={search as string} />
+        );
     }
 };

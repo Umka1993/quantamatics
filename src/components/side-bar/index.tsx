@@ -13,6 +13,8 @@ type SideBarProps = {
 
 export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
+    const  yearToday = new Date().getFullYear();
+
     return (
         <aside
             className={classNames(style.root, { [style.collapsed]: collapsed })}
@@ -35,7 +37,7 @@ export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
 
             {!collapsed &&
                 <small className={style.copyright}>
-                    © Copyright 2021 Facteus. All <br />rights reserved. {' '}
+                    © Copyright {yearToday} Facteus. All <br />rights reserved. {' '}
                     <a href="https://www.facteus.com/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
                 </small>}
 
