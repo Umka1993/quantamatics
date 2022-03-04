@@ -16,15 +16,13 @@ import classNames from "classnames";
 import MultiselectAssetOption, {
     MultiselectAssetOptionProps,
 } from "./multiselect-asset-option";
-import { AssetInOrganization, AssetListItem } from "../../types/asset";
+import {AssetInOrganization, AssetListItem} from "../../types/asset";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 import { useClickOutside } from "../../hooks/useClickOutside";
 interface IInput
-    extends Omit<
-    MultiselectAssetOptionProps,
-    "option" | "selected" | "setSelected"
-    >,
-    SelectHTMLAttributes<HTMLSelectElement> {
+    extends Omit<MultiselectAssetOptionProps,
+        "option" | "selected" | "setSelected">,
+        SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
@@ -32,8 +30,8 @@ interface IInput
     selected: Set<string | number> | AssetInOrganization[];
 
     setSelected:
-    | Dispatch<SetStateAction<Set<string | number>>>
-    | Dispatch<SetStateAction<AssetInOrganization[]>>;
+        | Dispatch<SetStateAction<Set<string | number>>>
+        | Dispatch<SetStateAction<AssetInOrganization[]>>;
 
     errorMessage?: string;
     showError?: boolean;
@@ -72,7 +70,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
-            const { offsetWidth } = labelRef.current;
+            const {offsetWidth} = labelRef.current;
             setRightOffset(offsetWidth + 25);
         }
     };
@@ -95,11 +93,11 @@ const Multiselect: FunctionComponent<IInput> = ({
             Boolean(selected.size)
                 ? setList(
                     [
-                        ...(options as AssetListItem[]).filter(({ assetId }) =>
+                        ...(options as AssetListItem[]).filter(({assetId}) =>
                             selected.has(assetId)
                         ),
                     ]
-                        .map(({ name }) => name)
+                        .map(({name}) => name)
                         .join(", ")
                 )
                 : setList("");
@@ -108,7 +106,9 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
 
-    const toggleOptions = () => setShowOptions(!showOptions);
+    const toggleOptions = () => {
+        setShowOptions(!showOptions)
+    };
 
     // useCloseModal(showOptions, setShowOptions);
     useClickOutside(rootElement, () => setShowOptions(false), showOptions);

@@ -56,10 +56,11 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [assignedAssets, setAssignedAssets] = useState<AssetInOrganization[]>(
         organization?.organizationAssets || []
     );
+    const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
     const [isSavedMessageActive, setSavedMessageActive] = useState(false);
 
-    const [isChanged, setIsChanged] = useState(true);
+    const [isChanged, setIsChanged] = useState(false);
 
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -77,8 +78,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         setName,
         setCustomerID
     );
-
-    const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
     function initOptions() {
         if (organization && user) {
@@ -179,7 +178,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         if (isUpdated) {
             setOptions([]);
             initOptions();
-
             setSavedMessageActive(true);
         }
     }, [isUpdated]);
@@ -187,7 +185,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     useEffect(() => {
         if (isSavedMessageActive) {
             setTimeout(() => setSavedMessageActive(false), 2000);
-            setTimeout(() => setIsChanged(true), 2000);
+            setIsChanged(false);
+            setCustomerLink(addHTTPtoURL(customerCrmLink));
         }
     }, [isSavedMessageActive]);
 
@@ -196,26 +195,47 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setName(organization.name);
             setCustomerID(organization.customerCrmId);
             setAssignedAssets(organization.organizationAssets);
-            setCustomerLink(organization.customerCrmLink);
+            setCustomerLink(addHTTPtoURL(organization.customerCrmLink));
             setComment(organization.comments);
         }
-    }, [organization, isSavedMessageActive]);
+    }, [organization]);
 
     useEffect(() => {
         if (organization) {
-            if (
+            const isQuickChanged =
                 organization.name !== name ||
                 organization.customerCrmId !== customerCrmId ||
                 organization.organizationAssets.length !== assignedAssets.length ||
                 organization.customerCrmLink !== customerCrmLink ||
-                organization.comments !== comments
-            ) {
-                setIsChanged(false);
-            } else {
+                organization.comments !== comments;
+
+            if (isQuickChanged) {
                 setIsChanged(true);
+            } else {
+                let isSharedChanged = false;
+                assignedAssets.forEach((asset) => {
+                    const foundedInitialAsset = organization.organizationAssets.find(
+                        (initialAsset) => initialAsset.assetId === asset.assetId
+                    );
+
+                    if (
+                        foundedInitialAsset === undefined ||
+                        foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
+                    ) {
+                        isSharedChanged = true;
+                    }
+                });
+                setIsChanged(isSharedChanged);
             }
         }
-    }, [name, customerCrmId, customerCrmLink, comments, assignedAssets]);
+    }, [
+        name,
+        customerCrmId,
+        customerCrmLink,
+        comments,
+        assignedAssets,
+        organization,
+    ]);
 
     const assignedAssetsReset = (target: HTMLButtonElement) => {
         target.blur();
@@ -223,10 +243,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             setAssignedAssets(organization.organizationAssets);
         }
     };
-    useEffect(() => {
-        assignedAssets.length &&
-            console.log(`Is setted: ${assignedAssets[0].sharedByDefault}`);
-    }, [assignedAssets]);
 
     return (
         <form
@@ -253,7 +269,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         type="submit"
                         className={style.save}
                         disabled={
-                            isChanged ||
+                            !isChanged ||
                             isUpdating ||
                             externalLoad ||
                             Boolean(duplicateOrgError) ||
@@ -287,7 +303,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     className={style.input}
                     error={duplicateOrgError}
                     disabled={isUpdating}
-                    variant='squared'
+                    variant="squared"
                 />
                 <Input
                     externalSetter={setCustomerID}
@@ -297,7 +313,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     className={style.input}
                     error={duplicateIdError}
                     disabled={isUpdating}
-                    variant='squared'
+                    variant="squared"
                 />
 
                 <InputURL
@@ -307,7 +323,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     maxLength={72}
                     className={style.input}
                     disabled={isUpdating}
-                    variant='squared'
+                    variant="squared"
                 />
 
                 <Multiselect
@@ -324,7 +340,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         .map((asset) => asset.asset.name)
                         .join(", ")}
                     fullDisabled={isUpdating}
-                    variant='squared'
+                    variant="squared"
                 />
 
                 <Input
@@ -336,7 +352,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     showLimit
                     className={style.input}
                     disabled={isUpdating}
-                    variant='squared'
+                    variant="squared"
                 />
             </div>
         </form>
