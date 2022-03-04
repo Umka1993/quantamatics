@@ -1,7 +1,7 @@
-import React, {Dispatch, FunctionComponent, SetStateAction, useEffect, useState,} from "react";
+import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState, } from "react";
 import Checkbox from "../app-checkbox/checkbox";
 import classNames from "classnames";
-import {AssetInOrganization} from "../../types/asset";
+import { AssetInOrganization } from "../../types/asset";
 import PinButton from "../pin-button";
 
 export interface MultiselectAssetOptionProps {
@@ -9,28 +9,26 @@ export interface MultiselectAssetOptionProps {
     setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
     option: AssetInOrganization;
     disabled?: boolean;
-    setPinned?: (arg: boolean) => void
 }
 
 const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> = ({
-                                                                                       selected,
-                                                                                       option,
-                                                                                       setSelected,
-                                                                                       disabled,
-                                                                                       setPinned,
-
-                                                                                   }) => {
+    selected,
+    option,
+    setSelected,
+    disabled,
+}) => {
     const selectedID = selected.findIndex(
-        ({assetId}) => assetId === option.assetId
+        ({ assetId }) => assetId === option.assetId
     );
     const isSelected = selectedID !== -1;
     const isPinned = isSelected ? selected[selectedID].sharedByDefault : false;
 
     const addToSelected = (sharedByDefault: boolean) =>
-        setSelected([...selected, {...option, sharedByDefault}]);
+        setSelected([...selected, { ...option, sharedByDefault }]);
+
     const removeFromSelected = () =>
         setSelected(
-            [...selected].filter(({assetId}) => assetId !== option.assetId)
+            [...selected].filter(({ assetId }) => assetId !== option.assetId)
         );
 
 
@@ -54,7 +52,6 @@ const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> 
                             sharedByDefault: !isPinned,
                         };
                         setSelected(copySelected);
-                        setPinned && setPinned(copySelected[selectedID].sharedByDefault);
                     } else {
                         !isPinned && addToSelected(true)
                     }

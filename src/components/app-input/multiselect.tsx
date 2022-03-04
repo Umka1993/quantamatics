@@ -41,7 +41,6 @@ interface IInput
 
     fullDisabled?: boolean;
     variant?: "squared";
-    setPinned?: (arg: boolean) => void
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -59,7 +58,6 @@ const Multiselect: FunctionComponent<IInput> = ({
     type,
     variant,
     fullDisabled,
-                                                    setPinned,
 }) => {
     const isEditOrganization = Array.isArray(selected);
     const [rightOffset, setRightOffset] = useState<number>(20);
@@ -184,7 +182,6 @@ const Multiselect: FunctionComponent<IInput> = ({
                             selected={selected as any}
                             setSelected={setSelected as any}
                             disabled={disabled}
-                            setPinned={setPinned}
                         />
                     ) : (
                         <MultiselectAssetOption
