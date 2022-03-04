@@ -1,6 +1,6 @@
 import React, { useEffect, useState, FunctionComponent, useRef } from "react";
 import "./styles/create-organization.scss";
-import Input, { Multiselect } from "../app-input";
+import Input, { Multiselect, InputURL } from "../app-input";
 import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
@@ -13,6 +13,7 @@ import {
 } from "../../api/asset";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import normalizeName from "../../services/normalize-name";
+import addHTTPtoURL from "../../services/addHTTPtoURL";
 
 interface ICreateOrganization { }
 
@@ -48,7 +49,13 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         duplicateIdError,
         checkNameDuplicate,
         checkIdDuplicate,
-    ] = useDuplicatedOrgValues(formRef, name, customerCrmId, setName, setCustomerCrmId);
+    ] = useDuplicatedOrgValues(
+        formRef,
+        name,
+        customerCrmId,
+        setName,
+        setCustomerCrmId
+    );
     // Load all assets that are available for logged user
     const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
         useGetAllAssetsQuery(user?.organizationId as string);
@@ -76,7 +83,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         if (isError) {
             const text = (error as any).data.errors;
             console.log(text);
-
         }
     }, [isError]);
 
@@ -96,7 +102,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         if (duplicate) {
             return setStopLoading(true);
         } else {
-            register({ name: normalizeName(name), customerCrmId, customerCrmLink, comments }).unwrap();
+            register({
+                name: normalizeName(name),
+                customerCrmId,
+                customerCrmLink: addHTTPtoURL(customerCrmLink),
+                comments,
+            }).unwrap();
         }
     };
 
@@ -119,7 +130,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     maxLength={64}
                     error={duplicateOrgError}
                 />
-
                 <Input
                     externalSetter={setCustomerCrmId}
                     label="CRM Customer ID"
@@ -127,22 +137,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     maxLength={32}
                     error={duplicateIdError}
                 />
-                <Input
+                <InputURL
                     externalSetter={setCustomerCrmLink}
                     label="CRM Customer ID Link"
                     value={customerCrmLink}
-                    type="url"
-                    maxLength={64}
+                    maxLength={72}
                 />
-
-                <Input
-                    externalSetter={setComments}
-                    label="Comments"
-                    value={comments}
-                    maxLength={200}
-                    showLimit
-                />
-
                 {allAvailableAsset && (
                     <Multiselect
                         options={allAvailableAsset}
@@ -153,8 +153,14 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                         showError={assetError}
                     />
                 )}
+                <Input
+                    externalSetter={setComments}
+                    label="Comments"
+                    value={comments}
+                    maxLength={200}
+                    showLimit
+                />
             </div>
-
             <Button
                 className="create-organization__submit"
                 type="submit"
@@ -164,7 +170,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     duplicateIdError !== undefined
                 }
             >
-                Save
+                Create
             </Button>
             <ResetButton className="create-organization__cancel">Cancel</ResetButton>
         </Form>

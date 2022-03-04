@@ -1,6 +1,6 @@
-import React, { ButtonHTMLAttributes, FunctionComponent } from "react";
+import React, {ButtonHTMLAttributes, FunctionComponent} from "react";
 import "./styles/reset.scss";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import classNames from "classnames";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,14 +9,13 @@ interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Cancel: FunctionComponent<IButton> = ({
-    type = "button",
-    className,
-    href,
-    children,
-    ...other
-}) => {
+                                                type = "button",
+                                                className,
+                                                href,
+                                                children,
+                                                ...other
+                                            }) => {
     const buttonClasses = classNames("reset", className);
-
 
 
     return href ? (
@@ -24,9 +23,9 @@ const Cancel: FunctionComponent<IButton> = ({
             {children}
         </Link>
     ) : (
-        <button className={buttonClasses} type='reset' {...other}>
-            {children}
-        </button>
+            <button className={buttonClasses} type='reset' {...other}>
+                {children}
+            </button>
     );
 };
 

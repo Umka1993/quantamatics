@@ -45,4 +45,21 @@
       color: $inactive;
     }
   }
+
+  &--valid {
+    background-color: #00C04D;
+    color: #fff;
+    border-color: #00C04D;
+    &:disabled {
+      color: white;
+      &:hover {
+        background-color: #00C04D;
+        color: #fff;
+      }
+    }
+
+    @include hover-focus {
+      background: #00C04D;
+    }
+  }
 }

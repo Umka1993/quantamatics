@@ -2,22 +2,18 @@ import React, {
     useState,
     useEffect,
     useRef,
-    InputHTMLAttributes,
     ChangeEventHandler,
     FormEventHandler,
+    CSSProperties,
+    FunctionComponent
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
+import EditIcon from "./assets/edit.svg";
+import { IInput } from "./input";
 
 
-
-interface IInput extends InputHTMLAttributes<HTMLInputElement> {
-    error?: string;
-    label?: string;
-    externalSetter?: (value: string) => void;
-}
-
-const InputURL: React.FunctionComponent<IInput> = ({
+const Input: FunctionComponent<IInput> = ({
     className,
     label,
     placeholder,
@@ -28,80 +24,121 @@ const InputURL: React.FunctionComponent<IInput> = ({
     autoComplete,
     externalSetter,
     error,
+    icon,
     maxLength,
+    showLimit,
+    variant,
+    invalid,
     ...other
 }) => {
-    // const [innerValue, setInnerValue] = useState<string>(value as string);
     const inputRef = useRef<HTMLInputElement>(null);
+    const labelRef = useRef<HTMLSpanElement>(null);
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
     );
-
-    // check if any label is provided
-    let labelText = label ? label : placeholder;
-    labelText = labelText ? labelText : "Enter text";
-
+    const [rightOffset, setRightOffset] = useState<number>(20);
 
     const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-        const { value } = evt.target;
-        externalSetter && externalSetter(value);
+        externalSetter && externalSetter(evt.currentTarget.value)
         onChange && onChange(evt);
     };
 
-
-
     useEffect(() => {
+        reCalcLabelWidth();
         if (inputRef.current) {
-            error && inputRef.current.setCustomValidity(error);
+            const { validationMessage, validity, value, required } = inputRef.current;
 
-            if (value && Boolean(String(value).length)) {
-                !inputRef.current.validationMessage.length && setErrorMessage(undefined)
+            const isOnlySpaces = /^\s+$/.test(value);
+
+            if (
+                (required && (validity.valueMissing || isOnlySpaces)) ||
+                (!validity.valueMissing && validity.patternMismatch)
+            ) {
+                inputRef.current.setCustomValidity(
+                    `This is not valid ${label ? label : ""}`
+                );
+            } else {
+                inputRef.current.setCustomValidity("");
             }
+            error
+                ? inputRef.current.setCustomValidity(error)
+                : setErrorMessage(undefined);
 
-            setErrorMessage(inputRef.current.validationMessage)
+            if (!validationMessage.length) {
+                setErrorMessage(undefined);
+            }
         }
     }, [inputRef.current?.validity, error, value]);
 
     const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
         evt.preventDefault();
+
         setErrorMessage(inputRef.current?.validationMessage);
         onInvalid && onInvalid(evt);
     };
 
+    const reCalcLabelWidth = () => {
+        if (labelRef.current) {
+            const { offsetWidth } = labelRef.current;
+            setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5);
+        }
+    };
 
     return (
         <div
             className={classNames("app-input", className, {
-                "app-input--validate": true,
+                "app-input--validate": errorMessage,
+                "app-input--squared": variant === "squared"
             })}
         >
-            <div className={
-                classNames("app-input__wrapper", { "app-input__wrapper--limited": maxLength })}
-                data-limit={`${(value as string)?.length} / ${maxLength}`}
+            <label
+                className="app-input__wrapper"
+                style={
+                    label
+                        ? ({
+                            "--label-width": `${rightOffset}px`,
+                        } as CSSProperties)
+                        : undefined
+                }
             >
                 <input
-                    className="app-input__field"
+                    className={classNames("app-input__field", {
+                        "app-input__field--error": invalid,
+                    })}
                     onChange={changeHandler}
                     aria-invalid={!!errorMessage}
-                    aria-label={labelText}
                     autoComplete={autoComplete}
-                    placeholder={
-                        `${placeholder ? placeholder : labelText}${required ? '*' : ''}`
-                    }
+                    placeholder={label ? " " : placeholder}
                     required={required}
                     aria-required={required}
                     value={value || ""}
                     maxLength={maxLength}
-                    type='url'
+                    type="text"
+                    pattern='.{1,}\..{1,}'
                     {...other}
                     ref={inputRef}
                     onInvalid={invalidHandler}
                 />
-            </div>
+                {icon === "edit" && <EditIcon className="app-input__icon" />}
+                {label && (
+                    <span
+                        className={classNames("app-input__label", {
+                            "app-input__label--icon": icon,
+                        })}
+                    >
+                        <span ref={labelRef}>
+                            {label}
+                            {showLimit &&
+                                maxLength &&
+                                ` (${(value as string)?.length} / ${maxLength})`}
+                        </span>
+                    </span>
+                )}
+            </label>
 
-            {errorMessage && errorMessage.length && <p className="app-input__error">{errorMessage}</p>}
+            {errorMessage && <p className="app-input__error">{errorMessage}</p>}
         </div>
     );
 };
 
-export default InputURL;
+export default Input;

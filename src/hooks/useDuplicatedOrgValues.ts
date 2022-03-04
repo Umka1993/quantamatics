@@ -16,7 +16,7 @@ export default function useDuplicatedOrgValues(
     setName: Dispatch<SetStateAction<string>>,
     setCustomerCrmId: Dispatch<SetStateAction<string>>
 ) {
-    const { data: allOrganizations } = useGetAllOrganizationsQuery();
+    const { data: allOrganizations } = useGetAllOrganizationsQuery(undefined);
 
     const [duplicateOrgError, setDuplicateOrgError] = useState<
         undefined | UniqueError.Name

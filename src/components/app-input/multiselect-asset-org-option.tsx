@@ -1,13 +1,7 @@
-import React, {
-    useState,
-    FunctionComponent,
-    Dispatch,
-    SetStateAction,
-    useEffect,
-} from "react";
+import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState, } from "react";
 import Checkbox from "../app-checkbox/checkbox";
 import classNames from "classnames";
-import { AssetInOrganization, AssetListItem } from "../../types/asset";
+import { AssetInOrganization } from "../../types/asset";
 import PinButton from "../pin-button";
 
 export interface MultiselectAssetOptionProps {
@@ -17,9 +11,12 @@ export interface MultiselectAssetOptionProps {
     disabled?: boolean;
 }
 
-const MultiselectAssetOrgOption: FunctionComponent<
-    MultiselectAssetOptionProps
-> = ({ selected, option, setSelected, disabled }) => {
+const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> = ({
+    selected,
+    option,
+    setSelected,
+    disabled,
+}) => {
     const selectedID = selected.findIndex(
         ({ assetId }) => assetId === option.assetId
     );
@@ -28,10 +25,12 @@ const MultiselectAssetOrgOption: FunctionComponent<
 
     const addToSelected = (sharedByDefault: boolean) =>
         setSelected([...selected, { ...option, sharedByDefault }]);
+
     const removeFromSelected = () =>
         setSelected(
             [...selected].filter(({ assetId }) => assetId !== option.assetId)
         );
+
 
     return (
         <div

@@ -9,10 +9,11 @@ import React, {
 import "./styles/input.scss";
 import classNames from "classnames";
 import CalendarIcon from "./assets/calendar.svg";
-import { checkDateInputSupport, formatToValue } from "./utils/date-utils";
+import {checkDateInputSupport, formatToValue} from "./utils/date-utils";
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import 'react-day-picker/lib/style.css';
 import dateFnsFormat from 'date-fns/format';
+
 // import dateFnsParse from 'date-fns/parse';
 
 interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
@@ -27,19 +28,19 @@ interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const DatePick: React.FunctionComponent<IDatePick> = ({
-    className,
-    itemRef,
-    required,
-    label,
-    valueAsDate,
-    onChange,
-    externalSetter,
-    min,
-    minDate,
-    max,
-    maxDate,
-    ...other
-}) => {
+                                                          className,
+                                                          itemRef,
+                                                          required,
+                                                          label,
+                                                          valueAsDate,
+                                                          onChange,
+                                                          externalSetter,
+                                                          min,
+                                                          minDate,
+                                                          max,
+                                                          maxDate,
+                                                          ...other
+                                                      }) => {
     const isSupport = checkDateInputSupport();
     const labelRef = useRef<HTMLSpanElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -125,11 +126,11 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
 
                     />
                 )}
-                <CalendarIcon className="app-input__icon" />
                 {label && (
                     <span
-                        className="app-input__label app-input__label--icon app-input__label--shifted"                    >
+                        className="app-input__label app-input__label--icon app-input__label--shifted">
                         <span ref={labelRef}>{label}</span>
+                        <CalendarIcon className="app-input__icon"/>
                     </span>
                 )}
             </div>

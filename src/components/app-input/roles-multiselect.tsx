@@ -1,49 +1,49 @@
 import React, {
-    useState,
-    useRef,
+    CSSProperties,
+    Dispatch,
     FunctionComponent,
     SelectHTMLAttributes,
-    CSSProperties,
+    SetStateAction,
     useEffect,
     useLayoutEffect,
-    Dispatch,
-    SetStateAction,
+    useRef,
+    useState,
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
 import useCloseModal from "../../hooks/useCloseModal";
 import classNames from "classnames";
-import MultiselectAssetOption, {
-    MultiselectAssetOptionProps,
-} from "./multiselect-asset-option";
-import {AssetInOrganization, AssetListItem} from "../../types/asset";
-import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import {MultiselectAssetOptionProps,} from "./multiselect-asset-option";
+import {UserRole} from "../../data/enum";
+import RolesOption from "./roles-option";
+import useUser from "../../hooks/useUser";
+import {useClickOutside} from "../../hooks/useClickOutside";
+
+
 interface IInput
-    extends Omit<MultiselectAssetOptionProps,
-        "option" | "selected" | "setSelected">,
-        SelectHTMLAttributes<HTMLSelectElement> {
+    extends Omit<
+    MultiselectAssetOptionProps,
+    "option" | "selected" | "setSelected"
+    >,
+    SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
     showLimit?: boolean;
-    selected: Set<string | number> | AssetInOrganization[];
+    selected: UserRole[];
 
     setSelected:
-        | Dispatch<SetStateAction<Set<string | number>>>
-        | Dispatch<SetStateAction<AssetInOrganization[]>>;
+    | Dispatch<SetStateAction<Set<string | number>>>
+    | Dispatch<SetStateAction<UserRole[]>>;
 
     errorMessage?: string;
     showError?: boolean;
 
-    options: AssetListItem[] | AssetInOrganization[];
+    options: UserRole[];
     inputList?: string;
-
-    fullDisabled?: boolean;
-    variant?: "squared";
 }
 
-const Multiselect: FunctionComponent<IInput> = ({
+const RolesMultiselect: FunctionComponent<IInput> = ({
     options,
     label,
     placeholder,
@@ -56,21 +56,19 @@ const Multiselect: FunctionComponent<IInput> = ({
     disabled,
     inputList = "",
     type,
-    variant,
-    fullDisabled,
 }) => {
-    const isEditOrganization = Array.isArray(selected);
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const rootElement = useRef<HTMLDivElement>(null);
+
 
     const [hideError, setHideError] = useState(false);
     const [list, setList] = useState(inputList);
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
-            const {offsetWidth} = labelRef.current;
+            const { offsetWidth } = labelRef.current;
             setRightOffset(offsetWidth + 25);
         }
     };
@@ -78,48 +76,35 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     useEffect(() => {
         setHideError(
-            isEditOrganization ? Boolean(selected.length) : Boolean(selected.size)
+            Boolean(selected.length)
         );
 
         reCalcLabelWidth();
     }, [selected]);
 
     useLayoutEffect(() => {
-        if (isEditOrganization) {
-            Boolean(selected.length)
-                ? setList([...selected].map((asset) => asset.asset.name).join(", "))
-                : setList("");
-        } else {
-            Boolean(selected.size)
-                ? setList(
-                    [
-                        ...(options as AssetListItem[]).filter(({assetId}) =>
-                            selected.has(assetId)
-                        ),
-                    ]
-                        .map(({name}) => name)
-                        .join(", ")
-                )
-                : setList("");
-        }
+        Boolean(selected.length)
+            ? setList(
+                [
+                    ...(options as UserRole[]).filter((userRoleItem) =>
+                        selected.includes(userRoleItem)
+                    ),
+                ]
+                    .map((userRoleItem) => userRoleItem)
+                    .join(", ")
+            )
+            : setList("");
     }, [selected]);
 
     /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
 
-    const toggleOptions = () => {
-        setShowOptions(!showOptions)
-    };
+    const toggleOptions = () => setShowOptions(!showOptions);
 
     // useCloseModal(showOptions, setShowOptions);
-    useClickOutside(rootElement, () => setShowOptions(false), showOptions);
-
+    useClickOutside(rootElement, () => setShowOptions(false), showOptions)
     return (
         <div
-            className={classNames(
-                "app-input multiselect",
-                { "app-input--squared": variant === "squared" },
-                className
-            )}
+            className={classNames("app-input multiselect", className)}
             ref={rootElement}
             onClick={(e) => e.stopPropagation()}
         >
@@ -140,9 +125,7 @@ const Multiselect: FunctionComponent<IInput> = ({
                         "app-input__field--error":
                             showError &&
                             !hideError &&
-                            !(isEditOrganization
-                                ? Boolean(selected.length)
-                                : Boolean(selected.size)),
+                            !Boolean(selected.length)
                     })}
                     type="text"
                     placeholder={label ? " " : placeholder}
@@ -153,7 +136,6 @@ const Multiselect: FunctionComponent<IInput> = ({
                     style={{
                         cursor: "pointer",
                     }}
-                    disabled={fullDisabled}
                 />
 
                 {label && (
@@ -174,29 +156,19 @@ const Multiselect: FunctionComponent<IInput> = ({
                 })}
                 hidden={!showOptions}
             >
-                {options.map((option: any) =>
-                    isEditOrganization ? (
-                        <MultiselectAssetOrgOption
-                            key={option.assetId}
-                            option={option}
-                            selected={selected as any}
-                            setSelected={setSelected as any}
-                            disabled={disabled}
-                        />
-                    ) : (
-                        <MultiselectAssetOption
-                            key={option.assetId}
-                            option={option}
-                            selected={(selected as any).has(option.assetId)}
-                            setSelected={setSelected as any}
-                            disabled={disabled}
-                            type={type}
-                        />
-                    )
+                {options.map((option: any, index) =>
+                    <RolesOption
+                        key={index}
+                        option={option}
+                        selected={selected.includes(option)}
+                        setSelected={setSelected as any}
+                        disabled={disabled}
+                        type={type}
+                    />
                 )}
             </div>
         </div>
     );
 };
 
-export default Multiselect;
+export default RolesMultiselect;

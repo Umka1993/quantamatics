@@ -1,4 +1,6 @@
+@use "../../../sass/mixins" as *;
 @import "../../../sass/variables";
+
 .login-page {
     &__wrap {
         display: flex;
@@ -95,6 +97,9 @@
         a {
             color: $accent;
             text-decoration: none;
+            @include hover-focus {
+                color: $headlines
+            }
         }
     }
 }

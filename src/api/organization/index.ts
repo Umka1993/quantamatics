@@ -5,18 +5,24 @@ import baseApi from "../index";
 
 const organizationsApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
-        getAllOrganizations: build.query<Organization[], void>({
+        getAllOrganizations: build.query<Organization[], number | undefined>({
             query: () => ApiRoute.GetAllOrganization,
-            providesTags: (result) =>
-                result
+            providesTags: (result, _err, userID) => {
+                const tags = result
                     ? [
                         ...result.map(({ id }) => ({
                             type: "Organizations" as const,
                             id,
                         })),
-                        { type: "Organizations", id: "list" },
                     ]
-                    : [{ type: "Organizations", id: "list" }],
+                    : [];
+
+                tags.push({ type: "Organizations", id: "list" });
+                userID !== undefined &&
+                    tags.push({ type: "Organizations", id: String(userID) });
+
+                return tags;
+            },
         }),
 
         addOrganization: build.mutation<Organization, any>({
