@@ -138,7 +138,7 @@ deploy uat:
     AWS_DEFAULT_REGION: us-east-1
     ENV_SUFFIX: uat
     STACK_NAME: qmc-web-ui-$ENV_SUFFIX
-    CERTIFICATE_ARN: arn:aws:acm:us-east-1:494904037583:certificate/28c11360-be7e-45a2-a8ae-1234c334bb1d
+    CERTIFICATE_ARN: arn:aws:acm:us-east-1:494904037583:certificate/a35b39fd-f8c0-4077-a5df-1a6574fb4db0
     DISTRIBUTION_ALIAS: uat.quantamatics.net    
   only:
     - develop # temp
