@@ -1,27 +1,18 @@
-import Button, { ResetButton } from "../button";
-import React, {
-    FormEvent,
-    FunctionComponent,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
-import { Organization } from "types/organization/types";
+import Button, {ResetButton} from "../button";
+import React, {FormEvent, FunctionComponent, useCallback, useEffect, useRef, useState,} from "react";
+import {Organization} from "types/organization/types";
 import Headline from "../page-title";
-import Input, { InputURL, Multiselect } from "../app-input";
+import Input, {InputURL} from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
-import {
-    useLazyGetOrganizationQuery,
-    useUpdateOrganizationMutation,
-} from "../../api/organization";
+import {useLazyGetOrganizationQuery, useUpdateOrganizationMutation,} from "../../api/organization";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
-import { AssetInOrganization } from "../../types/asset";
+import {AssetInOrganization} from "../../types/asset";
 import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
 import CheckSVG from "./assets/check.svg";
 import addHTTPtoURL from "../../services/addHTTPtoURL";
+import AssetsModalWindow from "../app-input/assets-modal-window";
 
 interface EditOrganizationFormProps {
     organization?: Organization;
@@ -30,9 +21,9 @@ interface EditOrganizationFormProps {
 }
 
 const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
-    organization,
-    externalLoad,
-}) => {
+                                                                                organization,
+                                                                                externalLoad,
+                                                                            }) => {
     const user = useUser();
     const [assetError, setAssetError] = useState(false);
     const [
@@ -85,11 +76,11 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 setOptions(
                     [...allAssets].map((asset) => {
                         const alreadySelectedAsset = organization.organizationAssets.find(
-                            ({ assetId }) => assetId === asset.assetId
+                            ({assetId}) => assetId === asset.assetId
                         );
 
                         return alreadySelectedAsset === undefined
-                            ? { ...asset, organizationId: organization.id }
+                            ? {...asset, organizationId: organization.id}
                             : alreadySelectedAsset;
                     })
                 );
@@ -100,7 +91,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             } else {
                 getInfoOrg(user.organizationId as string)
                     .unwrap()
-                    .then(({ organizationAssets: allAssets }) =>
+                    .then(({organizationAssets: allAssets}) =>
                         prepareOptions(allAssets)
                     );
             }
@@ -244,118 +235,146 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         }
     };
 
+    const [showOptions, setShowOptions] = useState<boolean>(true);
+
+    const toggleOptions = () => {
+        setShowOptions(!showOptions)
+    };
+
     return (
-        <form
-            className={style.root}
-            onSubmit={submitHandler}
-            onReset={resetHandler}
-            ref={formRef}
-        >
-            <header className={style.header}>
-                <Headline className="edit-organization__title" style={{ margin: 0 }}>
-                    Edit Organization {organization?.parentOrganization}
-                </Headline>
-                <div className={style.buttons}>
-                    <ResetButton
-                        onClick={({ target }) =>
-                            assignedAssetsReset(target as HTMLButtonElement)
-                        }
+        <>
+            <form
+                className={style.root}
+                onSubmit={submitHandler}
+                onReset={resetHandler}
+                ref={formRef}
+            >
+                <header className={style.header}>
+                    <Headline className="edit-organization__title" style={{margin: 0}}>
+                        Edit Organization {organization?.parentOrganization}
+                    </Headline>
+                    <div className={style.buttons}>
+                        <ResetButton
+                            onClick={({target}) =>
+                                assignedAssetsReset(target as HTMLButtonElement)
+                            }
+                            disabled={isUpdating}
+                        >
+                            Cancel
+                        </ResetButton>
+
+                        <Button
+                            type="submit"
+                            className={style.save}
+                            disabled={
+                                !isChanged ||
+                                isUpdating ||
+                                externalLoad ||
+                                Boolean(duplicateOrgError) ||
+                                Boolean(duplicateIdError)
+                            }
+                            variant={isSavedMessageActive ? "valid" : undefined}
+                        >
+                            {isSavedMessageActive ? (
+                                <>
+                                    <CheckSVG
+                                        aria-hidden="true"
+                                        width={17}
+                                        height={17}
+                                        fill="currentColor"
+                                    />
+                                    Saved
+                                </>
+                            ) : (
+                                "Save"
+                            )}
+                        </Button>
+                    </div>
+                </header>
+                <div className={style.inputs}>
+                    <Input
+                        externalSetter={setName}
+                        value={name}
+                        label="Org. Name"
+                        maxLength={64}
+                        required
+                        className={style.input}
+                        error={duplicateOrgError}
                         disabled={isUpdating}
-                    >
-                        Cancel
-                    </ResetButton>
+                        variant="squared"
+                    />
+                    <Input
+                        externalSetter={setCustomerID}
+                        value={customerCrmId}
+                        label="CRM Customer ID"
+                        maxLength={32}
+                        className={style.input}
+                        error={duplicateIdError}
+                        disabled={isUpdating}
+                        variant="squared"
+                    />
 
-                    <Button
-                        type="submit"
-                        className={style.save}
-                        disabled={
-                            !isChanged ||
-                            isUpdating ||
-                            externalLoad ||
-                            Boolean(duplicateOrgError) ||
-                            Boolean(duplicateIdError)
-                        }
-                        variant={isSavedMessageActive ? "valid" : undefined}
-                    >
-                        {isSavedMessageActive ? (
-                            <>
-                                <CheckSVG
-                                    aria-hidden="true"
-                                    width={17}
-                                    height={17}
-                                    fill="currentColor"
-                                />
-                                Saved
-                            </>
-                        ) : (
-                            "Save"
-                        )}
-                    </Button>
+                    <InputURL
+                        externalSetter={setCustomerLink}
+                        value={customerCrmLink}
+                        label="CRM Customer ID Link"
+                        maxLength={72}
+                        className={style.input}
+                        disabled={isUpdating}
+                        variant="squared"
+                    />
+
+                    <Input
+                        externalSetter={setComment}
+                        value={comments}
+                        placeholder="Comments"
+                        label="Comments"
+                        maxLength={200}
+                        showLimit
+                        className={style.input}
+                        disabled={isUpdating}
+                        variant="squared"
+                    />
                 </div>
-            </header>
-            <div className={style.inputs}>
-                <Input
-                    externalSetter={setName}
-                    value={name}
-                    label="Org. Name"
-                    maxLength={64}
-                    required
-                    className={style.input}
-                    error={duplicateOrgError}
-                    disabled={isUpdating}
-                    variant="squared"
-                />
-                <Input
-                    externalSetter={setCustomerID}
-                    value={customerCrmId}
-                    label="CRM Customer ID"
-                    maxLength={32}
-                    className={style.input}
-                    error={duplicateIdError}
-                    disabled={isUpdating}
-                    variant="squared"
-                />
+            </form>
+            <div className="assets">
+                <div className='assets__manage'>
+                    <div className="assets__manage--btn">
+                        <Button
+                            type="submit"
+                            className={style.save}
+                            disabled={false}
+                            variant={isSavedMessageActive ? "valid" : undefined}
+                            onClick={toggleOptions}>
+                            Configure Assets
+                        </Button>
+                    </div>
+                    <div className="assets__manage--prompt">
+                        <p>Manage assets for the organization</p>
+                    </div>
+                </div>
 
-                <InputURL
-                    externalSetter={setCustomerLink}
-                    value={customerCrmLink}
-                    label="CRM Customer ID Link"
-                    maxLength={72}
-                    className={style.input}
-                    disabled={isUpdating}
-                    variant="squared"
-                />
-
-                <Multiselect
-                    options={options}
-                    label="Org. Assets"
-                    selected={assignedAssets}
-                    setSelected={setAssignedAssets}
-                    errorMessage="Select asset permissions to assign to the organization."
-                    showError={assetError}
-                    className={style.input}
-                    disabled={isUserOrganization}
-                    type="edit-organization"
-                    inputList={[...assignedAssets]
-                        .map((asset) => asset.asset.name)
-                        .join(", ")}
-                    fullDisabled={isUpdating}
-                    variant="squared"
-                />
-
-                <Input
-                    externalSetter={setComment}
-                    value={comments}
-                    placeholder="Comments"
-                    label="Comments"
-                    maxLength={200}
-                    showLimit
-                    className={style.input}
-                    disabled={isUpdating}
-                    variant="squared"
-                />
             </div>
-        </form>
+            {showOptions && <AssetsModalWindow
+                showOptions={showOptions}
+                setShowOptions={setShowOptions}
+                options={options}
+                selected={assignedAssets}
+                errorMessage="Select asset permissions to assign to the organization."
+                showError={assetError}
+                setSelected={setAssignedAssets}
+                disabled={isUserOrganization}
+                type="edit-organization"
+                assignedAssetsReset={assignedAssetsReset}
+                isUpdating={isUpdating}
+                isChanged={isChanged}
+                duplicateOrgError={duplicateOrgError}
+                duplicateIdError={duplicateIdError}
+                isSavedMessageActive={isSavedMessageActive}
+            />}
+
+        </>
+
     );
 };
 
