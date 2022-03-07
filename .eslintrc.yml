@@ -29,5 +29,6 @@ rules: {
   "no-extra-boolean-cast": "off",
   "@typescript-eslint/no-empty-function": ["warn"],
   "@typescript-eslint/no-empty-interface": ["warn"],
-  "@typescript-eslint/ban-types": ["warn"]
+  "@typescript-eslint/ban-types": ["warn"],
+  "object-curly-spacing": ["error", "always", { "arraysInObjects": false }],
 }
