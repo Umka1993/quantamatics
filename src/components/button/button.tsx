@@ -24,8 +24,8 @@ const Button: FunctionComponent<IButton> = ({
             {children}
         </Link>
     ) : (
-        <button className={buttonClasses} {...other}>
-                {children}
+        <button className={buttonClasses} type={type} {...other}>
+            {children}
         </button>
     );
 };

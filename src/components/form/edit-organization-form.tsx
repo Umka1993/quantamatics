@@ -1,11 +1,21 @@
 import Button from "../button";
-import React, { FormEvent, FunctionComponent, useCallback, useEffect, useRef, useState, } from "react";
+import React, {
+    FormEvent,
+    FunctionComponent,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { Organization } from "types/organization/types";
 
 import Input, { InputURL } from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
-import { useLazyGetOrganizationQuery, useUpdateOrganizationMutation, } from "../../api/organization";
+import {
+    useLazyGetOrganizationQuery,
+    useUpdateOrganizationMutation,
+} from "../../api/organization";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import { AssetInOrganization } from "../../types/asset";
 import useUser from "../../hooks/useUser";
@@ -14,7 +24,8 @@ import normalizeName from "../../services/normalize-name";
 import addHTTPtoURL from "../../services/addHTTPtoURL";
 import AssetsModalWindow from "../app-input/assets-modal-window";
 
-import SaveResetHeader from '../save-reset-header/SaveResetHeader';
+import SaveResetHeader from "../save-reset-header/SaveResetHeader";
+import DocIcon from './assets/doc.svg'
 
 interface EditOrganizationFormProps {
     organization?: Organization;
@@ -223,12 +234,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         organization,
     ]);
 
-
-
     const [showOptions, setShowOptions] = useState<boolean>(true);
 
     const toggleOptions = () => {
-        setShowOptions(!showOptions)
+        setShowOptions(prevState => !prevState);
     };
 
     return (
@@ -239,13 +248,16 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 onReset={resetHandler}
                 ref={formRef}
             >
-                <SaveResetHeader headline='Edit Organization'
+                <SaveResetHeader
+                    headline="Edit Organization"
                     disableReset={isUpdating}
-                    disableSave={!isChanged ||
+                    disableSave={
+                        !isChanged ||
                         isUpdating ||
                         externalLoad ||
                         Boolean(duplicateOrgError) ||
-                        Boolean(duplicateIdError)}
+                        Boolean(duplicateIdError)
+                    }
                     isSavedMessageActive={isSavedMessageActive}
                 />
                 <div className={style.inputs}>
@@ -293,43 +305,39 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         variant="squared"
                     />
                 </div>
+
+                <p className={style.assets}>
+                    <Button
+                        type='button'
+                        className={style.save}
+                        disabled={false}
+                        onClick={toggleOptions}
+                    >
+                        <DocIcon width={21} height={21} fill='currentColor' aria-hidden />
+                        Configure Assets
+                    </Button>
+                    Manage assets for the organization
+                </p>
             </form>
-            <div className="assets">
-                <div className='assets__manage'>
-                    <div className="assets__manage--btn">
-                        <Button
-                            type="submit"
-                            className={style.save}
-                            disabled={false}
-                            variant={isSavedMessageActive ? "valid" : undefined}
-                            onClick={toggleOptions}>
-                            Configure Assets
-                        </Button>
-                    </div>
-                    <div className="assets__manage--prompt">
-                        <p>Manage assets for the organization</p>
-                    </div>
-                </div>
 
-            </div>
-            {showOptions && <AssetsModalWindow
-                showOptions={showOptions}
-                setShowOptions={setShowOptions}
-                options={options}
-                selected={assignedAssets}
-                errorMessage="Select asset permissions to assign to the organization."
-                showError={assetError}
-                setSelected={setAssignedAssets}
-                disabled={isUserOrganization}
-                type="edit-organization"
-                // assignedAssetsReset={assignedAssetsReset}
-                isUpdating={isUpdating}
-                isChanged={isChanged}
-                isSavedMessageActive={isSavedMessageActive}
-            />}
-
+            {showOptions && (
+                <AssetsModalWindow
+                    showOptions={showOptions}
+                    setShowOptions={setShowOptions}
+                    options={options}
+                    selected={assignedAssets}
+                    errorMessage="Select asset permissions to assign to the organization."
+                    showError={assetError}
+                    setSelected={setAssignedAssets}
+                    disabled={isUserOrganization}
+                    type="edit-organization"
+                    // assignedAssetsReset={assignedAssetsReset}
+                    isUpdating={isUpdating}
+                    isChanged={isChanged}
+                    isSavedMessageActive={isSavedMessageActive}
+                />
+            )}
         </>
-
     );
 };
 
