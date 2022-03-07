@@ -1,8 +1,8 @@
-import React, {ReactElement} from "react";
-import {useSelector} from "react-redux";
-import {RootState} from "../store";
+import React, { ReactElement } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
-import {AuthorizationStatus} from "../data/enum"
+import { AuthorizationStatus } from "../data/enum"
 import UnLoggedLayout from "./unlogged";
 import WithSideBarLayout from "./with-sidebar";
 

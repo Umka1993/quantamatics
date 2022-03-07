@@ -16,7 +16,7 @@ import classNames from "classnames";
 import MultiselectAssetOption, {
     MultiselectAssetOptionProps,
 } from "./multiselect-asset-option";
-import {AssetInOrganization, AssetListItem} from "../../types/asset";
+import { AssetInOrganization, AssetListItem } from "../../types/asset";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 import { useClickOutside } from "../../hooks/useClickOutside";
 interface IInput
@@ -70,7 +70,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     const reCalcLabelWidth = () => {
         if (labelRef.current) {
-            const {offsetWidth} = labelRef.current;
+            const { offsetWidth } = labelRef.current;
             setRightOffset(offsetWidth + 25);
         }
     };
@@ -93,11 +93,11 @@ const Multiselect: FunctionComponent<IInput> = ({
             Boolean(selected.size)
                 ? setList(
                     [
-                        ...(options as AssetListItem[]).filter(({assetId}) =>
+                        ...(options as AssetListItem[]).filter(({ assetId }) =>
                             selected.has(assetId)
                         ),
                     ]
-                        .map(({name}) => name)
+                        .map(({ name }) => name)
                         .join(", ")
                 )
                 : setList("");
