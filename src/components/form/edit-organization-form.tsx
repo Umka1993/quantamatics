@@ -331,7 +331,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     setSelected={setAssignedAssets}
                     disabled={isUserOrganization}
                     type="edit-organization"
-                    // assignedAssetsReset={assignedAssetsReset}
                     isUpdating={isUpdating}
                     isChanged={isChanged}
                     isSavedMessageActive={isSavedMessageActive}
