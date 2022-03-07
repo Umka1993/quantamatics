@@ -20,8 +20,8 @@ import { useClickOutside } from "../../hooks/useClickOutside";
 
 interface IInput
     extends Omit<MultiselectAssetOptionProps,
-        "option" | "selected" | "setSelected">,
-        SelectHTMLAttributes<HTMLSelectElement> {
+    "option" | "selected" | "setSelected">,
+    SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
@@ -29,8 +29,8 @@ interface IInput
     selected: Set<string | number> | AssetInOrganization[];
 
     setSelected:
-        | Dispatch<SetStateAction<Set<string | number>>>
-        | Dispatch<SetStateAction<AssetInOrganization[]>>;
+    | Dispatch<SetStateAction<Set<string | number>>>
+    | Dispatch<SetStateAction<AssetInOrganization[]>>;
 
     errorMessage?: string;
     showError?: boolean;
@@ -43,21 +43,21 @@ interface IInput
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
-                                                    options,
-                                                    label,
-                                                    placeholder,
-                                                    onFocus,
-                                                    setSelected,
-                                                    selected,
-                                                    errorMessage,
-                                                    showError,
-                                                    className,
-                                                    disabled,
-                                                    inputList = "",
-                                                    type,
-                                                    variant,
-                                                    fullDisabled,
-                                                }) => {
+    options,
+    label,
+    placeholder,
+    onFocus,
+    setSelected,
+    selected,
+    errorMessage,
+    showError,
+    className,
+    disabled,
+    inputList = "",
+    type,
+    variant,
+    fullDisabled,
+}) => {
     const isEditOrganization = Array.isArray(selected);
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
@@ -116,7 +116,7 @@ const Multiselect: FunctionComponent<IInput> = ({
         <div
             className={classNames(
                 "app-input multiselect",
-                {"app-input--squared": variant === "squared"},
+                { "app-input--squared": variant === "squared" },
                 className
             )}
             ref={rootElement}

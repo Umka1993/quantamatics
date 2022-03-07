@@ -1,27 +1,26 @@
-/**  
- * ! Class naming doesn't work correctly, I'll figure out what's wrong later
- * But the main functionality of css modules is working
- * */
+const getCSSModuleLocalIdent = require("./getCSSModuleLocalIdent.js");
 
 exports.MODULE_STYLE_LOADERS = {
-    test: /\.(sa|sc|c)ss$/,
+    test: /\.module.(sa|sc|c)ss$/,
     use: [
         "style-loader",
         {
-            loader: "css-loader",
+            loader: require.resolve('css-loader'),
             options: {
-                importLoaders: 1,
-                modules: true,
-                localIdentName: "[name]__[local]__[hash:base64:5]",
+                importLoaders: 3,
+                sourceMap: process.env.NODE_ENV === 'development',
+                modules: {
+                    mode: 'local',
+                    getLocalIdent: getCSSModuleLocalIdent,
+                },
             },
         },
         "sass-loader",
     ],
-    include: /\.module$/,
 };
 
 exports.DEFAULT_STYLE_LOADERS = {
     test: /\.(sa|sc|c)ss$/,
     use: ["style-loader", "css-loader", "sass-loader"],
-    exclude: /\.module\.css$/,
+    exclude: /\.module/,
 };
