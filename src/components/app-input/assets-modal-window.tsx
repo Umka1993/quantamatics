@@ -8,19 +8,17 @@ import React, {
     useState
 } from 'react';
 import classNames from "classnames";
-import {useClickOutside} from "../../hooks/useClickOutside";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 import "./styles/assets.scss";
-import MultiselectAssetOption, {MultiselectAssetOptionProps} from "./multiselect-asset-option";
-import {AssetInOrganization, AssetListItem} from "../../types/asset";
-import style from "../form/styles/edit-organization.module.scss";
-import Button, {ResetButton} from "../button";
-import CheckSVG from "../form/assets/check.svg";
-import {SortDirection, UniqueError} from "../../data/enum";
+import MultiselectAssetOption, { MultiselectAssetOptionProps } from "./multiselect-asset-option";
+import { AssetInOrganization, AssetListItem } from "../../types/asset";
+import { SortDirection, UniqueError } from "../../data/enum";
 import sortTable from "../sort-table-header/utils/sort";
 import SortIcon from "../sort-table-header/assets/sort-icon.svg";
 import ISort from "../../types/sort-type";
-import {IUpdateUser} from "../../types/user";
+import { IUpdateUser } from "../../types/user";
+import SaveResetHeader from '../save-reset-header/SaveResetHeader';
 
 
 interface IAssetsModalWindow extends Omit<MultiselectAssetOptionProps,
@@ -33,43 +31,38 @@ interface IAssetsModalWindow extends Omit<MultiselectAssetOptionProps,
     errorMessage?: string;
     showError?: boolean;
     setSelected:
-        | Dispatch<SetStateAction<Set<string | number>>>
-        | Dispatch<SetStateAction<AssetInOrganization[]>>;
-    assignedAssetsReset: (target: HTMLButtonElement) => void
+    | Dispatch<SetStateAction<Set<string | number>>>
+    | Dispatch<SetStateAction<AssetInOrganization[]>>;
+    // assignedAssetsReset: (target: HTMLButtonElement) => void
     isUpdating: boolean,
     isChanged: boolean,
     externalLoad?: boolean;
-    duplicateOrgError: undefined | UniqueError.Name
-    duplicateIdError: undefined | UniqueError.ID
     isSavedMessageActive: boolean,
 
 
 }
 
 const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
-                                                                      showOptions,
-                                                                      setShowOptions,
-                                                                      selected,
-                                                                      errorMessage,
-                                                                      showError,
-                                                                      setSelected,
-                                                                      disabled,
-                                                                      options,
-                                                                      assignedAssetsReset,
-                                                                      type,
-                                                                      isUpdating,
-                                                                      isChanged,
-                                                                      externalLoad,
-                                                                      duplicateOrgError,
-                                                                      duplicateIdError,
-                                                                      isSavedMessageActive,
-
-                                                                  }) => {
+    showOptions,
+    setShowOptions,
+    selected,
+    errorMessage,
+    showError,
+    setSelected,
+    disabled,
+    options,
+    // assignedAssetsReset,
+    type,
+    isUpdating,
+    isChanged,
+    externalLoad,
+    isSavedMessageActive,
+}) => {
     const rootElement = useRef<HTMLDivElement>(null);
     const isEditOrganization = Array.isArray(selected);
     const [hideError, setHideError] = useState(false);
     const [scrollY, setScrollY] = useState<number>(0);
-    const INITIAL_SORT = {name: "", direction: SortDirection.Up}
+    const INITIAL_SORT = { name: "", direction: SortDirection.Up }
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
     const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
     const [visible, setVisible] = useState('')
@@ -98,63 +91,26 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
 
     return (
         <>
-            <div
+            <article
                 className={classNames("assets__modal")}
             >
                 {showError && !hideError && (
                     <p className="app-input__error">{errorMessage}</p>
                 )}
                 <div className={`assets__modal--body ${visible}`}
-                     ref={rootElement}>
-                    <div className="assets__header">
-                        <div className="assets__header--wrap">
-                            <div className="assets__header--title">
-                                <h3>Application Assets</h3>
-                            </div>
-                            <div className="assets__header--buttons">
-                                <div className={style.buttons}>
-                                    <ResetButton
-                                        onClick={({target}) =>
-                                            assignedAssetsReset(target as HTMLButtonElement)
-                                        }
-                                        disabled={isUpdating}
-                                    >
-                                        Cancel
-                                    </ResetButton>
+                    ref={rootElement}>
 
-                                    <Button
-                                        type="submit"
-                                        className={style.save}
-                                        disabled={
-                                            !isChanged ||
-                                            isUpdating ||
-                                            externalLoad ||
-                                            Boolean(duplicateOrgError) ||
-                                            Boolean(duplicateIdError)
-                                        }
-                                        variant={isSavedMessageActive ? "valid" : undefined}
-                                    >
-                                        {isSavedMessageActive ? (
-                                            <>
-                                                <CheckSVG
-                                                    aria-hidden="true"
-                                                    width={17}
-                                                    height={17}
-                                                    fill="currentColor"
-                                                />
-                                                Saved
-                                            </>
-                                        ) : (
-                                            "Save"
-                                        )}
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <SaveResetHeader headline='Application Assets'
+                        disableReset={isUpdating}
+                        disableSave={!isChanged ||
+                            isUpdating ||
+                            externalLoad
+                        }
+                        isSavedMessageActive={isSavedMessageActive}
+                    />
+            
                     <div
-                        className={classNames("assets__options", {})}
-
+                        className={classNames("assets__options")}
                     >
                         <ul className="assets__options--header">
                             <li
@@ -170,7 +126,7 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                                     className='sort-table-header__button'
                                 >
                                     Name
-                                    <SortIcon aria-hidden/>
+                                    <SortIcon aria-hidden />
                                 </button>
                             </li>
                             <li>Read</li>
@@ -201,7 +157,7 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                 </div>
 
 
-            </div>
+            </article>
         </>
 
     );

@@ -13,25 +13,6 @@
     position: relative;
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 30px;
-}
-
-.buttons {
-    display: flex;
-    align-items: center;
-    width: 230px;
-    justify-content: space-between;
-}
-
-.save {
-    min-width: 140px;
-    height: 40px;
-}
-
 .input {
     flex: 1 1 400px;
     margin: 12.5px;
