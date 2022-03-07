@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import Checkbox from "../app-checkbox/checkbox";
 import { AssetListItem } from "../../types/asset";
-import {UserRole, UserRoleLabel} from "../../data/enum";
+import { UserRole, UserRoleLabel } from "../../data/enum";
 export interface RolesOptionProps {
     selected: boolean;
     setSelected: Dispatch<SetStateAction<UserRole[]>>

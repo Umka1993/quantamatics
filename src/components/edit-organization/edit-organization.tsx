@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect} from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import "./styles/edit-organizations.scss";
 import AddIcon from "./assets/human-add.svg";
 import Button from "../button";

@@ -1,23 +1,23 @@
-import React, {FunctionComponent, useEffect, useLayoutEffect, useMemo, useState} from "react";
+import React, { FunctionComponent, useEffect, useLayoutEffect, useMemo, useState } from "react";
 
 import EditSVG from "./assets/edit-row-icon.svg";
 
-import {EditProfile} from "../edit-modal/edit-profile";
-import {SortTableHeader} from "../sort-table-header/SortTableHeader";
-import {adaptRoles} from "../../services/baseService";
+import { EditProfile } from "../edit-modal/edit-profile";
+import { SortTableHeader } from "../sort-table-header/SortTableHeader";
+import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
-import {IUpdateUser} from "../../types/user";
+import { IUpdateUser } from "../../types/user";
 import ISort from "../../types/sort-type";
-import {useGetOrganizationUsersQuery} from "../../api/user";
+import { useGetOrganizationUsersQuery } from "../../api/user";
 import "./styles/table.scss";
-import {USER_HEADER} from "./utils/constants";
-import {SortDirection} from "../../data/enum";
+import { USER_HEADER } from "./utils/constants";
+import { SortDirection } from "../../data/enum";
 
 interface UserTableProps {
     orgId: string;
 }
 
-export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
+export const UserTable: FunctionComponent<UserTableProps> = ({ orgId }) => {
     // ? Need to be in component to reset sort after update
     const INITIAL_SORT = { name: "", direction: SortDirection.Default }
 

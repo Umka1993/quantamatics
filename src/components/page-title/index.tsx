@@ -1,5 +1,5 @@
 import { AppInfo } from "../../data/enum";
-import React, {useEffect, FunctionComponent, HTMLAttributes, useRef } from "react";
+import React, { useEffect, FunctionComponent, HTMLAttributes, useRef } from "react";
 import "./style/page-title.scss";
 
 interface HeadlineProps extends HTMLAttributes<HTMLHeadingElement> {

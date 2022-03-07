@@ -13,11 +13,11 @@ import "./styles/input.scss";
 import "./styles/multiselect.scss";
 import useCloseModal from "../../hooks/useCloseModal";
 import classNames from "classnames";
-import {MultiselectAssetOptionProps,} from "./multiselect-asset-option";
-import {UserRole} from "../../data/enum";
+import { MultiselectAssetOptionProps, } from "./multiselect-asset-option";
+import { UserRole } from "../../data/enum";
 import RolesOption from "./roles-option";
 import useUser from "../../hooks/useUser";
-import {useClickOutside} from "../../hooks/useClickOutside";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 
 interface IInput

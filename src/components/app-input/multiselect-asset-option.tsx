@@ -1,6 +1,6 @@
-import React, {Dispatch, FunctionComponent, SetStateAction, useEffect, useState,} from "react";
+import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState, } from "react";
 import Checkbox from "../app-checkbox/checkbox";
-import {AssetListItem} from "../../types/asset";
+import { AssetListItem } from "../../types/asset";
 export interface MultiselectAssetOptionProps {
     selected: boolean;
     setSelected: Dispatch<SetStateAction<Set<string | number >>> 

@@ -9,6 +9,6 @@ export function logoutFromJupiter() {
     //         logoutWindow.close();
     //     }, 6000)
     
-    const user_logout = axios.get(JUPITER_LOGOUT, {withCredentials: true});
+    const user_logout = axios.get(JUPITER_LOGOUT, { withCredentials: true });
     localStorage.removeItem('jupiter-logged');
 }

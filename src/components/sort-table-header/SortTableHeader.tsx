@@ -1,5 +1,5 @@
-import {SortDirection} from "../../data/enum";
-import React, {Dispatch, FunctionComponent, SetStateAction, useEffect} from "react";
+import { SortDirection } from "../../data/enum";
+import React, { Dispatch, FunctionComponent, SetStateAction, useEffect } from "react";
 import sortTable from "./utils/sort";
 import SortIcon from "./assets/sort-icon.svg";
 import "./styles/sort-th.scss";

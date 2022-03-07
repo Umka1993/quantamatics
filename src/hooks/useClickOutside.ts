@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 export const useClickOutside = (ref: any, callback: any, state: boolean) => {
     useEffect(() => {
