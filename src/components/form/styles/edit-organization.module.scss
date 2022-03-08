@@ -23,18 +23,18 @@
 .buttons {
     display: flex;
     align-items: center;
-    width: 229px;
+    width: 230px;
     justify-content: space-between;
 }
 
 .save {
-    width: 140px;
+    min-width: 140px;
     height: 40px;
 }
 
 .input {
-    flex: 1 1 500px;
-    margin: 5px 18px;
+    flex: 1 1 400px;
+    margin: 12.5px;
 
     @media (max-width: 900px) {
         flex-basis: auto;
@@ -43,8 +43,6 @@
 
 .inputs {
     display: flex;
-    margin: -5px -18px;
+    margin: -12.5px;
     flex-wrap: wrap;
-    // opacity: 0;
-    // animation: fadeIn 0.2s ease-in 0.8s forwards;
 }

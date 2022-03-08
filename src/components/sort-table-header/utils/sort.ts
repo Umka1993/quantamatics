@@ -11,7 +11,11 @@ const sortTable = (
 ) => {    
     const newSort = sort;
 
-    if (name === sort.name) {
+
+    if (
+        name === sort.name
+        || '' === sort.mame
+    ) {
         switch (sort.direction) {
             case SortDirection.Up:
                 newSort.direction = SortDirection.Down;

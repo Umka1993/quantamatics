@@ -12,14 +12,10 @@ import classNames from "classnames";
 import EditIcon from "./assets/edit.svg";
 import getValidationMessage from "./utils/emailValidation";
 import { RegExpValidation } from "../../data/enum";
+import { IInput } from "./input";
 
-interface IEmail extends InputHTMLAttributes<HTMLInputElement> {
-    error?: string,
-    label?: string,
-    externalSetter?: (value: string) => void,
+interface IEmail extends IInput {
     hideError?: boolean,
-    icon?: string,
-    showLimit?: boolean,
 }
 
 const Email: React.FunctionComponent<IEmail> = ({
@@ -36,6 +32,7 @@ const Email: React.FunctionComponent<IEmail> = ({
     icon,
     name,
     onFocus,
+    variant,
     showLimit,
     maxLength,
     ...other
@@ -80,6 +77,7 @@ const Email: React.FunctionComponent<IEmail> = ({
         <div
             className={classNames("app-input", className, {
                 "app-input--validate": errorMessage,
+                "app-input--squared": variant === "squared",
             })}
         >
             <label
