@@ -234,7 +234,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         organization,
     ]);
 
-    const [showOptions, setShowOptions] = useState<boolean>(true);
+    const [showOptions, setShowOptions] = useState<boolean>(false);
 
     const toggleOptions = () => {
         setShowOptions(prevState => !prevState);

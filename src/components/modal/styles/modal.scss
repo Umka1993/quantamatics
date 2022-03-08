@@ -21,25 +21,10 @@
   min-height: 602px;
   cursor: default;
 
-  inset: 0;
   z-index: 200;
 
   margin: auto;
-  position: fixed;
-  border: none;
-
-  &:not([open]) {
-    display: none;
-  }
-
-  &::backdrop,
-  & + .backdrop {
-    background-color: transparentize(#263768, 0.2);
-    position: fixed;
-    z-index: 180;
-    inset: 0;
-    cursor: pointer;
-  }
+  position: relative;
 
   &:focus {
     outline: none;

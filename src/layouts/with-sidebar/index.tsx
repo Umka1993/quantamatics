@@ -11,6 +11,8 @@ import useUser from "../../hooks/useUser";
 import { useGetUserQuery } from "../../api/user";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authorization";
+import Dialog from "../../components/dialog";
+import { useCallback } from "react";
 
 export default function WithSideBarLayout(): ReactElement {
     const logout = useLogout();
@@ -34,16 +36,25 @@ export default function WithSideBarLayout(): ReactElement {
         }
     }, [isUserLoaded, dispatch, userRoles]);
 
+    const closeModalProfile = useCallback(() => setShowProfile(false), [setShowProfile])
+    const openModalProfile = useCallback(() => setShowProfile(true), [setShowProfile])
     return (
         <>
-            <SideBar openModal={() => setShowProfile(true)} />
+            <SideBar openModal={openModalProfile} />
             <main className={style.main}>
                 <PrivateRoutes />
             </main>
 
-            {showProfile && user && (
-                <EditPassword onClose={() => setShowProfile(false)} />
-            )}
+            <Dialog
+                open={showProfile}
+                onRequestClose={closeModalProfile}
+                closeOnOutsideClick
+                headline="My Account"
+                id="user-account-modal"
+            >
+                {user && <EditPassword onClose={closeModalProfile} />}
+            </Dialog>
+
         </>
     );
 }

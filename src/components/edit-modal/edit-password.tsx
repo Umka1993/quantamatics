@@ -87,128 +87,125 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
         isSuccess && onClose();
     }, [isSuccess]);
 
-    return (
-        <Modal onClose={onClose} className="edit-account" headline="My Account">
-            {isLoading || isLoadUser || user === undefined ? (
-                <Loader />
-            ) : (
-                <>
-                    <dl className="edit-account__list">
-                        <div className="edit-account__row">
-                            <dt className="edit-account__name">First Name</dt>
-                            <dd className="edit-account__value">{user.firstName}</dd>
-                        </div>
-                        <div className="edit-account__row">
-                            <dt className="edit-account__name">Last Name</dt>
-                            <dd className="edit-account__value">{user.lastName}</dd>
-                        </div>
-                        <div className="edit-account__row">
-                            <dt className="edit-account__name">Organization</dt>
-                            <dd className="edit-account__value">{user.companyName}</dd>
-                        </div>
-                        <div className="edit-account__row">
-                            <dt className="edit-account__name">Organization Role</dt>
+    return (isLoading || isLoadUser || user === undefined ? (
+        <Loader />
+    ) : (
+        <>
+            <dl className="edit-account__list">
+                <div className="edit-account__row">
+                    <dt className="edit-account__name">First Name</dt>
+                    <dd className="edit-account__value">{user.firstName}</dd>
+                </div>
+                <div className="edit-account__row">
+                    <dt className="edit-account__name">Last Name</dt>
+                    <dd className="edit-account__value">{user.lastName}</dd>
+                </div>
+                <div className="edit-account__row">
+                    <dt className="edit-account__name">Organization</dt>
+                    <dd className="edit-account__value">{user.companyName}</dd>
+                </div>
+                <div className="edit-account__row">
+                    <dt className="edit-account__name">Organization Role</dt>
 
-                            <dd className="edit-account__value">
-                                <ComaList list={adaptRoles(userRoles)} />
-                            </dd>
-                        </div>
-                        <div className="edit-account__row">
-                            <dt className="edit-account__name">Assigned Assets</dt>
+                    <dd className="edit-account__value">
+                        <ComaList list={adaptRoles(userRoles)} />
+                    </dd>
+                </div>
+                <div className="edit-account__row">
+                    <dt className="edit-account__name">Assigned Assets</dt>
 
-                            {userAsset && Boolean(userAsset.length) && (
-                                <dd className="edit-account__value">
-                                    <ComaList
-                                        list={userAsset.map(
-                                            ({ name }: AssetServerResponse) => name
-                                        )}
-                                    />
-                                </dd>
-                            )}
-                        </div>
-                        <div className="edit-account__row">
-                            <dt className="edit-account__name">Email</dt>
-                            <dd className="edit-account__value">{user.email}</dd>
-                        </div>
-                        <div className="edit-account__row">
-                            <dt className="edit-account__name">Expiration Date</dt>
-                            <dd className="edit-account__value">
-                                {user.subscriptionEndDate.split(" ")[0]}
-                            </dd>
-                        </div>
-                        {!showEditForm && !user.userRoles.includes(UserRole.Demo) && (
-                            <div className="edit-account__row edit-account__row--inactive">
-                                <dt className="edit-account__name">Current Password</dt>
-                                <dd className="edit-account__value">
-                                    <button
-                                        type="button"
-                                        className="edit-account__button"
-                                        onClick={() => setShowEditForm(true)}
-                                    >
-                                        change
-                                        <KeyIcon aria-hidden="true" fill="currentColor" />
-                                    </button>
-                                </dd>
-                            </div>
-                        )}
-                    </dl>
-                    {showEditForm && (
-                        <form
-                            id="edit-pass-form"
-                            action=""
-                            className="edit-account__form edit-account__form--pass"
-                            onSubmit={handlerSubmit}
-                            onReset={onClose}
-                            ref={formRef}
-                        >
+                    {userAsset && Boolean(userAsset.length) && (
+                        <dd className="edit-account__value">
+                            <ComaList
+                                list={userAsset.map(
+                                    ({ name }: AssetServerResponse) => name
+                                )}
+                            />
+                        </dd>
+                    )}
+                </div>
+                <div className="edit-account__row">
+                    <dt className="edit-account__name">Email</dt>
+                    <dd className="edit-account__value">{user.email}</dd>
+                </div>
+                <div className="edit-account__row">
+                    <dt className="edit-account__name">Expiration Date</dt>
+                    <dd className="edit-account__value">
+                        {user.subscriptionEndDate.split(" ")[0]}
+                    </dd>
+                </div>
+                {!showEditForm && !user.userRoles.includes(UserRole.Demo) && (
+                    <div className="edit-account__row edit-account__row--inactive">
+                        <dt className="edit-account__name">Current Password</dt>
+                        <dd className="edit-account__value">
                             <button
                                 type="button"
-                                className="edit-account__button edit-account__button--cancel"
-                                onClick={() => setShowEditForm(false)}
+                                className="edit-account__button"
+                                onClick={() => setShowEditForm(true)}
                             >
-                                cancel
+                                change
+                                <KeyIcon aria-hidden="true" fill="currentColor" />
                             </button>
-                            <Password
-                                placeholder="Current Password"
-                                value={currentPassword}
-                                externalSetter={setCurrentPassword}
-                                name="password"
-                                autoComplete="current-password"
-                                error={wrongCurrent}
-                            />
+                        </dd>
+                    </div>
+                )}
+            </dl>
+            {showEditForm && (
+                <form
+                    id="edit-pass-form"
+                    action=""
+                    className="edit-account__form edit-account__form--pass"
+                    onSubmit={handlerSubmit}
+                    onReset={onClose}
+                    ref={formRef}
+                >
+                    <button
+                        type="button"
+                        className="edit-account__button edit-account__button--cancel"
+                        onClick={() => setShowEditForm(false)}
+                    >
+                        cancel
+                    </button>
+                    <Password
+                        placeholder="Current Password"
+                        value={currentPassword}
+                        externalSetter={setCurrentPassword}
+                        name="password"
+                        autoComplete="current-password"
+                        error={wrongCurrent}
+                    />
 
-                            <Password
-                                autoComplete="new-password"
-                                value={newPassword}
-                                externalSetter={setNewPassword}
-                                placeholder="New Password"
-                                error={compare}
-                                hideError
-                            />
-                            <Password
-                                autoComplete="new-password"
-                                value={confirmPassword}
-                                externalSetter={setConfirmPassword}
-                                placeholder="Confirm New Password"
-                                error={compare}
-                            />
-                        </form>
-                    )}
-
-                    <footer className="edit-account__footer">
-                        <ResetButton onClick={onClose}>Cancel</ResetButton>
-                        <Button
-                            type="submit"
-                            disabled={
-                                !Boolean(currentPassword && newPassword && confirmPassword)
-                            }
-                            form="edit-pass-form"
-                        >
-                            Save
-                        </Button>
-                    </footer>
-                </>
+                    <Password
+                        autoComplete="new-password"
+                        value={newPassword}
+                        externalSetter={setNewPassword}
+                        placeholder="New Password"
+                        error={compare}
+                        hideError
+                    />
+                    <Password
+                        autoComplete="new-password"
+                        value={confirmPassword}
+                        externalSetter={setConfirmPassword}
+                        placeholder="Confirm New Password"
+                        error={compare}
+                    />
+                </form>
             )}
-        </Modal>
+
+            <footer className="edit-account__footer">
+                <ResetButton onClick={onClose}>Cancel</ResetButton>
+                <Button
+                    type="submit"
+                    disabled={
+                        !Boolean(currentPassword && newPassword && confirmPassword)
+                    }
+                    form="edit-pass-form"
+                >
+                    Save
+                </Button>
+            </footer>
+        </>
+    )
     );
 };
