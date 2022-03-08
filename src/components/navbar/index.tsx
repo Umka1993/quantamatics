@@ -34,11 +34,11 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
         user?.userRoles.includes(UserRole.Admin) ||
         user?.userRoles.includes(UserRole.OrgOwner);
 
-    const subItems: NavLinkContent[] = [
-        { href: AppRoute.Files, text: "My Files", icon: FilesIcon },
-        { href: AppRoute.Shared, text: "Shared With Me", icon: ShareIcon },
-    ];
-
+    /*  const subItems: NavLinkContent[] = [
+         { href: AppRoute.Files, text: "My Files", icon: FilesIcon },
+         { href: AppRoute.Shared, text: "Shared With Me", icon: ShareIcon },
+     ];
+  */
     return (
         <nav
             className={classNames("navigation", className, {
@@ -131,8 +131,8 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                             ? "navigation__item navigation__item--active"
                             : "navigation__item"
                     }
-                    >
-                    <ExcelIcon 
+                >
+                    <ExcelIcon
                         aria-hidden={true}
                         className="navigation__icon"
                         width={16}
