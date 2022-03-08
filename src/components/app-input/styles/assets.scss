@@ -107,7 +107,7 @@
       margin-inline-end: 0;
       padding-inline-start: 0;
 
-      li {
+      th {
         list-style-type: none;
         width: 15%;
         text-align: center;
@@ -118,13 +118,41 @@
         letter-spacing: 0.04em;
         color: #003C71;
       }
-      li:nth-child(1) {
+      th:nth-child(1) {
         min-width: 60%;
         text-align: left;
+        &[aria-sort="ascending"] .sort-icon_svg__up {
+          color: #017aee;
+          transition: color 0.2s;
+        }
+
+        &[aria-sort="descending"] .sort-icon_svg__down {
+          color: #017aee;
+          transition: color 0.2s;
+        }
+
+        svg {
+          color: $inactive;
+          margin-left: 5px;
+          position: relative;
+          top: 0.3em;
+          cursor: pointer;
+        }
       }
 
     }
 
+    &--sort{
+      all: unset;
+      font: inherit;
+      display: flex;
+      align-items: baseline;
+
+      &:hover, &:focus-visible {
+        color: $accent;
+        cursor: pointer;
+      }
+    }
     .pin-button {
       margin-right: 25px;
     }

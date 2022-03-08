@@ -1,9 +1,9 @@
 import React, {
     Dispatch,
     FunctionComponent,
-    ReactNode,
     SelectHTMLAttributes,
-    SetStateAction, useEffect,
+    SetStateAction,
+    useEffect,
     useRef,
     useState
 } from 'react';
@@ -12,15 +12,13 @@ import {useClickOutside} from "../../hooks/useClickOutside";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 import "./styles/assets.scss";
 import MultiselectAssetOption, {MultiselectAssetOptionProps} from "./multiselect-asset-option";
-import {AssetInOrganization, AssetListItem} from "../../types/asset";
+import {AssetInOrganization, AssetServerResponse} from "../../types/asset";
 import style from "../form/styles/edit-organization.module.scss";
 import Button, {ResetButton} from "../button";
 import CheckSVG from "../form/assets/check.svg";
 import {SortDirection, UniqueError} from "../../data/enum";
-import sortTable from "../sort-table-header/utils/sort";
-import SortIcon from "../sort-table-header/assets/sort-icon.svg";
 import ISort from "../../types/sort-type";
-import {IUpdateUser} from "../../types/user";
+import {SortTableHeader} from "../sort-table-header/SortTableHeader";
 
 
 interface IAssetsModalWindow extends Omit<MultiselectAssetOptionProps,
@@ -28,7 +26,7 @@ interface IAssetsModalWindow extends Omit<MultiselectAssetOptionProps,
     SelectHTMLAttributes<HTMLSelectElement> {
     showOptions: boolean;
     setShowOptions: (arg: boolean) => void;
-    options: AssetListItem[] | AssetInOrganization[];
+    options: AssetInOrganization[];
     selected: Set<string | number> | AssetInOrganization[];
     errorMessage?: string;
     showError?: boolean;
@@ -41,9 +39,7 @@ interface IAssetsModalWindow extends Omit<MultiselectAssetOptionProps,
     externalLoad?: boolean;
     duplicateOrgError: undefined | UniqueError.Name
     duplicateIdError: undefined | UniqueError.ID
-    isSavedMessageActive: boolean,
-
-
+    isSavedMessageActive: boolean
 }
 
 const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
@@ -62,18 +58,18 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                                                                       externalLoad,
                                                                       duplicateOrgError,
                                                                       duplicateIdError,
-                                                                      isSavedMessageActive,
+                                                                      isSavedMessageActive
 
                                                                   }) => {
     const rootElement = useRef<HTMLDivElement>(null);
     const isEditOrganization = Array.isArray(selected);
     const [hideError, setHideError] = useState(false);
     const [scrollY, setScrollY] = useState<number>(0);
-    const INITIAL_SORT = {name: "", direction: SortDirection.Up}
+    const INITIAL_SORT = {name: "name", direction: SortDirection.Down}
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
-    const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
     const [visible, setVisible] = useState('')
-
+    const [arrAssets, setArrAssets] = useState<AssetServerResponse[]>()
+    const [filteredOptions, setFilteredOptions] = useState<AssetInOrganization[]>([])
 
     const addVisible = () => {
         setTimeout(() => setVisible('visible'))
@@ -90,12 +86,43 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
 
 
     useEffect(() => {
-        sortTable("Name", sort, localRows, setSort, setLocalRows)
-    }, [])
+        const arr: AssetServerResponse[] = []
+        options.forEach((option) => {
+            arr.push(option.asset)
+        })
+        setArrAssets(arr)
+    }, [options])
 
+
+    const getFilteredOptions = () => {
+
+        let newOption: AssetInOrganization
+        const filtered: AssetInOrganization[] = []
+        const optionsId: number[] = []
+        options.forEach((item) => optionsId.push(item.assetId))
+        for (let a = 0; arrAssets && a < arrAssets.length; a++) {
+            for (let o = 0; o < options.length; o++) {
+                if (arrAssets[a].name === options[o].asset.name) {
+                    newOption = {
+                        organizationId: options[o].organizationId,
+                        assetId: options[o].assetId,
+                        sharedByDefault: options[o].sharedByDefault,
+                        asset: arrAssets[a]
+                    }
+
+                    filtered.push(newOption)
+                }
+            }
+        }
+        setFilteredOptions(filtered)
+    }
+
+
+    useEffect(() => {
+        getFilteredOptions()
+    }, [arrAssets])
 
     useClickOutside(rootElement, () => hideModal(), showOptions);
-
     return (
         <>
             <div
@@ -153,31 +180,31 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                         </div>
                     </div>
                     <div
-                        className={classNames("assets__options", {})}
+                        className={classNames("assets__options")}
 
                     >
-                        <ul className="assets__options--header">
-                            <li
-                                aria-sort={sort.name === 'Name' ? sort.direction : SortDirection.Default}>
-                                <button
-                                    onClick={() => {
-                                        if (setScrollY) {
-                                            const scrollWrapper = document.querySelector('main')
-                                            scrollWrapper && setScrollY(scrollWrapper.scrollTop)
-                                        }
-                                        sortTable('Name', sort, localRows, setSort, setLocalRows)
-                                    }}
-                                    className='sort-table-header__button'
-                                >
-                                    Name
-                                    <SortIcon aria-hidden/>
-                                </button>
-                            </li>
-                            <li>Read</li>
-                            <li>Write</li>
-                            <li>Default</li>
-                        </ul>
-                        {options.map((option: any) =>
+                        <table>
+                            <thead>
+                            <tr className="assets__options--header">
+                                <SortTableHeader
+                                    name={'name'}
+                                    text={'Name'}
+                                    sort={sort}
+                                    localRows={arrAssets}
+                                    setSort={setSort}
+                                    setLocalRows={setArrAssets}
+                                    className="user"
+                                    rememberScroll={setScrollY}
+                                />
+                                <th>Read</th>
+                                <th>Write</th>
+                                <th>Default</th>
+                            </tr>
+                            </thead>
+
+                        </table>
+
+                        {filteredOptions.map((option: any) =>
                             isEditOrganization ? (
                                 <MultiselectAssetOrgOption
                                     key={option.assetId}
@@ -203,6 +230,7 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
 
             </div>
         </>
+
 
     );
 };
