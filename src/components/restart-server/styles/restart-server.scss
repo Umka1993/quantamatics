@@ -21,6 +21,10 @@
         margin: 0 0 32px - 11px;
     }
 
+    p, h4 {
+        margin-top: 0px;
+    }
+
     .btn-danger {
         color: #fff;
         background-color: #dc3545;
@@ -40,5 +44,10 @@
         align-items: center;
         justify-content: end;
         gap: 40px;
+    }
+
+    .loader {
+        position: relative;
+        top:35px;
     }
 }
