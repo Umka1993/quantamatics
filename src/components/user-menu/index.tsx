@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import useUser from '../../hooks/useUser';
 import ProfileIcon from './assets/profile.svg';
 import LogoutIcon from './assets/logout.svg';
+import PowerIcon from './assets/power.svg';
 import CrossIcon from './assets/cross.svg';
 import useLogout from '../../hooks/useLogout';
 import style from './user-menu.module.scss';
@@ -10,7 +11,7 @@ import useCloseModal from '../../hooks/useCloseModal';
 
 interface Props {
     collapsed: boolean;
-    openModal: () => void; 
+    openModal: (modal:string) => void; 
 }
 
 export default function UserMenu({ collapsed, openModal }: Props): ReactElement {
@@ -54,7 +55,7 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
                     </button>
                     <button
                         type='button'
-                        onClick={() => {openModal(); setOpenDropdown(false)}}
+                        onClick={() => {openModal("my-account"); setOpenDropdown(false)}}
                         className={style.button}
                     >
                         <ProfileIcon
@@ -64,6 +65,18 @@ export default function UserMenu({ collapsed, openModal }: Props): ReactElement 
 
                         />
                         My Account
+                    </button>
+                    <button
+                        type='button'
+                        onClick={() => {openModal("restart-server"); setOpenDropdown(false)}}
+                        className={style.button}
+                    >
+                        <PowerIcon
+                            aria-hidden={true}
+                            width={16} height={16}
+                            fill='currentColor'
+                        />
+                        Restart Server
                     </button>
                     <button
                         onClick={logout}

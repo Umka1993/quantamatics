@@ -14,7 +14,8 @@ export const enum AccountEndpoint {
     UserInfo = "/api/Account/userInfo",
 
     GetToken = "/api/Account/getAPIToken",
-    GetNameFromAPI = "​/api​/Account​/userNameFromAPIKey​",
+    GetNameFromAPI = "/api/Account/userNameFromAPIKey",
+    RestartServer = "/api/User/RestartEnvironment", // Should move this on the backend to Account controller
 }
 
 const accountApi = baseApi.injectEndpoints({
@@ -59,13 +60,19 @@ const accountApi = baseApi.injectEndpoints({
             }),
         }),
 
-
         getUserInfo: build.query<void, void>({
             query: () => AccountEndpoint.UserInfo,
         }),
 
         getToken: build.query<void, void>({
             query: () => AccountEndpoint.GetToken,
+        }),
+
+        restartServer: build.mutation<void, void>({
+            query: () => ({
+                url: AccountEndpoint.RestartServer,
+                method: "POST",
+            })
         }),
 
         changePassword: build.mutation<
@@ -107,6 +114,7 @@ export const {
     useLogoutMutation,
     useGetUserInfoQuery,
     useGetTokenQuery,
+    useRestartServerMutation,
     useChangePasswordMutation,
     useResetPasswordMutation,
     useSendResetPasswordMailMutation,

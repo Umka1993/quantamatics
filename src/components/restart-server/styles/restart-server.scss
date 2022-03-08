@@ -1,0 +1,44 @@
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
+
+.restart-server {
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+    min-height: 240px;
+    height: calc(100vh - 80px);
+    max-height: 300px;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+
+    .modal__title {
+        margin: 0 0 32px - 11px;
+    }
+
+    .btn-danger {
+        color: #fff;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        color: #fff;
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    &__footer {
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: auto 140px;
+        align-items: center;
+        justify-content: end;
+        gap: 40px;
+    }
+}
