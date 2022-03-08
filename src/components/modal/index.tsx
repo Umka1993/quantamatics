@@ -1,5 +1,4 @@
 import React, {
-    FocusEventHandler,
     KeyboardEventHandler,
     ReactNode,
     useEffect,
@@ -10,6 +9,12 @@ import classNames from "classnames";
 import CloseIcon from "./assets/close.svg";
 import Headline from "../page-title/index";
 
+import dialogPolyfill from "dialog-polyfill";
+
+interface DialogElement extends HTMLDivElement {
+    open: boolean,
+    showModal: () => void,
+}
 interface IModal {
     className?: string;
     children: ReactNode;
@@ -23,8 +28,7 @@ export const Modal: React.FunctionComponent<IModal> = ({
     className,
     headline,
 }) => {
-    const modalRef = useRef<HTMLElement>(null);
-    const overlayRef = useRef<HTMLDivElement>(null);
+    const modalRef = useRef<DialogElement>(null);
 
     const enum Hint {
         close = 'Close modal',
@@ -34,52 +38,47 @@ export const Modal: React.FunctionComponent<IModal> = ({
         modalRef.current?.focus();
     }, []);
 
-    const focusLock: FocusEventHandler<HTMLDivElement> = ({ target }) => {
-        target === overlayRef.current && modalRef.current?.focus();
-    };
+    useEffect(() => {
+        console.log(modalRef.current)
+        if (modalRef.current) {
+            dialogPolyfill.registerDialog(modalRef.current);
+
+            !modalRef.current.open && modalRef.current.showModal();
+        }
+    }, [modalRef.current]);
+
 
     const closeOnEsc: KeyboardEventHandler<HTMLDivElement> = ({ key }) => {
         (key === "Escape" || key === "Esc") && onClose();
     };
 
-    const closeOnClick = ({ target }: any) => {
-        target === overlayRef.current && onClose()
-    }
-
     return (
-        <div
-            className="modal-overlay"
-            aria-label={Hint.close}
+
+        <dialog
+            role="dialog"
+            aria-modal={true}
+            className={classNames("modal", className)}
             tabIndex={0}
-            onFocusCapture={focusLock}
-            onClick={closeOnClick}
-            ref={overlayRef}
+            ref={modalRef}
+            aria-labelledby="modal-label"
+            onKeyUp={closeOnEsc}
         >
-            <article
-                role="dialog"
-                aria-modal={true}
-                className={classNames("modal", className)}
-                tabIndex={0}
-                ref={modalRef}
-                aria-labelledby="modal-label"
-                onKeyUp={closeOnEsc}
+            {headline && (
+                <Headline id="modal-label" className="modal__title">
+                    {headline}
+                </Headline>
+            )}
+            <button
+                aria-label={Hint.close}
+                title={Hint.close}
+                className="modal__close"
+                onClick={onClose}
             >
-                {headline && (
-                    <Headline id="modal-label" className="modal__title">
-                        {headline}
-                    </Headline>
-                )}
-                <button
-                    aria-label={Hint.close}
-                    title={Hint.close}
-                    className="modal__close"
-                    onClick={onClose}
-                >
-                    <CloseIcon aria-hidden />
-                </button>
-                {children}
-            </article>
-        </div>
+                <CloseIcon aria-hidden />
+            </button>
+            {children}
+        </dialog>
+
     );
 };
 
