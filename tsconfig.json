@@ -5,7 +5,7 @@
       "es5", "es6", "dom", "dom.iterable"
     ],
     "target": "es6",
-    "module": "commonjs",
+    "module": "esnext",
     "allowJs": true,
     "jsx": "react",
     "outDir": "../publish",

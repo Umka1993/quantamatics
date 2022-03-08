@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require("copy-webpack-plugin");
-const { MODULE_STYLE_LOADERS, DEFAULT_STYLE_LOADERS } = require('./_const.js');
+const { MODULE_STYLE_LOADERS, DEFAULT_STYLE_LOADERS, output } = require('./_const.js');
 
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
@@ -11,19 +11,19 @@ module.exports = {
     devServer: {
         static: path.resolve(__dirname, '../publish'),
         historyApiFallback: true,
-        port: 8888
+        port: 8888,
+        hot: true,
     },
+    devtool: isDev ? 'source-map' : false,
     entry: path.resolve(__dirname, '../src', 'index.tsx'),
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, '../publish'),
-        publicPath: '/'
-    },
+    output,
     mode: process.env.NODE_ENV,
     resolve: {
         extensions: ['.js', '.ts', '.tsx']
     },
+
     module: {
+        strictExportPresence: true,
         rules: [
             {
                 test: /\.(png|jp(e*)g|gif)$/,
