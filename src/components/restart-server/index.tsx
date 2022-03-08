@@ -32,7 +32,7 @@ export const RestartServer: React.FunctionComponent<IRestartServer> = ({onClose}
         <Modal onClose={onClose} className="restart-server" headline="Restart Server">
             {restarting ? (
                 <>
-                    <p>Your server is restarting</p>
+                    <p>Your server is restarting, you will be redirect automatically</p>
                     <div className="loader">
                         <Loader/>
                     </div>
