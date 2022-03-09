@@ -19,13 +19,13 @@ export default function OrganizationList(): ReactElement {
                         width={16}
                         height={16}
                         role="img"
-                        aria-label="Search organization"
+                        aria-label="Search organizations"
                         fill='currentColor'
                     />
                     <input
                         type="search"
                         name="search"
-                        placeholder="Search organization..."
+                        placeholder="Search organizations"
                         value={search}
                         onInput={({ currentTarget: { value } }) => setSearch(value)}
                     />
