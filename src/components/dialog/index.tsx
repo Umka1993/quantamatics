@@ -13,6 +13,7 @@ interface ModalProps extends HTMLProps<HTMLDivElement> {
     onRequestClose: () => void;
     open?: boolean;
     headline?: string;
+    wrapperClass?: string;
 }
 
 export default function Dialog({
@@ -21,6 +22,7 @@ export default function Dialog({
     open,
     children,
     headline,
+    wrapperClass,
     id,
     ...other
 }: ModalProps) {
@@ -86,7 +88,7 @@ export default function Dialog({
                 <CloseIcon aria-hidden />
             </button>
 
-            <div {...other} className={classNames(style.wrapper)}>
+            <div {...other} className={classNames(style.wrapper, wrapperClass)}>
                 {headline && (
                     <h2 id={`${id}-title`} className={style.title}>
                         {headline}

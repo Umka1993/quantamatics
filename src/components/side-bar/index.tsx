@@ -6,10 +6,11 @@ import ExelIcon from "./assets/exel.svg";
 import classNames from "classnames";
 import Logo from "../logo";
 import UserMenu from "../user-menu";
+import { SideBarModalOpen } from "../../types/sidebar-modal";
 
 type SideBarProps = {
-    openModal: (modal:string) => void;
-}
+    openModal: SideBarModalOpen;
+};
 
 export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);

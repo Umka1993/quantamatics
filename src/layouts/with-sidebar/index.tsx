@@ -5,7 +5,7 @@ import { SideBar } from "../../components/side-bar";
 import style from "./with-sidebar.module.scss";
 import PrivateRoutes from "../../router/private-routes";
 import { EditPassword } from "../../components/edit-modal/edit-password";
-import { RestartServer } from '../../components/restart-server';
+import { RestartServer } from "../../components/restart-server";
 
 import { useLocation } from "react-router-dom";
 import useUser from "../../hooks/useUser";
@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../store/authorization";
 import Dialog from "../../components/dialog";
 import { useCallback } from "react";
+import { SideBarModalMode } from "../../types/sidebar-modal";
 
 export default function WithSideBarLayout(): ReactElement {
     const logout = useLogout();
@@ -23,8 +24,7 @@ export default function WithSideBarLayout(): ReactElement {
     const { data: user, isSuccess: isUserLoaded } = useGetUserQuery(id);
     const dispatch = useDispatch();
 
-    const [showProfile, setShowProfile] = useState<boolean>(false);
-    const [showRestart, setShowRestart] = useState<boolean>(false);
+    const [activeModal, setActiveModal] = useState<SideBarModalMode>(undefined);
 
     useEffect(() => {
         !getCookie("user") && logout();
@@ -38,33 +38,32 @@ export default function WithSideBarLayout(): ReactElement {
         }
     }, [isUserLoaded, dispatch, userRoles]);
 
-    const closeModalProfile = useCallback(() => setShowProfile(false), [setShowProfile])
-    const openModalProfile = useCallback(() => setShowProfile(true), [setShowProfile])
+    const isProfileModalShowed = activeModal === "my-account";
+    const isRestartServerModalShowed = activeModal === "restart-server";
+    const closeModal = useCallback(
+        () => setActiveModal(undefined),
+        [setActiveModal]
+    );
+
     return (
         <>
-            <SideBar openModal={(modal) => {
-                    if(modal === "my-account") openModalProfile();
-                    if(modal === "restart-server") setShowRestart(true);
-                }} />
+            <SideBar openModal={setActiveModal} />
             <main className={style.main}>
                 <PrivateRoutes />
             </main>
 
             <Dialog
-                open={showProfile}
-                onRequestClose={closeModalProfile}
+                open={activeModal !== undefined}
+                onRequestClose={closeModal}
                 closeOnOutsideClick
-                headline="My Account"
-                id="user-account-modal"
+                headline={isProfileModalShowed ? "My Account" : "Restart Server"}
+                id={activeModal}
+                wrapperClass={isProfileModalShowed ? "edit-account" : 'restart-server'}
+                role={isRestartServerModalShowed ? "alertdialog " : 'dialog'}
             >
-                {user && <EditPassword onClose={closeModalProfile} />}
+                {user && isProfileModalShowed && <EditPassword onClose={closeModal} />}
+                {isRestartServerModalShowed && <RestartServer onClose={closeModal} />}
             </Dialog>
-
-            {showRestart && user &&
-                <RestartServer
-                    onClose={() => setShowRestart(false)}
-                />
-            }
         </>
     );
 }

@@ -19,7 +19,7 @@ import "./styles/table.scss";
 import { USER_HEADER } from "./utils/constants";
 import { SortDirection } from "../../data/enum";
 import { useCallback } from "react";
-import Dialog from '../dialog';
+import Dialog from "../dialog";
 interface UserTableProps {
     orgId: string;
 }
@@ -70,7 +70,7 @@ export const UserTable: FunctionComponent<UserTableProps> = ({ orgId }) => {
         }
     }, [localRows]);
 
-    const closeModal = useCallback(() => setShowModal(false), [setShowModal])
+    const closeModal = useCallback(() => setShowModal(false), [setShowModal]);
 
     return (
         <>
@@ -126,16 +126,10 @@ export const UserTable: FunctionComponent<UserTableProps> = ({ orgId }) => {
                 closeOnOutsideClick
                 headline="Edit User Account"
                 id="org-user-modal"
+                wrapperClass="edit-account"
             >
-
-                <EditProfile
-                    user={user as IUpdateUser}
-                    onClose={closeModal}
-                />
-
+                <EditProfile user={user as IUpdateUser} onClose={closeModal} />
             </Dialog>
-
-
         </>
     );
 };

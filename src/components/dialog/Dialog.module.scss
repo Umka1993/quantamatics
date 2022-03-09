@@ -35,10 +35,9 @@
 .wrapper {
     padding: 40px;
     width: 100%;
+    max-width: 480px;
 
-    min-height: 650px;
-    height: calc(100vh - 80px);
-    max-height: 720px;
+    
     overflow: auto;
     scrollbar-gutter: stable both-edges;
 

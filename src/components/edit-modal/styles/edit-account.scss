@@ -2,23 +2,12 @@
 @use "../../../sass/mixins" as *;
 
 .edit-account {
-    padding: 40px;
-    width: 100%;
-    max-width: 480px;
     min-height: 650px;
     height: calc(100vh - 80px);
     max-height: 720px;
-    overflow: auto;
-    scrollbar-gutter: stable both-edges;
 
     display: flex;
     flex-direction: column;
-
-    // position: relative;
-
-    .modal__title {
-        margin: 0 0 32px - 11px;
-    }
 
     &__list {
         margin: 21px 0 0;
