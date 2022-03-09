@@ -1,7 +1,6 @@
 import React, {
     Dispatch,
     FunctionComponent,
-    ReactNode,
     SelectHTMLAttributes,
     SetStateAction,
     useEffect,
@@ -12,16 +11,14 @@ import classNames from "classnames";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 import "./styles/assets.scss";
-import MultiselectAssetOption, {
-    MultiselectAssetOptionProps,
-} from "./multiselect-asset-option";
-import { AssetInOrganization, AssetListItem } from "../../types/asset";
-import { SortDirection, UniqueError } from "../../data/enum";
-import sortTable from "../sort-table-header/utils/sort";
-import SortIcon from "../sort-table-header/assets/sort-icon.svg";
+import MultiselectAssetOption, {MultiselectAssetOptionProps} from "./multiselect-asset-option";
+import {AssetInOrganization, AssetServerResponse} from "../../types/asset";
+import style from "../form/styles/edit-organization.module.scss";
+import Button, {ResetButton} from "../button";
+import CheckSVG from "../form/assets/check.svg";
+import {SortDirection, UniqueError} from "../../data/enum";
 import ISort from "../../types/sort-type";
-import { IUpdateUser } from "../../types/user";
-import SaveResetHeader from "../save-reset-header/SaveResetHeader";
+import {SortTableHeader} from "../sort-table-header/SortTableHeader";
 
 interface IAssetsModalWindow
     extends Omit<
@@ -31,7 +28,7 @@ interface IAssetsModalWindow
     SelectHTMLAttributes<HTMLSelectElement> {
     showOptions: boolean;
     setShowOptions: (arg: boolean) => void;
-    options: AssetListItem[] | AssetInOrganization[];
+    options: AssetInOrganization[];
     selected: Set<string | number> | AssetInOrganization[];
     errorMessage?: string;
     showError?: boolean;
@@ -42,32 +39,39 @@ interface IAssetsModalWindow
     isUpdating: boolean;
     isChanged: boolean;
     externalLoad?: boolean;
-    isSavedMessageActive: boolean;
+    duplicateOrgError: undefined | UniqueError.Name
+    duplicateIdError: undefined | UniqueError.ID
+    isSavedMessageActive: boolean
 }
 
 const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
-    showOptions,
-    setShowOptions,
-    selected,
-    errorMessage,
-    showError,
-    setSelected,
-    disabled,
-    options,
-    // assignedAssetsReset,
-    type,
-    isUpdating,
-    isChanged,
-    externalLoad,
-    isSavedMessageActive,
-}) => {
-    const rootElement = useRef<HTMLFormElement>(null);
+                                                                      showOptions,
+                                                                      setShowOptions,
+                                                                      selected,
+                                                                      errorMessage,
+                                                                      showError,
+                                                                      setSelected,
+                                                                      disabled,
+                                                                      options,
+                                                                      assignedAssetsReset,
+                                                                      type,
+                                                                      isUpdating,
+                                                                      isChanged,
+                                                                      externalLoad,
+                                                                      duplicateOrgError,
+                                                                      duplicateIdError,
+                                                                      isSavedMessageActive
+
+                                                                  }) => {
+    const rootElement = useRef<HTMLDivElement>(null);
     const isEditOrganization = Array.isArray(selected);
     const [hideError, setHideError] = useState(false);
-    const INITIAL_SORT = { name: "", direction: SortDirection.Up };
+    const [scrollY, setScrollY] = useState<number>(0);
+    const INITIAL_SORT = {name: "name", direction: SortDirection.Down}
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
-    const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
-    const [visible, setVisible] = useState("");
+    const [visible, setVisible] = useState('')
+    const [arrAssets, setArrAssets] = useState<AssetServerResponse[]>()
+    const [filteredOptions, setFilteredOptions] = useState<AssetInOrganization[]>([])
 
     const addVisible = () => {
         setTimeout(() => setVisible("visible"));
@@ -83,11 +87,43 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
     }, [showOptions]);
 
     useEffect(() => {
-        sortTable("Name", sort, localRows, setSort, setLocalRows);
-    }, []);
+        const arr: AssetServerResponse[] = []
+        options.forEach((option) => {
+            arr.push(option.asset)
+        })
+        setArrAssets(arr)
+    }, [options])
 
-    useClickOutside(rootElement, hideModal, showOptions);
 
+    const getFilteredOptions = () => {
+
+        let newOption: AssetInOrganization
+        const filtered: AssetInOrganization[] = []
+        const optionsId: number[] = []
+        options.forEach((item) => optionsId.push(item.assetId))
+        for (let a = 0; arrAssets && a < arrAssets.length; a++) {
+            for (let o = 0; o < options.length; o++) {
+                if (arrAssets[a].name === options[o].asset.name) {
+                    newOption = {
+                        organizationId: options[o].organizationId,
+                        assetId: options[o].assetId,
+                        sharedByDefault: options[o].sharedByDefault,
+                        asset: arrAssets[a]
+                    }
+
+                    filtered.push(newOption)
+                }
+            }
+        }
+        setFilteredOptions(filtered)
+    }
+
+
+    useEffect(() => {
+        getFilteredOptions()
+    }, [arrAssets])
+
+    useClickOutside(rootElement, () => hideModal(), showOptions);
     return (
         <article className={classNames("assets__modal")}>
             {showError && !hideError && (
@@ -105,50 +141,89 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                     isSavedMessageActive={isSavedMessageActive}
                 />
 
-                <div className={classNames("assets__options")}>
-                    <ul className="assets__options--header">
-                        <li
-                            aria-sort={
-                                sort.name === "Name" ? sort.direction : SortDirection.Default
-                            }
-                        >
-                            <button
-                                onClick={() =>
-                                    sortTable("Name", sort, localRows, setSort, setLocalRows)
-                                }
-                                className="sort-table-header__button"
-                            >
-                                Name
-                                <SortIcon aria-hidden />
-                            </button>
-                        </li>
-                        <li>Read</li>
-                        <li>Write</li>
-                        <li>Default</li>
-                    </ul>
-                    {options.map((option: any) =>
-                        isEditOrganization ? (
-                            <MultiselectAssetOrgOption
-                                key={option.assetId}
-                                option={option}
-                                selected={selected as any}
-                                setSelected={setSelected as any}
-                                disabled={disabled}
-                            />
-                        ) : (
-                            <MultiselectAssetOption
-                                key={option.assetId}
-                                option={option}
-                                selected={(selected as any).has(option.assetId)}
-                                setSelected={setSelected as any}
-                                disabled={disabled}
-                                type={type}
-                            />
-                        )
-                    )}
+                                    <Button
+                                        type="submit"
+                                        className={style.save}
+                                        disabled={
+                                            !isChanged ||
+                                            isUpdating ||
+                                            externalLoad ||
+                                            Boolean(duplicateOrgError) ||
+                                            Boolean(duplicateIdError)
+                                        }
+                                        variant={isSavedMessageActive ? "valid" : undefined}
+                                    >
+                                        {isSavedMessageActive ? (
+                                            <>
+                                                <CheckSVG
+                                                    aria-hidden="true"
+                                                    width={17}
+                                                    height={17}
+                                                    fill="currentColor"
+                                                />
+                                                Saved
+                                            </>
+                                        ) : (
+                                            "Save"
+                                        )}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        className={classNames("assets__options")}
+
+                    >
+                        <table>
+                            <thead>
+                            <tr className="assets__options--header">
+                                <SortTableHeader
+                                    name={'name'}
+                                    text={'Name'}
+                                    sort={sort}
+                                    localRows={arrAssets}
+                                    setSort={setSort}
+                                    setLocalRows={setArrAssets}
+                                    className="user"
+                                    rememberScroll={setScrollY}
+                                />
+                                <th>Read</th>
+                                <th>Write</th>
+                                <th>Default</th>
+                            </tr>
+                            </thead>
+
+                        </table>
+
+                        {filteredOptions.map((option: any) =>
+                            isEditOrganization ? (
+                                <MultiselectAssetOrgOption
+                                    key={option.assetId}
+                                    option={option}
+                                    selected={selected as any}
+                                    setSelected={setSelected as any}
+                                    disabled={disabled}
+                                />
+                            ) : (
+                                <MultiselectAssetOption
+                                    key={option.assetId}
+                                    option={option}
+                                    selected={(selected as any).has(option.assetId)}
+                                    setSelected={setSelected as any}
+                                    disabled={disabled}
+                                    type={type}
+                                />
+                            )
+                        )}
+                    </div>
                 </div>
-            </form>
-        </article>
+
+
+            </div>
+        </>
+
+
     );
 };
 

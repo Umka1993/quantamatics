@@ -1,4 +1,4 @@
-import { SortDirection } from "../../../data/enum";
+import {SortDirection} from "../../../data/enum";
 
 
 
@@ -62,7 +62,11 @@ const sortTable = (
             break;
 
         default:
-            newRows = JSON.parse(sessionStorage.getItem('table-rows') as string);
+            if ( name !== 'name'){
+                newRows = JSON.parse(sessionStorage.getItem('table-rows') as string);
+            } else {
+                newRows = [...localRows]
+            }
             break;
     }
 
