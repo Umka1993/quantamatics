@@ -148,5 +148,6 @@ export const {
     useLinkAssetToUserMutation,
     useUnlinkAssetToUserMutation,
     useGetUserAssetsQuery,
+    useLazyGetUserAssetsQuery,
     useToggleAssetSharedMutation,
 } = assetApi;

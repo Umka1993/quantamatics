@@ -19,7 +19,7 @@ import "./styles/table.scss";
 import { USER_HEADER } from "./utils/constants";
 import { SortDirection } from "../../data/enum";
 import { useCallback } from "react";
-
+import Dialog from '../dialog';
 interface UserTableProps {
     orgId: string;
 }
@@ -119,12 +119,23 @@ export const UserTable: FunctionComponent<UserTableProps> = ({ orgId }) => {
                     ))}
                 </tbody>
             </table>
-            {showModal && (
+
+            <Dialog
+                open={showModal}
+                onRequestClose={closeModal}
+                closeOnOutsideClick
+                headline="Edit User Account"
+                id="org-user-modal"
+            >
+
                 <EditProfile
                     user={user as IUpdateUser}
                     onClose={closeModal}
                 />
-            )}
+
+            </Dialog>
+
+
         </>
     );
 };

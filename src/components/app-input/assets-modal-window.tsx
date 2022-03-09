@@ -5,26 +5,23 @@ import React, {
     SetStateAction,
     useEffect,
     useRef,
-    useState,
-} from "react";
+    useState
+} from 'react';
 import classNames from "classnames";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 import "./styles/assets.scss";
-import MultiselectAssetOption, {MultiselectAssetOptionProps} from "./multiselect-asset-option";
-import {AssetInOrganization, AssetServerResponse} from "../../types/asset";
+import MultiselectAssetOption, { MultiselectAssetOptionProps } from "./multiselect-asset-option";
+import { AssetInOrganization, AssetServerResponse } from "../../types/asset";
 import style from "../form/styles/edit-organization.module.scss";
-import Button, {ResetButton} from "../button";
-import CheckSVG from "../form/assets/check.svg";
-import {SortDirection, UniqueError} from "../../data/enum";
+import Button, { ResetButton } from "../button";
+import { SortDirection, UniqueError } from "../../data/enum";
 import ISort from "../../types/sort-type";
-import {SortTableHeader} from "../sort-table-header/SortTableHeader";
+import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
-interface IAssetsModalWindow
-    extends Omit<
-    MultiselectAssetOptionProps,
-    "option" | "selected" | "setSelected"
-    >,
+
+interface IAssetsModalWindow extends Omit<MultiselectAssetOptionProps,
+    "option" | "selected" | "setSelected">,
     SelectHTMLAttributes<HTMLSelectElement> {
     showOptions: boolean;
     setShowOptions: (arg: boolean) => void;
@@ -35,9 +32,9 @@ interface IAssetsModalWindow
     setSelected:
     | Dispatch<SetStateAction<Set<string | number>>>
     | Dispatch<SetStateAction<AssetInOrganization[]>>;
-    // assignedAssetsReset: (target: HTMLButtonElement) => void
-    isUpdating: boolean;
-    isChanged: boolean;
+    assignedAssetsReset: (target: HTMLButtonElement) => void
+    isUpdating: boolean,
+    isChanged: boolean,
     externalLoad?: boolean;
     duplicateOrgError: undefined | UniqueError.Name
     duplicateIdError: undefined | UniqueError.ID
@@ -45,46 +42,47 @@ interface IAssetsModalWindow
 }
 
 const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
-                                                                      showOptions,
-                                                                      setShowOptions,
-                                                                      selected,
-                                                                      errorMessage,
-                                                                      showError,
-                                                                      setSelected,
-                                                                      disabled,
-                                                                      options,
-                                                                      assignedAssetsReset,
-                                                                      type,
-                                                                      isUpdating,
-                                                                      isChanged,
-                                                                      externalLoad,
-                                                                      duplicateOrgError,
-                                                                      duplicateIdError,
-                                                                      isSavedMessageActive
+    showOptions,
+    setShowOptions,
+    selected,
+    errorMessage,
+    showError,
+    setSelected,
+    disabled,
+    options,
+    assignedAssetsReset,
+    type,
+    isUpdating,
+    isChanged,
+    externalLoad,
+    duplicateOrgError,
+    duplicateIdError,
+    isSavedMessageActive
 
-                                                                  }) => {
+}) => {
     const rootElement = useRef<HTMLDivElement>(null);
     const isEditOrganization = Array.isArray(selected);
     const [hideError, setHideError] = useState(false);
     const [scrollY, setScrollY] = useState<number>(0);
-    const INITIAL_SORT = {name: "name", direction: SortDirection.Down}
+    const INITIAL_SORT = { name: "name", direction: SortDirection.Down }
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
     const [visible, setVisible] = useState('')
     const [arrAssets, setArrAssets] = useState<AssetServerResponse[]>()
     const [filteredOptions, setFilteredOptions] = useState<AssetInOrganization[]>([])
 
     const addVisible = () => {
-        setTimeout(() => setVisible("visible"));
-    };
+        setTimeout(() => setVisible('visible'))
+    }
 
     const hideModal = async () => {
-        setVisible("");
-        setTimeout(() => setShowOptions(false), 300);
-    };
+        setVisible('')
+        setTimeout(() => setShowOptions(false), 300)
+    }
 
     useEffect(() => {
-        addVisible();
-    }, [showOptions]);
+        addVisible()
+    }, [showOptions])
+
 
     useEffect(() => {
         const arr: AssetServerResponse[] = []
@@ -125,21 +123,30 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
 
     useClickOutside(rootElement, () => hideModal(), showOptions);
     return (
-        <article className={classNames("assets__modal")}>
-            {showError && !hideError && (
-                <p className="app-input__error">{errorMessage}</p>
-            )}
-            <form
-                className={`assets__modal--body ${visible}`}
-                ref={rootElement}
-                onReset={hideModal}
+        <>
+            <div
+                className={classNames("assets__modal")}
             >
-                <SaveResetHeader
-                    headline="Application Assets"
-                    disableReset={isUpdating}
-                    disableSave={!isChanged || isUpdating || externalLoad}
-                    isSavedMessageActive={isSavedMessageActive}
-                />
+                {/* {showError && !hideError && (
+                    <p className="app-input__error">{errorMessage}</p>
+                )} */}
+                {/* <div className={`assets__modal--body ${visible}`}
+                    ref={rootElement}>
+                    <div className="assets__header">
+                        <div className="assets__header--wrap">
+                            <div className="assets__header--title">
+                                <h3>Application Assets</h3>
+                            </div>
+                            <div className="assets__header--buttons">
+                                <div className={style.buttons}>
+                                    <ResetButton
+                                        onClick={({ target }) =>
+                                            assignedAssetsReset(target as HTMLButtonElement)
+                                        }
+                                        disabled={isUpdating}
+                                    >
+                                        Cancel
+                                    </ResetButton>
 
                                     <Button
                                         type="submit"
@@ -177,21 +184,21 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                     >
                         <table>
                             <thead>
-                            <tr className="assets__options--header">
-                                <SortTableHeader
-                                    name={'name'}
-                                    text={'Name'}
-                                    sort={sort}
-                                    localRows={arrAssets}
-                                    setSort={setSort}
-                                    setLocalRows={setArrAssets}
-                                    className="user"
-                                    rememberScroll={setScrollY}
-                                />
-                                <th>Read</th>
-                                <th>Write</th>
-                                <th>Default</th>
-                            </tr>
+                                <tr className="assets__options--header">
+                                    <SortTableHeader
+                                        name={'name'}
+                                        text={'Name'}
+                                        sort={sort}
+                                        localRows={arrAssets}
+                                        setSort={setSort}
+                                        setLocalRows={setArrAssets}
+                                        className="user"
+                                        rememberScroll={setScrollY}
+                                    />
+                                    <th>Read</th>
+                                    <th>Write</th>
+                                    <th>Default</th>
+                                </tr>
                             </thead>
 
                         </table>
@@ -217,7 +224,7 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                             )
                         )}
                     </div>
-                </div>
+                </div> */}
 
 
             </div>

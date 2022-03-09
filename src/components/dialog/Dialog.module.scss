@@ -12,9 +12,8 @@
     position: fixed;
     left: 0;
     right: 0;
-    width: -moz-fit-content;
-    width: -webkit-fit-content;
-    width: fit-content;
+    width: 100%;
+    max-width: 480px;
     height: -moz-fit-content;
     height: -webkit-fit-content;
     height: fit-content;
@@ -36,7 +35,7 @@
 .wrapper {
     padding: 40px;
     width: 100%;
-    max-width: 480px;
+
     min-height: 650px;
     height: calc(100vh - 80px);
     max-height: 720px;
@@ -81,12 +80,7 @@
 
 :global {
     dialog + .backdrop {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background: rgba(0, 0, 0, 0.1);
+        @include backdrop;
     }
 
     ._dialog_overlay {

@@ -320,7 +320,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 </p>
             </form>
 
-            {showOptions && (
+            {/* {showOptions && (
                 <AssetsModalWindow
                     showOptions={showOptions}
                     setShowOptions={setShowOptions}
@@ -335,7 +335,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     isChanged={isChanged}
                     isSavedMessageActive={isSavedMessageActive}
                 />
-            )}
+            )} */}
         </>
     );
 };

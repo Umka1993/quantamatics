@@ -1,7 +1,7 @@
 {
   "scripts": {
     "clean": "rimraf publish",
-    "lint": "eslint --ext .tsx,.ts . --quiet",
+    "lint": "eslint --ext .tsx,.ts src --quiet",
     "build": "npm run clean && npm run lint && cross-env NODE_ENV=production webpack --config config/webpack.dev.js",
     "buildBeta": "npm run clean && npm run lint && webpack --config config/webpack.dev-beta.js",
     "buildStaging": "npm run clean && npm run lint && webpack --config config/webpack.stag.js",
@@ -17,6 +17,7 @@
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
+    "@reduxjs/toolkit": "^1.8.0",
     "@svgr/webpack": "^6.2.1",
     "@types/react": "^17.0.19",
     "@types/react-datepicker": "^4.1.7",
@@ -50,7 +51,6 @@
     "webpack-dev-server": "^4.7.1"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.6.2",
     "axios": "^0.26.0",
     "classnames": "^2.3.1",
     "connected-react-router": "^6.9.1",

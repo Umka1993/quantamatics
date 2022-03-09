@@ -14,7 +14,10 @@ export default function useDialogPolyfill(ref: RefObject<HTMLDialogElement>) {
             if (dialogPolyfill) {
                 dialogPolyfill.registerDialog(ref.current);
             } else {
-                import("dialog-polyfill").then((polyfill) => {
+                import(
+                    /* webpackChunkName: "dialog-polyfill" */
+                    "dialog-polyfill"
+                ).then((polyfill) => {
                     polyfill.default.registerDialog(ref.current as any);
                     dialogPolyfill = polyfill.default;
                 });
