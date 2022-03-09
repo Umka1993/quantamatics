@@ -8,8 +8,8 @@ import Logo from "../logo";
 import UserMenu from "../user-menu";
 
 type SideBarProps = {
-    openModal: () => void;
-};
+    openModal: (modal:string) => void;
+}
 
 export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);

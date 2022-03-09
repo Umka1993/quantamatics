@@ -32,7 +32,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 
     const filterOrganizationToOrgAdmin = useCallback(
-        (organizations: Organization[]) => {
+        (organizations: Organization[]): Organization[] => {
             const filteredOrgs = user?.userRoles.includes(UserRole.Admin)
                 ? organizations
                 : organizations?.filter(
@@ -47,23 +47,35 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
     );
     useEffect(() => {
         if (data && isSuccess) {
-            setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
+            setLocalRows(filterOrganizationToOrgAdmin(data));
             setSort(INITIAL_SORT);
         }
     }, [data, isSuccess]);
 
-    useEffect(() => {
-        if (sessionStorage.getItem("table-rows") && search?.length) {
-            const normalizedSearchQuery = search.toLocaleLowerCase();
+    const filterOrganizationsToQuery = useCallback(
+        (query: string, initialOrgs: Organization[]) => {
+            const normalizedSearchQuery = query.toLocaleLowerCase();
 
-            const filteredOrgs = localRows.filter(
+            const filteredOrgs = initialOrgs.filter(
                 ({ name, customerCrmId, customerCrmLink, comments }) =>
                     name.toLocaleLowerCase().includes(normalizedSearchQuery) ||
                     customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
                     customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
                     comments.toLocaleLowerCase().includes(normalizedSearchQuery)
             );
+
             setLocalRows(filteredOrgs);
+        },
+        [search, setLocalRows]
+    );
+
+    useEffect(() => {
+        const initialOrgs = sessionStorage.getItem("table-rows");
+        if (initialOrgs && search?.length) {
+            filterOrganizationsToQuery(
+                search,
+                JSON.parse(initialOrgs) as Organization[]
+            );
         } else {
             setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
             setSort(INITIAL_SORT);
