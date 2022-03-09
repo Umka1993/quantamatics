@@ -228,6 +228,22 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         organization,
     ]);
 
+
+    const [visible, setVisible] = useState('')
+
+
+    const hideModal = () => {
+        setVisible('')
+        setTimeout(() => setShowOptions(false), 300)
+    }
+
+    const assetsReset = () => {
+        if (organization) {
+            setAssignedAssets(organization.organizationAssets);
+        }
+        hideModal()
+    };
+
     const assignedAssetsReset = (target: HTMLButtonElement) => {
         target.blur();
         if (organization) {
@@ -235,7 +251,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         }
     };
 
-    const [showOptions, setShowOptions] = useState<boolean>(true);
+    const [showOptions, setShowOptions] = useState<boolean>(false);
+
 
     const toggleOptions = () => {
         setShowOptions(!showOptions)
@@ -344,9 +361,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                             type="submit"
                             className={style.save}
                             disabled={false}
-                            variant={isSavedMessageActive ? "valid" : undefined}
                             onClick={toggleOptions}>
-                            Configure Assets
+                            Manage Assets
                         </Button>
                     </div>
                     <div className="assets__manage--prompt">
@@ -365,12 +381,16 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 setSelected={setAssignedAssets}
                 disabled={isUserOrganization}
                 type="edit-organization"
-                assignedAssetsReset={assignedAssetsReset}
                 isUpdating={isUpdating}
                 isChanged={isChanged}
                 duplicateOrgError={duplicateOrgError}
                 duplicateIdError={duplicateIdError}
-                isSavedMessageActive={isSavedMessageActive}
+                organization={organization}
+                setAssignedAssets={setAssignedAssets}
+                hideModal={hideModal}
+                visible={visible}
+                setVisible={setVisible}
+                assetsReset={assetsReset}
             />}
 
         </>

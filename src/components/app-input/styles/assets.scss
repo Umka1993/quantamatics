@@ -46,7 +46,7 @@
       background-color: #fff;
       box-shadow: 0 2px 20px rgba(22, 34, 101, 0.1);
       border-radius: 2px;
-      padding: 32px;
+      padding: 32px 0;
       transition: right 0.5s ease;
     }
     .visible {
@@ -56,7 +56,7 @@
 
 
   &__header {
-    margin-bottom: 35px;
+    padding: 40px;
 
     &--wrap {
       display: flex;
@@ -81,15 +81,10 @@
   &__options {
     display: grid;
     grid-template-columns: 1fr;
-    //display: flex;
-    //flex-direction: column;
-    //align-items: flex-end;
-
     backdrop-filter: blur(10px);
 
     font-size: 14px;
     line-height: 16px;
-    gap: 16px 60px;
 
     z-index: 2;
     transition: opacity 0.2s;
@@ -110,16 +105,16 @@
       th {
         list-style-type: none;
         width: 15%;
-        text-align: center;
         font-style: normal;
         font-weight: 600;
         font-size: 12px;
         line-height: 16px;
         letter-spacing: 0.04em;
         color: #003C71;
+        text-align: right;
       }
       th:nth-child(1) {
-        min-width: 60%;
+        min-width: 55%;
         text-align: left;
         &[aria-sort="ascending"] .sort-icon_svg__up {
           color: #017aee;
@@ -154,7 +149,7 @@
       }
     }
     .pin-button {
-      margin-right: 25px;
+      margin-right: 55px;
     }
 
     @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
@@ -181,8 +176,36 @@
       font-size: 16px;
     }
   }
+  &__option {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0 14px 40px;
+    color: #017AEE;
+
+
+    &:nth-last-child(even){
+      background: rgba(188, 196, 216, 0.1);
+    }
+
+
+
+    .check-block {
+      //grid-column: 2 / 3;
+      display: flex;
+      justify-content: space-between;
+      min-width: 77%;
+
+      &--wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 21%;
+      }
+    }
+  }
 
   &__option--hide-pin {
+    color: #7182A6;
     .pin-button {
       opacity: 0;
       transition: opacity 0.2s;
@@ -197,28 +220,6 @@
     }
   }
 
-  &__option--pinned {
-    //display: grid;
-    //grid-template-columns: 16px 1fr;
-    //gap: 6px;
-    //align-items: start;
-    display: flex;
-    justify-content: space-between;
-
-    .check-block {
-      //grid-column: 2 / 3;
-      display: flex;
-      justify-content: space-between;
-      min-width: 82%;
-
-      &--wrap {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 20%;
-      }
-    }
-  }
 
   &__option .check-block__text {
     white-space: nowrap;
