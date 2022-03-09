@@ -5,6 +5,7 @@ import { SideBar } from "../../components/side-bar";
 import style from "./with-sidebar.module.scss";
 import PrivateRoutes from "../../router/private-routes";
 import { EditPassword } from "../../components/edit-modal/edit-password";
+import { RestartServer } from '../../components/restart-server';
 
 import { useLocation } from "react-router-dom";
 import useUser from "../../hooks/useUser";
@@ -21,6 +22,7 @@ export default function WithSideBarLayout(): ReactElement {
     const dispatch = useDispatch();
 
     const [showProfile, setShowProfile] = useState<boolean>(false);
+    const [showRestart, setShowRestart] = useState<boolean>(false);
 
     useEffect(() => {
         !getCookie("user") && logout();
@@ -36,7 +38,10 @@ export default function WithSideBarLayout(): ReactElement {
 
     return (
         <>
-            <SideBar openModal={() => setShowProfile(true)} />
+            <SideBar openModal={(modal) => {
+                    if(modal === "my-account") setShowProfile(true);
+                    if(modal === "restart-server") setShowRestart(true);
+                }} />
             <main className={style.main}>
                 <PrivateRoutes />
             </main>
@@ -44,6 +49,12 @@ export default function WithSideBarLayout(): ReactElement {
             {showProfile && user && (
                 <EditPassword onClose={() => setShowProfile(false)} />
             )}
+
+            {showRestart && user &&
+                <RestartServer
+                    onClose={() => setShowRestart(false)}
+                />
+            }
         </>
     );
 }
