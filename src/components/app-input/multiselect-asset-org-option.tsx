@@ -38,7 +38,7 @@ const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> 
                 "assets__option",
                 "assets__option--pinned",
                 {
-                    "assets__option--hide-pin": !isPinned,
+                    "assets__option--hide-pin": Boolean(!selected[selectedID]),
                 }
             )}
         >

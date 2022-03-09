@@ -12,12 +12,15 @@ import { useClickOutside } from "../../hooks/useClickOutside";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 import "./styles/assets.scss";
 import MultiselectAssetOption, { MultiselectAssetOptionProps } from "./multiselect-asset-option";
-import { AssetInOrganization, AssetServerResponse } from "../../types/asset";
+import { AssetInOrganization } from "../../types/asset";
 import style from "../form/styles/edit-organization.module.scss";
 import Button, { ResetButton } from "../button";
+import CheckSVG from "../form/assets/check.svg";
 import { SortDirection, UniqueError } from "../../data/enum";
 import ISort from "../../types/sort-type";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
+import sortTable from "../sort-table-header/utils/sort";
+import { Organization } from "../../types/organization/types";
 
 
 interface IAssetsModalWindow extends Omit<MultiselectAssetOptionProps,
@@ -32,33 +35,39 @@ interface IAssetsModalWindow extends Omit<MultiselectAssetOptionProps,
     setSelected:
     | Dispatch<SetStateAction<Set<string | number>>>
     | Dispatch<SetStateAction<AssetInOrganization[]>>;
-    assignedAssetsReset: (target: HTMLButtonElement) => void
     isUpdating: boolean,
     isChanged: boolean,
     externalLoad?: boolean;
     duplicateOrgError: undefined | UniqueError.Name
     duplicateIdError: undefined | UniqueError.ID
-    isSavedMessageActive: boolean
+    organization?: Organization;
+    setAssignedAssets: | Dispatch<SetStateAction<Set<string | number>>>
+    | Dispatch<SetStateAction<AssetInOrganization[]>>;
+
+    hideModal: () => void
+    visible: string
+    assetsReset: () => void,
+    setVisible: (arg: string) => void
 }
 
 const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
     showOptions,
-    setShowOptions,
     selected,
     errorMessage,
     showError,
     setSelected,
     disabled,
     options,
-    assignedAssetsReset,
     type,
     isUpdating,
     isChanged,
     externalLoad,
     duplicateOrgError,
     duplicateIdError,
-    isSavedMessageActive
-
+    hideModal,
+    visible,
+    setVisible,
+    assetsReset
 }) => {
     const rootElement = useRef<HTMLDivElement>(null);
     const isEditOrganization = Array.isArray(selected);
@@ -66,71 +75,48 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
     const [scrollY, setScrollY] = useState<number>(0);
     const INITIAL_SORT = { name: "name", direction: SortDirection.Down }
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
-    const [visible, setVisible] = useState('')
-    const [arrAssets, setArrAssets] = useState<AssetServerResponse[]>()
-    const [filteredOptions, setFilteredOptions] = useState<AssetInOrganization[]>([])
+    // const [visible, setVisible] = useState('')
+    const [arrAssets, setArrAssets] = useState<AssetInOrganization[]>(options)
+    const [isSave, setIsSave] = useState<boolean>(false)
+
 
     const addVisible = () => {
         setTimeout(() => setVisible('visible'))
     }
 
-    const hideModal = async () => {
-        setVisible('')
-        setTimeout(() => setShowOptions(false), 300)
-    }
+
 
     useEffect(() => {
         addVisible()
     }, [showOptions])
 
+    useEffect(() => {
+        if (isSave) {
+            setTimeout(() => setIsSave(false), 1000);
+            setTimeout(() => hideModal(), 1200);
+        }
+    }, [isSave]);
+
 
     useEffect(() => {
-        const arr: AssetServerResponse[] = []
-        options.forEach((option) => {
-            arr.push(option.asset)
-        })
-        setArrAssets(arr)
+        setArrAssets(options)
     }, [options])
 
-
-    const getFilteredOptions = () => {
-
-        let newOption: AssetInOrganization
-        const filtered: AssetInOrganization[] = []
-        const optionsId: number[] = []
-        options.forEach((item) => optionsId.push(item.assetId))
-        for (let a = 0; arrAssets && a < arrAssets.length; a++) {
-            for (let o = 0; o < options.length; o++) {
-                if (arrAssets[a].name === options[o].asset.name) {
-                    newOption = {
-                        organizationId: options[o].organizationId,
-                        assetId: options[o].assetId,
-                        sharedByDefault: options[o].sharedByDefault,
-                        asset: arrAssets[a]
-                    }
-
-                    filtered.push(newOption)
-                }
-            }
-        }
-        setFilteredOptions(filtered)
-    }
-
-
     useEffect(() => {
-        getFilteredOptions()
-    }, [arrAssets])
+        sortTable('name', sort, options, setSort, setArrAssets)
+    }, [])
 
-    useClickOutside(rootElement, () => hideModal(), showOptions);
+
+    useClickOutside(rootElement, () => assetsReset(), showOptions);
     return (
         <>
-            <div
+            {/* <div
                 className={classNames("assets__modal")}
             >
-                {/* {showError && !hideError && (
+                {showError && !hideError && (
                     <p className="app-input__error">{errorMessage}</p>
-                )} */}
-                {/* <div className={`assets__modal--body ${visible}`}
+                )}
+                <div className={`assets__modal--body ${visible}`}
                     ref={rootElement}>
                     <div className="assets__header">
                         <div className="assets__header--wrap">
@@ -140,8 +126,8 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                             <div className="assets__header--buttons">
                                 <div className={style.buttons}>
                                     <ResetButton
-                                        onClick={({ target }) =>
-                                            assignedAssetsReset(target as HTMLButtonElement)
+                                        onClick={() =>
+                                            assetsReset()
                                         }
                                         disabled={isUpdating}
                                     >
@@ -158,9 +144,10 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                                             Boolean(duplicateOrgError) ||
                                             Boolean(duplicateIdError)
                                         }
-                                        variant={isSavedMessageActive ? "valid" : undefined}
+                                        variant={isSave ? "valid" : undefined}
+                                        onClick={() => setTimeout(() => setIsSave(true), 100)}
                                     >
-                                        {isSavedMessageActive ? (
+                                        {isSave ? (
                                             <>
                                                 <CheckSVG
                                                     aria-hidden="true"
@@ -203,7 +190,7 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
 
                         </table>
 
-                        {filteredOptions.map((option: any) =>
+                        {arrAssets.map((option: any) =>
                             isEditOrganization ? (
                                 <MultiselectAssetOrgOption
                                     key={option.assetId}
@@ -224,10 +211,10 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                             )
                         )}
                     </div>
-                </div> */}
+                </div>
 
 
-            </div>
+            </div> */}
         </>
 
 

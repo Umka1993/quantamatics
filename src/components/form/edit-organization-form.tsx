@@ -234,7 +234,33 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         organization,
     ]);
 
+
     const [showOptions, setShowOptions] = useState<boolean>(false);
+
+
+    const [visible, setVisible] = useState('')
+
+
+    const hideModal = () => {
+        setVisible('')
+        setTimeout(() => setShowOptions(false), 300)
+    }
+
+    const assetsReset = () => {
+        if (organization) {
+            setAssignedAssets(organization.organizationAssets);
+        }
+        hideModal()
+    };
+
+    const assignedAssetsReset = (target: HTMLButtonElement) => {
+        target.blur();
+        if (organization) {
+            setAssignedAssets(organization.organizationAssets);
+        }
+    };
+
+
 
     const toggleOptions = () => {
         setShowOptions(prevState => !prevState);
@@ -314,7 +340,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                         onClick={toggleOptions}
                     >
                         <DocIcon width={21} height={21} fill='currentColor' aria-hidden />
-                        Configure Assets
+                        Manage Assets
                     </Button>
                     Manage assets for the organization
                 </p>

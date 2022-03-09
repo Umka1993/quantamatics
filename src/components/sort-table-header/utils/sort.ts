@@ -81,7 +81,14 @@ function normalizeCompare(item : any, name: string) {
     
         case "userRoles":
             return item[name];
-    
+
+        case 'name':
+            if (item.asset) {
+                return item.asset[name]
+            } else {
+                return item[name].toUpperCase()
+            }
+
         default:
             return item[name].toUpperCase()
     }      
