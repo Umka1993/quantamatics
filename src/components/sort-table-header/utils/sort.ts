@@ -5,11 +5,12 @@ const sortTable = (
     sort: any,
     localRows: any,
     setSort: any,
-    setLocalRows: any
+    setLocalRows: any,
+    localKey: string,
 ) => {
     const newSort = sort;
 
-    if (name === sort.name || "" === sort.mame) {
+    if (name === sort.name || "" === sort.name) {
         switch (sort.direction) {
             case SortDirection.Up:
                 newSort.direction = SortDirection.Down;
@@ -53,7 +54,7 @@ const sortTable = (
 
         default:
             if (name !== "name") {
-                newRows = JSON.parse(sessionStorage.getItem("table-rows") as string);
+                newRows = JSON.parse(sessionStorage.getItem(localKey) as string);
             } else {
                 newRows = [...localRows];
             }

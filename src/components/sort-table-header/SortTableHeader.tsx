@@ -12,23 +12,25 @@ interface ISortTableHeader {
     setLocalRows: any;
     text: string;
     className?: string;
-    rememberScroll?: Dispatch<SetStateAction<number>>
+    rememberScroll?: Dispatch<SetStateAction<number>>;
+    localKey?: string;
 }
 
 export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
-                                                                         name,
-                                                                         sort,
-                                                                         localRows,
-                                                                         setSort,
-                                                                         setLocalRows,
-                                                                         text,
-                                                                         className,
-                                                                         rememberScroll
-                                                                     }) => {
+    name,
+    sort,
+    localRows,
+    setSort,
+    setLocalRows,
+    text,
+    className,
+    rememberScroll,
+    localKey = 'table-rows',
+}) => {
     useEffect(() => {
 
         if (!sort.name.length) {
-            sortTable(name, sort, localRows, setSort, setLocalRows)
+            sortTable(name, sort, localRows, setSort, setLocalRows, localKey)
         }
     }, [])
 
@@ -43,12 +45,13 @@ export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
                         const scrollWrapper = document.querySelector('main')
                         scrollWrapper && rememberScroll(scrollWrapper.scrollTop)
                     }
-                    sortTable(name, sort, localRows, setSort, setLocalRows)
+                    sortTable(name, sort, localRows, setSort, setLocalRows, localKey)
                 }}
+                type='button'
                 className='sort-table-header__button'
             >
                 {text}
-                <SortIcon aria-hidden/>
+                <SortIcon aria-hidden />
             </button>
         </th>
     );

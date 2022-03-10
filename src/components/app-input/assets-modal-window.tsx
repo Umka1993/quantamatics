@@ -100,7 +100,7 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
     }, [options])
 
     useEffect(() => {
-        sortTable('name', sort, options, setSort, setArrAssets)
+        // sortTable('name', sort, options, setSort, setArrAssets)
     }, [])
 
 

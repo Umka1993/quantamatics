@@ -6,6 +6,7 @@ import React, {
     useState,
     Dispatch,
     FormEvent,
+    useRef,
 } from "react";
 import { HTMLProps } from "react";
 import Dialog from "../dialog";
@@ -13,8 +14,10 @@ import style from "./AssetModal.module.scss";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { AssetInOrganization } from "types/asset";
 import AssetRow from "./AssetRow";
-import { useRef } from "react";
-import { FormEventHandler } from "react";
+
+import { SortDirection } from "../../data/enum";
+import ISort from "../../types/sort-type";
+import sortTable from "../sort-table-header/utils/sort";
 
 interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
     open: boolean;
@@ -43,8 +46,16 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 
     const errorRef = useRef<HTMLParagraphElement>(null);
 
+    const INITIAL_SORT = { name: "name", direction: SortDirection.Down };
+    const [sort, setSort] = useState<ISort>(INITIAL_SORT);
+
+    // useEffect(() => {
+    //     sortTable("name", sort, options, setSort, setArrAssets, "asset-rows");
+    // }, []);
+
     useEffect(() => {
         setArrAssets(options);
+        sessionStorage.setItem("asset-rows", JSON.stringify(options));
     }, [options]);
 
     useEffect(() => {
@@ -58,14 +69,13 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
         evt.preventDefault();
 
         if (hasChanges && !hasError) {
-            setError(true)
+            setError(true);
             return;
         }
 
         if (!hasChanges || hasError) {
             setError(false);
             closeFunction();
-
         }
     }
 
@@ -92,7 +102,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
                     evt.preventDefault();
                     setSubmitting(true);
                 }}
-                method='dialog'
+                method="dialog"
             >
                 <SaveResetHeader
                     headline="Application Assets"
@@ -111,7 +121,18 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
                 <table className={style.table}>
                     <thead>
                         <tr className={style.row}>
-                            <th className={style.headline}>Name</th>
+                            <th className={style.headline}>
+                                <SortTableHeader
+                                    name="name"
+                                    text="Name"
+                                    sort={sort}
+                                    localRows={arrAssets}
+                                    setSort={setSort}
+                                    setLocalRows={setArrAssets}
+                                    className="user"
+                                    localKey='asset-rows'
+                                />
+                            </th>
                             <th className={[style.headline, style.action].join(" ")}>
                                 Assign
                             </th>
