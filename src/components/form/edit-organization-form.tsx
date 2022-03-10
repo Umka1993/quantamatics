@@ -342,9 +342,14 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 </p>
             </form>
 
-            <AssetModal open={showOptions} closeFunction={toggleOptions} options={options} />
-            {/* 
-            {showOptions && <AssetsModalWindow
+            <AssetModal 
+                open={showOptions} 
+                closeFunction={toggleOptions} 
+                options={options} 
+                selected={assignedAssets}
+            />
+            
+            {/* {showOptions && <AssetsModalWindow
                 showOptions={showOptions}
                 setShowOptions={setShowOptions}
                 options={options}

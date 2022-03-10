@@ -109,7 +109,7 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
     useClickOutside(rootElement, () => assetsReset(), showOptions);
     return (
         <>
-            =<div
+            <div
                 className={classNames("assets__modal")}
             >
                 {showError && !hideError && (

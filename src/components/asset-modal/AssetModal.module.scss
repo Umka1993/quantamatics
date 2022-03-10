@@ -28,3 +28,12 @@
     letter-spacing: 0.04em;
     color: $headlines;
 }
+
+.asset {
+    padding: 14px 40px;
+
+    &:nth-child(odd) {
+        background-color: rgba($inactive, 0.1);
+    }
+
+}
