@@ -66,30 +66,6 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
             )}
             {...other}
         >
-            <span className="check-block__text" title={textTitle}>
-                {children}
-            </span>
-            <span className="check-block--wrap">
-                 <input
-                     type="checkbox"
-                     name={name}
-                     defaultChecked={checked}
-                     onChange={inputHandler}
-                     className="check-block__input"
-                     disabled={disabled}
-                     value={value}
-                     ref={inputRef}
-                     aria-describedby={`${name}-desc`}
-                 />
-            <span className="check-block__custom">
-                <CheckIcon
-                    width="16"
-                    height="16"
-                    aria-hidden="true"
-                    className="check-block__check"
-                />
-            </span>
-
             <input
                 type="checkbox"
                 name={name}
@@ -109,7 +85,6 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                     className="check-block__check"
                 />
             </span>
-            </span>
 
             {labelCheckbox && (
                 <span id={`${name}-desc`} className="check-block__desc">
@@ -117,7 +92,9 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                 </span>
             )}
 
-
+            <span className="check-block__text" title={textTitle}>
+                {children}
+            </span>
         </label>
     );
 };

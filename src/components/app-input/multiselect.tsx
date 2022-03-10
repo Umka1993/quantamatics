@@ -1,15 +1,17 @@
 import React, {
-    Dispatch,
+    useState,
+    useRef,
     FunctionComponent,
     SelectHTMLAttributes,
-    SetStateAction,
+    CSSProperties,
     useEffect,
     useLayoutEffect,
-    useRef,
-    useState,
+    Dispatch,
+    SetStateAction,
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
+import useCloseModal from "../../hooks/useCloseModal";
 import classNames from "classnames";
 import MultiselectAssetOption, {
     MultiselectAssetOptionProps,
@@ -17,7 +19,6 @@ import MultiselectAssetOption, {
 import { AssetInOrganization, AssetListItem } from "../../types/asset";
 import MultiselectAssetOrgOption from "./multiselect-asset-org-option";
 import { useClickOutside } from "../../hooks/useClickOutside";
-
 interface IInput
     extends Omit<MultiselectAssetOptionProps,
     "option" | "selected" | "setSelected">,
@@ -105,9 +106,9 @@ const Multiselect: FunctionComponent<IInput> = ({
 
     /* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
 
-    // const toggleOptions = () => {
-    //     setShowOptions(!showOptions)
-    // };
+    const toggleOptions = () => {
+        setShowOptions(!showOptions)
+    };
 
     // useCloseModal(showOptions, setShowOptions);
     useClickOutside(rootElement, () => setShowOptions(false), showOptions);
@@ -122,47 +123,47 @@ const Multiselect: FunctionComponent<IInput> = ({
             ref={rootElement}
             onClick={(e) => e.stopPropagation()}
         >
-            {/*<label*/}
-            {/*    className={classNames("app-input__wrapper multiselect__search_wrap", {*/}
-            {/*        "multiselect__search_wrap--opened": showOptions,*/}
-            {/*    })}*/}
-            {/*    style={*/}
-            {/*        label*/}
-            {/*            ? ({*/}
-            {/*                "--label-width": `${rightOffset}px`,*/}
-            {/*            } as CSSProperties)*/}
-            {/*            : undefined*/}
-            {/*    }*/}
-            {/*>*/}
-            {/*    <input*/}
-            {/*        className={classNames("app-input__field", {*/}
-            {/*            "app-input__field--error":*/}
-            {/*                showError &&*/}
-            {/*                !hideError &&*/}
-            {/*                !(isEditOrganization*/}
-            {/*                    ? Boolean(selected.length)*/}
-            {/*                    : Boolean(selected.size)),*/}
-            {/*        })}*/}
-            {/*        type="text"*/}
-            {/*        placeholder={label ? " " : placeholder}*/}
-            {/*        value={list}*/}
-            {/*        // onFocus={openOptions}*/}
-            {/*        onClick={toggleOptions}*/}
-            {/*        readOnly*/}
-            {/*        style={{*/}
-            {/*            cursor: "pointer",*/}
-            {/*        }}*/}
-            {/*        disabled={fullDisabled}*/}
-            {/*    />*/}
+            <label
+                className={classNames("app-input__wrapper multiselect__search_wrap", {
+                    "multiselect__search_wrap--opened": showOptions,
+                })}
+                style={
+                    label
+                        ? ({
+                            "--label-width": `${rightOffset}px`,
+                        } as CSSProperties)
+                        : undefined
+                }
+            >
+                <input
+                    className={classNames("app-input__field", {
+                        "app-input__field--error":
+                            showError &&
+                            !hideError &&
+                            !(isEditOrganization
+                                ? Boolean(selected.length)
+                                : Boolean(selected.size)),
+                    })}
+                    type="text"
+                    placeholder={label ? " " : placeholder}
+                    value={list}
+                    // onFocus={openOptions}
+                    onClick={toggleOptions}
+                    readOnly
+                    style={{
+                        cursor: "pointer",
+                    }}
+                    disabled={fullDisabled}
+                />
 
-            {/*    {label && (*/}
-            {/*        <span*/}
-            {/*            className={classNames("app-input__label app-input__label--icon")}*/}
-            {/*        >*/}
-            {/*            <span ref={labelRef}>{label}</span>*/}
-            {/*        </span>*/}
-            {/*    )}*/}
-            {/*</label>*/}
+                {label && (
+                    <span
+                        className={classNames("app-input__label app-input__label--icon")}
+                    >
+                        <span ref={labelRef}>{label}</span>
+                    </span>
+                )}
+            </label>
             {showError && !hideError && (
                 <p className="app-input__error">{errorMessage}</p>
             )}

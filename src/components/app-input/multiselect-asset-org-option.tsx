@@ -35,27 +35,13 @@ const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> 
     return (
         <div
             className={classNames(
-                "assets__option",
-                "assets__option--pinned",
+                "multiselect__option",
+                "multiselect__option--pinned",
                 {
-                    "assets__option--hide-pin": Boolean(!selected[selectedID]),
+                    "multiselect__option--hide-pin": !isPinned,
                 }
             )}
         >
-
-
-            <Checkbox
-                name={option.asset.name}
-                checked={isSelected}
-                disabled={disabled}
-                highlightOnChecked
-                value={option.assetId}
-                textTitle={option.asset.name}
-                onChange={isSelected ? removeFromSelected : () => addToSelected(false)}
-            >
-                {option.asset.name}
-            </Checkbox>
-
             <PinButton
                 checked={isPinned}
                 onClick={() => {
@@ -72,6 +58,18 @@ const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> 
                 }}
                 aria-label="Set as default for all user accounts"
             />
+
+            <Checkbox
+                name={option.asset.name}
+                checked={isSelected}
+                disabled={disabled}
+                highlightOnChecked
+                value={option.assetId}
+                textTitle={option.asset.name}
+                onChange={isSelected ? removeFromSelected : () => addToSelected(false)}
+            >
+                {option.asset.name}
+            </Checkbox>
         </div>
     );
 };
