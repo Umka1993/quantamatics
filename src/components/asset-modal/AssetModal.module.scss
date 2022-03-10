@@ -1,7 +1,30 @@
+@use "../../sass/variables.scss" as *;
+
 .root {
     padding: 40px 0;
 }
 
 .header {
     padding: 0 40px;
+}
+
+.table {
+    width: 100%;
+    display: grid;
+}
+
+.row {
+    padding: 8px 40px;
+    display: grid;
+    grid-template-columns: 1fr 45px 45px;
+    gap: 18px;
+}
+
+.headline {
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1.33;
+    letter-spacing: 0.04em;
+    color: $headlines;
 }

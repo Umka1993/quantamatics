@@ -236,14 +236,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     ]);
 
 
-    const [showOptions, setShowOptions] = useState<boolean>(false);
-
-
-    const [visible, setVisible] = useState('')
-
+    const [showOptions, setShowOptions] = useState(false);
 
     const hideModal = () => {
-        setVisible('')
         setTimeout(() => setShowOptions(false), 300)
     }
 
@@ -347,8 +342,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 </p>
             </form>
 
-            <AssetModal open={showOptions} closeFunction={toggleOptions} />
-{/* 
+            <AssetModal open={showOptions} closeFunction={toggleOptions} options={options} />
+            {/* 
             {showOptions && <AssetsModalWindow
                 showOptions={showOptions}
                 setShowOptions={setShowOptions}
@@ -366,8 +361,7 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 organization={organization}
                 setAssignedAssets={setAssignedAssets}
                 hideModal={hideModal}
-                visible={visible}
-                setVisible={setVisible}
+        
                 assetsReset={assetsReset}
             />} */}
         </>
