@@ -26,6 +26,7 @@ import AssetsModalWindow from "../app-input/assets-modal-window";
 
 import SaveResetHeader from "../save-reset-header/SaveResetHeader";
 import DocIcon from './assets/doc.svg'
+import AssetModal from "../asset-modal/AssetModal";
 
 interface EditOrganizationFormProps {
     organization?: Organization;
@@ -346,22 +347,29 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 </p>
             </form>
 
-            {/* {showOptions && (
-                <AssetsModalWindow
-                    showOptions={showOptions}
-                    setShowOptions={setShowOptions}
-                    options={options}
-                    selected={assignedAssets}
-                    errorMessage="Select asset permissions to assign to the organization."
-                    showError={assetError}
-                    setSelected={setAssignedAssets}
-                    disabled={isUserOrganization}
-                    type="edit-organization"
-                    isUpdating={isUpdating}
-                    isChanged={isChanged}
-                    isSavedMessageActive={isSavedMessageActive}
-                />
-            )} */}
+            <AssetModal open={showOptions} closeFunction={toggleOptions} />
+{/* 
+            {showOptions && <AssetsModalWindow
+                showOptions={showOptions}
+                setShowOptions={setShowOptions}
+                options={options}
+                selected={assignedAssets}
+                errorMessage="Select asset permissions to assign to the organization."
+                showError={assetError}
+                setSelected={setAssignedAssets}
+                disabled={isUserOrganization}
+                type="edit-organization"
+                isUpdating={isUpdating}
+                isChanged={isChanged}
+                duplicateOrgError={duplicateOrgError}
+                duplicateIdError={duplicateIdError}
+                organization={organization}
+                setAssignedAssets={setAssignedAssets}
+                hideModal={hideModal}
+                visible={visible}
+                setVisible={setVisible}
+                assetsReset={assetsReset}
+            />} */}
         </>
     );
 };

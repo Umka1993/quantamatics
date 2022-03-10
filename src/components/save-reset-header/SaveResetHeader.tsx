@@ -2,19 +2,29 @@ import Button, { ResetButton } from "../button";
 import Headline from "../page-title";
 import React, { FunctionComponent, HTMLProps } from "react";
 import CheckSVG from "./assets/check.svg";
-import style from "./SaveResetHeader.module.scss"
+import style from "./SaveResetHeader.module.scss";
+import classNames from "classnames";
 
 interface SaveResetHeaderProps extends HTMLProps<HTMLDivElement> {
-    headline: string,
-    disableSave?: boolean,
-    isSavedMessageActive?: boolean,
-    disableReset?: boolean,
+    headline: string;
+    disableSave?: boolean;
+    isSavedMessageActive?: boolean;
+    disableReset?: boolean;
+    headlineID?: string;
 }
 
-const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({ headline, disableSave, disableReset, isSavedMessageActive, ...other }) => {
+const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
+    headline,
+    disableSave,
+    disableReset,
+    isSavedMessageActive,
+    headlineID,
+    className,
+    ...other
+}) => {
     return (
-        <header className={style.header} {...other}>
-            <Headline style={{ margin: 0 }}>
+        <header className={classNames(style.header, className)} {...other}>
+            <Headline style={{ margin: 0 }} id={headlineID}>
                 {headline}
             </Headline>
             <div className={style.buttons}>
@@ -28,8 +38,7 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({ headline, di
                 <Button
                     type="submit"
                     className={style.save}
-                    disabled={disableSave
-                    }
+                    disabled={disableSave}
                     variant={isSavedMessageActive ? "valid" : undefined}
                 >
                     {isSavedMessageActive ? (
@@ -47,7 +56,8 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({ headline, di
                     )}
                 </Button>
             </div>
-        </header>);
-}
+        </header>
+    );
+};
 
 export default SaveResetHeader;

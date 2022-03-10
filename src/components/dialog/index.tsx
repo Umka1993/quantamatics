@@ -8,12 +8,14 @@ import classNames from "classnames";
 
 import CloseIcon from './assets/close.svg'
 
-interface ModalProps extends HTMLProps<HTMLDivElement> {
+export interface ModalProps extends HTMLProps<HTMLDivElement> {
     closeOnOutsideClick?: boolean;
     onRequestClose: () => void;
     open?: boolean;
     headline?: string;
     wrapperClass?: string;
+    variant?: 'default' | 'right-side'
+    hasCloseButton?: boolean;
 }
 
 export default function Dialog({
@@ -24,6 +26,8 @@ export default function Dialog({
     headline,
     wrapperClass,
     id,
+    variant = 'default',
+    hasCloseButton = true,
     ...other
 }: ModalProps) {
     const dialogRef = useRef<HTMLDialogElement>(null);
@@ -75,20 +79,21 @@ export default function Dialog({
         <dialog
             ref={dialogRef}
             onClick={handleOutsideClick}
-            className={style.root}
-            aria-labelledby={id}
+            className={[style.root, style[`root--${variant}`]].join(' ')}
+            aria-labelledby={`${id}-title`}
         >
 
-            <button
-                aria-label={closeMessage}
-                title={closeMessage}
-                className={style.close}
-                onClick={onRequestClose}
-            >
-                <CloseIcon aria-hidden />
-            </button>
-
-            <div {...other} className={classNames(style.wrapper, wrapperClass)}>
+            {hasCloseButton &&
+                <button
+                    aria-label={closeMessage}
+                    title={closeMessage}
+                    className={style.close}
+                    onClick={onRequestClose}
+                >
+                    <CloseIcon aria-hidden />
+                </button>
+            }
+            <div {...other} className={classNames(style.wrapper, style[`wrapper--${variant}`], wrapperClass)}>
                 {headline && (
                     <h2 id={`${id}-title`} className={style.title}>
                         {headline}

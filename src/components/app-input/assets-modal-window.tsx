@@ -15,7 +15,6 @@ import MultiselectAssetOption, { MultiselectAssetOptionProps } from "./multisele
 import { AssetInOrganization } from "../../types/asset";
 import style from "../form/styles/edit-organization.module.scss";
 import Button, { ResetButton } from "../button";
-import CheckSVG from "../form/assets/check.svg";
 import { SortDirection, UniqueError } from "../../data/enum";
 import ISort from "../../types/sort-type";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
@@ -110,7 +109,7 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
     useClickOutside(rootElement, () => assetsReset(), showOptions);
     return (
         <>
-            {/* <div
+            =<div
                 className={classNames("assets__modal")}
             >
                 {showError && !hideError && (
@@ -149,12 +148,6 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                                     >
                                         {isSave ? (
                                             <>
-                                                <CheckSVG
-                                                    aria-hidden="true"
-                                                    width={17}
-                                                    height={17}
-                                                    fill="currentColor"
-                                                />
                                                 Saved
                                             </>
                                         ) : (
@@ -214,7 +207,7 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                 </div>
 
 
-            </div> */}
+            </div> 
         </>
 
 

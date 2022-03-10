@@ -8,16 +8,20 @@
     cursor: pointer;
 }
 
+@mixin side-backdrop {
+    background: rgba(black, 0.2);
+    position: fixed;
+    inset: 0;
+    cursor: pointer;
+}
+
 .root {
     position: fixed;
-    left: 0;
-    right: 0;
     width: 100%;
-    max-width: 480px;
     height: -moz-fit-content;
     height: -webkit-fit-content;
     height: fit-content;
-    margin: auto;
+
     border: none;
     padding: 0;
     background: white;
@@ -25,24 +29,64 @@
     display: block;
 
     box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.1);
-    border-radius: 4px;
 
-    &::backdrop {
-        @include backdrop;
+    &--default {
+        left: 0;
+        right: 0;
+        max-width: 480px;
+        margin: auto;
+        border-radius: 4px;
+        &::backdrop {
+            @include backdrop;
+        }
+
+        &:not([open]) {
+            display: none;
+        }
+    }
+
+    &--right-side {
+        top: 0;
+        right: 0;
+        max-width: 565px;
+        box-shadow: 0 2px 20px rgba(22, 34, 101, 0.1);
+
+        padding: 0;
+        transition: transform 0.5s ease;
+        transform: translateX(1000px);
+        margin: 0;
+        margin-left: auto;
+        max-height: none;
+        &::backdrop {
+            @include side-backdrop();
+        }
+
+        &[open] {
+            transform: translateX(0);
+        }
     }
 }
 
+.test {
+    background-color: limegreen;
+}
+
 .wrapper {
-    padding: 40px;
-    width: 100%;
-    max-width: 480px;
-
-    
     overflow: auto;
-    scrollbar-gutter: stable both-edges;
 
-    display: flex;
-    flex-direction: column;
+    &--default {
+        padding: 40px;
+        width: 100%;
+        max-width: 480px;
+        display: flex;
+        flex-direction: column;
+        scrollbar-gutter: stable both-edges;
+    }
+
+    &--right-side {
+        width: 100%;
+        height: 100vh;
+    }
 }
 
 .title {
@@ -71,10 +115,6 @@
     &:active {
         color: darken($accent, 20);
     }
-}
-
-.root:not([open]) {
-    display: none;
 }
 
 :global {
