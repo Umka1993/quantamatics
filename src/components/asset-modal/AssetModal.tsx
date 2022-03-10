@@ -1,16 +1,18 @@
 import SaveResetHeader from "../save-reset-header/SaveResetHeader";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, SetStateAction, useEffect, useState, Dispatch } from "react";
 import { HTMLProps } from "react";
 import Dialog from "../dialog";
 import style from "./AssetModal.module.scss";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { AssetInOrganization } from "types/asset";
+import AssetRow from "./AssetRow";
 
 interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
     open: boolean;
     closeFunction: () => void;
     options: AssetInOrganization[];
     selected: AssetInOrganization[];
+    setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>
 }
 
 const AssetModal: FunctionComponent<AssetModalProps> = ({
@@ -18,6 +20,8 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
     open,
     options,
     selected,
+    disabled,
+    setSelected,
     ...other
 }) => {
     const [arrAssets, setArrAssets] = useState(options);
@@ -51,15 +55,20 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
                     <thead>
                         <tr className={style.row}>
                             <th className={style.headline}>Name</th>
-                            <th className={style.headline}>Assign</th>
-                            <th className={style.headline}>Default</th>
+                            <th className={[style.headline, style.action].join(' ')}>Assign</th>
+                            <th className={[style.headline, style.action].join(' ')}>Default</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {arrAssets.length &&
+                        {arrAssets.length &&
                             arrAssets.map((option) => (
-                                <AssetRow key={option.assetId} />
-                            ))} */}
+                                <AssetRow
+                                    key={option.assetId}
+                                    option={option}
+                                    selected={selected}
+                                    setSelected={setSelected}
+                                    disabled={disabled} />
+                            ))}
                     </tbody>
                 </table>
             </form>

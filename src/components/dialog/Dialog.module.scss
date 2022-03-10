@@ -72,9 +72,10 @@
 }
 
 .wrapper {
-    overflow: auto;
+    
 
     &--default {
+        overflow: auto;
         padding: 40px;
         width: 100%;
         max-width: 480px;
@@ -84,6 +85,8 @@
     }
 
     &--right-side {
+        overflow-y: auto;
+        overflow-x: hidden;
         width: 100%;
         height: 100vh;
     }

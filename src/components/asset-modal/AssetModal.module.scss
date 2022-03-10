@@ -18,6 +18,12 @@
     display: grid;
     grid-template-columns: 1fr 45px 45px;
     gap: 18px;
+
+}
+
+.action {
+    display: grid;
+    place-content: center;
 }
 
 .headline {
@@ -35,5 +41,4 @@
     &:nth-child(odd) {
         background-color: rgba($inactive, 0.1);
     }
-
 }

@@ -347,6 +347,8 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 closeFunction={toggleOptions} 
                 options={options} 
                 selected={assignedAssets}
+                disabled={isUserOrganization}
+                setSelected={setAssignedAssets}
             />
             
             {/* {showOptions && <AssetsModalWindow
