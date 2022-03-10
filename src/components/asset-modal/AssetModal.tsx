@@ -65,9 +65,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
         }
     }, [isSubmitting]);
 
-    function resetHandler(evt: FormEvent<HTMLFormElement>) {
-        evt.preventDefault();
-
+    function checkErrorsOrClose() {
         if (hasChanges && !hasError) {
             setError(true);
             return;
@@ -77,6 +75,11 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
             setError(false);
             closeFunction();
         }
+    }
+
+    function resetHandler(evt: FormEvent<HTMLFormElement>) {
+        evt.preventDefault();
+        checkErrorsOrClose()
     }
 
     useEffect(() => {
@@ -92,7 +95,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
             open={open}
             hasCloseButton={false}
             closeOnOutsideClick
-            onRequestClose={closeFunction}
+            onRequestClose={checkErrorsOrClose}
             {...other}
         >
             <form
