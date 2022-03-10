@@ -3,7 +3,7 @@ import Checkbox from "../app-checkbox/checkbox";
 import { AssetListItem } from "../../types/asset";
 export interface MultiselectAssetOptionProps {
     selected: boolean;
-    setSelected: Dispatch<SetStateAction<Set<string | number >>> 
+    setSelected: Dispatch<SetStateAction<Set<string | number>>>
     option: AssetListItem;
     type?: "edit-organization" | "user";
 
