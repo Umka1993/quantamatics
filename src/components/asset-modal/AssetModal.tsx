@@ -1,5 +1,11 @@
 import SaveResetHeader from "../save-reset-header/SaveResetHeader";
-import React, { FunctionComponent, SetStateAction, useEffect, useState, Dispatch } from "react";
+import React, {
+    FunctionComponent,
+    SetStateAction,
+    useEffect,
+    useState,
+    Dispatch,
+} from "react";
 import { HTMLProps } from "react";
 import Dialog from "../dialog";
 import style from "./AssetModal.module.scss";
@@ -12,7 +18,8 @@ interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
     closeFunction: () => void;
     options: AssetInOrganization[];
     selected: AssetInOrganization[];
-    setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>
+    setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
+    assetsReset: () => void
 }
 
 const AssetModal: FunctionComponent<AssetModalProps> = ({
@@ -26,11 +33,21 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 }) => {
     const [arrAssets, setArrAssets] = useState(options);
 
+    const [hasChanges, setHasChanges] = useState(false);
+
+    const [isSubmitting, setSubmitting] = useState(false);
+
     useEffect(() => {
         setArrAssets(options);
     }, [options]);
 
-    console.table(arrAssets);
+    useEffect(() => {
+        if (isSubmitting) {
+            setTimeout(() => setSubmitting(false), 800)
+            setTimeout(closeFunction, 800)
+        }
+    }, [isSubmitting]);
+
 
     return (
         <Dialog
@@ -42,37 +59,44 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
             onRequestClose={closeFunction}
             {...other}
         >
-            <form className={style.root} onReset={closeFunction}>
+            <form className={style.root} onReset={closeFunction} onSubmit={(evt) => { evt.preventDefault(); setSubmitting(true) }}>
                 <SaveResetHeader
                     headline="Application Assets"
                     disableReset={false}
-                    disableSave={false}
-                    isSavedMessageActive={true}
+                    disableSave={!hasChanges}
+                    isSavedMessageActive={isSubmitting}
                     headlineID="asset-modal-title"
                     className={style.header}
                 />
+                {/* <p>Your changes will not be saved. Click again if you want to persist.</p> */}
                 <table className={style.table}>
                     <thead>
                         <tr className={style.row}>
                             <th className={style.headline}>Name</th>
-                            <th className={[style.headline, style.action].join(' ')}>Assign</th>
-                            <th className={[style.headline, style.action].join(' ')}>Default</th>
+                            <th className={[style.headline, style.action].join(" ")}>
+                                Assign
+                            </th>
+                            <th className={[style.headline, style.action].join(" ")}>
+                                Default
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {arrAssets.length &&
+                        {Boolean(arrAssets.length) &&
                             arrAssets.map((option) => (
                                 <AssetRow
                                     key={option.assetId}
                                     option={option}
                                     selected={selected}
                                     setSelected={setSelected}
-                                    disabled={disabled} />
+                                    disabled={disabled}
+                                    setChange={() => !hasChanges && setHasChanges(true)}
+                                />
                             ))}
                     </tbody>
                 </table>
             </form>
-        </Dialog>
+        </Dialog >
     );
 };
 

@@ -1,4 +1,10 @@
-import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState, } from "react";
+import React, {
+    Dispatch,
+    FunctionComponent,
+    SetStateAction,
+    useEffect,
+    useState,
+} from "react";
 import Checkbox from "../app-checkbox/checkbox";
 import classNames from "classnames";
 import { AssetInOrganization } from "../../types/asset";
@@ -10,6 +16,7 @@ export interface MultiselectAssetOptionProps {
     setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
     option: AssetInOrganization;
     disabled?: boolean;
+    setChange: () => void;
 }
 
 const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
@@ -17,6 +24,7 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
     option,
     setSelected,
     disabled,
+    setChange,
 }) => {
     const selectedID = selected.findIndex(
         ({ assetId }) => assetId === option.assetId
@@ -32,17 +40,11 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
             [...selected].filter(({ assetId }) => assetId !== option.assetId)
         );
 
-
     return (
-        <tr
-            className={classNames(
-                style.row, style.asset
-            )}
-        >
+        <tr className={classNames(style.row, style.asset)}>
             <td>{option.asset.name}</td>
 
             <td className={style.action}>
-
                 <Checkbox
                     name={option.asset.name}
                     checked={isSelected}
@@ -50,14 +52,17 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
                     highlightOnChecked
                     value={option.assetId}
                     textTitle={option.asset.name}
-                    onChange={isSelected ? removeFromSelected : () => addToSelected(false)}
-
+                    onChange={() => {
+                        setChange();
+                        isSelected ? removeFromSelected() : addToSelected(false);
+                    }}
                 />
             </td>
             <td className={style.action}>
                 <PinButton
                     checked={isPinned}
                     onClick={() => {
+                        setChange();
                         if (isSelected) {
                             const copySelected = [...selected];
                             copySelected[selectedID] = {
@@ -66,13 +71,12 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
                             };
                             setSelected(copySelected);
                         } else {
-                            !isPinned && addToSelected(true)
+                            !isPinned && addToSelected(true);
                         }
                     }}
                     aria-label="Set as default for all user accounts"
                 />
             </td>
-
         </tr>
     );
 };

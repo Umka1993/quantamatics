@@ -83,8 +83,6 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
         setTimeout(() => setVisible('visible'))
     }
 
-
-
     useEffect(() => {
         addVisible()
     }, [showOptions])
@@ -205,8 +203,6 @@ const AssetsModalWindow: FunctionComponent<IAssetsModalWindow> = ({
                         )}
                     </div>
                 </div>
-
-
             </div> 
         </>
 

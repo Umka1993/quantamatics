@@ -22,10 +22,9 @@ import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
 
 import addHTTPtoURL from "../../services/addHTTPtoURL";
-import AssetsModalWindow from "../app-input/assets-modal-window";
 
 import SaveResetHeader from "../save-reset-header/SaveResetHeader";
-import DocIcon from './assets/doc.svg'
+import DocIcon from "./assets/doc.svg";
 import AssetModal from "../asset-modal/AssetModal";
 
 interface EditOrganizationFormProps {
@@ -235,31 +234,14 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         organization,
     ]);
 
-
     const [showOptions, setShowOptions] = useState(false);
 
-    const hideModal = () => {
-        setTimeout(() => setShowOptions(false), 300)
-    }
-
-    const assetsReset = () => {
-        if (organization) {
-            setAssignedAssets(organization.organizationAssets);
-        }
-        hideModal()
-    };
-
-    const assignedAssetsReset = (target: HTMLButtonElement) => {
-        target.blur();
-        if (organization) {
-            setAssignedAssets(organization.organizationAssets);
-        }
-    };
-
-
-
+    const assetsReset = useCallback(
+        () => organization && setAssignedAssets(organization.organizationAssets),
+        [organization]
+    );
     const toggleOptions = () => {
-        setShowOptions(prevState => !prevState);
+        setShowOptions((prevState) => !prevState);
     };
 
     return (
@@ -330,47 +312,27 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
                 <p className={style.assets}>
                     <Button
-                        type='button'
+                        type="button"
                         className={style.save}
                         disabled={false}
                         onClick={toggleOptions}
                     >
-                        <DocIcon width={21} height={21} fill='currentColor' aria-hidden />
+                        <DocIcon width={21} height={21} fill="currentColor" aria-hidden />
                         Manage Assets
                     </Button>
                     Manage assets for the organization
                 </p>
             </form>
 
-            <AssetModal 
-                open={showOptions} 
-                closeFunction={toggleOptions} 
-                options={options} 
-                selected={assignedAssets}
-                disabled={isUserOrganization}
-                setSelected={setAssignedAssets}
-            />
-            
-            {/* {showOptions && <AssetsModalWindow
-                showOptions={showOptions}
-                setShowOptions={setShowOptions}
+            <AssetModal
+                open={showOptions}
+                closeFunction={toggleOptions}
                 options={options}
                 selected={assignedAssets}
-                errorMessage="Select asset permissions to assign to the organization."
-                showError={assetError}
-                setSelected={setAssignedAssets}
                 disabled={isUserOrganization}
-                type="edit-organization"
-                isUpdating={isUpdating}
-                isChanged={isChanged}
-                duplicateOrgError={duplicateOrgError}
-                duplicateIdError={duplicateIdError}
-                organization={organization}
-                setAssignedAssets={setAssignedAssets}
-                hideModal={hideModal}
-        
+                setSelected={setAssignedAssets}
                 assetsReset={assetsReset}
-            />} */}
+            />
         </>
     );
 };
