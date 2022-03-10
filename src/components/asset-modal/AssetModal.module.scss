@@ -7,6 +7,11 @@
 .header {
     padding: 0 40px;
 }
+.error {
+    color: $error;
+    margin: 0 40px 16px;
+    outline: none;
+}
 
 .table {
     width: 100%;
