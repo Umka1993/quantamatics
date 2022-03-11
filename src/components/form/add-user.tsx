@@ -189,7 +189,7 @@ const InviteUserForm: FunctionComponent = () => {
                         externalSetter={setRoles}
                     />
                 }
-                {isSuperAdmin ? (
+                {/* {isSuperAdmin ? (
                     <RolesMultiselect
                         options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
                         selected={Array.from(userRoles).sort()}
@@ -203,7 +203,7 @@ const InviteUserForm: FunctionComponent = () => {
                 ) : (
                     <p>sd</p>
                     // <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
-                )}
+                )} */}
             </div>
             <Button
                 className="create-organization__submit"

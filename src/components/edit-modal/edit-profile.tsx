@@ -278,7 +278,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             .join(", ")}
                     />
                 )}
-                {isSuperAdmin ? (
+                {/* {isSuperAdmin ? (
                     <RolesMultiselect
                         options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
                         selected={Array.from(userRoles).sort()}
@@ -292,7 +292,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                 ) : (
                     <p>s</p>
                     // <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
-                )}
+                )} */}
             </form>
 
             <footer className="edit-account__footer">

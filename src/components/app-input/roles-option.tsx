@@ -6,15 +6,16 @@ import React, {
     useEffect,
 } from "react";
 import Checkbox from "../app-checkbox/checkbox";
-import { AssetListItem } from "../../types/asset";
-import { UserRole, UserRoleLabel } from "../../data/enum";
+import { UserRole } from "../../data/enum";
+import { Option } from "../../types/option";
+import useChangeSet from "../../hooks/useChangeSet";
 export interface RolesOptionProps {
     selected: boolean;
-    setSelected: Dispatch<SetStateAction<UserRole[]>>
-    option: UserRole;
-    type?: "edit-organization" | "user";
+    setSelected: Dispatch<SetStateAction<Set<UserRole>>>
+    option: Option<UserRole>;
 
     disabled?: boolean;
+
 }
 
 const RolesOption: FunctionComponent<
@@ -22,25 +23,14 @@ const RolesOption: FunctionComponent<
 > = ({
     selected,
     option,
-    type,
-    setSelected,
-    disabled
+    setSelected
 }) => {
-        const isUserMode = type === "user";
+
 
         const [isSelected, setIsSelected] = useState(selected);
 
-        const showLabel = isUserMode
 
-        const addAssetIdToState = (prevSet: any) => {
-            if (!prevSet.includes(option)) return [...prevSet, option];
-            return prevSet
-        }
-        const removeAssetIdFromState = (prevSet: any) =>
-            [...prevSet].filter((chosenOption) => chosenOption !== option);
-
-        const addToSelected = () => setSelected(addAssetIdToState);
-        const removeFromSelected = () => setSelected(removeAssetIdFromState);
+        const [addToSelected, removeFromSelected] = useChangeSet(option.value, setSelected)
 
         useEffect(() => {
             isSelected ? addToSelected() : removeFromSelected();
@@ -51,13 +41,12 @@ const RolesOption: FunctionComponent<
                 className="multiselect__option"
             >
                 <Checkbox
-                    name={option}
+                    name={option.value}
                     externalSetter={setIsSelected}
                     checked={isSelected}
                     highlightOnChecked
                 >
-                    <p>rer</p>
-                    {/* {UserRoleLabel[option] as any} */}
+                    {option.label}
                 </Checkbox>
             </div>
         );

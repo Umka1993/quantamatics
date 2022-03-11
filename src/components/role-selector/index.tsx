@@ -1,13 +1,14 @@
-import RolesMultiselect from "../app-input/roles-multiselect";
 import React, {
     Dispatch,
     FunctionComponent,
     SetStateAction,
+    useEffect,
     useState,
 } from "react";
 import RoleCheckboxes from "../role-checkboxes";
 import { UserRole, UserRoleLabel } from "../../data/enum";
 import { Option } from "types/option";
+import RolesMultiselect from "../app-input/roles-multiselect";
 
 interface RoleSelectorProps {
     isSuperAdmin: boolean;
@@ -24,6 +25,10 @@ const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
         new Set(defaultRoles)
     );
 
+    useEffect(() => {
+        externalSetter(Array.from(selected))
+    }, [selected])
+
     const options: Option<UserRole>[] = isSuperAdmin
         ? [
             { label: UserRoleLabel[UserRole.OrgOwner], value: UserRole.OrgOwner },
@@ -32,22 +37,20 @@ const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
         : [{ label: "Organization Admin", value: UserRole.OrgAdmin }];
 
     return (
-        <RoleCheckboxes
-            defaultRoles={defaultRoles}
-            externalSetter={externalSetter}
+        isSuperAdmin ? <RolesMultiselect
+            selected={selected}
+            setter={setSelected}
             options={options}
+
+            label="Organization Role"
         />
-        // isSuperAdmin ? <RolesMultiselect
-        //     options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
-        //     selected={Array.from(userRoles).sort()}
-        //     setSelected={setRoles}
-        //     label="Organization Role"
-        //     errorMessage="Select asset permissions to assign to the user account."
-        //     showError={assetError}
-        //     type="user"
-        //     inputList={Array.from(userRoles).sort().join(", ")}
-        // /> :
-        //
+            :
+            <RoleCheckboxes
+                selected={selected}
+                setter={setSelected}
+                options={options}
+            />
+
     );
 };
 

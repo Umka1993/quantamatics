@@ -18,28 +18,25 @@ import { UserRole } from "../../data/enum";
 import RolesOption from "./roles-option";
 import useUser from "../../hooks/useUser";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { Option } from "../../types/option";
 
 
 interface IInput
-    extends Omit<
-    MultiselectAssetOptionProps,
-    "option" | "selected" | "setSelected"
-    >,
+    extends
     SelectHTMLAttributes<HTMLSelectElement> {
     error?: string;
     label?: string;
     icon?: string;
     showLimit?: boolean;
-    selected: UserRole[];
 
-    setSelected:
-    | Dispatch<SetStateAction<Set<string | number>>>
-    | Dispatch<SetStateAction<UserRole[]>>;
+    selected: Set<UserRole>;
+    setter: Dispatch<SetStateAction<Set<UserRole>>>;
+    className?: string;
+    options: Option<UserRole>[]
 
     errorMessage?: string;
     showError?: boolean;
 
-    options: UserRole[];
     inputList?: string;
 }
 
@@ -48,14 +45,13 @@ const RolesMultiselect: FunctionComponent<IInput> = ({
     label,
     placeholder,
     onFocus,
-    setSelected,
+    setter,
     selected,
     errorMessage,
     showError,
     className,
     disabled,
     inputList = "",
-    type,
 }) => {
     const [rightOffset, setRightOffset] = useState<number>(20);
     const labelRef = useRef<HTMLSpanElement>(null);
@@ -76,21 +72,21 @@ const RolesMultiselect: FunctionComponent<IInput> = ({
 
     useEffect(() => {
         setHideError(
-            Boolean(selected.length)
+            Boolean(selected.size)
         );
 
         reCalcLabelWidth();
     }, [selected]);
 
     useLayoutEffect(() => {
-        Boolean(selected.length)
+        Boolean(selected.size)
             ? setList(
                 [
-                    ...(options as UserRole[]).filter((userRoleItem) =>
-                        selected.includes(userRoleItem)
+                    ...options.filter((option) =>
+                        selected.has(option.value)
                     ),
                 ]
-                    .map((userRoleItem) => userRoleItem)
+                    .map((option) => option.label)
                     .join(", ")
             )
             : setList("");
@@ -125,7 +121,7 @@ const RolesMultiselect: FunctionComponent<IInput> = ({
                         "app-input__field--error":
                             showError &&
                             !hideError &&
-                            !Boolean(selected.length)
+                            !Boolean(selected.size)
                     })}
                     type="text"
                     placeholder={label ? " " : placeholder}
@@ -156,14 +152,13 @@ const RolesMultiselect: FunctionComponent<IInput> = ({
                 })}
                 hidden={!showOptions}
             >
-                {options.map((option: any, index) =>
+                {options.map((option) =>
                     <RolesOption
-                        key={index}
+                        key={option.value}
                         option={option}
-                        selected={selected.includes(option)}
-                        setSelected={setSelected as any}
+                        selected={selected.has(option.value)}
+                        setSelected={setter}
                         disabled={disabled}
-                        type={type}
                     />
                 )}
             </div>
