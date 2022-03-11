@@ -6,7 +6,7 @@ import React, { useEffect, useRef, HTMLProps } from "react";
 import style from "./Dialog.module.scss";
 import classNames from "classnames";
 
-import CloseIcon from './assets/close.svg'
+import CloseIcon from "./assets/close.svg";
 
 export interface ModalProps extends HTMLProps<HTMLDivElement> {
     closeOnOutsideClick?: boolean;
@@ -14,7 +14,7 @@ export interface ModalProps extends HTMLProps<HTMLDivElement> {
     open?: boolean;
     headline?: string;
     wrapperClass?: string;
-    variant?: 'default' | 'right-side'
+    variant?: "default" | "right-side";
     hasCloseButton?: boolean;
 }
 
@@ -26,7 +26,7 @@ export default function Dialog({
     headline,
     wrapperClass,
     id,
-    variant = 'default',
+    variant = "default",
     hasCloseButton = true,
     ...other
 }: ModalProps) {
@@ -46,11 +46,11 @@ export default function Dialog({
                 lastActiveElement.current = document.activeElement;
                 dialogNode && dialogNode.showModal();
 
-                document.body.classList.add('scroll-lock')
+                document.body.classList.add("scroll-lock");
             } else {
                 dialogNode && dialogNode.close();
                 lastActiveElement.current && (lastActiveElement.current as any).focus();
-                document.body.classList.remove('scroll-lock')
+                document.body.classList.remove("scroll-lock");
             }
         }
     }, [open]);
@@ -79,11 +79,10 @@ export default function Dialog({
         <dialog
             ref={dialogRef}
             onClick={handleOutsideClick}
-            className={[style.root, style[`root--${variant}`]].join(' ')}
+            className={[style.root, style[`root--${variant}`]].join(" ")}
             aria-labelledby={`${id}-title`}
         >
-
-            {hasCloseButton &&
+            {hasCloseButton && (
                 <button
                     aria-label={closeMessage}
                     title={closeMessage}
@@ -92,8 +91,15 @@ export default function Dialog({
                 >
                     <CloseIcon aria-hidden />
                 </button>
-            }
-            <div {...other} className={classNames(style.wrapper, style[`wrapper--${variant}`], wrapperClass)}>
+            )}
+            <div
+                {...other}
+                className={classNames(
+                    style.wrapper,
+                    style[`wrapper--${variant}`],
+                    wrapperClass
+                )}
+            >
                 {headline && (
                     <h2 id={`${id}-title`} className={style.title}>
                         {headline}
@@ -102,7 +108,6 @@ export default function Dialog({
 
                 {children}
             </div>
-
         </dialog>
     );
 }

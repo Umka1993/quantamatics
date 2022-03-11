@@ -53,10 +53,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
     const [
         update,
         {
-            isSuccess: isUpdated,
             isLoading: isUpdating,
-            isError: isUpdateError,
-            error: updateError,
         },
     ] = useUpdateOrganizationMutation();
     const [getInfoOrg] = useLazyGetOrganizationQuery();
@@ -111,10 +108,6 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
     }
 
     useEffect(initOptions, [organization, user]);
-
-    useEffect(() => {
-        isUpdating && setTimeout(closeFunction, 800);
-    }, [isUpdating]);
 
     function checkErrorsOrClose() {
         if (hasChanges && !hasError) {
@@ -181,15 +174,14 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
             return setNoAssetError(true);
         }
 
-        if (organization) {
-            update({
-                ...organization,
-                organizationAssets: [...selected].map((asset) => ({
-                    ...asset,
-                    asset: null,
-                })),
-            });
-        }
+        update({
+            ...organization,
+            organizationAssets: [...selected].map((asset) => ({
+                ...asset,
+                asset: null,
+            })),
+        }).unwrap().then(closeFunction);
+
     }
 
     return (
@@ -206,12 +198,11 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
                 className={style.root}
                 onReset={resetHandler}
                 onSubmit={submitHandler}
-                method="dialog"
             >
                 <SaveResetHeader
                     headline="Application Assets"
                     disableReset={false}
-                    disableSave={!hasChanges || noAssetError}
+                    disableSave={false}
                     isSavedMessageActive={isUpdating}
                     headlineID="asset-modal-title"
                     className={style.header}
