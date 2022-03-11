@@ -11,35 +11,59 @@ import useUser from "../../hooks/useUser";
 import { UserRole } from "../../data/enum";
 
 import { EditOrganizationForm } from "../form";
+import useToggle from "../../hooks/useToggle";
+import AssetModal from "../asset-modal/AssetModal";
+import { Organization } from "types/organization/types";
 
 export const EditOrganization: FunctionComponent = () => {
     const user = useUser();
 
     const { id } = useParams<RouteParams>();
 
-    const { data, isError, error, isLoading } = useGetOrganizationQuery(
-        id as string
-    );
+    const {
+        data: organization,
+        isError,
+        error,
+        isSuccess,
+    } = useGetOrganizationQuery(id as string);
 
+    const EMPTY_ORGANIZATION: Organization = {
+        name: "",
+        parentId: "",
+        id: "",
+        customerCrmId: "",
+        comments: "",
+        customerCrmLink: "",
+        organizationAssets: [],
+        parentOrganization: "",
+    };
     const isHaveAccessToOrgList =
         user?.userRoles.includes(UserRole.Admin) ||
         user?.userRoles.includes(UserRole.OrgOwner);
+
+    const [isAssetOpened, toggleAssetModal] = useToggle(false);
 
     return (
         <div className="edit-organization">
             {isError ? (
                 <p>Error on loading data: {(error as IApiError).data} </p>
             ) : (
-                <EditOrganizationForm
-                    organization={data}
-                    isHaveAccessToOrgList={isHaveAccessToOrgList}
-                    externalLoad={isLoading}
-                />
+                <>
+                    <EditOrganizationForm
+                        organization={organization || EMPTY_ORGANIZATION}
+                        isHaveAccessToOrgList={isHaveAccessToOrgList}
+                        toggleAssetModal={toggleAssetModal}
+                    />
+                    <AssetModal
+                        open={isAssetOpened}
+                        closeFunction={toggleAssetModal}
+                        organization={organization || EMPTY_ORGANIZATION}
+                    />
+                </>
             )}
             <section className="edit-organization__user-list">
                 <div className="edit-organization__user-list-header">
                     <h2 className="sub-headline">User Accounts</h2>
-
                     <Button className="edit-organization__user-list-add" href="add-user">
                         <AddIcon />
                         Add New
