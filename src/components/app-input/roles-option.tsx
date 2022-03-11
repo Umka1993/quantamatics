@@ -44,7 +44,7 @@ const RolesOption: FunctionComponent<
 
         useEffect(() => {
             isSelected ? addToSelected() : removeFromSelected();
-        }, [isSelected]);  
+        }, [isSelected]);
 
         return (
             <div
@@ -56,7 +56,8 @@ const RolesOption: FunctionComponent<
                     checked={isSelected}
                     highlightOnChecked
                 >
-                    {UserRoleLabel[option]}
+                    <p>rer</p>
+                    {/* {UserRoleLabel[option] as any} */}
                 </Checkbox>
             </div>
         );

@@ -290,7 +290,8 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                         inputList={Array.from(userRoles).sort().join(", ")}
                     />
                 ) : (
-                    <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
+                    <p>s</p>
+                    // <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
                 )}
             </form>
 
