@@ -13,11 +13,9 @@ import Input, { InputURL } from "../app-input";
 
 import style from "./styles/edit-organization.module.scss";
 import {
-    useLazyGetOrganizationQuery,
     useUpdateOrganizationMutation,
 } from "../../api/organization";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
-import { AssetInOrganization } from "../../types/asset";
 import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
 

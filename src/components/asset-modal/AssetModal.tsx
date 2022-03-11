@@ -146,6 +146,13 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
     }, [hasError, errorRef.current]);
 
     useEffect(() => {
+        if (selected.length) {
+            setNoAssetError(false);
+            setError(false);
+        }
+    }, [noAssetError, selected])
+
+    useEffect(() => {
         if (organization) {
             const isQuickChanged =
                 organization.organizationAssets.length !== selected.length;

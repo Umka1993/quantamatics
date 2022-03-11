@@ -47,8 +47,13 @@
 
 .asset {
     padding: 14px 40px;
+    color: $accent;
 
     &:nth-child(odd) {
         background-color: rgba($inactive, 0.1);
+    }
+
+    &.disabled {
+        color: $main-text;
     }
 }
