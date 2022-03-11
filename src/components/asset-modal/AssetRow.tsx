@@ -1,9 +1,7 @@
 import React, {
     Dispatch,
     FunctionComponent,
-    SetStateAction,
-    useEffect,
-    useState,
+    SetStateAction
 } from "react";
 import Checkbox from "../app-checkbox/checkbox";
 import classNames from "classnames";
@@ -16,7 +14,6 @@ export interface MultiselectAssetOptionProps {
     setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
     option: AssetInOrganization;
     disabled?: boolean;
-    setChange: () => void;
 }
 
 const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
@@ -24,7 +21,6 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
     option,
     setSelected,
     disabled,
-    setChange,
 }) => {
     const selectedID = selected.findIndex(
         ({ assetId }) => assetId === option.assetId
@@ -53,7 +49,6 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
                     value={option.assetId}
                     textTitle={option.asset.name}
                     onChange={() => {
-                        setChange();
                         isSelected ? removeFromSelected() : addToSelected(false);
                     }}
                 />
@@ -62,7 +57,6 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
                 <PinButton
                     checked={isPinned}
                     onClick={() => {
-                        setChange();
                         if (isSelected) {
                             const copySelected = [...selected];
                             copySelected[selectedID] = {

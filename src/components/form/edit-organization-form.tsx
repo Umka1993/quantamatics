@@ -57,18 +57,11 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     const [comments, setComment] = useState<string | undefined>("");
     const [loading, setLoading] = useState(false);
 
-    const [assignedAssets, setAssignedAssets] = useState<AssetInOrganization[]>(
-        organization?.organizationAssets || []
-    );
-    const [options, setOptions] = useState<AssetInOrganization[]>([]);
-
     const [isSavedMessageActive, setSavedMessageActive] = useState(false);
 
     const [isChanged, setIsChanged] = useState(false);
 
     const formRef = useRef<HTMLFormElement>(null);
-
-    const [getInfoOrg] = useLazyGetOrganizationQuery();
 
     const [
         duplicateOrgError,
@@ -83,43 +76,12 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         setCustomerID
     );
 
-    function initOptions() {
-        if (organization && user) {
-            const prepareOptions = (allAssets: AssetInOrganization[]) => {
-                setOptions(
-                    [...allAssets].map((asset) => {
-                        const alreadySelectedAsset = organization.organizationAssets.find(
-                            ({ assetId }) => assetId === asset.assetId
-                        );
-
-                        return alreadySelectedAsset === undefined
-                            ? { ...asset, organizationId: organization.id }
-                            : alreadySelectedAsset;
-                    })
-                );
-            };
-
-            if (isUserOrganization) {
-                setOptions(organization.organizationAssets);
-            } else {
-                getInfoOrg(user.organizationId as string)
-                    .unwrap()
-                    .then(({ organizationAssets: allAssets }) =>
-                        prepareOptions(allAssets)
-                    );
-            }
-        }
-    }
-
-    useEffect(initOptions, [organization, user]);
-
     const setInitialOrg = useCallback(() => {
         if (organization) {
             setName(organization.name);
             setCustomerID(organization.customerCrmId);
             setCustomerLink(organization.customerCrmLink);
             setComment(organization.comments);
-            setAssignedAssets(organization.organizationAssets);
         }
     }, [organization]);
 
@@ -130,11 +92,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     function submitHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();
         setLoading(true);
-
-        if (!assignedAssets.length) {
-            setAssetError(true);
-            return setLoading(false);
-        }
 
         let duplicate = false;
 
@@ -159,10 +116,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 customerCrmId,
                 customerCrmLink: addHTTPtoURL(customerCrmLink),
                 comments,
-                organizationAssets: [...assignedAssets].map((asset) => ({
-                    ...asset,
-                    asset: null,
-                })),
             });
         }
         setLoading(false);
@@ -181,8 +134,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
     useEffect(() => {
         if (isUpdated) {
-            setOptions([]);
-            initOptions();
             setSavedMessageActive(true);
         }
     }, [isUpdated]);
@@ -202,44 +153,14 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             const isQuickChanged =
                 organization.name !== name ||
                 organization.customerCrmId !== customerCrmId ||
-                organization.organizationAssets.length !== assignedAssets.length ||
                 organization.customerCrmLink !== customerCrmLink ||
                 organization.comments !== comments;
-
-            if (isQuickChanged) {
-                setIsChanged(true);
-            } else {
-                let isSharedChanged = false;
-                assignedAssets.forEach((asset) => {
-                    const foundedInitialAsset = organization.organizationAssets.find(
-                        (initialAsset) => initialAsset.assetId === asset.assetId
-                    );
-
-                    if (
-                        foundedInitialAsset === undefined ||
-                        foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
-                    ) {
-                        isSharedChanged = true;
-                    }
-                });
-                setIsChanged(isSharedChanged);
-            }
+            setIsChanged(isQuickChanged);
         }
-    }, [
-        name,
-        customerCrmId,
-        customerCrmLink,
-        comments,
-        assignedAssets,
-        organization,
-    ]);
+    }, [name, customerCrmId, customerCrmLink, comments, organization]);
 
     const [showOptions, setShowOptions] = useState(false);
 
-    const assetsReset = useCallback(
-        () => organization && setAssignedAssets(organization.organizationAssets),
-        [organization]
-    );
     const toggleOptions = () => {
         setShowOptions((prevState) => !prevState);
     };
@@ -324,15 +245,13 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                 </p>
             </form>
 
-            <AssetModal
-                open={showOptions}
-                closeFunction={toggleOptions}
-                options={options}
-                selected={assignedAssets}
-                disabled={isUserOrganization}
-                setSelected={setAssignedAssets}
-                assetsReset={assetsReset}
-            />
+            {organization && (
+                <AssetModal
+                    open={showOptions}
+                    closeFunction={toggleOptions}
+                    organization={organization}
+                />
+            )}
         </>
     );
 };
