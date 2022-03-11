@@ -19,17 +19,17 @@ export default function PrivateRoutes(): ReactElement {
     const isEditOrgAvailable =
         isOrganizationsAvailable || user?.userRoles.includes(UserRole.OrgAdmin);
 
-   
-
     const HomePath = user.allowResearch
         ? AppRoute.Files
         : user.allowCoherence
-            ? AppRoute.ExcelLibrary
-            : isOrganizationsAvailable
-                ? AppRoute.OrganizationList
-                : isEditOrgAvailable
-                    ? `/apps/organizations/${user?.organizationId}`
-                    : "/demo";
+            ? AppRoute.Coherence
+            : user.allowExcelLibrary
+                ? AppRoute.ExcelLibrary
+                : isOrganizationsAvailable
+                    ? AppRoute.OrganizationList
+                    : isEditOrgAvailable
+                        ? `/apps/organizations/${user?.organizationId}`
+                        : "/demo";
 
     return (
         <Routes>
