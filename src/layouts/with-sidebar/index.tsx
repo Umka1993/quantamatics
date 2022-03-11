@@ -15,6 +15,9 @@ import { login } from "../../store/authorization";
 import Dialog from "../../components/dialog";
 import { useCallback } from "react";
 import { SideBarModalMode } from "../../types/sidebar-modal";
+import useToggle from "../../hooks/useToggle";
+import UserMenu from "../../components/user-menu";
+import useBoolean from "hooks/useBoolean";
 
 export default function WithSideBarLayout(): ReactElement {
     const logout = useLogout();
@@ -45,21 +48,29 @@ export default function WithSideBarLayout(): ReactElement {
         [setActiveModal]
     );
 
+    const [isUserMenuOpened, setUserMenuOpened] = useState(false);
+
     return (
         <>
-            <SideBar openModal={setActiveModal} />
+            <SideBar toggleUserMenu={() => setUserMenuOpened(true)} />
             <main className={style.main}>
                 <PrivateRoutes />
             </main>
-
+            {isUserMenuOpened && (
+                <UserMenu
+                    setOpenDropdown={setUserMenuOpened}
+                    openDropdown={isUserMenuOpened}
+                    openModal={setActiveModal}
+                />
+            )}
             <Dialog
                 open={activeModal !== undefined}
                 onRequestClose={closeModal}
                 closeOnOutsideClick
                 headline={isProfileModalShowed ? "My Account" : "Restart Server"}
                 id={activeModal}
-                wrapperClass={isProfileModalShowed ? "edit-account" : 'restart-server'}
-                role={isRestartServerModalShowed ? "alertdialog " : 'dialog'}
+                wrapperClass={isProfileModalShowed ? "edit-account" : "restart-server"}
+                role={isRestartServerModalShowed ? "alertdialog " : "dialog"}
             >
                 {user && isProfileModalShowed && <EditPassword onClose={closeModal} />}
                 {isRestartServerModalShowed && <RestartServer onClose={closeModal} />}

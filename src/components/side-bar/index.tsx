@@ -1,19 +1,31 @@
-import React, { useState, FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import style from "./styles/side-bar.module.scss";
 import NavBar from "../navbar";
 import LinesIcon from "./assets/lines.svg";
 import ExelIcon from "./assets/exel.svg";
 import classNames from "classnames";
 import Logo from "../logo";
-import UserMenu from "../user-menu";
-import { SideBarModalOpen } from "../../types/sidebar-modal";
+import useToggle from "../../hooks/useToggle";
+import ProfileButton from "./ProfileButton";
 
 type SideBarProps = {
-    openModal: SideBarModalOpen;
+    toggleUserMenu: () => void;
 };
 
-export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
-    const [collapsed, setCollapsed] = useState<boolean>(false);
+export const SideBar: FunctionComponent<SideBarProps> = ({
+    toggleUserMenu,
+}) => {
+    const COLLAPSE_SESSION_KEY = "navbar-collapse";
+    const [collapsed, toggleCollapse] = useToggle(
+        sessionStorage.getItem(COLLAPSE_SESSION_KEY) !== null
+    );
+
+    useEffect(() => {
+        collapsed
+            ? sessionStorage.setItem(COLLAPSE_SESSION_KEY, "true")
+            : sessionStorage.removeItem(COLLAPSE_SESSION_KEY);
+    }, [collapsed]);
+
     const yearToday = new Date().getFullYear();
 
     const isMacOs = navigator.userAgent.includes("Mac OS");
@@ -28,7 +40,7 @@ export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
                     role="switch"
                     aria-label="Hide Menu"
                     aria-checked={collapsed}
-                    onClick={() => setCollapsed(!collapsed)}
+                    onClick={toggleCollapse}
                 >
                     <LinesIcon width={16} height={16} aria-hidden="true" />
                 </button>
@@ -61,7 +73,13 @@ export const SideBar: FunctionComponent<SideBarProps> = ({ openModal }) => {
                 </a>
             )}
 
-            <UserMenu collapsed={collapsed} openModal={openModal} />
+            <ProfileButton
+                className={classNames(style.trigger, {
+                    [style["trigger--wide"]]: !collapsed,
+                })}
+                onClick={toggleUserMenu}
+                collapsed={collapsed}
+            />
         </aside>
     );
 };
