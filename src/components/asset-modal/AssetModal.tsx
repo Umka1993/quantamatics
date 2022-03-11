@@ -201,8 +201,8 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
             >
                 <SaveResetHeader
                     headline="Application Assets"
-                    disableReset={false}
-                    disableSave={false}
+                    disableReset={isUpdating}
+                    disableSave={!hasChanges || noAssetError || isUpdating}
                     isSavedMessageActive={isUpdating}
                     headlineID="asset-modal-title"
                     className={style.header}

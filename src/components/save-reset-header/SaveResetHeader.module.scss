@@ -6,13 +6,12 @@
 }
 
 .buttons {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 100px;
     align-items: center;
-    width: 230px;
-    justify-content: space-between;
+    gap: 32px;
 }
 
 .save {
-    min-width: 140px;
     height: 40px;
 }
