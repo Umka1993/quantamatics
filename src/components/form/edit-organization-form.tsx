@@ -68,9 +68,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         setComment(organization.comments);
     }, [organization]);
 
-    useEffect(() => {
-        organization && setInitialOrg();
-    }, [organization]);
 
     function submitHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();

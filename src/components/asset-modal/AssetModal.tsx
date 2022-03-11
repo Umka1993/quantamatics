@@ -1,10 +1,8 @@
 import SaveResetHeader from "../save-reset-header/SaveResetHeader";
 import React, {
     FunctionComponent,
-    SetStateAction,
     useEffect,
     useState,
-    Dispatch,
     FormEvent,
     useRef,
     useCallback,
@@ -34,8 +32,6 @@ interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
 const AssetModal: FunctionComponent<AssetModalProps> = ({
     closeFunction,
     open,
-    // selected,
-    // setSelected,
     organization,
     ...other
 }) => {
