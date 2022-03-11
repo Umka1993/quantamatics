@@ -1,6 +1,6 @@
-import React, {ButtonHTMLAttributes, FunctionComponent} from "react";
+import React, { ButtonHTMLAttributes, FunctionComponent } from "react";
 import "./styles/reset.scss";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import classNames from "classnames";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {

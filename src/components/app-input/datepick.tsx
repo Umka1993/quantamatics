@@ -9,7 +9,7 @@ import React, {
 import "./styles/input.scss";
 import classNames from "classnames";
 import CalendarIcon from "./assets/calendar.svg";
-import {checkDateInputSupport, formatToValue} from "./utils/date-utils";
+import { checkDateInputSupport, formatToValue } from "./utils/date-utils";
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import 'react-day-picker/lib/style.css';
 import dateFnsFormat from 'date-fns/format';

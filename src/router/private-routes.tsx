@@ -19,36 +19,34 @@ export default function PrivateRoutes(): ReactElement {
     const isEditOrgAvailable =
         isOrganizationsAvailable || user?.userRoles.includes(UserRole.OrgAdmin);
 
-    const isCoherence = user?.userRoles.includes(UserRole.Coherence);
-
-    const isResearch = user?.userRoles.includes(UserRole.Research);
-
-    const HomePath = isResearch
+    const HomePath = user.allowResearch
         ? AppRoute.Files
-        : isCoherence
-            ? AppRoute.ExcelLibrary
-            : isOrganizationsAvailable
-                ? AppRoute.OrganizationList
-                : isEditOrgAvailable
-                    ? `/apps/organizations/${user?.organizationId}`
-                    : "/demo";
+        : user.allowCoherence
+            ? AppRoute.Coherence
+            : user.allowExcelLibrary
+                ? AppRoute.ExcelLibrary
+                : isOrganizationsAvailable
+                    ? AppRoute.OrganizationList
+                    : isEditOrgAvailable
+                        ? `/apps/organizations/${user?.organizationId}`
+                        : "/demo";
 
     return (
         <Routes>
             <Route path="*" element={<Navigate to={HomePath} />} />
             <Route path="/demo" element={<h1>Demo Page</h1>} />
-            {isResearch && (
+            {user.allowResearch && (
                 <Route path={AppRoute.Files} element={<JupyterFrame type="files" />} />
             )}
 
-            {isCoherence && (
+            {user.allowCoherence && (
                 <Route
                     path={AppRoute.Coherence}
                     element={<JupyterFrame type="coherence" />}
                 />
             )}
 
-            {isCoherence && (
+            {user.allowExcelLibrary && (
                 <Route
                     path={AppRoute.ExcelLibrary}
                     element={<JupyterFrame type="excelLibrary" />}

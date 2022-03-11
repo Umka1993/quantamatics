@@ -3,7 +3,7 @@
 
 .button {
   font: inherit;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 16px;
   line-height: 1.125;
   display: flex;
@@ -60,6 +60,16 @@
 
     @include hover-focus {
       background: #00C04D;
+    }
+  }
+
+  &--danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+
+    @include hover-focus {
+      background: darken(#dc3545, 10);
     }
   }
 }

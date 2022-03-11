@@ -1,3 +1,5 @@
+@use "../../../sass/variables.scss" as *;
+
 @keyframes fadeIn {
     0% {
         opacity: 0;
@@ -13,25 +15,6 @@
     position: relative;
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 30px;
-}
-
-.buttons {
-    display: flex;
-    align-items: center;
-    width: 230px;
-    justify-content: space-between;
-}
-
-.save {
-    min-width: 140px;
-    height: 40px;
-}
-
 .input {
     flex: 1 1 400px;
     margin: 12.5px;
@@ -45,4 +28,21 @@
     display: flex;
     margin: -12.5px;
     flex-wrap: wrap;
+}
+
+.assets {
+    display: grid;
+    grid-template-columns: 223px auto;
+    gap: 16px;
+    align-items: center;
+
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 1.375;
+    color: $main-text;
+    margin: 1.75em 0 0;
+}
+
+.save {
+    letter-spacing: 0.02em;
 }

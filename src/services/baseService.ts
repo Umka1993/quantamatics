@@ -19,21 +19,21 @@ export function formatDate(date: string): string {
     return result.replace(/[/]/g, ".");
 }
 
-
 export function adaptRoles(array: string[]): string[] {
-    const formattedArray = [...array];
+    const formattedArray = array.filter(
+        (role) => role !== UserRole.Coherence && role !== UserRole.Research
+    );
 
-    replaceItemInArray(formattedArray, UserRole.OrgAdmin, 'Org. Admin')
-    replaceItemInArray(formattedArray, UserRole.Admin, 'Super Admin')
-    replaceItemInArray(formattedArray, UserRole.OrgOwner, 'Org. Owner')
+    replaceItemInArray(formattedArray, UserRole.OrgAdmin, "Org. Admin");
+    replaceItemInArray(formattedArray, UserRole.Admin, "Super Admin");
+    replaceItemInArray(formattedArray, UserRole.OrgOwner, "Org. Owner");
 
     return formattedArray;
-    
 }
 
 function replaceItemInArray(array: any[], oldValue: any, newValue: any) {
     if (array.includes(oldValue)) {
         const index = array.indexOf(oldValue);
-        array[index] = newValue
+        array[index] = newValue;
     }
 }

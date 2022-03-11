@@ -2,7 +2,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require("copy-webpack-plugin");
-const { MODULE_STYLE_LOADERS, DEFAULT_STYLE_LOADERS } = require('./_const.js');
+const { MODULE_STYLE_LOADERS, DEFAULT_STYLE_LOADERS, output } = require('./_const.js');
 
 module.exports = {
     devServer: {
@@ -11,11 +11,7 @@ module.exports = {
         port: 8888
     },
     entry: path.resolve(__dirname, '../src', 'index.tsx'),
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, '../publish'),
-        publicPath: '/'
-    },
+    output,
     mode: "production",
     resolve: {
         extensions: ['.js', '.ts', '.tsx']

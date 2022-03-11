@@ -1,0 +1,17 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: auto 100px;
+    align-items: center;
+    gap: 32px;
+}
+
+.save {
+    height: 40px;
+}

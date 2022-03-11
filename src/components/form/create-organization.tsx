@@ -1,16 +1,12 @@
 import React, { useEffect, useState, FunctionComponent, useRef } from "react";
 import "./styles/create-organization.scss";
-import Input, { Multiselect, InputURL } from "../app-input";
+import Input, { InputURL } from "../app-input";
 import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
 import { useAddOrganizationMutation } from "../../api/organization";
 import { AppRoute } from "../../data/enum";
-import useUser from "../../hooks/useUser";
-import {
-    useGetAllAssetsQuery,
-    useLinkAssetToOrgMutation,
-} from "../../api/asset";
+
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import normalizeName from "../../services/normalize-name";
 import addHTTPtoURL from "../../services/addHTTPtoURL";
@@ -25,20 +21,13 @@ export interface createOrganizationRequestBody {
 }
 
 const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
-    const user = useUser();
     const navigate = useNavigate();
-    const [register, { isError, isSuccess, error, data }] =
-        useAddOrganizationMutation();
+    const [register, { isError, error }] = useAddOrganizationMutation();
 
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerCrmId] = useState<string>("");
     const [customerCrmLink, setCustomerCrmLink] = useState<string>("");
     const [comments, setComments] = useState<string | undefined>("");
-    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
-        new Set()
-    );
-
-    const [assetError, setAssetError] = useState(false);
 
     const [stopLoading, setStopLoading] = useState<true | undefined>(undefined);
 
@@ -56,28 +45,10 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
         setName,
         setCustomerCrmId
     );
-    // Load all assets that are available for logged user
-    const { data: allAvailableAsset, isSuccess: isAllAssetLoaded } =
-        useGetAllAssetsQuery(user?.organizationId as string);
-
-    const [linkAsset, { isLoading: isLinkingAsset }] =
-        useLinkAssetToOrgMutation();
 
     const returnBack = () => {
         navigate(AppRoute.OrganizationList);
     };
-
-    useEffect(() => {
-        if (isSuccess && data) {
-            assignedAssets.forEach((assetId) =>
-                linkAsset({
-                    assetId,
-                    orgId: data.id,
-                })
-            );
-            returnBack();
-        }
-    }, [isSuccess]);
 
     useEffect(() => {
         if (isError) {
@@ -91,11 +62,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
     }, [stopLoading]);
 
     const handleSubmit = () => {
-        if (!assignedAssets.size) {
-            setAssetError(true);
-            return setStopLoading(true);
-        }
-
         let duplicate = checkNameDuplicate();
         duplicate = (customerCrmId && checkIdDuplicate()) || duplicate;
 
@@ -107,7 +73,9 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                 customerCrmId,
                 customerCrmLink: addHTTPtoURL(customerCrmLink),
                 comments,
-            }).unwrap();
+            })
+                .unwrap()
+                .then(returnBack);
         }
     };
 
@@ -143,16 +111,6 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
                     value={customerCrmLink}
                     maxLength={72}
                 />
-                {allAvailableAsset && (
-                    <Multiselect
-                        options={allAvailableAsset}
-                        label="Org. Assets"
-                        selected={assignedAssets}
-                        setSelected={setAssignedAssets}
-                        errorMessage="Select asset permissions to assign to the organization."
-                        showError={assetError}
-                    />
-                )}
                 <Input
                     externalSetter={setComments}
                     label="Comments"

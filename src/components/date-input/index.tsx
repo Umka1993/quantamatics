@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from "react";
+import React, { useState, useCallback } from "react";
 import "./styles/input.scss"
 import classNames from "classnames";
 import calendarIcon from "./assets/calendar.svg"
@@ -18,8 +18,8 @@ interface IInput {
 }
 
 export const DateInput: React.FunctionComponent<IInput> = (props) => {
-    const {className, placeholder, value, onChangeInput, required, errors, disablePastDate, minDate } = props;
-    const inputClassNames = classNames('date-input', className, {'error': errors})
+    const { className, placeholder, value, onChangeInput, required, errors, disablePastDate, minDate } = props;
+    const inputClassNames = classNames('date-input', className, { 'error': errors })
 
     return(
         <div className={inputClassNames}>

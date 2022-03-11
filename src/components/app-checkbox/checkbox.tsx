@@ -92,9 +92,10 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
                 </span>
             )}
 
-            <span className="check-block__text" title={textTitle}>
-                {children}
-            </span>
+            {children &&
+                <span className="check-block__text" title={textTitle}>
+                    {children}
+                </span>}
         </label>
     );
 };

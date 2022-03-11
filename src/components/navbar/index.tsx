@@ -85,7 +85,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
             )} */}
 
             {/* Research with no sub-nav*/}
-            {user?.userRoles.includes(UserRole.Research) && (
+            {user?.allowResearch && (
                 <NavLink
                     to={AppRoute.Files}
                     className={({ isActive }) =>
@@ -103,8 +103,8 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                     Research
                 </NavLink>
             )}
-            
-            {/* {user?.userRoles.includes(UserRole.Coherence) && (
+
+            {user?.allowCoherence && (
                 <NavLink
                     to={AppRoute.Coherence}
                     className={({ isActive }) =>
@@ -113,7 +113,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                             : "navigation__item"
                     }
                 >
-                    <CoherenceIcon 
+                    <CoherenceIcon
                         aria-hidden={true}
                         className="navigation__icon"
                         width={16}
@@ -121,9 +121,9 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                     />
                     Coherence
                 </NavLink>
-            )} */}
+            )}
 
-            {user?.userRoles.includes(UserRole.Coherence) && (
+            {user?.allowExcelLibrary && (
                 <NavLink
                     to={AppRoute.ExcelLibrary}
                     className={({ isActive }) =>
