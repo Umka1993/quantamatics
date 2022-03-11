@@ -6,9 +6,9 @@ const sortTable = (
     localRows: any,
     setSort: any,
     setLocalRows: any,
-    localKey: string,
+    localKey: string
 ) => {
-    const newSort = sort;
+    const newSort = { ...sort, name };
 
     if (name === sort.name || "" === sort.name) {
         switch (sort.direction) {
@@ -17,7 +17,6 @@ const sortTable = (
                 break;
             case SortDirection.Down:
                 newSort.direction = SortDirection.Default;
-                newSort.name = "";
                 break;
 
             default:
@@ -26,10 +25,9 @@ const sortTable = (
         }
     } else {
         newSort.direction = SortDirection.Up;
-        newSort.name = name;
     }
 
-    setSort({ name: newSort.name, direction: newSort.direction });
+    setSort(newSort);
 
     let newRows = [...localRows];
 
@@ -53,15 +51,17 @@ const sortTable = (
             break;
 
         default:
-            if (name !== "name") {
-                newRows = JSON.parse(sessionStorage.getItem(localKey) as string);
-            } else {
-                newRows = [...localRows];
+            {
+                const rowsFromStorage = sessionStorage.getItem(localKey);
+                if (rowsFromStorage) {
+                    newRows = JSON.parse(rowsFromStorage);
+                } else {
+                    newRows = [...localRows];
+                }
             }
             break;
     }
 
-    setSort({ name: newSort.name, direction: newSort.direction });
     setLocalRows(newRows);
 };
 
