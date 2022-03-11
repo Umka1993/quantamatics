@@ -189,21 +189,6 @@ const InviteUserForm: FunctionComponent = () => {
                         externalSetter={setRoles}
                     />
                 }
-                {/* {isSuperAdmin ? (
-                    <RolesMultiselect
-                        options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
-                        selected={Array.from(userRoles).sort()}
-                        setSelected={setRoles}
-                        label="Organization Role"
-                        errorMessage="Select asset permissions to assign to the user account."
-                        showError={assetError}
-                        type="user"
-                        inputList={Array.from(userRoles).sort().join(", ")}
-                    />
-                ) : (
-                    <p>sd</p>
-                    // <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
-                )} */}
             </div>
             <Button
                 className="create-organization__submit"
