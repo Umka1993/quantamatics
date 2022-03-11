@@ -47,13 +47,13 @@
 
 .asset {
     padding: 14px 40px;
-    color: $accent;
+    color: $main-text;
 
     &:nth-child(odd) {
         background-color: rgba($inactive, 0.1);
     }
 
-    &.disabled {
-        color: $main-text;
+    &--selected {
+        color: $accent;
     }
 }

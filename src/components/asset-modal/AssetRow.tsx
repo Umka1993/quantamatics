@@ -37,7 +37,7 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
         );
 
     return (
-        <tr className={classNames(style.row, style.asset, { [style.disabled]: disabled })}>
+        <tr className={classNames(style.row, style.asset, { [style['asset--selected']]: isSelected || isPinned })}>
             <td>{option.asset.name}</td>
 
             <td className={style.action}>
@@ -56,7 +56,7 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
             <td className={style.action}>
                 <PinButton
                     checked={isPinned}
-                    onClick={disabled ? undefined : () => {
+                    onClick={() => {
                         if (isSelected) {
                             const copySelected = [...selected];
                             copySelected[selectedID] = {
