@@ -11,8 +11,6 @@ import {
     useGetAllAssetsQuery,
     useLinkAssetToUserMutation,
 } from "../../api/asset";
-import RolesMultiselect from "../app-input/roles-multiselect";
-import RoleCheckboxes from "../role-checkboxes";
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
 
@@ -53,7 +51,7 @@ const InviteUserForm: FunctionComponent = () => {
 
     const [errors, setErrors] = useState<string | undefined>(undefined);
 
-    const [userRoles, setRoles] = useState<UserRole[]>([]);
+    const [userRoles, setRoles] = useState<Set<UserRole>>(new Set());
 
     const [
         register,
@@ -119,7 +117,7 @@ const InviteUserForm: FunctionComponent = () => {
                 organizationId: company?.id,
                 companyName: company?.name,
                 subscriptionEndDate,
-                userRoles,
+                userRoles: Array.from(userRoles),
             });
         } else {
             setLoading(false);

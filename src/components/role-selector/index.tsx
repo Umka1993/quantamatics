@@ -5,16 +5,15 @@ import React, {
     useEffect,
     useState,
 } from "react";
-import { UserRole, UserRoleLabel } from "../../data/enum";
+import { UserRole } from "../../data/enum";
 import { Option } from "types/option";
-import RolesMultiselect from "../app-input/roles-multiselect";
 import style from "./role-selector.module.scss";
 import RoleOption from "./RoleOption";
 import RoleMultiSelect from "./RoleMultiselect";
 interface RoleSelectorProps {
     isSuperAdmin: boolean;
-    defaultRoles: UserRole[];
-    externalSetter: Dispatch<SetStateAction<UserRole[]>>;
+    defaultRoles: Set<UserRole>;
+    externalSetter: Dispatch<SetStateAction<Set<UserRole>>>;
 }
 
 const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
@@ -22,14 +21,6 @@ const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
     externalSetter,
     isSuperAdmin,
 }) => {
-    const [selected, setSelected] = useState<Set<UserRole>>(
-        new Set(defaultRoles)
-    );
-
-    useEffect(() => {
-        externalSetter(Array.from(selected));
-    }, [selected]);
-
     const options: Option<UserRole>[] = isSuperAdmin
         ? [
             { label: "Org. Owner", value: UserRole.OrgOwner },
@@ -39,8 +30,8 @@ const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
 
     return isSuperAdmin ? (
         <RoleMultiSelect
-            selected={selected}
-            setter={setSelected}
+            selected={defaultRoles}
+            setter={externalSetter}
             options={options}
             label="Organization Role"
         />
@@ -50,8 +41,8 @@ const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
             {options.map((option) => (
                 <RoleOption
                     key={option.value}
-                    selected={selected.has(option.value)}
-                    setter={setSelected}
+                    selected={defaultRoles.has(option.value)}
+                    setter={externalSetter}
                     align="right"
                     {...option}
                 />
