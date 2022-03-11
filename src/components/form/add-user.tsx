@@ -180,13 +180,13 @@ const InviteUserForm: FunctionComponent = () => {
                             .join(", ")}
                     />
                 )}
-                {
-                    <RoleSelector
-                        isSuperAdmin={isSuperAdmin}
-                        defaultRoles={userRoles}
-                        externalSetter={setRoles}
-                    />
-                }
+
+                <RoleSelector
+                    isSuperAdmin={isSuperAdmin}
+                    defaultRoles={userRoles}
+                    externalSetter={setRoles}
+                />
+
             </div>
             <Button
                 className="create-organization__submit"

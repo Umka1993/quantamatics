@@ -9,8 +9,7 @@ import React, {
 import Button, { ResetButton } from "../button";
 import AppInput, { DatePick, Email, Multiselect } from "../app-input";
 import { SelectorInput } from "../selector-input";
-import Modal from "../modal";
-import RoleCheckboxes from "../role-checkboxes";
+
 import { Error, OrganizationKey, UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
 import { IUpdateUser } from "../../types/user";
@@ -25,17 +24,15 @@ import { login } from "../../store/authorization";
 import Loader from "../loader";
 
 import "./styles/edit-account.scss";
-import { Organization } from "types/organization/types";
+import { Organization } from "../../types/organization/types";
 import {
     useGetAllAssetsQuery,
-    useGetUserAssetsQuery,
     useLazyGetUserAssetsQuery,
     useLinkAssetToUserMutation,
     useUnlinkAssetToUserMutation,
 } from "../../api/asset";
 import { useParams } from "react-router-dom";
-import { AssetListItem } from "../../types/asset";
-import RolesMultiselect from "../app-input/roles-multiselect";
+import RoleSelector from "../role-selector";
 interface IEditProfile {
     onClose: () => void;
     user: IUpdateUser;
@@ -54,7 +51,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     const [emailError, setEmailError] = useState<string | undefined>(undefined);
     const [validate, setValidate] = useState<boolean>(false);
-    const [userRoles, setRoles] = useState<UserRole[]>([]);
+    const [userRoles, setRoles] = useState<Set<UserRole>>(new Set());
     const dispatch = useDispatch();
 
     const formRef = useRef<HTMLFormElement>(null);
@@ -92,7 +89,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
             lastName,
             companyName,
             subscriptionEndDate,
-            userRoles,
+            userRoles: Array.from(userRoles),
         };
         if (email !== user.email) {
             newUserData.newEmail = email;
@@ -107,7 +104,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
             setOrganization(user.companyName);
             setEmail(user.email);
             setExpiration(user.subscriptionEndDate);
-            setRoles(user.userRoles);
+            setRoles(new Set(user.userRoles));
 
             fetchUserAssets(user.id);
         }
@@ -136,7 +133,8 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
     useEffect(() => {
         if (isSuccess) {
-            updateRoles([user.id, userRoles]);
+            const rolesAsArray = Array.from(userRoles)
+            updateRoles([user.id, rolesAsArray]);
 
             if (user.id === loggedUser?.id) {
                 const normalizedNewData = {
@@ -146,7 +144,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                     companyName,
                     email,
                     subscriptionEndDate: subscriptionEndDate.toLocaleDateString(),
-                    userRoles,
+                    userRoles: rolesAsArray,
                 };
                 dispatch(login(normalizedNewData));
 
@@ -278,21 +276,11 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                             .join(", ")}
                     />
                 )}
-                {/* {isSuperAdmin ? (
-                    <RolesMultiselect
-                        options={[UserRole.OrgOwner, UserRole.OrgAdmin]}
-                        selected={Array.from(userRoles).sort()}
-                        setSelected={setRoles}
-                        label="Organization Role"
-                        errorMessage="Select asset permissions to assign to the user account."
-                        showError={assetError}
-                        type="user"
-                        inputList={Array.from(userRoles).sort().join(", ")}
-                    />
-                ) : (
-                    <p>s</p>
-                    // <RoleCheckboxes defaultRoles={userRoles} externalSetter={setRoles} />
-                )} */}
+                <RoleSelector
+                    isSuperAdmin={isSuperAdmin}
+                    defaultRoles={userRoles}
+                    externalSetter={setRoles}
+                />
             </form>
 
             <footer className="edit-account__footer">
