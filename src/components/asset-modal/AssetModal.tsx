@@ -46,12 +46,9 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 
     const errorRef = useRef<HTMLParagraphElement>(null);
 
-    const INITIAL_SORT = { name: "name", direction: SortDirection.Down };
+    const INITIAL_SORT = { name: "name", direction: SortDirection.Default };
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 
-    // useEffect(() => {
-    //     sortTable("name", sort, options, setSort, setArrAssets, "asset-rows");
-    // }, []);
 
     useEffect(() => {
         setArrAssets(options);
@@ -79,7 +76,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 
     function resetHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();
-        checkErrorsOrClose()
+        checkErrorsOrClose();
     }
 
     useEffect(() => {
@@ -124,18 +121,16 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
                 <table className={style.table}>
                     <thead>
                         <tr className={style.row}>
-                            <th className={style.headline}>
-                                <SortTableHeader
-                                    name="name"
-                                    text="Name"
-                                    sort={sort}
-                                    localRows={arrAssets}
-                                    setSort={setSort}
-                                    setLocalRows={setArrAssets}
-                                    className="user"
-                                    localKey='asset-rows'
-                                />
-                            </th>
+                            <SortTableHeader
+                                name="name"
+                                text="Name"
+                                sort={sort}
+                                localRows={arrAssets}
+                                setSort={setSort}
+                                setLocalRows={setArrAssets}
+                                className={style.headline}
+                                localKey="asset-rows"
+                            />
                             <th className={[style.headline, style.action].join(" ")}>
                                 Assign
                             </th>

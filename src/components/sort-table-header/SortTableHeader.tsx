@@ -27,11 +27,6 @@ export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
     rememberScroll,
     localKey = 'table-rows',
 }) => {
-    // useEffect(() => {
-    //     if (!sort.name.length) {
-    //         sortTable(name, sort, localRows, setSort, setLocalRows, localKey)
-    //     }
-    // }, [])
 
     return (
         <th
