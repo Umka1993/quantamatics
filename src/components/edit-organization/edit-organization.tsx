@@ -43,6 +43,9 @@ export const EditOrganization: FunctionComponent = () => {
 
     const [isAssetOpened, toggleAssetModal] = useToggle(false);
 
+    const hasAssets =
+        organization && Boolean(organization.organizationAssets.length);
+
     return (
         <div className="edit-organization">
             {isError ? (
@@ -64,7 +67,18 @@ export const EditOrganization: FunctionComponent = () => {
             <section className="edit-organization__user-list">
                 <div className="edit-organization__user-list-header">
                     <h2 className="sub-headline">User Accounts</h2>
-                    <Button className="edit-organization__user-list-add" href="add-user">
+                    {!hasAssets && (
+                        <p id="warning-asset" className="edit-organization__warning">
+                            Please set up assets first to invite users to the organization
+                        </p>
+                    )}
+
+                    <Button
+                        className="edit-organization__user-list-add"
+                        href={hasAssets ? "add-user" : undefined}
+                        aria-describedby={hasAssets ? undefined : "warning-asset"}
+                        disabled={!hasAssets}
+                    >
                         <AddIcon />
                         Add New
                     </Button>
