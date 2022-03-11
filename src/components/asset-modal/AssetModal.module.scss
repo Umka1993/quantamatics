@@ -48,6 +48,8 @@
 .asset {
     padding: 14px 40px;
     color: $main-text;
+    font-size: 14px;
+    line-height: 1.36;
 
     &:nth-child(odd) {
         background-color: rgba($inactive, 0.1);

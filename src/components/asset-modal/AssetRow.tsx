@@ -56,6 +56,7 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
             <td className={style.action}>
                 <PinButton
                     checked={isPinned}
+                    size={21}
                     onClick={() => {
                         if (isSelected) {
                             const copySelected = [...selected];
