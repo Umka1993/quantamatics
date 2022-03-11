@@ -50,7 +50,6 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
     const [sort, setSort] = useState<ISort>(INITIAL_SORT);
     const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
-
     const [
         update,
         {
@@ -122,17 +121,18 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
             setError(true);
             return;
         }
+        closeModal();
+    }
 
-        if (!hasChanges || hasError) {
-            setError(false);
-            assetsReset();
-            closeFunction();
-        }
+    function closeModal() {
+        hasError && setError(false);
+        hasChanges && assetsReset();
+        closeFunction();
     }
 
     function resetHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();
-        checkErrorsOrClose();
+        closeModal();
     }
 
     useEffect(() => {
@@ -146,7 +146,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
             setNoAssetError(false);
             setError(false);
         }
-    }, [noAssetError, selected])
+    }, [noAssetError, selected]);
 
     useEffect(() => {
         if (organization) {
@@ -177,7 +177,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
     function submitHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();
         if (!selected.length) {
-            setError(true)
+            setError(true);
             return setNoAssetError(true);
         }
 
