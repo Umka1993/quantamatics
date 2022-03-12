@@ -82,20 +82,86 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
     const [assetError, setAssetError] = useState(false);
     const [assetPrepared, setAssetPrepared] = useState(false);
 
-    const sendNewUser = (validate: any) => {
+    function validateHandler() {
+        let userChanged =
+            firstName !== user.firstName ||
+            lastName !== user.lastName ||
+            companyName !== user.companyName ||
+            subscriptionEndDate !== user.subscriptionEndDate;
+
+        const rolesAsArray = Array.from(userRoles);
+        const rolesIsSame =
+            rolesAsArray.length === user.userRoles.length &&
+            rolesAsArray.every((value, index) => value === user.userRoles[index]);
+
         const newUserData: IUpdateUser = {
             ...user,
             firstName,
             lastName,
             companyName,
             subscriptionEndDate,
-            userRoles: Array.from(userRoles),
+            userRoles: rolesAsArray,
         };
+
         if (email !== user.email) {
             newUserData.newEmail = email;
+            userChanged = true;
         }
-        update(newUserData).unwrap();
-    };
+
+        //* Update user in redux store
+        if (user.id === loggedUser?.id) {
+            const normalizedNewData = {
+                ...loggedUser,
+                firstName,
+                lastName,
+                companyName,
+                email,
+                subscriptionEndDate: subscriptionEndDate.toLocaleDateString(),
+                userRoles: rolesAsArray,
+            };
+            dispatch(login(normalizedNewData));
+            localStorage.setItem("user", JSON.stringify(normalizedNewData));
+        }
+
+        updateAssets();
+
+        function updateRolesAndClose() {
+            updateRoles([user.id, rolesAsArray]).unwrap().then(onClose);
+        }
+
+        userChanged
+            ? update(newUserData)
+                .unwrap()
+                .then(rolesIsSame ? onClose : updateRolesAndClose)
+            : !rolesIsSame && updateRolesAndClose();
+
+        !userChanged && rolesIsSame && onClose();
+    }
+
+    function updateAssets() {
+        // ? Link new assets to user
+        assignedAssets.forEach((assetId) => {
+            const alreadySelectedAsset = serverSelectedAssets?.find(
+                (element) => element.id === assetId
+            );
+
+            if (alreadySelectedAsset === undefined) {
+                linkAsset({
+                    assetId,
+                    userId: user.id,
+                });
+            }
+        });
+
+        // ? Unlink old assets from user
+        serverSelectedAssets?.forEach((alreadySelectedAsset) => {
+            !assignedAssets.has(alreadySelectedAsset.id) &&
+                unlinkAsset({
+                    assetId: alreadySelectedAsset.id,
+                    userId: user.id,
+                });
+        });
+    }
 
     useEffect(() => {
         if (user) {
@@ -105,7 +171,6 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
             setEmail(user.email);
             setExpiration(user.subscriptionEndDate);
             setRoles(new Set(user.userRoles));
-
             fetchUserAssets(user.id);
         }
     }, [user]);
@@ -125,62 +190,11 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
         if (assignedAssets.size) {
             setValidate(true);
             const isValid = formRef.current?.reportValidity();
-            isValid && sendNewUser(validate);
+            isValid && validateHandler();
         } else {
             setAssetError(true);
         }
     };
-
-    useEffect(() => {
-        if (isSuccess) {
-            const rolesAsArray = Array.from(userRoles)
-            updateRoles([user.id, rolesAsArray]);
-
-            if (user.id === loggedUser?.id) {
-                const normalizedNewData = {
-                    ...loggedUser,
-                    firstName,
-                    lastName,
-                    companyName,
-                    email,
-                    subscriptionEndDate: subscriptionEndDate.toLocaleDateString(),
-                    userRoles: rolesAsArray,
-                };
-                dispatch(login(normalizedNewData));
-
-                localStorage.setItem("user", JSON.stringify(normalizedNewData));
-            }
-
-            // ! It will be waste if we start update all users on updating org
-
-            // ? Link new assets to user
-            assignedAssets.forEach((assetId) => {
-                const alreadySelectedAsset = serverSelectedAssets?.find(
-                    (element) => element.id === assetId
-                );
-
-                if (alreadySelectedAsset === undefined) {
-                    linkAsset({
-                        assetId,
-                        userId: user.id,
-                    });
-                }
-            });
-
-            // ? Unlink old assets from user
-            serverSelectedAssets?.forEach((alreadySelectedAsset) => {
-                !assignedAssets.has(alreadySelectedAsset.id) &&
-                    unlinkAsset({
-                        assetId: alreadySelectedAsset.id,
-                        userId: user.id,
-                    });
-            });
-        }
-    }, [isSuccess]);
-
-    useEffect(() => {
-        isFinish && onClose();
-    }, [isFinish]);
 
     useEffect(() => {
         if (isError) {
