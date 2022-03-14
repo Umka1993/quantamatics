@@ -5,17 +5,17 @@ import SVG from "../SVG";
 import arrowIcon from "./assets/arrow.svg";
 
 interface ISelectorInput {
-    className?: string;
-    placeholder?: string;
-    value?: any;
-    options: string[];
-    required?: boolean;
-    errors?: boolean;
-    disabled?: boolean;
-    values?: string[];
-    valueSetter?: any;
-    optionSetter?: any;
-    label?: string;
+	className?: string;
+	placeholder?: string;
+	value?: any;
+	options: string[];
+	required?: boolean;
+	errors?: boolean;
+	disabled?: boolean;
+	values?: string[];
+	valueSetter?: any;
+	optionSetter?: any;
+	label?: string;
 }
 
 export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({ className, values, valueSetter, optionSetter, placeholder, value, required, errors, options, disabled, label }) => {

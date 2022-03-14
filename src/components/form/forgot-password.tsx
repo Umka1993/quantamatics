@@ -50,11 +50,11 @@ const ForgotPassword: FunctionComponent = () => {
 			</div>
 
 			<Button className="login-page__btn" type="submit" disabled={!forgotEmail}>
-                Send
+	Send
 			</Button>
 
 			<ResetButton className="login-page__btn-cancel" href={AppRoute.Login}>
-                Cancel
+	Cancel
 			</ResetButton>
 		</Form>
 	);

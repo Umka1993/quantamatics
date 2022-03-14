@@ -18,20 +18,20 @@ import { Option } from "../../types/option";
 import RoleOption from "./RoleOption";
 
 interface RoleMultiSelectProp extends SelectHTMLAttributes<HTMLSelectElement> {
-    error?: string;
-    label?: string;
-    icon?: string;
-    showLimit?: boolean;
+	error?: string;
+	label?: string;
+	icon?: string;
+	showLimit?: boolean;
 
-    selected: Set<UserRole>;
-    setter: Dispatch<SetStateAction<Set<UserRole>>>;
-    className?: string;
-    options: Option<UserRole>[];
+	selected: Set<UserRole>;
+	setter: Dispatch<SetStateAction<Set<UserRole>>>;
+	className?: string;
+	options: Option<UserRole>[];
 
-    errorMessage?: string;
-    showError?: boolean;
+	errorMessage?: string;
+	showError?: boolean;
 
-    inputList?: string;
+	inputList?: string;
 }
 
 const RoleMultiSelect: FunctionComponent<RoleMultiSelectProp> = ({
@@ -106,7 +106,7 @@ const RoleMultiSelect: FunctionComponent<RoleMultiSelectProp> = ({
 				<input
 					className={classNames("app-input__field", {
 						"app-input__field--error":
-                            showError && !hideError && !Boolean(selected.size),
+							showError && !hideError && !Boolean(selected.size),
 					})}
 					type="text"
 					placeholder={label ? " " : placeholder}

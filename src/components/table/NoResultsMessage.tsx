@@ -3,8 +3,8 @@ import React, { FunctionComponent } from "react";
 import style from "./styles/no-result.module.scss";
 
 interface NoResultsMessageProps {
-    query: string;
-    dataPresent?: boolean;
+	query: string;
+	dataPresent?: boolean;
 }
 
 const NoResultsMessage: FunctionComponent<NoResultsMessageProps> = ({

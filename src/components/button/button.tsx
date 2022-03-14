@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
-    href?: string;
-    mod?: string;
-    variant?: 'valid' | 'danger';
+	href?: string;
+	mod?: string;
+	variant?: 'valid' | 'danger';
 }
 
 const Button: FunctionComponent<IButton> = ({

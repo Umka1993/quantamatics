@@ -4,7 +4,7 @@ import classNames from 'classnames'
 
 
 interface ComaListProps extends HTMLAttributes<HTMLUListElement> {
-    list: Array<any>;
+	list: Array<any>;
 }
 
 const ComaList: FunctionComponent<ComaListProps> = ({ list, className, ...other }) => {

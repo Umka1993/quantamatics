@@ -21,7 +21,7 @@ export default function useLogin(): (body: LoginResponse) => void {
 					headline: "Your user account is in the process of being set up",
 					image: "man",
 					subtitle:
-                        "Please try again later or start a chat session to get help live from someone on our team.",
+	"Please try again later or start a chat session to get help live from someone on our team.",
 				} as InfoMessage,
 			});
 		}

@@ -32,18 +32,18 @@ const ResetPassword: React.FunctionComponent = () => {
 	] = useResetPasswordMutation();
 
 	const { isSuccess: isTokenValid, isError: isExpiredToken } =
-        useVerifyTokenQuery({ userName: String(email), token: token as string });
+		useVerifyTokenQuery({ userName: String(email), token: token as string });
 
 	useEffect(() => {
 		isExpiredToken &&
-            navigate(AppRoute.Expired, {
-                
-            	state: {
-            		headline: "The password reset link can only be used once",
-            		subtitle: "Please return to Sign in page and choose Forgot Password.",
-            		returnBack: true,
-            	} as InfoMessage,
-            });
+			navigate(AppRoute.Expired, {
+
+				state: {
+					headline: "The password reset link can only be used once",
+					subtitle: "Please return to Sign in page and choose Forgot Password.",
+					returnBack: true,
+				} as InfoMessage,
+			});
 	}, [isExpiredToken]);
 
 	const handleResetPassword = useCallback(() => {
@@ -99,7 +99,7 @@ const ResetPassword: React.FunctionComponent = () => {
 					type="submit"
 					disabled={!password || !passwordConfirm}
 				>
-                    Save
+					Save
 				</Button>
 			</Form>
 		);

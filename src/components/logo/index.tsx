@@ -5,8 +5,8 @@ import LogoSVG from './assets/logo.svg';
 import { Link } from "react-router-dom";
 
 interface LogoProps {
-    width: number,
-    height: number
+	width: number,
+	height: number
 }
 
 export default function Logo({ width, height }: LogoProps): ReactElement {

@@ -6,11 +6,11 @@ import Headline from '../page-title/index'
 
 
 interface IForm extends FormHTMLAttributes<HTMLFormElement> {
-    stopLoading?: boolean;
-    headline?: string | JSX.Element;
-    headlineText?: string;
-    subtitle?: string;
-    forwardRef?: ForwardedRef<HTMLFormElement>
+	stopLoading?: boolean;
+	headline?: string | JSX.Element;
+	headlineText?: string;
+	subtitle?: string;
+	forwardRef?: ForwardedRef<HTMLFormElement>
 }
 
 

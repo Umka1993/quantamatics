@@ -17,7 +17,7 @@ export default function OrganizationList(): ReactElement {
 
 				<Button className={style.button} href={AppRoute.CreateOrganization}>
 					<AddIcon aria-hidden="true" />
-                    Add New
+	Add New
 				</Button>
 			</header>
 			<OrganizationTable search={search} />

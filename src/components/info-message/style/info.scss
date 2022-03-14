@@ -2,35 +2,35 @@
 @use "../../../sass/mixins" as *;
 
 .info {
-    text-align: center;
-    &__title {
-        margin: 28px auto 11px;
-        &--pass {
-            margin-top: -110px;
-        }
-    }
+	text-align: center;
+	&__title {
+		margin: 28px auto 11px;
+		&--pass {
+			margin-top: -110px;
+		}
+	}
 
-    &__text {
-        margin: 0;
-        font-size: 18px;
-        line-height: 1.4;
+	&__text {
+		margin: 0;
+		font-size: 18px;
+		line-height: 1.4;
 
-        a {
-            color: $accent;
-            text-decoration: none;
-            @include hover-focus {
-                color: darken($accent, 5);
-                text-decoration: underline;
-            }
-        }
-    }
+		a {
+			color: $accent;
+			text-decoration: none;
+			@include hover-focus {
+				color: darken($accent, 5);
+				text-decoration: underline;
+			}
+		}
+	}
 
-    &__back {
-        margin: 21px auto 0;
-        color: $main-text;
-        position: relative;
-        border-color: currentColor;
-        width: max-content;
-        padding: 12px 32px;
-    }
+	&__back {
+		margin: 21px auto 0;
+		color: $main-text;
+		position: relative;
+		border-color: currentColor;
+		width: max-content;
+		padding: 12px 32px;
+	}
 }

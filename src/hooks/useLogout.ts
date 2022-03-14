@@ -9,7 +9,7 @@ export default function useLogout() : () => void {
 	return () => {
 		dropToken();
 		dispatch(logout());
-    
+
 		localStorage.clear()
 		sessionStorage.clear()
 		deleteAllCookies();
@@ -17,5 +17,3 @@ export default function useLogout() : () => void {
 		logoutFromJupiter();
 	}
 }
-
-

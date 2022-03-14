@@ -14,10 +14,10 @@ import addHTTPtoURL from "../../services/addHTTPtoURL";
 interface ICreateOrganization { }
 
 export interface createOrganizationRequestBody {
-    name: string;
-    comments?: string;
-    customerCrmId?: string;
-    customerCrmLink?: string;
+	name: string;
+	comments?: string;
+	customerCrmId?: string;
+	customerCrmLink?: string;
 }
 
 const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
@@ -124,11 +124,11 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 				type="submit"
 				disabled={
 					!name ||
-                    duplicateOrgError !== undefined ||
-                    duplicateIdError !== undefined
+					duplicateOrgError !== undefined ||
+					duplicateIdError !== undefined
 				}
 			>
-                Create
+				Create
 			</Button>
 			<ResetButton className="create-organization__cancel">Cancel</ResetButton>
 		</Form>

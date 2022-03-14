@@ -5,10 +5,10 @@ import './styles/role-checkboxes.scss'
 import { Option } from '../../types/option';
 import useChangeSet from '../../hooks/useChangeSet';
 interface RoleCheckboxesProps {
-    selected: Set<UserRole>;
-    setter: Dispatch<SetStateAction<Set<UserRole>>>;
-    className?: string;
-    options: Option<UserRole>[]
+	selected: Set<UserRole>;
+	setter: Dispatch<SetStateAction<Set<UserRole>>>;
+	className?: string;
+	options: Option<UserRole>[]
 }
 
 const RoleCheckboxes: FunctionComponent<RoleCheckboxesProps> = ({ selected, setter, className, options }) =>

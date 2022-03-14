@@ -11,10 +11,10 @@ import { useEffect } from "react";
 import classNames from "classnames";
 
 interface AccordionProps extends DetailsHTMLAttributes<HTMLDetailsElement> {
-  summary: ReactElement | string;
-  summaryClass?: string;
-  wrapperClass?: string;
-  isOpened?: boolean;
+	summary: ReactElement | string;
+	summaryClass?: string;
+	wrapperClass?: string;
+	isOpened?: boolean;
 }
 
 const Accordion: FunctionComponent<AccordionProps> = ({
@@ -38,7 +38,7 @@ const Accordion: FunctionComponent<AccordionProps> = ({
 
 	useEffect(() => {
 		summaryRef.current &&
-      setSummaryHeight(`${summaryRef.current.offsetHeight}px`);
+			setSummaryHeight(`${summaryRef.current.offsetHeight}px`);
 	}, [summaryRef.current]);
 
 	const ANIMATION_OPTIONS = {

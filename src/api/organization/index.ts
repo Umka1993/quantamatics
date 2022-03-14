@@ -19,7 +19,7 @@ const organizationsApi = baseApi.injectEndpoints({
 
 				tags.push({ type: "Organizations", id: "list" });
 				userID !== undefined &&
-                    tags.push({ type: "Organizations", id: String(userID) });
+	tags.push({ type: "Organizations", id: String(userID) });
 
 				return tags;
 			},

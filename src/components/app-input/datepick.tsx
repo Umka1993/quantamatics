@@ -17,14 +17,14 @@ import dateFnsFormat from 'date-fns/format';
 // import dateFnsParse from 'date-fns/parse';
 
 interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
-    error?: string;
-    label?: string;
-    autoComplete?: "current-password" | "new-password";
-    externalSetter?: (value: Date) => void;
-    triggerValidity?: boolean;
-    valueAsDate?: Date;
-    minDate?: Date;
-    maxDate?: Date;
+	error?: string;
+	label?: string;
+	autoComplete?: "current-password" | "new-password";
+	externalSetter?: (value: Date) => void;
+	triggerValidity?: boolean;
+	valueAsDate?: Date;
+	minDate?: Date;
+	maxDate?: Date;
 }
 
 const DatePick: React.FunctionComponent<IDatePick> = ({
@@ -82,9 +82,9 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
 			<div
 				className="app-input__wrapper"
 				style={
-                    {
-                    	"--label-width": `${labelRef.current ? labelRef.current.offsetWidth + 25 : 100}px`,
-                    } as CSSProperties
+					{
+						"--label-width": `${labelRef.current ? labelRef.current.offsetWidth + 25 : 100}px`,
+					} as CSSProperties
 				}
 			>
 				{isSupport ? (

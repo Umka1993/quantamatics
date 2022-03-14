@@ -3,7 +3,7 @@ import React, { useEffect, FunctionComponent, HTMLAttributes, useRef } from "rea
 import "./style/page-title.scss";
 
 interface HeadlineProps extends HTMLAttributes<HTMLHeadingElement> {
-    pageTitle?: string;
+	pageTitle?: string;
 }
 
 const Headline: FunctionComponent<HeadlineProps> = ({ pageTitle, children, className, ...other }) => {
@@ -15,7 +15,7 @@ const Headline: FunctionComponent<HeadlineProps> = ({ pageTitle, children, class
 		document.title = pageTitle
 			? pageTitle
 			: `${String(children)} | ${AppInfo.Name}`;
-        
+
 		// GM: Commenting this out as I am unsure why it is needed
 		// headlineRef.current?.focus();
 

@@ -9,13 +9,13 @@ import classNames from "classnames";
 import CloseIcon from "./assets/close.svg";
 
 export interface ModalProps extends HTMLProps<HTMLDivElement> {
-    closeOnOutsideClick?: boolean;
-    onRequestClose: () => void;
-    open?: boolean;
-    headline?: string;
-    wrapperClass?: string;
-    variant?: "default" | "right-side";
-    hasCloseButton?: boolean;
+	closeOnOutsideClick?: boolean;
+	onRequestClose: () => void;
+	open?: boolean;
+	headline?: string;
+	wrapperClass?: string;
+	variant?: "default" | "right-side";
+	hasCloseButton?: boolean;
 }
 
 export default function Dialog({

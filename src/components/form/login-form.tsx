@@ -18,7 +18,7 @@ const LoginForm: FunctionComponent = () => {
 	const formRef = useRef<HTMLFormElement>(null);
 
 	const [sendLogin, { isError, isSuccess, isLoading, error, data }] =
-        useLoginUserMutation();
+		useLoginUserMutation();
 
 	const loginProcess = useLogin();
 
@@ -101,7 +101,7 @@ const LoginForm: FunctionComponent = () => {
 			</div>
 			<div className="login-page__wrap">
 				<Link to={AppRoute.ForgotPassword} className="login-page__forgot">
-                    Forgot Password?
+					Forgot Password?
 				</Link>
 			</div>
 			<Button
@@ -109,16 +109,16 @@ const LoginForm: FunctionComponent = () => {
 				disabled={!email || !password}
 				type="submit"
 			>
-                Sign In
+				Sign In
 			</Button>
 			<p className="login-page__note">
-                Interested in Quantamatics and want to{" "}
+				Interested in Quantamatics and want to{" "}
 				<a
 					href="https://www.facteus.com/quantamatics"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-                    learn more?
+					learn more?
 				</a>
 			</p>
 		</Form>

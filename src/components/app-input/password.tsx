@@ -14,11 +14,11 @@ import ClosedEyeSVG from "./assets/closed-eye.svg";
 import getValidationMessage from "./utils/passwordValidation";
 import { RegExpValidation } from "../../data/enum";
 interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
-    error?: string;
-    label?: string;
-    autoComplete?: "current-password" | "new-password";
-    externalSetter?: (value: string) => void;
-    hideError?: boolean
+	error?: string;
+	label?: string;
+	autoComplete?: "current-password" | "new-password";
+	externalSetter?: (value: string) => void;
+	hideError?: boolean
 }
 
 const Password: FunctionComponent<IPassword> = ({

@@ -8,7 +8,7 @@ import { useRestartServerMutation } from "../../api/account";
 import Loader from "../loader";
 
 interface IRestartServer {
-    onClose: () => void;
+	onClose: () => void;
 }
 
 export const RestartServer: React.FunctionComponent<IRestartServer> = ({ onClose }) => {
@@ -41,7 +41,7 @@ export const RestartServer: React.FunctionComponent<IRestartServer> = ({ onClose
 					onClick={restartServer as () => void}
 					variant='danger'
 				>
-                    Restart
+					Restart
 				</Button>
 			</footer>
 		</>

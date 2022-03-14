@@ -18,9 +18,9 @@ import SaveResetHeader from "../save-reset-header/SaveResetHeader";
 import DocIcon from "./assets/doc.svg";
 
 interface EditOrganizationFormProps {
-    organization: Organization;
-    isHaveAccessToOrgList?: boolean;
-    toggleAssetModal: () => void;
+	organization: Organization;
+	isHaveAccessToOrgList?: boolean;
+	toggleAssetModal: () => void;
 }
 
 const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
@@ -126,10 +126,10 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 	useEffect(() => {
 		if (organization) {
 			const isQuickChanged =
-                organization.name !== name ||
-                organization.customerCrmId !== customerCrmId ||
-                organization.customerCrmLink !== customerCrmLink ||
-                organization.comments !== comments;
+				organization.name !== name ||
+				organization.customerCrmId !== customerCrmId ||
+				organization.customerCrmLink !== customerCrmLink ||
+				organization.comments !== comments;
 			setIsChanged(isQuickChanged);
 		}
 	}, [name, customerCrmId, customerCrmLink, comments, organization]);
@@ -146,9 +146,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 				disableReset={isUpdating}
 				disableSave={
 					!isChanged ||
-                    isUpdating ||
-                    Boolean(duplicateOrgError) ||
-                    Boolean(duplicateIdError)
+					isUpdating ||
+					Boolean(duplicateOrgError) ||
+					Boolean(duplicateIdError)
 				}
 				isSavedMessageActive={isSavedMessageActive}
 			/>
@@ -205,9 +205,9 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 					onClick={toggleAssetModal}
 				>
 					<DocIcon width={21} height={21} fill="currentColor" aria-hidden />
-                    Manage Assets
+					Manage Assets
 				</Button>
-                Manage assets for the organization
+				Manage assets for the organization
 			</p>
 		</form>
 	);

@@ -1,23 +1,23 @@
 @use "../../sass/variables" as *;
 
 .root {
-    padding: 40px;
+	padding: 40px;
 }
 
 .header {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
 
-    h1 {
-        margin: 0 24px 0 0;
-    }
+	h1 {
+		margin: 0 24px 0 0;
+	}
 }
 
 .button {
-    align-self: center;
-    // justify-self: end;
-    width: 140px;
-    height: 40px;
-    margin-left: auto;
+	align-self: center;
+	// justify-self: end;
+	width: 140px;
+	height: 40px;
+	margin-left: auto;
 }

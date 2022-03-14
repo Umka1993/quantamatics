@@ -9,7 +9,7 @@ import useToggle from "../../hooks/useToggle";
 import ProfileButton from "./ProfileButton";
 
 type SideBarProps = {
-    toggleUserMenu: () => void;
+	toggleUserMenu: () => void;
 };
 
 export const SideBar: FunctionComponent<SideBarProps> = ({
@@ -50,14 +50,14 @@ export const SideBar: FunctionComponent<SideBarProps> = ({
 
 			{!collapsed && (
 				<small className={style.copyright}>
-                    © Copyright {yearToday} Facteus. All <br />
-                    rights reserved.{" "}
+					© Copyright {yearToday} Facteus. All <br />
+					rights reserved.{" "}
 					<a
 						href="https://www.facteus.com/privacy-policy"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-                        Privacy Policy
+						Privacy Policy
 					</a>
 				</small>
 			)}

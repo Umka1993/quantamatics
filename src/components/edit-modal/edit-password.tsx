@@ -17,7 +17,7 @@ import useUser from "../../hooks/useUser";
 import { useLazyGetUserQuery } from "../../api/user";
 
 interface IEditProfile {
-    onClose: () => void;
+	onClose: () => void;
 }
 
 export const EditPassword: React.FunctionComponent<IEditProfile> = ({
@@ -45,7 +45,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 	const { data: userAsset } = useGetAllUserAssetsQuery();
 
 	const [updatePassword, { isSuccess, isError, error, isLoading }] =
-        useChangePasswordMutation();
+		useChangePasswordMutation();
 
 	useEffect(() => {
 		wrongCurrent && setWrongCurrent(undefined);
@@ -143,7 +143,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 								className="edit-account__button"
 								onClick={() => setShowEditForm(true)}
 							>
-                                change
+								change
 								<KeyIcon aria-hidden="true" fill="currentColor" />
 							</button>
 						</dd>
@@ -164,7 +164,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 						className="edit-account__button edit-account__button--cancel"
 						onClick={() => setShowEditForm(false)}
 					>
-                        cancel
+						cancel
 					</button>
 					<Password
 						placeholder="Current Password"
@@ -202,7 +202,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 					}
 					form="edit-pass-form"
 				>
-                    Save
+					Save
 				</Button>
 			</footer>
 		</>

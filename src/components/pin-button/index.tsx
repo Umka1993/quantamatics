@@ -5,8 +5,8 @@ import './style/pin-button.scss';
 import classNames from 'classnames'
 
 interface PinButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    checked?: boolean
-    size?: number
+	checked?: boolean
+	size?: number
 }
 
 const PinButton: FunctionComponent<PinButtonProps> = ({ checked, className, size=16, ...other }) => {

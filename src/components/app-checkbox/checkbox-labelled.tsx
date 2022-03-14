@@ -15,17 +15,17 @@ import { useRef } from "react";
 import Checkbox from "./checkbox";
 
 interface CheckboxProps
-    extends Omit<LabelHTMLAttributes<HTMLLabelElement>, "onChange"> {
-    name?: string;
-    checked: boolean;
-    externalSetter?: Dispatch<SetStateAction<boolean>>;
-    align?: "right" | "left";
-    disabled?: boolean;
-    highlightOnChecked?: boolean;
-    value?: string | number;
-    textTitle?: string;
-    labelCheckbox?: string;
-    onChange?: ChangeEventHandler<HTMLInputElement>;
+	extends Omit<LabelHTMLAttributes<HTMLLabelElement>, "onChange"> {
+	name?: string;
+	checked: boolean;
+	externalSetter?: Dispatch<SetStateAction<boolean>>;
+	align?: "right" | "left";
+	disabled?: boolean;
+	highlightOnChecked?: boolean;
+	value?: string | number;
+	textTitle?: string;
+	labelCheckbox?: string;
+	onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 const CheckboxLabelled: FunctionComponent<CheckboxProps> = ({

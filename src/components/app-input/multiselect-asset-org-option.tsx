@@ -5,10 +5,10 @@ import { AssetInOrganization } from "../../types/asset";
 import PinButton from "../pin-button";
 
 export interface MultiselectAssetOptionProps {
-    selected: AssetInOrganization[];
-    setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
-    option: AssetInOrganization;
-    disabled?: boolean;
+	selected: AssetInOrganization[];
+	setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
+	option: AssetInOrganization;
+	disabled?: boolean;
 }
 
 const MultiselectAssetOrgOption: FunctionComponent<MultiselectAssetOptionProps> = ({

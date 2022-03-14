@@ -2,34 +2,34 @@ import { AssetServerResponse, AssetListItem } from "../../types/asset";
 import baseApi from "../index";
 
 const enum AssetEndpoint {
-    GetAll = "api/Asset/getAll",
-    GetAllUser = "api/Asset/getAllUser",
-    getUserAssets = "api/Asset/getAllUserAdmin",
+	GetAll = "api/Asset/getAll",
+	GetAllUser = "api/Asset/getAllUser",
+	getUserAssets = "api/Asset/getAllUserAdmin",
 
-    GetByID = "api/Asset/get",
+	GetByID = "api/Asset/get",
 
-    LinkOrganization = "api/Asset/addOrgLink",
-    LinkUser = "api/Asset/addUserLink",
+	LinkOrganization = "api/Asset/addOrgLink",
+	LinkUser = "api/Asset/addUserLink",
 
-    UnLinkOrganization = "api/Asset/removeOrgLink",
-    UnLinkUser = "api/Asset/removeUserLink",
+	UnLinkOrganization = "api/Asset/removeOrgLink",
+	UnLinkUser = "api/Asset/removeUserLink",
 
-    ToggleShared = "api/Asset/toggleAssetSharedByDefault",
+	ToggleShared = "api/Asset/toggleAssetSharedByDefault",
 }
 
 interface LinkOrganizationParameters {
-    assetId: number | string;
-    orgId: number | string;
+	assetId: number | string;
+	orgId: number | string;
 }
 
 interface LinkUserParameters {
-    assetId: number | string;
-    userId: number | string;
+	assetId: number | string;
+	userId: number | string;
 }
 
 interface ToggleSharesParams {
-    assetId: number | string;
-    passedOrgID: number | string;
+	assetId: number | string;
+	passedOrgID: number | string;
 }
 
 const assetApi = baseApi.injectEndpoints({

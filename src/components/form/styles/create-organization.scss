@@ -1,35 +1,35 @@
 @import "../../../sass/variables";
 
 .create-organization {
-    height: 100%;
-    display: grid;
-    min-height: 600px;
-    min-height: var(--min-height);
-    align-content: center;
-    max-width: 400px;
+	height: 100%;
+	display: grid;
+	min-height: 600px;
+	min-height: var(--min-height);
+	align-content: center;
+	max-width: 400px;
 
-    &__submit {
-        margin-top: 40px;
-        min-height: 40px;
-    }
+	&__submit {
+		margin-top: 40px;
+		min-height: 40px;
+	}
 
-    &__cancel {
-        width: fit-content;
-        margin: 16px auto 0;
-        padding: 0 0 0 2px;
-    }
+	&__cancel {
+		width: fit-content;
+		margin: 16px auto 0;
+		padding: 0 0 0 2px;
+	}
 
-    &__fields {
-        display: grid;
-        gap: 18px;
-    }
+	&__fields {
+		display: grid;
+		gap: 18px;
+	}
 
-    .role-checkboxes {
-        margin-top: 10px;
-        color: $headlines;
-    }
+	.role-checkboxes {
+		margin-top: 10px;
+		color: $headlines;
+	}
 
-    .check-block {
-        color: $main-text;
-    }
+	.check-block {
+		color: $main-text;
+	}
 }

@@ -4,8 +4,8 @@ import { IUser } from "../../types/user";
 import pendoInitialize from "../../services/pendoInitialize";
 
 export interface AuthState {
-    status: AuthorizationStatus;
-    user?: IUser;
+	status: AuthorizationStatus;
+	user?: IUser;
 }
 
 const user: IUser = localStorage.getItem("user")

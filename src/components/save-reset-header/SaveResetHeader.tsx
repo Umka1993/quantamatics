@@ -6,11 +6,11 @@ import style from "./SaveResetHeader.module.scss";
 import classNames from "classnames";
 
 interface SaveResetHeaderProps extends HTMLProps<HTMLDivElement> {
-    headline: string;
-    disableSave?: boolean;
-    isSavedMessageActive?: boolean;
-    disableReset?: boolean;
-    headlineID?: string;
+	headline: string;
+	disableSave?: boolean;
+	isSavedMessageActive?: boolean;
+	disableReset?: boolean;
+	headlineID?: string;
 }
 
 const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
@@ -32,7 +32,7 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
 					disabled={disableReset}
 					onClick={({ currentTarget }) => currentTarget.blur()}
 				>
-                    Cancel
+					Cancel
 				</ResetButton>
 
 				<Button
@@ -49,7 +49,7 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
 								height={17}
 								fill="currentColor"
 							/>
-                            Saved
+							Saved
 						</>
 					) : (
 						"Save"

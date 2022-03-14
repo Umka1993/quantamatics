@@ -2,14 +2,14 @@ import classNames from 'classnames'
 import React, { CSSProperties } from 'react'
 
 export type ReactSVGComponent = React.FunctionComponent<
-  React.SVGAttributes<SVGElement>
+	React.SVGAttributes<SVGElement>
 >
 interface SVGProps {
-  name?: string
-  icon: ReactSVGComponent
-  style?: CSSProperties
-  className?: string
-  onClick?: () => void
+	name?: string
+	icon: ReactSVGComponent
+	style?: CSSProperties
+	className?: string
+	onClick?: () => void
 }
 
 export const SVG: React.FunctionComponent<SVGProps> = (props) => {

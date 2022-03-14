@@ -6,9 +6,9 @@ import CheckIcon from "./assets/check.svg";
 import style from "./style/success.module.scss";
 
 interface Message {
-    headline: string;
-    linkText: string;
-    link: string;
+	headline: string;
+	linkText: string;
+	link: string;
 }
 
 const SuccessMessage: FunctionComponent = () => {

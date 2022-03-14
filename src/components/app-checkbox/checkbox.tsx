@@ -4,7 +4,7 @@ import CheckIcon from "./assets/check.svg";
 import classNames from "classnames";
 
 interface CheckboxProps extends Omit<HTMLProps<HTMLInputElement>, 'type'> {
-    highlightOnChecked?: boolean;
+	highlightOnChecked?: boolean;
 }
 
 const Checkbox: FunctionComponent<CheckboxProps> = ({ highlightOnChecked, checked, disabled, ...other }) => {

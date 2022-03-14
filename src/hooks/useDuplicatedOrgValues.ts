@@ -19,11 +19,11 @@ export default function useDuplicatedOrgValues(
 	const { data: allOrganizations } = useGetAllOrganizationsQuery(undefined);
 
 	const [duplicateOrgError, setDuplicateOrgError] = useState<
-        undefined | UniqueError.Name
-    >(undefined);
+		undefined | UniqueError.Name
+	>(undefined);
 	const [duplicateIdError, setDuplicateIdError] = useState<
-        undefined | UniqueError.ID
-    >(undefined);
+		undefined | UniqueError.ID
+	>(undefined);
 
 	const [checkNameTrigger, setCheckNameTrigger] = useState(false);
 

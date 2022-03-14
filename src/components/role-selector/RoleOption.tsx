@@ -4,14 +4,14 @@ import { UserRole } from "../../data/enum";
 import useChangeSet from "../../hooks/useChangeSet";
 
 interface RoleOptionProps {
-    selected?: boolean;
-    value: UserRole;
-    label: string;
-    setter: Dispatch<SetStateAction<Set<UserRole>>>;
-    className?: string;
-    highlightOnChecked?: boolean;
-    align?: "right" | "left";
-    
+	selected?: boolean;
+	value: UserRole;
+	label: string;
+	setter: Dispatch<SetStateAction<Set<UserRole>>>;
+	className?: string;
+	highlightOnChecked?: boolean;
+	align?: "right" | "left";
+
 }
 
 const RoleOption: FunctionComponent<RoleOptionProps> = ({

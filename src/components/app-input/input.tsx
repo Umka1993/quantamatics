@@ -12,13 +12,13 @@ import classNames from "classnames";
 import EditIcon from "./assets/edit.svg";
 
 export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
-    error?: string;
-    label?: string;
-    externalSetter?: (value: string) => void;
-    icon?: string;
-    showLimit?: boolean;
-    invalid?: boolean;
-    variant?: "squared";
+	error?: string;
+	label?: string;
+	externalSetter?: (value: string) => void;
+	icon?: string;
+	showLimit?: boolean;
+	invalid?: boolean;
+	variant?: "squared";
 }
 
 const Input: React.FunctionComponent<IInput> = ({
@@ -139,8 +139,8 @@ const Input: React.FunctionComponent<IInput> = ({
 						<span ref={labelRef}>
 							{label}
 							{showLimit &&
-                                maxLength &&
-                                ` (${(value as string)?.length} / ${maxLength})`}
+								maxLength &&
+								` (${(value as string)?.length} / ${maxLength})`}
 						</span>
 					</span>
 				)}

@@ -2,7 +2,7 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getToken } from '../../services/token';
 
 
-const baseQuery = fetchBaseQuery({ 
+const baseQuery = fetchBaseQuery({
 	baseUrl: process.env.DATA_API_URL,
 	prepareHeaders: (headers) => {
 		const token = getToken()
@@ -14,7 +14,7 @@ const baseQuery = fetchBaseQuery({
 
 		return headers;
 	}
-}) 
+})
 
 
 export default baseQuery

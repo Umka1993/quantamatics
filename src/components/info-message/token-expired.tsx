@@ -5,9 +5,9 @@ import Button from "../button";
 import { AppRoute } from "../../data/enum";
 
 interface TokenExpiredProps {
-    headline: string,
-    subtitle: string,
-    returnBack?: boolean
+	headline: string,
+	subtitle: string,
+	returnBack?: boolean
 }
 
 const TokenExpired: FunctionComponent<TokenExpiredProps> = ({ headline, subtitle, returnBack = true }) => {

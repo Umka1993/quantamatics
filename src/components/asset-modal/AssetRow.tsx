@@ -6,10 +6,10 @@ import PinButton from "../pin-button";
 import style from "./AssetModal.module.scss";
 
 export interface MultiselectAssetOptionProps {
-    selected: AssetInOrganization[];
-    setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
-    option: AssetInOrganization;
-    disabled?: boolean;
+	selected: AssetInOrganization[];
+	setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
+	option: AssetInOrganization;
+	disabled?: boolean;
 }
 
 const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({

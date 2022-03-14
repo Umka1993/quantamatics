@@ -5,15 +5,15 @@ import SortIcon from "./assets/sort-icon.svg";
 import "./styles/sort-th.scss";
 
 interface ISortTableHeader {
-    name: string;
-    sort: any;
-    localRows: any;
-    setSort: any;
-    setLocalRows: any;
-    text: string;
-    className?: string;
-    rememberScroll?: Dispatch<SetStateAction<number>>;
-    localKey?: string;
+	name: string;
+	sort: any;
+	localRows: any;
+	setSort: any;
+	setLocalRows: any;
+	text: string;
+	className?: string;
+	rememberScroll?: Dispatch<SetStateAction<number>>;
+	localKey?: string;
 }
 
 export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({

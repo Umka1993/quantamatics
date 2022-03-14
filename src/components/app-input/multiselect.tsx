@@ -19,22 +19,22 @@ import MultiselectAssetOption, {
 import { AssetListItem } from "../../types/asset";
 import { useClickOutside } from "../../hooks/useClickOutside";
 interface IInput
-    extends Omit<MultiselectAssetOptionProps,
-    "option" | "selected">,
-    SelectHTMLAttributes<HTMLSelectElement> {
-    error?: string;
-    label?: string;
-    icon?: string;
-    showLimit?: boolean;
-    selected: Set<string | number>;
-    errorMessage?: string;
-    showError?: boolean;
+	extends Omit<MultiselectAssetOptionProps,
+	"option" | "selected">,
+	SelectHTMLAttributes<HTMLSelectElement> {
+	error?: string;
+	label?: string;
+	icon?: string;
+	showLimit?: boolean;
+	selected: Set<string | number>;
+	errorMessage?: string;
+	showError?: boolean;
 
-    options: AssetListItem[];
-    inputList?: string;
+	options: AssetListItem[];
+	inputList?: string;
 
-    fullDisabled?: boolean;
-    variant?: "squared";
+	fullDisabled?: boolean;
+	variant?: "squared";
 }
 
 const Multiselect: FunctionComponent<IInput> = ({
@@ -91,7 +91,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 					.join(", ")
 			)
 			: setList("");
-        
+
 	}, [selected]);
 
 	/* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
@@ -128,9 +128,9 @@ const Multiselect: FunctionComponent<IInput> = ({
 				<input
 					className={classNames("app-input__field", {
 						"app-input__field--error":
-                            showError &&
-                            !hideError &&
-                            !Boolean(selected.size),
+							showError &&
+							!hideError &&
+							!Boolean(selected.size),
 					})}
 					type="text"
 					placeholder={label ? " " : placeholder}

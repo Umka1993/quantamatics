@@ -2,51 +2,51 @@
 @use "../../../sass/mixins" as *;
 
 .modal-overlay {
-  background: transparentize(#263768, 0.2);
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  place-items: center;
-  cursor: pointer;
+	background: transparentize(#263768, 0.2);
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	display: flex;
+	place-items: center;
+	cursor: pointer;
 }
 
 .modal {
-  width: 775px;
-  height: 602px;
-  background: #ffffff;
-  box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.2);
-  border-radius: 4px;
-  max-width: 775px;
-  min-height: 602px;
-  cursor: default;
+	width: 775px;
+	height: 602px;
+	background: #ffffff;
+	box-shadow: 0px 2px 20px rgba(22, 34, 101, 0.2);
+	border-radius: 4px;
+	max-width: 775px;
+	min-height: 602px;
+	cursor: default;
 
-  z-index: 200;
+	z-index: 200;
 
-  margin: auto;
-  position: relative;
+	margin: auto;
+	position: relative;
 
-  &:focus {
-    outline: none;
-  }
+	&:focus {
+		outline: none;
+	}
 
-  &__close {
-    all: unset;
-    position: absolute;
-    right: 0;
-    top: 0;
+	&__close {
+		all: unset;
+		position: absolute;
+		right: 0;
+		top: 0;
 
-    color: #bcc4d8;
+		color: #bcc4d8;
 
-    padding: 24px;
-    cursor: pointer;
+		padding: 24px;
+		cursor: pointer;
 
-    @include hover-focus {
-      color: $accent;
-    }
+		@include hover-focus {
+			color: $accent;
+		}
 
-    &:active {
-      color: darken($accent, 20);
-    }
-  }
+		&:active {
+			color: darken($accent, 20);
+		}
+	}
 }

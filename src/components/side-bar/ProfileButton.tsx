@@ -3,7 +3,7 @@ import useUser from "../../hooks/useUser";
 import ProfileIcon from "./assets/profile.svg";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-    collapsed: boolean;
+	collapsed: boolean;
 }
 
 export default function ProfileButton({

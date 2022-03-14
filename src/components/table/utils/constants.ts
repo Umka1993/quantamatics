@@ -9,4 +9,3 @@ export const ORG_HEADER = {
 	titles: ["Organization Name", "CRM Customer ID", "CRM Customer Link", "Comments"],
 	keys: [OrganizationKey.Name, OrganizationKey.IdCRM, OrganizationKey.LinkCRM, OrganizationKey.Comment]
 }
-

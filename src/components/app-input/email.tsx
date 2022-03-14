@@ -51,7 +51,7 @@ const Email: React.FunctionComponent<IEmail> = ({
 	useEffect(() => {
 		reCalcLabelWidth();
 		if (inputRef.current) {
-			const message = getValidationMessage(inputRef.current.validity, error);            
+			const message = getValidationMessage(inputRef.current.validity, error);
 			inputRef.current.setCustomValidity(message);
 			const { validationMessage } = inputRef.current;
 
@@ -84,9 +84,9 @@ const Email: React.FunctionComponent<IEmail> = ({
 				className="app-input__wrapper"
 				style={
 					label ?
-                        {
-                        	"--label-width": `${rightOffset}px`,
-                        } as CSSProperties
+	{
+		"--label-width": `${rightOffset}px`,
+	} as CSSProperties
 						: undefined
 				}
 			>

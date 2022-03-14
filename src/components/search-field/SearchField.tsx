@@ -4,8 +4,8 @@ import SearchIcon from "./assets/search.svg";
 import style from './SearchField.module.scss'
 
 interface SearchFieldProps extends HTMLProps<HTMLLabelElement> {
-    search: string;
-    setSearch: Dispatch<SetStateAction<string>>
+	search: string;
+	setSearch: Dispatch<SetStateAction<string>>
 }
 
 const SearchField: FunctionComponent<SearchFieldProps> = ({ search, setSearch, ...other }) => {

@@ -8,8 +8,8 @@ import classNames from "classnames";
 import { formatDate } from "../../services/baseService";
 
 interface IProfileSummary {
-    user: IUser;
-    className?: string;
+	user: IUser;
+	className?: string;
 }
 
 const ProfileSummary: FunctionComponent<IProfileSummary> = ({ user, className }) => {

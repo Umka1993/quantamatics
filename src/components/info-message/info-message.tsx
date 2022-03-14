@@ -7,10 +7,10 @@ import classes from "classnames";
 import Button from "../button";
 
 export interface InfoMessage {
-    headline: string;
-    subtitle: string;
-    image: "calendar" | "man";
-    returnBack?: boolean;
+	headline: string;
+	subtitle: string;
+	image: "calendar" | "man";
+	returnBack?: boolean;
 }
 
 const InfoMessage: FunctionComponent = () => {
@@ -51,7 +51,7 @@ const InfoMessage: FunctionComponent = () => {
 
 				{(state as InfoMessage).returnBack && (
 					<Button href={AppRoute.Login} className="info__back">
-                        Return to Sign In
+						Return to Sign In
 					</Button>
 				)}
 			</article>

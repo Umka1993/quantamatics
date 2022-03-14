@@ -1,74 +1,74 @@
 @import "../../../sass/variables";
 
 .selector-input {
-  width: 100%;
-  margin-top: 24px;
-  position: relative;
-  display: flex;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #bcc4d8;
-  justify-content: space-between;
-  &__label {
-    margin-left: auto;
-    margin-right: 8px;
-    font-size: 14px;
-    line-height: 1.143;
-    color: $inactive;
-  }
-  svg {
-    transition: all ease 0.5s;
-    transform: rotate(180deg);
-    path {
-      fill: #bcc4d8;
-    }
-  }
+	width: 100%;
+	margin-top: 24px;
+	position: relative;
+	display: flex;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #bcc4d8;
+	justify-content: space-between;
+	&__label {
+		margin-left: auto;
+		margin-right: 8px;
+		font-size: 14px;
+		line-height: 1.143;
+		color: $inactive;
+	}
+	svg {
+		transition: all ease 0.5s;
+		transform: rotate(180deg);
+		path {
+			fill: #bcc4d8;
+		}
+	}
 
-  &--disabled {
-    background-color: #f8f8f8;
-    cursor: no-drop;
-  }
+	&--disabled {
+		background-color: #f8f8f8;
+		cursor: no-drop;
+	}
 
-  &__active {
-    border-bottom: 1px solid $accent;
-    svg {
-      transform: rotate(0deg);
-      path {
-        fill: $accent;
-      }
-    }
-  }
+	&__active {
+		border-bottom: 1px solid $accent;
+		svg {
+			transform: rotate(0deg);
+			path {
+				fill: $accent;
+			}
+		}
+	}
 
-  &__value {
-    font-size: 16px;
-    line-height: 18px;
-    color: #003c71;
-  }
+	&__value {
+		font-size: 16px;
+		line-height: 18px;
+		color: #003c71;
+	}
 
-  &__list {
-    position: absolute;
-    width: 100%;
-    height: 195px;
-    background: #ffffff;
-    box-shadow: 0px 1px 18px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
-    z-index: 10;
-    top: 39px;
-    overflow-y: scroll;
-  }
-  &__item {
-    margin-bottom: 8px;
-    padding: 7px 0;
-    padding-left: 14px;
-    font-size: 16px;
-    line-height: 18px;
-    color: #003c71;
-    &:first-child {
-      margin-top: 8px;
-    }
-    &:hover {
-      color: $accent;
-      background: #f2f8fe;
-      cursor: pointer;
-    }
-  }
+	&__list {
+		position: absolute;
+		width: 100%;
+		height: 195px;
+		background: #ffffff;
+		box-shadow: 0px 1px 18px rgba(0, 0, 0, 0.15);
+		backdrop-filter: blur(10px);
+		z-index: 10;
+		top: 39px;
+		overflow-y: scroll;
+	}
+	&__item {
+		margin-bottom: 8px;
+		padding: 7px 0;
+		padding-left: 14px;
+		font-size: 16px;
+		line-height: 18px;
+		color: #003c71;
+		&:first-child {
+			margin-top: 8px;
+		}
+		&:hover {
+			color: $accent;
+			background: #f2f8fe;
+			cursor: pointer;
+		}
+	}
 }

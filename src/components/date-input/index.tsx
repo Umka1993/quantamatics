@@ -7,14 +7,14 @@ import DatePicker from "react-datepicker";
 
 
 interface IInput {
-    className?: string,
-    placeholder?: string,
-    onChangeInput: (value: any) => void
-    value?: any
-    required?: boolean
-    errors?: boolean
-    minDate?: Date,
-    disablePastDate?: boolean;
+	className?: string,
+	placeholder?: string,
+	onChangeInput: (value: any) => void
+	value?: any
+	required?: boolean
+	errors?: boolean
+	minDate?: Date,
+	disablePastDate?: boolean;
 }
 
 export const DateInput: React.FunctionComponent<IInput> = (props) => {
@@ -23,9 +23,9 @@ export const DateInput: React.FunctionComponent<IInput> = (props) => {
 
 	return(
 		<div className={inputClassNames}>
-			<DatePicker 
-				placeholderText={placeholder} selected={value} 
-				onChange={(date) => onChangeInput(date)} 
+			<DatePicker
+				placeholderText={placeholder} selected={value}
+				onChange={(date) => onChangeInput(date)}
 				minDate={minDate}
 				showDisabledMonthNavigation={disablePastDate}
 				dateFormat="MM.dd.yyyy"

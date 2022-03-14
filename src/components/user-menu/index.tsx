@@ -9,9 +9,9 @@ import useCloseModal from "../../hooks/useCloseModal";
 import { SideBarModalOpen } from "../../types/sidebar-modal";
 
 interface Props {
-    openModal: SideBarModalOpen;
-    openDropdown: boolean;
-    setOpenDropdown: Dispatch<SetStateAction<boolean>>;
+	openModal: SideBarModalOpen;
+	openDropdown: boolean;
+	setOpenDropdown: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function UserMenu({
@@ -49,7 +49,7 @@ export default function UserMenu({
 					height={20}
 					fill="currentColor"
 				/>
-                My Account
+				My Account
 			</button>
 			<button
 				type="button"
@@ -60,7 +60,7 @@ export default function UserMenu({
 				className={style.button}
 			>
 				<PowerIcon aria-hidden width={16} height={16} fill="currentColor" />
-                Restart Server
+				Restart Server
 			</button>
 			<button onClick={logout} type="button" className={style.button}>
 				<LogoutIcon
@@ -69,7 +69,7 @@ export default function UserMenu({
 					height={16}
 					fill="currentColor"
 				/>
-                Log Out
+				Log Out
 			</button>
 		</div>
 

@@ -21,7 +21,7 @@ import { SortDirection } from "../../data/enum";
 import { useCallback } from "react";
 import Dialog from "../dialog";
 interface UserTableProps {
-    orgId: string;
+	orgId: string;
 }
 
 export const UserTable: FunctionComponent<UserTableProps> = ({ orgId }) => {

@@ -12,12 +12,12 @@ export default function PrivateRoutes(): ReactElement {
 	const user = useUser();
 
 	const isOrganizationsAvailable =
-        user &&
-        (user.userRoles.includes(UserRole.Admin) ||
-            user.userRoles.includes(UserRole.OrgOwner));
+		user &&
+		(user.userRoles.includes(UserRole.Admin) ||
+			user.userRoles.includes(UserRole.OrgOwner));
 
 	const isEditOrgAvailable =
-        isOrganizationsAvailable || user?.userRoles.includes(UserRole.OrgAdmin);
+		isOrganizationsAvailable || user?.userRoles.includes(UserRole.OrgAdmin);
 
 	const HomePath = user.allowResearch
 		? AppRoute.Files

@@ -26,7 +26,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
 	const INITIAL_SORT = { name: "", direction: SortDirection.Default };
 
 	const { isLoading, data, isError, isSuccess, error } =
-        useGetAllOrganizationsQuery(user?.id as number);
+	useGetAllOrganizationsQuery(user?.id as number);
 
 	const [localRows, setLocalRows] = useState<Organization[]>([]);
 	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
@@ -59,9 +59,9 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
 			const filteredOrgs = initialOrgs.filter(
 				({ name, customerCrmId, customerCrmLink, comments }) =>
 					name.toLocaleLowerCase().includes(normalizedSearchQuery) ||
-                    customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
-                    customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
-                    comments.toLocaleLowerCase().includes(normalizedSearchQuery)
+		customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
+		customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
+		comments.toLocaleLowerCase().includes(normalizedSearchQuery)
 			);
 
 			setLocalRows(filteredOrgs);
@@ -74,7 +74,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
 		if (initialOrgs && search?.length) {
 			filterOrganizationsToQuery(
 				search,
-                JSON.parse(initialOrgs) as Organization[]
+	JSON.parse(initialOrgs) as Organization[]
 			);
 		} else {
 			setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));

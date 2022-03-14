@@ -16,14 +16,14 @@ import useUser from "../../hooks/useUser";
 import Accordion from "../accordion";
 
 interface NavBarProps {
-    collapsed: boolean;
-    className?: string,
+	collapsed: boolean;
+	className?: string,
 }
 
 interface NavLinkContent {
-    href: string;
-    text: string;
-    icon: FunctionComponent<SVGProps<SVGSVGElement>>;
+	href: string;
+	text: string;
+	icon: FunctionComponent<SVGProps<SVGSVGElement>>;
 }
 
 const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
@@ -31,13 +31,13 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 	const user = useUser();
 
 	const isHaveAccessToOrgList =
-        user?.userRoles.includes(UserRole.Admin) ||
-        user?.userRoles.includes(UserRole.OrgOwner);
+		user?.userRoles.includes(UserRole.Admin) ||
+		user?.userRoles.includes(UserRole.OrgOwner);
 
 	/*  const subItems: NavLinkContent[] = [
-         { href: AppRoute.Files, text: "My Files", icon: FilesIcon },
-         { href: AppRoute.Shared, text: "Shared With Me", icon: ShareIcon },
-     ];
+		{ href: AppRoute.Files, text: "My Files", icon: FilesIcon },
+		{ href: AppRoute.Shared, text: "Shared With Me", icon: ShareIcon },
+	];
   */
 	return (
 		<nav
@@ -46,43 +46,43 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 			})}
 		>
 			{/* {user?.userRoles.includes(UserRole.Research) && (
-                <Accordion
-                    isOpened={pathname.includes("/research")}
-                    summaryClass="navigation__item"
-                    summary={
-                        <>
-                            <ZoomIcon
-                                aria-hidden="true"
-                                className="navigation__icon"
-                                width="16"
-                                height="16"
-                            />
-                            Research
-                        </>
-                    }
-                    wrapperClass='navigation__sublist'
-                >
-                    {subItems.map((item) => (
-                        <NavLink
-                            to={item.href}
-                            className={({ isActive }) => {
-                                const classes = ["navigation__item", "navigation__item--sub"];
-                                isActive && classes.push("navigation__item--active");
-                                return classes.join(" ");
-                            }}
-                            key={item.href}
-                        >
-                            <item.icon
-                                aria-hidden="true"
-                                className="navigation__icon"
-                                width={16}
-                                height={16}
-                            />
-                            {item.text}
-                        </NavLink>
-                    ))}
-                </Accordion>
-            )} */}
+				<Accordion
+					isOpened={pathname.includes("/research")}
+					summaryClass="navigation__item"
+					summary={
+						<>
+							<ZoomIcon
+								aria-hidden="true"
+								className="navigation__icon"
+								width="16"
+								height="16"
+							/>
+							Research
+						</>
+					}
+					wrapperClass='navigation__sublist'
+				>
+					{subItems.map((item) => (
+						<NavLink
+							to={item.href}
+							className={({ isActive }) => {
+								const classes = ["navigation__item", "navigation__item--sub"];
+								isActive && classes.push("navigation__item--active");
+								return classes.join(" ");
+							}}
+							key={item.href}
+						>
+							<item.icon
+								aria-hidden="true"
+								className="navigation__icon"
+								width={16}
+								height={16}
+							/>
+							{item.text}
+						</NavLink>
+					))}
+				</Accordion>
+			)} */}
 
 			{/* Research with no sub-nav*/}
 			{user?.allowResearch && (
@@ -100,7 +100,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 						width="16"
 						height="16"
 					/>
-                    Research
+					Research
 				</NavLink>
 			)}
 
@@ -119,7 +119,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 						width={16}
 						height={16}
 					/>
-                    Coherence
+					Coherence
 				</NavLink>
 			)}
 
@@ -138,7 +138,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 						width={16}
 						height={16}
 					/>
-                    Excel Library
+					Excel Library
 				</NavLink>
 			)}
 
@@ -148,10 +148,10 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 					className={(isActive) =>
 						classNames("navigation__item", {
 							"navigation__item--active":
-                                pathname.includes("/apps/organizations/") &&
-                                !pathname.includes(
-                                	`/apps/organizations/${user?.organizationId}`
-                                ),
+								pathname.includes("/apps/organizations/") &&
+								!pathname.includes(
+									`/apps/organizations/${user?.organizationId}`
+								),
 						})
 					}
 				>
@@ -161,7 +161,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 						width={16}
 						height={16}
 					/>
-                    Organizations
+					Organizations
 				</NavLink>
 			)}
 
@@ -180,7 +180,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 						width={16}
 						height={16}
 					/>
-                    Settings
+					Settings
 				</NavLink>
 			)}
 		</nav>

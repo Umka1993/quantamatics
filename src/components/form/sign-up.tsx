@@ -39,23 +39,23 @@ const SignUp: FunctionComponent = () => {
 	] = useResetPasswordMutation();
 
 	const { isSuccess: isTokenValid, isError: isExpiredToken } =
-        useVerifyTokenQuery({ userName: String(email), token: token as string });
+	useVerifyTokenQuery({ userName: String(email), token: token as string });
 
 
 	useEffect(() => {
 		isExpiredToken &&
-        navigate(AppRoute.Expired, {
-        	state: {
-        		headline: "Set password link can only be used once",
-        		subtitle: "Please return to Sign in page and choose Forgot Password.",
-        		returnBack: true,
-        	} as InfoMessage,
-        });
+	navigate(AppRoute.Expired, {
+		state: {
+			headline: "Set password link can only be used once",
+			subtitle: "Please return to Sign in page and choose Forgot Password.",
+			returnBack: true,
+		} as InfoMessage,
+	});
 	}, [isExpiredToken]);
 
 	const title = (
 		<>
-            Welcome to <b>{organizationName}</b>
+	Welcome to <b>{organizationName}</b>
 		</>
 	);
 
@@ -114,7 +114,7 @@ const SignUp: FunctionComponent = () => {
 					type="submit"
 					disabled={!password || !passwordConfirm}
 				>
-                    Save
+		Save
 				</Button>
 			</Form>
 		);

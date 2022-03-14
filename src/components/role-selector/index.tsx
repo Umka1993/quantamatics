@@ -11,9 +11,9 @@ import style from "./role-selector.module.scss";
 import RoleOption from "./RoleOption";
 import RoleMultiSelect from "./RoleMultiselect";
 interface RoleSelectorProps {
-    isSuperAdmin: boolean;
-    defaultRoles: Set<UserRole>;
-    externalSetter: Dispatch<SetStateAction<Set<UserRole>>>;
+	isSuperAdmin: boolean;
+	defaultRoles: Set<UserRole>;
+	externalSetter: Dispatch<SetStateAction<Set<UserRole>>>;
 }
 
 const RoleSelector: FunctionComponent<RoleSelectorProps> = ({

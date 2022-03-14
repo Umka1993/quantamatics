@@ -2,20 +2,20 @@ import { LoginResponse } from "../../types/loginResponse";
 import baseApi from "../index";
 
 export const enum AccountEndpoint {
-    Login = "/api/Account/login",
-    ResetPasswordMail = "/api/Account/sendPasswordReset",
-    ResetPassword = "/api/Account/resetPassword",
-    ChangePassword = "/api/Account/changePassword",
-    VerifyToken = "/api/Account/verifyToken",
-    Capabilities = "/api/Account/capabilities",
-    Register = "/api/Account/register",
+	Login = "/api/Account/login",
+	ResetPasswordMail = "/api/Account/sendPasswordReset",
+	ResetPassword = "/api/Account/resetPassword",
+	ChangePassword = "/api/Account/changePassword",
+	VerifyToken = "/api/Account/verifyToken",
+	Capabilities = "/api/Account/capabilities",
+	Register = "/api/Account/register",
 
-    Logout = "/api/Account/logout",
-    UserInfo = "/api/Account/userInfo",
+	Logout = "/api/Account/logout",
+	UserInfo = "/api/Account/userInfo",
 
-    GetToken = "/api/Account/getAPIToken",
-    GetNameFromAPI = "/api/Account/userNameFromAPIKey",
-    RestartServer = "/api/User/RestartEnvironment", // Should move this on the backend to Account controller
+	GetToken = "/api/Account/getAPIToken",
+	GetNameFromAPI = "/api/Account/userNameFromAPIKey",
+	RestartServer = "/api/User/RestartEnvironment", // Should move this on the backend to Account controller
 }
 
 const accountApi = baseApi.injectEndpoints({
@@ -30,15 +30,15 @@ const accountApi = baseApi.injectEndpoints({
 		}),
 
 		loginUser: build.mutation<
-            LoginResponse,
-            { email: string; password: string }
-        >({
-        	query: (body) => ({
-        		url: AccountEndpoint.Login,
-        		method: "POST",
-        		body,
-        	}),
-        }),
+			LoginResponse,
+			{ email: string; password: string }
+		>({
+			query: (body) => ({
+				url: AccountEndpoint.Login,
+				method: "POST",
+				body,
+			}),
+		}),
 
 		verifyToken: build.query<void, { userName: string; token: string }>({
 			query: (params) => ({
@@ -76,15 +76,15 @@ const accountApi = baseApi.injectEndpoints({
 		}),
 
 		changePassword: build.mutation<
-            void,
-            { currentPassword: string; newPassword: string }
-        >({
-        	query: (body) => ({
-        		url: AccountEndpoint.ChangePassword,
-        		method: "PUT",
-        		body,
-        	}),
-        }),
+			void,
+			{ currentPassword: string; newPassword: string }
+		>({
+			query: (body) => ({
+				url: AccountEndpoint.ChangePassword,
+				method: "PUT",
+				body,
+			}),
+		}),
 
 		sendResetPasswordMail: build.mutation<void, string>({
 			query: (email) => ({
@@ -94,15 +94,15 @@ const accountApi = baseApi.injectEndpoints({
 			})
 		}),
 		resetPassword: build.mutation<
-            void,
-            { email: string, password: string, token: string  }
-        >({
-        	query: (body) => ({
-        		url: AccountEndpoint.ResetPassword,
-        		method: "POST",
-        		body,
-        	}),
-        }),
+			void,
+			{ email: string, password: string, token: string  }
+		>({
+			query: (body) => ({
+				url: AccountEndpoint.ResetPassword,
+				method: "POST",
+				body,
+			}),
+		}),
 	}),
 });
 

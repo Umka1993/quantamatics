@@ -5,7 +5,7 @@ import useUser from "../../hooks/useUser";
 import { getToken } from "../../services/token";
 
 interface JupyterFrameProps {
-    type: 'coherence' | 'files' | 'excelLibrary',
+	type: 'coherence' | 'files' | 'excelLibrary',
 }
 
 export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => {
@@ -47,22 +47,22 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
 			</header>
 
 			{token &&
-                <form
-                	method='POST'
-                	target="jupyter-iframe"
-                	action={`${process.env.HUB_URL}hub/login`}
-                	ref={formRef}
-                	hidden
-                >
-                	<input
-                		name='token'
-                		value={token}
-                		readOnly
-                	/>
-                </form>
+				<form
+					method='POST'
+					target="jupyter-iframe"
+					action={`${process.env.HUB_URL}hub/login`}
+					ref={formRef}
+					hidden
+				>
+					<input
+						name='token'
+						value={token}
+						readOnly
+					/>
+				</form>
 			}
 
-			<iframe className={style.frame} name="jupyter-iframe" src={HUB_URL} ref={frameRef} onLoad={frameLoaded}/>
+			<iframe className={style.frame} name="jupyter-iframe" src={HUB_URL} ref={frameRef} onLoad={frameLoaded} />
 		</div>
 	)
 }

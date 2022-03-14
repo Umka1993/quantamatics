@@ -24,9 +24,9 @@ import { Organization } from "../../types/organization/types";
 import useUser from "../../hooks/useUser";
 
 interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
-    open: boolean;
-    closeFunction: () => void;
-    organization: Organization;
+	open: boolean;
+	closeFunction: () => void;
+	organization: Organization;
 }
 
 const AssetModal: FunctionComponent<AssetModalProps> = ({
@@ -144,7 +144,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 	useEffect(() => {
 		if (organization) {
 			const isQuickChanged =
-                organization.organizationAssets.length !== selected.length;
+				organization.organizationAssets.length !== selected.length;
 
 			if (isQuickChanged) {
 				setHasChanges(true);
@@ -157,7 +157,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 
 					if (
 						foundedInitialAsset === undefined ||
-                        foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
+						foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
 					) {
 						isSharedChanged = true;
 					}
@@ -229,24 +229,24 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 								localKey="asset-rows"
 							/>
 							<th className={[style.headline, style.action].join(" ")}>
-                                Assign
+								Assign
 							</th>
 							<th className={[style.headline, style.action].join(" ")}>
-                                Default
+								Default
 							</th>
 						</tr>
 					</thead>
 					<tbody>
 						{Boolean(options.length) &&
-                            options.map((option) => (
-                            	<AssetRow
-                            		key={option.assetId}
-                            		option={option}
-                            		selected={selected}
-                            		setSelected={setSelected}
-                            		disabled={isUserOrganization}
-                            	/>
-                            ))}
+							options.map((option) => (
+								<AssetRow
+									key={option.assetId}
+									option={option}
+									selected={selected}
+									setSelected={setSelected}
+									disabled={isUserOrganization}
+								/>
+							))}
 					</tbody>
 				</table>
 			</form>

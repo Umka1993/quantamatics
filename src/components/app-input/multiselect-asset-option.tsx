@@ -9,16 +9,16 @@ import Checkbox from "../app-checkbox/checkbox-labelled";
 import { AssetListItem } from "../../types/asset";
 import useChangeSet from "../../hooks/useChangeSet";
 export interface MultiselectAssetOptionProps {
-    selected: boolean;
-    setSelected: Dispatch<SetStateAction<Set<string | number>>>;
-    option: AssetListItem;
-    type?: "edit-organization" | "user";
+	selected: boolean;
+	setSelected: Dispatch<SetStateAction<Set<string | number>>>;
+	option: AssetListItem;
+	type?: "edit-organization" | "user";
 
-    disabled?: boolean;
+	disabled?: boolean;
 }
 
 const MultiselectAssetOption: FunctionComponent<
-    MultiselectAssetOptionProps
+	MultiselectAssetOptionProps
 > = ({ selected, option, type, setSelected, disabled }) => {
 	const isUserMode = type === "user";
 

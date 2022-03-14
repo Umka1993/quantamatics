@@ -34,8 +34,8 @@ import {
 import { useParams } from "react-router-dom";
 import RoleSelector from "../role-selector";
 interface IEditProfile {
-    onClose: () => void;
-    user: IUpdateUser;
+	onClose: () => void;
+	user: IUpdateUser;
 }
 
 export const EditProfile: FunctionComponent<IEditProfile> = ({
@@ -65,9 +65,9 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 	] = useLazyGetUserAssetsQuery();
 
 	const [update, { isSuccess, isError, error, isLoading }] =
-        useUpdateUserMutation();
+		useUpdateUserMutation();
 	const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] =
-        useUpdateUserRolesMutation();
+		useUpdateUserRolesMutation();
 
 	const { data: allOrganizations } = useGetAllOrganizationsQuery(undefined);
 
@@ -84,15 +84,15 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
 	function validateHandler() {
 		let userChanged =
-            firstName !== user.firstName ||
-            lastName !== user.lastName ||
-            companyName !== user.companyName ||
-            subscriptionEndDate !== user.subscriptionEndDate;
+			firstName !== user.firstName ||
+			lastName !== user.lastName ||
+			companyName !== user.companyName ||
+			subscriptionEndDate !== user.subscriptionEndDate;
 
 		const rolesAsArray = Array.from(userRoles);
 		const rolesIsSame =
-            rolesAsArray.length === user.userRoles.length &&
-            rolesAsArray.every((value, index) => value === user.userRoles[index]);
+			rolesAsArray.length === user.userRoles.length &&
+			rolesAsArray.every((value, index) => value === user.userRoles[index]);
 
 		const newUserData: IUpdateUser = {
 			...user,
@@ -156,10 +156,10 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 		// ? Unlink old assets from user
 		serverSelectedAssets?.forEach((alreadySelectedAsset) => {
 			!assignedAssets.has(alreadySelectedAsset.id) &&
-                unlinkAsset({
-                	assetId: alreadySelectedAsset.id,
-                	userId: user.id,
-                });
+				unlinkAsset({
+					assetId: alreadySelectedAsset.id,
+					userId: user.id,
+				});
 		});
 	}
 
@@ -261,9 +261,9 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 				{allOrganizations && (
 					<SelectorInput
 						options={
-                            allOrganizations?.map(
-                            	(org: Organization) => org[OrganizationKey.Name]
-                            ) as string[]
+							allOrganizations?.map(
+								(org: Organization) => org[OrganizationKey.Name]
+							) as string[]
 						}
 						// valueSetter={setOrganizationId}
 						optionSetter={setOrganization}
@@ -300,7 +300,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 			<footer className="edit-account__footer">
 				<ResetButton onClick={onClose}>Cancel</ResetButton>
 				<Button type="submit" form="edit-account-form">
-                    Save
+					Save
 				</Button>
 			</footer>
 		</>
