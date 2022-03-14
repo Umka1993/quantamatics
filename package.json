@@ -2,6 +2,7 @@
 	"scripts": {
 		"clean": "rimraf publish",
 		"lint": "eslint --ext .tsx,.ts src --quiet",
+		"lint:fix": "eslint --ext .tsx,.ts ./src --fix --color",
 		"build": "npm run clean && npm run lint && cross-env NODE_ENV=production webpack --config config/webpack.dev.js",
 		"buildStaging": "npm run clean && npm run lint && webpack --config config/webpack.stag.js",
 		"buildUAT": "npm run clean && npm run lint && webpack --config config/webpack.uat.js",
@@ -34,10 +35,12 @@
 		"file-loader": "^6.2.0",
 		"html-loader": "^3.1.0",
 		"html-webpack-plugin": "^5.3.2",
+		"lint-staged": "^12.3.5",
 		"react-imask": "^6.4.2",
 		"redux": "^4.1.2",
 		"sass": "^1.45.1",
 		"sass-loader": "^12.1.0",
+		"simple-git-hooks": "^2.7.0",
 		"style-loader": "^3.2.1",
 		"ts-loader": "^9.2.5",
 		"typesafe-actions": "^5.1.0",
@@ -55,5 +58,11 @@
 		"react-dom": "^17.0.2",
 		"react-redux": "^7.2.5",
 		"react-router-dom": "^6.1.1"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "npx eslint --ext .tsx,.ts src --fix"
+	},
+	"lint-staged": {
+		"src/**/*.{ts, tsx}": ["npm run lint:fix", "git add"]
 	}
 }

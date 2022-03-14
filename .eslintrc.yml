@@ -1,41 +1,36 @@
 env:
-	browser: true
-	es2021: true
+  browser: true
+  es2021: true
 extends:
-	- "eslint:recommended"
-	- "plugin:react/recommended"
-	- "plugin:@typescript-eslint/recommended"
+  - "eslint:recommended"
+  - "plugin:react/recommended"
+  - "plugin:@typescript-eslint/recommended"
 parser: "@typescript-eslint/parser"
 parserOptions:
-	ecmaFeatures:
-		jsx: true
-	ecmaVersion: 12
-	sourceType: module
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 12
+  sourceType: module
 plugins:
-	- react
-	- "@typescript-eslint"
-settings:
-	{
-		react:
-			{
-				version: "999.999.999", # no latest option, 999.999.999 as a hack
-			}
-	}
+  - react
+  - "@typescript-eslint"
+settings: { react: {
+        version: "999.999.999", # no latest option, 999.999.999 as a hack
+      } }
 
 globals:
-	pendo: readonly
+  pendo: readonly
 
 rules:
-	{
-		"no-empty-function": "off",
-		"no-constant-condition": "warn",
-		"no-extra-boolean-cast": "off",
-		"@typescript-eslint/no-empty-function": ["warn"],
-		"@typescript-eslint/no-empty-interface": ["warn"],
-		"@typescript-eslint/ban-types": ["warn"],
-		"object-curly-spacing":
-			["error", "always", { "arraysInObjects": false }],
-		"indent": ["error", "tab", { "offsetTernaryExpressions": false }],
-	}
+  {
+    "no-empty-function": "off",
+    "no-constant-condition": "warn",
+    "no-extra-boolean-cast": "off",
+    "@typescript-eslint/no-empty-function": ["warn"],
+    "@typescript-eslint/no-empty-interface": ["warn"],
+    "@typescript-eslint/ban-types": ["warn"],
+    "object-curly-spacing": ["error", "always", { "arraysInObjects": false }],
+    "indent": ["error", "tab", { "offsetTernaryExpressions": false }],
+  }
 
 ignorePatterns: ["config/**/*", "node_modules/**/*"]
