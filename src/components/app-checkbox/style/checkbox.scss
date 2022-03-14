@@ -10,16 +10,20 @@
     justify-content: start;
     position: relative;
 
-    &__custom {
+    &__check {
         width: 1em;
         height: 1em;
         background-color: #fff;
         border: 0.0625em solid transparentize($main-text, 0.7);
+
         box-shadow: inset 0px 0.125em 0.4375em transparentize($main-text, 0.9);
         border-radius: 2px;
 
-        transition: border-color 0.2s ease-in;
-        position: relative;
+        transition-property: border-color, fill;
+        transition-duration: 0.2s;
+        transition-timing-function: ease-in;
+
+        fill: transparent;
     }
 
     &--right &__custom {
@@ -35,6 +39,7 @@
     &__text {
         transition: color 0.2s ease-in;
     }
+
     &--highlight &__input:not(:disabled):checked ~ &__text,
     &--highlight:hover &__text {
         color: $accent;
@@ -48,45 +53,31 @@
         outline: none;
     }
 
-    &--highlight &__input:focus-visible ~ &__custom {
-        border-color: $accent;
-    }
-    &--highlight:hover &__input:not(:disabled) ~ &__custom {
+    &--highlight &__input:focus-visible ~ &__check {
         border-color: $accent;
     }
 
-    &__check {
+    &--highlight:hover &__input:not(:disabled) ~ &__check {
+        border-color: $accent;
+    }
+
+    &__input:checked + &__check,
+    &__input[checked] + &__check {
         fill: $accent;
-        width: 0.625em;
-        height: 0.5em;
-
-        left: 0.125em;
-        top: 0.25em;
-        position: absolute;
-
-        opacity: 0;
-        transition: opacity 0.1s;
     }
 
-    &__input:checked + &__custom &__check,
-    &__input[checked] + &__custom &__check {
-        opacity: 1;
-    }
-
-    &__input:disabled + &__custom &__check {
+    &__input:disabled + &__check {
         fill: $main-text;
+
+        border-color: transparent;
+        background-color: transparentize(rgb(188, 196, 216), 0.75);
+
+        box-shadow: inset 0px 2px 7px rgba(134, 146, 166, 0.1);
     }
 
     &__input:disabled ~ &__text {
         color: $main-text;
         cursor: default;
-    }
-
-    &__input:disabled ~ &__custom {
-        border-color: transparent;
-        background-color: transparentize(rgb(188, 196, 216), 0.75);
-
-        box-shadow: inset 0px 2px 7px rgba(134, 146, 166, 0.1);
     }
 
     &__desc {
@@ -107,7 +98,7 @@
         font-size: 12px;
     }
 
-    &__custom:hover ~ &__desc {
+    &__check:hover ~ &__desc {
         opacity: 1;
     }
 

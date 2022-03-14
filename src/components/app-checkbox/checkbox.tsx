@@ -7,14 +7,12 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({ ...other }) => {
     return (
         <>
             <input type="checkbox" className="check-block__input" {...other} />
-            <span className="check-block__custom">
-                <CheckIcon
-                    width={10}
-                    height={8}
-                    aria-hidden
-                    className="check-block__check"
-                />
-            </span>
+            <CheckIcon
+                width={16}
+                height={16}
+                aria-hidden
+                className="check-block__check"
+            />
         </>
     );
 };
