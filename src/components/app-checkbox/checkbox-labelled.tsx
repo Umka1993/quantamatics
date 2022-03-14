@@ -67,16 +67,23 @@ const CheckboxLabelled: FunctionComponent<CheckboxProps> = ({
             )}
             {...other}
         >
-            <Checkbox
+            <input
+                type="checkbox"
                 name={name}
                 defaultChecked={checked}
                 onChange={inputHandler}
+                className="check-block__input"
                 disabled={disabled}
                 value={value}
                 ref={inputRef}
                 aria-describedby={`${name}-desc`}
             />
-
+            <CheckIcon
+                width={16}
+                height={16}
+                aria-hidden="true"
+                className="check-block__check"
+            />
             {labelCheckbox && (
                 <span id={`${name}-desc`} className="check-block__desc">
                     {labelCheckbox}

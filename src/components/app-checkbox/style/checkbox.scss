@@ -24,9 +24,11 @@
         transition-timing-function: ease-in;
 
         fill: transparent;
+
+        cursor: pointer;
     }
 
-    &--right &__custom {
+    &--right &__check {
         order: 1;
     }
 
@@ -53,19 +55,23 @@
         outline: none;
     }
 
-    &--highlight &__input:focus-visible ~ &__check {
+    &--highlight &__input:focus-visible ~ &__check,
+    &__check--highlight:focus-visible {
         border-color: $accent;
     }
 
-    &--highlight:hover &__input:not(:disabled) ~ &__check {
+    &--highlight:hover &__input:not(:disabled) ~ &__check,
+    &__check--highlight:hover {
         border-color: $accent;
     }
 
     &__input:checked + &__check,
-    &__input[checked] + &__check {
+    &__input[checked] + &__check,
+    &__check[aria-checked="true"] {
         fill: $accent;
     }
 
+    &__check[aria-disabled="true"],
     &__input:disabled + &__check {
         fill: $main-text;
 
@@ -73,6 +79,15 @@
         background-color: transparentize(rgb(188, 196, 216), 0.75);
 
         box-shadow: inset 0px 2px 7px rgba(134, 146, 166, 0.1);
+        cursor: default;
+    }
+
+    &__check[aria-disabled="true"]:not([aria-checked="true"]) {
+        fill: transparent;
+    }
+
+    &__check[aria-disabled="true"]:hover {
+        border-color: transparent;
     }
 
     &__input:disabled ~ &__text {

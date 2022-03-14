@@ -1,9 +1,5 @@
-import React, {
-    Dispatch,
-    FunctionComponent,
-    SetStateAction
-} from "react";
-import Checkbox from "../app-checkbox";
+import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
+import { Checkbox } from "../app-checkbox";
 import classNames from "classnames";
 import { AssetInOrganization } from "../../types/asset";
 import PinButton from "../pin-button";
@@ -37,7 +33,11 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
         );
 
     return (
-        <tr className={classNames(style.row, style.asset, { [style['asset--selected']]: isSelected || isPinned })}>
+        <tr
+            className={classNames(style.row, style.asset, {
+                [style["asset--selected"]]: isSelected || isPinned,
+            })}
+        >
             <td>{option.asset.name}</td>
 
             <td className={style.action}>
@@ -45,12 +45,15 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
                     name={option.asset.name}
                     checked={isSelected}
                     disabled={disabled}
-                    highlightOnChecked
                     value={option.assetId}
-                    textTitle={option.asset.name}
-                    onChange={() => {
-                        isSelected ? removeFromSelected() : addToSelected(false);
-                    }}
+                    highlightOnChecked
+                    onClick={
+                        disabled
+                            ? undefined
+                            : () => {
+                                isSelected ? removeFromSelected() : addToSelected(false);
+                            }
+                    }
                 />
             </td>
             <td className={style.action}>

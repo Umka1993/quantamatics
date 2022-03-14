@@ -1,19 +1,24 @@
 import React, { FunctionComponent, HTMLProps } from "react";
 import "./style/checkbox.scss";
 import CheckIcon from "./assets/check.svg";
-interface CheckboxProps extends HTMLProps<HTMLInputElement> { }
+import classNames from "classnames";
 
-const Checkbox: FunctionComponent<CheckboxProps> = ({ ...other }) => {
+interface CheckboxProps extends Omit<HTMLProps<HTMLInputElement>, 'type'> {
+    highlightOnChecked?: boolean;
+}
+
+const Checkbox: FunctionComponent<CheckboxProps> = ({ highlightOnChecked, checked, disabled, ...other }) => {
     return (
-        <>
-            <input type="checkbox" className="check-block__input" {...other} />
-            <CheckIcon
-                width={16}
-                height={16}
-                aria-hidden
-                className="check-block__check"
-            />
-        </>
+        <CheckIcon
+            width={16}
+            height={16}
+            className={classNames("check-block__check", { 'check-block__check--highlight': highlightOnChecked })}
+            role="checkbox"
+            aria-checked={checked}
+            tabIndex={0}
+            aria-disabled={disabled}
+            {...other}
+        />
     );
 };
 
