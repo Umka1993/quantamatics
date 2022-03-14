@@ -5,7 +5,7 @@ import React, {
     useEffect,
     useState,
 } from "react";
-import Checkbox from "../app-checkbox/checkbox";
+import Checkbox from "../app-checkbox/checkbox-labelled";
 import { AssetListItem } from "../../types/asset";
 import useChangeSet from "../../hooks/useChangeSet";
 export interface MultiselectAssetOptionProps {

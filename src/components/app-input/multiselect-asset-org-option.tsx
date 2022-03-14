@@ -1,5 +1,5 @@
 import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState, } from "react";
-import Checkbox from "../app-checkbox/checkbox";
+import Checkbox from "../app-checkbox";
 import classNames from "classnames";
 import { AssetInOrganization } from "../../types/asset";
 import PinButton from "../pin-button";

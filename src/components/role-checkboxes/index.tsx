@@ -1,6 +1,6 @@
 import { UserRole } from '../../data/enum';
 import React, { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react';
-import Checkbox from '../app-checkbox/checkbox';
+import Checkbox from '../app-checkbox/';
 import './styles/role-checkboxes.scss'
 import { Option } from '../../types/option';
 import useChangeSet from '../../hooks/useChangeSet';

@@ -28,6 +28,7 @@
 .action {
     display: grid;
     place-content: center;
+    font-style: 16px;
 
     :global .pin-button::after {
         left: auto;
