@@ -51,7 +51,7 @@ export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({ classNa
 
     return (
         <div className={inputClassNames} onClick={changeState}>
-            <div className="selector-input__value">{selected}</div>
+            <div className="selector-input__value">{value}</div>
             {label && <span className='selector-input__label'>{label}</span>}
             <SVG icon={arrowIcon} />
             {selecting && <div className="selector-input__list">{optionsMap}</div>}

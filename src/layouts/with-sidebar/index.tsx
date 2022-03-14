@@ -5,13 +5,19 @@ import { SideBar } from "../../components/side-bar";
 import style from "./with-sidebar.module.scss";
 import PrivateRoutes from "../../router/private-routes";
 import { EditPassword } from "../../components/edit-modal/edit-password";
-import { RestartServer } from '../../components/restart-server';
+import { RestartServer } from "../../components/restart-server";
 
 import { useLocation } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 import { useGetUserQuery } from "../../api/user";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authorization";
+import Dialog from "../../components/dialog";
+import { useCallback } from "react";
+import { SideBarModalMode } from "../../types/sidebar-modal";
+import useToggle from "../../hooks/useToggle";
+import UserMenu from "../../components/user-menu";
+import useBoolean from "hooks/useBoolean";
 
 export default function WithSideBarLayout(): ReactElement {
     const logout = useLogout();
@@ -21,8 +27,7 @@ export default function WithSideBarLayout(): ReactElement {
     const { data: user, isSuccess: isUserLoaded } = useGetUserQuery(id);
     const dispatch = useDispatch();
 
-    const [showProfile, setShowProfile] = useState<boolean>(false);
-    const [showRestart, setShowRestart] = useState<boolean>(false);
+    const [activeModal, setActiveModal] = useState<SideBarModalMode>(undefined);
 
     useEffect(() => {
         !getCookie("user") && logout();
@@ -36,25 +41,40 @@ export default function WithSideBarLayout(): ReactElement {
         }
     }, [isUserLoaded, dispatch, userRoles]);
 
+    const isProfileModalShowed = activeModal === "my-account";
+    const isRestartServerModalShowed = activeModal === "restart-server";
+    const closeModal = useCallback(
+        () => setActiveModal(undefined),
+        [setActiveModal]
+    );
+
+    const [isUserMenuOpened, setUserMenuOpened] = useState(false);
+
     return (
         <>
-            <SideBar openModal={(modal) => {
-                    if(modal === "my-account") setShowProfile(true);
-                    if(modal === "restart-server") setShowRestart(true);
-                }} />
+            <SideBar toggleUserMenu={() => setUserMenuOpened(true)} />
             <main className={style.main}>
                 <PrivateRoutes />
             </main>
-
-            {showProfile && user && (
-                <EditPassword onClose={() => setShowProfile(false)} />
-            )}
-
-            {showRestart && user &&
-                <RestartServer
-                    onClose={() => setShowRestart(false)}
+            {isUserMenuOpened && (
+                <UserMenu
+                    setOpenDropdown={setUserMenuOpened}
+                    openDropdown={isUserMenuOpened}
+                    openModal={setActiveModal}
                 />
-            }
+            )}
+            <Dialog
+                open={activeModal !== undefined}
+                onRequestClose={closeModal}
+                closeOnOutsideClick
+                headline={isProfileModalShowed ? "My Account" : "Restart Server"}
+                id={activeModal}
+                wrapperClass={isProfileModalShowed ? "edit-account" : "restart-server"}
+                role={isRestartServerModalShowed ? "alertdialog " : "dialog"}
+            >
+                {user && isProfileModalShowed && <EditPassword onClose={closeModal} />}
+                {isRestartServerModalShowed && <RestartServer onClose={closeModal} />}
+            </Dialog>
         </>
     );
 }

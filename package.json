@@ -1,15 +1,11 @@
 {
   "scripts": {
     "clean": "rimraf publish",
-    "lint": "eslint --ext .tsx,.ts . --quiet",
+    "lint": "eslint --ext .tsx,.ts src --quiet",
     "build": "npm run clean && npm run lint && cross-env NODE_ENV=production webpack --config config/webpack.dev.js",
-    "buildBeta": "npm run clean && npm run lint && webpack --config config/webpack.dev-beta.js",
     "buildStaging": "npm run clean && npm run lint && webpack --config config/webpack.stag.js",
-    "buildStagingBeta": "npm run clean && npm run lint && webpack --config config/webpack.stag-beta.js",
     "buildUAT": "npm run clean && npm run lint && webpack --config config/webpack.uat.js",
-    "buildUATBeta": "npm run clean && npm run lint && webpack --config config/webpack.uat-beta.js",
     "buildProduction": "npm run clean && npm run lint && webpack --config config/webpack.prod.js",
-    "buildProductionBeta": "npm run clean && npm run lint && webpack --config config/webpack.prod-beta.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.dev.js --open --https --env dev",
     "stag": "webpack-dev-server --config config/webpack.stag.js --open --https"
   },
@@ -17,7 +13,8 @@
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
-    "@svgr/webpack": "^5.5.0",
+    "@reduxjs/toolkit": "^1.8.0",
+    "@svgr/webpack": "^6.2.1",
     "@types/react": "^17.0.19",
     "@types/react-datepicker": "^4.1.7",
     "@types/react-dom": "^17.0.9",
@@ -30,6 +27,7 @@
     "copy-webpack-plugin": "^10.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
+    "dialog-polyfill": "^0.5.6",
     "dotenv-webpack": "^7.0.3",
     "eslint": "^8.8.0",
     "eslint-plugin-react": "^7.26.1",
@@ -49,8 +47,7 @@
     "webpack-dev-server": "^4.7.1"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.6.2",
-    "axios": "^0.25.0",
+    "axios": "^0.26.0",
     "classnames": "^2.3.1",
     "connected-react-router": "^6.9.1",
     "react": "^17.0.2",

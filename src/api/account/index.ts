@@ -90,7 +90,7 @@ const accountApi = baseApi.injectEndpoints({
             query: (email) => ({
                 url: AccountEndpoint.ResetPasswordMail,
                 method: "POST",
-                params: {email}
+                params: { email }
             })
         }),
         resetPassword: build.mutation<

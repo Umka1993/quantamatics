@@ -16,6 +16,9 @@ export interface IUser {
     [UserKey.Avatar]: string,
     [UserKey.UserRoles]: Array<UserRole>,
     [UserKey.OrganizationId]: OrganizationID,
+    allowResearch: boolean,
+    allowExcelLibrary: boolean,
+    allowCoherence: boolean,
 }
 
 export interface IUpdateUser extends Omit<IUser, UserKey.SubscriptionEndDate>  {

@@ -16,7 +16,7 @@ export const network = {
         }
         return new Promise((resolve, reject) => {
             axios
-                .get(`${this.apiUrl()}${url}`, {params: params, headers: this.headers() })
+                .get(`${this.apiUrl()}${url}`, { params: params, headers: this.headers() })
                 .then(this.handleStatusCode)
                 .then((data) => {
                     resolve(data)
@@ -64,7 +64,7 @@ export const network = {
         }
         return new Promise((resolve, reject) => {
             axios
-                .delete(`${this.apiUrl()}${url}`, {params: params, headers: this.headers() })
+                .delete(`${this.apiUrl()}${url}`, { params: params, headers: this.headers() })
                 .then(this.handleStatusCode)
                 .then((data) => {
                     resolve(data)

@@ -5,7 +5,7 @@
     &__item {
         appearance: none;
         height: 56px;
-        font-weight: 300;
+        font-weight: 400;
         font-size: 16px;
         line-height: 1.125;
         color: $main-text;
@@ -24,7 +24,7 @@
 
         &--active {
             background-color: #f2f8fe;
-            font-weight: 500;
+            font-weight: 600;
             color: $accent;
         }
 

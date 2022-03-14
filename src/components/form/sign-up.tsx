@@ -4,10 +4,10 @@ import React, {
     useState,
     FunctionComponent,
 } from "react";
-import {Password} from "../../components/app-input/index";
+import { Password } from "../../components/app-input/index";
 import Button from "../button";
-import {useNavigate} from "react-router-dom";
-import {AppRoute} from "../../data/enum";
+import { useNavigate } from "react-router-dom";
+import { AppRoute } from "../../data/enum";
 import Form from "./form";
 
 import "./styles/form.scss";
@@ -17,7 +17,7 @@ import {
     useVerifyTokenQuery,
 } from "../../api/account";
 import Loader from "../loader";
-import {InfoMessage} from "../info-message/info-message";
+import { InfoMessage } from "../info-message/info-message";
 
 const SignUp: FunctionComponent = () => {
     const [password, setPassword] = useState<string>("");
@@ -35,11 +35,11 @@ const SignUp: FunctionComponent = () => {
 
     const [
         sendPassword,
-        {isSuccess: isPasswordUpdated, isError: isPasswordError},
+        { isSuccess: isPasswordUpdated, isError: isPasswordError },
     ] = useResetPasswordMutation();
 
-    const {isSuccess: isTokenValid, isError: isExpiredToken} =
-        useVerifyTokenQuery({userName: String(email), token: token as string});
+    const { isSuccess: isTokenValid, isError: isExpiredToken } =
+        useVerifyTokenQuery({ userName: String(email), token: token as string });
 
 
     useEffect(() => {

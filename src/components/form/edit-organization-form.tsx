@@ -1,4 +1,4 @@
-import Button, { ResetButton } from "../button";
+import Button from "../button";
 import React, {
     FormEvent,
     FunctionComponent,
@@ -8,33 +8,25 @@ import React, {
     useState,
 } from "react";
 import { Organization } from "types/organization/types";
-import Headline from "../page-title";
-import Input, { InputURL, Multiselect } from "../app-input";
-
+import Input, { InputURL } from "../app-input";
 import style from "./styles/edit-organization.module.scss";
-import {
-    useLazyGetOrganizationQuery,
-    useUpdateOrganizationMutation,
-} from "../../api/organization";
+import { useUpdateOrganizationMutation } from "../../api/organization";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
-import { AssetInOrganization } from "../../types/asset";
-import useUser from "../../hooks/useUser";
 import normalizeName from "../../services/normalize-name";
-import CheckSVG from "./assets/check.svg";
 import addHTTPtoURL from "../../services/addHTTPtoURL";
+import SaveResetHeader from "../save-reset-header/SaveResetHeader";
+import DocIcon from "./assets/doc.svg";
 
 interface EditOrganizationFormProps {
-    organization?: Organization;
+    organization: Organization;
     isHaveAccessToOrgList?: boolean;
-    externalLoad?: boolean;
+    toggleAssetModal: () => void;
 }
 
 const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
     organization,
-    externalLoad,
+    toggleAssetModal,
 }) => {
-    const user = useUser();
-    const [assetError, setAssetError] = useState(false);
     const [
         update,
         {
@@ -45,26 +37,16 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         },
     ] = useUpdateOrganizationMutation();
 
-    const isUserOrganization = user?.organizationId === organization?.id;
-
     const [name, setName] = useState<string>("");
     const [customerCrmId, setCustomerID] = useState<string>("");
     const [customerCrmLink, setCustomerLink] = useState<string>("");
     const [comments, setComment] = useState<string | undefined>("");
-    const [loading, setLoading] = useState(false);
-
-    const [assignedAssets, setAssignedAssets] = useState<AssetInOrganization[]>(
-        organization?.organizationAssets || []
-    );
-    const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
     const [isSavedMessageActive, setSavedMessageActive] = useState(false);
 
     const [isChanged, setIsChanged] = useState(false);
 
     const formRef = useRef<HTMLFormElement>(null);
-
-    const [getInfoOrg] = useLazyGetOrganizationQuery();
 
     const [
         duplicateOrgError,
@@ -79,88 +61,39 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         setCustomerID
     );
 
-    function initOptions() {
-        if (organization && user) {
-            const prepareOptions = (allAssets: AssetInOrganization[]) => {
-                setOptions(
-                    [...allAssets].map((asset) => {
-                        const alreadySelectedAsset = organization.organizationAssets.find(
-                            ({ assetId }) => assetId === asset.assetId
-                        );
-
-                        return alreadySelectedAsset === undefined
-                            ? { ...asset, organizationId: organization.id }
-                            : alreadySelectedAsset;
-                    })
-                );
-            };
-
-            if (isUserOrganization) {
-                setOptions(organization.organizationAssets);
-            } else {
-                getInfoOrg(user.organizationId as string)
-                    .unwrap()
-                    .then(({ organizationAssets: allAssets }) =>
-                        prepareOptions(allAssets)
-                    );
-            }
-        }
-    }
-
-    useEffect(initOptions, [organization, user]);
-
     const setInitialOrg = useCallback(() => {
-        if (organization) {
-            setName(organization.name);
-            setCustomerID(organization.customerCrmId);
-            setCustomerLink(organization.customerCrmLink);
-            setComment(organization.comments);
-        }
+        setName(organization.name);
+        setCustomerID(organization.customerCrmId);
+        setCustomerLink(organization.customerCrmLink);
+        setComment(organization.comments);
     }, [organization]);
 
-    useEffect(() => {
-        organization && setInitialOrg();
-    }, [organization]);
 
     function submitHandler(evt: FormEvent<HTMLFormElement>) {
         evt.preventDefault();
-        setLoading(true);
-
-        if (!assignedAssets.length) {
-            setAssetError(true);
-            return setLoading(false);
-        }
-
         let duplicate = false;
 
         const normalizedName = normalizeName(name);
 
-        if (normalizedName !== organization?.name) {
+        if (normalizedName !== organization.name) {
             duplicate = checkNameDuplicate();
         }
 
-        if (customerCrmId !== organization?.customerCrmId) {
+        if (customerCrmId !== organization.customerCrmId) {
             duplicate = checkIdDuplicate() || duplicate;
         }
 
         if (duplicate) {
-            return setLoading(false);
+            return;
         }
 
-        if (organization) {
-            update({
-                ...organization,
-                name: normalizedName,
-                customerCrmId,
-                customerCrmLink: addHTTPtoURL(customerCrmLink),
-                comments,
-                organizationAssets: [...assignedAssets].map((asset) => ({
-                    ...asset,
-                    asset: null,
-                })),
-            });
-        }
-        setLoading(false);
+        update({
+            ...organization,
+            name: normalizedName,
+            customerCrmId,
+            customerCrmLink: addHTTPtoURL(customerCrmLink),
+            comments,
+        });
     }
 
     const resetHandler = (evt: FormEvent<HTMLFormElement>) => {
@@ -176,8 +109,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
 
     useEffect(() => {
         if (isUpdated) {
-            setOptions([]);
-            initOptions();
             setSavedMessageActive(true);
         }
     }, [isUpdated]);
@@ -190,59 +121,18 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
         }
     }, [isSavedMessageActive]);
 
-    useEffect(() => {
-        if (organization) {
-            setName(organization.name);
-            setCustomerID(organization.customerCrmId);
-            setAssignedAssets(organization.organizationAssets);
-            setCustomerLink(addHTTPtoURL(organization.customerCrmLink));
-            setComment(organization.comments);
-        }
-    }, [organization]);
+    useEffect(setInitialOrg, [organization]);
 
     useEffect(() => {
         if (organization) {
             const isQuickChanged =
                 organization.name !== name ||
                 organization.customerCrmId !== customerCrmId ||
-                organization.organizationAssets.length !== assignedAssets.length ||
                 organization.customerCrmLink !== customerCrmLink ||
                 organization.comments !== comments;
-
-            if (isQuickChanged) {
-                setIsChanged(true);
-            } else {
-                let isSharedChanged = false;
-                assignedAssets.forEach((asset) => {
-                    const foundedInitialAsset = organization.organizationAssets.find(
-                        (initialAsset) => initialAsset.assetId === asset.assetId
-                    );
-
-                    if (
-                        foundedInitialAsset === undefined ||
-                        foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
-                    ) {
-                        isSharedChanged = true;
-                    }
-                });
-                setIsChanged(isSharedChanged);
-            }
+            setIsChanged(isQuickChanged);
         }
-    }, [
-        name,
-        customerCrmId,
-        customerCrmLink,
-        comments,
-        assignedAssets,
-        organization,
-    ]);
-
-    const assignedAssetsReset = (target: HTMLButtonElement) => {
-        target.blur();
-        if (organization) {
-            setAssignedAssets(organization.organizationAssets);
-        }
-    };
+    }, [name, customerCrmId, customerCrmLink, comments, organization]);
 
     return (
         <form
@@ -251,48 +141,17 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
             onReset={resetHandler}
             ref={formRef}
         >
-            <header className={style.header}>
-                <Headline className="edit-organization__title" style={{ margin: 0 }}>
-                    Edit Organization {organization?.parentOrganization}
-                </Headline>
-                <div className={style.buttons}>
-                    <ResetButton
-                        onClick={({ target }) =>
-                            assignedAssetsReset(target as HTMLButtonElement)
-                        }
-                        disabled={isUpdating}
-                    >
-                        Cancel
-                    </ResetButton>
-
-                    <Button
-                        type="submit"
-                        className={style.save}
-                        disabled={
-                            !isChanged ||
-                            isUpdating ||
-                            externalLoad ||
-                            Boolean(duplicateOrgError) ||
-                            Boolean(duplicateIdError)
-                        }
-                        variant={isSavedMessageActive ? "valid" : undefined}
-                    >
-                        {isSavedMessageActive ? (
-                            <>
-                                <CheckSVG
-                                    aria-hidden="true"
-                                    width={17}
-                                    height={17}
-                                    fill="currentColor"
-                                />
-                                Saved
-                            </>
-                        ) : (
-                            "Save"
-                        )}
-                    </Button>
-                </div>
-            </header>
+            <SaveResetHeader
+                headline="Edit Organization"
+                disableReset={isUpdating}
+                disableSave={
+                    !isChanged ||
+                    isUpdating ||
+                    Boolean(duplicateOrgError) ||
+                    Boolean(duplicateIdError)
+                }
+                isSavedMessageActive={isSavedMessageActive}
+            />
             <div className={style.inputs}>
                 <Input
                     externalSetter={setName}
@@ -326,23 +185,6 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     variant="squared"
                 />
 
-                <Multiselect
-                    options={options}
-                    label="Org. Assets"
-                    selected={assignedAssets}
-                    setSelected={setAssignedAssets}
-                    errorMessage="Select asset permissions to assign to the organization."
-                    showError={assetError}
-                    className={style.input}
-                    disabled={isUserOrganization}
-                    type="edit-organization"
-                    inputList={[...assignedAssets]
-                        .map((asset) => asset.asset.name)
-                        .join(", ")}
-                    fullDisabled={isUpdating}
-                    variant="squared"
-                />
-
                 <Input
                     externalSetter={setComment}
                     value={comments}
@@ -355,6 +197,18 @@ const EditOrganizationForm: FunctionComponent<EditOrganizationFormProps> = ({
                     variant="squared"
                 />
             </div>
+            <p className={style.assets}>
+                <Button
+                    type="button"
+                    className={style.save}
+                    disabled={false}
+                    onClick={toggleAssetModal}
+                >
+                    <DocIcon width={21} height={21} fill="currentColor" aria-hidden />
+                    Manage Assets
+                </Button>
+                Manage assets for the organization
+            </p>
         </form>
     );
 };

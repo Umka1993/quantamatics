@@ -6,9 +6,10 @@ import classNames from 'classnames'
 
 interface PinButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     checked?: boolean
+    size?: number
 }
 
-const PinButton: FunctionComponent<PinButtonProps> = ({ checked, className, ...other }) => {
+const PinButton: FunctionComponent<PinButtonProps> = ({ checked, className, size=16, ...other }) => {
     return (<button
         type="button"
         role="switch"
@@ -19,8 +20,8 @@ const PinButton: FunctionComponent<PinButtonProps> = ({ checked, className, ...o
     >
         <PinIcon
             fill={checked ? '#017AEE' : '#BCC4D8'}
-            width={16}
-            height={16}
+            width={size}
+            height={size}
         />
     </button>);
 }
