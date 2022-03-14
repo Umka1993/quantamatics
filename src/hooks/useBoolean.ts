@@ -9,13 +9,13 @@ interface ReturnType {
 }
 
 function useBoolean(defaultValue?: boolean): ReturnType {
-    const [value, setValue] = useState(!!defaultValue)
+	const [value, setValue] = useState(!!defaultValue)
 
-    const setTrue = () => setValue(true)
-    const setFalse = () => setValue(false)
-    const toggle = () => setValue(state => !state)
+	const setTrue = () => setValue(true)
+	const setFalse = () => setValue(false)
+	const toggle = () => setValue(state => !state)
 
-    return { value, setValue, setTrue, setFalse, toggle }
+	return { value, setValue, setTrue, setFalse, toggle }
 }
 
 export default useBoolean

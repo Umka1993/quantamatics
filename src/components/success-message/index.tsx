@@ -12,21 +12,21 @@ interface Message {
 }
 
 const SuccessMessage: FunctionComponent = () => {
-    const { state } = useLocation();
+	const { state } = useLocation();
 
-    return state ? (
-        <article className={style.success}>
-            <h1 className={style.title}>
-                <CheckIcon aria-hidden="true" fill="currentColor" />
-                {(state as Message).headline}
-            </h1>
-            <Button className={style.button} href={(state as Message).link}>
-                {(state as Message).linkText}
-            </Button>
-        </article>
-    ) : (
-        <Navigate to={AppRoute.Home} />
-    );
+	return state ? (
+		<article className={style.success}>
+			<h1 className={style.title}>
+				<CheckIcon aria-hidden="true" fill="currentColor" />
+				{(state as Message).headline}
+			</h1>
+			<Button className={style.button} href={(state as Message).link}>
+				{(state as Message).linkText}
+			</Button>
+		</article>
+	) : (
+		<Navigate to={AppRoute.Home} />
+	);
 };
 
 export default SuccessMessage;

@@ -5,5 +5,5 @@
  * 'Some Name' === normalizeName('   Some     Name   ') // true
  */
 export default function normalizeName (name: string) : string{
-    return name.trim().replace(/\s\s+/g, " ")
+	return name.trim().replace(/\s\s+/g, " ")
 }

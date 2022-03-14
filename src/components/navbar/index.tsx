@@ -27,25 +27,25 @@ interface NavLinkContent {
 }
 
 const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
-    const { pathname } = useLocation();
-    const user = useUser();
+	const { pathname } = useLocation();
+	const user = useUser();
 
-    const isHaveAccessToOrgList =
+	const isHaveAccessToOrgList =
         user?.userRoles.includes(UserRole.Admin) ||
         user?.userRoles.includes(UserRole.OrgOwner);
 
-    /*  const subItems: NavLinkContent[] = [
+	/*  const subItems: NavLinkContent[] = [
          { href: AppRoute.Files, text: "My Files", icon: FilesIcon },
          { href: AppRoute.Shared, text: "Shared With Me", icon: ShareIcon },
      ];
   */
-    return (
-        <nav
-            className={classNames("navigation", className, {
-                "navigation--collapsed": collapsed,
-            })}
-        >
-            {/* {user?.userRoles.includes(UserRole.Research) && (
+	return (
+		<nav
+			className={classNames("navigation", className, {
+				"navigation--collapsed": collapsed,
+			})}
+		>
+			{/* {user?.userRoles.includes(UserRole.Research) && (
                 <Accordion
                     isOpened={pathname.includes("/research")}
                     summaryClass="navigation__item"
@@ -84,107 +84,107 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
                 </Accordion>
             )} */}
 
-            {/* Research with no sub-nav*/}
-            {user?.allowResearch && (
-                <NavLink
-                    to={AppRoute.Files}
-                    className={({ isActive }) =>
-                        isActive
-                            ? "navigation__item navigation__item--active"
-                            : "navigation__item"
-                    }
-                >
-                    <ZoomIcon
-                        aria-hidden="true"
-                        className="navigation__icon"
-                        width="16"
-                        height="16"
-                    />
+			{/* Research with no sub-nav*/}
+			{user?.allowResearch && (
+				<NavLink
+					to={AppRoute.Files}
+					className={({ isActive }) =>
+						isActive
+							? "navigation__item navigation__item--active"
+							: "navigation__item"
+					}
+				>
+					<ZoomIcon
+						aria-hidden="true"
+						className="navigation__icon"
+						width="16"
+						height="16"
+					/>
                     Research
-                </NavLink>
-            )}
+				</NavLink>
+			)}
 
-            {user?.allowCoherence && (
-                <NavLink
-                    to={AppRoute.Coherence}
-                    className={({ isActive }) =>
-                        isActive
-                            ? "navigation__item navigation__item--active"
-                            : "navigation__item"
-                    }
-                >
-                    <CoherenceIcon
-                        aria-hidden={true}
-                        className="navigation__icon"
-                        width={16}
-                        height={16}
-                    />
+			{user?.allowCoherence && (
+				<NavLink
+					to={AppRoute.Coherence}
+					className={({ isActive }) =>
+						isActive
+							? "navigation__item navigation__item--active"
+							: "navigation__item"
+					}
+				>
+					<CoherenceIcon
+						aria-hidden={true}
+						className="navigation__icon"
+						width={16}
+						height={16}
+					/>
                     Coherence
-                </NavLink>
-            )}
+				</NavLink>
+			)}
 
-            {user?.allowExcelLibrary && (
-                <NavLink
-                    to={AppRoute.ExcelLibrary}
-                    className={({ isActive }) =>
-                        isActive
-                            ? "navigation__item navigation__item--active"
-                            : "navigation__item"
-                    }
-                >
-                    <ExcelIcon
-                        aria-hidden={true}
-                        className="navigation__icon"
-                        width={16}
-                        height={16}
-                    />
+			{user?.allowExcelLibrary && (
+				<NavLink
+					to={AppRoute.ExcelLibrary}
+					className={({ isActive }) =>
+						isActive
+							? "navigation__item navigation__item--active"
+							: "navigation__item"
+					}
+				>
+					<ExcelIcon
+						aria-hidden={true}
+						className="navigation__icon"
+						width={16}
+						height={16}
+					/>
                     Excel Library
-                </NavLink>
-            )}
+				</NavLink>
+			)}
 
-            {isHaveAccessToOrgList && (
-                <NavLink
-                    to="/apps/organizations/list"
-                    className={(isActive) =>
-                        classNames("navigation__item", {
-                            "navigation__item--active":
+			{isHaveAccessToOrgList && (
+				<NavLink
+					to="/apps/organizations/list"
+					className={(isActive) =>
+						classNames("navigation__item", {
+							"navigation__item--active":
                                 pathname.includes("/apps/organizations/") &&
                                 !pathname.includes(
-                                    `/apps/organizations/${user?.organizationId}`
+                                	`/apps/organizations/${user?.organizationId}`
                                 ),
-                        })
-                    }
-                >
-                    <OrganizationsIcon
-                        aria-hidden={true}
-                        className="navigation__icon"
-                        width={16}
-                        height={16}
-                    />
+						})
+					}
+				>
+					<OrganizationsIcon
+						aria-hidden={true}
+						className="navigation__icon"
+						width={16}
+						height={16}
+					/>
                     Organizations
-                </NavLink>
-            )}
+				</NavLink>
+			)}
 
-            {user?.userRoles.includes(UserRole.OrgAdmin) && (
-                <NavLink
-                    to={`/apps/organizations/${user?.organizationId}`}
-                    className={({ isActive }) =>
-                        isActive
-                            ? "navigation__item navigation__item--active"
-                            : "navigation__item"
-                    }
-                >
-                    <CogsIcon
-                        aria-hidden={true}
-                        className="navigation__icon"
-                        width={16}
-                        height={16}
-                    />
+			{user?.userRoles.includes(UserRole.OrgAdmin) && (
+				<NavLink
+					to={`/apps/organizations/${user?.organizationId}`}
+					className={({ isActive }) =>
+						isActive
+							? "navigation__item navigation__item--active"
+							: "navigation__item"
+					}
+				>
+					<CogsIcon
+						aria-hidden={true}
+						className="navigation__icon"
+						width={16}
+						height={16}
+					/>
                     Settings
-                </NavLink>
-            )}
-        </nav>
-    );
+				</NavLink>
+			)}
+		</nav>
+	);
 };
 
 export default NavBar;

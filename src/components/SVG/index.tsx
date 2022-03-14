@@ -13,14 +13,14 @@ interface SVGProps {
 }
 
 export const SVG: React.FunctionComponent<SVGProps> = (props) => {
-  const classes = classNames('icon', props.className)
-  return (
-    <props.icon
-      onClick={props.onClick}
-      style={props.style}
-      className={classes}
-    />
-  )
+	const classes = classNames('icon', props.className)
+	return (
+		<props.icon
+			onClick={props.onClick}
+			style={props.style}
+			className={classes}
+		/>
+	)
 }
 
 export default SVG

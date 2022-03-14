@@ -18,19 +18,19 @@ interface IInput {
 }
 
 export const DateInput: React.FunctionComponent<IInput> = (props) => {
-    const { className, placeholder, value, onChangeInput, required, errors, disablePastDate, minDate } = props;
-    const inputClassNames = classNames('date-input', className, { 'error': errors })
+	const { className, placeholder, value, onChangeInput, required, errors, disablePastDate, minDate } = props;
+	const inputClassNames = classNames('date-input', className, { 'error': errors })
 
-    return(
-        <div className={inputClassNames}>
-            <DatePicker 
-                placeholderText={placeholder} selected={value} 
-                onChange={(date) => onChangeInput(date)} 
-                minDate={minDate}
-                showDisabledMonthNavigation={disablePastDate}
-                dateFormat="MM.dd.yyyy"
-            />
-            <SVG icon={calendarIcon} />
-        </div>
-    )
+	return(
+		<div className={inputClassNames}>
+			<DatePicker 
+				placeholderText={placeholder} selected={value} 
+				onChange={(date) => onChangeInput(date)} 
+				minDate={minDate}
+				showDisabledMonthNavigation={disablePastDate}
+				dateFormat="MM.dd.yyyy"
+			/>
+			<SVG icon={calendarIcon} />
+		</div>
+	)
 }

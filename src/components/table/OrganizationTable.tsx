@@ -18,140 +18,140 @@ interface ITable {
 }
 
 export const OrganizationTable: React.FunctionComponent<ITable> = ({
-    search,
+	search,
 }) => {
-    const user = useUser();
+	const user = useUser();
 
-    // ? Need to be in component to reset sort after update
-    const INITIAL_SORT = { name: "", direction: SortDirection.Default };
+	// ? Need to be in component to reset sort after update
+	const INITIAL_SORT = { name: "", direction: SortDirection.Default };
 
-    const { isLoading, data, isError, isSuccess, error } =
+	const { isLoading, data, isError, isSuccess, error } =
         useGetAllOrganizationsQuery(user?.id as number);
 
-    const [localRows, setLocalRows] = useState<Organization[]>([]);
-    const [sort, setSort] = useState<ISort>(INITIAL_SORT);
+	const [localRows, setLocalRows] = useState<Organization[]>([]);
+	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 
-    const filterOrganizationToOrgAdmin = useCallback(
-        (organizations: Organization[]): Organization[] => {
-            const filteredOrgs = user?.userRoles.includes(UserRole.Admin)
-                ? organizations
-                : organizations?.filter(
-                    (organization) =>
-                        organization.parentId === String(user?.organizationId)
-                );
+	const filterOrganizationToOrgAdmin = useCallback(
+		(organizations: Organization[]): Organization[] => {
+			const filteredOrgs = user?.userRoles.includes(UserRole.Admin)
+				? organizations
+				: organizations?.filter(
+					(organization) =>
+						organization.parentId === String(user?.organizationId)
+				);
 
-            sessionStorage.setItem("table-rows", JSON.stringify(filteredOrgs));
-            return filteredOrgs;
-        },
-        [user?.userRoles]
-    );
-    useEffect(() => {
-        if (data && isSuccess) {
-            setLocalRows(filterOrganizationToOrgAdmin(data));
-            setSort(INITIAL_SORT);
-        }
-    }, [data, isSuccess]);
+			sessionStorage.setItem("table-rows", JSON.stringify(filteredOrgs));
+			return filteredOrgs;
+		},
+		[user?.userRoles]
+	);
+	useEffect(() => {
+		if (data && isSuccess) {
+			setLocalRows(filterOrganizationToOrgAdmin(data));
+			setSort(INITIAL_SORT);
+		}
+	}, [data, isSuccess]);
 
-    const filterOrganizationsToQuery = useCallback(
-        (query: string, initialOrgs: Organization[]) => {
-            const normalizedSearchQuery = query.toLocaleLowerCase();
+	const filterOrganizationsToQuery = useCallback(
+		(query: string, initialOrgs: Organization[]) => {
+			const normalizedSearchQuery = query.toLocaleLowerCase();
 
-            const filteredOrgs = initialOrgs.filter(
-                ({ name, customerCrmId, customerCrmLink, comments }) =>
-                    name.toLocaleLowerCase().includes(normalizedSearchQuery) ||
+			const filteredOrgs = initialOrgs.filter(
+				({ name, customerCrmId, customerCrmLink, comments }) =>
+					name.toLocaleLowerCase().includes(normalizedSearchQuery) ||
                     customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
                     customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
                     comments.toLocaleLowerCase().includes(normalizedSearchQuery)
-            );
+			);
 
-            setLocalRows(filteredOrgs);
-        },
-        [search, setLocalRows]
-    );
+			setLocalRows(filteredOrgs);
+		},
+		[search, setLocalRows]
+	);
 
-    useEffect(() => {
-        const initialOrgs = sessionStorage.getItem("table-rows");
-        if (initialOrgs && search?.length) {
-            filterOrganizationsToQuery(
-                search,
+	useEffect(() => {
+		const initialOrgs = sessionStorage.getItem("table-rows");
+		if (initialOrgs && search?.length) {
+			filterOrganizationsToQuery(
+				search,
                 JSON.parse(initialOrgs) as Organization[]
-            );
-        } else {
-            setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
-            setSort(INITIAL_SORT);
-        }
-    }, [search]);
+			);
+		} else {
+			setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
+			setSort(INITIAL_SORT);
+		}
+	}, [search]);
 
-    if (!localRows) return null;
+	if (!localRows) return null;
 
-    if (isError) {
-        console.log(error);
+	if (isError) {
+		console.log(error);
 
-        return <p>Something went wrong</p>;
-    }
+		return <p>Something went wrong</p>;
+	}
 
-    if (isLoading) {
-        return (
-            <div className="table-loader">
-                <Loader />
-            </div>
-        );
-    }
+	if (isLoading) {
+		return (
+			<div className="table-loader">
+				<Loader />
+			</div>
+		);
+	}
 
-    if (localRows.length) {
-        return (
-            <table className="table table--organization">
-                <thead className="table__head">
-                    <tr className="table__header">
-                        {ORG_HEADER.keys.map((key, index) => (
-                            <SortTableHeader
-                                key={key}
-                                name={key}
-                                text={ORG_HEADER.titles[index]}
-                                sort={sort}
-                                localRows={localRows}
-                                setSort={setSort}
-                                setLocalRows={setLocalRows}
-                            />
-                        ))}
+	if (localRows.length) {
+		return (
+			<table className="table table--organization">
+				<thead className="table__head">
+					<tr className="table__header">
+						{ORG_HEADER.keys.map((key, index) => (
+							<SortTableHeader
+								key={key}
+								name={key}
+								text={ORG_HEADER.titles[index]}
+								sort={sort}
+								localRows={localRows}
+								setSort={setSort}
+								setLocalRows={setLocalRows}
+							/>
+						))}
 
-                        <th className="table__headline table__headline--hidden">Actions</th>
-                    </tr>
-                </thead>
-                <tbody className="table__body">
-                    {localRows.map((organization, index) => (
-                        <tr className="table__row" key={index}>
-                            <td className="table__cell">{organization.name}</td>
-                            <td className="table__cell">{organization.customerCrmId}</td>
-                            <td className="table__cell">
-                                <a
-                                    className="table__link"
-                                    href={organization.customerCrmLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {organization.customerCrmLink}
-                                </a>
-                            </td>
-                            <td className="table__cell table__cell--comment">
-                                {organization.comments}
-                            </td>
-                            <td className="table__cell table__cell--actions">
-                                <Link
-                                    className="table__action"
-                                    to={`/apps/organizations/${organization.id}`}
-                                >
-                                    <EditSVG role="img" aria-label="edit" fill="currentColor" />
-                                </Link>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        );
-    } else {
-        return (
-            <NoResultsMessage dataPresent={!!data?.length} query={search as string} />
-        );
-    }
+						<th className="table__headline table__headline--hidden">Actions</th>
+					</tr>
+				</thead>
+				<tbody className="table__body">
+					{localRows.map((organization, index) => (
+						<tr className="table__row" key={index}>
+							<td className="table__cell">{organization.name}</td>
+							<td className="table__cell">{organization.customerCrmId}</td>
+							<td className="table__cell">
+								<a
+									className="table__link"
+									href={organization.customerCrmLink}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{organization.customerCrmLink}
+								</a>
+							</td>
+							<td className="table__cell table__cell--comment">
+								{organization.comments}
+							</td>
+							<td className="table__cell table__cell--actions">
+								<Link
+									className="table__action"
+									to={`/apps/organizations/${organization.id}`}
+								>
+									<EditSVG role="img" aria-label="edit" fill="currentColor" />
+								</Link>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		);
+	} else {
+		return (
+			<NoResultsMessage dataPresent={!!data?.length} query={search as string} />
+		);
+	}
 };

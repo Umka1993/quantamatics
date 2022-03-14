@@ -14,50 +14,50 @@ interface SaveResetHeaderProps extends HTMLProps<HTMLDivElement> {
 }
 
 const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
-    headline,
-    disableSave,
-    disableReset,
-    isSavedMessageActive,
-    headlineID,
-    className,
-    ...other
+	headline,
+	disableSave,
+	disableReset,
+	isSavedMessageActive,
+	headlineID,
+	className,
+	...other
 }) => {
-    return (
-        <header className={classNames(style.header, className)} {...other}>
-            <Headline style={{ margin: 0 }} id={headlineID}>
-                {headline}
-            </Headline>
-            <div className={style.buttons}>
-                <ResetButton
-                    disabled={disableReset}
-                    onClick={({ currentTarget }) => currentTarget.blur()}
-                >
+	return (
+		<header className={classNames(style.header, className)} {...other}>
+			<Headline style={{ margin: 0 }} id={headlineID}>
+				{headline}
+			</Headline>
+			<div className={style.buttons}>
+				<ResetButton
+					disabled={disableReset}
+					onClick={({ currentTarget }) => currentTarget.blur()}
+				>
                     Cancel
-                </ResetButton>
+				</ResetButton>
 
-                <Button
-                    type="submit"
-                    className={style.save}
-                    disabled={disableSave}
-                    variant={isSavedMessageActive ? "valid" : undefined}
-                >
-                    {isSavedMessageActive ? (
-                        <>
-                            <CheckSVG
-                                aria-hidden="true"
-                                width={17}
-                                height={17}
-                                fill="currentColor"
-                            />
+				<Button
+					type="submit"
+					className={style.save}
+					disabled={disableSave}
+					variant={isSavedMessageActive ? "valid" : undefined}
+				>
+					{isSavedMessageActive ? (
+						<>
+							<CheckSVG
+								aria-hidden="true"
+								width={17}
+								height={17}
+								fill="currentColor"
+							/>
                             Saved
-                        </>
-                    ) : (
-                        "Save"
-                    )}
-                </Button>
-            </div>
-        </header>
-    );
+						</>
+					) : (
+						"Save"
+					)}
+				</Button>
+			</div>
+		</header>
+	);
 };
 
 export default SaveResetHeader;

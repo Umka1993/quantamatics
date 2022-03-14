@@ -17,36 +17,36 @@ interface ISortTableHeader {
 }
 
 export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
-    name,
-    sort,
-    localRows,
-    setSort,
-    setLocalRows,
-    text,
-    className,
-    rememberScroll,
-    localKey = 'table-rows',
+	name,
+	sort,
+	localRows,
+	setSort,
+	setLocalRows,
+	text,
+	className,
+	rememberScroll,
+	localKey = 'table-rows',
 }) => {
 
-    return (
-        <th
-            className={["sort-table-header", className].join(" ")}
-            aria-sort={sort.name === name ? sort.direction : SortDirection.Default}
-        >
-            <button
-                onClick={() => {
-                    if (rememberScroll) {
-                        const scrollWrapper = document.querySelector('main')
-                        scrollWrapper && rememberScroll(scrollWrapper.scrollTop)
-                    }
-                    sortTable(name, sort, localRows, setSort, setLocalRows, localKey)
-                }}
-                type='button'
-                className='sort-table-header__button'
-            >
-                {text}
-                <SortIcon aria-hidden />
-            </button>
-        </th>
-    );
+	return (
+		<th
+			className={["sort-table-header", className].join(" ")}
+			aria-sort={sort.name === name ? sort.direction : SortDirection.Default}
+		>
+			<button
+				onClick={() => {
+					if (rememberScroll) {
+						const scrollWrapper = document.querySelector('main')
+						scrollWrapper && rememberScroll(scrollWrapper.scrollTop)
+					}
+					sortTable(name, sort, localRows, setSort, setLocalRows, localKey)
+				}}
+				type='button'
+				className='sort-table-header__button'
+			>
+				{text}
+				<SortIcon aria-hidden />
+			</button>
+		</th>
+	);
 };

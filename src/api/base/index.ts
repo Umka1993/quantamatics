@@ -3,17 +3,17 @@ import { getToken } from '../../services/token';
 
 
 const baseQuery = fetchBaseQuery({ 
-    baseUrl: process.env.DATA_API_URL,
-    prepareHeaders: (headers) => {
-        const token = getToken()
+	baseUrl: process.env.DATA_API_URL,
+	prepareHeaders: (headers) => {
+		const token = getToken()
 
-        token && headers.set('Authorization', `Bearer ${token}`);
+		token && headers.set('Authorization', `Bearer ${token}`);
 
-        headers.set('Accept', 'application/json');
-        headers.set('Content-Type', 'application/json');
+		headers.set('Accept', 'application/json');
+		headers.set('Content-Type', 'application/json');
 
-        return headers;
-    }
+		return headers;
+	}
 }) 
 
 

@@ -10,14 +10,14 @@ interface LogoProps {
 }
 
 export default function Logo({ width, height }: LogoProps): ReactElement {
-    return (
-        <Link to={AppRoute.Home}>
-            <LogoSVG
-                aria-label={`Logotype of ${AppInfo.Name}`}
-                role='img'
-                width={width}
-                height={height}
-            />
-        </Link>
-    );
+	return (
+		<Link to={AppRoute.Home}>
+			<LogoSVG
+				aria-label={`Logotype of ${AppInfo.Name}`}
+				role='img'
+				width={width}
+				height={height}
+			/>
+		</Link>
+	);
 }

@@ -14,51 +14,51 @@ export interface InfoMessage {
 }
 
 const InfoMessage: FunctionComponent = () => {
-    const { state } = useLocation();
-    if (state as InfoMessage) {
-        const isCalendarPic = (state as InfoMessage).image === "calendar";
-        return (
-            <article className="info">
-                {isCalendarPic ? (
-                    <img
-                        src="img/calendar.svg"
-                        width={244}
-                        height={216}
-                        alt="Recheck your calendar"
-                        className="info__img"
-                    />
-                ) : (
-                    <img
-                        src="img/man.svg"
-                        alt="Something went wrong"
-                        width={440}
-                        height={370}
-                        className="info__img"
-                    />
-                )}
+	const { state } = useLocation();
+	if (state as InfoMessage) {
+		const isCalendarPic = (state as InfoMessage).image === "calendar";
+		return (
+			<article className="info">
+				{isCalendarPic ? (
+					<img
+						src="img/calendar.svg"
+						width={244}
+						height={216}
+						alt="Recheck your calendar"
+						className="info__img"
+					/>
+				) : (
+					<img
+						src="img/man.svg"
+						alt="Something went wrong"
+						width={440}
+						height={370}
+						className="info__img"
+					/>
+				)}
 
-                <Headline
-                    className={classes("info__title", {
-                        "info__title--pass": !isCalendarPic,
-                    })}
-                >
-                    {(state as InfoMessage).headline}
-                </Headline>
-                <p
-                    className="info__text"
-                    dangerouslySetInnerHTML={{ __html: (state as InfoMessage).subtitle }}
-                />
+				<Headline
+					className={classes("info__title", {
+						"info__title--pass": !isCalendarPic,
+					})}
+				>
+					{(state as InfoMessage).headline}
+				</Headline>
+				<p
+					className="info__text"
+					dangerouslySetInnerHTML={{ __html: (state as InfoMessage).subtitle }}
+				/>
 
-                {(state as InfoMessage).returnBack && (
-                    <Button href={AppRoute.Login} className="info__back">
+				{(state as InfoMessage).returnBack && (
+					<Button href={AppRoute.Login} className="info__back">
                         Return to Sign In
-                    </Button>
-                )}
-            </article>
-        );
-    }
+					</Button>
+				)}
+			</article>
+		);
+	}
 
-    return <Navigate to={AppRoute.Home} />;
+	return <Navigate to={AppRoute.Home} />;
 };
 
 export default InfoMessage;

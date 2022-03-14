@@ -1,13 +1,13 @@
 export default function getValidationMessage(validity: ValidityState, error?: string) {
-    if (error) {
-        return error;
-    }
+	if (error) {
+		return error;
+	}
 
-    const { patternMismatch } = validity;
+	const { patternMismatch } = validity;
 
-    if (patternMismatch) {
-        return 'This is not a valid email';
-    }
+	if (patternMismatch) {
+		return 'This is not a valid email';
+	}
 
-    return "";
+	return "";
 }

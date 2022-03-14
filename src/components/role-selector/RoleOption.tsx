@@ -15,28 +15,28 @@ interface RoleOptionProps {
 }
 
 const RoleOption: FunctionComponent<RoleOptionProps> = ({
-    selected = false,
-    setter,
-    value,
-    label,
-    className,
-    highlightOnChecked,
-    align
+	selected = false,
+	setter,
+	value,
+	label,
+	className,
+	highlightOnChecked,
+	align
 }) => {
-    const [addToSet, removeFromSet] = useChangeSet(value, setter);
+	const [addToSet, removeFromSet] = useChangeSet(value, setter);
 
-    return (
-        <Checkbox
-            name={value}
-            checked={selected}
-            onChange={selected ? removeFromSet : addToSet}
-            className={className}
-            highlightOnChecked={highlightOnChecked}
-            align={align}
-        >
-            {label}
-        </Checkbox>
-    );
+	return (
+		<Checkbox
+			name={value}
+			checked={selected}
+			onChange={selected ? removeFromSet : addToSet}
+			className={className}
+			highlightOnChecked={highlightOnChecked}
+			align={align}
+		>
+			{label}
+		</Checkbox>
+	);
 };
 
 export default RoleOption;

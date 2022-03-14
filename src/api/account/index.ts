@@ -19,103 +19,103 @@ export const enum AccountEndpoint {
 }
 
 const accountApi = baseApi.injectEndpoints({
-    endpoints: (build) => ({
-        registerUser: build.mutation({
-            query: (body: any) => ({
-                url: AccountEndpoint.Register,
-                method: "POST",
-                body,
-            }),
-            invalidatesTags: [{ type: "Users", id: "list" }],
-        }),
+	endpoints: (build) => ({
+		registerUser: build.mutation({
+			query: (body: any) => ({
+				url: AccountEndpoint.Register,
+				method: "POST",
+				body,
+			}),
+			invalidatesTags: [{ type: "Users", id: "list" }],
+		}),
 
-        loginUser: build.mutation<
+		loginUser: build.mutation<
             LoginResponse,
             { email: string; password: string }
         >({
-            query: (body) => ({
-                url: AccountEndpoint.Login,
-                method: "POST",
-                body,
-            }),
+        	query: (body) => ({
+        		url: AccountEndpoint.Login,
+        		method: "POST",
+        		body,
+        	}),
         }),
 
-        verifyToken: build.query<void, { userName: string; token: string }>({
-            query: (params) => ({
-                url: AccountEndpoint.VerifyToken,
-                method: "GET",
-                params,
-            }),
-        }),
+		verifyToken: build.query<void, { userName: string; token: string }>({
+			query: (params) => ({
+				url: AccountEndpoint.VerifyToken,
+				method: "GET",
+				params,
+			}),
+		}),
 
-        capabilities: build.query<void, void>({
-            query: () => AccountEndpoint.Capabilities,
-        }),
+		capabilities: build.query<void, void>({
+			query: () => AccountEndpoint.Capabilities,
+		}),
 
-        //! Not work in backend
-        logout: build.mutation<void, void>({
-            query: () => ({
-                url: AccountEndpoint.Logout,
-                method: "POST",
-            }),
-        }),
+		//! Not work in backend
+		logout: build.mutation<void, void>({
+			query: () => ({
+				url: AccountEndpoint.Logout,
+				method: "POST",
+			}),
+		}),
 
-        getUserInfo: build.query<void, void>({
-            query: () => AccountEndpoint.UserInfo,
-        }),
+		getUserInfo: build.query<void, void>({
+			query: () => AccountEndpoint.UserInfo,
+		}),
 
-        getToken: build.query<void, void>({
-            query: () => AccountEndpoint.GetToken,
-        }),
+		getToken: build.query<void, void>({
+			query: () => AccountEndpoint.GetToken,
+		}),
 
-        restartServer: build.mutation<void, void>({
-            query: () => ({
-                url: AccountEndpoint.RestartServer,
-                method: "POST",
-            })
-        }),
+		restartServer: build.mutation<void, void>({
+			query: () => ({
+				url: AccountEndpoint.RestartServer,
+				method: "POST",
+			})
+		}),
 
-        changePassword: build.mutation<
+		changePassword: build.mutation<
             void,
             { currentPassword: string; newPassword: string }
         >({
-            query: (body) => ({
-                url: AccountEndpoint.ChangePassword,
-                method: "PUT",
-                body,
-            }),
+        	query: (body) => ({
+        		url: AccountEndpoint.ChangePassword,
+        		method: "PUT",
+        		body,
+        	}),
         }),
 
-        sendResetPasswordMail: build.mutation<void, string>({
-            query: (email) => ({
-                url: AccountEndpoint.ResetPasswordMail,
-                method: "POST",
-                params: { email }
-            })
-        }),
-        resetPassword: build.mutation<
+		sendResetPasswordMail: build.mutation<void, string>({
+			query: (email) => ({
+				url: AccountEndpoint.ResetPasswordMail,
+				method: "POST",
+				params: { email }
+			})
+		}),
+		resetPassword: build.mutation<
             void,
             { email: string, password: string, token: string  }
         >({
-            query: (body) => ({
-                url: AccountEndpoint.ResetPassword,
-                method: "POST",
-                body,
-            }),
+        	query: (body) => ({
+        		url: AccountEndpoint.ResetPassword,
+        		method: "POST",
+        		body,
+        	}),
         }),
-    }),
+	}),
 });
 
 export const {
-    useRegisterUserMutation,
-    useLoginUserMutation,
-    useVerifyTokenQuery,
-    useCapabilitiesQuery,
-    useLogoutMutation,
-    useGetUserInfoQuery,
-    useGetTokenQuery,
-    useRestartServerMutation,
-    useChangePasswordMutation,
-    useResetPasswordMutation,
-    useSendResetPasswordMailMutation,
+	useRegisterUserMutation,
+	useLoginUserMutation,
+	useVerifyTokenQuery,
+	useCapabilitiesQuery,
+	useLogoutMutation,
+	useGetUserInfoQuery,
+	useGetTokenQuery,
+	useRestartServerMutation,
+	useChangePasswordMutation,
+	useResetPasswordMutation,
+	useSendResetPasswordMailMutation,
 } = accountApi;

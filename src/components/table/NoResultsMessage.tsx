@@ -8,20 +8,20 @@ interface NoResultsMessageProps {
 }
 
 const NoResultsMessage: FunctionComponent<NoResultsMessageProps> = ({
-    query,
-    dataPresent,
+	query,
+	dataPresent,
 }) => {
-    const normalizedQuery = query.length > 32 ? `${query.slice(0, 32)}…` : query;
+	const normalizedQuery = query.length > 32 ? `${query.slice(0, 32)}…` : query;
 
-    return (
-        <article className={style.root}>
-            <samp className={style.headline}>
-                {dataPresent
-                    ? ` No results for “${normalizedQuery}” were found.`
-                    : "No organizations found"}
-            </samp>
-        </article>
-    );
+	return (
+		<article className={style.root}>
+			<samp className={style.headline}>
+				{dataPresent
+					? ` No results for “${normalizedQuery}” were found.`
+					: "No organizations found"}
+			</samp>
+		</article>
+	);
 };
 
 export default NoResultsMessage;

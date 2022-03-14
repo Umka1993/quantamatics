@@ -13,70 +13,70 @@ export interface MultiselectAssetOptionProps {
 }
 
 const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
-    selected,
-    option,
-    setSelected,
-    disabled,
+	selected,
+	option,
+	setSelected,
+	disabled,
 }) => {
-    const selectedID = selected.findIndex(
-        ({ assetId }) => assetId === option.assetId
-    );
-    const isSelected = selectedID !== -1;
-    const isPinned = isSelected ? selected[selectedID].sharedByDefault : false;
+	const selectedID = selected.findIndex(
+		({ assetId }) => assetId === option.assetId
+	);
+	const isSelected = selectedID !== -1;
+	const isPinned = isSelected ? selected[selectedID].sharedByDefault : false;
 
-    const addToSelected = (sharedByDefault: boolean) =>
-        setSelected([...selected, { ...option, sharedByDefault }]);
+	const addToSelected = (sharedByDefault: boolean) =>
+		setSelected([...selected, { ...option, sharedByDefault }]);
 
-    const removeFromSelected = () =>
-        setSelected(
-            [...selected].filter(({ assetId }) => assetId !== option.assetId)
-        );
+	const removeFromSelected = () =>
+		setSelected(
+			[...selected].filter(({ assetId }) => assetId !== option.assetId)
+		);
 
-    return (
-        <tr
-            className={classNames(style.row, style.asset, {
-                [style["asset--selected"]]: isSelected || isPinned,
-            })}
-        >
-            <td>{option.asset.name}</td>
+	return (
+		<tr
+			className={classNames(style.row, style.asset, {
+				[style["asset--selected"]]: isSelected || isPinned,
+			})}
+		>
+			<td>{option.asset.name}</td>
 
-            <td className={style.action}>
-                <Checkbox
-                    name={option.asset.name}
-                    checked={isSelected}
-                    disabled={disabled}
-                    value={option.assetId}
-                    highlightOnChecked
-                    onClick={
-                        disabled
-                            ? undefined
-                            : () => {
-                                isSelected ? removeFromSelected() : addToSelected(false);
-                            }
-                    }
-                />
-            </td>
-            <td className={style.action}>
-                <PinButton
-                    checked={isPinned}
-                    size={21}
-                    onClick={() => {
-                        if (isSelected) {
-                            const copySelected = [...selected];
-                            copySelected[selectedID] = {
-                                ...copySelected[selectedID],
-                                sharedByDefault: !isPinned,
-                            };
-                            setSelected(copySelected);
-                        } else {
-                            !isPinned && addToSelected(true);
-                        }
-                    }}
-                    aria-label="Set as default for all user accounts"
-                />
-            </td>
-        </tr>
-    );
+			<td className={style.action}>
+				<Checkbox
+					name={option.asset.name}
+					checked={isSelected}
+					disabled={disabled}
+					value={option.assetId}
+					highlightOnChecked
+					onClick={
+						disabled
+							? undefined
+							: () => {
+								isSelected ? removeFromSelected() : addToSelected(false);
+							}
+					}
+				/>
+			</td>
+			<td className={style.action}>
+				<PinButton
+					checked={isPinned}
+					size={21}
+					onClick={() => {
+						if (isSelected) {
+							const copySelected = [...selected];
+							copySelected[selectedID] = {
+								...copySelected[selectedID],
+								sharedByDefault: !isPinned,
+							};
+							setSelected(copySelected);
+						} else {
+							!isPinned && addToSelected(true);
+						}
+					}}
+					aria-label="Set as default for all user accounts"
+				/>
+			</td>
+		</tr>
+	);
 };
 
 export default AssetRow;
