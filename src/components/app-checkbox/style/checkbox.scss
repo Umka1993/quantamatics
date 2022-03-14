@@ -11,8 +11,6 @@
     position: relative;
 
     &__custom {
-        display: grid;
-        place-items: center;
         width: 1em;
         height: 1em;
         background-color: #fff;
@@ -21,6 +19,7 @@
         border-radius: 2px;
 
         transition: border-color 0.2s ease-in;
+        position: relative;
     }
 
     &--right &__custom {
@@ -59,7 +58,12 @@
     &__check {
         fill: $accent;
         width: 0.625em;
-        height: 0.4375em;
+        height: 0.5em;
+
+        left: 0.125em;
+        top: 0.25em;
+        position: absolute;
+
         opacity: 0;
         transition: opacity 0.1s;
     }
