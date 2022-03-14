@@ -2,7 +2,7 @@ import { UserKey, UserRole } from "../data/enum";
 import { OrganizationID } from "./organization/types";
 
 export interface IUser {
-	[UserKey.Id]: number,
+	  [UserKey.Id]: number,
 	[UserKey.Email]: string,
 	[UserKey.Name]: string,
 	[UserKey.Surname]: string,
