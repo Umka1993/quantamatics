@@ -63,6 +63,6 @@
 		"pre-commit": "npx eslint --ext .tsx,.ts src --fix"
 	},
 	"lint-staged": {
-		"src/**/*.{ts, tsx}": ["npm run lint:fix", "git add"]
+		"*": ["npm run lint:fix", "git add"]
 	}
 }
