@@ -1,5 +1,5 @@
 import { UserKey, UserRole } from "../data/enum";
-import { OrganizationID } from "./organization/types";
+import {OrganizationID } from "./organization/types";
 
 export interface IUser {
 	  [UserKey.Id]: number,
