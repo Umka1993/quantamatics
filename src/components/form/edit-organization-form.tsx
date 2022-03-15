@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { Organization } from "types/organization/types";
 import Input, { InputURL } from "../app-input";
-import style from "./styles/edit-organization.module.scss";
+import style from "./styles/edit-org-form.module.scss";
 import { useUpdateOrganizationMutation } from "../../api/organization";
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import normalizeName from "../../services/normalize-name";

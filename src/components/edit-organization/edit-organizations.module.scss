@@ -1,0 +1,31 @@
+@use "../../sass/variables.scss" as *;
+
+.organization {
+	padding: 40px var(--side);
+}
+
+.subheader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 var(--side);
+	margin-bottom: 15px;
+
+	h2 {
+		margin: 0;
+		font-weight: 600;
+		font-size: 18px;
+		line-height: 1.389;
+		color: $headlines;
+	}
+}
+
+.add {
+	min-width: 120px;
+	height: 40px;
+}
+
+.warning {
+	margin: 0 24px 0 auto;
+	line-height: 1.375;
+}

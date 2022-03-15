@@ -5,7 +5,6 @@ import React, {
 	FunctionComponent,
 	HTMLProps,
 } from "react";
-import "./styles/table.scss";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import EditSVG from "./assets/edit-row-icon.svg";
@@ -81,7 +80,7 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 						</td>
 						<td className={style.cell}>
 							<Link
-								className="table__action"
+								className={style.action}
 								to={`/apps/organizations/${organization.id}`}
 							>
 								<EditSVG role="img" aria-label="edit" fill="currentColor" />

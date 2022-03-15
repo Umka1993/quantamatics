@@ -1,6 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
-import "./styles/edit-organizations.scss";
-import AddIcon from "./assets/human-add.svg";
+import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
 import Button from "../button";
 import { UserTable } from "../table/UserTable";
 import { useParams } from "react-router-dom";
@@ -13,7 +11,14 @@ import { UserRole } from "../../data/enum";
 import { EditOrganizationForm } from "../form";
 import useToggle from "../../hooks/useToggle";
 import AssetModal from "../asset-modal/AssetModal";
-import { Organization } from "types/organization/types";
+import style from "./edit-organizations.module.scss";
+import SpriteIcon from "../sprite-icon/SpriteIcon";
+import { EMPTY_ORGANIZATION } from "./utils";
+import { useGetOrganizationUsersQuery } from "../../api/user";
+import { IUpdateUser } from "../../types/user";
+import Dialog from "../dialog";
+import { EditProfile } from "../edit-modal/edit-profile";
+import Loader from "../loader";
 
 export const EditOrganization: FunctionComponent = () => {
 	const user = useUser();
@@ -24,68 +29,111 @@ export const EditOrganization: FunctionComponent = () => {
 		data: organization,
 		isError,
 		error,
-		isSuccess,
+		isLoading: isOrganizationLoading
 	} = useGetOrganizationQuery(id as string);
 
-	const EMPTY_ORGANIZATION: Organization = {
-		name: "",
-		parentId: "",
-		id: "",
-		customerCrmId: "",
-		comments: "",
-		customerCrmLink: "",
-		organizationAssets: [],
-		parentOrganization: "",
-	};
+	const { data: userList, isSuccess, isLoading: isUsersLoading } = useGetOrganizationUsersQuery(
+		id as string
+	);
+
+	const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
+	const [selectedUser, setUser] = useState<IUpdateUser | null>(null);
+
+	useEffect(() => {
+		if (isSuccess && userList) {
+			const usersWithDate = userList.map((user) => ({
+				...user,
+				subscriptionEndDate: new Date(user.subscriptionEndDate),
+			}));
+			sessionStorage.setItem("table-rows", JSON.stringify(usersWithDate));
+			setLocalRows(usersWithDate);
+		}
+	}, [isSuccess, userList]);
+
 	const isHaveAccessToOrgList =
-	user?.userRoles.includes(UserRole.Admin) ||
-	user?.userRoles.includes(UserRole.OrgOwner);
+		user?.userRoles.includes(UserRole.Admin) ||
+		user?.userRoles.includes(UserRole.OrgOwner);
 
 	const [isAssetOpened, toggleAssetModal] = useToggle(false);
 
 	const hasAssets =
-	organization && Boolean(organization.organizationAssets.length);
+		organization && Boolean(organization.organizationAssets.length);
+
+	const endDates = useMemo(() => {
+		if (userList) {
+			const result = new Map<number, string>();
+
+			userList.map((user) => {
+				result.set(user.id, user.subscriptionEndDate.split(" ")[0]);
+			});
+			return result;
+		}
+	}, [isSuccess]);
+
+	const closeModal = () => setUser(null);
+
+	if (isOrganizationLoading && isUsersLoading) {
+		return <Loader />
+	}
 
 	return (
-		<div className="edit-organization">
-			{isError ? (
-				<p>Error on loading data: {(error as IApiError).data} </p>
-			) : (
-				<>
-					<EditOrganizationForm
-						organization={organization || EMPTY_ORGANIZATION}
-						isHaveAccessToOrgList={isHaveAccessToOrgList}
-						toggleAssetModal={toggleAssetModal}
-					/>
-					<AssetModal
-						open={isAssetOpened}
-						closeFunction={toggleAssetModal}
-						organization={organization || EMPTY_ORGANIZATION}
-					/>
-				</>
-			)}
-			<section className="edit-organization__user-list">
-				<div className="edit-organization__user-list-header">
-					<h2 className="sub-headline">User Accounts</h2>
+		<>
+			<div className={style.organization}>
+				{isError ? (
+					<p>Error on loading data: {(error as IApiError).data} </p>
+				) : (
+					<>
+						<EditOrganizationForm
+							organization={organization || EMPTY_ORGANIZATION}
+							isHaveAccessToOrgList={isHaveAccessToOrgList}
+							toggleAssetModal={toggleAssetModal}
+						/>
+						<AssetModal
+							open={isAssetOpened}
+							closeFunction={toggleAssetModal}
+							organization={organization || EMPTY_ORGANIZATION}
+						/>
+					</>
+				)}
+			</div>
+			<section>
+				<div className={style.subheader}>
+					<h2>User Accounts</h2>
 					{!hasAssets && (
-						<p id="warning-asset" className="edit-organization__warning">
-			Please set up assets first to invite users to the organization
+						<p id="warning-asset" className={style.warning}>
+							Please set up assets first to invite users to the organization
 						</p>
 					)}
 
 					<Button
-						className="edit-organization__user-list-add"
+						className={style.add}
 						href={hasAssets ? "add-user" : undefined}
 						aria-describedby={hasAssets ? undefined : "warning-asset"}
 						disabled={!hasAssets}
 					>
-						<AddIcon />
-			Add New
+						<SpriteIcon icon="plus" width={10} />
+						Add
 					</Button>
 				</div>
-
-				<UserTable orgId={id as string} />
+				{endDates && (
+					<UserTable list={localRows} setter={setLocalRows} dates={endDates} userSetter={setUser} />
+				)}
 			</section>
-		</div>
+
+
+			<Dialog
+				open={selectedUser !== null}
+				onRequestClose={closeModal}
+				closeOnOutsideClick
+				headline="Edit User Account"
+				id="org-user-modal"
+				wrapperClass="edit-account"
+			>
+				{selectedUser !== null &&
+					< EditProfile user={selectedUser} onClose={closeModal} />
+				}
+			</Dialog>
+
+		</>
 	);
 };

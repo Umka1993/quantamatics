@@ -32,6 +32,21 @@
 			64px;
 	}
 
+	&--user {
+		grid-template-columns:
+			max(#{math.div(120, 1108) * 100%}, 60px + 24px)
+			max(#{math.div(136 - 24, 1108) * 100%}, 76px + 24px)
+			max(#{math.div(258 - 24, 1108) * 100%}, 112px + 24px)
+			max(#{math.div(186 - 24, 1108) * 100%}, 118px + 24px)
+			1fr
+			64px;
+
+		.cell,
+		.headline {
+			padding-left: 0;
+		}
+	}
+
 	&--body {
 		min-height: 65px;
 		align-items: center;
@@ -99,5 +114,27 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+}
+
+.action {
+	all: unset;
+	color: $inactive;
+	cursor: pointer;
+	outline-color: currentColor;
+	outline-offset: 0.4em;
+	border-radius: 0.2em;
+
+	&:focus-visible {
+		outline-width: 1px;
+	}
+
+	@include hover-focus {
+		color: $accent;
+	}
+
+	&:disabled {
+		cursor: default;
+		color: transparentize($inactive, 0.6);
 	}
 }
