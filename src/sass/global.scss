@@ -1,9 +1,15 @@
 @use "variables" as *;
+@use "sass:math";
+@use "mixins" as *;
 
 *,
 *::before,
 *::after {
 	box-sizing: border-box;
+}
+
+:root {
+	--side: clamp(20px, #{math.div(40, 1440) * 100}vw, 40px);
 }
 
 html {
@@ -84,4 +90,19 @@ body {
 
 .scroll-lock {
 	overflow: hidden;
+}
+
+.link {
+	color: $accent;
+	text-decoration: none;
+
+	@include hover-focus {
+		color: darken($accent, 10)
+	}
+
+	&:focus-visible {
+		outline: 1px solid currentColor;
+		border-radius: 2px;
+		outline-offset: 0.2em;
+	}
 }

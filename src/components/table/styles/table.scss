@@ -23,7 +23,7 @@ $design-table-w: 1038;
 		line-height: 1.167;
 		letter-spacing: 0.04em;
 		color: $headlines;
-		border-bottom: 1.5px solid transparentize($main-text, 0.7);
+
 
 		th,
 		td {
@@ -43,13 +43,12 @@ $design-table-w: 1038;
 
 	&--organization {
 		tr {
-			display: grid;
 			grid-template-columns:
-				#{math.div(226, $design-table-w) * 100%}
-				#{math.div(192, $design-table-w) * 100%}
-				#{math.div(260, $design-table-w) * 100%}
+				#{math.div(278, 1110) * 100%}
+				#{math.div(202, 1110) * 100%}
+				#{math.div(238, 1110) * 100%}
 				1fr
-				60px;
+				56px;
 		}
 	}
 
@@ -70,6 +69,19 @@ $design-table-w: 1038;
 	.comma-list {
 		max-width: 180px;
 		display: inline-block;
+	}
+
+	&__header,
+	&__row {
+		display: grid;
+		padding: 0 40px;
+	}
+
+	&__headline {
+		border-bottom: 1.5px solid transparentize($main-text, 0.7);
+		&:first-child {
+			padding-left: 24px;
+		}
 	}
 
 	&__row:not(:last-child) {

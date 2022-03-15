@@ -1,0 +1,103 @@
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
+@use "sass:math";
+
+.loader {
+	position: relative;
+	height: 60vh;
+}
+
+.root {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.head {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.row {
+	display: grid;
+	padding: 0 var(--side);
+	background-color: #fff;
+
+	&--organization {
+		grid-template-columns:
+			max(#{math.div(278 - 24, 1110) * 100%}, 140px + 48px)
+			max(#{math.div(202 - 24, 1110) * 100%}, 131px + 48px)
+			max(#{math.div(238 - 24, 1110) * 100%}, 143px + 48px)
+			1fr
+			64px;
+	}
+
+	&--body {
+		min-height: 65px;
+		align-items: center;
+
+		position: relative;
+
+		&::before {
+			position: absolute;
+
+			border-radius: 0px 2px 2px 0px;
+			height: 100%;
+			left: 0;
+			top: 0;
+			width: 3px;
+			content: "";
+		}
+
+		&:hover,
+		&:focus-within {
+			box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05), inset 0 -1px 0 0 rgba(22, 34, 101, 0.07), 0 -1px 0 0 #eff0f4;
+
+			.cell {
+				border-color: transparent;
+			}
+
+			&::before {
+				background-color: $accent;
+			}
+		}
+	}
+}
+
+.headline {
+	font-family: inherit;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 1.33;
+	letter-spacing: 0.04em;
+
+	color: $headlines;
+
+	border-bottom: 1px solid #eff0f4;
+	padding: 10px 24px;
+	text-align: left;
+
+	&--action {
+		font-size: 0;
+	}
+}
+
+.cell {
+	height: 100%;
+	display: grid;
+	align-items: center;
+	border-bottom: 1px solid #eff0f4;
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	padding: 0 24px;
+
+	a {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}

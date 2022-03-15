@@ -12,9 +12,10 @@ import useUser from "../../hooks/useUser";
 import { ORG_HEADER } from "./utils/constants";
 import { Link } from "react-router-dom";
 import NoResultsMessage from "./NoResultsMessage";
+import style from "./styles/table.module.scss";
 
 interface ITable {
-    search?: string;
+	search?: string;
 }
 
 export const OrganizationTable: React.FunctionComponent<ITable> = ({
@@ -26,7 +27,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
 	const INITIAL_SORT = { name: "", direction: SortDirection.Default };
 
 	const { isLoading, data, isError, isSuccess, error } =
-	useGetAllOrganizationsQuery(user?.id as number);
+		useGetAllOrganizationsQuery(user?.id as number);
 
 	const [localRows, setLocalRows] = useState<Organization[]>([]);
 	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
@@ -59,9 +60,9 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
 			const filteredOrgs = initialOrgs.filter(
 				({ name, customerCrmId, customerCrmLink, comments }) =>
 					name.toLocaleLowerCase().includes(normalizedSearchQuery) ||
-		customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
-		customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
-		comments.toLocaleLowerCase().includes(normalizedSearchQuery)
+					customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
+					customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
+					comments.toLocaleLowerCase().includes(normalizedSearchQuery)
 			);
 
 			setLocalRows(filteredOrgs);
@@ -74,7 +75,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
 		if (initialOrgs && search?.length) {
 			filterOrganizationsToQuery(
 				search,
-	JSON.parse(initialOrgs) as Organization[]
+				JSON.parse(initialOrgs) as Organization[]
 			);
 		} else {
 			setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
@@ -92,7 +93,7 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
 
 	if (isLoading) {
 		return (
-			<div className="table-loader">
+			<div className={style.loader}>
 				<Loader />
 			</div>
 		);
@@ -100,9 +101,9 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
 
 	if (localRows.length) {
 		return (
-			<table className="table table--organization">
-				<thead className="table__head">
-					<tr className="table__header">
+			<table className={style.root}>
+				<thead className={style.head}>
+					<tr className={[style.row, style["row--organization"]].join(" ")}>
 						{ORG_HEADER.keys.map((key, index) => (
 							<SortTableHeader
 								key={key}
@@ -112,31 +113,45 @@ export const OrganizationTable: React.FunctionComponent<ITable> = ({
 								localRows={localRows}
 								setSort={setSort}
 								setLocalRows={setLocalRows}
+								className={style.headline}
 							/>
 						))}
 
-						<th className="table__headline table__headline--hidden">Actions</th>
+						<th
+							className={[style.headline, style["headline--action"]].join(" ")}
+						>
+							Actions
+						</th>
 					</tr>
 				</thead>
-				<tbody className="table__body">
+				<tbody>
 					{localRows.map((organization, index) => (
-						<tr className="table__row" key={index}>
-							<td className="table__cell">{organization.name}</td>
-							<td className="table__cell">{organization.customerCrmId}</td>
-							<td className="table__cell">
-								<a
-									className="table__link"
-									href={organization.customerCrmLink}
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{organization.customerCrmLink}
-								</a>
+						<tr
+							className={[
+								style.row,
+								style["row--body"],
+								style["row--organization"],
+							].join(" ")}
+							key={index}
+						>
+							<td className={style.cell}>{organization.name}</td>
+							<td className={style.cell}>{organization.customerCrmId}</td>
+							<td className={style.cell}>
+								{Boolean(organization.customerCrmLink.length) && (
+									<a
+										className="link"
+										href={organization.customerCrmLink}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{organization.customerCrmLink}
+									</a>
+								)}
 							</td>
-							<td className="table__cell table__cell--comment">
-								{organization.comments}
+							<td className={style.cell}>
+								{organization.comments.length ? organization.comments : "—"}
 							</td>
-							<td className="table__cell table__cell--actions">
+							<td className={style.cell}>
 								<Link
 									className="table__action"
 									to={`/apps/organizations/${organization.id}`}

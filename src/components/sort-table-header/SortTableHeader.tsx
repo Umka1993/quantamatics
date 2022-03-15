@@ -3,11 +3,9 @@ import React, {
 	Dispatch,
 	FunctionComponent,
 	SetStateAction,
-	useEffect,
 } from "react";
 import sortTable from "./utils/sort";
 import SortIcon from "./assets/sort-icon.svg";
-import "./styles/sort-th.scss";
 import s from "./SortTableHeader.module.scss";
 import DownArrow from "./assets/down.svg";
 import classNames from "classnames";
