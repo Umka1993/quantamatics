@@ -20,6 +20,7 @@ const sortTable = (
 			break;
 
 		default:
+			sessionStorage.setItem(localKey, JSON.stringify(localRows));
 			newSort.direction = SortDirection.Up;
 			break;
 		}
