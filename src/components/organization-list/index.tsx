@@ -61,6 +61,7 @@ export default function OrganizationList(): ReactElement {
 					comments.toLocaleLowerCase().includes(normalizedSearchQuery)
 			);
 
+			sessionStorage.setItem('table-rows', JSON.stringify(filteredOrgs))
 			setLocalRows(filteredOrgs);
 		},
 		[search, setLocalRows]
