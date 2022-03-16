@@ -38,7 +38,8 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 		{ href: AppRoute.Files, text: "My Files", icon: FilesIcon },
 		{ href: AppRoute.Shared, text: "Shared With Me", icon: ShareIcon },
 	];
-  */
+	*/
+
 	return (
 		<nav
 			className={classNames("navigation", className, {
@@ -145,12 +146,12 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 			{isHaveAccessToOrgList && (
 				<NavLink
 					to={AppRoute.OrganizationList}
-					className={(isActive) =>
+					className={
 						classNames("navigation__item", {
 							"navigation__item--active":
-								pathname.includes("/apps/organizations/") &&
+								pathname.includes("organizations") &&
 								!pathname.includes(
-									`/apps/organizations/${user?.organizationId}`
+									user?.organizationId
 								),
 						})
 					}
