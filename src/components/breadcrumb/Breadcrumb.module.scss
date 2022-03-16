@@ -4,13 +4,14 @@
 
 .list {
 	list-style: none;
-	color: $inactive;
+
 	display: flex;
 	margin: 0;
 	padding: 0;
 	font-weight: 600;
 	font-size: 16px;
 	line-height: 1.375;
+	color: $main-text;
 }
 
 .item {
@@ -26,12 +27,8 @@
 }
 
 .link {
-	color: inherit;
+	color: $inactive;
 	text-decoration: none;
-
-	&[aria-current] {
-		color: $main-text;
-	}
 
 	@include hover-focus {
 		color: $accent;

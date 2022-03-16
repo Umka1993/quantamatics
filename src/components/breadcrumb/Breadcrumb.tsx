@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import style from "./Breadcrumb.module.scss";
 
 export interface BreadcrumbLink {
-	href: string;
+	href?: string;
 	text: string;
 }
 
@@ -20,15 +20,18 @@ const Breadcrumb: FunctionComponent<BreadcrumbProps> = ({
 	return (
 		<nav aria-label={label} {...other}>
 			<ol className={style.list}>
-				{links.map((link, index) => (
-					<li className={style.item} key={link.href}>
-						<Link
-							to={link.href}
-							aria-current={index === links.length - 1 ? "page" : undefined}
-							className={style.link}
-						>
-							{link.text}
-						</Link>
+				{links.map(({ text, href }, index) => (
+					<li className={style.item} key={text}>
+						{href ? (
+							<Link
+								to={href}
+								className={style.link}
+							>
+								{text}
+							</Link>
+						) : (
+							text
+						)}
 					</li>
 				))}
 			</ol>

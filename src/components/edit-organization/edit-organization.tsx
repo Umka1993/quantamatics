@@ -77,7 +77,7 @@ export const EditOrganization: FunctionComponent = () => {
 
 	const links: BreadcrumbLink[] = [{ href: AppRoute.OrganizationList, text: "Organizations" }]
 
-	organization && links.push({ href: `/organizations/${organization.id}`, text: organization.name })
+	organization && links.push({ text: organization.name })
 
 	return (
 		<>
