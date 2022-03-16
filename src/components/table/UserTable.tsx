@@ -11,17 +11,17 @@ import EditSVG from "./assets/edit-row-icon.svg";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
-import { IUpdateUser } from "../../types/user";
+import { IUpdateUser, IUser } from "../../types/user";
 import ISort from "../../types/sort-type";
 import { USER_HEADER } from "./utils/constants";
 import { SortDirection } from "../../data/enum";
 import style from "./styles/table.module.scss";
 
 interface UserTableProps {
-	list: IUpdateUser[];
-	setter: Dispatch<SetStateAction<IUpdateUser[]>>;
+	list: IUser[];
+	setter: Dispatch<SetStateAction<IUser[]>>;
 	dates: Map<number, string>;
-	userSetter: Dispatch<SetStateAction<IUpdateUser | null>>;
+	userSetter: Dispatch<SetStateAction<IUser | null>>;
 }
 
 export const UserTable: FunctionComponent<UserTableProps> = ({

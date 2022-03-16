@@ -12,7 +12,7 @@ import { SelectorInput } from "../selector-input";
 
 import { Error, OrganizationKey, UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
-import { IUpdateUser } from "../../types/user";
+import { IUpdateUser, IUser } from "../../types/user";
 import {
 	useUpdateUserMutation,
 	useUpdateUserRolesMutation,
@@ -35,7 +35,7 @@ import { useParams } from "react-router-dom";
 import RoleSelector from "../role-selector";
 interface IEditProfile {
 	onClose: () => void;
-	user: IUpdateUser;
+	user: IUser;
 }
 
 export const EditProfile: FunctionComponent<IEditProfile> = ({
@@ -87,7 +87,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 			firstName !== user.firstName ||
 			lastName !== user.lastName ||
 			companyName !== user.companyName ||
-			subscriptionEndDate !== user.subscriptionEndDate;
+			subscriptionEndDate !== new Date(user.subscriptionEndDate);
 
 		const rolesAsArray = Array.from(userRoles);
 		const rolesIsSame =
@@ -169,7 +169,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 			setSurname(user.lastName);
 			setOrganization(user.companyName);
 			setEmail(user.email);
-			setExpiration(user.subscriptionEndDate);
+			setExpiration(new Date(user.subscriptionEndDate));
 			setRoles(new Set(user.userRoles));
 			fetchUserAssets(user.id);
 		}

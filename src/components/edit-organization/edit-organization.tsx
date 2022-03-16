@@ -15,7 +15,7 @@ import style from "./edit-organizations.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import { EMPTY_ORGANIZATION } from "./utils";
 import { useGetOrganizationUsersQuery } from "../../api/user";
-import { IUpdateUser } from "../../types/user";
+import { IUpdateUser, IUser } from "../../types/user";
 import Dialog from "../dialog";
 import { EditProfile } from "../edit-modal/edit-profile";
 import Loader from "../loader";
@@ -35,23 +35,19 @@ export const EditOrganization: FunctionComponent = () => {
 
 	const {
 		data: userList,
-		isSuccess,
+		isSuccess: isUsersLoaded,
 		isLoading: isUsersLoading,
 	} = useGetOrganizationUsersQuery(id as string);
 
-	const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
-	const [selectedUser, setUser] = useState<IUpdateUser | null>(null);
+	const [localRows, setLocalRows] = useState<IUser[]>([]);
+	const [selectedUser, setUser] = useState<IUser | null>(null);
 
 	useEffect(() => {
-		if (isSuccess && userList) {
-			const usersWithDate = userList.map((user) => ({
-				...user,
-				subscriptionEndDate: new Date(user.subscriptionEndDate),
-			}));
-			sessionStorage.setItem("table-rows", JSON.stringify(usersWithDate));
-			setLocalRows(usersWithDate);
+		if (userList) {
+			sessionStorage.setItem("table-rows", JSON.stringify(userList));
+			setLocalRows(userList);
 		}
-	}, [isSuccess, userList]);
+	}, [isUsersLoaded, userList]);
 
 	const isHaveAccessToOrgList =
 		user?.userRoles.includes(UserRole.Admin) ||
@@ -71,7 +67,7 @@ export const EditOrganization: FunctionComponent = () => {
 			});
 			return result;
 		}
-	}, [isSuccess]);
+	}, [isUsersLoaded]);
 
 	const closeModal = () => setUser(null);
 
