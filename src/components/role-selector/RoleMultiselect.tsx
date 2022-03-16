@@ -30,6 +30,7 @@ interface RoleMultiSelectProp extends SelectHTMLAttributes<HTMLSelectElement> {
 
 	errorMessage?: string;
 	showError?: boolean;
+	variant?: "squared";
 
 	inputList?: string;
 }
@@ -44,6 +45,7 @@ const RoleMultiSelect: FunctionComponent<RoleMultiSelectProp> = ({
 	errorMessage,
 	showError,
 	className,
+	variant,
 	disabled,
 	inputList = "",
 }) => {
@@ -87,7 +89,7 @@ const RoleMultiSelect: FunctionComponent<RoleMultiSelectProp> = ({
 	useClickOutside(rootElement, () => setShowOptions(false), showOptions);
 	return (
 		<div
-			className={classNames("app-input multiselect", className)}
+			className={classNames("app-input multiselect", { "app-input--squared": variant === "squared" }, className)}
 			ref={rootElement}
 			onClick={(e) => e.stopPropagation()}
 		>

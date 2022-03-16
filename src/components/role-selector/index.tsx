@@ -14,12 +14,14 @@ interface RoleSelectorProps {
 	isSuperAdmin: boolean;
 	defaultRoles: Set<UserRole>;
 	externalSetter: Dispatch<SetStateAction<Set<UserRole>>>;
+	variant?: "squared";
 }
 
 const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
 	defaultRoles,
 	externalSetter,
 	isSuperAdmin,
+	variant
 }) => {
 	const options: Option<UserRole>[] = isSuperAdmin
 		? [
@@ -34,6 +36,7 @@ const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
 			setter={externalSetter}
 			options={options}
 			label="Organization Role"
+			variant={variant}
 		/>
 	) : (
 		<div className={style.checkboxes}>
