@@ -56,11 +56,11 @@ export default function PrivateRoutes(): ReactElement {
 			{isOrganizationsAvailable && (
 				<>
 					<Route
-						path="/apps/organizations/list"
+						path={AppRoute.OrganizationList}
 						element={<OrganizationList />}
 					/>
 					<Route
-						path="/apps/organizations/new-organization"
+						path={AppRoute.CreateOrganization}
 						element={<CreateOrganizationForm />}
 					/>
 				</>
@@ -68,12 +68,9 @@ export default function PrivateRoutes(): ReactElement {
 
 			{isEditOrgAvailable && (
 				<>
+					<Route path={AppRoute.Organizations} element={<EditOrganization />} />
 					<Route
-						path="/apps/organizations/:id"
-						element={<EditOrganization />}
-					/>
-					<Route
-						path="/apps/organizations/:id/add-user"
+						path={AppRoute.Organizations + "/add-user"}
 						element={<AddUserForm />}
 					/>
 					<Route path={AppRoute.Success} element={<SuccessMessage />} />

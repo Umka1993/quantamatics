@@ -144,7 +144,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 
 			{isHaveAccessToOrgList && (
 				<NavLink
-					to="/apps/organizations/list"
+					to={AppRoute.OrganizationList}
 					className={(isActive) =>
 						classNames("navigation__item", {
 							"navigation__item--active":
@@ -167,7 +167,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 
 			{user?.userRoles.includes(UserRole.OrgAdmin) && (
 				<NavLink
-					to={`/apps/organizations/${user?.organizationId}`}
+					to={`/organizations/${user?.organizationId}`}
 					className={({ isActive }) =>
 						isActive
 							? "navigation__item navigation__item--active"

@@ -81,7 +81,7 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 						<td className={style.cell}>
 							<Link
 								className={style.action}
-								to={`/apps/organizations/${organization.id}`}
+								to={`/organizations/${organization.id}`}
 							>
 								<EditSVG role="img" aria-label="edit" fill="currentColor" />
 							</Link>

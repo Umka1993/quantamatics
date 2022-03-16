@@ -12,9 +12,9 @@ export const enum AppRoute {
 	ExcelLibrary = '/excel-library',
 	Settings = '/settings',
 
-	Organizations = '/apps/organizations/:path',
-	OrganizationList = '/apps/organizations/list',
-	CreateOrganization = '/apps/organizations/new-organization',
+	Organizations = '/organizations/:id',
+	OrganizationList = '/organizations/list',
+	CreateOrganization = '/organizations/new-organization',
 	SignUp = '/sign-up',
 	ResetPassword = '/reset-password',
 	Login = '/login',
