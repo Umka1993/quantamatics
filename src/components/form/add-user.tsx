@@ -70,7 +70,7 @@ const InviteUserForm: FunctionComponent = () => {
 		}
 	}, [isError]);
 
-	const backLink = `/apps/organizations/${company?.id}`;
+	const backLink = `/organizations/${company?.id}`;
 
 	useEffect(() => {
 		if (isUserRegistered) {
