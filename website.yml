@@ -3,9 +3,9 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Creates the S3 bucket and distribution for deploying the static files for Quantamatics UI.
 
 Parameters:
-  DistributionAlias:
+  DistributionAliases:
     Description: Alias for the website.
-    Type: String
+    Type: CommaDelimitedList
   CertificateArn:
     Description: ARN of the certificate to utilize.
     Type: String
@@ -36,8 +36,7 @@ Resources:
           Id: !Sub S3-Website-${!GetAtt UiFilesBucket.RegionalDomainName}       
           CustomOriginConfig:
             OriginProtocolPolicy: http-only
-        Aliases:
-          - !Ref DistributionAlias
+        Aliases: !Ref DistributionAliases
         DefaultCacheBehavior:
           ViewerProtocolPolicy: redirect-to-https
           TargetOriginId: !Sub S3-Website-${!GetAtt UiFilesBucket.RegionalDomainName}
