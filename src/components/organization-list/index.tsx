@@ -74,7 +74,7 @@ export default function OrganizationList(): ReactElement {
 				<SearchField search={search} setSearch={setSearch} />
 				<Button className={style.button} href={AppRoute.CreateOrganization}>
 					<SpriteIcon icon="plus" width={10} />
-					Add New
+					Create
 				</Button>
 			</header>
 
