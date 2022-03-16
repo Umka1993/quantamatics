@@ -19,8 +19,9 @@
 		font-size: 16px;
 		line-height: 1.125;
 		color: $main-text;
-		display: flex;
-		// flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 10px;
 		justify-content: space-between;
 		border-bottom: 1px solid transparentize($inactive, 0.76);
 
@@ -32,14 +33,26 @@
 
 	&__name {
 		font: inherit;
-		flex: 0 1 52%;
+		flex: 0 1 50%;
 		height: 100%;
+
+		position: sticky;
+		top: 0;
 	}
 
 	&__value {
 		color: $headlines;
 		margin: 0;
 		text-align: right;
+		justify-self: end;
+
+		&--asset {
+			overflow: auto;
+			max-width: 100%;
+			white-space: nowrap;
+
+			@include hide-scrollbar;
+		}
 	}
 
 	&__button {

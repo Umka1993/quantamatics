@@ -114,7 +114,7 @@ export const EditPassword: React.FunctionComponent<IEditProfile> = ({
 					<dt className="edit-account__name">Assigned Assets</dt>
 
 					{userAsset && Boolean(userAsset.length) && (
-						<dd className="edit-account__value">
+						<dd className="edit-account__value edit-account__value--asset">
 							<ComaList
 								list={userAsset.map(
 									({ name }: AssetServerResponse) => name
