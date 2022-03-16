@@ -16,14 +16,18 @@
 	text-decoration: none;
 	padding: 0;
 
-	text-decoration: 1.5px underline dotted;
+	text-decoration: {
+		line: underline;
+		style: dotted;
+		thickness: 1.5px;
+	}
 	text-underline-offset: 0.2em;
 
 	&:not(:disabled):hover {
 		color: $accent;
 		text-decoration: none;
 		&:after {
-			content: '';
+			content: "";
 			z-index: -9999999;
 		}
 	}
