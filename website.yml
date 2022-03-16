@@ -4,7 +4,7 @@ Description: Creates the S3 bucket and distribution for deploying the static fil
 
 Parameters:
   DistributionAliases:
-    Description: Alias for the website.
+    Description: Aliases for the website.
     Type: CommaDelimitedList
   CertificateArn:
     Description: ARN of the certificate to utilize.
