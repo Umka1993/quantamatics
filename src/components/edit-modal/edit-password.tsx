@@ -3,7 +3,6 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Button, { ResetButton } from "../button";
 import Password from "../app-input/password";
 
-import Modal from "../modal";
 import "./styles/edit-account.scss";
 import { adaptRoles } from "../../services/baseService";
 import KeyIcon from "./assets/key.svg";

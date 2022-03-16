@@ -6,7 +6,7 @@ import type { RouteParams } from "../../types/route-params";
 import { useGetOrganizationQuery } from "../../api/organization";
 import IApiError from "../../types/api-error";
 import useUser from "../../hooks/useUser";
-import { UserRole } from "../../data/enum";
+import { AppRoute, UserRole } from "../../data/enum";
 
 import { EditOrganizationForm } from "../form";
 import useToggle from "../../hooks/useToggle";
@@ -19,6 +19,7 @@ import { IUpdateUser } from "../../types/user";
 import Dialog from "../dialog";
 import { EditProfile } from "../edit-modal/edit-profile";
 import Loader from "../loader";
+import Breadcrumb, { BreadcrumbLink } from "../breadcrumb/Breadcrumb";
 
 export const EditOrganization: FunctionComponent = () => {
 	const user = useUser();
@@ -29,12 +30,14 @@ export const EditOrganization: FunctionComponent = () => {
 		data: organization,
 		isError,
 		error,
-		isLoading: isOrganizationLoading
+		isLoading: isOrganizationLoading,
 	} = useGetOrganizationQuery(id as string);
 
-	const { data: userList, isSuccess, isLoading: isUsersLoading } = useGetOrganizationUsersQuery(
-		id as string
-	);
+	const {
+		data: userList,
+		isSuccess,
+		isLoading: isUsersLoading,
+	} = useGetOrganizationUsersQuery(id as string);
 
 	const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
 	const [selectedUser, setUser] = useState<IUpdateUser | null>(null);
@@ -73,12 +76,20 @@ export const EditOrganization: FunctionComponent = () => {
 	const closeModal = () => setUser(null);
 
 	if (isOrganizationLoading && isUsersLoading) {
-		return <Loader />
+		return <Loader />;
 	}
+
+	const links: BreadcrumbLink[] = [{ href: AppRoute.OrganizationList, text: "Organizations" }]
+
+	organization && links.push({ href: `/organizations/${organization.id}`, text: organization.name })
 
 	return (
 		<>
 			<div className={style.organization}>
+				<Breadcrumb
+					links={links}
+					className={style.nav}
+				/>
 				{isError ? (
 					<p>Error on loading data: {(error as IApiError).data} </p>
 				) : (
@@ -116,10 +127,14 @@ export const EditOrganization: FunctionComponent = () => {
 					</Button>
 				</div>
 				{endDates && (
-					<UserTable list={localRows} setter={setLocalRows} dates={endDates} userSetter={setUser} />
+					<UserTable
+						list={localRows}
+						setter={setLocalRows}
+						dates={endDates}
+						userSetter={setUser}
+					/>
 				)}
 			</section>
-
 
 			<Dialog
 				open={selectedUser !== null}
@@ -129,11 +144,10 @@ export const EditOrganization: FunctionComponent = () => {
 				id="org-user-modal"
 				wrapperClass="edit-account"
 			>
-				{selectedUser !== null &&
-					< EditProfile user={selectedUser} onClose={closeModal} />
-				}
+				{selectedUser !== null && (
+					<EditProfile user={selectedUser} onClose={closeModal} />
+				)}
 			</Dialog>
-
 		</>
 	);
 };
