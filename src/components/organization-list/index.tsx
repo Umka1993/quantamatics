@@ -10,7 +10,6 @@ import useUser from "../../hooks/useUser";
 import { useGetAllOrganizationsQuery } from "../../api/organization";
 import { Organization } from "../../types/organization/types";
 import Loader from "../loader";
-import NoResultsMessage from "../table/NoResultsMessage";
 
 export default function OrganizationList(): ReactElement {
 	const [search, setSearch] = useState("");
@@ -61,7 +60,7 @@ export default function OrganizationList(): ReactElement {
 					comments.toLocaleLowerCase().includes(normalizedSearchQuery)
 			);
 
-			sessionStorage.setItem('table-rows', JSON.stringify(filteredOrgs))
+			sessionStorage.setItem("table-rows", JSON.stringify(filteredOrgs));
 			setLocalRows(filteredOrgs);
 		},
 		[search, setLocalRows]
@@ -79,9 +78,7 @@ export default function OrganizationList(): ReactElement {
 				</Button>
 			</header>
 
-			{isError && <p>Something went wrong</p>}
-
-			{!listIsReady && (
+			{!isError && !listIsReady && (
 				<div
 					style={{
 						position: "relative",
@@ -91,15 +88,19 @@ export default function OrganizationList(): ReactElement {
 					<Loader />
 				</div>
 			)}
+			{isError && <samp className={style.output}>Something went wrong</samp>}
 
 			{listIsReady &&
 				(localRows.length ? (
 					<OrganizationTable list={localRows} setter={setLocalRows} />
+				) : search.length ? (
+					<samp className={style.output}>
+						No results for “
+						{search.length > 32 ? `${search.slice(0, 32)}…` : search}” were
+						found.
+					</samp>
 				) : (
-					<NoResultsMessage
-						dataPresent={Boolean(localRows.length)}
-						query={search as string}
-					/>
+					<samp className={style.output}>No organizations found</samp>
 				))}
 		</>
 	);
