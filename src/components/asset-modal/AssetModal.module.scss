@@ -2,11 +2,15 @@
 
 .root {
 	padding: 40px 0;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	height: 100%;
 }
 
 .header {
 	padding: 0 40px;
 }
+
 .error {
 	color: $error;
 	margin: 0 40px 16px;
@@ -16,6 +20,15 @@
 .table {
 	width: 100%;
 	display: grid;
+	height: 100%;
+	overflow: auto;
+
+	thead {
+		position: sticky;
+		top: 0;
+		background-color: #fff;
+		z-index: 1;
+	}
 }
 
 .row {

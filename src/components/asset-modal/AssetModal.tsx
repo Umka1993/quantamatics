@@ -50,12 +50,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 	const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
-	const [
-		update,
-		{
-			isLoading: isUpdating,
-		},
-	] = useUpdateOrganizationMutation();
+	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
 	const [getInfoOrg] = useLazyGetOrganizationQuery();
 
 	const isUserOrganization = user?.organizationId === organization?.id;
@@ -180,8 +175,9 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 				...asset,
 				asset: null,
 			})),
-		}).unwrap().then(closeFunction);
-
+		})
+			.unwrap()
+			.then(closeFunction);
 	}
 
 	return (
