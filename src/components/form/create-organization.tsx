@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FunctionComponent, useRef } from "react";
-import "./styles/create-organization.scss";
+import style from "./styles/create-organization.module.scss";
 import Input, { InputURL } from "../app-input";
 import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
@@ -81,7 +81,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 
 	return (
 		<Form
-			className="create-organization"
+			className={style.root}
 			headline="Create an Organization"
 			subtitle="Add a new organization to Quantamatics"
 			onSubmit={handleSubmit}
@@ -89,7 +89,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 			stopLoading={isError || stopLoading}
 			forwardRef={formRef}
 		>
-			<div className="create-organization__fields">
+			<div className={style.fields}>
 				<Input
 					externalSetter={setName}
 					label="Organization Name"
@@ -97,6 +97,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 					value={name}
 					maxLength={64}
 					error={duplicateOrgError}
+					variant='squared'
 				/>
 				<Input
 					externalSetter={setCustomerCrmId}
@@ -104,12 +105,14 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 					value={customerCrmId}
 					maxLength={32}
 					error={duplicateIdError}
+					variant='squared'
 				/>
 				<InputURL
 					externalSetter={setCustomerCrmLink}
 					label="CRM Customer ID Link"
 					value={customerCrmLink}
 					maxLength={72}
+					variant='squared'
 				/>
 				<Input
 					externalSetter={setComments}
@@ -117,10 +120,12 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 					value={comments}
 					maxLength={200}
 					showLimit
+					variant='squared'
 				/>
 			</div>
 			<Button
-				className="create-organization__submit"
+
+				className={style.submit}
 				type="submit"
 				disabled={
 					!name ||
@@ -130,7 +135,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 			>
 				Create
 			</Button>
-			<ResetButton className="create-organization__cancel">Cancel</ResetButton>
+			<ResetButton className={style.cancel}>Cancel</ResetButton>
 		</Form>
 	);
 };

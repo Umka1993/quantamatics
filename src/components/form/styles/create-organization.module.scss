@@ -1,0 +1,28 @@
+@use "../../../sass/variables" as *;
+
+.root {
+	max-width: 420px;
+	margin: auto;
+
+	display: grid;
+	min-height: 600px;
+	height: 100%;
+	align-content: center;
+}
+
+.fields {
+	margin-top: 10px;
+	display: grid;
+	gap: 14px;
+}
+
+.submit {
+	margin-top: 40px;
+	min-height: 48px;
+}
+
+.cancel {
+	margin: 14px auto 0;
+}
+
+
