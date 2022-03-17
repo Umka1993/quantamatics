@@ -1,6 +1,8 @@
-@use "variables" as *;
+@use "variables"as *;
 @use "sass:math";
-@use "mixins" as *;
+@use "mixins"as *;
+
+$webkit-scroll-width: 12px;
 
 *,
 *::before,
@@ -14,8 +16,10 @@
 
 html {
 	height: 100%;
-	line-height: 1.15; /* Correct the line height in all browsers. */
-	-webkit-text-size-adjust: 100%; /* Prevent adjustments of font size after orientation changes in iOS. */
+	line-height: 1.15;
+	/* Correct the line height in all browsers. */
+	-webkit-text-size-adjust: 100%;
+	/* Prevent adjustments of font size after orientation changes in iOS. */
 
 	/* Firefox scrollbar */
 	scrollbar-color: $accent #fff;
@@ -48,7 +52,7 @@ body {
 
 /* Blink/Webkit scrollbar */
 ::-webkit-scrollbar {
-	width: 12px;
+	width: $webkit-scroll-width;
 	height: 5px;
 }
 
@@ -90,6 +94,11 @@ body {
 
 .scroll-lock {
 	overflow: hidden;
+
+	/* Not Firefox */
+	@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+		padding-right: $webkit-scroll-width;
+	}
 }
 
 .link {
@@ -97,7 +106,7 @@ body {
 	text-decoration: none;
 
 	@include hover-focus {
-		color: darken($accent, 10)
+		color: darken($accent, 10);
 	}
 
 	&:focus-visible {
