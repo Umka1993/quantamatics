@@ -25,9 +25,9 @@
 
 	&--organization {
 		grid-template-columns:
-			max(#{math.div(278 - 24, 1110) * 100%}, 140px + 48px)
-			max(#{math.div(202 - 24, 1110) * 100%}, 131px + 48px)
-			max(#{math.div(238 - 24, 1110) * 100%}, 143px + 48px)
+			max(#{math.div(278 - 24, 1110) * 100%}, 140px + 24px)
+			max(#{math.div(202 - 24, 1110) * 100%}, 131px + 24px)
+			max(#{math.div(238 - 24, 1110) * 100%}, 143px + 24px)
 			1fr
 			64px;
 	}
@@ -40,11 +40,6 @@
 			max(#{math.div(186 - 24, 1108) * 100%}, 118px + 24px)
 			1fr
 			64px;
-
-		.cell,
-		.headline {
-			padding-left: 0;
-		}
 	}
 
 	&--body {
@@ -92,7 +87,7 @@
 	color: $headlines;
 
 	border-bottom: 1px solid #eff0f4;
-	padding: 10px 24px;
+	padding: 10px 24px 10px 0;
 	text-align: left;
 
 	&--action {
@@ -113,7 +108,7 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 
-	padding: 0 24px;
+	padding-right: 24px;
 
 	a {
 		white-space: nowrap;

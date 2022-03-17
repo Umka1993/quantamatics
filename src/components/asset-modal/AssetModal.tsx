@@ -53,6 +53,29 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
 	const [getInfoOrg] = useLazyGetOrganizationQuery();
 
+	const scrollRef = useRef<HTMLTableElement>(null);
+
+	const addBorderToTHeadOnScroll = useCallback(() => {
+		if (scrollRef.current) {
+			const theadClassList = scrollRef.current.children[0].classList;
+			const activeClass = style["thead--active"];
+			scrollRef.current.scrollTop >= 5
+				? theadClassList.add(activeClass)
+				: theadClassList.remove(activeClass);
+		}
+	}, [scrollRef.current]);
+
+	useEffect(() => {
+		if (scrollRef.current) {
+			scrollRef.current.addEventListener("scroll", addBorderToTHeadOnScroll);
+			return () =>
+				scrollRef.current?.removeEventListener(
+					"scroll",
+					addBorderToTHeadOnScroll
+				);
+		}
+	}, [scrollRef.current]);
+
 	const isUserOrganization = user?.organizationId === organization?.id;
 
 	const setInitialOrg = useCallback(() => {
@@ -211,8 +234,8 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 					</p>
 				)}
 
-				<table className={style.table}>
-					<thead>
+				<table className={style.table} ref={scrollRef}>
+					<thead className={style.thead}>
 						<tr className={style.row}>
 							<SortTableHeader
 								name="name"

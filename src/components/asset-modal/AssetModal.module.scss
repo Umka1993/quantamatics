@@ -22,12 +22,18 @@
 	display: grid;
 	height: 100%;
 	overflow: auto;
+}
 
-	thead {
-		position: sticky;
-		top: 0;
-		background-color: #fff;
-		z-index: 1;
+.thead {
+	position: sticky;
+	top: 0;
+	background-color: #fff;
+	z-index: 1;
+	border-bottom: 1px solid transparent;
+	transition: border-color 0.2s;
+
+	&--active {
+		border-color: $inactive;
 	}
 }
 
