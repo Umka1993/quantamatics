@@ -15,7 +15,7 @@
 .head {
 	position: sticky;
 	top: 0;
-	z-index: 1;
+	z-index: 2;
 }
 
 .row {
@@ -58,15 +58,17 @@
 
 			border-radius: 0px 2px 2px 0px;
 			height: 100%;
+			height: calc(100% + 1px);
 			left: 0;
-			top: 0;
+			top: -1px;
 			width: 3px;
 			content: "";
 		}
 
 		&:hover,
 		&:focus-within {
-			box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05), inset 0 -1px 0 0 rgba(22, 34, 101, 0.07), 0 -1px 0 0 #eff0f4;
+			box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05), inset 0px -1px 0px rgba(22, 34, 101, 0.07), 0px -1px 0px #eff0f4;
+			z-index: 1;
 
 			.cell {
 				border-color: transparent;
