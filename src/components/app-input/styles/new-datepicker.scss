@@ -1,0 +1,114 @@
+.react-datepicker {
+  width: 100%;
+  padding-top: 36px;
+  border: 0;
+  box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 2px;
+  font-family: "Nunito Sans", system-ui, sans-serif;
+
+  &__triangle {
+    display: none;
+  }
+
+  &-popper {
+    width: 100%;
+  }
+
+  &__month-container {
+    width: inherit;
+
+    .react-datepicker__header {
+      background-color: white;
+      border-bottom: none;
+    }
+  }
+
+  .react-datepicker__current-month, .react-datepicker-time__header, .react-datepicker-year-header {
+    margin-top: 0;
+    display: flex;
+    margin-left: 42px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #003C71;
+  }
+
+  .react-datepicker__navigation {
+    top: 40px;
+
+    &--previous {
+      left: auto;
+      right: 72px;
+    }
+    &--next{
+      right: 55px;
+    }
+
+    &-icon {
+      &::before {
+        //display: none;
+        border-width: 2px 2px 0 0;
+        width: 15px;
+        height: 15px;
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 9px;
+        height: 15px;
+        background: url("../assets/arrowPrew.svg") no-repeat center;
+      }
+    }
+
+  }
+
+  .react-datepicker__day-name,
+  .react-datepicker__day,
+  .react-datepicker__time-name {
+    margin: 21px 14px 0 0;
+    width: 32px;
+    line-height: 32px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    color: #003C71;
+  }
+
+  &__day-name,
+  .react-datepicker__day,
+  .react-datepicker__time-name {
+    width: 32px;
+    line-height: 32px;
+    margin: 0 14px 0 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #7182A6;
+    &:last-child{
+      margin-right: 0;
+    }
+  }
+
+  .react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range, .react-datepicker__month-text--selected, .react-datepicker__month-text--in-selecting-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--selected, .react-datepicker__quarter-text--in-selecting-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--selected, .react-datepicker__year-text--in-selecting-range, .react-datepicker__year-text--in-range {
+    background: #017AEE;
+    border-radius: 2px;
+    color: white;
+  }
+
+  .react-datepicker{
+    &__day--outside-month {
+      color: #BCC4D8;
+    }
+  }
+
+
+
+
+}
+
+
