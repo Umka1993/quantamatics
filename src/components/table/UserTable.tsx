@@ -91,7 +91,8 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 							<button
 								type="button"
 								className={style.action}
-								onClick={() => {
+								onClick={({ currentTarget }) => {
+									currentTarget.blur();
 									userSetter(user)
 								}}
 							>
