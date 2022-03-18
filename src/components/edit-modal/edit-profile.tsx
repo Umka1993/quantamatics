@@ -87,7 +87,8 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 			firstName !== user.firstName ||
 			lastName !== user.lastName ||
 			companyName !== user.companyName ||
-			subscriptionEndDate !== new Date(user.subscriptionEndDate);
+			subscriptionEndDate.toISOString() !==
+			new Date(user.subscriptionEndDate).toISOString();
 
 		const rolesAsArray = Array.from(userRoles);
 		const rolesIsSame =

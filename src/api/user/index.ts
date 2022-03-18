@@ -11,15 +11,7 @@ const usersApi = baseApi.injectEndpoints({
 				method: "GET",
 				params: { orgId },
 			}),
-			providesTags: (result) =>
-				result
-					? [
-						...result.map(({ id }) => ({
-							type: "Users" as const, id,
-						})),
-						{ type: "Users", id: "list" },
-					]
-					: [{ type: "Users", id: "list" }],
+			providesTags: [{ type: "Users", id: "list" }],
 		}),
 
 		getUser: build.query<IUser, string | number>({
