@@ -193,6 +193,10 @@ $text: #bcc4d8;
 		border-color: $accent;
 	}
 
+	&--squared &__icon {
+		inset: auto 15px auto auto;
+	}
+
 	&--validate &__field:not(:placeholder-shown):invalid,
 	&--squared &__field--error {
 		border-color: #ff5757;
