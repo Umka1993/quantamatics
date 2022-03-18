@@ -53,17 +53,17 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
 	const [getInfoOrg] = useLazyGetOrganizationQuery();
 
-	const scrollRef = useRef<HTMLTableElement>(null);
+	const scrollRef = useRef<HTMLTableSectionElement>(null);
 
-	const addBorderToTHeadOnScroll = useCallback(() => {
-		if (scrollRef.current) {
-			const theadClassList = scrollRef.current.children[0].classList;
-			const activeClass = style["thead--active"];
-			scrollRef.current.scrollTop >= 5
-				? theadClassList.add(activeClass)
-				: theadClassList.remove(activeClass);
-		}
-	}, [scrollRef.current]);
+	function addBorderToTHeadOnScroll(this: HTMLTableSectionElement) {
+		const thead = this.previousElementSibling;
+		const activeClass = style["thead--active"];
+
+		thead &&
+			(this.scrollTop >= 5
+				? thead.classList.add(activeClass)
+				: thead.classList.remove(activeClass));
+	}
 
 	useEffect(() => {
 		if (scrollRef.current) {
@@ -234,7 +234,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 					</p>
 				)}
 
-				<table className={style.table} ref={scrollRef}>
+				<table className={style.table}>
 					<thead className={style.thead}>
 						<tr className={style.row}>
 							<SortTableHeader
@@ -255,7 +255,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 							</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody ref={scrollRef}>
 						{Boolean(options.length) &&
 							options.map((option) => (
 								<AssetRow
