@@ -1,22 +1,20 @@
 {
-  "compileOnSave": true,
-  "compilerOptions": {
-    "lib": [
-      "es5", "es6", "dom", "dom.iterable"
-    ],
-    "target": "es6",
-    "module": "esnext",
-    "allowJs": true,
-    "jsx": "react",
-    "outDir": "../publish",
-    "rootDir": "./",
-    "isolatedModules": true,
-    "strict": true,
-    "moduleResolution": "node",
-    "baseUrl": "./src",
-    "typeRoots": ["node_modules/@types", "src/typings"],
-    "esModuleInterop": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+	"compileOnSave": true,
+	"compilerOptions": {
+		"lib": ["es5", "es6", "dom", "dom.iterable"],
+		"target": "es6",
+		"module": "esnext",
+		"allowJs": true,
+		"jsx": "react",
+		"outDir": "../publish",
+		"rootDir": "./",
+		"isolatedModules": true,
+		"strict": true,
+		"moduleResolution": "node",
+		"baseUrl": "./src",
+		"typeRoots": ["node_modules/@types", "src/typings"],
+		"esModuleInterop": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules"]
 }

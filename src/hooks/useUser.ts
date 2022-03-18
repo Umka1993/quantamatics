@@ -3,7 +3,7 @@ import { IUser } from "../types/user";
 import { RootState } from "../store";
 
 export default function useUser() :IUser {
-    const user = useSelector((state: RootState) => state.auth.user);
+	const user = useSelector((state: RootState) => state.auth.user);
 
-    return user as IUser;
+	return user as IUser;
 }

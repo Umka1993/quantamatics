@@ -9,70 +9,70 @@ import useCloseModal from "../../hooks/useCloseModal";
 import { SideBarModalOpen } from "../../types/sidebar-modal";
 
 interface Props {
-    openModal: SideBarModalOpen;
-    openDropdown: boolean;
-    setOpenDropdown: Dispatch<SetStateAction<boolean>>;
+	openModal: SideBarModalOpen;
+	openDropdown: boolean;
+	setOpenDropdown: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function UserMenu({
-    openModal,
-    openDropdown, setOpenDropdown
+	openModal,
+	openDropdown, setOpenDropdown
 }: Props): ReactElement {
-    const logout = useLogout();
-    useCloseModal(openDropdown, setOpenDropdown);
+	const logout = useLogout();
+	useCloseModal(openDropdown, setOpenDropdown);
 
-    return (
-        <div className={style.menu} onClick={(e) => e.stopPropagation()}>
-            <button
-                type="button"
-                onClick={() => setOpenDropdown(false)}
-                className={style.close}
-            >
-                <CrossIcon
-                    width={16}
-                    height={16}
-                    role="img"
-                    aria-label="Close dropdown"
-                />
-            </button>
-            <button
-                type="button"
-                onClick={() => {
-                    openModal("my-account");
-                    setOpenDropdown(false);
-                }}
-                className={style.button}
-            >
-                <ProfileIcon
-                    aria-hidden={true}
-                    width={20}
-                    height={20}
-                    fill="currentColor"
-                />
-                My Account
-            </button>
-            <button
-                type="button"
-                onClick={() => {
-                    openModal("restart-server");
-                    setOpenDropdown(false);
-                }}
-                className={style.button}
-            >
-                <PowerIcon aria-hidden width={16} height={16} fill="currentColor" />
-                Restart Server
-            </button>
-            <button onClick={logout} type="button" className={style.button}>
-                <LogoutIcon
-                    aria-hidden={true}
-                    width={16}
-                    height={16}
-                    fill="currentColor"
-                />
-                Log Out
-            </button>
-        </div>
+	return (
+		<div className={style.menu} onClick={(e) => e.stopPropagation()}>
+			<button
+				type="button"
+				onClick={() => setOpenDropdown(false)}
+				className={style.close}
+			>
+				<CrossIcon
+					width={16}
+					height={16}
+					role="img"
+					aria-label="Close dropdown"
+				/>
+			</button>
+			<button
+				type="button"
+				onClick={() => {
+					openModal("my-account");
+					setOpenDropdown(false);
+				}}
+				className={style.button}
+			>
+				<ProfileIcon
+					aria-hidden={true}
+					width={20}
+					height={20}
+					fill="currentColor"
+				/>
+				My Account
+			</button>
+			<button
+				type="button"
+				onClick={() => {
+					openModal("restart-server");
+					setOpenDropdown(false);
+				}}
+				className={style.button}
+			>
+				<PowerIcon aria-hidden width={16} height={16} fill="currentColor" />
+				Restart Server
+			</button>
+			<button onClick={logout} type="button" className={style.button}>
+				<LogoutIcon
+					aria-hidden={true}
+					width={16}
+					height={16}
+					fill="currentColor"
+				/>
+				Log Out
+			</button>
+		</div>
 
 
-    );
+	);
 }

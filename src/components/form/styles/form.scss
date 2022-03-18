@@ -1,28 +1,28 @@
 @use "../../../sass/variables" as *;
 
 .form {
-  width: 100%;
-  max-width: $form-width;
-  margin: auto;
-  position: relative;
-  &__header {
-    text-align: center;
-    margin-bottom: 50px - 10px;
-  }
+	width: 100%;
+	max-width: $form-width;
+	margin: auto;
+	position: relative;
+	&__header {
+		text-align: center;
+		margin-bottom: 50px - 10px;
+	}
 
-  &__title {
-    margin: 0 0 12px;
+	&__title {
+		margin: 0 0 12px;
 
-    b {
-      font: inherit;
-      color: $accent;
-    }
-  }
+		b {
+			font: inherit;
+			color: $accent;
+		}
+	}
 
-  &__subtitle {
-    font-size: 16px;
-    line-height: 1.125;
-    color: $main-text;
-    margin: 0;
-  }
+	&__subtitle {
+		font-size: 16px;
+		line-height: 1.125;
+		color: $main-text;
+		margin: 0;
+	}
 }

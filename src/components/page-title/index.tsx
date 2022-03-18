@@ -3,35 +3,35 @@ import React, { useEffect, FunctionComponent, HTMLAttributes, useRef } from "rea
 import "./style/page-title.scss";
 
 interface HeadlineProps extends HTMLAttributes<HTMLHeadingElement> {
-    pageTitle?: string;
+	pageTitle?: string;
 }
 
 const Headline: FunctionComponent<HeadlineProps> = ({ pageTitle, children, className, ...other }) => {
-    const headlineRef = useRef<HTMLHeadingElement>(null);
+	const headlineRef = useRef<HTMLHeadingElement>(null);
 
-    useEffect(() => {
-        const oldTitle = document.title;
+	useEffect(() => {
+		const oldTitle = document.title;
 
-        document.title = pageTitle
-            ? pageTitle
-            : `${String(children)} | ${AppInfo.Name}`;
-        
-        // GM: Commenting this out as I am unsure why it is needed
-        // headlineRef.current?.focus();
+		document.title = pageTitle
+			? pageTitle
+			: `${String(children)} | ${AppInfo.Name}`;
 
-        return () => {
-            document.title = oldTitle;
-        };
-    });
-    return (
-        <h1
-            className={["page-title", className].join(" ")}
-            ref={headlineRef} tabIndex={0}
-            {...other}
-        >
-            {children}
-        </h1>
-    );
+		// GM: Commenting this out as I am unsure why it is needed
+		// headlineRef.current?.focus();
+
+		return () => {
+			document.title = oldTitle;
+		};
+	});
+	return (
+		<h1
+			className={["page-title", className].join(" ")}
+			ref={headlineRef} tabIndex={0}
+			{...other}
+		>
+			{children}
+		</h1>
+	);
 };
 
 export default Headline;

@@ -3,121 +3,121 @@
 .button,
 .close,
 .trigger {
-    background-color: transparent;
-    border: none;
-    font: inherit;
-    cursor: pointer;
-    color: $main-text;
+	background-color: transparent;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	color: $main-text;
 
-    &:hover,
-    &:active {
-        color: $accent;
-    }
+	&:hover,
+	&:active {
+		color: $accent;
+	}
 
-    &:focus-visible {
-        color: $accent;
-    }
+	&:focus-visible {
+		color: $accent;
+	}
 }
 
 .trigger {
-    border: none;
-    border-top: 1px solid transparentize($main-text, 0.9);
-    height: 52px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
+	border: none;
+	border-top: 1px solid transparentize($main-text, 0.9);
+	height: 52px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
 
-    font-size: 0;
-    transition-property: font-size;
-    transition-duration: 0.2s;
-    transition-delay: 0.3s;
+	font-size: 0;
+	transition-property: font-size;
+	transition-duration: 0.2s;
+	transition-delay: 0.3s;
 
-    &--wide {
-        font-size: 14px;
-    }
+	&--wide {
+		font-size: 14px;
+	}
 }
 
 .menu {
-    position: fixed;
-    left: 0;
-    z-index: 1;
-    bottom: 52px;
-    width: 248px;
-    background-color: #fff;
-    box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.15);
-    display: grid;
+	position: fixed;
+	left: 0;
+	z-index: 1;
+	bottom: 52px;
+	width: 248px;
+	background-color: #fff;
+	box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.15);
+	display: grid;
 
-    transition: 0.3s ease-in-out;
-    padding: 22px 0 20px;
+	transition: 0.3s ease-in-out;
+	padding: 22px 0 20px;
 
-    @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-        background-color: transparent;
-        background-image: linear-gradient(149.05deg, rgba(255, 255, 255, 0.8) 3.23%, rgba(255, 255, 255, 0.7) 98.66%);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-    }
+	@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+		background-color: transparent;
+		background-image: linear-gradient(149.05deg, rgba(255, 255, 255, 0.8) 3.23%, rgba(255, 255, 255, 0.7) 98.66%);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+	}
 }
 
 .close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    color: $inactive;
-    z-index: 2;
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	color: $inactive;
+	z-index: 2;
 }
 
 .button {
-    text-align: left;
-    padding: 12px 26px;
-    display: flex;
-    align-items: center;
+	text-align: left;
+	padding: 12px 26px;
+	display: flex;
+	align-items: center;
 
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 18px;
-    position: relative;
+	font-weight: 300;
+	font-size: 16px;
+	line-height: 18px;
+	position: relative;
 
-    svg {
-        margin-right: 16px;
-        color: $inactive;
-    }
+	svg {
+		margin-right: 16px;
+		color: $inactive;
+	}
 
-    &:hover,
-    &:active {
-        font-weight: 500;
-        svg {
-            color: currentColor;
-        }
+	&:hover,
+	&:active {
+		font-weight: 500;
+		svg {
+			color: currentColor;
+		}
 
-        &::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 12px;
-            height: 22px;
-            width: 2px;
-            background-color: currentColor;
-            border-radius: 0px 5px 5px 0px;
-        }
-    }
+		&::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 12px;
+			height: 22px;
+			width: 2px;
+			background-color: currentColor;
+			border-radius: 0px 5px 5px 0px;
+		}
+	}
 
-    &:focus-visible {
-        font-weight: 500;
-        svg {
-            color: currentColor;
-        }
+	&:focus-visible {
+		font-weight: 500;
+		svg {
+			color: currentColor;
+		}
 
-        &::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 12px;
-            height: 22px;
-            width: 2px;
-            background-color: currentColor;
-            border-radius: 0px 5px 5px 0px;
-        }
-    }
+		&::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 12px;
+			height: 22px;
+			width: 2px;
+			background-color: currentColor;
+			border-radius: 0px 5px 5px 0px;
+		}
+	}
 }

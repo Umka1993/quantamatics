@@ -1,3 +1,3 @@
 export type RouteParams = {
-    id: string;
+	id: string;
 };
