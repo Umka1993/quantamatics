@@ -1,19 +1,19 @@
 @use "../../sass/variables.scss" as *;
 
 .checkboxes {
-    display: flex;
-    justify-content: space-between;
-    border: none;
-    margin: 0;
-    padding: 0;
-    justify-content: space-between;
-    gap: 20px;
+	display: flex;
+	justify-content: space-between;
+	border: none;
+	margin: 0;
+	padding: 0;
+	justify-content: space-between;
+	gap: 20px;
 }
 
 .legend {
-    color: inherit;
-    margin: 0;
-    padding: 0;
-    float: left;
-    font-weight: inherit;
+	color: inherit;
+	margin: 0;
+	padding: 0;
+	float: left;
+	font-weight: inherit;
 }

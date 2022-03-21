@@ -1,6 +1,6 @@
 interface IApiError {
-    status: number,
-    data: string,
+	status: number,
+	data: string,
 }
 
 export default IApiError;

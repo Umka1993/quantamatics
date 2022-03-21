@@ -2,106 +2,119 @@
 @use "../../../sass/mixins" as *;
 
 .edit-account {
-    min-height: 650px;
-    height: calc(100vh - 80px);
-    max-height: 720px;
+	min-height: 650px;
+	height: calc(100vh - 80px);
+	max-height: 720px;
 
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-    &__list {
-        margin: 21px 0 0;
-    }
+	&__list {
+		margin: 21px 0 0;
+	}
 
-    &__row {
-        padding: 11px 0;
-        font-weight: normal;
-        font-size: 16px;
-        line-height: 1.125;
-        color: $main-text;
-        display: flex;
-        // flex-wrap: wrap;
-        justify-content: space-between;
-        border-bottom: 1px solid transparentize($inactive, 0.76);
+	&__row {
+		padding: 11px 0;
+		font-weight: normal;
+		font-size: 16px;
+		line-height: 1.125;
+		color: $main-text;
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 10px;
+		justify-content: space-between;
+		border-bottom: 1px solid transparentize($inactive, 0.76);
 
-        &--inactive {
-            border-bottom: none;
-            color: $inactive;
-        }
-    }
+		&--inactive {
+			border-bottom: none;
+			color: $inactive;
+		}
+	}
 
-    &__name {
-        font: inherit;
-        flex: 0 1 52%;
-        height: 100%;
-    }
+	&__name {
+		font: inherit;
+		flex: 0 1 50%;
+		height: 100%;
 
-    &__value {
-        color: $headlines;
-        margin: 0;
-        text-align: right;
-    }
+		position: sticky;
+		top: 0;
+	}
 
-    &__button {
-        all: unset;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        svg {
-            margin-left: 6px;
-        }
+	&__value {
+		color: $headlines;
+		margin: 0;
+		text-align: right;
+		justify-self: end;
 
-        @include hover-focus {
-            color: $accent;
-        }
-    }
+		&--asset {
+			overflow: auto;
+			max-width: 100%;
+			white-space: nowrap;
 
-    &__form {
-        margin: 4px 0 20px;
-        display: grid;
-        gap: 4px;
+			@include hide-scrollbar;
+		}
+	}
 
-        &--pass {
-            position: relative;
-            .app-input {
-                &__field {
-                    padding-right: 5em;
-                }
+	&__button {
+		all: unset;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		svg {
+			margin-left: 6px;
+		}
 
-                &__error {
-                    font-size: 14px;
-                    margin-top: 0.43em;
-                }
-            }
-        }
-    }
-    &__form--pass &__button--cancel {
-        position: absolute;
-        right: 1.66em;
-        top: 0.55em;
-        z-index: 2;
-    }
+		@include hover-focus {
+			color: $accent;
+		}
+	}
 
-    &__footer {
-        margin-top: auto;
-        display: grid;
-        grid-template-columns: auto 140px;
-        align-items: center;
-        justify-content: end;
-        gap: 40px;
-    }
+	&__form {
+		margin: 4px 0 20px;
+		display: grid;
+		gap: 4px;
 
-    &__form-account {
-        margin-top: 30px;
-        display: grid;
-        gap: 30px - 10px;
+		&--pass {
+			position: relative;
+			.app-input {
+				&__field {
+					padding-right: 5em;
+				}
 
-        .selector-input {
-            margin-top: 10px;
-        }
-    }
+				&__error {
+					font-size: 14px;
+					margin-top: 0.43em;
+				}
+			}
+		}
+	}
+	&__form--pass &__button--cancel {
+		position: absolute;
+		right: 1.66em;
+		top: 0.55em;
+		z-index: 2;
+	}
 
-    .check-block {
-        color: $headlines;
-    }
+	&__footer {
+		margin-top: auto;
+		display: grid;
+		grid-template-columns: auto 140px;
+		align-items: center;
+		justify-content: end;
+		gap: 40px;
+	}
+
+	&__form-account {
+		margin-top: 30px;
+		display: grid;
+		gap: 30px - 10px;
+
+		.selector-input {
+			margin-top: 10px;
+		}
+	}
+
+	.check-block {
+		color: $headlines;
+	}
 }

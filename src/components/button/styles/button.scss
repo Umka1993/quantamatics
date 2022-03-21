@@ -2,74 +2,74 @@
 @use "../../../sass/mixins" as *;
 
 .button {
-  font: inherit;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 1.125;
-  display: flex;
-  align-items: center;
-  text-align: center;
+	font: inherit;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 1.125;
+	display: flex;
+	align-items: center;
+	text-align: center;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  outline: none;
-  cursor: pointer;
-  box-sizing: border-box;
-  padding: 0;
-  background-color: transparent;
-  border: 1px solid $accent;
-  transition: 0.3s ease all;
-  padding: 11px;
+	outline: none;
+	cursor: pointer;
+	box-sizing: border-box;
+	padding: 0;
+	background-color: transparent;
+	border: 1px solid $accent;
+	transition: 0.3s ease all;
+	padding: 11px;
 
-  border-radius: 2px;
-  color: $accent;
-  text-decoration: none;
+	border-radius: 2px;
+	color: $accent;
+	text-decoration: none;
 
-  svg:first-of-type {
-    margin-right: 7px;
-  }
+	svg:first-of-type {
+		margin-right: 7px;
+	}
 
-  @include hover-focus {
-    background: $accent;
-    color: #ffffff;
-  }
+	@include hover-focus {
+		background: $accent;
+		color: #ffffff;
+	}
 
-  &[disabled] {
-    cursor: default;
-    color: $inactive;
-    border-color: $inactive;
-    &:hover {
-      background: #fff;
-      color: $inactive;
-    }
-  }
+	&[disabled] {
+		cursor: default;
+		color: $inactive;
+		border-color: $inactive;
+		&:hover {
+			background: #fff;
+			color: $inactive;
+		}
+	}
 
-  &--valid {
-    background-color: #00C04D;
-    color: #fff;
-    border-color: #00C04D;
-    &:disabled {
-      color: white;
-      &:hover {
-        background-color: #00C04D;
-        color: #fff;
-      }
-    }
+	&--valid {
+		background-color: #00C04D;
+		color: #fff;
+		border-color: #00C04D;
+		&:disabled {
+			color: white;
+			&:hover {
+				background-color: #00C04D;
+				color: #fff;
+			}
+		}
 
-    @include hover-focus {
-      background: #00C04D;
-    }
-  }
+		@include hover-focus {
+			background: #00C04D;
+		}
+	}
 
-  &--danger {
-    color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545;
+	&--danger {
+		color: #fff;
+		background-color: #dc3545;
+		border-color: #dc3545;
 
-    @include hover-focus {
-      background: darken(#dc3545, 10);
-    }
-  }
+		@include hover-focus {
+			background: darken(#dc3545, 10);
+		}
+	}
 }

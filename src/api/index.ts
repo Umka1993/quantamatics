@@ -6,12 +6,12 @@ import baseQuery from "./base/";
  */
 
 const api = createApi({
-    reducerPath: "quantamaticsApi",
-    baseQuery,
-    tagTypes: ["Organizations", "Users", "Assets"],
+	reducerPath: "quantamaticsApi",
+	baseQuery,
+	tagTypes: ["Organizations", "Users", "Assets"],
 
-    endpoints: (_build) => ({
-    }),
+	endpoints: (_build) => ({
+	}),
 });
 
 export default api;
