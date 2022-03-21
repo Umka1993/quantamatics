@@ -6,20 +6,20 @@ import type { RouteParams } from "../../types/route-params";
 import { useGetOrganizationQuery } from "../../api/organization";
 import IApiError from "../../types/api-error";
 import useUser from "../../hooks/useUser";
-import { AppRoute, UserRole } from "../../data/enum";
+import { UserRole } from "../../data/enum";
 
-import { EditOrganizationForm } from "../form";
 import useToggle from "../../hooks/useToggle";
 import AssetModal from "../asset-modal/AssetModal";
 import style from "./edit-organizations.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import { EMPTY_ORGANIZATION } from "./utils";
 import { useGetOrganizationUsersQuery } from "../../api/user";
-import { IUpdateUser, IUser } from "../../types/user";
+import { IUser } from "../../types/user";
 import Dialog from "../dialog";
 import { EditProfile } from "../edit-modal/edit-profile";
 import Loader from "../loader";
-import Breadcrumb, { BreadcrumbLink } from "../breadcrumb/Breadcrumb";
+import OrganizationInfo from "../organization-info/OrganizationInfo";
+import OrganizationModal from "../organization-modal/OrganizationModal";
 
 export const EditOrganization: FunctionComponent = () => {
 	const user = useUser();
@@ -54,6 +54,7 @@ export const EditOrganization: FunctionComponent = () => {
 		user?.userRoles.includes(UserRole.OrgOwner);
 
 	const [isAssetOpened, toggleAssetModal] = useToggle(false);
+	const [isOrganizationOpened, toggleOrganizationModal] = useToggle(false);
 
 	const hasAssets =
 		organization && Boolean(organization.organizationAssets.length);
@@ -75,34 +76,37 @@ export const EditOrganization: FunctionComponent = () => {
 		return <Loader />;
 	}
 
-	const links: BreadcrumbLink[] = [{ href: AppRoute.OrganizationList, text: "Organizations" }]
-
-	organization && links.push({ text: organization.name })
+	const selectedOrganization = organization || EMPTY_ORGANIZATION;
 
 	return (
 		<>
-			<div className={style.organization}>
-				<Breadcrumb
-					links={links}
-					className={style.nav}
-				/>
-				{isError ? (
-					<p>Error on loading data: {(error as IApiError).data} </p>
-				) : (
-					<>
-						<EditOrganizationForm
-							organization={organization || EMPTY_ORGANIZATION}
-							isHaveAccessToOrgList={isHaveAccessToOrgList}
-							toggleAssetModal={toggleAssetModal}
-						/>
-						<AssetModal
-							open={isAssetOpened}
-							closeFunction={toggleAssetModal}
-							organization={organization || EMPTY_ORGANIZATION}
-						/>
-					</>
-				)}
-			</div>
+			{isError ? (
+				<p className={style.organization}>
+					Error on loading data: {(error as IApiError).data}{" "}
+				</p>
+			) : (
+				<>
+					<OrganizationInfo
+						organization={selectedOrganization}
+						toggleAssetModal={toggleAssetModal}
+						toggleOrganizationModal={toggleOrganizationModal}
+						className={style.organization}
+					/>
+
+					<AssetModal
+						open={isAssetOpened}
+						closeFunction={toggleAssetModal}
+						organization={selectedOrganization}
+					/>
+
+					<OrganizationModal
+						open={isOrganizationOpened}
+						closeFunction={toggleOrganizationModal}
+						organization={selectedOrganization}
+					/>
+				</>
+			)}
+
 			<section>
 				<div className={style.subheader}>
 					<h2>User Accounts</h2>

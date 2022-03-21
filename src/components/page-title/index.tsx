@@ -16,7 +16,7 @@ const Headline: FunctionComponent<HeadlineProps> = ({ pageTitle, children, class
 			? pageTitle
 			: `${String(children)} | ${AppInfo.Name}`;
 
-		// GM: Commenting this out as I am unsure why it is needed
+		// * Uncomment for a11y improvements. Screen Reader will read headline on mount
 		// headlineRef.current?.focus();
 
 		return () => {
