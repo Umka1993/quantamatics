@@ -30,12 +30,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 }) => {
 	const [
 		update,
-		{
-			isSuccess: isUpdated,
-			isLoading: isUpdating,
-			isError: isUpdateError,
-			error: updateError,
-		},
+		{ isLoading: isUpdating, isError: isUpdateError, error: updateError },
 	] = useUpdateOrganizationMutation();
 
 	const [name, setName] = useState<string>(organization.name);
@@ -49,9 +44,9 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 		organization.comments
 	);
 
-	const [isSavedMessageActive, setSavedMessageActive] = useState(false);
-
 	const [isChanged, setIsChanged] = useState(false);
+
+	const [closeError, setCloseError] = useState("");
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -114,14 +109,6 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 		}
 	}, [isUpdateError]);
 
-	useEffect(() => {
-		if (isSavedMessageActive) {
-			setTimeout(() => setSavedMessageActive(false), 2000);
-			setIsChanged(false);
-			setCustomerLink(addHTTPtoURL(customerCrmLink));
-		}
-	}, [isSavedMessageActive]);
-
 	useEffect(setInitialOrg, [organization]);
 
 	useEffect(() => {
@@ -135,10 +122,26 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 		}
 	}, [name, customerCrmId, customerCrmLink, comments, organization]);
 
+	function checkErrorsOrClose() {
+		if (closeError.length) {
+			setCloseError("");
+		} else {
+			if (isChanged) {
+				setCloseError(
+					"Your changes will not be saved. Click again if you want to persist."
+				);
+				return;
+			}
+		}
+
+		setInitialOrg();
+		closeFunction();
+	}
+
 	return (
 		<Dialog
 			open={open}
-			onRequestClose={closeFunction}
+			onRequestClose={checkErrorsOrClose}
 			closeOnOutsideClick
 			id="org-modal"
 			variant="right-side"
@@ -148,9 +151,11 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 				className={style.root}
 				onReset={resetHandler}
 				onSubmit={submitHandler}
+				ref={formRef}
 			>
 				{open && (
 					<SaveResetHeader
+						title={`Edit ${organization.name}`}
 						headline={
 							<>
 								Edit <span className={style.title}>{organization.name}</span>{" "}
@@ -167,6 +172,10 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 						headlineID="org-modal-title"
 						className={style.header}
 					/>
+				)}
+
+				{Boolean(closeError.length) && (
+					<p className={style.error}>{closeError}</p>
 				)}
 				<div className={style.inputs}>
 					<Input

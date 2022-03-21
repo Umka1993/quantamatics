@@ -20,11 +20,12 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
 	isSavedMessageActive,
 	headlineID,
 	className,
+	title,
 	...other
 }) => {
 	return (
 		<header className={classNames(style.header, className)} {...other}>
-			<Headline style={{ margin: 0 }} id={headlineID}>
+			<Headline style={{ margin: 0 }} id={headlineID} pageTitle={title}>
 				{headline}
 			</Headline>
 			<div className={style.buttons}>
