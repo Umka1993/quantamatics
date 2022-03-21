@@ -13,7 +13,7 @@
 
 .error {
 	color: $error;
-	margin: 0 40px 16px;
+	margin: 0 40px 0;
 	outline: none;
 }
 
@@ -22,6 +22,8 @@
 	display: grid;
 	height: calc(100vh - #{40 * 2 + 40 + 30}px);
 	grid-template-rows: auto 1fr;
+
+	margin-top: 12px;
 
 	tbody {
 		display: block;
