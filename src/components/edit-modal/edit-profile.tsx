@@ -33,6 +33,7 @@ import {
 } from "../../api/asset";
 import { useParams } from "react-router-dom";
 import RoleSelector from "../role-selector";
+import DatePickerComponent from "../app-input/new-datepick";
 interface IEditProfile {
     onClose: () => void;
     user: IUpdateUser;
@@ -252,11 +253,18 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
                     maxLength={100}
                     required
                 />
-                <DatePick
+                {/*<DatePick*/}
+                {/*    externalSetter={setExpiration}*/}
+                {/*    valueAsDate={subscriptionEndDate}*/}
+                {/*    label="Expiration Date"*/}
+                {/*    required*/}
+                {/*/>*/}
+
+                <DatePickerComponent
                     externalSetter={setExpiration}
                     valueAsDate={subscriptionEndDate}
-                    label="Expiration Date"
                     required
+                    label="Expiration Date"
                 />
                 {allOrganizations && (
                     <SelectorInput
