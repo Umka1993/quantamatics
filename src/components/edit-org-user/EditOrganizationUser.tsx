@@ -6,8 +6,10 @@ import React, {
 	FunctionComponent,
 } from "react";
 
+import Headline from "../page-title";
+
 import Button, { ResetButton } from "../button";
-import AppInput, { DatePick, Email, Multiselect } from "../app-input";
+import Input, { DatePick, Email, Multiselect } from "../app-input";
 import { SelectorInput } from "../selector-input";
 
 import { Error, OrganizationKey, UserRole } from "../../data/enum";
@@ -23,8 +25,7 @@ import useUser from "../../hooks/useUser";
 import { login } from "../../store/authorization";
 import Loader from "../loader";
 
-import "./styles/edit-account.scss";
-import { Organization } from "../../types/organization/types";
+import style from "./edit-org-user.module.scss";
 import {
 	useGetAllAssetsQuery,
 	useLazyGetUserAssetsQuery,
@@ -33,12 +34,13 @@ import {
 } from "../../api/asset";
 import { useParams } from "react-router-dom";
 import RoleSelector from "../role-selector";
-interface IEditProfile {
+
+interface Props {
 	onClose: () => void;
 	user: IUser;
 }
 
-export const EditProfile: FunctionComponent<IEditProfile> = ({
+export const EditOrganizationUser: FunctionComponent<Props> = ({
 	onClose,
 	user,
 }) => {
@@ -68,8 +70,6 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 		useUpdateUserMutation();
 	const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] =
 		useUpdateUserRolesMutation();
-
-	const { data: allOrganizations } = useGetAllOrganizationsQuery(undefined);
 
 	const { data: assets } = useGetAllAssetsQuery(organizationID as string);
 	const [linkAsset] = useLinkAssetToUserMutation();
@@ -216,94 +216,110 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 	return isLoading || secondLoading ? (
 		<Loader />
 	) : (
-		<>
-			<form
-				id="edit-account-form"
-				action=""
-				className="edit-account__form-account"
-				onSubmit={handlerSubmit}
-				noValidate={validate ? undefined : true}
-				ref={formRef}
-			>
-				<AppInput
-					externalSetter={setName}
-					value={firstName}
-					name="firstName"
-					icon="edit"
-					label="First Name"
-					maxLength={100}
-					required
-				/>
-				<AppInput
-					externalSetter={setSurname}
-					value={lastName}
-					name="lastName"
-					icon="edit"
-					label="Last Name"
-					maxLength={100}
-					required
+		<form
+			id="edit-account-form"
+			action=""
+			className={style.root}
+			onSubmit={handlerSubmit}
+			noValidate={validate ? undefined : true}
+			ref={formRef}
+		>
+			<Headline className={style.title} id="org-user-modal-title">
+				Edit User Account
+			</Headline>
+
+			<Input
+				externalSetter={setName}
+				value={firstName}
+				name="firstName"
+				icon="edit"
+				label="First Name"
+				maxLength={100}
+				required
+				variant="squared"
+				className={style.half}
+			/>
+
+			<Input
+				externalSetter={setSurname}
+				value={lastName}
+				name="lastName"
+				icon="edit"
+				label="Last Name"
+				maxLength={100}
+				required
+				variant="squared"
+				className={style.half}
+			/>
+
+			<Email
+				externalSetter={setEmail}
+				value={email}
+				error={emailError}
+				icon="edit"
+				label="Email"
+				maxLength={100}
+				required
+				variant="squared"
+				className={style.input}
+			/>
+			<DatePick
+				externalSetter={setExpiration}
+				valueAsDate={subscriptionEndDate}
+				label="Expiration Date"
+				required
+				variant="squared"
+				className={style.input}
+			/>
+
+			<Input
+				externalSetter={setOrganization}
+				value={companyName}
+				name="companyName"
+				icon="edit"
+				label="Organization"
+				maxLength={100}
+				disabled
+				required
+				variant="squared"
+				className={style.input}
+			/>
+
+			{assets && assetPrepared && (
+				<Multiselect
+					className={style.input}
+					options={assets}
+					selected={assignedAssets}
+					setSelected={setAssignedAssets}
+					label="Account Assets"
+					errorMessage="Select asset permissions to assign to the user account."
+					showError={assetError}
+					type="user"
+					variant="squared"
+					inputList={[
+						...assets.filter(({ assetId }) => assignedAssets.has(assetId)),
+					]
+						.map(({ name }) => name)
+						.join(", ")}
 				/>
 
-				<Email
-					externalSetter={setEmail}
-					value={email}
-					error={emailError}
-					icon="edit"
-					label="Email"
-					maxLength={100}
-					required
-				/>
-				<DatePick
-					externalSetter={setExpiration}
-					valueAsDate={subscriptionEndDate}
-					label="Expiration Date"
-					required
-				/>
-				{allOrganizations && (
-					<SelectorInput
-						options={
-							allOrganizations?.map(
-								(org: Organization) => org[OrganizationKey.Name]
-							) as string[]
-						}
-						// valueSetter={setOrganizationId}
-						optionSetter={setOrganization}
-						// values={allOrganizations?.map(({id}) => id) as string[]}
-						value={companyName}
-						label="Organization"
-						disabled
-					/>
-				)}
+			)}
 
-				{assets && assetPrepared && (
-					<Multiselect
-						options={assets}
-						selected={assignedAssets}
-						setSelected={setAssignedAssets}
-						label="Account Assets"
-						errorMessage="Select asset permissions to assign to the user account."
-						showError={assetError}
-						type="user"
-						inputList={[
-							...assets.filter(({ assetId }) => assignedAssets.has(assetId)),
-						]
-							.map(({ name }) => name)
-							.join(", ")}
-					/>
-				)}
-				<RoleSelector
-					isSuperAdmin={isSuperAdmin}
-					defaultRoles={userRoles}
-					externalSetter={setRoles}
-				/>
-			</form>
+			<RoleSelector
+				isSuperAdmin={isSuperAdmin}
+				defaultRoles={userRoles}
+				externalSetter={setRoles}
+				variant="squared"
+				className={style.input}
+			/>
 
-			<footer className="edit-account__footer">
+
+			<footer className={style.footer}>
 				<ResetButton onClick={onClose}>Cancel</ResetButton>
 				<Button type="submit" form="edit-account-form">
 					Save
 				</Button>
 			</footer>
-		</>
+		</form>
 	);
 };

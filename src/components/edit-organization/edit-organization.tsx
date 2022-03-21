@@ -16,10 +16,10 @@ import { EMPTY_ORGANIZATION } from "./utils";
 import { useGetOrganizationUsersQuery } from "../../api/user";
 import { IUser } from "../../types/user";
 import Dialog from "../dialog";
-import { EditProfile } from "../edit-modal/edit-profile";
 import Loader from "../loader";
 import OrganizationInfo from "../organization-info/OrganizationInfo";
 import OrganizationModal from "../organization-modal/OrganizationModal";
+import { EditOrganizationUser } from "../edit-org-user/EditOrganizationUser";
 
 export const EditOrganization: FunctionComponent = () => {
 	const user = useUser();
@@ -72,7 +72,7 @@ export const EditOrganization: FunctionComponent = () => {
 
 	const closeModal = () => setUser(null);
 
-	if (isOrganizationLoading && isUsersLoading) {
+	if (isOrganizationLoading || isUsersLoading) {
 		return <Loader />;
 	}
 
@@ -140,12 +140,12 @@ export const EditOrganization: FunctionComponent = () => {
 				open={selectedUser !== null}
 				onRequestClose={closeModal}
 				closeOnOutsideClick
-				headline="Edit User Account"
 				id="org-user-modal"
-				wrapperClass="edit-account"
+				variant='right-side'
+				hasCloseButton={false}
 			>
 				{selectedUser !== null && (
-					<EditProfile user={selectedUser} onClose={closeModal} />
+					<EditOrganizationUser user={selectedUser} onClose={closeModal} />
 				)}
 			</Dialog>
 		</>

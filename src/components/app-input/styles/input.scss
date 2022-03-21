@@ -194,7 +194,8 @@ $text: #bcc4d8;
 	}
 
 	&--squared &__icon {
-		inset: auto 15px auto auto;
+		inset: 50% 15px auto auto;
+		transform: translateY(-50%);
 	}
 
 	&--validate &__field:not(:placeholder-shown):invalid,

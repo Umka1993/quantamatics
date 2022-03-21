@@ -1,27 +1,24 @@
-import React, {
-	Dispatch,
-	FunctionComponent,
-	SetStateAction,
-	useEffect,
-	useState,
-} from "react";
+import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { UserRole } from "../../data/enum";
 import { Option } from "types/option";
 import style from "./role-selector.module.scss";
 import RoleOption from "./RoleOption";
 import RoleMultiSelect from "./RoleMultiselect";
+import classNames from "classnames";
 interface RoleSelectorProps {
 	isSuperAdmin: boolean;
 	defaultRoles: Set<UserRole>;
 	externalSetter: Dispatch<SetStateAction<Set<UserRole>>>;
 	variant?: "squared";
+	className?: string;
 }
 
 const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
 	defaultRoles,
 	externalSetter,
 	isSuperAdmin,
-	variant
+	variant,
+	className,
 }) => {
 	const options: Option<UserRole>[] = isSuperAdmin
 		? [
@@ -37,9 +34,10 @@ const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
 			options={options}
 			label="Organization Role"
 			variant={variant}
+			className={className}
 		/>
 	) : (
-		<div className={style.checkboxes}>
+		<div className={classNames(style.checkboxes, className)}>
 			<h4 className={style.clegend}>Organization Role</h4>
 			{options.map((option) => (
 				<RoleOption
