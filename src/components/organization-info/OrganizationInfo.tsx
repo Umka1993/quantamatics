@@ -19,19 +19,21 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 }) => {
 	return (
 		<section className={style.root}>
+
 			<Headline
 				className={style.title}
 				pageTitle={`Organization ${organization.name}`}
 			>
 				Organization <span className={style.name}>{organization.name}</span>
 			</Headline>
+			<Button className={style.cta} onClick={toggleOrganizationModal}>
+				Edit
+			</Button>
 			<Button className={style.cta} onClick={toggleAssetModal}>
 				<DocIcon width={21} height={21} fill="currentColor" aria-hidden />
 				Manage Assets
 			</Button>
-			<Button className={style.cta} onClick={toggleOrganizationModal}>
-				Edit Organization
-			</Button>
+
 			<dl className={style.info}>
 				<dt>CRM Customer ID</dt>
 				<dd>{organization.customerCrmId}</dd>
