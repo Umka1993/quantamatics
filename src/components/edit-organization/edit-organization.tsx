@@ -80,31 +80,33 @@ export const EditOrganization: FunctionComponent = () => {
 
 	return (
 		<>
-			<div className={style.organization}>
-				{isError ? (
-					<p>Error on loading data: {(error as IApiError).data} </p>
-				) : (
-					<>
-						<OrganizationInfo
-							organization={selectedOrganization}
-							toggleAssetModal={toggleAssetModal}
-							toggleOrganizationModal={toggleOrganizationModal}
-						/>
+			{isError ? (
+				<p className={style.organization}>
+					Error on loading data: {(error as IApiError).data}{" "}
+				</p>
+			) : (
+				<>
+					<OrganizationInfo
+						organization={selectedOrganization}
+						toggleAssetModal={toggleAssetModal}
+						toggleOrganizationModal={toggleOrganizationModal}
+						className={style.organization}
+					/>
 
-						<AssetModal
-							open={isAssetOpened}
-							closeFunction={toggleAssetModal}
-							organization={selectedOrganization}
-						/>
+					<AssetModal
+						open={isAssetOpened}
+						closeFunction={toggleAssetModal}
+						organization={selectedOrganization}
+					/>
 
-						<OrganizationModal
-							open={isOrganizationOpened}
-							closeFunction={toggleOrganizationModal}
-							organization={selectedOrganization}
-						/>
-					</>
-				)}
-			</div>
+					<OrganizationModal
+						open={isOrganizationOpened}
+						closeFunction={toggleOrganizationModal}
+						organization={selectedOrganization}
+					/>
+				</>
+			)}
+
 			<section>
 				<div className={style.subheader}>
 					<h2>User Accounts</h2>

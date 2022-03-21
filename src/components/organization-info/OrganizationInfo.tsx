@@ -5,6 +5,7 @@ import style from "./organization-info.module.scss";
 import Button from "../button";
 import ComaList from "../coma-list";
 import DocIcon from "./assets/doc.svg";
+import classNames from "classnames";
 
 interface OrganizationInfoProps extends HTMLProps<HTMLDivElement> {
 	organization: Organization;
@@ -16,9 +17,10 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 	organization,
 	toggleAssetModal,
 	toggleOrganizationModal,
+	className
 }) => {
 	return (
-		<section className={style.root}>
+		<section className={classNames(style.root, className)}>
 
 			<Headline
 				className={style.title}
