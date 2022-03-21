@@ -84,8 +84,8 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
     const [defaultCalendar, setDefaultCalendar] = useState(true)
 
     const handeChange = (e: Date) => {
-        const changedValue = e.toLocaleDateString('en-us', {month: 'long', year: 'numeric'})
-        const changedYear = e.toLocaleDateString('en-us', {year: 'numeric'})
+        const changedValue = e.toLocaleDateString('en-us', { month: 'long', year: 'numeric' })
+        const changedYear = e.toLocaleDateString('en-us', { year: 'numeric' })
         setMonthYear(changedValue)
         setYear(changedYear)
     }
