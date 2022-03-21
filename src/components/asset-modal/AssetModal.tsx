@@ -218,14 +218,16 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 				onReset={resetHandler}
 				onSubmit={submitHandler}
 			>
-				<SaveResetHeader
-					headline="Application Assets"
-					disableReset={isUpdating}
-					disableSave={!hasChanges || noAssetError || isUpdating}
-					isSavedMessageActive={isUpdating}
-					headlineID="asset-modal-title"
-					className={style.header}
-				/>
+				{open &&
+					<SaveResetHeader
+						headline="Application Assets"
+						disableReset={isUpdating}
+						disableSave={!hasChanges || noAssetError || isUpdating}
+						isSavedMessageActive={isUpdating}
+						headlineID="asset-modal-title"
+						className={style.header}
+					/>
+				}
 				{hasError && (
 					<p className={style.error} role="alert" ref={errorRef} tabIndex={0}>
 						{noAssetError

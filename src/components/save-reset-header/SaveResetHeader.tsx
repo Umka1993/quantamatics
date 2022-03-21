@@ -1,12 +1,12 @@
 import Button, { ResetButton } from "../button";
 import Headline from "../page-title";
-import React, { FunctionComponent, HTMLProps } from "react";
+import React, { FunctionComponent, HTMLProps, ReactNode } from "react";
 import CheckSVG from "./assets/check.svg";
 import style from "./SaveResetHeader.module.scss";
 import classNames from "classnames";
 
 interface SaveResetHeaderProps extends HTMLProps<HTMLDivElement> {
-	headline: string;
+	headline: ReactNode;
 	disableSave?: boolean;
 	isSavedMessageActive?: boolean;
 	disableReset?: boolean;
