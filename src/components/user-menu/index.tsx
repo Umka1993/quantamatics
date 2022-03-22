@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import ProfileIcon from "./assets/profile.svg";
 import LogoutIcon from "./assets/logout.svg";
 import PowerIcon from "./assets/power.svg";
@@ -6,7 +6,7 @@ import CrossIcon from "./assets/cross.svg";
 import useLogout from "../../hooks/useLogout";
 import style from "./user-menu.module.scss";
 import useCloseModal from "../../hooks/useCloseModal";
-import { SideBarModalOpen } from "../../types/sidebar-modal";
+import { SideBarModalMode, SideBarModalOpen } from "../../types/sidebar-modal";
 
 interface Props {
 	openModal: SideBarModalOpen;
@@ -38,7 +38,7 @@ export default function UserMenu({
 			<button
 				type="button"
 				onClick={() => {
-					openModal("my-account");
+					openModal(SideBarModalMode.Account);
 					setOpenDropdown(false);
 				}}
 				className={style.button}
@@ -54,7 +54,7 @@ export default function UserMenu({
 			<button
 				type="button"
 				onClick={() => {
-					openModal("restart-server");
+					openModal(SideBarModalMode.Restart);
 					setOpenDropdown(false);
 				}}
 				className={style.button}

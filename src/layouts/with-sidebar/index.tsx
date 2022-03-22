@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../store/authorization";
 import Dialog from "../../components/dialog";
 import { useCallback } from "react";
-import { SideBarModalMode } from "../../types/sidebar-modal";
+import { SideBarModalModeType, SideBarModalMode } from "../../types/sidebar-modal";
 import useToggle from "../../hooks/useToggle";
 import UserMenu from "../../components/user-menu";
 import useBoolean from "hooks/useBoolean";
@@ -27,7 +27,7 @@ export default function WithSideBarLayout(): ReactElement {
 	const { data: user, isSuccess: isUserLoaded } = useGetUserQuery(id);
 	const dispatch = useDispatch();
 
-	const [activeModal, setActiveModal] = useState<SideBarModalMode>(undefined);
+	const [activeModal, setActiveModal] = useState<SideBarModalModeType>(undefined);
 
 	useEffect(() => {
 		!getCookie("user") && logout();
@@ -63,17 +63,32 @@ export default function WithSideBarLayout(): ReactElement {
 					openModal={setActiveModal}
 				/>
 			)}
+
+
 			<Dialog
-				open={activeModal !== undefined}
+				open={isRestartServerModalShowed}
 				onRequestClose={closeModal}
 				closeOnOutsideClick
-				headline={isProfileModalShowed ? "My Account" : "Restart Server"}
-				id={activeModal}
-				wrapperClass={isProfileModalShowed ? "edit-account" : "restart-server"}
-				role={isRestartServerModalShowed ? "alertdialog " : "dialog"}
+				headline="Restart Server"
+				id={SideBarModalMode.Restart}
+				wrapperClass="restart-server"
+				role="alertdialog"
+			>
+				<RestartServer onClose={closeModal} />
+			</Dialog>
+
+			<Dialog
+				open={isProfileModalShowed}
+				onRequestClose={closeModal}
+				closeOnOutsideClick
+				headline="My Account"
+				id={SideBarModalMode.Account}
+				wrapperClass="edit-account"
+				role="dialog"
+				variant='right-side'
+				hasCloseButton={false}
 			>
 				{user && isProfileModalShowed && <EditPassword onClose={closeModal} />}
-				{isRestartServerModalShowed && <RestartServer onClose={closeModal} />}
 			</Dialog>
 		</>
 	);

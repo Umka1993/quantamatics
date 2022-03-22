@@ -49,10 +49,6 @@ export const EditOrganization: FunctionComponent = () => {
 		}
 	}, [isUsersLoaded, userList]);
 
-	const isHaveAccessToOrgList =
-		user?.userRoles.includes(UserRole.Admin) ||
-		user?.userRoles.includes(UserRole.OrgOwner);
-
 	const [isAssetOpened, toggleAssetModal] = useToggle(false);
 	const [isOrganizationOpened, toggleOrganizationModal] = useToggle(false);
 
