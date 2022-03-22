@@ -34,7 +34,7 @@ const MyAccountModal: React.FunctionComponent<IEditProfile> = ({
 		fetchUser(id);
 	}, [id]);
 
-	const { value: showEditForm, setTrue: openPassword, setFalse: closePassword } = useBoolean(true)
+	const { value: showEditForm, setTrue: openPassword, setFalse: closePassword } = useBoolean(false)
 
 	const [currentPassword, setCurrentPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");

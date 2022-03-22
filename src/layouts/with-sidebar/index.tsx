@@ -12,12 +12,8 @@ import useUser from "../../hooks/useUser";
 import { useGetUserQuery } from "../../api/user";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authorization";
-import Dialog from "../../components/dialog";
 import { useCallback } from "react";
-import {
-	SideBarModalModeType,
-	SideBarModalMode,
-} from "../../types/sidebar-modal";
+import { SideBarModalModeType } from "../../types/sidebar-modal";
 import UserMenu from "../../components/user-menu";
 
 export default function WithSideBarLayout(): ReactElement {
@@ -66,24 +62,12 @@ export default function WithSideBarLayout(): ReactElement {
 				/>
 			)}
 
-			<Dialog
+			<RestartServer
 				open={isRestartServerModalShowed}
-				onRequestClose={closeModal}
-				closeOnOutsideClick
-				headline="Restart Server"
-				id={SideBarModalMode.Restart}
-				wrapperClass="restart-server"
-				role="alertdialog"
-			>
-				<RestartServer onClose={closeModal} />
-			</Dialog>
-
-
-			<MyAccountModal
-				open={isProfileModalShowed}
 				onRequestClose={closeModal}
 			/>
 
+			<MyAccountModal open={isProfileModalShowed} onRequestClose={closeModal} />
 		</>
 	);
 }
