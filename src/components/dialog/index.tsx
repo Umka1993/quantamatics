@@ -5,8 +5,7 @@ import React, { useEffect, useRef, HTMLProps } from "react";
 
 import style from "./Dialog.module.scss";
 import classNames from "classnames";
-
-import CloseIcon from "./assets/close.svg";
+import SpriteIcon from "../sprite-icon/SpriteIcon";
 
 export interface ModalProps extends HTMLProps<HTMLDivElement> {
 	closeOnOutsideClick?: boolean;
@@ -82,16 +81,6 @@ export default function Dialog({
 			className={[style.root, style[`root--${variant}`]].join(" ")}
 			aria-labelledby={`${id}-title`}
 		>
-			{hasCloseButton && (
-				<button
-					aria-label={closeMessage}
-					title={closeMessage}
-					className={style.close}
-					onClick={onRequestClose}
-				>
-					<CloseIcon aria-hidden />
-				</button>
-			)}
 			<div
 				{...other}
 				className={classNames(
@@ -108,6 +97,17 @@ export default function Dialog({
 
 				{children}
 			</div>
+
+			{hasCloseButton && (
+				<button className={style.close} onClick={onRequestClose}>
+					<SpriteIcon
+						icon="cross-close"
+						width={16}
+						label={closeMessage}
+						id={`${id}-close`}
+					/>
+				</button>
+			)}
 		</dialog>
 	);
 }
