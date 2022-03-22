@@ -4,7 +4,7 @@ import useLogout from "../../hooks/useLogout";
 import { SideBar } from "../../components/side-bar";
 import style from "./with-sidebar.module.scss";
 import PrivateRoutes from "../../router/private-routes";
-import { EditPassword } from "../../components/edit-modal/edit-password";
+import MyAccountModal from "../../components/my-account-modal/MyAccountModal";
 import { RestartServer } from "../../components/restart-server";
 
 import { useLocation } from "react-router-dom";
@@ -14,10 +14,11 @@ import { useDispatch } from "react-redux";
 import { login } from "../../store/authorization";
 import Dialog from "../../components/dialog";
 import { useCallback } from "react";
-import { SideBarModalModeType, SideBarModalMode } from "../../types/sidebar-modal";
-import useToggle from "../../hooks/useToggle";
+import {
+	SideBarModalModeType,
+	SideBarModalMode,
+} from "../../types/sidebar-modal";
 import UserMenu from "../../components/user-menu";
-import useBoolean from "hooks/useBoolean";
 
 export default function WithSideBarLayout(): ReactElement {
 	const logout = useLogout();
@@ -27,7 +28,8 @@ export default function WithSideBarLayout(): ReactElement {
 	const { data: user, isSuccess: isUserLoaded } = useGetUserQuery(id);
 	const dispatch = useDispatch();
 
-	const [activeModal, setActiveModal] = useState<SideBarModalModeType>(undefined);
+	const [activeModal, setActiveModal] =
+		useState<SideBarModalModeType>(undefined);
 
 	useEffect(() => {
 		!getCookie("user") && logout();
@@ -64,7 +66,6 @@ export default function WithSideBarLayout(): ReactElement {
 				/>
 			)}
 
-
 			<Dialog
 				open={isRestartServerModalShowed}
 				onRequestClose={closeModal}
@@ -77,19 +78,12 @@ export default function WithSideBarLayout(): ReactElement {
 				<RestartServer onClose={closeModal} />
 			</Dialog>
 
-			<Dialog
+
+			<MyAccountModal
 				open={isProfileModalShowed}
 				onRequestClose={closeModal}
-				closeOnOutsideClick
-				headline="My Account"
-				id={SideBarModalMode.Account}
-				wrapperClass="edit-account"
-				role="dialog"
-				variant='right-side'
-				hasCloseButton={false}
-			>
-				{user && isProfileModalShowed && <EditPassword onClose={closeModal} />}
-			</Dialog>
+			/>
+
 		</>
 	);
 }
