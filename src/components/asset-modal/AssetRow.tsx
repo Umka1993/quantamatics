@@ -39,6 +39,7 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
 			})}
 		>
 			<td>{option.asset.name}</td>
+
 			<td className={style.action}>
 				<Checkbox
 					name={option.asset.name}
