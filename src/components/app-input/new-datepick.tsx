@@ -2,7 +2,7 @@ import React, {
     ChangeEventHandler,
     CSSProperties,
     FormEventHandler,
-    InputHTMLAttributes,
+    InputHTMLAttributes, useEffect,
     useRef,
     useState,
 } from "react";
@@ -10,11 +10,19 @@ import "./styles/input.scss";
 import "./styles/new-datepicker.scss";
 import classNames from "classnames";
 import CalendarIcon from "./assets/calendar.svg";
-import { checkDateInputSupport } from "./utils/date-utils";
+import { checkDateInputSupport, formatToValue } from "./utils/date-utils";
 import 'react-day-picker/lib/style.css';
 import enGb from "date-fns/locale/en-GB"
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
+import moment from "moment";
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import dateFnsFormat from "date-fns/format";
+import ArrowPrew from './assets/arrowPrew.svg'
+import ArrowNext from './assets/arrowNext.svg'
+import Button from "../button";
+import DatePickerHeader from "./date-picker-header";
+
 
 registerLocale('enGB', enGb)
 
@@ -47,6 +55,7 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
     const isSupport = checkDateInputSupport();
     const labelRef = useRef<HTMLSpanElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const datePickerRef = useRef(null);
 
     const [errorMessage, setErrorMessage] = useState<string | undefined>(
         undefined
@@ -82,13 +91,34 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
     const [year, setYear] = useState<string>()
 
     const [defaultCalendar, setDefaultCalendar] = useState(true)
+    const [isOpacity, setOpacity] = useState(false)
 
-    const handeChange = (e: Date) => {
+    const [closeIsSelected, setCloseIsSelected] = useState<boolean>()
+
+    const handelChange = (e: Date) => {
         const changedValue = e.toLocaleDateString('en-us', { month: 'long', year: 'numeric' })
         const changedYear = e.toLocaleDateString('en-us', { year: 'numeric' })
         setMonthYear(changedValue)
         setYear(changedYear)
+        setStartDate(e)
+        if (e !== startDate) {
+            setDefaultCalendar(true)
+        }
     }
+
+    const onClose = () => {
+        setOpacity(true)
+        setTimeout(() => setCloseIsSelected(false), 200)
+        setTimeout(() =>  setDefaultCalendar(true), 300)
+    }
+
+    const onOpen = () => {
+        setOpacity(false)
+        setCloseIsSelected(true)
+        setDefaultCalendar(true)
+    }
+
+
 
     return (
         <div
@@ -144,7 +174,8 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
 
                 {/*    />*/}
                 {/*)}*/}
-                {defaultCalendar ? <DatePicker
+                {defaultCalendar ? 
+                    <DatePicker
                         selected={startDate}
                         onChange={(date: Date) => setStartDate(date)}
                         className="app-input__field"
@@ -154,14 +185,29 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
                         minDate={new Date()}
                         locale="enGB"
                         showDisabledMonthNavigation
-                        onCalendarOpen={() => handeChange(startDate)}
-                        onMonthChange={(e) => handeChange(e)}>
-
-                        {<div
-                            className='monthYear'>
-                            <span onClick={() => setDefaultCalendar(false)}>{monthYear}</span>
-                        </div>}
-
+                        onCalendarOpen={() => handelChange(startDate)}
+                        onMonthChange={(e) => handelChange(e)}
+                        dateFormat="MM/dd/yyyy"
+                        popperClassName={`${isOpacity ? 'opacityBlock weeksCalendar' : 'weeksCalendar'}`}
+                        shouldCloseOnSelect={false}
+                        onSelect={() => onClose()}
+                        open={closeIsSelected}
+                        onInputClick={() => onOpen()}
+                        onClickOutside={()=>onClose()}
+                        renderCustomHeader={({ prevMonthButtonDisabled,
+                                                 nextMonthButtonDisabled,
+                                                 decreaseYear,
+                                                 increaseYear,
+                                             }) => (<DatePickerHeader
+                            decrease={decreaseYear}
+                            increase={increaseYear}
+                            title={monthYear}
+                            nextButtonDisabled={nextMonthButtonDisabled}
+                            prevButtonDisabled={prevMonthButtonDisabled}
+                            setDefaultCalendar={setDefaultCalendar}
+                            defaultCalendar={false}
+                        />)}
+                    >
                     </DatePicker> :
                     <DatePicker
                         selected={startDate}
@@ -174,17 +220,31 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
                         locale="enGB"
                         showDisabledMonthNavigation
                         showMonthYearPicker
-                        onCalendarClose={() => setDefaultCalendar(true)}
+                        focusSelectedMonth={true}
+                        onCalendarClose={() => onClose()}
                         showFourColumnMonthYearPicker={true}
-                        onCalendarOpen={() => handeChange(startDate)}
-                        onYearChange={(e) => handeChange(e)}>
-
-                        {<div
-
-                            className='monthYear'>
-                            <span onClick={() => setDefaultCalendar(true)}>{year}</span>
-                        </div>}
-
+                        onCalendarOpen={() => handelChange(startDate)}
+                        onSelect={(e) => handelChange(e)}
+                        onYearChange={(e) => handelChange(e)}
+                        shouldCloseOnSelect={false}
+                        dateFormat="MM/dd/yyyy"
+                        popperClassName={`${isOpacity ? 'opacityBlock montCalendar' : 'montCalendar'}`}
+                        open={closeIsSelected}
+                        onClickOutside={()=>onClose()}
+                        renderCustomHeader={({ decreaseYear,
+                                                 increaseYear,
+                                                 nextYearButtonDisabled,
+                                                 prevYearButtonDisabled
+                                             }) => (<DatePickerHeader
+                            decrease={decreaseYear}
+                            increase={increaseYear}
+                            title={year}
+                            nextButtonDisabled={nextYearButtonDisabled}
+                            prevButtonDisabled={prevYearButtonDisabled}
+                            setDefaultCalendar={setDefaultCalendar}
+                            defaultCalendar={true}
+                        />)}
+                    >
                     </DatePicker>
                 }
 
