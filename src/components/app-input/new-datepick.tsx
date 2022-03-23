@@ -2,7 +2,7 @@ import React, {
     ChangeEventHandler,
     CSSProperties,
     FormEventHandler,
-    InputHTMLAttributes, useEffect,
+    InputHTMLAttributes,
     useRef,
     useState,
 } from "react";
@@ -10,17 +10,11 @@ import "./styles/input.scss";
 import "./styles/new-datepicker.scss";
 import classNames from "classnames";
 import CalendarIcon from "./assets/calendar.svg";
-import { checkDateInputSupport, formatToValue } from "./utils/date-utils";
+import { checkDateInputSupport } from "./utils/date-utils";
 import 'react-day-picker/lib/style.css';
 import enGb from "date-fns/locale/en-GB"
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
-import moment from "moment";
-import DayPickerInput from "react-day-picker/DayPickerInput";
-import dateFnsFormat from "date-fns/format";
-import ArrowPrew from './assets/arrowPrew.svg'
-import ArrowNext from './assets/arrowNext.svg'
-import Button from "../button";
 import DatePickerHeader from "./date-picker-header";
 
 
@@ -96,14 +90,11 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
     const [closeIsSelected, setCloseIsSelected] = useState<boolean>()
 
     const handelChange = (e: Date) => {
-        const changedValue = e.toLocaleDateString('en-us', { month: 'long', year: 'numeric' })
+        const changedMonth = e.toLocaleDateString('en-us', { month: 'long', year: 'numeric' })
         const changedYear = e.toLocaleDateString('en-us', { year: 'numeric' })
-        setMonthYear(changedValue)
+        setMonthYear(changedMonth)
         setYear(changedYear)
-        setStartDate(e)
-        if (e !== startDate) {
-            setDefaultCalendar(true)
-        }
+        // setStartDate(e)
     }
 
     const onClose = () => {
@@ -194,24 +185,28 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
                         open={closeIsSelected}
                         onInputClick={() => onOpen()}
                         onClickOutside={()=>onClose()}
+                        onKeyDown={(e) => {
+                            e.preventDefault();
+                        }}
                         renderCustomHeader={({ prevMonthButtonDisabled,
                                                  nextMonthButtonDisabled,
-                                                 decreaseYear,
-                                                 increaseYear,
+                                                 decreaseMonth,
+                                                 increaseMonth,
                                              }) => (<DatePickerHeader
-                            decrease={decreaseYear}
-                            increase={increaseYear}
+                            decrease={decreaseMonth}
+                            increase={increaseMonth}
                             title={monthYear}
                             nextButtonDisabled={nextMonthButtonDisabled}
                             prevButtonDisabled={prevMonthButtonDisabled}
                             setDefaultCalendar={setDefaultCalendar}
                             defaultCalendar={false}
+
                         />)}
                     >
                     </DatePicker> :
                     <DatePicker
                         selected={startDate}
-                        onChange={(date: Date) => setStartDate(date)}
+                        onChange={() => setDefaultCalendar(true)}
                         className="app-input__field"
                         aria-invalid={!!errorMessage}
                         required={required}
@@ -231,6 +226,9 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
                         popperClassName={`${isOpacity ? 'opacityBlock montCalendar' : 'montCalendar'}`}
                         open={closeIsSelected}
                         onClickOutside={()=>onClose()}
+                        onKeyDown={(e) => {
+                            e.preventDefault();
+                        }}
                         renderCustomHeader={({ decreaseYear,
                                                  increaseYear,
                                                  nextYearButtonDisabled,

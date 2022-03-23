@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from "../button";
 import ArrowPrew from "./assets/arrowPrew.svg";
 import ArrowNext from "./assets/arrowNext.svg";
