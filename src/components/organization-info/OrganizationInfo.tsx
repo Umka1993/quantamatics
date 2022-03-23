@@ -3,7 +3,6 @@ import { FunctionComponent, HTMLProps } from "react";
 import { Organization } from "../../types/organization/types";
 import style from "./organization-info.module.scss";
 import Button from "../button";
-import ComaList from "../coma-list";
 import { ReactComponent as DocIcon } from "./assets/doc.svg";
 import classNames from "classnames";
 
@@ -17,7 +16,7 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 	organization,
 	toggleAssetModal,
 	toggleOrganizationModal,
-	className
+	className,
 }) => {
 	return (
 		<section className={classNames(style.root, className)}>
@@ -44,7 +43,7 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 					{organization.customerCrmLink && (
 						<a
 							href={organization.customerCrmLink}
-							className='link'
+							className="link"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
@@ -55,11 +54,9 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 
 				<dt>Assets</dt>
 				<dd>
-					<ComaList
-						list={organization.organizationAssets.map(
-							({ asset }) => asset.name
-						)}
-					/>
+					{organization.organizationAssets
+						.map(({ asset }) => asset.name)
+						.join(", ")}
 				</dd>
 
 				<dt>Comments</dt>
