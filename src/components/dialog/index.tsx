@@ -15,6 +15,7 @@ export interface ModalProps extends HTMLProps<HTMLDivElement> {
 	wrapperClass?: string;
 	variant?: "default" | "right-side";
 	hasCloseButton?: boolean;
+	hasWrapper?: boolean;
 }
 
 export default function Dialog({
@@ -27,6 +28,7 @@ export default function Dialog({
 	id,
 	variant = "default",
 	hasCloseButton = true,
+	hasWrapper = true,
 	...other
 }: ModalProps) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -81,22 +83,24 @@ export default function Dialog({
 			className={[style.root, style[`root--${variant}`]].join(" ")}
 			aria-labelledby={`${id}-title`}
 		>
-			<div
-				{...other}
-				className={classNames(
-					style.wrapper,
-					style[`wrapper--${variant}`],
-					wrapperClass
-				)}
-			>
-				{headline && (
-					<h2 id={`${id}-title`} className={style.title}>
-						{headline}
-					</h2>
-				)}
+			{hasWrapper ?
+				<div
+					{...other}
+					className={classNames(
+						style.wrapper,
+						style[`wrapper--${variant}`],
+						wrapperClass
+					)}
+				>
+					{headline && (
+						<h2 id={`${id}-title`} className={style.title}>
+							{headline}
+						</h2>
+					)}
 
-				{children}
-			</div>
+					{children}
+				</div> : children
+			}
 
 			{hasCloseButton && (
 				<button className={style.close} onClick={onRequestClose}>
@@ -108,6 +112,7 @@ export default function Dialog({
 					/>
 				</button>
 			)}
+
 		</dialog>
 	);
 }
