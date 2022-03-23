@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-;
+
 import { ReactComponent as ArrowIcon } from "./assets/arrow.svg";
 
 interface ISelectorInput {

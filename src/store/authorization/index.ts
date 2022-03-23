@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {  AuthorizationStatus } from "../../data/enum";
 import { IUser } from "../../types/user";
 
-// @ts-expect-error
+// @ts-expect-error Not typed 3rd party script
 import pendoInitialize from "../../services/pendoInitialize";
 
 export interface AuthState {
