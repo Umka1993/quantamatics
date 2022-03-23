@@ -174,11 +174,12 @@ $text: #bcc4d8;
 			border-color: $accent;
 			box-shadow: inset 0px 2px 10px rgba(103, 115, 184, 0.1);
 		}
-
 	}
 
 	&--squared &__toggle {
 		right: 14px;
+		display: grid;
+		align-items: center;
 	}
 
 	&--squared &__label {
