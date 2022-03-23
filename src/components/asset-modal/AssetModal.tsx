@@ -212,6 +212,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 			hasCloseButton={false}
 			closeOnOutsideClick
 			onRequestClose={checkErrorsOrClose}
+			hasWrapper={false}
 			{...other}
 		>
 			<form
