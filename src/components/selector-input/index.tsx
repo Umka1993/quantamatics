@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import SVG from "../SVG";
-import arrowIcon from "./assets/arrow.svg";
+;
+import { ReactComponent as ArrowIcon } from "./assets/arrow.svg";
 
 interface ISelectorInput {
 	className?: string;
@@ -37,7 +37,7 @@ export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({ classNa
 				setSelected(item)
 				setSelecting(false);
 			}}
-			// data-value={values ? values[index] : undefined}
+		// data-value={values ? values[index] : undefined}
 		>
 			{item}
 		</div>
@@ -53,7 +53,7 @@ export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({ classNa
 		<div className={inputClassNames} onClick={changeState}>
 			<div className="selector-input__value">{value}</div>
 			{label && <span className='selector-input__label'>{label}</span>}
-			<SVG icon={arrowIcon} />
+			<ArrowIcon />
 			{selecting && <div className="selector-input__list">{optionsMap}</div>}
 
 		</div>

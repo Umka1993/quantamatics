@@ -1,10 +1,10 @@
 import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { UserRole } from "../../data/enum";
-import { Option } from "types/option";
 import style from "./role-selector.module.scss";
 import RoleOption from "./RoleOption";
 import RoleMultiSelect from "./RoleMultiselect";
 import classNames from "classnames";
+import { Option } from "../../types/option";
 interface RoleSelectorProps {
 	isSuperAdmin: boolean;
 	defaultRoles: Set<UserRole>;

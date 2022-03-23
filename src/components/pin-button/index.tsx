@@ -1,6 +1,6 @@
 
-import React, { ButtonHTMLAttributes, FunctionComponent } from 'react';
-import PinIcon from './assets/pin.svg';
+import { ButtonHTMLAttributes, FunctionComponent } from 'react';
+import { ReactComponent as PinIcon } from './assets/pin.svg';
 import './style/pin-button.scss';
 import classNames from 'classnames'
 
@@ -9,7 +9,7 @@ interface PinButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	size?: number
 }
 
-const PinButton: FunctionComponent<PinButtonProps> = ({ checked, className, size=16, ...other }) => {
+const PinButton: FunctionComponent<PinButtonProps> = ({ checked, className, size = 16, ...other }) => {
 	return (<button
 		type="button"
 		role="switch"

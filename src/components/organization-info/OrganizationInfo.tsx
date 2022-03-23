@@ -1,10 +1,10 @@
 import Headline from "../page-title";
-import React, { FunctionComponent, HTMLProps } from "react";
+import { FunctionComponent, HTMLProps } from "react";
 import { Organization } from "../../types/organization/types";
 import style from "./organization-info.module.scss";
 import Button from "../button";
 import ComaList from "../coma-list";
-import DocIcon from "./assets/doc.svg";
+import { ReactComponent as DocIcon } from "./assets/doc.svg";
 import classNames from "classnames";
 
 interface OrganizationInfoProps extends HTMLProps<HTMLDivElement> {
@@ -17,7 +17,7 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 	organization,
 	toggleAssetModal,
 	toggleOrganizationModal,
-	className,
+	className
 }) => {
 	return (
 		<section className={classNames(style.root, className)}>
