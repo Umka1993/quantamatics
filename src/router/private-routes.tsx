@@ -5,7 +5,7 @@ import useUser from "../hooks/useUser";
 import { JupyterFrame } from "../components/jupyter-frame";
 import OrganizationList from "../components/organization-list";
 import { CreateOrganizationForm, AddUserForm } from "../components/form/";
-import { EditOrganization } from "../components/edit-organization/edit-organization";
+import OrganizationDetail from "../components/organization-detail/OrganizationDetail";
 import SuccessMessage from "../components/success-message";
 
 export default function PrivateRoutes(): ReactElement {
@@ -68,7 +68,7 @@ export default function PrivateRoutes(): ReactElement {
 
 			{isEditOrgAvailable && (
 				<>
-					<Route path={AppRoute.Organizations} element={<EditOrganization />} />
+					<Route path={AppRoute.Organizations} element={<OrganizationDetail />} />
 					<Route
 						path={AppRoute.Organizations + "/add-user"}
 						element={<AddUserForm />}

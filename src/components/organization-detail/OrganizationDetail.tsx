@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Button from "../button";
 import { UserTable } from "../table/UserTable";
 import { useParams } from "react-router-dom";
@@ -18,7 +18,8 @@ import OrganizationInfo from "../organization-info/OrganizationInfo";
 import OrganizationModal from "../organization-modal/OrganizationModal";
 import { EditOrganizationUser } from "../edit-org-user/EditOrganizationUser";
 
-export const EditOrganization: FunctionComponent = () => {
+
+export default function OrganizationDetail() {
 	const { id } = useParams<RouteParams>();
 
 	const {
