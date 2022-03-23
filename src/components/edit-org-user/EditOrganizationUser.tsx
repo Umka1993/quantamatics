@@ -1,9 +1,4 @@
-import {
-	FormEvent,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 import Headline from "../page-title";
 
@@ -79,18 +74,13 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 	const [assetError, setAssetError] = useState(false);
 	const [assetPrepared, setAssetPrepared] = useState(false);
 
+	const [isUserChanged, setUserChanged] = useState(false);
+	const [isRoleChanged, setRoleChanged] = useState(false);
+
 	function validateHandler() {
-		let userChanged =
-			firstName !== user.firstName ||
-			lastName !== user.lastName ||
-			companyName !== user.companyName ||
-			subscriptionEndDate.toISOString() !==
-				new Date(user.subscriptionEndDate).toISOString();
+		let userChanged = isUserChanged;
 
 		const rolesAsArray = Array.from(userRoles);
-		const rolesIsSame =
-			rolesAsArray.length === user.userRoles.length &&
-			rolesAsArray.every((value, index) => value === user.userRoles[index]);
 
 		const newUserData: IUpdateUser = {
 			...user,
@@ -130,11 +120,32 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 		userChanged
 			? update(newUserData)
 					.unwrap()
-					.then(rolesIsSame ? onClose : updateRolesAndClose)
-			: !rolesIsSame && updateRolesAndClose();
+					.then(!isRoleChanged ? onClose : updateRolesAndClose)
+			: isRoleChanged && updateRolesAndClose();
 
-		!userChanged && rolesIsSame && onClose();
+		!userChanged && !isRoleChanged && onClose();
 	}
+
+	useEffect(
+		() =>
+			setUserChanged(
+				firstName !== user.firstName ||
+					lastName !== user.lastName ||
+					companyName !== user.companyName ||
+					subscriptionEndDate.toISOString() !==
+						new Date(user.subscriptionEndDate).toISOString()
+			),
+		[firstName, lastName, companyName, userRoles, subscriptionEndDate]
+	);
+
+	useEffect(() => {
+		const rolesAsArray = Array.from(userRoles);
+		const rolesIsSame =
+			rolesAsArray.length === user.userRoles.length &&
+			rolesAsArray.every((value, index) => value === user.userRoles[index]);
+
+		setRoleChanged(!rolesIsSame);
+	}, [userRoles]);
 
 	function updateAssets() {
 		// ? Link new assets to user
@@ -300,7 +311,9 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 
 			<footer className={style.footer}>
 				<ResetButton type="reset">Cancel</ResetButton>
-				<Button type="submit">Save</Button>
+				<Button type="submit" disabled={!isUserChanged && !isRoleChanged}>
+					Save
+				</Button>
 			</footer>
 		</form>
 	);
