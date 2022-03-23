@@ -16,7 +16,7 @@ import Dialog from "../dialog";
 import Loader from "../loader";
 import OrganizationInfo from "../organization-info/OrganizationInfo";
 import OrganizationModal from "../organization-modal/OrganizationModal";
-import { EditOrganizationUser } from "../edit-org-user/EditOrganizationUser";
+import EditOrganizationUser from "../edit-org-user/EditOrganizationUser";
 
 
 export default function OrganizationDetail() {
