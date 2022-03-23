@@ -71,7 +71,7 @@ const assetApi = baseApi.injectEndpoints({
 			],
 		}),
 
-		getAllUserAssets: build.query<any, void>({
+		getAllUserAssets: build.query<AssetServerResponse[], void>({
 			query: () => AssetEndpoint.GetAllUser,
 		}),
 

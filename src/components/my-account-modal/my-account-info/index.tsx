@@ -5,7 +5,6 @@ import classNames from "classnames";
 import { useGetAllUserAssetsQuery } from "../../../api/asset";
 import ComaList from "../../coma-list";
 import { adaptRoles } from "../../../services/baseService";
-import { AssetServerResponse } from "../../../types/asset";
 import { UserRole } from "../../../data/enum";
 
 interface MyAccountInfoProps extends HTMLProps<HTMLDListElement> {
@@ -23,6 +22,7 @@ export default function MyAccountInfo({
 	...other
 }: MyAccountInfoProps) {
 	const { data: userAsset } = useGetAllUserAssetsQuery();
+
 	const fullWidthClass = [style.row, style["row--full"]].join(" ");
 
 	return (
@@ -57,9 +57,7 @@ export default function MyAccountInfo({
 				<dt className={style.name}>Assigned Assets</dt>
 				{userAsset && Boolean(userAsset.length) && (
 					<dd className={style.value}>
-						<ComaList
-							list={userAsset.map(({ name }: AssetServerResponse) => name)}
-						/>
+						{userAsset.map(({ name }) => name).join(', ')}
 					</dd>
 				)}
 			</div>
