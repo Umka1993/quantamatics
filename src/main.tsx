@@ -1,4 +1,3 @@
-import React from 'react';
 import './sass/global.scss';
 import { BrowserRouter } from "react-router-dom"
 import store from "./store";
