@@ -1,4 +1,4 @@
-import React, { FunctionComponent, HTMLProps } from "react";
+import { HTMLProps } from "react";
 import { IUser } from "../../../types/user";
 import style from "./my-account-info.module.scss";
 import classNames from "classnames";
@@ -14,14 +14,14 @@ interface MyAccountInfoProps extends HTMLProps<HTMLDListElement> {
 	openPassword: () => void;
 }
 
-const MyAccountInfo: FunctionComponent<MyAccountInfoProps> = ({
+export default function MyAccountInfo({
 	user,
 	className,
 	isPasswordClosed,
 	openPassword,
 	children,
 	...other
-}) => {
+}: MyAccountInfoProps) {
 	const { data: userAsset } = useGetAllUserAssetsQuery();
 	const fullWidthClass = [style.row, style["row--full"]].join(" ");
 
@@ -56,7 +56,7 @@ const MyAccountInfo: FunctionComponent<MyAccountInfoProps> = ({
 			<div className={fullWidthClass}>
 				<dt className={style.name}>Assigned Assets</dt>
 				{userAsset && Boolean(userAsset.length) && (
-					<dd className={[style.value, style.assets].join(" ")}>
+					<dd className={style.value}>
 						<ComaList
 							list={userAsset.map(({ name }: AssetServerResponse) => name)}
 						/>
@@ -74,13 +74,9 @@ const MyAccountInfo: FunctionComponent<MyAccountInfoProps> = ({
 			{isPasswordClosed && !user.userRoles.includes(UserRole.Demo) && (
 				<div className={fullWidthClass}>
 					<dt className={style.name}>Current Password</dt>
-					<dd className={style.value}>
-						{children}
-					</dd>
+					<dd className={style.value}>{children}</dd>
 				</div>
 			)}
 		</dl>
 	);
-};
-
-export default MyAccountInfo;
+}

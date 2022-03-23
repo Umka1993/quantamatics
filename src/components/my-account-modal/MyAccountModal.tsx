@@ -1,9 +1,7 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 import Button, { ResetButton } from "../button";
 import Password from "../app-input/password";
-
-import "./styles/edit-account.scss";
 
 import { useChangePasswordMutation } from "../../api/account";
 import Loader from "../loader";
@@ -21,20 +19,20 @@ interface IEditProfile {
 	open?: boolean;
 }
 
-const MyAccountModal: React.FunctionComponent<IEditProfile> = ({
-	onRequestClose,
-	open,
-}) => {
+export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 	const { id } = useUser();
 	const [fetchUser, { data: user, isLoading: isLoadUser }] =
 		useLazyGetUserQuery();
-
 
 	useEffect(() => {
 		fetchUser(id);
 	}, [id]);
 
-	const { value: showEditForm, setTrue: openPassword, setFalse: closePassword } = useBoolean(false)
+	const {
+		value: showEditForm,
+		setTrue: openPassword,
+		setFalse: closePassword,
+	} = useBoolean(false);
 
 	const [currentPassword, setCurrentPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");
@@ -46,7 +44,6 @@ const MyAccountModal: React.FunctionComponent<IEditProfile> = ({
 	const [compare, setCompare] = useState<string | undefined>(undefined);
 
 	const formRef = useRef<HTMLFormElement>(null);
-
 
 	const [updatePassword, { isSuccess, isError, error, isLoading }] =
 		useChangePasswordMutation();
@@ -110,11 +107,7 @@ const MyAccountModal: React.FunctionComponent<IEditProfile> = ({
 					isPasswordClosed={!showEditForm}
 					openPassword={openPassword}
 				>
-					<button
-						type="button"
-						className={style.button}
-						onClick={openPassword}
-					>
+					<button type="button" className={style.button} onClick={openPassword}>
 						change
 						<KeyIcon aria-hidden fill="currentColor" width={16} height={16} />
 					</button>
@@ -132,7 +125,7 @@ const MyAccountModal: React.FunctionComponent<IEditProfile> = ({
 				>
 					<button
 						type="button"
-						className={[style.button, style.cancel].join(' ')}
+						className={[style.button, style.cancel].join(" ")}
 						onClick={closePassword}
 					>
 						cancel
@@ -144,7 +137,7 @@ const MyAccountModal: React.FunctionComponent<IEditProfile> = ({
 						name="password"
 						autoComplete="current-password"
 						error={wrongCurrent}
-						variant='squared'
+						variant="squared"
 					/>
 
 					<Password
@@ -154,7 +147,7 @@ const MyAccountModal: React.FunctionComponent<IEditProfile> = ({
 						placeholder="New Password"
 						error={compare}
 						hideError
-						variant='squared'
+						variant="squared"
 					/>
 					<Password
 						autoComplete="new-password"
@@ -162,7 +155,7 @@ const MyAccountModal: React.FunctionComponent<IEditProfile> = ({
 						externalSetter={setConfirmPassword}
 						placeholder="Confirm New Password"
 						error={compare}
-						variant='squared'
+						variant="squared"
 					/>
 				</form>
 			)}
@@ -181,6 +174,4 @@ const MyAccountModal: React.FunctionComponent<IEditProfile> = ({
 			{isLoading || isLoadUser || (user === undefined && <Loader />)}
 		</Dialog>
 	);
-};
-
-export default MyAccountModal;
+}

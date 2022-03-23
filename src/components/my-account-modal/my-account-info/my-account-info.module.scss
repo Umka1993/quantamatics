@@ -17,7 +17,7 @@
 
 	display: grid;
 	grid-template-columns: max-content 1fr;
-	gap: 10px;
+	gap: 20px;
 
 	&:not(:last-child) {
 		border-bottom: 1px solid rgba($inactive, 0.4);
@@ -33,14 +33,6 @@
 	margin: 0;
 	justify-self: end;
 	text-align: right;
-}
-
-.assets {
-	overflow: auto;
-	width: 100%;
-	white-space: nowrap;
-
-	@include hide-scrollbar;
 }
 
 .name {
