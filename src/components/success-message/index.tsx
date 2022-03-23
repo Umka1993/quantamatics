@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { AppRoute } from "../../data/enum";
 import Button from "../button";
-import CheckIcon from "./assets/check.svg";
+import { ReactComponent as CheckIcon } from "./assets/check.svg";
 import style from "./style/success.module.scss";
 
 interface Message {

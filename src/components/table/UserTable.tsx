@@ -1,4 +1,4 @@
-import React, {
+import {
 	FunctionComponent,
 	SetStateAction,
 	useLayoutEffect,
@@ -6,7 +6,7 @@ import React, {
 	Dispatch,
 } from "react";
 
-import EditSVG from "./assets/edit-row-icon.svg";
+import { ReactComponent as EditSVG } from "./assets/edit-row-icon.svg";
 
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { adaptRoles } from "../../services/baseService";
