@@ -1,6 +1,6 @@
-// import { createOrganizationRequestBody } from "../../components/form/create-organization";
-import { Organization } from "types/organization/types";
+
 import { ApiRoute } from "../../data/enum";
+import { Organization } from "../../types/organization/types";
 import baseApi from "../index";
 
 const organizationsApi = baseApi.injectEndpoints({
