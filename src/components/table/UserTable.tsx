@@ -6,8 +6,6 @@ import {
 	Dispatch,
 } from "react";
 
-import { ReactComponent as EditSVG } from "./assets/edit-row-icon.svg";
-
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
@@ -16,6 +14,7 @@ import ISort from "../../types/sort-type";
 import { USER_HEADER } from "./utils/constants";
 import { SortDirection } from "../../data/enum";
 import style from "./styles/table.module.scss";
+import SpriteIcon from "../sprite-icon/SpriteIcon";
 
 interface UserTableProps {
 	list: IUser[];
@@ -100,7 +99,7 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 									currentTarget.blur();
 								}}
 							>
-								<EditSVG role="img" aria-label="edit" fill="currentColor" />
+								<SpriteIcon icon='pen' label="Edit user" width={16} id={`edit-${user.id}`} />
 							</button>
 						</td>
 					</tr>

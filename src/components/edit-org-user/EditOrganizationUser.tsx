@@ -1,4 +1,4 @@
-import React, {
+import {
 	FormEvent,
 	useEffect,
 	useRef,
@@ -10,16 +10,14 @@ import Headline from "../page-title";
 
 import Button, { ResetButton } from "../button";
 import Input, { DatePick, Email, Multiselect } from "../app-input";
-import { SelectorInput } from "../selector-input";
 
-import { Error, OrganizationKey, UserRole } from "../../data/enum";
+import { Error, UserRole } from "../../data/enum";
 import { useDispatch } from "react-redux";
 import { IUpdateUser, IUser } from "../../types/user";
 import {
 	useUpdateUserMutation,
 	useUpdateUserRolesMutation,
 } from "../../api/user";
-import { useGetAllOrganizationsQuery } from "../../api/organization";
 import IApiError from "../../types/api-error";
 import useUser from "../../hooks/useUser";
 import { login } from "../../store/authorization";
@@ -34,6 +32,7 @@ import {
 } from "../../api/asset";
 import { useParams } from "react-router-dom";
 import RoleSelector from "../role-selector";
+import SpriteIcon from "../sprite-icon/SpriteIcon";
 
 interface Props {
 	onClose: () => void;
@@ -88,7 +87,7 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 			lastName !== user.lastName ||
 			companyName !== user.companyName ||
 			subscriptionEndDate.toISOString() !==
-			new Date(user.subscriptionEndDate).toISOString();
+				new Date(user.subscriptionEndDate).toISOString();
 
 		const rolesAsArray = Array.from(userRoles);
 		const rolesIsSame =
@@ -132,8 +131,8 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 
 		userChanged
 			? update(newUserData)
-				.unwrap()
-				.then(rolesIsSame ? onClose : updateRolesAndClose)
+					.unwrap()
+					.then(rolesIsSame ? onClose : updateRolesAndClose)
 			: !rolesIsSame && updateRolesAndClose();
 
 		!userChanged && rolesIsSame && onClose();
@@ -221,6 +220,7 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 			action=""
 			className={style.root}
 			onSubmit={handlerSubmit}
+			onReset={onClose}
 			noValidate={validate ? undefined : true}
 			ref={formRef}
 		>
@@ -232,19 +232,19 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 				externalSetter={setName}
 				value={firstName}
 				name="firstName"
-				icon="edit"
 				label="First Name"
 				maxLength={100}
 				required
 				variant="squared"
 				className={style.half}
+				icon={<SpriteIcon icon='pen' width={16}  />}
 			/>
 
 			<Input
 				externalSetter={setSurname}
 				value={lastName}
 				name="lastName"
-				icon="edit"
+				icon={<SpriteIcon icon='pen' width={16}  />}
 				label="Last Name"
 				maxLength={100}
 				required
@@ -256,7 +256,7 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 				externalSetter={setEmail}
 				value={email}
 				error={emailError}
-				icon="edit"
+				icon={<SpriteIcon icon='pen' width={16}  />}
 				label="Email"
 				maxLength={100}
 				required
@@ -276,7 +276,7 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 				externalSetter={setOrganization}
 				value={companyName}
 				name="companyName"
-				icon="edit"
+				icon={<SpriteIcon icon='pen' width={16}  />}
 				label="Organization"
 				maxLength={100}
 				disabled
@@ -302,7 +302,6 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 						.map(({ name }) => name)
 						.join(", ")}
 				/>
-
 			)}
 
 			<RoleSelector
@@ -313,12 +312,9 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 				className={style.input}
 			/>
 
-
 			<footer className={style.footer}>
-				<ResetButton onClick={onClose}>Cancel</ResetButton>
-				<Button type="submit" form="edit-account-form">
-					Save
-				</Button>
+				<ResetButton type="reset">Cancel</ResetButton>
+				<Button type="submit">Save</Button>
 			</footer>
 		</form>
 	);

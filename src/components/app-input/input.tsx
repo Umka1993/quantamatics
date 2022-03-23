@@ -6,22 +6,23 @@ import React, {
 	ChangeEventHandler,
 	FormEventHandler,
 	CSSProperties,
+	ReactElement,
+	cloneElement,
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import { ReactComponent as EditIcon } from "./assets/edit.svg";
 
 export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	error?: string;
 	label?: string;
 	externalSetter?: (value: string) => void;
-	icon?: string;
 	showLimit?: boolean;
 	invalid?: boolean;
 	variant?: "squared";
+	icon?: ReactElement
 }
 
-const Input: React.FunctionComponent<IInput> = ({
+export default function Input({
 	className,
 	label,
 	placeholder,
@@ -39,7 +40,7 @@ const Input: React.FunctionComponent<IInput> = ({
 	onFocus,
 	variant,
 	...other
-}) => {
+}: IInput) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const labelRef = useRef<HTMLSpanElement>(null);
 	const [errorMessage, setErrorMessage] = useState<string | undefined>(
@@ -129,7 +130,7 @@ const Input: React.FunctionComponent<IInput> = ({
 						onFocus && onFocus(evt);
 					}}
 				/>
-				{icon === "edit" && <EditIcon className="app-input__icon" />}
+				{icon && cloneElement(icon, {className: "app-input__icon"})}
 				{label && (
 					<span
 						className={classNames("app-input__label", {
@@ -150,5 +151,3 @@ const Input: React.FunctionComponent<IInput> = ({
 		</div>
 	);
 };
-
-export default Input;
