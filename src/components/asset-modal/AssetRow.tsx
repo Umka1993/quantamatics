@@ -45,7 +45,6 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
 					name={option.asset.name}
 					checked={isSelected}
 					disabled={disabled}
-					value={option.assetId}
 					highlightOnChecked
 					onClick={
 						disabled
