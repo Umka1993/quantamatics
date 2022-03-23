@@ -1,5 +1,5 @@
 import { AppRoute, UserRole } from "../data/enum";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { Route, Navigate, Routes } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { JupyterFrame } from "../components/jupyter-frame";

@@ -1,5 +1,6 @@
 import { LoginResponse } from "../types/loginResponse";
 import { AppRoute } from "../data/enum";
+// @ts-expect-error
 import pendoInitialize from "../services/pendoInitialize";
 import { saveToken } from "../services/token";
 import { setCookie } from "../services/cookies";
