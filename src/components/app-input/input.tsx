@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import EditIcon from "./assets/edit.svg";
+import { ReactComponent as EditIcon } from "./assets/edit.svg";
 
 export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	error?: string;

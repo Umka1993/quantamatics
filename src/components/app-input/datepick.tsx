@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import CalendarIcon from "./assets/calendar.svg";
+import { ReactComponent as CalendarIcon } from "./assets/calendar.svg";
 import { checkDateInputSupport, formatToValue } from "./utils/date-utils";
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import 'react-day-picker/lib/style.css';
@@ -133,7 +133,7 @@ const DatePick: React.FunctionComponent<IDatePick> = ({
 					<span
 						className="app-input__label app-input__label--icon app-input__label--shifted">
 						<span ref={labelRef}>{label}</span>
-						<CalendarIcon className="app-input__icon"/>
+						<CalendarIcon className="app-input__icon" />
 					</span>
 				)}
 			</div>

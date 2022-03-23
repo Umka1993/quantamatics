@@ -9,13 +9,13 @@ import React, {
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import EditIcon from "./assets/edit.svg";
+import { ReactComponent as EditIcon } from "./assets/edit.svg";
 import getValidationMessage from "./utils/emailValidation";
 import { RegExpValidation } from "../../data/enum";
 import { IInput } from "./input";
 
 interface IEmail extends IInput {
-    hideError?: boolean,
+	hideError?: boolean,
 }
 
 const Email: React.FunctionComponent<IEmail> = ({
@@ -84,9 +84,9 @@ const Email: React.FunctionComponent<IEmail> = ({
 				className="app-input__wrapper"
 				style={
 					label ?
-	{
-		"--label-width": `${rightOffset}px`,
-	} as CSSProperties
+						{
+							"--label-width": `${rightOffset}px`,
+						} as CSSProperties
 						: undefined
 				}
 			>

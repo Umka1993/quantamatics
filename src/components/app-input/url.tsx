@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import EditIcon from "./assets/edit.svg";
+import { ReactComponent as EditIcon } from "./assets/edit.svg";
 import { IInput } from "./input";
 
 
@@ -52,7 +52,7 @@ const Input: FunctionComponent<IInput> = ({
 
 			if (
 				(required && (validity.valueMissing || isOnlySpaces)) ||
-	(!validity.valueMissing && validity.patternMismatch)
+				(!validity.valueMissing && validity.patternMismatch)
 			) {
 				inputRef.current.setCustomValidity(
 					`This is not valid ${label ? label : ""}`
@@ -129,8 +129,8 @@ const Input: FunctionComponent<IInput> = ({
 						<span ref={labelRef}>
 							{label}
 							{showLimit &&
-		maxLength &&
-		` (${(value as string)?.length} / ${maxLength})`}
+								maxLength &&
+								` (${(value as string)?.length} / ${maxLength})`}
 						</span>
 					</span>
 				)}
