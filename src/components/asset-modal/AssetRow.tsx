@@ -1,4 +1,4 @@
-import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
+import { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { Checkbox } from "../app-checkbox";
 import classNames from "classnames";
 import { AssetInOrganization } from "../../types/asset";

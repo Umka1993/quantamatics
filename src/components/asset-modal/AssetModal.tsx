@@ -1,5 +1,5 @@
 import SaveResetHeader from "../save-reset-header/SaveResetHeader";
-import React, {
+import {
 	FunctionComponent,
 	useEffect,
 	useState,
@@ -11,7 +11,7 @@ import { HTMLProps } from "react";
 import Dialog from "../dialog";
 import style from "./AssetModal.module.scss";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
-import { AssetInOrganization } from "types/asset";
+
 import AssetRow from "./AssetRow";
 
 import { SortDirection } from "../../data/enum";
@@ -22,6 +22,7 @@ import {
 } from "../../api/organization";
 import { Organization } from "../../types/organization/types";
 import useUser from "../../hooks/useUser";
+import { AssetInOrganization } from "../../types/asset";
 
 interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
 	open: boolean;
