@@ -112,7 +112,7 @@ export const EditOrganization: FunctionComponent = () => {
 					<h2>User Accounts</h2>
 					{!hasAssets && (
 						<p id="warning-asset" className={style.warning}>
-							Please set up assets first to invite users to the organization
+							Please assign assets to the organization to add user accounts
 						</p>
 					)}
 

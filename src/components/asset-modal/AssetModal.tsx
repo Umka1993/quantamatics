@@ -220,7 +220,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 			>
 				{open &&
 					<SaveResetHeader
-						headline="Application Assets"
+						headline="Assets"
 						disableReset={isUpdating}
 						disableSave={!hasChanges || noAssetError || isUpdating}
 						isSavedMessageActive={isUpdating}
@@ -232,7 +232,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 					<p className={style.error} role="alert" ref={errorRef} tabIndex={0}>
 						{noAssetError
 							? "Select asset permissions to assign to the organization."
-							: "Your changes will not be saved. Click again if you want to persist."}
+							: "Changes have not been saved."}
 					</p>
 				)}
 

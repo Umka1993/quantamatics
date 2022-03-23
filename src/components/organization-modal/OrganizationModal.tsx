@@ -128,7 +128,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 		} else {
 			if (isChanged) {
 				setCloseError(
-					"Your changes will not be saved. Click again if you want to persist."
+					"Changes have not been saved."
 				);
 				return;
 			}

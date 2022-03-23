@@ -17,11 +17,10 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 	organization,
 	toggleAssetModal,
 	toggleOrganizationModal,
-	className
+	className,
 }) => {
 	return (
 		<section className={classNames(style.root, className)}>
-
 			<Headline
 				className={style.title}
 				pageTitle={`Organization ${organization.name}`}
@@ -41,9 +40,20 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 				<dd>{organization.customerCrmId}</dd>
 
 				<dt>CRM Customer Link</dt>
-				<dd>{organization.customerCrmLink}</dd>
+				<dd>
+					{organization.customerCrmLink && (
+						<a
+							href={organization.customerCrmLink}
+							className='link'
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{organization.customerCrmLink}
+						</a>
+					)}
+				</dd>
 
-				<dt>Application Assets</dt>
+				<dt>Assets</dt>
 				<dd>
 					<ComaList
 						list={organization.organizationAssets.map(
