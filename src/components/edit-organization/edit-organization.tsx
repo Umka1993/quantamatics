@@ -1,13 +1,10 @@
-import React, { FunctionComponent, useEffect, useMemo, useState } from "react";
+import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import Button from "../button";
 import { UserTable } from "../table/UserTable";
 import { useParams } from "react-router-dom";
 import type { RouteParams } from "../../types/route-params";
 import { useGetOrganizationQuery } from "../../api/organization";
 import IApiError from "../../types/api-error";
-import useUser from "../../hooks/useUser";
-import { UserRole } from "../../data/enum";
-
 import useToggle from "../../hooks/useToggle";
 import AssetModal from "../asset-modal/AssetModal";
 import style from "./edit-organizations.module.scss";
@@ -22,8 +19,6 @@ import OrganizationModal from "../organization-modal/OrganizationModal";
 import { EditOrganizationUser } from "../edit-org-user/EditOrganizationUser";
 
 export const EditOrganization: FunctionComponent = () => {
-	const user = useUser();
-
 	const { id } = useParams<RouteParams>();
 
 	const {
