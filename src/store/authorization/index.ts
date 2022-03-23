@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {  AuthorizationStatus } from "../../data/enum";
 import { IUser } from "../../types/user";
+
+// @ts-expect-error
 import pendoInitialize from "../../services/pendoInitialize";
 
 export interface AuthState {
