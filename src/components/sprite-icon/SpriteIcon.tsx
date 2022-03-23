@@ -2,7 +2,7 @@ import React, { FunctionComponent, SVGProps } from 'react'
 
 interface SpriteIconProps extends SVGProps<SVGSVGElement> {
 	label?: string
-	icon: 'cross-close' | 'plus'
+	icon: 'cross-close' | 'plus' | 'gears'
 	sprite?: 'sprite';
 }
 
