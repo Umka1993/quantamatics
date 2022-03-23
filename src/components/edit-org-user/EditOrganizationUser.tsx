@@ -122,8 +122,6 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 					.unwrap()
 					.then(!isRoleChanged ? onClose : updateRolesAndClose)
 			: isRoleChanged && updateRolesAndClose();
-
-		!userChanged && !isRoleChanged && onClose();
 	}
 
 	useEffect(
@@ -139,10 +137,9 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 	);
 
 	useEffect(() => {
-		const rolesAsArray = Array.from(userRoles);
 		const rolesIsSame =
-			rolesAsArray.length === user.userRoles.length &&
-			rolesAsArray.every((value, index) => value === user.userRoles[index]);
+			userRoles.size === user.userRoles.length &&
+			user.userRoles.every((value) => userRoles.has(value));
 
 		setRoleChanged(!rolesIsSame);
 	}, [userRoles]);
