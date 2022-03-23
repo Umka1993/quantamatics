@@ -1,6 +1,5 @@
 import { AppRoute, AppInfo } from "../../data/enum";
-import React, { ReactElement } from "react";
-import LogoSVG from './assets/logo.svg';
+import { ReactComponent as LogoSVG } from './assets/logo.svg';
 
 import { Link } from "react-router-dom";
 
@@ -9,7 +8,7 @@ interface LogoProps {
 	height: number
 }
 
-export default function Logo({ width, height }: LogoProps): ReactElement {
+export default function Logo({ width, height }: LogoProps) {
 	return (
 		<Link to={AppRoute.Home}>
 			<LogoSVG

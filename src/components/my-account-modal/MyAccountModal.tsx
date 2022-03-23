@@ -14,7 +14,7 @@ import { SideBarModalMode } from "../../types/sidebar-modal";
 import style from "./my-account-modal.module.scss";
 import MyAccountInfo from "./my-account-info";
 import useBoolean from "../../hooks/useBoolean";
-import KeyIcon from "./key.svg";
+import { ReactComponent as KeyIcon } from "./key.svg";
 
 interface IEditProfile {
 	onRequestClose: () => void;
