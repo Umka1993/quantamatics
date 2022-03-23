@@ -1,4 +1,4 @@
-import React, {
+import {
 	useState,
 	useRef,
 	FunctionComponent,
@@ -6,12 +6,10 @@ import React, {
 	CSSProperties,
 	useEffect,
 	useLayoutEffect,
-	Dispatch,
-	SetStateAction,
+
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
-import useCloseModal from "../../hooks/useCloseModal";
 import classNames from "classnames";
 import MultiselectAssetOption, {
 	MultiselectAssetOptionProps,
