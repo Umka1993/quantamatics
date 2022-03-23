@@ -88,10 +88,18 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 		isSuccess && onRequestClose();
 	}, [isSuccess]);
 
+	function resetHandler() {
+		setCurrentPassword('')
+		setNewPassword('')
+		setConfirmPassword('')
+		closePassword();
+		onRequestClose()
+	}
+
 	return (
 		<Dialog
 			open={open}
-			onRequestClose={onRequestClose}
+			onRequestClose={resetHandler}
 			closeOnOutsideClick
 			headline="My Account"
 			id={SideBarModalMode.Account}
@@ -120,7 +128,7 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 					action=""
 					className={style.form}
 					onSubmit={handlerSubmit}
-					onReset={onRequestClose}
+					onReset={resetHandler}
 					ref={formRef}
 				>
 					<button
@@ -161,7 +169,7 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 			)}
 
 			<footer className={style.footer}>
-				<ResetButton onClick={onRequestClose}>Cancel</ResetButton>
+				<ResetButton form="edit-pass-form">Cancel</ResetButton>
 				<Button
 					type="submit"
 					disabled={!Boolean(currentPassword && newPassword && confirmPassword)}
