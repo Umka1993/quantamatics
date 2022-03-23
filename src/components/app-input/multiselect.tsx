@@ -6,7 +6,6 @@ import {
 	CSSProperties,
 	useEffect,
 	useLayoutEffect,
-
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
@@ -16,9 +15,12 @@ import MultiselectAssetOption, {
 } from "./multiselect-asset-option";
 import { AssetListItem } from "../../types/asset";
 import { useClickOutside } from "../../hooks/useClickOutside";
+
+import style from "./styles/multiselect.module.scss";
+import AssetOption from "../asset-option";
+import { CheckBox } from "../checkbox";
 interface IInput
-	extends Omit<MultiselectAssetOptionProps,
-	"option" | "selected">,
+	extends Omit<MultiselectAssetOptionProps, "option" | "selected">,
 	SelectHTMLAttributes<HTMLSelectElement> {
 	error?: string;
 	label?: string;
@@ -51,7 +53,6 @@ const Multiselect: FunctionComponent<IInput> = ({
 	variant,
 	fullDisabled,
 }) => {
-	const isEditOrganization = Array.isArray(selected);
 	const [rightOffset, setRightOffset] = useState<number>(20);
 	const labelRef = useRef<HTMLSpanElement>(null);
 	const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -66,18 +67,14 @@ const Multiselect: FunctionComponent<IInput> = ({
 			setRightOffset(offsetWidth + 25);
 		}
 	};
-	// useLayoutEffect(reCalcLabelWidth, [selected, labelRef.current])
 
 	useEffect(() => {
-		setHideError(
-			isEditOrganization ? Boolean(selected.length) : Boolean(selected.size)
-		);
+		setHideError(Boolean(selected.size));
 
 		reCalcLabelWidth();
 	}, [selected]);
 
 	useLayoutEffect(() => {
-
 		Boolean(selected.size)
 			? setList(
 				[
@@ -89,13 +86,12 @@ const Multiselect: FunctionComponent<IInput> = ({
 					.join(", ")
 			)
 			: setList("");
-
 	}, [selected]);
 
 	/* const openOptions = useCallback(() => setShowOptions(true), [setShowOptions]) */
 
 	const toggleOptions = () => {
-		setShowOptions(!showOptions)
+		setShowOptions(!showOptions);
 	};
 
 	// useCloseModal(showOptions, setShowOptions);
@@ -126,9 +122,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 				<input
 					className={classNames("app-input__field", {
 						"app-input__field--error":
-							showError &&
-							!hideError &&
-							!Boolean(selected.size),
+							showError && !hideError && !Boolean(selected.size),
 					})}
 					type="text"
 					placeholder={label ? " " : placeholder}
@@ -154,22 +148,19 @@ const Multiselect: FunctionComponent<IInput> = ({
 				<p className="app-input__error">{errorMessage}</p>
 			)}
 
-			<div
-				className={classNames("multiselect__options", {
-					// 'multiselect__options--ods': options.length % 2 !== 0
-				})}
-				hidden={!showOptions}
-			>
-				{options.map((option) =>
-					<MultiselectAssetOption
+			<div className={style.options} hidden={!showOptions}>
+				{options.map((option) => (
+					<AssetOption
 						key={option.assetId}
-						option={option}
 						selected={selected.has(option.assetId)}
+						isSetByDefault={option.sharedByDefault}
+						value={option.assetId}
 						setSelected={setSelected}
-						disabled={disabled}
-						type={type}
-					/>
-				)}
+						className={style.option}
+					>
+						{option.name}
+					</AssetOption>
+				))}
 			</div>
 		</div>
 	);

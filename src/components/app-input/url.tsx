@@ -9,7 +9,6 @@ import React, {
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import { ReactComponent as EditIcon } from "./assets/edit.svg";
 import { IInput } from "./input";
 
 
@@ -119,7 +118,6 @@ const Input: FunctionComponent<IInput> = ({
 					ref={inputRef}
 					onInvalid={invalidHandler}
 				/>
-				{icon === "edit" && <EditIcon className="app-input__icon" />}
 				{label && (
 					<span
 						className={classNames("app-input__label", {

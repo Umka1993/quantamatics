@@ -15,7 +15,7 @@ import { useRef } from "react";
 interface CheckboxProps
 	extends Omit<LabelHTMLAttributes<HTMLLabelElement>, "onChange"> {
 	name?: string;
-	checked: boolean;
+	checked?: boolean;
 	externalSetter?: Dispatch<SetStateAction<boolean>>;
 	align?: "right" | "left";
 	disabled?: boolean;
@@ -50,7 +50,7 @@ const CheckboxLabelled: FunctionComponent<CheckboxProps> = ({
 
 	useEffect(() => {
 		if (inputRef.current) {
-			inputRef.current.checked = checked;
+			inputRef.current.checked = Boolean(checked);
 		}
 	}, [checked, inputRef.current]);
 	return (
