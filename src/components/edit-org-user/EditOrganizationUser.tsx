@@ -3,7 +3,6 @@ import {
 	useEffect,
 	useRef,
 	useState,
-	FunctionComponent,
 } from "react";
 
 import Headline from "../page-title";
@@ -26,7 +25,7 @@ import Loader from "../loader";
 import style from "./edit-org-user.module.scss";
 import {
 	useGetAllAssetsQuery,
-	useLazyGetUserAssetsQuery,
+	useGetUserAssetsQuery,
 	useLinkAssetToUserMutation,
 	useUnlinkAssetToUserMutation,
 } from "../../api/asset";
@@ -39,20 +38,21 @@ interface Props {
 	user: IUser;
 }
 
-export const EditOrganizationUser: FunctionComponent<Props> = ({
-	onClose,
-	user,
-}) => {
+export default function EditOrganizationUser({ onClose, user }: Props) {
 	const { id: organizationID } = useParams();
-	const [firstName, setName] = useState("");
-	const [lastName, setSurname] = useState("");
-	const [companyName, setOrganization] = useState("");
-	const [email, setEmail] = useState("");
-	const [subscriptionEndDate, setExpiration] = useState<Date>(new Date());
+	const [firstName, setName] = useState(user.firstName);
+	const [lastName, setSurname] = useState(user.lastName);
+	const [companyName, setOrganization] = useState(user.companyName);
+	const [email, setEmail] = useState(user.email);
+	const [subscriptionEndDate, setExpiration] = useState<Date>(
+		new Date(user.subscriptionEndDate)
+	);
 
 	const [emailError, setEmailError] = useState<string | undefined>(undefined);
 	const [validate, setValidate] = useState<boolean>(false);
-	const [userRoles, setRoles] = useState<Set<UserRole>>(new Set());
+	const [userRoles, setRoles] = useState<Set<UserRole>>(
+		new Set(user.userRoles)
+	);
 	const dispatch = useDispatch();
 
 	const formRef = useRef<HTMLFormElement>(null);
@@ -60,10 +60,8 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 	const loggedUser = useUser();
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
-	const [
-		fetchUserAssets,
-		{ data: serverSelectedAssets, isSuccess: isAssetsLoaded },
-	] = useLazyGetUserAssetsQuery();
+	const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } =
+		useGetUserAssetsQuery(user.id);
 
 	const [update, { isSuccess, isError, error, isLoading }] =
 		useUpdateUserMutation();
@@ -164,18 +162,6 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 	}
 
 	useEffect(() => {
-		if (user) {
-			setName(user.firstName);
-			setSurname(user.lastName);
-			setOrganization(user.companyName);
-			setEmail(user.email);
-			setExpiration(new Date(user.subscriptionEndDate));
-			setRoles(new Set(user.userRoles));
-			fetchUserAssets(user.id);
-		}
-	}, [user]);
-
-	useEffect(() => {
 		if (serverSelectedAssets && assets) {
 			const selectedAssets: Set<string | number> = new Set(
 				serverSelectedAssets.map(({ id }) => id)
@@ -237,14 +223,14 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 				required
 				variant="squared"
 				className={style.half}
-				icon={<SpriteIcon icon='pen' width={16}  />}
+				icon={<SpriteIcon icon="pen" width={16} />}
 			/>
 
 			<Input
 				externalSetter={setSurname}
 				value={lastName}
 				name="lastName"
-				icon={<SpriteIcon icon='pen' width={16}  />}
+				icon={<SpriteIcon icon="pen" width={16} />}
 				label="Last Name"
 				maxLength={100}
 				required
@@ -256,7 +242,7 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 				externalSetter={setEmail}
 				value={email}
 				error={emailError}
-				icon={<SpriteIcon icon='pen' width={16}  />}
+				icon={<SpriteIcon icon="pen" width={16} />}
 				label="Email"
 				maxLength={100}
 				required
@@ -276,7 +262,7 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 				externalSetter={setOrganization}
 				value={companyName}
 				name="companyName"
-				icon={<SpriteIcon icon='pen' width={16}  />}
+				icon={<SpriteIcon icon="pen" width={16} />}
 				label="Organization"
 				maxLength={100}
 				disabled
@@ -318,4 +304,4 @@ export const EditOrganizationUser: FunctionComponent<Props> = ({
 			</footer>
 		</form>
 	);
-};
+}
