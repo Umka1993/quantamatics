@@ -19,6 +19,7 @@ interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
 	autoComplete?: "current-password" | "new-password";
 	externalSetter?: (value: string) => void;
 	hideError?: boolean
+	variant?: "squared";
 }
 
 const Password: FunctionComponent<IPassword> = ({
@@ -34,6 +35,7 @@ const Password: FunctionComponent<IPassword> = ({
 	externalSetter,
 	hideError,
 	error,
+	variant,
 	...other
 }) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -86,6 +88,7 @@ const Password: FunctionComponent<IPassword> = ({
 		<div
 			className={classNames("app-input", className, {
 				"app-input--validate": errorMessage,
+				"app-input--squared": variant === "squared",
 			})}
 		>
 			<div className="app-input__wrapper">
