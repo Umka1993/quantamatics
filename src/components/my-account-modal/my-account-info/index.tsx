@@ -28,11 +28,11 @@ export default function MyAccountInfo({
 	return (
 		<dl className={classNames(style.root, className)} {...other}>
 			<div className={style.row}>
-				<dt className={style.name}>Name</dt>
+				<dt className={style.name}>First Name</dt>
 				<dd className={style.value}>{user.firstName}</dd>
 			</div>
 			<div className={style.row}>
-				<dt className={style.name}>Surname</dt>
+				<dt className={style.name}>Last Name</dt>
 				<dd className={style.value}>{user.lastName}</dd>
 			</div>
 
