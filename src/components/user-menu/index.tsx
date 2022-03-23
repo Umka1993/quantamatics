@@ -1,7 +1,7 @@
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
-import ProfileIcon from "./assets/profile.svg";
-import LogoutIcon from "./assets/logout.svg";
-import PowerIcon from "./assets/power.svg";
+import { ReactComponent as ProfileIcon } from "./assets/profile.svg";
+import { ReactComponent as LogoutIcon } from "./assets/logout.svg";
+import { ReactComponent as PowerIcon } from "./assets/power.svg";
 import useLogout from "../../hooks/useLogout";
 import style from "./user-menu.module.scss";
 import useCloseModal from "../../hooks/useCloseModal";
