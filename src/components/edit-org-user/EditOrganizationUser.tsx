@@ -1,4 +1,9 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import {
+	FormEvent,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 
 import Headline from "../page-title";
 
@@ -31,9 +36,16 @@ import SpriteIcon from "../sprite-icon/SpriteIcon";
 interface Props {
 	onClose: () => void;
 	user: IUser;
+	setUserToDefault: () => void;
+	isUserCloseRequested: boolean;
 }
 
-export default function EditOrganizationUser({ onClose, user }: Props) {
+export default function EditOrganizationUser({
+	onClose,
+	user,
+	setUserToDefault,
+	isUserCloseRequested,
+}: Props) {
 	const { id: organizationID } = useParams();
 	const [firstName, setName] = useState(user.firstName);
 	const [lastName, setSurname] = useState(user.lastName);
@@ -76,6 +88,7 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 
 	const [isUserChanged, setUserChanged] = useState(false);
 	const [isRoleChanged, setRoleChanged] = useState(false);
+	const [showError, setShowError] = useState(false);
 
 	function validateHandler() {
 		let userChanged = isUserChanged;
@@ -119,8 +132,8 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 
 		userChanged
 			? update(newUserData)
-					.unwrap()
-					.then(!isRoleChanged ? onClose : updateRolesAndClose)
+				.unwrap()
+				.then(!isRoleChanged ? onClose : updateRolesAndClose)
 			: isRoleChanged && updateRolesAndClose();
 	}
 
@@ -128,10 +141,10 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 		() =>
 			setUserChanged(
 				firstName !== user.firstName ||
-					lastName !== user.lastName ||
-					companyName !== user.companyName ||
-					subscriptionEndDate.toISOString() !==
-						new Date(user.subscriptionEndDate).toISOString()
+				lastName !== user.lastName ||
+				companyName !== user.companyName ||
+				subscriptionEndDate.toISOString() !==
+				new Date(user.subscriptionEndDate).toISOString()
 			),
 		[firstName, lastName, companyName, userRoles, subscriptionEndDate]
 	);
@@ -143,6 +156,21 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 
 		setRoleChanged(!rolesIsSame);
 	}, [userRoles]);
+
+	useEffect(() => {
+		if (isUserCloseRequested) {
+			setUserToDefault();
+
+			if (isUserChanged || isRoleChanged) {
+				if (showError) {
+					setShowError(false);
+					return onClose();
+
+				} else setShowError(true);
+			} else onClose()
+
+		}
+	}, [isUserCloseRequested, isUserChanged, isRoleChanged]);
 
 	function updateAssets() {
 		// ? Link new assets to user
@@ -222,29 +250,35 @@ export default function EditOrganizationUser({ onClose, user }: Props) {
 				Edit User Account
 			</Headline>
 
-			<Input
-				externalSetter={setName}
-				value={firstName}
-				name="firstName"
-				label="First Name"
-				maxLength={100}
-				required
-				variant="squared"
-				className={style.half}
-				icon={<SpriteIcon icon="pen" width={16} />}
-			/>
+			{showError && (
+				<p className={style.warning}>Changes have not been saved.</p>
+			)}
 
-			<Input
-				externalSetter={setSurname}
-				value={lastName}
-				name="lastName"
-				icon={<SpriteIcon icon="pen" width={16} />}
-				label="Last Name"
-				maxLength={100}
-				required
-				variant="squared"
-				className={style.half}
-			/>
+			<div className={style.columns}>
+				<Input
+					externalSetter={setName}
+					value={firstName}
+					name="firstName"
+					label="First Name"
+					maxLength={100}
+					required
+					variant="squared"
+					className={style.input}
+					icon={<SpriteIcon icon="pen" width={16} />}
+				/>
+
+				<Input
+					externalSetter={setSurname}
+					value={lastName}
+					name="lastName"
+					icon={<SpriteIcon icon="pen" width={16} />}
+					label="Last Name"
+					maxLength={100}
+					required
+					variant="squared"
+					className={style.input}
+				/>
+			</div>
 
 			<Email
 				externalSetter={setEmail}
