@@ -6,38 +6,31 @@ import {
 	CSSProperties,
 	useEffect,
 	useLayoutEffect,
+	Dispatch,
+	SetStateAction,
 } from "react";
 import "./styles/input.scss";
 import "./styles/multiselect.scss";
 import classNames from "classnames";
-import MultiselectAssetOption, {
-	MultiselectAssetOptionProps,
-} from "./multiselect-asset-option";
+
 import { AssetListItem } from "../../types/asset";
 import { useClickOutside } from "../../hooks/useClickOutside";
 
 import style from "./styles/multiselect.module.scss";
 import AssetOption from "../asset-option";
-import { CheckBox } from "../checkbox";
-interface IInput
-	extends Omit<MultiselectAssetOptionProps, "option" | "selected">,
-	SelectHTMLAttributes<HTMLSelectElement> {
-	error?: string;
-	label?: string;
-	icon?: string;
-	showLimit?: boolean;
+import { IInput } from "./input";
+interface Props extends IInput {
+	setSelected: Dispatch<SetStateAction<Set<string | number>>>;
+
 	selected: Set<string | number>;
 	errorMessage?: string;
 	showError?: boolean;
 
 	options: AssetListItem[];
 	inputList?: string;
-
-	fullDisabled?: boolean;
-	variant?: "squared";
 }
 
-const Multiselect: FunctionComponent<IInput> = ({
+const Multiselect: FunctionComponent<Props> = ({
 	options,
 	label,
 	placeholder,
@@ -49,9 +42,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 	className,
 	disabled,
 	inputList = "",
-	type,
 	variant,
-	fullDisabled,
 }) => {
 	const [rightOffset, setRightOffset] = useState<number>(20);
 	const labelRef = useRef<HTMLSpanElement>(null);
@@ -133,7 +124,7 @@ const Multiselect: FunctionComponent<IInput> = ({
 					style={{
 						cursor: "pointer",
 					}}
-					disabled={fullDisabled}
+					disabled={disabled}
 				/>
 
 				{label && (
