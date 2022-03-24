@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./styles/create-organization.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
@@ -15,7 +15,7 @@ import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
 
 export default function InviteUserForm() {
-	const {id: organizationId } = useParams();
+	const { id: organizationId } = useParams();
 
 	const loggedUser = useUser();
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
@@ -24,9 +24,9 @@ export default function InviteUserForm() {
 		organizationId as string
 	);
 
-	const { data: assets } = useGetAllAssetsQuery(organizationId as string);
-	const [assetError, setAssetError] = useState(false);
-	const [loading, setLoading] = useState(false);
+									const { data: assets } = useGetAllAssetsQuery(organizationId as string);
+									const [assetError, setAssetError] = useState(false);
+									const [loading, setLoading] = useState(false);
 
 	const [firstName, setFirstName] = useState<string>("");
 	const [lastName, setLastName] = useState<string>("");
