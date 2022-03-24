@@ -27,6 +27,7 @@
 		background-color: transparent;
 		background: linear-gradient(149.05deg, rgba(255, 255, 255, 0.95) 3.23%, rgba(255, 255, 255, 0.85) 98.66%);
 		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
 	}
 	&[hidden] {
 		opacity: 0;

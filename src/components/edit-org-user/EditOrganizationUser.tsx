@@ -192,14 +192,14 @@ export default function EditOrganizationUser({
 		if (isUserCloseRequested) {
 			setUserToDefault();
 
-			if (isUserChanged || isRoleChanged) {
+			if (isUserChanged || isRoleChanged || isAssetChanged) {
 				if (showError) {
 					setShowError(false);
 					return onClose();
 				} else setShowError(true);
 			} else onClose();
 		}
-	}, [isUserCloseRequested, isUserChanged, isRoleChanged]);
+	}, [isUserCloseRequested, isUserChanged, isRoleChanged, isAssetChanged]);
 
 	function updateAssets() {
 		// ? Link new assets to user
