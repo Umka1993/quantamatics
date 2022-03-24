@@ -141,7 +141,6 @@ export default function OrganizationDetail() {
 				id="org-user-modal"
 				variant="right-side"
 				hasCloseButton={false}
-				hasWrapper={false}
 			>
 				{selectedUser !== null && (
 					<EditOrganizationUser

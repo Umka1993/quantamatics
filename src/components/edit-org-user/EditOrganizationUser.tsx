@@ -71,8 +71,8 @@ export default function EditOrganizationUser({
 		useUpdateUserRolesMutation();
 
 	const { data: assets } = useGetAllAssetsQuery(organizationID as string);
-	const [linkAsset] = useLinkAssetToUserMutation();
-	const [unlinkAsset] = useUnlinkAssetToUserMutation();
+	const [linkAsset, { isLoading: isAssetLinking }] = useLinkAssetToUserMutation();
+	const [unlinkAsset, { isLoading: isAssetUnLinking }] = useUnlinkAssetToUserMutation();
 
 	const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
 		new Set()
@@ -262,7 +262,7 @@ export default function EditOrganizationUser({
 		emailError && formRef.current?.reportValidity();
 	}, [emailError]);
 
-	return isLoading || secondLoading ? (
+	return isLoading || secondLoading || isAssetLinking || isAssetUnLinking ? (
 		<Loader />
 	) : (
 		<form
@@ -274,6 +274,8 @@ export default function EditOrganizationUser({
 			noValidate={validate ? undefined : true}
 			ref={formRef}
 		>
+
+			isLoading || secondLoading
 			<Headline className={style.title} id="org-user-modal-title">
 				Edit User Account
 			</Headline>
