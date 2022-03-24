@@ -1,16 +1,16 @@
-import React, {
+import {
 	useState,
 	useEffect,
 	useRef,
 	InputHTMLAttributes,
 	ChangeEventHandler,
 	FormEventHandler,
-	FunctionComponent
+	FunctionComponent,
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import EyeSVG from "./assets/eye.svg";
-import ClosedEyeSVG from "./assets/closed-eye.svg";
+import { ReactComponent as EyeSVG } from "./assets/eye.svg";
+import { ReactComponent as ClosedEyeSVG } from "./assets/closed-eye.svg";
 import getValidationMessage from "./utils/passwordValidation";
 import { RegExpValidation } from "../../data/enum";
 interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
@@ -18,7 +18,8 @@ interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	autoComplete?: "current-password" | "new-password";
 	externalSetter?: (value: string) => void;
-	hideError?: boolean
+	hideError?: boolean;
+	variant?: "squared";
 }
 
 const Password: FunctionComponent<IPassword> = ({
@@ -34,6 +35,7 @@ const Password: FunctionComponent<IPassword> = ({
 	externalSetter,
 	hideError,
 	error,
+	variant,
 	...other
 }) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -66,7 +68,7 @@ const Password: FunctionComponent<IPassword> = ({
 			if (error) {
 				inputRef.current.setCustomValidity(error);
 			} else {
-				inputRef.current.setCustomValidity('');
+				inputRef.current.setCustomValidity("");
 				if (isNewPassword) {
 					const message = getValidationMessage(inputRef.current.validity);
 					inputRef.current.setCustomValidity(message);
@@ -74,7 +76,7 @@ const Password: FunctionComponent<IPassword> = ({
 			}
 			errorMessage && setErrorMessage(undefined);
 		}
-	}, [value, inputRef.current?.validity, error])
+	}, [value, inputRef.current?.validity, error]);
 
 	const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
 		evt.preventDefault();
@@ -86,6 +88,7 @@ const Password: FunctionComponent<IPassword> = ({
 		<div
 			className={classNames("app-input", className, {
 				"app-input--validate": errorMessage,
+				"app-input--squared": variant === "squared",
 			})}
 		>
 			<div className="app-input__wrapper">
@@ -101,14 +104,15 @@ const Password: FunctionComponent<IPassword> = ({
 					placeholder={placeholder}
 					required={required}
 					aria-required={required}
-					pattern={isNewPassword ? RegExpValidation.Password as string : undefined}
+					pattern={
+						isNewPassword ? (RegExpValidation.Password as string) : undefined
+					}
 					minLength={isNewPassword ? 8 : undefined}
 					maxLength={isNewPassword ? 32 : undefined}
-					value={value || ''}
+					value={value || ""}
 					{...other}
 					ref={inputRef}
 					onInvalid={invalidHandler}
-
 				/>
 
 				<button

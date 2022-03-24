@@ -1,23 +1,21 @@
-import React, {
+import {
 	ChangeEvent,
 	Dispatch,
 	FunctionComponent,
 	LabelHTMLAttributes,
 	SetStateAction,
-	FormEventHandler,
 	useEffect,
 	ChangeEventHandler,
 } from "react";
 import "./style/checkbox.scss";
-import CheckIcon from "./assets/check.svg";
+import { ReactComponent as CheckIcon } from "./assets/check.svg";
 import classNames from "classnames";
 import { useRef } from "react";
-import Checkbox from "./checkbox";
 
 interface CheckboxProps
 	extends Omit<LabelHTMLAttributes<HTMLLabelElement>, "onChange"> {
 	name?: string;
-	checked: boolean;
+	checked?: boolean;
 	externalSetter?: Dispatch<SetStateAction<boolean>>;
 	align?: "right" | "left";
 	disabled?: boolean;
@@ -52,7 +50,7 @@ const CheckboxLabelled: FunctionComponent<CheckboxProps> = ({
 
 	useEffect(() => {
 		if (inputRef.current) {
-			inputRef.current.checked = checked;
+			inputRef.current.checked = Boolean(checked);
 		}
 	}, [checked, inputRef.current]);
 	return (

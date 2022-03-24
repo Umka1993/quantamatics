@@ -10,7 +10,7 @@ import React, {
 	useState,
 } from "react";
 import "../app-input/styles/input.scss";
-import "../app-input//styles/multiselect.scss";
+import "../app-input/styles/multiselect.scss";
 import classNames from "classnames";
 import { UserRole } from "../../data/enum";
 import { useClickOutside } from "../../hooks/useClickOutside";

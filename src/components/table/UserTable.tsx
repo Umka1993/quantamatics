@@ -1,4 +1,4 @@
-import React, {
+import {
 	FunctionComponent,
 	SetStateAction,
 	useLayoutEffect,
@@ -6,16 +6,15 @@ import React, {
 	Dispatch,
 } from "react";
 
-import EditSVG from "./assets/edit-row-icon.svg";
-
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
-import { IUpdateUser, IUser } from "../../types/user";
+import { IUser } from "../../types/user";
 import ISort from "../../types/sort-type";
 import { USER_HEADER } from "./utils/constants";
 import { SortDirection } from "../../data/enum";
 import style from "./styles/table.module.scss";
+import SpriteIcon from "../sprite-icon/SpriteIcon";
 
 interface UserTableProps {
 	list: IUser[];
@@ -74,6 +73,11 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 						className={[style.row, style["row--body"], style["row--user"]].join(
 							" "
 						)}
+						onClick={({ target }) =>
+							(target as any).href === undefined &&
+							userSetter(user)
+						}
+
 						key={user.id}
 					>
 						<td className={style.cell}>{user.firstName}</td>
@@ -93,10 +97,9 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 								className={style.action}
 								onClick={({ currentTarget }) => {
 									currentTarget.blur();
-									userSetter(user)
 								}}
 							>
-								<EditSVG role="img" aria-label="edit" fill="currentColor" />
+								<SpriteIcon icon='pen' label="Edit user" width={16} id={`edit-${user.id}`} />
 							</button>
 						</td>
 					</tr>

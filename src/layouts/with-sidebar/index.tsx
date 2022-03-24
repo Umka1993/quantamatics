@@ -4,7 +4,7 @@ import useLogout from "../../hooks/useLogout";
 import { SideBar } from "../../components/side-bar";
 import style from "./with-sidebar.module.scss";
 import PrivateRoutes from "../../router/private-routes";
-import { EditPassword } from "../../components/edit-modal/edit-password";
+import MyAccountModal from "../../components/my-account-modal/MyAccountModal";
 import { RestartServer } from "../../components/restart-server";
 
 import { useLocation } from "react-router-dom";
@@ -12,12 +12,9 @@ import useUser from "../../hooks/useUser";
 import { useGetUserQuery } from "../../api/user";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authorization";
-import Dialog from "../../components/dialog";
 import { useCallback } from "react";
-import { SideBarModalMode } from "../../types/sidebar-modal";
-import useToggle from "../../hooks/useToggle";
+import { SideBarModalModeType } from "../../types/sidebar-modal";
 import UserMenu from "../../components/user-menu";
-import useBoolean from "hooks/useBoolean";
 
 export default function WithSideBarLayout(): ReactElement {
 	const logout = useLogout();
@@ -27,7 +24,8 @@ export default function WithSideBarLayout(): ReactElement {
 	const { data: user, isSuccess: isUserLoaded } = useGetUserQuery(id);
 	const dispatch = useDispatch();
 
-	const [activeModal, setActiveModal] = useState<SideBarModalMode>(undefined);
+	const [activeModal, setActiveModal] =
+		useState<SideBarModalModeType>(undefined);
 
 	useEffect(() => {
 		!getCookie("user") && logout();
@@ -63,18 +61,13 @@ export default function WithSideBarLayout(): ReactElement {
 					openModal={setActiveModal}
 				/>
 			)}
-			<Dialog
-				open={activeModal !== undefined}
+
+			<RestartServer
+				open={isRestartServerModalShowed}
 				onRequestClose={closeModal}
-				closeOnOutsideClick
-				headline={isProfileModalShowed ? "My Account" : "Restart Server"}
-				id={activeModal}
-				wrapperClass={isProfileModalShowed ? "edit-account" : "restart-server"}
-				role={isRestartServerModalShowed ? "alertdialog " : "dialog"}
-			>
-				{user && isProfileModalShowed && <EditPassword onClose={closeModal} />}
-				{isRestartServerModalShowed && <RestartServer onClose={closeModal} />}
-			</Dialog>
+			/>
+
+			<MyAccountModal open={isProfileModalShowed} onRequestClose={closeModal} />
 		</>
 	);
 }

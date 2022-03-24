@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../button";
-import ArrowPrew from "./assets/arrowPrew.svg";
-import ArrowNext from "./assets/arrowNext.svg";
+import { ReactComponent as ArrowPrew } from "./assets/arrowPrew.svg";
+import { ReactComponent as ArrowNext } from "./assets/arrowNext.svg";
 
 interface IDatePickerHeader {
 	decrease: () => void;

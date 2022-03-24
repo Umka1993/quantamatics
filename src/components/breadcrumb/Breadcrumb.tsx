@@ -15,10 +15,10 @@ interface BreadcrumbProps extends HTMLProps<HTMLDivElement> {
 const Breadcrumb: FunctionComponent<BreadcrumbProps> = ({
 	links,
 	label = "Breadcrumb",
-	...other
+
 }) => {
 	return (
-		<nav aria-label={label} {...other}>
+		<nav aria-label={label}>
 			<ol className={style.list}>
 				{links.map(({ text, href }, index) => (
 					<li className={style.item} key={text}>

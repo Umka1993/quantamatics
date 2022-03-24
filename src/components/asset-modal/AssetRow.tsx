@@ -1,4 +1,4 @@
-import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
+import { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { Checkbox } from "../app-checkbox";
 import classNames from "classnames";
 import { AssetInOrganization } from "../../types/asset";
@@ -45,7 +45,6 @@ const AssetRow: FunctionComponent<MultiselectAssetOptionProps> = ({
 					name={option.asset.name}
 					checked={isSelected}
 					disabled={disabled}
-					value={option.assetId}
 					highlightOnChecked
 					onClick={
 						disabled

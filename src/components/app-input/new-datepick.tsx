@@ -9,20 +9,18 @@ import React, {
 import "./styles/input.scss";
 import "./styles/new-datepicker.scss";
 import classNames from "classnames";
-import CalendarIcon from "./assets/calendar.svg";
+import { ReactComponent as CalendarIcon } from "./assets/calendar.svg";
 import { checkDateInputSupport } from "./utils/date-utils";
 import "react-day-picker/lib/style.css";
 import enGb from "date-fns/locale/en-GB";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
 import DatePickerHeader from "./date-picker-header";
+import { IInput } from "./input";
 
 registerLocale("enGB", enGb);
 
-interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
-	error?: string;
-	label?: string;
-	autoComplete?: "current-password" | "new-password";
+interface IDatePick extends Omit<IInput, "externalSetter"> {
 	externalSetter?: (value: Date) => void;
 	triggerValidity?: boolean;
 	valueAsDate?: Date;
@@ -30,16 +28,19 @@ interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
 	maxDate?: Date;
 	variant?: "squared";
 }
-
-const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
+export default function DatePickerComponent({
 	className,
 	itemRef,
 	required,
 	label,
 	onChange,
 	externalSetter,
+	min,
+	minDate,
+	max,
+	maxDate,
 	variant,
-}) => {
+}: IDatePick) {
 	const isSupport = checkDateInputSupport();
 	const labelRef = useRef<HTMLSpanElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -123,45 +124,6 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
 					} as CSSProperties
 				}
 			>
-				{/*{isSupport ? (*/}
-				{/*    <input*/}
-				{/*        className="app-input__field"*/}
-				{/*        type="date"*/}
-				{/*        aria-invalid={!!errorMessage}*/}
-				{/*        aria-label={label}*/}
-				{/*        placeholder={label}*/}
-				{/*        required={required}*/}
-				{/*        onChange={changeHandler}*/}
-				{/*        defaultValue={formatToValue(valueAsDate)}*/}
-				{/*        aria-required={required}*/}
-				{/*        {...other}*/}
-				{/*        ref={inputRef}*/}
-				{/*        onInvalid={invalidHandler}*/}
-				{/*        min={minDate ? formatToValue(minDate) : min}*/}
-				{/*        max={maxDate ? formatToValue(maxDate) : max}*/}
-				{/*    />*/}
-				{/*) : (*/}
-				{/*    <DayPickerInput*/}
-				{/*        format='MM/dd/yyyy'*/}
-				{/*        formatDate={(date, format) => dateFnsFormat(date, format)}*/}
-
-				{/*        dayPickerProps={{*/}
-				{/*            disabledDays: [minDate && {*/}
-				{/*                before: minDate*/}
-				{/*            }, maxDate && {*/}
-				{/*                after: maxDate,*/}
-				{/*            }]*/}
-				{/*        }}*/}
-				{/*        placeholder=''*/}
-
-				{/*        value={valueAsDate || undefined}*/}
-				{/*        inputProps={{*/}
-				{/*            className: 'app-input__field',*/}
-				{/*            onChange: changeFallbackHandler,*/}
-				{/*        }}*/}
-
-				{/*    />*/}
-				{/*)}*/}
 				{defaultCalendar ? (
 					<DatePicker
 						selected={startDate}
@@ -262,6 +224,4 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
 			{errorMessage && <p className="app-input__error">{errorMessage}</p>}
 		</div>
 	);
-};
-
-export default DatePickerComponent;
+}
