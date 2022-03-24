@@ -1,0 +1,40 @@
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
+
+.root {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0 45px;
+}
+
+.row {
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 1.375;
+	color: $inactive;
+
+	padding: 12px 0;
+
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: 20px;
+
+	&:not(:last-child) {
+		border-bottom: 1px solid rgba($inactive, 0.4);
+	}
+
+	&--full {
+		grid-column: 1 / -1;
+	}
+}
+
+.value {
+	color: $headlines;
+	margin: 0;
+	justify-self: end;
+	text-align: right;
+}
+
+.name {
+	font: inherit;
+}

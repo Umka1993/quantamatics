@@ -27,6 +27,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 	open,
 	closeFunction,
 	organization,
+	...other
 }) => {
 	const [
 		update,
@@ -128,7 +129,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 		} else {
 			if (isChanged) {
 				setCloseError(
-					"Your changes will not be saved. Click again if you want to persist."
+					"Changes have not been saved."
 				);
 				return;
 			}
@@ -140,12 +141,13 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 
 	return (
 		<Dialog
+			id="org-modal"
+			variant="right-side"
 			open={open}
 			onRequestClose={checkErrorsOrClose}
 			closeOnOutsideClick
-			id="org-modal"
-			variant="right-side"
 			hasCloseButton={false}
+			{...other}
 		>
 			<form
 				className={style.root}

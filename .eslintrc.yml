@@ -31,6 +31,7 @@ rules:
     "@typescript-eslint/ban-types": ["warn"],
     "object-curly-spacing": ["error", "always", { "arraysInObjects": false }],
     "indent": ["error", "tab", { "offsetTernaryExpressions": false }],
+    "react/react-in-jsx-scope": "off",
   }
 
 ignorePatterns: ["config/**/*", "node_modules/**/*"]

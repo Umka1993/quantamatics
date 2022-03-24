@@ -1,5 +1,4 @@
 import { AppRoute } from "../data/enum";
-import React, { ReactElement } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import {
 	LoginForm,
@@ -10,7 +9,7 @@ import {
 import SuccessMessage from "../components/success-message";
 import InfoMessage from "../components/info-message/info-message";
 
-export default function UnLoggedRoutes(): ReactElement {
+export default function UnLoggedRoutes() {
 	return (
 		<Routes>
 			<Route path="*" element={<Navigate to={AppRoute.Login} />} />

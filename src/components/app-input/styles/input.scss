@@ -139,13 +139,12 @@ $text: #bcc4d8;
 		}
 	}
 
-	&__icon {
-		fill: $inactive;
+  &__icon {
+    fill: $inactive;
 		margin: auto 0 auto 4px;
-
-		position: absolute;
-		inset: 0 0 0 auto;
-	}
+    position: absolute;
+    inset: 0 0 0 auto;
+  }
 
 	&__field:hover ~ &__icon {
 		border-color: $accent;
@@ -165,7 +164,7 @@ $text: #bcc4d8;
 		box-shadow: inset 0px 2px 10px rgba(147, 171, 212, 0.1);
 		border-radius: 2px;
 		min-height: 48px;
-		padding: 10px calc(30px + var(--label-width, 0)) 10px 20px;
+		padding: 10px calc(30px + var(--label-width, 0px)) 10px 20px;
 
 		transition-property: color, border-color;
 		transition-duration: 0.3s;
@@ -174,6 +173,12 @@ $text: #bcc4d8;
 			border-color: $accent;
 			box-shadow: inset 0px 2px 10px rgba(103, 115, 184, 0.1);
 		}
+	}
+
+	&--squared &__toggle {
+		right: 14px;
+		display: grid;
+		align-content: center;
 	}
 
 	&--squared &__label {
@@ -194,7 +199,8 @@ $text: #bcc4d8;
 	}
 
 	&--squared &__icon {
-		inset: auto 15px auto auto;
+		inset: 50% 15px auto auto;
+		transform: translateY(-50%);
 	}
 
 	&--validate &__field:not(:placeholder-shown):invalid,

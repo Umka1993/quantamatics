@@ -9,7 +9,7 @@ import "./styles/login-page.scss";
 import { useLoginUserMutation } from "../../api/account";
 import IApiError from "../../types/api-error";
 import useLogin from "../../hooks/useLogin";
-import { InfoMessage } from "components/info-message/info-message";
+import { InfoMessage } from "../info-message/info-message";
 
 const LoginForm: FunctionComponent = () => {
 	const [email, setEmail] = useState<string>("");

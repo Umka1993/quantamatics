@@ -2,23 +2,22 @@ import React, {
 	useState,
 	useEffect,
 	useRef,
-	InputHTMLAttributes,
 	ChangeEventHandler,
 	FormEventHandler,
 	CSSProperties,
+	cloneElement,
 } from "react";
 import "./styles/input.scss";
 import classNames from "classnames";
-import EditIcon from "./assets/edit.svg";
 import getValidationMessage from "./utils/emailValidation";
 import { RegExpValidation } from "../../data/enum";
 import { IInput } from "./input";
 
 interface IEmail extends IInput {
-    hideError?: boolean,
+	hideError?: boolean;
 }
 
-const Email: React.FunctionComponent<IEmail> = ({
+export default function Email({
 	className,
 	label,
 	placeholder,
@@ -36,7 +35,7 @@ const Email: React.FunctionComponent<IEmail> = ({
 	showLimit,
 	maxLength,
 	...other
-}) => {
+}: IEmail) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const labelRef = useRef<HTMLSpanElement>(null);
 	const [errorMessage, setErrorMessage] = useState<string | undefined>(error);
@@ -65,13 +64,12 @@ const Email: React.FunctionComponent<IEmail> = ({
 		onInvalid && onInvalid(evt);
 	};
 
-
 	const reCalcLabelWidth = () => {
 		if (labelRef.current) {
 			const { offsetWidth } = labelRef.current;
-			setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5)
+			setRightOffset(icon ? offsetWidth + 25 : offsetWidth + 5);
 		}
-	}
+	};
 
 	return (
 		<div
@@ -83,10 +81,10 @@ const Email: React.FunctionComponent<IEmail> = ({
 			<label
 				className="app-input__wrapper"
 				style={
-					label ?
-	{
-		"--label-width": `${rightOffset}px`,
-	} as CSSProperties
+					label
+						? ({
+							"--label-width": `${rightOffset}px`,
+						} as CSSProperties)
 						: undefined
 				}
 			>
@@ -96,7 +94,10 @@ const Email: React.FunctionComponent<IEmail> = ({
 					autoComplete="email"
 					className="app-input__field"
 					onChange={changeHandler}
-					onFocus={(evt) => { reCalcLabelWidth(); onFocus && onFocus(evt) }}
+					onFocus={(evt) => {
+						reCalcLabelWidth();
+						onFocus && onFocus(evt);
+					}}
 					aria-invalid={!!errorMessage}
 					aria-label={errorMessage && hideError ? errorMessage : undefined}
 					name={name}
@@ -112,15 +113,20 @@ const Email: React.FunctionComponent<IEmail> = ({
 					pattern={RegExpValidation.Email as string}
 				/>
 
-				{icon === "edit" && <EditIcon className="app-input__icon" />}
+				{icon && cloneElement(icon, { className: "app-input__icon" })}
+
 				{label && (
 					<span
 						className={classNames("app-input__label", {
-							'app-input__label--icon': icon
+							"app-input__label--icon": icon,
 						})}
-
 					>
-						<span ref={labelRef}>{label}{showLimit && maxLength && ` (${(value as string)?.length} / ${maxLength})`}</span>
+						<span ref={labelRef}>
+							{label}
+							{showLimit &&
+								maxLength &&
+								` (${(value as string)?.length} / ${maxLength})`}
+						</span>
 					</span>
 				)}
 			</label>
@@ -135,6 +141,4 @@ const Email: React.FunctionComponent<IEmail> = ({
 			)}
 		</div>
 	);
-};
-
-export default Email;
+}

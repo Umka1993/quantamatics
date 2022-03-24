@@ -1,7 +1,7 @@
 export function checkDateInputSupport() {
-	if (navigator.userAgent.includes('Safari') && navigator.userAgent.includes('Mac OS')) {
-		return false;
-	}
+	// if (navigator.userAgent.includes('Safari') && navigator.userAgent.includes('Mac OS')) {
+	// 	return false;
+	// }
 
 	const input = document.createElement('input');
 	input.setAttribute('type','date');

@@ -25,19 +25,19 @@
 
 	&--organization {
 		grid-template-columns:
-			max(#{math.div(278 - 24, 1110) * 100%}, 140px + 24px)
-			max(#{math.div(202 - 24, 1110) * 100%}, 131px + 24px)
-			max(#{math.div(238 - 24, 1110) * 100%}, 143px + 24px)
+			max(#{math.div(278 - 24, 1110) * 100%}, #{140 + 24}px)
+			max(#{math.div(202 - 24, 1110) * 100%}, #{131 + 24}px)
+			max(#{math.div(238 - 24, 1110) * 100%}, #{143 + 24}px)
 			1fr
 			64px;
 	}
 
 	&--user {
 		grid-template-columns:
-			max(#{math.div(120, 1108) * 100%}, 60px + 24px)
-			max(#{math.div(136 - 24, 1108) * 100%}, 76px + 24px)
-			max(#{math.div(258 - 24, 1108) * 100%}, 112px + 24px)
-			max(#{math.div(186 - 24, 1108) * 100%}, 118px + 24px)
+			max(#{math.div(120, 1108) * 100%}, #{90 + 24}px)
+			max(#{math.div(136 - 24, 1108) * 100%}, #{88 + 24}px)
+			max(#{math.div(258 - 24, 1108) * 100%}, #{112 + 24}px)
+			max(#{math.div(186 - 24, 1108) * 100%}, #{118 + 24}px)
 			1fr
 			64px;
 	}
@@ -47,6 +47,7 @@
 		align-items: center;
 
 		position: relative;
+		cursor: pointer;
 
 		&::before {
 			position: absolute;
@@ -72,6 +73,11 @@
 			&::before {
 				background-color: $accent;
 			}
+		}
+
+		&:hover .action {
+
+			color: $accent;
 		}
 	}
 }
@@ -126,11 +132,10 @@
 	outline-offset: 0.4em;
 	border-radius: 0.2em;
 
+	transition: color 0.2s;
+
 	&:focus-visible {
 		outline-width: 1px;
-	}
-
-	@include hover-focus {
 		color: $accent;
 	}
 

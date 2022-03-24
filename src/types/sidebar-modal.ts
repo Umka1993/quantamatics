@@ -1,5 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type SideBarModalMode = undefined | "my-account" | "restart-server";
+export const enum SideBarModalMode {
+	Account = 'my-account',
+	Restart = 'restart-server',
+}
 
-export type SideBarModalOpen = Dispatch<SetStateAction<SideBarModalMode>>;
+export type SideBarModalModeType = undefined | SideBarModalMode;
+
+export type SideBarModalOpen = Dispatch<SetStateAction<SideBarModalModeType>>;
