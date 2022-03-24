@@ -9,7 +9,7 @@ import React, {
 import "./styles/input.scss";
 import "./styles/new-datepicker.scss";
 import classNames from "classnames";
-import CalendarIcon from "./assets/calendar.svg";
+import { ReactComponent as CalendarIcon } from "./assets/calendar.svg";
 import { checkDateInputSupport } from "./utils/date-utils";
 import "react-day-picker/lib/style.css";
 import enGb from "date-fns/locale/en-GB";
@@ -126,45 +126,6 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
 					} as CSSProperties
 				}
 			>
-				{/*{isSupport ? (*/}
-				{/*    <input*/}
-				{/*        className="app-input__field"*/}
-				{/*        type="date"*/}
-				{/*        aria-invalid={!!errorMessage}*/}
-				{/*        aria-label={label}*/}
-				{/*        placeholder={label}*/}
-				{/*        required={required}*/}
-				{/*        onChange={changeHandler}*/}
-				{/*        defaultValue={formatToValue(valueAsDate)}*/}
-				{/*        aria-required={required}*/}
-				{/*        {...other}*/}
-				{/*        ref={inputRef}*/}
-				{/*        onInvalid={invalidHandler}*/}
-				{/*        min={minDate ? formatToValue(minDate) : min}*/}
-				{/*        max={maxDate ? formatToValue(maxDate) : max}*/}
-				{/*    />*/}
-				{/*) : (*/}
-				{/*    <DayPickerInput*/}
-				{/*        format='MM/dd/yyyy'*/}
-				{/*        formatDate={(date, format) => dateFnsFormat(date, format)}*/}
-
-				{/*        dayPickerProps={{*/}
-				{/*            disabledDays: [minDate && {*/}
-				{/*                before: minDate*/}
-				{/*            }, maxDate && {*/}
-				{/*                after: maxDate,*/}
-				{/*            }]*/}
-				{/*        }}*/}
-				{/*        placeholder=''*/}
-
-				{/*        value={valueAsDate || undefined}*/}
-				{/*        inputProps={{*/}
-				{/*            className: 'app-input__field',*/}
-				{/*            onChange: changeFallbackHandler,*/}
-				{/*        }}*/}
-
-				{/*    />*/}
-				{/*)}*/}
 				{defaultCalendar ? (
 					<DatePicker
 						selected={startDate}
