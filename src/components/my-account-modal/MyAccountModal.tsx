@@ -45,8 +45,10 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const [updatePassword, { isSuccess, isError, error, isLoading }] =
-		useChangePasswordMutation();
+	const [
+		updatePassword,
+		{ isSuccess, isError, error, isLoading: isPasswordUpdating },
+	] = useChangePasswordMutation();
 
 	useEffect(() => {
 		wrongCurrent && setWrongCurrent(undefined);
@@ -85,15 +87,15 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 	}, [wrongCurrent, formRef.current]);
 
 	useEffect(() => {
-		isSuccess && onRequestClose();
+		isSuccess && resetHandler();
 	}, [isSuccess]);
 
 	function resetHandler() {
-		setCurrentPassword('')
-		setNewPassword('')
-		setConfirmPassword('')
+		setCurrentPassword("");
+		setNewPassword("");
+		setConfirmPassword("");
 		closePassword();
-		onRequestClose()
+		onRequestClose();
 	}
 
 	return (
@@ -179,7 +181,9 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 				</Button>
 			</footer>
 
-			{isLoading || isLoadUser || (user === undefined && <Loader />)}
+			{(isPasswordUpdating || isLoadUser || user === undefined) && (
+				<Loader style={{ zIndex: 3 }} />
+			)}
 		</Dialog>
 	);
 }
