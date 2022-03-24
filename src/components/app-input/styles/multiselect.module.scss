@@ -45,6 +45,8 @@
 		left: 12px;
 		bottom: 90%;
 		transform: none;
+
+		z-index: 3;
 	}
 
 	&:first-child :global .check-block__desc {
