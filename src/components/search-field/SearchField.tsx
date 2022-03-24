@@ -8,10 +8,10 @@ interface SearchFieldProps extends HTMLProps<HTMLLabelElement> {
 	setSearch: Dispatch<SetStateAction<string>>
 }
 
-export default function SearchField({search, setSearch, ...other }: SearchFieldProps) {
+export default function SearchField({ search, setSearch, ...other }: SearchFieldProps) {
 	return (<label className={style.search} {...other}>
 		<SearchIcon
-					width={16}
+			width={16}
 			height={16}
 			role="img"
 			aria-label="Search organizations"
