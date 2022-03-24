@@ -1,8 +1,8 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import "./styles/create-organization.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
-import Input, { Email, Multiselect } from "../app-input/";
+import Input, { Email, Multiselect, DatePick } from "../app-input/";
 import Form from "./form";
 import { AppRoute, Error, UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
@@ -22,7 +22,7 @@ const InviteUserForm: FunctionComponent = () => {
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
 	const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(
-	organizationId as string
+		organizationId as string
 	);
 
 	const { data: assets } = useGetAllAssetsQuery(organizationId as string);
@@ -161,14 +161,15 @@ const InviteUserForm: FunctionComponent = () => {
 					label="Email Address"
 					variant='squared'
 				/>
-				<DatePickerComponent
+				<DatePick
 					externalSetter={setSubscriptionEndDate}
 					valueAsDate={subscriptionEndDate}
 					minDate={new Date()}
-					required
 					label="Expiration Date"
-					variant='squared'
+					required
+					variant="squared"
 				/>
+
 				{assetPrepared && assets && (
 					<Multiselect
 						options={assets}
@@ -204,11 +205,11 @@ const InviteUserForm: FunctionComponent = () => {
 					)
 				}
 			>
-		Create
+				Create
 			</Button>
 
 			<ResetButton className="create-organization__cancel" href={backLink}>
-		Cancel
+				Cancel
 			</ResetButton>
 		</Form>
 	);
