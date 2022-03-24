@@ -1,4 +1,4 @@
-import { FunctionComponent, HTMLProps, Dispatch, SetStateAction } from "react";
+import { HTMLProps, Dispatch, SetStateAction } from "react";
 
 import { ReactComponent as SearchIcon } from "./assets/search.svg";
 import style from './SearchField.module.scss'
@@ -8,10 +8,10 @@ interface SearchFieldProps extends HTMLProps<HTMLLabelElement> {
 	setSearch: Dispatch<SetStateAction<string>>
 }
 
-const SearchField: FunctionComponent<SearchFieldProps> = ({ search, setSearch, ...other }) => {
+export default function SearchField({search, setSearch, ...other }: SearchFieldProps) {
 	return (<label className={style.search} {...other}>
 		<SearchIcon
-			width={16}
+					width={16}
 			height={16}
 			role="img"
 			aria-label="Search organizations"
@@ -29,4 +29,3 @@ const SearchField: FunctionComponent<SearchFieldProps> = ({ search, setSearch, .
 	);
 }
 
-export default SearchField;
