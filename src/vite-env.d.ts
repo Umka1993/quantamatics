@@ -10,7 +10,7 @@ interface ImportMetaEnv {
 }
 
 interface ImportMeta {
-  readonly env: ImportMetaEnv
+	readonly env: ImportMetaEnv
 }
 
 declare module 'services/pendoInitialize"';

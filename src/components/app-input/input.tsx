@@ -19,7 +19,7 @@ export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	showLimit?: boolean;
 	invalid?: boolean;
 	variant?: "squared";
-	icon?: ReactElement
+	icon?: ReactElement;
 }
 
 export default function Input({
@@ -130,7 +130,7 @@ export default function Input({
 						onFocus && onFocus(evt);
 					}}
 				/>
-				{icon && cloneElement(icon, {className: "app-input__icon"})}
+				{icon && cloneElement(icon, { className: "app-input__icon" })}
 				{label && (
 					<span
 						className={classNames("app-input__label", {
@@ -150,4 +150,4 @@ export default function Input({
 			{errorMessage && <p className="app-input__error">{errorMessage}</p>}
 		</div>
 	);
-};
+}

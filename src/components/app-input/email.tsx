@@ -83,8 +83,8 @@ export default function Email({
 				style={
 					label
 						? ({
-								"--label-width": `${rightOffset}px`,
-						  } as CSSProperties)
+							"--label-width": `${rightOffset}px`,
+						} as CSSProperties)
 						: undefined
 				}
 			>

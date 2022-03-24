@@ -19,7 +19,6 @@ import OrganizationModal from "../organization-modal/OrganizationModal";
 import EditOrganizationUser from "../edit-org-user/EditOrganizationUser";
 import useBoolean from "../../hooks/useBoolean";
 
-
 export default function OrganizationDetail() {
 	const { id } = useParams<RouteParams>();
 
@@ -65,7 +64,11 @@ export default function OrganizationDetail() {
 
 	const closeModal = () => setUser(null);
 	// ! Temp kludge
-	const {value: isUserCloseRequested, setTrue: requestUserClose, setFalse: setUserToDefault} = useBoolean(false);
+	const {
+		value: isUserCloseRequested,
+		setTrue: requestUserClose,
+		setFalse: setUserToDefault,
+	} = useBoolean(false);
 
 	if (isOrganizationLoading || isUsersLoading) {
 		return <Loader />;
@@ -136,12 +139,17 @@ export default function OrganizationDetail() {
 				onRequestClose={requestUserClose}
 				closeOnOutsideClick
 				id="org-user-modal"
-				variant='right-side'
+				variant="right-side"
 				hasCloseButton={false}
 				hasWrapper={false}
 			>
 				{selectedUser !== null && (
-					<EditOrganizationUser user={selectedUser} onClose={closeModal} isUserCloseRequested={isUserCloseRequested} setUserToDefault={setUserToDefault} />
+					<EditOrganizationUser
+						user={selectedUser}
+						onClose={closeModal}
+						isUserCloseRequested={isUserCloseRequested}
+						setUserToDefault={setUserToDefault}
+					/>
 				)}
 			</Dialog>
 		</>
