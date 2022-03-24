@@ -8,42 +8,42 @@ import { useRestartServerMutation } from "../../api/account";
 import Loader from "../loader";
 
 interface IRestartServer {
-    onClose: () => void;
+	onClose: () => void;
 }
 
 export const RestartServer: React.FunctionComponent<IRestartServer> = ({ onClose }) => {
-    const navigate = useNavigate();
-    const [restartServer, { isSuccess, isError, error, isLoading: isRestarting }] = useRestartServerMutation();
+	const navigate = useNavigate();
+	const [restartServer, { isSuccess, isError, error, isLoading: isRestarting }] = useRestartServerMutation();
 
-    useEffect(() => {
-        if (isSuccess) {
-            navigate(AppRoute.Home);
-            onClose();
-        }
-    }, [isSuccess]);
+	useEffect(() => {
+		if (isSuccess) {
+			navigate(AppRoute.Home);
+			onClose();
+		}
+	}, [isSuccess]);
 
-    return isRestarting ? (
-        <>
-            <p>Your server is restarting, you will be redirect automatically</p>
-            <div className={style.loader}>
-                <Loader />
-            </div>
-        </>
-    ) : (
-        <>
-            <p><strong>Warning! This will restart your server.</strong></p>
-            <p><i>All unsaved work will be lost.</i></p>
+	return isRestarting ? (
+		<>
+			<p>Your server is restarting, you will be redirect automatically</p>
+			<div className={style.loader}>
+				<Loader />
+			</div>
+		</>
+	) : (
+		<>
+			<p><strong>Warning! This will restart your server.</strong></p>
+			<p><i>All unsaved work will be lost.</i></p>
 
-            <footer className={style.footer}>
-                <ResetButton onClick={onClose}>Cancel</ResetButton>
-                <Button
-                    type="button"
-                    onClick={restartServer as () => void}
-                    variant='danger'
-                >
-                    Restart
-                </Button>
-            </footer>
-        </>
-    )
+			<footer className={style.footer}>
+				<ResetButton onClick={onClose}>Cancel</ResetButton>
+				<Button
+					type="button"
+					onClick={restartServer as () => void}
+					variant='danger'
+				>
+					Restart
+				</Button>
+			</footer>
+		</>
+	)
 };

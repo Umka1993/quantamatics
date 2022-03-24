@@ -20,61 +20,61 @@ import UserMenu from "../../components/user-menu";
 import useBoolean from "hooks/useBoolean";
 
 export default function WithSideBarLayout(): ReactElement {
-    const logout = useLogout();
-    const { pathname } = useLocation();
+	const logout = useLogout();
+	const { pathname } = useLocation();
 
-    const { id, userRoles } = useUser();
-    const { data: user, isSuccess: isUserLoaded } = useGetUserQuery(id);
-    const dispatch = useDispatch();
+	const { id, userRoles } = useUser();
+	const { data: user, isSuccess: isUserLoaded } = useGetUserQuery(id);
+	const dispatch = useDispatch();
 
-    const [activeModal, setActiveModal] = useState<SideBarModalMode>(undefined);
+	const [activeModal, setActiveModal] = useState<SideBarModalMode>(undefined);
 
-    useEffect(() => {
-        !getCookie("user") && logout();
-    }, [pathname]);
+	useEffect(() => {
+		!getCookie("user") && logout();
+	}, [pathname]);
 
-    useEffect(() => {
-        if (isUserLoaded && user && dispatch) {
-            const normalizedUser = { ...user, userRoles };
-            localStorage.setItem("user", JSON.stringify(normalizedUser));
-            dispatch(login(normalizedUser));
-        }
-    }, [isUserLoaded, dispatch, userRoles]);
+	useEffect(() => {
+		if (isUserLoaded && user && dispatch) {
+			const normalizedUser = { ...user, userRoles };
+			localStorage.setItem("user", JSON.stringify(normalizedUser));
+			dispatch(login(normalizedUser));
+		}
+	}, [isUserLoaded, dispatch, userRoles]);
 
-    const isProfileModalShowed = activeModal === "my-account";
-    const isRestartServerModalShowed = activeModal === "restart-server";
-    const closeModal = useCallback(
-        () => setActiveModal(undefined),
-        [setActiveModal]
-    );
+	const isProfileModalShowed = activeModal === "my-account";
+	const isRestartServerModalShowed = activeModal === "restart-server";
+	const closeModal = useCallback(
+		() => setActiveModal(undefined),
+		[setActiveModal]
+	);
 
-    const [isUserMenuOpened, setUserMenuOpened] = useState(false);
+	const [isUserMenuOpened, setUserMenuOpened] = useState(false);
 
-    return (
-        <>
-            <SideBar toggleUserMenu={() => setUserMenuOpened(true)} />
-            <main className={style.main}>
-                <PrivateRoutes />
-            </main>
-            {isUserMenuOpened && (
-                <UserMenu
-                    setOpenDropdown={setUserMenuOpened}
-                    openDropdown={isUserMenuOpened}
-                    openModal={setActiveModal}
-                />
-            )}
-            <Dialog
-                open={activeModal !== undefined}
-                onRequestClose={closeModal}
-                closeOnOutsideClick
-                headline={isProfileModalShowed ? "My Account" : "Restart Server"}
-                id={activeModal}
-                wrapperClass={isProfileModalShowed ? "edit-account" : "restart-server"}
-                role={isRestartServerModalShowed ? "alertdialog " : "dialog"}
-            >
-                {user && isProfileModalShowed && <EditPassword onClose={closeModal} />}
-                {isRestartServerModalShowed && <RestartServer onClose={closeModal} />}
-            </Dialog>
-        </>
-    );
+	return (
+		<>
+			<SideBar toggleUserMenu={() => setUserMenuOpened(true)} />
+			<main className={style.main}>
+				<PrivateRoutes />
+			</main>
+			{isUserMenuOpened && (
+				<UserMenu
+					setOpenDropdown={setUserMenuOpened}
+					openDropdown={isUserMenuOpened}
+					openModal={setActiveModal}
+				/>
+			)}
+			<Dialog
+				open={activeModal !== undefined}
+				onRequestClose={closeModal}
+				closeOnOutsideClick
+				headline={isProfileModalShowed ? "My Account" : "Restart Server"}
+				id={activeModal}
+				wrapperClass={isProfileModalShowed ? "edit-account" : "restart-server"}
+				role={isRestartServerModalShowed ? "alertdialog " : "dialog"}
+			>
+				{user && isProfileModalShowed && <EditPassword onClose={closeModal} />}
+				{isRestartServerModalShowed && <RestartServer onClose={closeModal} />}
+			</Dialog>
+		</>
+	);
 }

@@ -15,7 +15,7 @@ variables:
   STACK_NAME: qmc-web-ui-$ENV_SUFFIX
   TEMPLATE_PATH: website.yml
   CERTIFICATE_ARN: arn:aws:acm:us-east-1:383101536740:certificate/29d974c2-caef-44cf-bd78-4e6102652152
-  DISTRIBUTION_ALIAS: dev.quantamatics.net
+  DISTRIBUTION_ALIASES: dev.quantamatics.net
 
 validate template:
   stage: pre-deploy
@@ -63,7 +63,7 @@ build production:
 
 .deploy:
   script:
-    - aws cloudformation deploy --stack-name $STACK_NAME --template-file $TEMPLATE_PATH --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides "CertificateArn=$CERTIFICATE_ARN" "DistributionAlias=$DISTRIBUTION_ALIAS"
+    - aws cloudformation deploy --stack-name $STACK_NAME --template-file $TEMPLATE_PATH --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides "CertificateArn=$CERTIFICATE_ARN" "DistributionAliases=$DISTRIBUTION_ALIASES"
     - aws s3 sync ./dist s3://$STACK_NAME --acl public-read
     - export DISTRIBUTION_ID=`aws cloudformation describe-stack-resource --stack-name $STACK_NAME --logical-resource-id CloudFrontDistribution | jq -r '.StackResourceDetail.PhysicalResourceId'`
     - invalidation_id=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*" | jq -r '.Invalidation.Id')
@@ -90,7 +90,7 @@ deploy staging:
     ENV_SUFFIX: staging
     STACK_NAME: qmc-web-ui-$ENV_SUFFIX
     CERTIFICATE_ARN: arn:aws:acm:us-east-1:873219636944:certificate/007c88f5-b68a-4a25-9ef6-fdf8c7100526
-    DISTRIBUTION_ALIAS: stag.quantamatics.net    
+    DISTRIBUTION_ALIASES: stag.quantamatics.net    
   only:
     - staging
 
@@ -106,7 +106,7 @@ deploy uat:
     ENV_SUFFIX: uat
     STACK_NAME: qmc-web-ui-$ENV_SUFFIX
     CERTIFICATE_ARN: arn:aws:acm:us-east-1:494904037583:certificate/a35b39fd-f8c0-4077-a5df-1a6574fb4db0
-    DISTRIBUTION_ALIAS: uat.quantamatics.net    
+    DISTRIBUTION_ALIASES: uat.quantamatics.net    
   only:
     - master
 
@@ -122,7 +122,7 @@ deploy production:
     ENV_SUFFIX: production
     STACK_NAME: qmc-web-ui-$ENV_SUFFIX
     CERTIFICATE_ARN: arn:aws:acm:us-east-1:695033446027:certificate/6967410a-8283-47bc-a0d8-120d03843e70
-    DISTRIBUTION_ALIAS: beta.quantamatics.com     
+    DISTRIBUTION_ALIASES: app.quantamatics.com,beta.quantamatics.com     
   only:
     - master
   when: manual

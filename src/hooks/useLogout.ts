@@ -5,17 +5,15 @@ import { deleteAllCookies } from "../services/cookies";
 import { logoutFromJupiter } from "../services/logoutFromJupiter";
 
 export default function useLogout() : () => void {
-    const dispatch = useDispatch();
-    return () => {
-        dropToken();
-        dispatch(logout());
-    
-        localStorage.clear()
-        sessionStorage.clear()
-        deleteAllCookies();
+	const dispatch = useDispatch();
+	return () => {
+		dropToken();
+		dispatch(logout());
 
-        logoutFromJupiter();
-    }
+		localStorage.clear()
+		sessionStorage.clear()
+		deleteAllCookies();
+
+		logoutFromJupiter();
+	}
 }
-
-

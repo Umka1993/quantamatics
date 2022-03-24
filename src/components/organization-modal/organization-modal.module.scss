@@ -1,0 +1,22 @@
+@use '../../sass/variables' as *;
+
+.root {
+	padding: 40px;
+	display: grid;
+}
+
+.title {
+	color: $accent;
+}
+
+.inputs {
+	display: grid;
+	gap: 16px;
+
+	margin-top: 40px - 16px;
+}
+
+.error {
+	margin: 0;
+	color: $error;
+}

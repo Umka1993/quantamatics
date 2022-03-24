@@ -5,57 +5,57 @@ import SVG from "../SVG";
 import arrowIcon from "./assets/arrow.svg";
 
 interface ISelectorInput {
-    className?: string;
-    placeholder?: string;
-    value?: any;
-    options: string[];
-    required?: boolean;
-    errors?: boolean;
-    disabled?: boolean;
-    values?: string[];
-    valueSetter?: any;
-    optionSetter?: any;
-    label?: string;
+	className?: string;
+	placeholder?: string;
+	value?: any;
+	options: string[];
+	required?: boolean;
+	errors?: boolean;
+	disabled?: boolean;
+	values?: string[];
+	valueSetter?: any;
+	optionSetter?: any;
+	label?: string;
 }
 
 export const SelectorInput: React.FunctionComponent<ISelectorInput> = ({ className, values, valueSetter, optionSetter, placeholder, value, required, errors, options, disabled, label }) => {
-    const [selecting, setSelecting] = useState<boolean>(false);
-    const [selected, setSelected] = useState<string>(value);
+	const [selecting, setSelecting] = useState<boolean>(false);
+	const [selected, setSelected] = useState<string>(value);
 
-    const inputClassNames = classNames("selector-input", className, {
-        error: errors,
-        "selector-input__active": selecting,
-        "selector-input--disabled": disabled,
-    });
+	const inputClassNames = classNames("selector-input", className, {
+		error: errors,
+		"selector-input__active": selecting,
+		"selector-input--disabled": disabled,
+	});
 
-    const optionsMap = options.map((item, index) => (
-        <div
-            key={item + index} className="selector-input__item"
-            onClick={() => {
-                // valueSetter && values && valueSetter(values[index]);
-                optionSetter && optionSetter(item);
-                setSelected(item)
-                setSelecting(false);
-            }}
-        // data-value={values ? values[index] : undefined}
-        >
-            {item}
-        </div>
-    ));
+	const optionsMap = options.map((item, index) => (
+		<div
+			key={item + index} className="selector-input__item"
+			onClick={() => {
+				// valueSetter && values && valueSetter(values[index]);
+				optionSetter && optionSetter(item);
+				setSelected(item)
+				setSelecting(false);
+			}}
+			// data-value={values ? values[index] : undefined}
+		>
+			{item}
+		</div>
+	));
 
-    const changeState = () => {
-        if (!disabled) {
-            setSelecting(!selecting)
-        }
-    }
+	const changeState = () => {
+		if (!disabled) {
+			setSelecting(!selecting)
+		}
+	}
 
-    return (
-        <div className={inputClassNames} onClick={changeState}>
-            <div className="selector-input__value">{value}</div>
-            {label && <span className='selector-input__label'>{label}</span>}
-            <SVG icon={arrowIcon} />
-            {selecting && <div className="selector-input__list">{optionsMap}</div>}
+	return (
+		<div className={inputClassNames} onClick={changeState}>
+			<div className="selector-input__value">{value}</div>
+			{label && <span className='selector-input__label'>{label}</span>}
+			<SVG icon={arrowIcon} />
+			{selecting && <div className="selector-input__list">{optionsMap}</div>}
 
-        </div>
-    );
+		</div>
+	);
 };

@@ -8,11 +8,11 @@
  */
 
 export default function addHTTPtoURL(string: string) {
-    const isHasProtocol = /^(http[s]?:\/\/).{1,}/gm.test(string);
+	const isHasProtocol = /^(http[s]?:\/\/).{1,}/gm.test(string);
 
-    if (isHasProtocol || !string.length) {
-        return string;
-    }
+	if (isHasProtocol || !string.length) {
+		return string;
+	}
 
-    return `https://${string}`;
+	return `https://${string}`;
 }
