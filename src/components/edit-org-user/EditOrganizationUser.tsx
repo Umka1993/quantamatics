@@ -140,14 +140,15 @@ export default function EditOrganizationUser({
 		const isMainDataChanged =
 			firstName !== user.firstName ||
 			lastName !== user.lastName ||
-			companyName !== user.companyName;
+			companyName !== user.companyName ||
+			email !== user.email;
 
 		const inSubScriptionDateChanged =
 			subscriptionEndDate.toISOString() !==
 			new Date(user.subscriptionEndDate).toISOString();
 
 		setUserChanged(isMainDataChanged || inSubScriptionDateChanged);
-	}, [firstName, lastName, companyName, userRoles, subscriptionEndDate]);
+	}, [firstName, lastName, companyName, userRoles, subscriptionEndDate, email]);
 
 	function checkIfAssetChanged() {
 		let changed = false;
@@ -275,7 +276,6 @@ export default function EditOrganizationUser({
 			ref={formRef}
 		>
 
-			isLoading || secondLoading
 			<Headline className={style.title} id="org-user-modal-title">
 				Edit User Account
 			</Headline>
