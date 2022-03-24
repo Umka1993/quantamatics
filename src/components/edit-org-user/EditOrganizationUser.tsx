@@ -1,9 +1,4 @@
-import {
-	FormEvent,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 import Headline from "../page-title";
 
@@ -88,6 +83,7 @@ export default function EditOrganizationUser({
 
 	const [isUserChanged, setUserChanged] = useState(false);
 	const [isRoleChanged, setRoleChanged] = useState(false);
+	const [isAssetChanged, setAssetChanged] = useState(false);
 	const [showError, setShowError] = useState(false);
 
 	function validateHandler() {
@@ -124,7 +120,10 @@ export default function EditOrganizationUser({
 			localStorage.setItem("user", JSON.stringify(normalizedNewData));
 		}
 
-		updateAssets();
+
+		isAssetChanged && updateAssets();
+
+		isAssetChanged && !userChanged && !isRoleChanged && onClose()
 
 		function updateRolesAndClose() {
 			updateRoles([user.id, rolesAsArray]).unwrap().then(onClose);
@@ -137,17 +136,48 @@ export default function EditOrganizationUser({
 			: isRoleChanged && updateRolesAndClose();
 	}
 
-	useEffect(
-		() =>
-			setUserChanged(
-				firstName !== user.firstName ||
-				lastName !== user.lastName ||
-				companyName !== user.companyName ||
-				subscriptionEndDate.toISOString() !==
-				new Date(user.subscriptionEndDate).toISOString()
-			),
-		[firstName, lastName, companyName, userRoles, subscriptionEndDate]
-	);
+	useEffect(() => {
+		const isMainDataChanged =
+			firstName !== user.firstName ||
+			lastName !== user.lastName ||
+			companyName !== user.companyName;
+
+		const inSubScriptionDateChanged =
+			subscriptionEndDate.toISOString() !==
+			new Date(user.subscriptionEndDate).toISOString();
+
+		setUserChanged(isMainDataChanged || inSubScriptionDateChanged);
+	}, [firstName, lastName, companyName, userRoles, subscriptionEndDate]);
+
+	function checkIfAssetChanged() {
+		let changed = false;
+
+		serverSelectedAssets?.forEach((asset) => {
+			if (!assignedAssets.has(asset.id)) {
+				changed = true;
+			}
+		});
+
+		!changed &&
+			assignedAssets.forEach((assetId) => {
+				const hasAsset = serverSelectedAssets?.findIndex((serverAsset) => {
+					serverAsset.id === assetId;
+				});
+
+				if (hasAsset === -1) {
+					return true;
+				}
+			});
+
+		return changed;
+	}
+
+	useEffect(() => {
+		if (serverSelectedAssets) {
+			const isSameAmount = assignedAssets.size === serverSelectedAssets.length;
+			setAssetChanged(!isSameAmount || (isSameAmount && checkIfAssetChanged()));
+		}
+	}, [assignedAssets, serverSelectedAssets, isAssetChanged]);
 
 	useEffect(() => {
 		const rolesIsSame =
@@ -165,10 +195,8 @@ export default function EditOrganizationUser({
 				if (showError) {
 					setShowError(false);
 					return onClose();
-
 				} else setShowError(true);
-			} else onClose()
-
+			} else onClose();
 		}
 	}, [isUserCloseRequested, isUserChanged, isRoleChanged]);
 
@@ -342,7 +370,10 @@ export default function EditOrganizationUser({
 
 			<footer className={style.footer}>
 				<ResetButton type="reset">Cancel</ResetButton>
-				<Button type="submit" disabled={!isUserChanged && !isRoleChanged}>
+				<Button
+					type="submit"
+					disabled={!isUserChanged && !isRoleChanged && !isAssetChanged}
+				>
 					Save
 				</Button>
 			</footer>
