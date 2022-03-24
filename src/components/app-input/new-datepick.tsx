@@ -28,6 +28,7 @@ interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
 	valueAsDate?: Date;
 	minDate?: Date;
 	maxDate?: Date;
+	variant?: "squared";
 }
 
 const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
@@ -35,14 +36,9 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
 	itemRef,
 	required,
 	label,
-	valueAsDate,
 	onChange,
 	externalSetter,
-	min,
-	minDate,
-	max,
-	maxDate,
-	...other
+	variant,
 }) => {
 	const isSupport = checkDateInputSupport();
 	const labelRef = useRef<HTMLSpanElement>(null);

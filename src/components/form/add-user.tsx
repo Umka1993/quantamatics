@@ -142,7 +142,7 @@ const InviteUserForm: FunctionComponent = () => {
 					value={firstName}
 					maxLength={100}
 					label="First Name"
-					variant='squared'
+					variant="squared"
 				/>
 				<Input
 					externalSetter={setLastName}
@@ -150,7 +150,7 @@ const InviteUserForm: FunctionComponent = () => {
 					value={lastName}
 					maxLength={100}
 					label="Last Name"
-					variant='squared'
+					variant="squared"
 				/>
 				<Email
 					externalSetter={setEmail}
@@ -159,7 +159,7 @@ const InviteUserForm: FunctionComponent = () => {
 					maxLength={100}
 					error={errors}
 					label="Email Address"
-					variant='squared'
+					variant="squared"
 				/>
 				<DatePickerComponent
 					externalSetter={setSubscriptionEndDate}
@@ -167,6 +167,7 @@ const InviteUserForm: FunctionComponent = () => {
 					minDate={new Date()}
 					required
 					label="Expiration Date"
+					variant="squared"
 				/>
 				{assetPrepared && assets && (
 					<Multiselect
@@ -177,7 +178,7 @@ const InviteUserForm: FunctionComponent = () => {
 						errorMessage="Select asset permissions to assign to the user account."
 						showError={assetError}
 						type="user"
-						variant='squared'
+						variant="squared"
 						inputList={[
 							...assets.filter(({ assetId }) => assignedAssets.has(assetId)),
 						]
@@ -190,9 +191,8 @@ const InviteUserForm: FunctionComponent = () => {
 					isSuperAdmin={isSuperAdmin}
 					defaultRoles={userRoles}
 					externalSetter={setRoles}
-					variant='squared'
+					variant="squared"
 				/>
-
 			</div>
 			<Button
 				className="create-organization__submit"
@@ -203,11 +203,11 @@ const InviteUserForm: FunctionComponent = () => {
 					)
 				}
 			>
-		Create
+				Create
 			</Button>
 
 			<ResetButton className="create-organization__cancel" href={backLink}>
-		Cancel
+				Cancel
 			</ResetButton>
 		</Form>
 	);
