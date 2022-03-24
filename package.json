@@ -47,7 +47,7 @@
 		"vite-plugin-svgr": "^1.1.0"
 	},
 	"lint-staged": {
-		"*.{tsx,ts}": "eslint --cache --fix",
+		"*.{tsx,ts}": "npm run lint:fix",
 		"*.{js,css,md}": "prettier --write"
 	}
 }

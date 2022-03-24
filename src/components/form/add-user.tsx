@@ -20,13 +20,13 @@ export default function InviteUserForm() {
 	const loggedUser = useUser();
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
-	const {data: company } = useGetOrganizationQuery(
+	const { data: company } = useGetOrganizationQuery(
 		organizationId as string
 	);
 
-									const { data: assets } = useGetAllAssetsQuery(organizationId as string);
-									const [assetError, setAssetError] = useState(false);
-									const [loading, setLoading] = useState(false);
+	const { data: assets } = useGetAllAssetsQuery(organizationId as string);
+	const [assetError, setAssetError] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const [firstName, setFirstName] = useState<string>("");
 	const [lastName, setLastName] = useState<string>("");
