@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./styles/create-organization.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
@@ -13,15 +13,14 @@ import {
 } from "../../api/asset";
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
-import DatePickerComponent from "../app-input/new-datepick";
 
-const InviteUserForm: FunctionComponent = () => {
+export default function InviteUserForm() {
 	const { id: organizationId } = useParams();
 
 	const loggedUser = useUser();
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
-	const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(
+	const { data: company } = useGetOrganizationQuery(
 		organizationId as string
 	);
 
@@ -213,6 +212,4 @@ const InviteUserForm: FunctionComponent = () => {
 			</ResetButton>
 		</Form>
 	);
-};
-
-export default InviteUserForm;
+}
