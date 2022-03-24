@@ -113,6 +113,7 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
 		<div
 			className={classNames("app-input", className, {
 				"app-input--validate": true,
+				"app-input--squared": variant === "squared",
 			})}
 			ref={itemRef}
 		>

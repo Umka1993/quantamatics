@@ -1,382 +1,390 @@
 .react-datepicker__tab-loop {
-  .opacityBlock {
-    .react-datepicker {
-      animation-duration: 0.3s;
-      animation-name: op;
-      @keyframes op {
-        from {
-          opacity: 1;
-        }
+	.opacityBlock {
+		.react-datepicker {
+			animation-duration: 0.3s;
+			animation-name: op;
+			@keyframes op {
+				from {
+					opacity: 1;
+				}
 
-        to {
-          opacity: 0;
-        }
-      }
-    }
-  }
-
-
-  .react-datepicker {
-    width: 100%;
-    padding-top: 36px;
-    border: none;
-    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
-    font-family: "Nunito Sans", system-ui, sans-serif;
-    animation-duration: 0.3s;
-    animation-name: opac;
-
-    @keyframes opac {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    &__triangle {
-      display: none;
-    }
-
-    &-popper {
-      width: 100%;
-
-      &[data-placement^=bottom] {
-        padding-top: 5px;
-      }
-    }
-
-    &__month-container {
-      width: inherit;
-
-      .react-datepicker__header {
-        background-color: white;
-        border-bottom: none;
-        margin-bottom: 2px;
-
-        .react-datepicker-header {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-bottom: 18px;
-
-          button {
-            border: none;
-            background: none;
-            padding: 0;
-
-            svg {
-              margin: 0;
-            }
-
-            &:hover {
-              svg {
-                fill: #017AEE;
-              }
-
-              &:disabled {
-                svg {
-                  fill: #7182A6
-                }
-              }
-            }
-
-          }
-
-          .prev {
-          }
-
-          .next {
-          }
-
-          .monthYear {
-            font-style: normal;
-            font-weight: 600;
-            font-size: 18px;
-            line-height: 22px;
-            color: #003C71;
-            transition: 0.3s ease;
-
-            &:hover {
-              color: #017AEE;
-              cursor: pointer;
-            }
-          }
-
-        }
-      }
-
-      .react-datepicker__day-names {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 0 42px;
-      }
-
-      .react-datepicker__month {
-        margin: 0;
-        padding-bottom: 37px;
-
-        .react-datepicker__week {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin: 8px 42px;
-        }
-
-        &-wrapper {
-          display: flex;
-          justify-content: space-between;
-          margin: 9px 47px;
-
-          &:nth-child(2) {
-            margin: 11px 47px;
-          }
-        }
-      }
-
-      .react-datepicker__monthPicker {
-        padding-bottom: 38px;
-      }
-    }
-
-    .react-datepicker__current-month, .react-datepicker-time__header,
-    .react-datepicker-year-header {
-      display: none;
-    }
-
-    .react-datepicker__navigation--previous--disabled {
-      &:hover {
-        .react-datepicker__navigation-icon--previous,
-        .react-datepicker__navigation-icon--next {
-          &::before {
-            border-color: #ccc;
-          }
-        }
-      }
-    }
-
-    .react-datepicker__day-name,
-    .react-datepicker__day,
-    .react-datepicker__time-name {
-      width: 20px;
-      line-height: 16px;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 12px;
-      color: #003C71;
-    }
-
-    &__day-name,
-    .react-datepicker__day,
-    .react-datepicker__time-name {
-      width: 20px;
-      height: 20px;
-      line-height: 16px;
-      margin: 0;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 12px;
-      color: #7182A6;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-
-    .react-datepicker__day--selected, .react-datepicker__day--in-selecting-range,
-    .react-datepicker__day--in-range, .react-datepicker__month-text--selected,
-    .react-datepicker__month-text--in-selecting-range, .react-datepicker__month-text--in-range,
-    .react-datepicker__quarter-text--selected, .react-datepicker__quarter-text--in-selecting-range,
-    .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--selected, .react-datepicker__year-text--in-selecting-range,
-    .react-datepicker__year-text--in-range {
-      color: white;
-      position: relative;
-      background-color: inherit;
-      font-weight: bold;
-
-      &:after {
-        content: '';
-        position: absolute;
-        width: 32px;
-        height: 32px;
-        background: #017AEE;
-        border-radius: 2px;
-        top: -7px;
-        left: -6px;
-        z-index: -1;
-      }
-    }
+				to {
+					opacity: 0;
+				}
+			}
+		}
+	}
 
 
-    .react-datepicker__day {
-      position: relative;
-      -webkit-transform:translate3d(0,0,200px);
-      transform: translate3d(0, 0, 200px);
-      &--today {
-        position: relative;
-        color: white;
-      }
+	.react-datepicker {
+		width: 100%;
+		padding-top: 36px;
+		border: none;
+		box-shadow: 0 1px 7px rgba(0, 0, 0, 0.15);
+		backdrop-filter: blur(10px);
+		font-family: "Nunito Sans", system-ui, sans-serif;
+		animation-duration: 0.3s;
+		animation-name: opac;
 
-      &:before {
-        opacity: 0;
-        content: '';
-        position: absolute;
-        width: 32px;
-        height: 32px;
-        background: #017AEE;
-        border-radius: 2px;
-        top: -7px;
-        left: -6px;
-        z-index: -1;
-        transition: all 0.5s ease;
-        transform: translate3d(0, 0, 2px);
-      }
+		@keyframes opac {
+			from {
+				opacity: 0;
+			}
 
-      &:after {
-        content: '';
-        position: absolute;
-        width: 32px;
-        height: 32px;
-        border-radius: 2px;
-        top: -7px;
-        left: -6px;
-        z-index: -1;
-        opacity: 1;
-        transition: all 0.5s ease;
-      }
+			to {
+				opacity: 1;
+			}
+		}
 
-      &:hover, .react-datepicker__month-text:hover, .react-datepicker__quarter-text:hover, .react-datepicker__year-text:hover {
-        color: white;
-        border-radius: 2px;
-        background: none;
-        &:after {
-          content: '';
-          position: absolute;
-          width: 32px;
-          height: 32px;
-          background: #017AEE;
-          border-radius: 2px;
-          top: -7px;
-          left: -6px;
-          z-index: -1;
-          opacity: 1;
-        }
-      }
-    }
+		&__triangle {
+			display: none;
+		}
+
+		&-popper {
+			width: 100%;
+
+			&[data-placement^=bottom] {
+				padding-top: 5px;
+			}
+		}
+
+		&__month-container {
+			width: inherit;
+
+			.react-datepicker__header {
+				background-color: white;
+				border-bottom: none;
+				margin-bottom: 2px;
+				padding: 0;
+
+				.react-datepicker-header {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					margin-bottom: 8px;
+
+					button {
+						border: none;
+						background: none;
+						padding: 10px;
+
+						svg {
+							margin: 0;
+						}
+
+						&:hover {
+							svg {
+								fill: #017AEE;
+							}
+
+							&:disabled {
+								svg {
+									fill: #7182A6
+								}
+							}
+						}
+
+					}
+
+					.prev {
+					}
+
+					.next {
+					}
+
+					.monthYear {
+						font-style: normal;
+						font-weight: 600;
+						font-size: 18px;
+						line-height: 22px;
+						color: #003C71;
+						transition: 0.3s ease;
+
+						&:hover {
+							color: #017AEE;
+							cursor: pointer;
+						}
+					}
+
+				}
+			}
+
+			.react-datepicker__day-names {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin: 0 42px;
+			}
+
+			.react-datepicker__month {
+				margin: 0;
+				padding-bottom: 37px;
+
+				.react-datepicker__week {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					margin: 8px 42px;
+				}
+
+				&-wrapper {
+					display: flex;
+					justify-content: space-between;
+					margin: 9px 47px;
+
+					&:nth-child(2) {
+						margin: 11px 47px;
+					}
+				}
+			}
+
+			.react-datepicker__monthPicker {
+				padding-bottom: 38px;
+			}
+		}
+
+		.react-datepicker__current-month, .react-datepicker-time__header,
+		.react-datepicker-year-header {
+			display: none;
+		}
+
+		.react-datepicker__navigation--previous--disabled {
+			&:hover {
+				.react-datepicker__navigation-icon--previous,
+				.react-datepicker__navigation-icon--next {
+					&::before {
+						border-color: #ccc;
+					}
+				}
+			}
+		}
+
+		.react-datepicker__day-name,
+		.react-datepicker__day,
+		.react-datepicker__time-name {
+			width: 20px;
+			line-height: 16px;
+			font-style: normal;
+			font-weight: 600;
+			font-size: 12px;
+			color: #003C71;
+		}
+
+		&__day-name,
+		.react-datepicker__day,
+		.react-datepicker__time-name {
+			width: 20px;
+			height: 20px;
+			line-height: 16px;
+			margin: 0;
+			font-style: normal;
+			font-weight: 400;
+			font-size: 12px;
+			color: #7182A6;
+			background: none;
+
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+
+		.react-datepicker__day--selected, .react-datepicker__day--in-selecting-range,
+		.react-datepicker__day--in-range, .react-datepicker__month-text--selected,
+		.react-datepicker__month-text--in-selecting-range, .react-datepicker__month-text--in-range,
+		.react-datepicker__quarter-text--selected, .react-datepicker__quarter-text--in-selecting-range,
+		.react-datepicker__quarter-text--in-range, .react-datepicker__year-text--selected, .react-datepicker__year-text--in-selecting-range,
+		.react-datepicker__year-text--in-range {
+			color: white;
+			position: relative;
+			background-color: inherit;
+			font-weight: bold;
+
+			&:after {
+				content: '';
+				position: absolute;
+				width: 32px;
+				height: 32px;
+				background: #017AEE;
+				border-radius: 2px;
+				top: -7px;
+				left: -6px;
+				z-index: -1;
+			}
+		}
 
 
-    .react-datepicker {
-      &__day--outside-month {
-        color: #BCC4D8;
-      }
-    }
+		.react-datepicker__day {
+			position: relative;
+			-webkit-transform: translate3d(0, 0, 200px);
+			transform: translate3d(0, 0, 200px);
+
+			&--today {
+				position: relative;
+				color: white;
+
+				&[aria-selected="true"] {
+					&:after {
+						position: absolute;
+						width: 32px;
+						height: 32px;
+						border-radius: 2px;
+						top: -7px;
+						left: -6px;
+						z-index: -1;
+						opacity: 1;
+						transition: all 0.5s ease;
+						background: #017AEE;
+					}
+				}
+
+			}
+
+			&:after {
+				content: '';
+				position: absolute;
+				width: 32px;
+				height: 32px;
+				border-radius: 2px;
+				top: -7px;
+				left: -6px;
+				z-index: -1;
+				opacity: 1;
+				transition: all 0.5s ease;
+			}
+
+			&:hover, .react-datepicker__month-text:hover, .react-datepicker__quarter-text:hover, .react-datepicker__year-text:hover {
+				color: white;
+				border-radius: 2px;
+				background: none;
+
+				&:after {
+					content: '';
+					position: absolute;
+					width: 32px;
+					height: 32px;
+					background: #017AEE;
+					border-radius: 2px;
+					top: -7px;
+					left: -6px;
+					z-index: -1;
+					opacity: 1;
+				}
+			}
+		}
 
 
-    &__month {
-      &-text {
-        padding: 8px 14px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 15px;
-        line-height: 24px;
-        color: #7182A6;
-        transition: all 0.3s ease;
-        cursor: pointer;
-
-        &:hover {
-          background: #017AEE;
-          border-radius: 2px;
-          color: white;
-        }
-      }
-
-      &--disabled {
-        cursor: pointer;
-
-        &:hover {
-          background: #bcc4d8;
-          color: black;
-        }
-      }
-
-    }
-
-    .react-datepicker {
-      &__month--selected {
-        background: #bcc4d8;
-        color: white;
-        border-radius: 2px;
-      }
-
-      &__day--keyboard-selected,
-      .react-datepicker__month-text--keyboard-selected,
-      .react-datepicker__quarter-text--keyboard-selected,
-      .react-datepicker__year-text--keyboard-selected {
-        color: inherit;
-
-        &:hover {
-          background: #017AEE;
-          transition: background 1s ease;
-
-        }
-      }
-    }
-
-    .react-datepicker__day {
-      position: relative;
-      &--today {
-        position: relative;
-        color: white;
-        -webkit-transform:translate3d(0,0,200px);
-        transform: translate3d(0, 0, 200px);
-        &:after {
-          content: '';
-          position: absolute;
-          width: 32px;
-          height: 32px;
-          background: #bcc4d8;
-          border-radius: 2px;
-          top: -7px;
-          left: -6px;
-          z-index: -2;
-        }
-      }
-
-      &--disabled {
-        &:hover {
-          color: black;
-
-          &:after {
-            content: '';
-            position: absolute;
-            width: 32px;
-            height: 32px;
-            background: #bcc4d8;
-            border-radius: 2px;
-            top: -7px;
-            left: -6px;
-            z-index: -1;
-          }
-        }
-      }
-    }
-
-  }
-
-  .montCalendar {
-    .monthYear {
-      width: 125px;
-      text-align: center;
-    }
-  }
+		.react-datepicker {
+			&__day--outside-month {
+				color: #BCC4D8;
+			}
+		}
 
 
-  .monthYear {
-    width: 200px;
-    text-align: center;
-  }
+		&__month {
+			&-text {
+				padding: 8px 14px;
+				font-style: normal;
+				font-weight: 400;
+				font-size: 15px;
+				line-height: 24px;
+				color: #7182A6;
+				transition: all 0.3s ease;
+				cursor: pointer;
+				background: none;
+
+				&:hover {
+					background: #017AEE;
+					border-radius: 2px;
+					color: white;
+				}
+			}
+
+			&--disabled {
+				cursor: pointer;
+
+				&:hover {
+					background: #bcc4d8;
+					color: black;
+				}
+			}
+
+		}
+
+		.react-datepicker {
+			&__month--selected {
+				background: #bcc4d8;
+				color: white;
+				border-radius: 2px;
+			}
+
+			&__day--keyboard-selected,
+			.react-datepicker__month-text--keyboard-selected,
+			.react-datepicker__quarter-text--keyboard-selected,
+			.react-datepicker__year-text--keyboard-selected {
+				color: inherit;
+
+				&:hover {
+					background: #017AEE;
+					transition: background 1s ease;
+
+				}
+			}
+		}
+
+		.react-datepicker__day {
+			position: relative;
+
+			&--today {
+				position: relative;
+				color: white;
+				-webkit-transform: translate3d(0, 0, 200px);
+				transform: translate3d(0, 0, 200px);
+
+				&:after {
+					content: '';
+					position: absolute;
+					width: 32px;
+					height: 32px;
+					background: #bcc4d8;
+					border-radius: 2px;
+					top: -7px;
+					left: -6px;
+					z-index: -2;
+				}
+			}
+
+			&--disabled {
+				&:hover {
+					color: black;
+
+					&:after {
+						content: '';
+						position: absolute;
+						width: 32px;
+						height: 32px;
+						background: #bcc4d8;
+						border-radius: 2px;
+						top: -7px;
+						left: -6px;
+						z-index: -1;
+					}
+				}
+			}
+		}
+
+	}
+
+	.montCalendar {
+		.monthYear {
+			width: 125px;
+			text-align: center;
+		}
+	}
+
+
+	.monthYear {
+		width: 200px;
+		text-align: center;
+	}
 
 }

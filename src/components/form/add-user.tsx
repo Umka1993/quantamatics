@@ -22,7 +22,7 @@ const InviteUserForm: FunctionComponent = () => {
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
 	const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(
-	organizationId as string
+		organizationId as string
 	);
 
 	const { data: assets } = useGetAllAssetsQuery(organizationId as string);
