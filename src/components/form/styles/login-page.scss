@@ -2,108 +2,108 @@
 @import "../../../sass/variables";
 
 .login-page {
-    &__wrap {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 24px;
-        margin-bottom: 40px;
-    }
+	&__wrap {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 24px;
+		margin-bottom: 40px;
+	}
 
-    &__remember {
-        cursor: pointer;
-        font-size: 16px;
-        line-height: 1.125;
-        color: $inactive;
-        font-weight: 400;
-    }
+	&__remember {
+		cursor: pointer;
+		font-size: 16px;
+		line-height: 1.125;
+		color: $inactive;
+		font-weight: 400;
+	}
 
-    &__forgot {
-        font-size: 16px;
-        line-height: 1.125;
-        color: $inactive;
-        font-weight: 400;
-        transition: 0.3s ease-in-out;
-        text-decoration: none;
-        &:hover {
-            color: $accent;
-        }
-    }
+	&__forgot {
+		font-size: 16px;
+		line-height: 1.125;
+		color: $inactive;
+		font-weight: 400;
+		transition: 0.3s ease-in-out;
+		text-decoration: none;
+		&:hover {
+			color: $accent;
+		}
+	}
 
-    &__container {
-        text-align: center;
-    }
+	&__container {
+		text-align: center;
+	}
 
-    &__inputs {
-        display: grid;
-        gap: 22px;
-        &-errors {
-            margin-top: 16px;
-            font-size: 16px;
-            line-height: 18px;
-            color: #ff5757;
-            text-align: left;
-        }
-    }
+	&__inputs {
+		display: grid;
+		gap: 22px;
+		&-errors {
+			margin-top: 16px;
+			font-size: 16px;
+			line-height: 18px;
+			color: #ff5757;
+			text-align: left;
+		}
+	}
 
-    &__btn {
-        height: 40px;
-        width: 100%;
-        margin: 40px auto 0;
-        &-cancel {
-            width: 49px;
-            margin: 16px auto 0 auto;
-        }
-    }
+	&__btn {
+		height: 40px;
+		width: 100%;
+		margin: 40px auto 0;
+		&-cancel {
+			width: 49px;
+			margin: 16px auto 0 auto;
+		}
+	}
 
-    &__forgot-password {
-        position: absolute;
-        background-color: #fff;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
+	&__forgot-password {
+		position: absolute;
+		background-color: #fff;
+		height: 100%;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
 
-        &.success {
-            .login-page__container {
-                max-width: 656px;
-            }
-            .login-page__btn {
-                max-width: 210px;
-            }
-        }
+		&.success {
+			.login-page__container {
+				max-width: 656px;
+			}
+			.login-page__btn {
+				max-width: 210px;
+			}
+		}
 
-        &-success-text {
-            font-weight: 500;
-            font-size: 24px;
-            line-height: 28px;
-            letter-spacing: 0.2px;
-            color: $success;
-            margin-bottom: 32px;
-            svg {
-                margin-right: 8px;
-            }
-        }
-    }
+		&-success-text {
+			font-weight: 500;
+			font-size: 24px;
+			line-height: 28px;
+			letter-spacing: 0.2px;
+			color: $success;
+			margin-bottom: 32px;
+			svg {
+				margin-right: 8px;
+			}
+		}
+	}
 
-    &__note {
-        font-size: 16px;
-        line-height: 1.125;
+	&__note {
+		font-size: 16px;
+		line-height: 1.125;
 
-        color: $main-text;
-        margin: 1.5em auto 0;
-        a {
-            color: $accent;
-            text-decoration: none;
-            @include hover-focus {
-                color: $headlines
-            }
-        }
-    }
+		color: $main-text;
+		margin: 1.5em auto 0;
+		a {
+			color: $accent;
+			text-decoration: none;
+			@include hover-focus {
+				color: $headlines
+			}
+		}
+	}
 }
 
 .login-form {
-    padding: 30px 0;
+	padding: 30px 0;
 }

@@ -7,10 +7,10 @@ import { Provider } from "react-redux";
 import BaseLayout from './layouts'
 
 ReactDOM.render(
-    <BrowserRouter>
-        <Provider store={store}>
-            <BaseLayout />
-        </Provider>
-    </BrowserRouter>,
-    document.getElementById("root")
+	<BrowserRouter>
+		<Provider store={store}>
+			<BaseLayout />
+		</Provider>
+	</BrowserRouter>,
+	document.getElementById("root")
 );

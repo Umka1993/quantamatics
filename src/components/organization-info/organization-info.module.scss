@@ -1,0 +1,44 @@
+@use "../../sass/variables" as *;
+
+.root {
+	display: grid;
+	grid-template-columns: 1fr auto auto;
+	gap: 35px 24px;
+	align-items: start;
+}
+
+.title {
+	margin: auto 0;
+}
+.name {
+	color: $accent;
+}
+
+.cta {
+	min-height: 40px;
+	height: 100%;
+	padding: 9px 32px;
+}
+
+.info {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: 180px 1fr;
+	margin: 0;
+	padding: 0;
+	gap: 16px 8px;
+	color: $headlines;
+
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 1.375;
+
+	dt {
+		color: $inactive;
+	}
+
+	dd {
+		padding: 0;
+		margin: 0;
+	}
+}

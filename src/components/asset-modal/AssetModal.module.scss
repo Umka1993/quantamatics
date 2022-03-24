@@ -1,62 +1,93 @@
 @use "../../sass/variables.scss" as *;
 
 .root {
-    padding: 40px 0;
+	padding: 40px 0;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	height: 100%;
 }
 
 .header {
-    padding: 0 40px;
+	padding: 0 40px;
 }
+
 .error {
-    color: $error;
-    margin: 0 40px 16px;
-    outline: none;
+	color: $error;
+	margin: 0 40px 0;
+	outline: none;
 }
 
 .table {
-    width: 100%;
-    display: grid;
+	width: 100%;
+	display: grid;
+	height: calc(100vh - #{40 * 2 + 40 + 30}px);
+	grid-template-rows: auto 1fr;
+
+	margin-top: 12px;
+
+	tbody {
+		display: block;
+		overflow: auto;
+		height: 100%;
+	}
+}
+
+.thead {
+	background-color: #fff;
+	border-bottom: 1px solid transparent;
+	transition: border-color 0.2s;
+
+	&--active {
+		border-color: $inactive;
+	}
 }
 
 .row {
-    padding: 8px 40px;
-    display: grid;
-    grid-template-columns: 1fr 45px 45px;
-    gap: 18px;
+	padding: 8px 40px;
+	display: grid;
+	grid-template-columns: 1fr 45px 45px;
+	gap: 18px;
 }
 
 .action {
-    display: grid;
-    place-content: center;
-    font-style: 16px;
+	display: grid;
+	place-content: center;
+	font-style: 16px;
 
-    :global .pin-button::after {
-        left: auto;
-        right: -48px;
-        transform: none;
-    }
+	:global .pin-button::after {
+		left: auto;
+		right: -48px;
+		transform: none;
+	}
 }
 
 .headline {
-    text-align: left;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 1.33;
-    letter-spacing: 0.04em;
-    color: $headlines;
+	text-align: left;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 1.33;
+	letter-spacing: 0.04em;
+	color: $headlines;
 }
 
 .asset {
-    padding: 14px 40px;
-    color: $main-text;
-    font-size: 14px;
-    line-height: 1.36;
+	padding: 14px 40px;
+	color: $main-text;
+	font-size: 14px;
+	line-height: 1.36;
 
-    &:nth-child(odd) {
-        background-color: rgba($inactive, 0.1);
-    }
+	&:nth-child(odd) {
+		background-color: rgba($inactive, 0.1);
+	}
 
-    &--selected {
-        color: $accent;
-    }
+	&--selected {
+		color: $accent;
+	}
+
+	&:first-child :global {
+		.pin-button::after {
+			top: calc(100% + 5px);
+			bottom: auto;
+		}
+	}
 }

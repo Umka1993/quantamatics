@@ -6,29 +6,29 @@ import { AuthorizationStatus } from "../data/enum";
 import Loader from "../components/loader";
 
 const UnLoggedLayout = React.lazy(
-    () =>
-        import(
-            /* webpackChunkName: "not-logged" */
-            "./unlogged"
-        )
+	() =>
+		import(
+			/* webpackChunkName: "not-logged" */
+			"./unlogged"
+		)
 );
 const WithSideBarLayout = React.lazy(
-    () =>
-        import(
-            /* webpackChunkName: "logged" */
-            "./with-sidebar"
-        )
+	() =>
+		import(
+			/* webpackChunkName: "logged" */
+			"./with-sidebar"
+		)
 );
 
 export default function BaseLayout(): ReactElement {
-    const currentStatus = useSelector((state: RootState) => state.auth.status);
-    return (
-        <Suspense fallback={<Loader />}>
-            {currentStatus === AuthorizationStatus.Auth ? (
-                <WithSideBarLayout />
-            ) : (
-                <UnLoggedLayout />
-            )}
-        </Suspense>
-    );
+	const currentStatus = useSelector((state: RootState) => state.auth.status);
+	return (
+		<Suspense fallback={<Loader />}>
+			{currentStatus === AuthorizationStatus.Auth ? (
+				<WithSideBarLayout />
+			) : (
+				<UnLoggedLayout />
+			)}
+		</Suspense>
+	);
 }

@@ -8,204 +8,209 @@ import { AppRoute, Error, UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
 import { useGetOrganizationQuery } from "../../api/organization";
 import {
-    useGetAllAssetsQuery,
-    useLinkAssetToUserMutation,
+	useGetAllAssetsQuery,
+	useLinkAssetToUserMutation,
 } from "../../api/asset";
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
 import DatePickerComponent from "../app-input/new-datepick";
 
 const InviteUserForm: FunctionComponent = () => {
-    const { id: organizationId } = useParams();
+	const { id: organizationId } = useParams();
 
-    const loggedUser = useUser();
-    const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
+	const loggedUser = useUser();
+	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
-    const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(
-        organizationId as string
-    );
+	const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(
+	organizationId as string
+	);
 
-    const { data: assets } = useGetAllAssetsQuery(organizationId as string);
-    const [assetError, setAssetError] = useState(false);
-    const [loading, setLoading] = useState(false);
+	const { data: assets } = useGetAllAssetsQuery(organizationId as string);
+	const [assetError, setAssetError] = useState(false);
+	const [loading, setLoading] = useState(false);
 
-    const [firstName, setFirstName] = useState<string>("");
-    const [lastName, setLastName] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
-    const [subscriptionEndDate, setSubscriptionEndDate] = useState<Date>(
-        new Date()
-    );
-    const [assetPrepared, setAssetPrepared] = useState(false);
+	const [firstName, setFirstName] = useState<string>("");
+	const [lastName, setLastName] = useState<string>("");
+	const [email, setEmail] = useState<string>("");
+	const [subscriptionEndDate, setSubscriptionEndDate] = useState<Date>(
+		new Date()
+	);
+	const [assetPrepared, setAssetPrepared] = useState(false);
 
-    const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
-        new Set()
-    );
+	const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
+		new Set()
+	);
 
-    useEffect(() => {
-        if (assets) {
-            const sharedAssets = assets.filter((asset) => asset.sharedByDefault);
-            const sharedAssetsIDs = sharedAssets.map(({ assetId }) => assetId);
-            setAssignedAssets(new Set(sharedAssetsIDs));
-            setAssetPrepared(true);
-        }
-    }, [assets]);
+	useEffect(() => {
+		if (assets) {
+			const sharedAssets = assets.filter((asset) => asset.sharedByDefault);
+			const sharedAssetsIDs = sharedAssets.map(({ assetId }) => assetId);
+			setAssignedAssets(new Set(sharedAssetsIDs));
+			setAssetPrepared(true);
+		}
+	}, [assets]);
 
-    const [errors, setErrors] = useState<string | undefined>(undefined);
+	const [errors, setErrors] = useState<string | undefined>(undefined);
 
-    const [userRoles, setRoles] = useState<Set<UserRole>>(new Set());
+	const [userRoles, setRoles] = useState<Set<UserRole>>(new Set());
 
-    const [
-        register,
-        { isSuccess: isUserRegistered, isError, error, data: registeredUser },
-    ] = useRegisterUserMutation();
-    const formRef = useRef<HTMLFormElement>(null);
+	const [
+		register,
+		{ isSuccess: isUserRegistered, isError, error, data: registeredUser },
+	] = useRegisterUserMutation();
+	const formRef = useRef<HTMLFormElement>(null);
 
-    const [linkAsset] = useLinkAssetToUserMutation();
+	const [linkAsset] = useLinkAssetToUserMutation();
 
-    useEffect(() => {
-        setLoading(false);
-        if (isError) {
-            if ((error as any).data[0]?.code === "DuplicateUserName")
-                setErrors(Error.DuplicateUser);
-            else alert(JSON.stringify((error as any).data?.errors));
-        }
-    }, [isError]);
+	useEffect(() => {
+		setLoading(false);
+		if (isError) {
+			if ((error as any).data[0]?.code === "DuplicateUserName")
+				setErrors(Error.DuplicateUser);
+			else alert(JSON.stringify((error as any).data?.errors));
+		}
+	}, [isError]);
 
-    const backLink = `/apps/organizations/${company?.id}`;
+	const backLink = `/organizations/${company?.id}`;
 
-    useEffect(() => {
-        if (isUserRegistered) {
-            //? Link new assets to user
-            assignedAssets.forEach((assetId) => {
-                linkAsset({
-                    assetId,
-                    userId: registeredUser.id,
-                });
-            });
+	useEffect(() => {
+		if (isUserRegistered) {
+			//? Link new assets to user
+			assignedAssets.forEach((assetId) => {
+				linkAsset({
+					assetId,
+					userId: registeredUser.id,
+				});
+			});
 
-            navigate(AppRoute.Success, {
-                state: {
-                    headline: "An invitation email has been sent to the user",
-                    linkText: "Go Back",
-                    link: backLink,
-                },
-            });
-        }
-    }, [isUserRegistered]);
+			navigate(AppRoute.Success, {
+				state: {
+					headline: "An invitation email has been sent to the user",
+					linkText: "Go Back",
+					link: backLink,
+				},
+			});
+		}
+	}, [isUserRegistered]);
 
-    useEffect(() => {
-        assignedAssets.size && setAssetError(false);
-    }, [assignedAssets]);
+	useEffect(() => {
+		assignedAssets.size && setAssetError(false);
+	}, [assignedAssets]);
 
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
-    useEffect(() => {
-        errors && setErrors(undefined);
-    }, [email]);
+	useEffect(() => {
+		errors && setErrors(undefined);
+	}, [email]);
 
-    useEffect(() => {
-        errors && formRef.current && formRef.current.reportValidity();
-    }, [errors, formRef.current]);
+	useEffect(() => {
+		errors && formRef.current && formRef.current.reportValidity();
+	}, [errors, formRef.current]);
 
-    const addUserToOrg = () => {
-        setLoading(true);
-        setAssetError(false);
-        if (assignedAssets.size) {
-            register({
-                firstName,
-                lastName,
-                email,
-                organizationId: company?.id,
-                companyName: company?.name,
-                subscriptionEndDate,
-                userRoles: Array.from(userRoles),
-            });
-        } else {
-            setLoading(false);
-            setAssetError(true);
-        }
-    };
+	const addUserToOrg = () => {
+		setLoading(true);
+		setAssetError(false);
+		if (assignedAssets.size) {
+			register({
+				firstName,
+				lastName,
+				email,
+				organizationId: company?.id,
+				companyName: company?.name,
+				subscriptionEndDate,
+				userRoles: Array.from(userRoles),
+			});
+		} else {
+			setLoading(false);
+			setAssetError(true);
+		}
+	};
 
-    return (
-        <Form
-            className="create-organization"
-            headline="Create a User Account"
-            subtitle="Add a new user account to your organization"
-            onSubmit={addUserToOrg}
-            stopLoading={isError || assetError}
-            forwardRef={formRef}
-        >
-            <div className="create-organization__fields">
-                <Input
-                    externalSetter={setFirstName}
-                    required
-                    value={firstName}
-                    maxLength={100}
-                    label="First Name"
-                />
-                <Input
-                    externalSetter={setLastName}
-                    required
-                    value={lastName}
-                    maxLength={100}
-                    label="Last Name"
-                />
-                <Email
-                    externalSetter={setEmail}
-                    required
-                    value={email}
-                    maxLength={100}
-                    error={errors}
-                    label="Email Address"
-                />
-                <DatePickerComponent
-                    externalSetter={setSubscriptionEndDate}
-                    valueAsDate={subscriptionEndDate}
-                    minDate={new Date()}
-                    required
-                    label="Expiration Date"
-                />
-                {assetPrepared && assets && (
-                    <Multiselect
-                        options={assets}
-                        selected={assignedAssets}
-                        setSelected={setAssignedAssets}
-                        label="Account Assets"
-                        errorMessage="Select asset permissions to assign to the user account."
-                        showError={assetError}
-                        type="user"
-                        inputList={[
-                            ...assets.filter(({ assetId }) => assignedAssets.has(assetId)),
-                        ]
-                            .map(({ name }) => name)
-                            .join(", ")}
-                    />
-                )}
+	return (
+		<Form
+			className="create-organization"
+			headline="Create a User Account"
+			subtitle="Add a new user account to your organization"
+			onSubmit={addUserToOrg}
+			stopLoading={isError || assetError}
+			forwardRef={formRef}
+		>
+			<div className="create-organization__fields">
+				<Input
+					externalSetter={setFirstName}
+					required
+					value={firstName}
+					maxLength={100}
+					label="First Name"
+					variant='squared'
+				/>
+				<Input
+					externalSetter={setLastName}
+					required
+					value={lastName}
+					maxLength={100}
+					label="Last Name"
+					variant='squared'
+				/>
+				<Email
+					externalSetter={setEmail}
+					required
+					value={email}
+					maxLength={100}
+					error={errors}
+					label="Email Address"
+					variant='squared'
+				/>
+				<DatePickerComponent
+					externalSetter={setSubscriptionEndDate}
+					valueAsDate={subscriptionEndDate}
+					minDate={new Date()}
+					required
+					label="Expiration Date"
+				/>
+				{assetPrepared && assets && (
+					<Multiselect
+						options={assets}
+						selected={assignedAssets}
+						setSelected={setAssignedAssets}
+						label="Account Assets"
+						errorMessage="Select asset permissions to assign to the user account."
+						showError={assetError}
+						type="user"
+						variant='squared'
+						inputList={[
+							...assets.filter(({ assetId }) => assignedAssets.has(assetId)),
+						]
+							.map(({ name }) => name)
+							.join(", ")}
+					/>
+				)}
 
-                <RoleSelector
-                    isSuperAdmin={isSuperAdmin}
-                    defaultRoles={userRoles}
-                    externalSetter={setRoles}
-                />
+				<RoleSelector
+					isSuperAdmin={isSuperAdmin}
+					defaultRoles={userRoles}
+					externalSetter={setRoles}
+					variant='squared'
+				/>
 
-            </div>
-            <Button
-                className="create-organization__submit"
-                type="submit"
-                disabled={
-                    !Boolean(
-                        firstName && lastName && email && subscriptionEndDate && !assetError
-                    )
-                }
-            >
-                Create
-            </Button>
+			</div>
+			<Button
+				className="create-organization__submit"
+				type="submit"
+				disabled={
+					!Boolean(
+						firstName && lastName && email && subscriptionEndDate && !assetError
+					)
+				}
+			>
+		Create
+			</Button>
 
-            <ResetButton className="create-organization__cancel" href={backLink}>
-                Cancel
-            </ResetButton>
-        </Form>
-    );
+			<ResetButton className="create-organization__cancel" href={backLink}>
+		Cancel
+			</ResetButton>
+		</Form>
+	);
 };
 
 export default InviteUserForm;

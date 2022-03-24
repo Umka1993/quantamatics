@@ -1,87 +1,117 @@
-@use "variables" as *;
+@use "variables"as *;
+@use "sass:math";
+@use "mixins"as *;
+
+$webkit-scroll-width: 12px;
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+:root {
+	--side: clamp(20px, #{math.div(40, 1440) * 100}vw, 40px);
 }
 
 html {
-  height: 100%;
-  line-height: 1.15; /* Correct the line height in all browsers. */
-  -webkit-text-size-adjust: 100%; /* Prevent adjustments of font size after orientation changes in iOS. */
+	height: 100%;
+	line-height: 1.15;
+	/* Correct the line height in all browsers. */
+	-webkit-text-size-adjust: 100%;
+	/* Prevent adjustments of font size after orientation changes in iOS. */
 
-  /* Firefox scrollbar */
-  scrollbar-color: $accent #fff;
-  scrollbar-width: thin;
+	/* Firefox scrollbar */
+	scrollbar-color: $accent #fff;
+	scrollbar-width: thin;
 
-  /* Smooth scrolling IF user doesn't have a preference due to motion sensitivities */
-  @media screen and (prefers-reduced-motion: no-preference) {
-    scroll-behavior: smooth;
-  }
+	/* Smooth scrolling IF user doesn't have a preference due to motion sensitivities */
+	@media screen and (prefers-reduced-motion: no-preference) {
+		scroll-behavior: smooth;
+	}
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: "Nunito", system-ui, sans-serif;
-  background-color: #fff;
-  font-size: 16px;
-  line-height: 1.125;
-  color: $main-text;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	font-family: "Nunito", system-ui, sans-serif;
+	background-color: #fff;
+	font-size: 16px;
+	line-height: 1.125;
+	color: $main-text;
 }
 
 .app {
-  min-height: 100%;
-  display: flex;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
+	min-height: 100%;
+	display: flex;
+	scrollbar-gutter: stable;
+	scrollbar-width: thin;
 }
 
 /* Blink/Webkit scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 5px;
+	width: $webkit-scroll-width;
+	height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #ffffff;
-  box-shadow: inset 0px 4px 3px rgba(14, 53, 91, 0.15);
-  border-radius: 100px;
+	background-color: #ffffff;
+	box-shadow: inset 0px 4px 3px rgba(14, 53, 91, 0.15);
+	border-radius: 100px;
 }
 
 ::-webkit-scrollbar-thumb {
-  border: 3px solid transparent;
-  border-radius: 100px;
+	border: 3px solid transparent;
+	border-radius: 100px;
 
-  background-color: transparentize($accent, 0.2);
-  background-clip: content-box;
+	background-color: transparentize($accent, 0.2);
+	background-clip: content-box;
 
-  &:hover {
-    background-color: $accent;
-  }
+	&:hover {
+		background-color: $accent;
+	}
 }
 
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
 }
 
 .sub-headline {
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 1.167;
-  color: $headlines;
+	font-weight: 500;
+	font-size: 18px;
+	line-height: 1.167;
+	color: $headlines;
 }
 
 .scroll-lock {
-  overflow: hidden;
+	overflow: hidden;
+
+	/* Not Firefox */
+	@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+		padding-right: $webkit-scroll-width;
+	}
+}
+
+.link {
+	color: $accent;
+	text-decoration: none;
+
+	@include hover-focus {
+		color: darken($accent, 10);
+	}
+
+	&:focus-visible {
+		outline: 1px solid currentColor;
+		border-radius: 2px;
+		outline-offset: 0.2em;
+	}
 }

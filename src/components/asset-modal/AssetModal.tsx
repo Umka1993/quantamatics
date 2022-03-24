@@ -1,11 +1,11 @@
 import SaveResetHeader from "../save-reset-header/SaveResetHeader";
 import React, {
-    FunctionComponent,
-    useEffect,
-    useState,
-    FormEvent,
-    useRef,
-    useCallback,
+	FunctionComponent,
+	useEffect,
+	useState,
+	FormEvent,
+	useRef,
+	useCallback,
 } from "react";
 import { HTMLProps } from "react";
 import Dialog from "../dialog";
@@ -17,241 +17,262 @@ import AssetRow from "./AssetRow";
 import { SortDirection } from "../../data/enum";
 import ISort from "../../types/sort-type";
 import {
-    useLazyGetOrganizationQuery,
-    useUpdateOrganizationMutation,
+	useLazyGetOrganizationQuery,
+	useUpdateOrganizationMutation,
 } from "../../api/organization";
 import { Organization } from "../../types/organization/types";
 import useUser from "../../hooks/useUser";
 
 interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
-    open: boolean;
-    closeFunction: () => void;
-    organization: Organization;
+	open: boolean;
+	closeFunction: () => void;
+	organization: Organization;
 }
 
 const AssetModal: FunctionComponent<AssetModalProps> = ({
-    closeFunction,
-    open,
-    organization,
-    ...other
+	closeFunction,
+	open,
+	organization,
+	...other
 }) => {
-    const user = useUser();
-    const [noAssetError, setNoAssetError] = useState(false);
+	const user = useUser();
+	const [noAssetError, setNoAssetError] = useState(false);
 
-    const [hasChanges, setHasChanges] = useState(false);
+	const [hasChanges, setHasChanges] = useState(false);
 
-    const [hasError, setError] = useState(false);
+	const [hasError, setError] = useState(false);
 
-    const errorRef = useRef<HTMLParagraphElement>(null);
+	const errorRef = useRef<HTMLParagraphElement>(null);
 
-    const [selected, setSelected] = useState(organization.organizationAssets);
+	const [selected, setSelected] = useState(organization.organizationAssets);
 
-    const INITIAL_SORT = { name: "name", direction: SortDirection.Default };
-    const [sort, setSort] = useState<ISort>(INITIAL_SORT);
-    const [options, setOptions] = useState<AssetInOrganization[]>([]);
+	const INITIAL_SORT = { name: "name", direction: SortDirection.Default };
+	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
+	const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
-    const [
-        update,
-        {
-            isLoading: isUpdating,
-        },
-    ] = useUpdateOrganizationMutation();
-    const [getInfoOrg] = useLazyGetOrganizationQuery();
+	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
+	const [getInfoOrg] = useLazyGetOrganizationQuery();
 
-    const isUserOrganization = user?.organizationId === organization?.id;
+	const scrollRef = useRef<HTMLTableSectionElement>(null);
 
-    const setInitialOrg = useCallback(() => {
-        if (organization) {
-            setSelected(organization.organizationAssets);
-        }
-    }, [organization]);
+	function addBorderToTHeadOnScroll(this: HTMLTableSectionElement) {
+		const thead = this.previousElementSibling;
+		const activeClass = style["thead--active"];
 
-    useEffect(() => {
-        organization && setInitialOrg();
-    }, [organization]);
+		thead &&
+			(this.scrollTop >= 5
+				? thead.classList.add(activeClass)
+				: thead.classList.remove(activeClass));
+	}
 
-    const assetsReset = useCallback(
-        () => organization && setSelected(organization.organizationAssets),
-        [organization]
-    );
+	useEffect(() => {
+		if (scrollRef.current) {
+			scrollRef.current.addEventListener("scroll", addBorderToTHeadOnScroll);
+			return () =>
+				scrollRef.current?.removeEventListener(
+					"scroll",
+					addBorderToTHeadOnScroll
+				);
+		}
+	}, [scrollRef.current]);
 
-    function initOptions() {
-        if (organization && user) {
-            const prepareOptions = (allAssets: AssetInOrganization[]) => {
-                const transformedOptions = [...allAssets].map((asset) => {
-                    const alreadySelectedAsset = organization.organizationAssets.find(
-                        ({ assetId }) => assetId === asset.assetId
-                    );
+	const isUserOrganization = user?.organizationId === organization?.id;
 
-                    return alreadySelectedAsset === undefined
-                        ? { ...asset, organizationId: organization.id }
-                        : alreadySelectedAsset;
-                });
-                sessionStorage.setItem(
-                    "asset-rows",
-                    JSON.stringify(transformedOptions)
-                );
+	const setInitialOrg = useCallback(() => {
+		if (organization) {
+			setSelected(organization.organizationAssets);
+		}
+	}, [organization]);
 
-                setOptions(transformedOptions);
-            };
+	useEffect(() => {
+		organization && setInitialOrg();
+	}, [organization]);
 
-            if (isUserOrganization) {
-                setOptions(organization.organizationAssets);
-            } else {
-                getInfoOrg(user.organizationId as string)
-                    .unwrap()
-                    .then(({ organizationAssets: allAssets }) =>
-                        prepareOptions(allAssets)
-                    );
-            }
-        }
-    }
+	const assetsReset = useCallback(
+		() => organization && setSelected(organization.organizationAssets),
+		[organization]
+	);
 
-    useEffect(initOptions, [organization, user]);
+	function initOptions() {
+		if (organization && user) {
+			const prepareOptions = (allAssets: AssetInOrganization[]) => {
+				const transformedOptions = [...allAssets].map((asset) => {
+					const alreadySelectedAsset = organization.organizationAssets.find(
+						({ assetId }) => assetId === asset.assetId
+					);
 
-    function checkErrorsOrClose() {
-        if (hasChanges && !hasError) {
-            setError(true);
-            return;
-        }
-        closeModal();
-    }
+					return alreadySelectedAsset === undefined
+						? { ...asset, organizationId: organization.id }
+						: alreadySelectedAsset;
+				});
+				sessionStorage.setItem(
+					"asset-rows",
+					JSON.stringify(transformedOptions)
+				);
 
-    function closeModal() {
-        hasError && setError(false);
-        hasChanges && assetsReset();
-        closeFunction();
-    }
+				setOptions(transformedOptions);
+			};
 
-    function resetHandler(evt: FormEvent<HTMLFormElement>) {
-        evt.preventDefault();
-        closeModal();
-    }
+			if (isUserOrganization) {
+				setOptions(organization.organizationAssets);
+			} else {
+				getInfoOrg(user.organizationId as string)
+					.unwrap()
+					.then(({ organizationAssets: allAssets }) =>
+						prepareOptions(allAssets)
+					);
+			}
+		}
+	}
 
-    useEffect(() => {
-        if (hasError && errorRef.current) {
-            errorRef.current.focus();
-        }
-    }, [hasError, errorRef.current]);
+	useEffect(initOptions, [organization, user]);
 
-    useEffect(() => {
-        if (selected.length) {
-            setNoAssetError(false);
-            setError(false);
-        }
-    }, [noAssetError, selected]);
+	function checkErrorsOrClose() {
+		if (hasChanges && !hasError) {
+			setError(true);
+			return;
+		}
+		closeModal();
+	}
 
-    useEffect(() => {
-        if (organization) {
-            const isQuickChanged =
-                organization.organizationAssets.length !== selected.length;
+	function closeModal() {
+		hasError && setError(false);
+		hasChanges && assetsReset();
+		closeFunction();
+	}
 
-            if (isQuickChanged) {
-                setHasChanges(true);
-            } else {
-                let isSharedChanged = false;
-                selected.forEach((asset) => {
-                    const foundedInitialAsset = organization.organizationAssets.find(
-                        (initialAsset) => initialAsset.assetId === asset.assetId
-                    );
+	function resetHandler(evt: FormEvent<HTMLFormElement>) {
+		evt.preventDefault();
+		closeModal();
+	}
 
-                    if (
-                        foundedInitialAsset === undefined ||
-                        foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
-                    ) {
-                        isSharedChanged = true;
-                    }
-                });
-                setHasChanges(isSharedChanged);
-            }
-        }
-    }, [selected, organization]);
+	useEffect(() => {
+		if (hasError && errorRef.current) {
+			errorRef.current.focus();
+		}
+	}, [hasError, errorRef.current]);
 
-    function submitHandler(evt: FormEvent<HTMLFormElement>) {
-        evt.preventDefault();
-        if (!selected.length) {
-            setError(true);
-            return setNoAssetError(true);
-        }
+	useEffect(() => {
+		if (selected.length) {
+			setNoAssetError(false);
+			setError(false);
+		}
+	}, [noAssetError, selected]);
 
-        update({
-            ...organization,
-            organizationAssets: [...selected].map((asset) => ({
-                ...asset,
-                asset: null,
-            })),
-        }).unwrap().then(closeFunction);
+	useEffect(() => {
+		if (organization) {
+			const isQuickChanged =
+				organization.organizationAssets.length !== selected.length;
 
-    }
+			if (isQuickChanged) {
+				setHasChanges(true);
+			} else {
+				let isSharedChanged = false;
+				selected.forEach((asset) => {
+					const foundedInitialAsset = organization.organizationAssets.find(
+						(initialAsset) => initialAsset.assetId === asset.assetId
+					);
 
-    return (
-        <Dialog
-            id="asset-modal"
-            variant="right-side"
-            open={open}
-            hasCloseButton={false}
-            closeOnOutsideClick
-            onRequestClose={checkErrorsOrClose}
-            {...other}
-        >
-            <form
-                className={style.root}
-                onReset={resetHandler}
-                onSubmit={submitHandler}
-            >
-                <SaveResetHeader
-                    headline="Application Assets"
-                    disableReset={isUpdating}
-                    disableSave={!hasChanges || noAssetError || isUpdating}
-                    isSavedMessageActive={isUpdating}
-                    headlineID="asset-modal-title"
-                    className={style.header}
-                />
-                {hasError && (
-                    <p className={style.error} role="alert" ref={errorRef} tabIndex={0}>
-                        {noAssetError
-                            ? "Select asset permissions to assign to the organization."
-                            : "Your changes will not be saved. Click again if you want to persist."}
-                    </p>
-                )}
+					if (
+						foundedInitialAsset === undefined ||
+						foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
+					) {
+						isSharedChanged = true;
+					}
+				});
+				setHasChanges(isSharedChanged);
+			}
+		}
+	}, [selected, organization]);
 
-                <table className={style.table}>
-                    <thead>
-                        <tr className={style.row}>
-                            <SortTableHeader
-                                name="name"
-                                text="Name"
-                                sort={sort}
-                                localRows={options}
-                                setSort={setSort}
-                                setLocalRows={setOptions}
-                                className={style.headline}
-                                localKey="asset-rows"
-                            />
-                            <th className={[style.headline, style.action].join(" ")}>
-                                Assign
-                            </th>
-                            <th className={[style.headline, style.action].join(" ")}>
-                                Default
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Boolean(options.length) &&
-                            options.map((option) => (
-                                <AssetRow
-                                    key={option.assetId}
-                                    option={option}
-                                    selected={selected}
-                                    setSelected={setSelected}
-                                    disabled={isUserOrganization}
-                                />
-                            ))}
-                    </tbody>
-                </table>
-            </form>
-        </Dialog>
-    );
+	function submitHandler(evt: FormEvent<HTMLFormElement>) {
+		evt.preventDefault();
+		if (!selected.length) {
+			setError(true);
+			return setNoAssetError(true);
+		}
+
+		update({
+			...organization,
+			organizationAssets: [...selected].map((asset) => ({
+				...asset,
+				asset: null,
+			})),
+		})
+			.unwrap()
+			.then(closeFunction);
+	}
+
+	return (
+		<Dialog
+			id="asset-modal"
+			variant="right-side"
+			open={open}
+			hasCloseButton={false}
+			closeOnOutsideClick
+			onRequestClose={checkErrorsOrClose}
+			{...other}
+		>
+			<form
+				className={style.root}
+				onReset={resetHandler}
+				onSubmit={submitHandler}
+			>
+				{open &&
+					<SaveResetHeader
+						headline="Application Assets"
+						disableReset={isUpdating}
+						disableSave={!hasChanges || noAssetError || isUpdating}
+						isSavedMessageActive={isUpdating}
+						headlineID="asset-modal-title"
+						className={style.header}
+					/>
+				}
+				{hasError && (
+					<p className={style.error} role="alert" ref={errorRef} tabIndex={0}>
+						{noAssetError
+							? "Select asset permissions to assign to the organization."
+							: "Your changes will not be saved. Click again if you want to persist."}
+					</p>
+				)}
+
+				<table className={style.table}>
+					<thead className={style.thead}>
+						<tr className={style.row}>
+							<SortTableHeader
+								name="name"
+								text="Name"
+								sort={sort}
+								localRows={options}
+								setSort={setSort}
+								setLocalRows={setOptions}
+								className={style.headline}
+								localKey="asset-rows"
+							/>
+							<th className={[style.headline, style.action].join(" ")}>
+								Assign
+							</th>
+							<th className={[style.headline, style.action].join(" ")}>
+								Default
+							</th>
+						</tr>
+					</thead>
+					<tbody ref={scrollRef}>
+						{Boolean(options.length) &&
+							options.map((option) => (
+								<AssetRow
+									key={option.assetId}
+									option={option}
+									selected={selected}
+									setSelected={setSelected}
+									disabled={isUserOrganization}
+								/>
+							))}
+					</tbody>
+				</table>
+			</form>
+		</Dialog>
+	);
 };
 
 export default AssetModal;

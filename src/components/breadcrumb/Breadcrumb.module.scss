@@ -1,0 +1,36 @@
+@use "../../sass/variables" as *;
+@use "../../sass/mixins" as *;
+
+
+.list {
+	list-style: none;
+
+	display: flex;
+	margin: 0;
+	padding: 0;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 1.375;
+	color: $main-text;
+}
+
+.item {
+	display: flex;
+	align-items: center;
+	&:not(:last-child)::after {
+		content: "/";
+		margin: 0 10px;
+		font-weight: 400;
+		font-size: 22px;
+		line-height: 1.364;
+	}
+}
+
+.link {
+	color: $inactive;
+	text-decoration: none;
+
+	@include hover-focus {
+		color: $accent;
+	}
+}
