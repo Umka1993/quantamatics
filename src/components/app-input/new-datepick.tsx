@@ -35,10 +35,6 @@ export default function DatePickerComponent({
 	label,
 	onChange,
 	externalSetter,
-	min,
-	minDate,
-	max,
-	maxDate,
 	variant,
 }: IDatePick) {
 	const isSupport = checkDateInputSupport();

@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useRef, useState } from "react";
 import "./styles/create-organization.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
-import Input, { Email, Multiselect, DatePick } from "../app-input/";
+import Input, { Email, Multiselect } from "../app-input/";
 import Form from "./form";
 import { AppRoute, Error, UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
@@ -162,8 +162,6 @@ const InviteUserForm: FunctionComponent = () => {
 					variant="squared"
 				/>
 				<DatePickerComponent
-					externalSetter={setSubscriptionEndDate}
-					valueAsDate={subscriptionEndDate}
 					minDate={new Date()}
 					required
 					label="Expiration Date"
