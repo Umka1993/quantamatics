@@ -10,7 +10,7 @@ interface JupyterFrameProps {
 
 export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => {
 	const user = useUser();
-	const BASE_USER_URL = `${process.env.HUB_URL}user/${user?.email}`
+	const BASE_USER_URL = `${import.meta.env.VITE_HUB_URL}user/${user?.email}`
 	const FILES_URL = `${BASE_USER_URL}/tree`;
 	const COHERENCE_URL = `${BASE_USER_URL}/apps/Coherence/CoherenceApp.ipynb?appmode_scroll=0`;
 	const EXCEL_LIB_URL = `${FILES_URL}/FacteusData/Excel%20Library`;
@@ -50,7 +50,7 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
 				<form
 					method='POST'
 					target="jupyter-iframe"
-					action={`${process.env.HUB_URL}hub/login`}
+					action={`${import.meta.env.VITE_HUB_URL}hub/login`}
 					ref={formRef}
 					hidden
 				>

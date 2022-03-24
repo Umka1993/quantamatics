@@ -1,8 +1,7 @@
-import React, { ButtonHTMLAttributes, FunctionComponent } from "react";
+import { ButtonHTMLAttributes, FunctionComponent } from "react";
 import "./styles/reset.scss";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
-import Line from './asset/line.svg'
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
 	href?: string;

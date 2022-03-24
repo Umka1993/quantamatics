@@ -3,7 +3,7 @@ import { getToken } from '../../services/token';
 
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: process.env.DATA_API_URL,
+	baseUrl: import.meta.env.VITE_DATA_API_URL as string,
 	prepareHeaders: (headers) => {
 		const token = getToken()
 

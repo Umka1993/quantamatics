@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useEffect } from "react";
 import style from "./styles/side-bar.module.scss";
 import NavBar from "../navbar";
-import LinesIcon from "./assets/lines.svg";
-import ExelIcon from "./assets/exel.svg";
+import { ReactComponent as LinesIcon } from "./assets/lines.svg";
+import { ReactComponent as ExelIcon } from "./assets/exel.svg";
 import classNames from "classnames";
 import Logo from "../logo";
 import useToggle from "../../hooks/useToggle";
@@ -64,7 +64,7 @@ export const SideBar: FunctionComponent<SideBarProps> = ({
 
 			{!isMacOs && (
 				<a
-					href={process.env.EXCEL_PLUGIN_DOWNLOAD_URL}
+					href={import.meta.env.VITE_EXCEL_PLUGIN_DOWNLOAD_URL}
 					className={style.plugin}
 					aria-label="Get Excel Plug-in"
 					download

@@ -1,18 +1,30 @@
-import React, { FunctionComponent, HTMLProps } from "react";
+import { FunctionComponent, HTMLProps, SVGProps } from "react";
 import "./style/checkbox.scss";
-import CheckIcon from "./assets/check.svg";
+import { ReactComponent as CheckIcon } from "./assets/check.svg";
 import classNames from "classnames";
 
-interface CheckboxProps extends Omit<HTMLProps<HTMLInputElement>, 'type'> {
+interface CheckboxProps extends SVGProps<SVGSVGElement> {
 	highlightOnChecked?: boolean;
+	checked?: boolean;
+	disabled?: boolean;
 }
 
-const Checkbox: FunctionComponent<CheckboxProps> = ({ highlightOnChecked, checked, disabled, ...other }) => {
+const Checkbox: FunctionComponent<CheckboxProps> = ({
+	highlightOnChecked,
+	className,
+	checked,
+	disabled,
+	...other
+}) => {
 	return (
 		<CheckIcon
 			width={16}
 			height={16}
-			className={classNames("check-block__check", { 'check-block__check--highlight': highlightOnChecked })}
+			className={classNames(
+				"check-block__check",
+				{ "check-block__check--highlight": highlightOnChecked },
+				className
+			)}
 			role="checkbox"
 			aria-checked={checked}
 			tabIndex={0}

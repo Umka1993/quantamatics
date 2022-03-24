@@ -5,8 +5,7 @@ import React, { useEffect, useRef, HTMLProps } from "react";
 
 import style from "./Dialog.module.scss";
 import classNames from "classnames";
-
-import CloseIcon from "./assets/close.svg";
+import SpriteIcon from "../sprite-icon/SpriteIcon";
 
 export interface ModalProps extends HTMLProps<HTMLDivElement> {
 	closeOnOutsideClick?: boolean;
@@ -16,6 +15,7 @@ export interface ModalProps extends HTMLProps<HTMLDivElement> {
 	wrapperClass?: string;
 	variant?: "default" | "right-side";
 	hasCloseButton?: boolean;
+	hasWrapper?: boolean;
 }
 
 export default function Dialog({
@@ -28,6 +28,7 @@ export default function Dialog({
 	id,
 	variant = "default",
 	hasCloseButton = true,
+	hasWrapper = true,
 	...other
 }: ModalProps) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -82,32 +83,36 @@ export default function Dialog({
 			className={[style.root, style[`root--${variant}`]].join(" ")}
 			aria-labelledby={`${id}-title`}
 		>
-			{hasCloseButton && (
-				<button
-					aria-label={closeMessage}
-					title={closeMessage}
-					className={style.close}
-					onClick={onRequestClose}
+			{hasWrapper ?
+				<div
+					{...other}
+					className={classNames(
+						style.wrapper,
+						style[`wrapper--${variant}`],
+						wrapperClass
+					)}
 				>
-					<CloseIcon aria-hidden />
+					{headline && (
+						<h2 id={`${id}-title`} className={style.title}>
+							{headline}
+						</h2>
+					)}
+
+					{children}
+				</div> : children
+			}
+
+			{hasCloseButton && (
+				<button className={style.close} onClick={onRequestClose}>
+					<SpriteIcon
+						icon="cross-close"
+						width={16}
+						label={closeMessage}
+						id={`${id}-close`}
+					/>
 				</button>
 			)}
-			<div
-				{...other}
-				className={classNames(
-					style.wrapper,
-					style[`wrapper--${variant}`],
-					wrapperClass
-				)}
-			>
-				{headline && (
-					<h2 id={`${id}-title`} className={style.title}>
-						{headline}
-					</h2>
-				)}
 
-				{children}
-			</div>
 		</dialog>
 	);
 }

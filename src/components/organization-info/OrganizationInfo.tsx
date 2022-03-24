@@ -1,10 +1,9 @@
 import Headline from "../page-title";
-import React, { FunctionComponent, HTMLProps } from "react";
+import { FunctionComponent, HTMLProps } from "react";
 import { Organization } from "../../types/organization/types";
 import style from "./organization-info.module.scss";
 import Button from "../button";
-import ComaList from "../coma-list";
-import DocIcon from "./assets/doc.svg";
+import { ReactComponent as DocIcon } from "./assets/doc.svg";
 import classNames from "classnames";
 
 interface OrganizationInfoProps extends HTMLProps<HTMLDivElement> {
@@ -17,11 +16,10 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 	organization,
 	toggleAssetModal,
 	toggleOrganizationModal,
-	className
+	className,
 }) => {
 	return (
 		<section className={classNames(style.root, className)}>
-
 			<Headline
 				className={style.title}
 				pageTitle={`Organization ${organization.name}`}
@@ -41,15 +39,24 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 				<dd>{organization.customerCrmId}</dd>
 
 				<dt>CRM Customer Link</dt>
-				<dd>{organization.customerCrmLink}</dd>
-
-				<dt>Application Assets</dt>
 				<dd>
-					<ComaList
-						list={organization.organizationAssets.map(
-							({ asset }) => asset.name
-						)}
-					/>
+					{organization.customerCrmLink && (
+						<a
+							href={organization.customerCrmLink}
+							className="link"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{organization.customerCrmLink}
+						</a>
+					)}
+				</dd>
+
+				<dt>Assets</dt>
+				<dd>
+					{organization.organizationAssets
+						.map(({ asset }) => asset.name)
+						.join(", ")}
 				</dd>
 
 				<dt>Comments</dt>

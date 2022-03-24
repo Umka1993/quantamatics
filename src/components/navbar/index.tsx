@@ -2,13 +2,13 @@ import React, { FunctionComponent, SVGProps } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { AppRoute, UserRole } from "../../data/enum";
 
-import ZoomIcon from "./assets/zoom.svg";
-import CoherenceIcon from "./assets/coherence.svg";
-import ExcelIcon from "./assets/excel.svg";
-import OrganizationsIcon from "./assets/org.svg";
-import CogsIcon from "./assets/cogs.svg";
-import FilesIcon from "./assets/files.svg";
-import ShareIcon from "./assets/share.svg";
+import { ReactComponent as ZoomIcon } from "./assets/zoom.svg";
+import { ReactComponent as CoherenceIcon } from "./assets/coherence.svg";
+import { ReactComponent as ExcelIcon } from "./assets/excel.svg";
+import { ReactComponent as OrganizationsIcon } from "./assets/org.svg";
+import { ReactComponent as CogsIcon } from "./assets/cogs.svg";
+import { ReactComponent as FilesIcon } from "./assets/files.svg";
+import { ReactComponent as ShareIcon } from "./assets/share.svg";
 
 import "./style/navbar.scss";
 import classNames from "classnames";

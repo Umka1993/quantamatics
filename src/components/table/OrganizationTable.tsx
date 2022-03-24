@@ -1,4 +1,4 @@
-import React, {
+import {
 	useState,
 	Dispatch,
 	SetStateAction,
@@ -7,14 +7,14 @@ import React, {
 } from "react";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
-import EditSVG from "./assets/edit-row-icon.svg";
 import { Organization } from "../../types/organization/types";
 import { SortDirection } from "../../data/enum";
 import ISort from "../../types/sort-type";
 
 import { ORG_HEADER } from "./utils/constants";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import style from "./styles/table.module.scss";
+import SpriteIcon from "../sprite-icon/SpriteIcon";
 
 interface ITable extends Omit<HTMLProps<HTMLTableElement>, "list"> {
 	list: Organization[];
@@ -28,6 +28,8 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 	// ? Need to be in component to reset sort after update
 	const INITIAL_SORT = { name: "", direction: SortDirection.Default };
 	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
+
+	const navigate = useNavigate();
 
 	return (
 		<table className={style.root}>
@@ -59,6 +61,10 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 							style["row--body"],
 							style["row--organization"],
 						].join(" ")}
+						onClick={({ target }) =>
+							(target as any).href === undefined &&
+							navigate(`/organizations/${organization.id}`)
+						}
 						key={index}
 					>
 						<td className={style.cell}>{organization.name}</td>
@@ -79,12 +85,9 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 							{organization.comments.length ? organization.comments : "—"}
 						</td>
 						<td className={style.cell}>
-							<Link
-								className={style.action}
-								to={`/organizations/${organization.id}`}
-							>
-								<EditSVG role="img" aria-label="edit" fill="currentColor" />
-							</Link>
+							<button className={style.action} type="button">
+								<SpriteIcon icon="gears" label="Edit Organization" width={16} />
+							</button>
 						</td>
 					</tr>
 				))}

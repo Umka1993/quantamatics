@@ -1,6 +1,6 @@
 import React, { ButtonHTMLAttributes, ReactElement } from "react";
 import useUser from "../../hooks/useUser";
-import ProfileIcon from "./assets/profile.svg";
+import { ReactComponent as ProfileIcon } from "./assets/profile.svg";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	collapsed: boolean;

@@ -1,5 +1,5 @@
 import SaveResetHeader from "../save-reset-header/SaveResetHeader";
-import React, {
+import {
 	FunctionComponent,
 	useEffect,
 	useState,
@@ -11,7 +11,7 @@ import { HTMLProps } from "react";
 import Dialog from "../dialog";
 import style from "./AssetModal.module.scss";
 import { SortTableHeader } from "../sort-table-header/SortTableHeader";
-import { AssetInOrganization } from "types/asset";
+
 import AssetRow from "./AssetRow";
 
 import { SortDirection } from "../../data/enum";
@@ -22,6 +22,7 @@ import {
 } from "../../api/organization";
 import { Organization } from "../../types/organization/types";
 import useUser from "../../hooks/useUser";
+import { AssetInOrganization } from "../../types/asset";
 
 interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
 	open: boolean;
@@ -211,6 +212,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 			hasCloseButton={false}
 			closeOnOutsideClick
 			onRequestClose={checkErrorsOrClose}
+			hasWrapper={false}
 			{...other}
 		>
 			<form
@@ -220,7 +222,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 			>
 				{open &&
 					<SaveResetHeader
-						headline="Application Assets"
+						headline="Assets"
 						disableReset={isUpdating}
 						disableSave={!hasChanges || noAssetError || isUpdating}
 						isSavedMessageActive={isUpdating}
@@ -232,7 +234,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 					<p className={style.error} role="alert" ref={errorRef} tabIndex={0}>
 						{noAssetError
 							? "Select asset permissions to assign to the organization."
-							: "Your changes will not be saved. Click again if you want to persist."}
+							: "Changes have not been saved."}
 					</p>
 				)}
 

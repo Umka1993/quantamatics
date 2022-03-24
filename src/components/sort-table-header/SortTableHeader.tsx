@@ -5,9 +5,9 @@ import React, {
 	SetStateAction,
 } from "react";
 import sortTable from "./utils/sort";
-import SortIcon from "./assets/sort-icon.svg";
+import { ReactComponent as SortIcon } from "./assets/sort-icon.svg";
 import s from "./SortTableHeader.module.scss";
-import DownArrow from "./assets/down.svg";
+import { ReactComponent as DownArrow } from "./assets/down.svg";
 import classNames from "classnames";
 
 interface ISortTableHeader {

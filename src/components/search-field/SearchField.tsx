@@ -1,6 +1,6 @@
-import React, { FunctionComponent, HTMLProps, Dispatch, SetStateAction } from "react";
+import { FunctionComponent, HTMLProps, Dispatch, SetStateAction } from "react";
 
-import SearchIcon from "./assets/search.svg";
+import { ReactComponent as SearchIcon } from "./assets/search.svg";
 import style from './SearchField.module.scss'
 
 interface SearchFieldProps extends HTMLProps<HTMLLabelElement> {
