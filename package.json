@@ -11,7 +11,8 @@
 		"buildStaging": "npm run lint && tsc && vite build --mode staging",
 		"buildUAT": "npm run lint && tsc && vite build --mode uat",
 		"buildProduction": "npm run lint && tsc && vite build --mode production",
-		"stag": "vite --mode preview"
+		"stag": "vite --mode preview",
+		"prepare": "husky install"
 	},
 	"dependencies": {
 		"axios": "^0.26.1",
@@ -45,15 +46,8 @@
 		"vite": "^2.8.0",
 		"vite-plugin-svgr": "^1.1.0"
 	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged"
-		}
-	},
 	"lint-staged": {
-		"*.{ts,tsx}": [
-			"npm run lint:fix",
-			"git add"
-		]
+		"*.{tsx,ts}": "eslint --cache --fix",
+		"*.{js,css,md}": "prettier --write"
 	}
 }
