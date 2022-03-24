@@ -20,7 +20,7 @@ export default function InviteUserForm() {
 	const loggedUser = useUser();
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
-	const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(
+	const {data: company } = useGetOrganizationQuery(
 		organizationId as string
 	);
 
