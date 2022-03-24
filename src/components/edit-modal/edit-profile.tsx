@@ -89,7 +89,7 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 			lastName !== user.lastName ||
 			companyName !== user.companyName ||
 			subscriptionEndDate.toISOString() !==
-			new Date(user.subscriptionEndDate).toISOString();
+				new Date(user.subscriptionEndDate).toISOString();
 
 		const rolesAsArray = Array.from(userRoles);
 		const rolesIsSame =
@@ -133,8 +133,8 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 
 		userChanged
 			? update(newUserData)
-				.unwrap()
-				.then(rolesIsSame ? onClose : updateRolesAndClose)
+					.unwrap()
+					.then(rolesIsSame ? onClose : updateRolesAndClose)
 			: !rolesIsSame && updateRolesAndClose();
 
 		!userChanged && rolesIsSame && onClose();
@@ -254,12 +254,12 @@ export const EditProfile: FunctionComponent<IEditProfile> = ({
 					maxLength={100}
 					required
 				/>
-                <DatePickerComponent
-                    externalSetter={setExpiration}
-                    valueAsDate={subscriptionEndDate}
-                    required
-                    label="Expiration Date"
-                />
+				<DatePickerComponent
+					externalSetter={setExpiration}
+					valueAsDate={subscriptionEndDate}
+					required
+					label="Expiration Date"
+				/>
 				{allOrganizations && (
 					<SelectorInput
 						options={
