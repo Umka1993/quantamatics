@@ -139,13 +139,12 @@ $text: #bcc4d8;
 		}
 	}
 
-	&__icon {
-		fill: $inactive;
-		margin: auto 0 auto 4px;
-
-		position: absolute;
-		inset: 0 0 0 auto;
-	}
+  &__icon {
+    fill: $inactive;
+    margin: 8px 0 10px 4px;
+    position: absolute;
+    inset: 0 0 0 auto;
+  }
 
 	&__field:hover ~ &__icon {
 		border-color: $accent;

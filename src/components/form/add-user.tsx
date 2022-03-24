@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import "./styles/create-organization.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
-import Input, { DatePick, Email, Multiselect } from "../app-input/";
+import Input, { Email, Multiselect } from "../app-input/";
 import Form from "./form";
 import { AppRoute, Error, UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
@@ -13,6 +13,7 @@ import {
 } from "../../api/asset";
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
+import DatePickerComponent from "../app-input/new-datepick";
 
 const InviteUserForm: FunctionComponent = () => {
 	const { id: organizationId } = useParams();
@@ -160,13 +161,12 @@ const InviteUserForm: FunctionComponent = () => {
 					label="Email Address"
 					variant='squared'
 				/>
-				<DatePick
+				<DatePickerComponent
 					externalSetter={setSubscriptionEndDate}
 					valueAsDate={subscriptionEndDate}
 					minDate={new Date()}
 					required
 					label="Expiration Date"
-					variant='squared'
 				/>
 				{assetPrepared && assets && (
 					<Multiselect
