@@ -16,21 +16,18 @@ import enGb from "date-fns/locale/en-GB";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
 import DatePickerHeader from "./date-picker-header";
+import { IInput } from "./input";
 
 registerLocale("enGB", enGb);
 
-interface IDatePick extends InputHTMLAttributes<HTMLInputElement> {
-	error?: string;
-	label?: string;
-	autoComplete?: "current-password" | "new-password";
+interface IDatePick extends Omit<IInput, "externalSetter"> {
 	externalSetter?: (value: Date) => void;
 	triggerValidity?: boolean;
 	valueAsDate?: Date;
 	minDate?: Date;
 	maxDate?: Date;
 }
-
-const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
+export default function DatePickerComponent({
 	className,
 	itemRef,
 	required,
@@ -42,8 +39,9 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
 	minDate,
 	max,
 	maxDate,
+	variant,
 	...other
-}) => {
+}: IDatePick) {
 	const isSupport = checkDateInputSupport();
 	const labelRef = useRef<HTMLSpanElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -113,6 +111,7 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
 		<div
 			className={classNames("app-input", className, {
 				"app-input--validate": true,
+				"app-input--squared": variant === "squared",
 			})}
 			ref={itemRef}
 		>
@@ -226,6 +225,4 @@ const DatePickerComponent: React.FunctionComponent<IDatePick> = ({
 			{errorMessage && <p className="app-input__error">{errorMessage}</p>}
 		</div>
 	);
-};
-
-export default DatePickerComponent;
+}

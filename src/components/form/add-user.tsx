@@ -167,6 +167,7 @@ const InviteUserForm: FunctionComponent = () => {
 					minDate={new Date()}
 					required
 					label="Expiration Date"
+					variant='squared'
 				/>
 				{assetPrepared && assets && (
 					<Multiselect
