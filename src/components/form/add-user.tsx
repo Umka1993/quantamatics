@@ -161,21 +161,21 @@ export default function InviteUserForm() {
 					label="Email Address"
 					variant="squared"
 				/>
-				<DatePick
-					externalSetter={setSubscriptionEndDate}
-					valueAsDate={subscriptionEndDate}
-					minDate={new Date()}
-					label="Expiration Date"
-					required
-					variant="squared"
-				/>
-				{/*
+				{/*<DatePick*/}
+				{/*	externalSetter={setSubscriptionEndDate}*/}
+				{/*	valueAsDate={subscriptionEndDate}*/}
+				{/*	minDate={new Date()}*/}
+				{/*	label="Expiration Date"*/}
+				{/*	required*/}
+				{/*	variant="squared"*/}
+				{/*/>*/}
+
 				<DatePickerComponent
 					minDate={new Date()}
 					required
 					label="Expiration Date"
 					variant="squared"
-				/> */}
+				/>
 
 				{assetPrepared && assets && (
 					<Multiselect
