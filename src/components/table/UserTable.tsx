@@ -44,6 +44,7 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 			scrollWrapper.scrollTop = scrollY;
 		}
 	}, [list]);
+	console.log('List Users', list)
 
 	return (
 		<table className={style.root}>

@@ -2,6 +2,9 @@
 import { ApiRoute } from "../../data/enum";
 import { Organization } from "../../types/organization/types";
 import baseApi from "../index";
+import { createOrganizationRequestBody } from "../../components/form/create-organization";
+
+
 
 const organizationsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
@@ -25,8 +28,8 @@ const organizationsApi = baseApi.injectEndpoints({
 			},
 		}),
 
-		addOrganization: build.mutation<Organization, any>({
-			query: (body) => ({
+		addOrganization: build.mutation<Organization,createOrganizationRequestBody>({
+			query: (body: createOrganizationRequestBody) => ({
 				url: ApiRoute.OrganizationCreate,
 				method: "POST",
 				body,
@@ -35,7 +38,7 @@ const organizationsApi = baseApi.injectEndpoints({
 		}),
 
 		updateOrganization: build.mutation({
-			query: (body: any) => ({
+			query: (body:Organization) => ({
 				url: ApiRoute.OrganizationUpdate,
 				method: "PUT",
 				body,
