@@ -51,18 +51,18 @@ const sortTable = ({
 
 	switch (newSort.direction) {
 	case SortDirection.Up:
-		newRows.sort((item) => {
-			const first = normalizeCompare({ item,name });
-			const second = normalizeCompare({ item, name });
+		newRows.sort((a,b) => {
+			const first = normalizeCompare(a,name );
+			const second = normalizeCompare(b, name);
 
 			return first > second ? 1 : second > first ? -1 : 0;
 		});
 		break;
 
 	case SortDirection.Down:
-		newRows.sort((item) => {
-			const first = normalizeCompare({ item,name });
-			const second = normalizeCompare({ item, name });
+		newRows.sort((a,b) => {
+			const first = normalizeCompare(a,name );
+			const second = normalizeCompare(b, name );
 
 			return second > first ? 1 : first > second ? -1 : 0;
 		});
@@ -84,11 +84,8 @@ const sortTable = ({
 };
 
 
-interface INormalizeCompare {
-		item:  AssetInOrganization | Organization | IUser
-		name: string
-}
-function normalizeCompare({ item, name }:INormalizeCompare) {
+
+function normalizeCompare(item: any, name: string) {
 
 	switch (name) {
 	case "subscriptionEndDate":
