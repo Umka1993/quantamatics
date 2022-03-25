@@ -1,3 +1,44 @@
+@use "../../sass/variables" as *;
+@use "../../sass/mixins" as *;
+@use "sass:math";
+
 .input {
-	
+	min-height: 50px;
+	background-color: #ffffff;
+
+	border: 1px solid rgba($inactive, 0.4);
+	border-radius: 2px;
+	padding: 12px;
+
+	color: $headlines;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: math.div(22, 16);
+	outline: none;
+
+	transition-property: color, border-color;
+	transition-duration: 0.3s;
+
+	&::placeholder {
+		color: $inactive;
+	}
+
+	&:focus {
+		border-color: $accent;
+	}
+
+	&:disabled {
+		background-color: rgba($inactive, 0.2);
+		color: $main-text;
+	}
+
+	&:not(:placeholder-shown):invalid,
+	&.invalid {
+		border-color: $error;
+	}
+}
+
+.error {
+	color: $error;
+	margin: 16px 0 0;
 }
