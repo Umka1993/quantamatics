@@ -133,8 +133,8 @@ export default function EditOrganizationUser({
 
 		userChanged
 			? update(newUserData)
-					.unwrap()
-					.then(!isRoleChanged ? onClose : updateRolesAndClose)
+				.unwrap()
+				.then(!isRoleChanged ? onClose : updateRolesAndClose)
 			: isRoleChanged && updateRolesAndClose();
 	}
 
@@ -322,13 +322,21 @@ export default function EditOrganizationUser({
 				variant="squared"
 				className={style.input}
 			/>
-			<DatePickerComponent
+			<DatePick
 				minDate={new Date()}
 				required
 				label="Expiration Date"
 				variant="squared"
 				className={style.input}
 			/>
+
+			{/* <DatePickerComponent
+				minDate={new Date()}
+				required
+				label="Expiration Date"
+				variant="squared"
+				className={style.input}
+			/> */}
 
 			<Input
 				externalSetter={setOrganization}

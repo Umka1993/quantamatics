@@ -64,8 +64,6 @@
 		&:hover,
 		&:focus-within {
 			box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05), inset 0px -1px 0px rgba(22, 34, 101, 0.07), 0px -1px 0px #eff0f4;
-			z-index: 2;
-
 			.cell {
 				border-color: transparent;
 			}
