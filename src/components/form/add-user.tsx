@@ -14,6 +14,16 @@ import {
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
 
+export interface IInviteUserRequestBody {
+		companyName: string | undefined
+		email: string
+		firstName: string
+		organizationId: string | undefined
+		lastName: string
+		subscriptionEndDate: Date | undefined
+		userRoles: UserRole[];
+}
+
 export default function InviteUserForm() {
 	const { id: organizationId } = useParams();
 
@@ -78,7 +88,7 @@ export default function InviteUserForm() {
 			assignedAssets.forEach((assetId) => {
 				linkAsset({
 					assetId,
-					userId: registeredUser.id,
+					userId:  registeredUser?.id as string | undefined ,
 				});
 			});
 
