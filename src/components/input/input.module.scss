@@ -4,6 +4,7 @@
 
 .input {
 	min-height: 50px;
+	width: 100%;
 	background-color: #ffffff;
 
 	border: 1px solid rgba($inactive, 0.4);
@@ -39,6 +40,7 @@
 }
 
 .error {
+	display: block;
 	color: $error;
 	margin: 16px 0 0;
 }

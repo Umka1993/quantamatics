@@ -66,10 +66,11 @@ export default function Input({
 				id={id}
 				ref={inputRef}
 				aria-describedby={externalErrorID ? externalErrorID : errorID}
+				aria-invalid={invalid}
 				{...otherProps}
 			/>
 			{error && (
-				<p className={styles.error} aria-live="polite" id={errorID}></p>
+				<p className={styles.error} aria-live="polite" id={errorID}>{error}</p>
 			)}
 		</>
 	);
