@@ -46,7 +46,7 @@ export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
 						const scrollWrapper = document.querySelector("main");
 						scrollWrapper && rememberScroll(scrollWrapper.scrollTop);
 					}
-					sortTable(name, sort, localRows, setSort, setLocalRows, localKey);
+					sortTable({ name, sort, localRows, setSort, setLocalRows, localKey });
 				}}
 				type="button"
 				className={s.button}

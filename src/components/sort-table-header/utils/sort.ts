@@ -1,13 +1,30 @@
 import { SortDirection } from "../../../data/enum";
+import { Organization } from "../../../types/organization/types";
+import { IUser } from "../../../types/user";
+import { AssetInOrganization } from "../../../types/asset";
 
-const sortTable = (
-	name: string,
-	sort: any,
-	localRows: any,
-	setSort: any,
-	setLocalRows: any,
-	localKey: string
-) => {
+interface ISort {
+	name: string;
+	direction: string;
+}
+
+interface ISortTable {
+	name: string;
+	sort: ISort;
+	localRows: AssetInOrganization[] | Organization[] | IUser[];
+	setSort: (arg: ISort) => void;
+	setLocalRows: (arg: AssetInOrganization[] | Organization[] | IUser[]) => void;
+	localKey: string;
+}
+
+const sortTable = ({
+	name,
+	sort,
+	localRows,
+	setSort,
+	setLocalRows,
+	localKey,
+}: ISortTable): void => {
 	const newSort = { ...sort, name };
 
 	if (name === sort.name || "" === sort.name) {
@@ -34,18 +51,18 @@ const sortTable = (
 
 	switch (newSort.direction) {
 	case SortDirection.Up:
-		newRows.sort((a: any, b: any) => {
-			const first = normalizeCompare(a, name);
-			const second = normalizeCompare(b, name);
+		newRows.sort((item) => {
+			const first = normalizeCompare({ item,name });
+			const second = normalizeCompare({ item, name });
 
 			return first > second ? 1 : second > first ? -1 : 0;
 		});
 		break;
 
 	case SortDirection.Down:
-		newRows.sort((a: any, b: any) => {
-			const first = normalizeCompare(a, name);
-			const second = normalizeCompare(b, name);
+		newRows.sort((item) => {
+			const first = normalizeCompare({ item,name });
+			const second = normalizeCompare({ item, name });
 
 			return second > first ? 1 : first > second ? -1 : 0;
 		});
@@ -63,10 +80,16 @@ const sortTable = (
 		break;
 	}
 
-	setLocalRows(newRows);
+	setLocalRows(newRows as AssetInOrganization[] | Organization[] | IUser[]);
 };
 
-function normalizeCompare(item: any, name: string) {
+
+interface INormalizeCompare {
+		item:  AssetInOrganization | Organization | IUser
+		name: string
+}
+function normalizeCompare({ item, name }:INormalizeCompare) {
+
 	switch (name) {
 	case "subscriptionEndDate":
 		return item[name];
@@ -75,7 +98,7 @@ function normalizeCompare(item: any, name: string) {
 		return item[name];
 
 	case "name":
-		if (item.asset) {
+		if ("asset" in item && item.asset) {
 			return item.asset[name];
 		} else {
 			return item[name].toUpperCase();
