@@ -124,7 +124,10 @@
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
-					margin: 8px 42px;
+					margin: 14px 42px;
+					&:last-of-type {
+						margin-bottom: 0;
+					}
 				}
 
 				&-wrapper {
@@ -319,8 +322,6 @@
 			.react-datepicker__month-text--keyboard-selected,
 			.react-datepicker__quarter-text--keyboard-selected,
 			.react-datepicker__year-text--keyboard-selected {
-				color: inherit;
-
 				&:hover {
 					background: #017AEE;
 					transition: background 1s ease;
