@@ -8,13 +8,15 @@ import {
 	SetStateAction,
 } from "react";
 import styles from "./input.module.scss";
+import useSetCustomError from "./utils/useSetCustomError";
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+export interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	externalSetter?: Dispatch<SetStateAction<string>>;
 	externalErrorID?: string;
 	invalid?: boolean;
 	customError?: string;
+	withToggler?: boolean;
 }
 
 export default function Input({
@@ -27,10 +29,12 @@ export default function Input({
 	externalErrorID,
 	invalid,
 	customError,
+	withToggler,
+	children,
 	...otherProps
-}: Props) {
+}: AppInputProps) {
 	const errorID = id ? `error-${id}` : undefined;
-	const inputRef = useRef<HTMLInputElement>(null);
+	const inputRef = useSetCustomError(customError);
 
 	const [error, setError] = useState("");
 
@@ -45,19 +49,15 @@ export default function Input({
 		onInvalid && onInvalid(evt);
 	}
 
-	useEffect(() => {
-		inputRef.current &&
-			(customError
-				? inputRef.current.setCustomValidity(customError)
-				: inputRef.current.setCustomValidity(""));
-	}, [customError, inputRef.current]);
-
 	return (
-		<>
+		<p className={styles.root}>
 			<input
 				className={classNames(
 					styles.input,
-					invalid && styles.invalid,
+					{
+						[styles.invalid]: invalid,
+						[styles.withToggler]: withToggler,
+					},
 					className
 				)}
 				aria-label={label}
@@ -70,8 +70,12 @@ export default function Input({
 				{...otherProps}
 			/>
 			{error && (
-				<p className={styles.error} aria-live="polite" id={errorID}>{error}</p>
+				<span className={styles.error} aria-live="polite" id={errorID}>
+					{error}
+				</span>
 			)}
-		</>
+
+			{children}
+		</p>
 	);
 }
