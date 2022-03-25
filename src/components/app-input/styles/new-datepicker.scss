@@ -197,7 +197,6 @@
 			color: white;
 			position: relative;
 			background-color: inherit;
-			font-weight: bold;
 
 			&:after {
 				content: '';
@@ -215,7 +214,6 @@
 
 		.react-datepicker__day {
 			position: relative;
-			-webkit-transform: translate3d(0, 0, 200px);
 			transform: translate3d(0, 0, 200px);
 
 			&--today {
@@ -312,7 +310,7 @@
 
 		.react-datepicker {
 			&__month--selected {
-				background: #bcc4d8;
+				background: #017AEE;
 				color: white;
 				border-radius: 2px;
 			}
@@ -337,7 +335,6 @@
 			&--today {
 				position: relative;
 				color: white;
-				-webkit-transform: translate3d(0, 0, 200px);
 				transform: translate3d(0, 0, 200px);
 
 				&:after {
@@ -388,3 +385,4 @@
 	}
 
 }
+
