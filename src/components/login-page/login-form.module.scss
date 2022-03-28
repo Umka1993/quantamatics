@@ -29,8 +29,7 @@
 }
 
 .forgot {
-	margin-top: 24px;
-	margin-bottom: 40px;
+	margin: 24px 0 0;
 	color: $inactive;
 	transition: color 0.3s ease-in-out;
 	text-decoration: none;
@@ -40,4 +39,17 @@
 	@include hover-focus {
 		color: $accent;
 	}
+}
+
+.submit {
+	width: 100%;
+	margin: 40px 0 0;
+}
+
+.note {
+	font-size: 16px;
+	line-height: 1.125;
+
+	color: $main-text;
+	margin: 1.5em auto 0;
 }

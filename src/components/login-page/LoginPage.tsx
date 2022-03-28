@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../button";
 
@@ -34,9 +34,11 @@ export default function LoginPage() {
 		errors && setErrors(undefined);
 	}, [email, password]);
 
-	const handleLogin = () => {
-		// const { email, password } = formRef.current;
-		sendLogin({ email, password }).unwrap();
+	const handleLogin = (evt: FormEvent<LoginForm>) => {
+		evt.preventDefault();
+
+		const { email, password } = evt.currentTarget;
+		sendLogin({ email: email.value, password: password.value }).unwrap();
 	};
 
 	const handleResponseError = () => {
@@ -44,18 +46,18 @@ export default function LoginPage() {
 			const { status, data } = error as IApiError;
 			if (status === 401) {
 				switch (data) {
-				case "User subscription has ended":
-					return navigate(AppRoute.Expired, {
-						state: expiredState,
-					});
+					case "User subscription has ended":
+						return navigate(AppRoute.Expired, {
+							state: expiredState,
+						});
 
-				case "User locked out":
-					setErrors(
-						"User account locked due to several failed login attempts. Please try again later."
-					);
-					break;
-				default:
-					setErrors("Incorrect email or password");
+					case "User locked out":
+						setErrors(
+							"User account locked due to several failed login attempts. Please try again later."
+						);
+						break;
+					default:
+						setErrors("Incorrect email or password");
 				}
 			}
 		}
@@ -110,15 +112,16 @@ export default function LoginPage() {
 			</Link>
 
 			<Button
-				className="login-page__btn"
+				className={style.submit}
 				disabled={!email || !password}
 				type="submit"
 			>
 				Sign In
 			</Button>
-			<p className="login-page__note">
+			<p className={style.note}>
 				Interested in Quantamatics and want to{" "}
 				<a
+					className='link'
 					href="https://www.facteus.com/quantamatics"
 					target="_blank"
 					rel="noopener noreferrer"
