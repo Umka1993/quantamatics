@@ -1,5 +1,5 @@
 
-name: Deploy on First QA
+name: Deploy on Second QA
 
 # Controls when the workflow will run
 on:
