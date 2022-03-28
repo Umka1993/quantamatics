@@ -46,18 +46,18 @@ export default function LoginPage() {
 			const { status, data } = error as IApiError;
 			if (status === 401) {
 				switch (data) {
-					case "User subscription has ended":
-						return navigate(AppRoute.Expired, {
-							state: expiredState,
-						});
+				case "User subscription has ended":
+					return navigate(AppRoute.Expired, {
+						state: expiredState,
+					});
 
-					case "User locked out":
-						setErrors(
-							"User account locked due to several failed login attempts. Please try again later."
-						);
-						break;
-					default:
-						setErrors("Incorrect email or password");
+				case "User locked out":
+					setErrors(
+						"User account locked due to several failed login attempts. Please try again later."
+					);
+					break;
+				default:
+					setErrors("Incorrect email or password");
 				}
 			}
 		}
