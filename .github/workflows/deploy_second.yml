@@ -42,4 +42,4 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.DUDKA_IP }} >> ~/.ssh/known_hosts
 
       - name: Deploy 🚀
-        run: cd publish && rsync --archive --compress --delete . ${{ secrets.USER }}@${{ secrets.DUDKA_IP }}:${{ secrets.FIRST_DEPLOY_PATH }}
+        run: cd publish && rsync --archive --compress --delete . ${{ secrets.USER }}@${{ secrets.DUDKA_IP }}:${{ secrets.SECOND_DEPLOY_PATH }}
