@@ -2,6 +2,7 @@ import { SortDirection } from "../../../data/enum";
 import { Organization } from "../../../types/organization/types";
 import { IUser } from "../../../types/user";
 import { AssetInOrganization } from "../../../types/asset";
+import { Dispatch } from "@reduxjs/toolkit";
 
 interface ISort {
 	name: string;
@@ -12,8 +13,8 @@ export interface ISortTable {
 	name: string;
 	sort: ISort;
 	localRows: AssetInOrganization[] | Organization[] | IUser[];
-	setSort: (arg: ISort) => void;
-	setLocalRows: (arg: AssetInOrganization[] | Organization[] | IUser[]) => void;
+	setSort: (arg: Dispatch<any>) => void;
+	setLocalRows: (arg: Dispatch<any>) => void;
 	localKey?: string;
 }
 
@@ -45,14 +46,14 @@ const sortTable = ({
 		newSort.direction = SortDirection.Up;
 	}
 
-	setSort(newSort);
+	setSort(newSort as unknown as Dispatch<any>);
 
 	let newRows = [...localRows];
 
 	switch (newSort.direction) {
 	case SortDirection.Up:
-		newRows.sort((a,b) => {
-			const first = normalizeCompare(a,name );
+		newRows.sort((a, b) => {
+			const first = normalizeCompare(a, name);
 			const second = normalizeCompare(b, name);
 
 			return first > second ? 1 : second > first ? -1 : 0;
@@ -60,9 +61,9 @@ const sortTable = ({
 		break;
 
 	case SortDirection.Down:
-		newRows.sort((a,b) => {
-			const first = normalizeCompare(a,name );
-			const second = normalizeCompare(b, name );
+		newRows.sort((a, b) => {
+			const first = normalizeCompare(a, name);
+			const second = normalizeCompare(b, name);
 
 			return second > first ? 1 : first > second ? -1 : 0;
 		});
@@ -80,13 +81,10 @@ const sortTable = ({
 		break;
 	}
 
-	setLocalRows(newRows as AssetInOrganization[] | Organization[] | IUser[]);
+	setLocalRows(newRows as unknown as Dispatch<any>);
 };
 
-
-
 function normalizeCompare(item: any, name: string) {
-
 	switch (name) {
 	case "subscriptionEndDate":
 		return item[name];
