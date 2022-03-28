@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./styles/create-organization.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
@@ -15,13 +15,13 @@ import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
 import DatePickerComponent from "../app-input/new-datepick";
 
-const InviteUserForm: FunctionComponent = () => {
+export default function InviteUserForm() {
 	const { id: organizationId } = useParams();
 
 	const loggedUser = useUser();
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
-	const { data: company, isSuccess: isOrgLoaded } = useGetOrganizationQuery(
+	const { data: company } = useGetOrganizationQuery(
 		organizationId as string
 	);
 
@@ -142,7 +142,7 @@ const InviteUserForm: FunctionComponent = () => {
 					value={firstName}
 					maxLength={100}
 					label="First Name"
-					variant='squared'
+					variant="squared"
 				/>
 				<Input
 					externalSetter={setLastName}
@@ -150,7 +150,7 @@ const InviteUserForm: FunctionComponent = () => {
 					value={lastName}
 					maxLength={100}
 					label="Last Name"
-					variant='squared'
+					variant="squared"
 				/>
 				<Email
 					externalSetter={setEmail}
@@ -159,14 +159,21 @@ const InviteUserForm: FunctionComponent = () => {
 					maxLength={100}
 					error={errors}
 					label="Email Address"
-					variant='squared'
+					variant="squared"
 				/>
-				<DatePick
-					externalSetter={setSubscriptionEndDate}
-					valueAsDate={subscriptionEndDate}
+				{/*<DatePick*/}
+				{/*	externalSetter={setSubscriptionEndDate}*/}
+				{/*	valueAsDate={subscriptionEndDate}*/}
+				{/*	minDate={new Date()}*/}
+				{/*	label="Expiration Date"*/}
+				{/*	required*/}
+				{/*	variant="squared"*/}
+				{/*/>*/}
+
+				<DatePickerComponent
 					minDate={new Date()}
-					label="Expiration Date"
 					required
+					label="Expiration Date"
 					variant="squared"
 				/>
 
@@ -179,7 +186,7 @@ const InviteUserForm: FunctionComponent = () => {
 						errorMessage="Select asset permissions to assign to the user account."
 						showError={assetError}
 						type="user"
-						variant='squared'
+						variant="squared"
 						inputList={[
 							...assets.filter(({ assetId }) => assignedAssets.has(assetId)),
 						]
@@ -192,9 +199,8 @@ const InviteUserForm: FunctionComponent = () => {
 					isSuperAdmin={isSuperAdmin}
 					defaultRoles={userRoles}
 					externalSetter={setRoles}
-					variant='squared'
+					variant="squared"
 				/>
-
 			</div>
 			<Button
 				className="create-organization__submit"
@@ -213,6 +219,4 @@ const InviteUserForm: FunctionComponent = () => {
 			</ResetButton>
 		</Form>
 	);
-};
-
-export default InviteUserForm;
+}

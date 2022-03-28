@@ -26,21 +26,16 @@ interface IDatePick extends Omit<IInput, "externalSetter"> {
 	valueAsDate?: Date;
 	minDate?: Date;
 	maxDate?: Date;
+	variant?: "squared";
 }
 export default function DatePickerComponent({
 	className,
 	itemRef,
 	required,
 	label,
-	valueAsDate,
 	onChange,
 	externalSetter,
-	min,
-	minDate,
-	max,
-	maxDate,
 	variant,
-	...other
 }: IDatePick) {
 	const isSupport = checkDateInputSupport();
 	const labelRef = useRef<HTMLSpanElement>(null);

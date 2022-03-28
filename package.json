@@ -8,9 +8,9 @@
 		"preview": "vite preview --mode testing",
 		"lint": "eslint --ext .tsx,.ts src --quiet",
 		"lint:fix": "eslint --ext .tsx,.ts ./src --fix --color",
-		"buildStaging": "npm run lint && tsc && vite build --mode staging",
-		"buildUAT": "npm run lint && tsc && vite build --mode uat",
-		"buildProduction": "npm run lint && tsc && vite build --mode production",
+		"buildStaging": "tsc && vite build --mode staging",
+		"buildUAT": "tsc && vite build --mode uat",
+		"buildProduction": "tsc && vite build --mode production",
 		"stag": "vite --mode preview"
 	},
 	"dependencies": {

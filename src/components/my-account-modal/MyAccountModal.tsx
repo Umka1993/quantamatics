@@ -130,7 +130,6 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 					action=""
 					className={style.form}
 					onSubmit={handlerSubmit}
-					onReset={resetHandler}
 					ref={formRef}
 				>
 					<button
@@ -171,7 +170,8 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 			)}
 
 			<footer className={style.footer}>
-				<ResetButton form="edit-pass-form">Cancel</ResetButton>
+				<ResetButton onClick={resetHandler}>Cancel</ResetButton>
+
 				<Button
 					type="submit"
 					disabled={!Boolean(currentPassword && newPassword && confirmPassword)}
