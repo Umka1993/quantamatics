@@ -61,7 +61,7 @@
 					display: flex;
 					justify-content: center;
 					align-items: center;
-					margin-bottom: 8px;
+					margin-bottom: 18px;
 
 					button {
 						border: none;
@@ -218,6 +218,8 @@
 		.react-datepicker__day {
 			position: relative;
 			transform: translate3d(0, 0, 200px);
+			border: none;
+			outline: none;
 
 			&--today {
 				position: relative;
@@ -238,19 +240,6 @@
 					}
 				}
 
-			}
-
-			&:after {
-				content: '';
-				position: absolute;
-				width: 32px;
-				height: 32px;
-				border-radius: 2px;
-				top: -7px;
-				left: -6px;
-				z-index: -1;
-				opacity: 1;
-				transition: all 0.5s ease;
 			}
 
 			&:hover, .react-datepicker__month-text:hover, .react-datepicker__quarter-text:hover, .react-datepicker__year-text:hover {
@@ -325,7 +314,7 @@
 				&:hover {
 					background: #017AEE;
 					transition: background 1s ease;
-
+					border: 1px solid red;
 				}
 			}
 		}
