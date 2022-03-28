@@ -4,6 +4,7 @@ export interface HTMLDialogElement extends HTMLDivElement {
 	open: boolean;
 	showModal: () => void;
 	close: () => void;
+	show: () => void;
 }
 
 export default function useDialogPolyfill(ref: RefObject<HTMLDialogElement>) {
@@ -14,10 +15,7 @@ export default function useDialogPolyfill(ref: RefObject<HTMLDialogElement>) {
 			if (dialogPolyfill) {
 				dialogPolyfill.registerDialog(ref.current);
 			} else {
-				import(
-					/* webpackChunkName: "dialog-polyfill" */
-					"dialog-polyfill"
-				).then((polyfill) => {
+				import("dialog-polyfill").then((polyfill) => {
 					polyfill.default.registerDialog(ref.current as any);
 					dialogPolyfill = polyfill.default;
 				});

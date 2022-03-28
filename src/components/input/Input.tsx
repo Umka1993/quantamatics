@@ -17,6 +17,7 @@ export interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
 	invalid?: boolean;
 	customError?: string;
 	withToggler?: boolean;
+	resetErrorOnInput?: boolean;
 }
 
 export default function Input({
@@ -31,6 +32,7 @@ export default function Input({
 	customError,
 	withToggler,
 	children,
+	resetErrorOnInput = true,
 	...otherProps
 }: AppInputProps) {
 	const errorID = id ? `error-${id}` : undefined;
@@ -40,6 +42,7 @@ export default function Input({
 
 	function inputHandler(evt: FormEvent<HTMLInputElement>) {
 		externalSetter && externalSetter(evt.currentTarget.value);
+		resetErrorOnInput && error && setError("")
 		onInput && onInput(evt);
 	}
 
@@ -57,6 +60,7 @@ export default function Input({
 					{
 						[styles.invalid]: invalid,
 						[styles.withToggler]: withToggler,
+						[styles.validate]: error.length,
 					},
 					className
 				)}
@@ -67,6 +71,7 @@ export default function Input({
 				ref={inputRef}
 				aria-describedby={externalErrorID ? externalErrorID : errorID}
 				aria-invalid={invalid}
+
 				{...otherProps}
 			/>
 			{error && (

@@ -133,8 +133,8 @@ export default function EditOrganizationUser({
 
 		userChanged
 			? update(newUserData)
-					.unwrap()
-					.then(!isRoleChanged ? onClose : updateRolesAndClose)
+				.unwrap()
+				.then(!isRoleChanged ? onClose : updateRolesAndClose)
 			: isRoleChanged && updateRolesAndClose();
 	}
 

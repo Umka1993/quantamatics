@@ -1,0 +1,43 @@
+@use "../../sass/variables" as *;
+@use "../../sass/mixins" as *;
+
+.root {
+	width: 100%;
+	max-width: 380px;
+	position: relative;
+}
+
+.header {
+	text-align: center;
+	margin-bottom: 50px - 10px;
+}
+
+.title {
+	margin: 0 0 12px;
+}
+
+.subtitle {
+	margin: 0;
+}
+
+.inputs {
+	display: grid;
+	gap: 22px;
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+
+.forgot {
+	margin-top: 24px;
+	margin-bottom: 40px;
+	color: $inactive;
+	transition: color 0.3s ease-in-out;
+	text-decoration: none;
+	width: fit-content;
+
+	display: block;
+	@include hover-focus {
+		color: $accent;
+	}
+}
