@@ -322,6 +322,14 @@ export default function EditOrganizationUser({
 				variant="squared"
 				className={style.input}
 			/>
+			{/*<DatePick*/}
+			{/*	minDate={new Date()}*/}
+			{/*	required*/}
+			{/*	label="Expiration Date"*/}
+			{/*	variant="squared"*/}
+			{/*	className={style.input}*/}
+			{/*/>*/}
+
 			<DatePickerComponent
 				minDate={new Date()}
 				required
