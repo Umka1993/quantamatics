@@ -1,3 +1,18 @@
+.app-input{
+	.app-input__wrapper{
+		.react-datepicker-wrapper {
+			.react-datepicker__input-container{
+				input {
+					cursor: pointer;
+				}
+			}
+
+		}
+	}
+
+}
+
+
 .react-datepicker__tab-loop {
 	.opacityBlock {
 		.react-datepicker {
@@ -35,6 +50,7 @@
 				opacity: 1;
 			}
 		}
+
 
 		&__triangle {
 			display: none;
