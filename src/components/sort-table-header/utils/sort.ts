@@ -5,16 +5,16 @@ import { AssetInOrganization } from "../../../types/asset";
 
 interface ISort {
 	name: string;
-	direction: string;
+	direction: "none" | "ascending" | "descending" | "other" | undefined;
 }
 
-interface ISortTable {
+export interface ISortTable {
 	name: string;
 	sort: ISort;
 	localRows: AssetInOrganization[] | Organization[] | IUser[];
 	setSort: (arg: ISort) => void;
 	setLocalRows: (arg: AssetInOrganization[] | Organization[] | IUser[]) => void;
-	localKey: string;
+	localKey?: string;
 }
 
 const sortTable = ({
@@ -37,7 +37,7 @@ const sortTable = ({
 			break;
 
 		default:
-			sessionStorage.setItem(localKey, JSON.stringify(localRows));
+			sessionStorage.setItem(localKey as string, JSON.stringify(localRows));
 			newSort.direction = SortDirection.Up;
 			break;
 		}
@@ -70,7 +70,7 @@ const sortTable = ({
 
 	default:
 		{
-			const rowsFromStorage = sessionStorage.getItem(localKey);
+			const rowsFromStorage = sessionStorage.getItem(localKey as string);
 			if (rowsFromStorage) {
 				newRows = JSON.parse(rowsFromStorage);
 			} else {
