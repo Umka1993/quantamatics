@@ -33,6 +33,7 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 
 	const handleOrgNameLength = (name:string)=>{
 
+
 		if(name && name.length>45){
 			return `${name.slice(0, 29)}...`
 
