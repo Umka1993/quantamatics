@@ -66,6 +66,10 @@
 			box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05), inset 0px -1px 0px rgba(22, 34, 101, 0.07), 0px -1px 0px #eff0f4;
 			.cell {
 				border-color: transparent;
+				button{
+					opacity: 1;
+					transition: opacity 0.3s ease-out;
+				}
 			}
 
 			&::before {
@@ -113,6 +117,11 @@
 	text-overflow: ellipsis;
 
 	padding-right: 24px;
+	button{
+		opacity: 0;
+		transition: opacity 0.3s ease-out;
+
+	}
 
 	a {
 		white-space: nowrap;
