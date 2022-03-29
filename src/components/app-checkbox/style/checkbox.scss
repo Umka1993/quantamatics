@@ -93,7 +93,7 @@
 	}
 
 	&__input:disabled ~ &__text {
-		color: $sharedByDefault;
+		color: $headlines;
 		cursor: default;
 		font-weight: 400;
 		font-size: 14px;
