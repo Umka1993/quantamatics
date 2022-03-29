@@ -41,10 +41,7 @@
 
 	&__text {
 		transition: color 0.2s ease-in;
-		font-style: normal;
-		font-weight: 400;
-		font-size: 14px;
-		line-height: 19px;
+
 	}
 
 	&--highlight &__input:not(:disabled):checked ~ &__text,
@@ -96,8 +93,11 @@
 	}
 
 	&__input:disabled ~ &__text {
-		color: $main-text;
+		color: $sharedByDefault;
 		cursor: default;
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 19px;
 	}
 
 	&__desc {
