@@ -1,5 +1,5 @@
 import Checkbox from "../app-checkbox";
-import React, { Dispatch, FunctionComponent, HTMLProps, SetStateAction } from "react";
+import { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { UserRole } from "../../data/enum";
 import useChangeSet from "../../hooks/useChangeSet";
 

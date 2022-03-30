@@ -1,4 +1,4 @@
-import React, {
+import {
 	CSSProperties,
 	Dispatch,
 	FunctionComponent,
@@ -13,7 +13,7 @@ import "../app-input/styles/input.scss";
 import "../app-input/styles/multiselect.scss";
 import classNames from "classnames";
 import { UserRole } from "../../data/enum";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import useClickOutside from "../../hooks/useClickOutside";
 import { Option } from "../../types/option";
 import RoleOption from "./RoleOption";
 

@@ -1,10 +1,7 @@
-
 import { ApiRoute } from "../../data/enum";
 import { Organization } from "../../types/organization/types";
 import baseApi from "../index";
 import { createOrganizationRequestBody } from "../../components/form/create-organization";
-
-
 
 const organizationsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
@@ -16,19 +13,21 @@ const organizationsApi = baseApi.injectEndpoints({
 						...result.map(({ id }) => ({
 							type: "Organizations" as const,
 							id,
-						})),
-					]
+						}))]
 					: [];
 
 				tags.push({ type: "Organizations", id: "list" });
 				userID !== undefined &&
-	tags.push({ type: "Organizations", id: String(userID) });
+					tags.push({ type: "Organizations", id: String(userID) });
 
 				return tags;
 			},
 		}),
 
-		addOrganization: build.mutation<Organization,createOrganizationRequestBody>({
+		addOrganization: build.mutation<
+			Organization,
+			createOrganizationRequestBody
+		>({
 			query: (body: createOrganizationRequestBody) => ({
 				url: ApiRoute.OrganizationCreate,
 				method: "POST",
@@ -38,7 +37,7 @@ const organizationsApi = baseApi.injectEndpoints({
 		}),
 
 		updateOrganization: build.mutation({
-			query: (body:Organization) => ({
+			query: (body: Organization) => ({
 				url: ApiRoute.OrganizationUpdate,
 				method: "PUT",
 				body,
@@ -69,10 +68,8 @@ const organizationsApi = baseApi.injectEndpoints({
 			}),
 			providesTags: (result, _err, id) =>
 				result
-					? [
-						{ type: "Organizations", id: `org-${id}` },
-						{ type: "Organizations", id: "selected" },
-					]
+					? [{ type: "Organizations", id: `org-${id}` },
+						{ type: "Organizations", id: "selected" }]
 					: [{ type: "Organizations", id: "selected" }],
 		}),
 	}),

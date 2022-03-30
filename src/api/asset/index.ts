@@ -24,7 +24,7 @@ interface LinkOrganizationParameters {
 
 interface LinkUserParameters {
 	assetId: number | string;
-	userId: number | string | undefined;
+	userId: number | string ;
 }
 
 interface ToggleSharesParams {

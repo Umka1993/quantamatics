@@ -45,7 +45,6 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 		}
 	}, [list]);
 
-
 	return (
 		<table className={style.root}>
 			<thead className={style.head}>

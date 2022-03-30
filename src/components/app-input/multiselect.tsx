@@ -2,7 +2,6 @@ import {
 	useState,
 	useRef,
 	FunctionComponent,
-	SelectHTMLAttributes,
 	CSSProperties,
 	useEffect,
 	useLayoutEffect,
@@ -14,7 +13,7 @@ import "./styles/multiselect.scss";
 import classNames from "classnames";
 
 import { AssetListItem } from "../../types/asset";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import useClickOutside from "../../hooks/useClickOutside";
 
 import style from "./styles/multiselect.module.scss";
 import AssetOption from "../asset-option";

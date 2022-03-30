@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, Dispatch, SetStateAction } from "react"
+import { useCallback, useEffect, Dispatch, SetStateAction } from "react"
 
 export default function useCloseModal(flag: boolean, setter: Dispatch<SetStateAction<boolean>>) : void {
 	const closeModal = useCallback(() => setter(false), [flag])
