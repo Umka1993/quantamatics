@@ -38,7 +38,7 @@ const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
 		/>
 	) : (
 		<div className={classNames(style.checkboxes, className)}>
-			<h4 className={style.clegend}>Organization Role</h4>
+			<h4 className={style.legend}>Organization Role</h4>
 			{options.map((option) => (
 				<RoleOption
 					key={option.value}

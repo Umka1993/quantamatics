@@ -13,6 +13,7 @@ import {
 } from "../../api/asset";
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
+import DatePickerComponent from "../app-input/new-datepick";
 
 export interface IInviteUserRequestBody {
 		companyName: string | undefined
@@ -151,7 +152,7 @@ export default function InviteUserForm() {
 					value={firstName}
 					maxLength={100}
 					label="First Name"
-					variant='squared'
+					variant="squared"
 				/>
 				<Input
 					externalSetter={setLastName}
@@ -159,7 +160,7 @@ export default function InviteUserForm() {
 					value={lastName}
 					maxLength={100}
 					label="Last Name"
-					variant='squared'
+					variant="squared"
 				/>
 				<Email
 					externalSetter={setEmail}
@@ -168,14 +169,21 @@ export default function InviteUserForm() {
 					maxLength={100}
 					error={errors}
 					label="Email Address"
-					variant='squared'
+					variant="squared"
 				/>
-				<DatePick
-					externalSetter={setSubscriptionEndDate}
-					valueAsDate={subscriptionEndDate}
+				{/*<DatePick*/}
+				{/*	externalSetter={setSubscriptionEndDate}*/}
+				{/*	valueAsDate={subscriptionEndDate}*/}
+				{/*	minDate={new Date()}*/}
+				{/*	label="Expiration Date"*/}
+				{/*	required*/}
+				{/*	variant="squared"*/}
+				{/*/>*/}
+
+				<DatePickerComponent
 					minDate={new Date()}
-					label="Expiration Date"
 					required
+					label="Expiration Date"
 					variant="squared"
 				/>
 
@@ -188,7 +196,7 @@ export default function InviteUserForm() {
 						errorMessage="Select asset permissions to assign to the user account."
 						showError={assetError}
 						type="user"
-						variant='squared'
+						variant="squared"
 						inputList={[
 							...assets.filter(({ assetId }) => assignedAssets.has(assetId)),
 						]
@@ -201,9 +209,8 @@ export default function InviteUserForm() {
 					isSuperAdmin={isSuperAdmin}
 					defaultRoles={userRoles}
 					externalSetter={setRoles}
-					variant='squared'
+					variant="squared"
 				/>
-
 			</div>
 			<Button
 				className="create-organization__submit"

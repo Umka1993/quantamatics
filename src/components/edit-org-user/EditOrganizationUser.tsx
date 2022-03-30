@@ -27,6 +27,7 @@ import {
 import { useParams } from "react-router-dom";
 import RoleSelector from "../role-selector";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
+import DatePickerComponent from "../app-input/new-datepick";
 
 interface Props {
 	onClose: () => void;
@@ -71,8 +72,10 @@ export default function EditOrganizationUser({
 		useUpdateUserRolesMutation();
 
 	const { data: assets } = useGetAllAssetsQuery(organizationID as string);
-	const [linkAsset, { isLoading: isAssetLinking }] = useLinkAssetToUserMutation();
-	const [unlinkAsset, { isLoading: isAssetUnLinking }] = useUnlinkAssetToUserMutation();
+	const [linkAsset, { isLoading: isAssetLinking }] =
+		useLinkAssetToUserMutation();
+	const [unlinkAsset, { isLoading: isAssetUnLinking }] =
+		useUnlinkAssetToUserMutation();
 
 	const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
 		new Set()
@@ -120,10 +123,9 @@ export default function EditOrganizationUser({
 			localStorage.setItem("user", JSON.stringify(normalizedNewData));
 		}
 
-
 		isAssetChanged && updateAssets();
 
-		isAssetChanged && !userChanged && !isRoleChanged && onClose()
+		isAssetChanged && !userChanged && !isRoleChanged && onClose();
 
 		function updateRolesAndClose() {
 			updateRoles([user.id, rolesAsArray]).unwrap().then(onClose);
@@ -275,7 +277,6 @@ export default function EditOrganizationUser({
 			noValidate={validate ? undefined : true}
 			ref={formRef}
 		>
-
 			<Headline className={style.title} id="org-user-modal-title">
 				Edit User Account
 			</Headline>
@@ -294,14 +295,14 @@ export default function EditOrganizationUser({
 					required
 					variant="squared"
 					className={style.input}
-					icon={<SpriteIcon icon="pen" width={16} />}
+					// icon={<SpriteIcon icon="pen" width={16} />}
 				/>
 
 				<Input
 					externalSetter={setSurname}
 					value={lastName}
 					name="lastName"
-					icon={<SpriteIcon icon="pen" width={16} />}
+					// icon={<SpriteIcon icon="pen" width={16} />}
 					label="Last Name"
 					maxLength={100}
 					required
@@ -314,18 +315,17 @@ export default function EditOrganizationUser({
 				externalSetter={setEmail}
 				value={email}
 				error={emailError}
-				icon={<SpriteIcon icon="pen" width={16} />}
+				// icon={<SpriteIcon icon="pen" width={16} />}
 				label="Email"
 				maxLength={100}
 				required
 				variant="squared"
 				className={style.input}
 			/>
-			<DatePick
-				externalSetter={setExpiration}
-				valueAsDate={subscriptionEndDate}
-				label="Expiration Date"
+			<DatePickerComponent
+				minDate={new Date()}
 				required
+				label="Expiration Date"
 				variant="squared"
 				className={style.input}
 			/>
@@ -334,7 +334,7 @@ export default function EditOrganizationUser({
 				externalSetter={setOrganization}
 				value={companyName}
 				name="companyName"
-				icon={<SpriteIcon icon="pen" width={16} />}
+				// icon={<SpriteIcon icon="pen" width={16} />}
 				label="Organization"
 				maxLength={100}
 				disabled
