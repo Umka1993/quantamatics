@@ -26,8 +26,6 @@ import {
 } from "../../api/asset";
 import { useParams } from "react-router-dom";
 import RoleSelector from "../role-selector";
-import SpriteIcon from "../sprite-icon/SpriteIcon";
-import DatePickerComponent from "../app-input/new-datepick";
 
 interface Props {
 	onClose: () => void;
@@ -315,14 +313,13 @@ export default function EditOrganizationUser({
 				externalSetter={setEmail}
 				value={email}
 				error={emailError}
-				// icon={<SpriteIcon icon="pen" width={16} />}
 				label="Email"
 				maxLength={100}
 				required
 				variant="squared"
 				className={style.input}
 			/>
-			<DatePickerComponent
+			<DatePick
 				minDate={new Date()}
 				required
 				label="Expiration Date"
@@ -334,7 +331,6 @@ export default function EditOrganizationUser({
 				externalSetter={setOrganization}
 				value={companyName}
 				name="companyName"
-				// icon={<SpriteIcon icon="pen" width={16} />}
 				label="Organization"
 				maxLength={100}
 				disabled

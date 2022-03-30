@@ -13,16 +13,15 @@ import {
 } from "../../api/asset";
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
-import DatePickerComponent from "../app-input/new-datepick";
 
 export interface IInviteUserRequestBody {
-		companyName: string | undefined
-		email: string
-		firstName: string
-		organizationId: string | undefined
-		lastName: string
-		subscriptionEndDate: Date | undefined
-		userRoles: UserRole[];
+	companyName: string | undefined
+	email: string
+	firstName: string
+	organizationId: string | undefined
+	lastName: string
+	subscriptionEndDate: Date | undefined
+	userRoles: UserRole[];
 }
 
 export default function InviteUserForm() {
@@ -89,7 +88,7 @@ export default function InviteUserForm() {
 			assignedAssets.forEach((assetId) => {
 				linkAsset({
 					assetId,
-					userId:  registeredUser?.id as string | undefined ,
+					userId: String(registeredUser?.id),
 				});
 			});
 
@@ -171,16 +170,8 @@ export default function InviteUserForm() {
 					label="Email Address"
 					variant="squared"
 				/>
-				{/*<DatePick*/}
-				{/*	externalSetter={setSubscriptionEndDate}*/}
-				{/*	valueAsDate={subscriptionEndDate}*/}
-				{/*	minDate={new Date()}*/}
-				{/*	label="Expiration Date"*/}
-				{/*	required*/}
-				{/*	variant="squared"*/}
-				{/*/>*/}
 
-				<DatePickerComponent
+				<DatePick
 					minDate={new Date()}
 					required
 					label="Expiration Date"
