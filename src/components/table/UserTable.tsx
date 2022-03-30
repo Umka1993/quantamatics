@@ -1,128 +1,110 @@
-import React, {FunctionComponent, useEffect, useLayoutEffect, useMemo, useState} from "react";
+import {
+	FunctionComponent,
+	SetStateAction,
+	useLayoutEffect,
+	useState,
+	Dispatch,
+} from "react";
 
-import EditSVG from "./assets/edit-row-icon.svg";
-
-import {EditProfile} from "../edit-modal/edit-profile";
-import {SortTableHeader} from "../sort-table-header/SortTableHeader";
-import {adaptRoles} from "../../services/baseService";
+import { SortTableHeader } from "../sort-table-header/SortTableHeader";
+import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
-import {IUpdateUser} from "../../types/user";
+import { IUser } from "../../types/user";
 import ISort from "../../types/sort-type";
-import {useGetOrganizationUsersQuery} from "../../api/user";
-import "./styles/table.scss";
-import {USER_HEADER} from "./utils/constants";
-import {SortDirection} from "../../data/enum";
+import { USER_HEADER } from "./utils/constants";
+import { SortDirection } from "../../data/enum";
+import style from "./styles/table.module.scss";
+import SpriteIcon from "../sprite-icon/SpriteIcon";
 
 interface UserTableProps {
-    orgId: string;
+	list: IUser[];
+	setter: Dispatch<SetStateAction<IUser[]>>;
+	dates: Map<number, string>;
+	userSetter: Dispatch<SetStateAction<IUser | null>>;
 }
 
-export const UserTable: FunctionComponent<UserTableProps> = ({orgId}) => {
-    // ? Need to be in component to reset sort after update
-    const INITIAL_SORT = { name: "", direction: SortDirection.Default }
+export const UserTable: FunctionComponent<UserTableProps> = ({
+	list,
+	setter,
+	dates,
+	userSetter
+}) => {
+	// ? Need to be in component to reset sort after update
+	const INITIAL_SORT = { name: "", direction: SortDirection.Default };
 
-    const { data, isSuccess } = useGetOrganizationUsersQuery(orgId);
+	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 
-    const [localRows, setLocalRows] = useState<IUpdateUser[]>([]);
-    const [showModal, setShowModal] = useState<boolean>(false);
+	const [scrollY, setScrollY] = useState<number>(0);
 
-    const [sort, setSort] = useState<ISort>(INITIAL_SORT);
-    const [user, setUser] = useState<IUpdateUser>();
+	// ? Kludge for Chrome to remember scroll position after rerendering
 
-    const [scrollY, setScrollY] = useState<number>(0); 
+	useLayoutEffect(() => {
+		const scrollWrapper = document.querySelector("main");
+		if (scrollWrapper) {
+			scrollWrapper.scrollTop = scrollY;
+		}
+	}, [list]);
 
-    const endDates = useMemo(() => {
-        if (data) {
-            const result = new Map;
+	return (
+		<table className={style.root}>
+			<thead className={style.head}>
+				<tr className={[style.row, style["row--user"]].join(" ")}>
+					{USER_HEADER.keys.map((key: string, index: number) => (
+						<SortTableHeader
+							key={key}
+							name={key}
+							text={USER_HEADER.titles[index]}
+							sort={sort}
+							localRows={list}
+							setSort={setSort}
+							setLocalRows={setter}
+							className={style.headline}
+							rememberScroll={setScrollY}
+						/>
+					))}
+					<th className={[style.headline, style["headline--action"]].join(" ")}>
+						Actions
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{list.map((user) => (
+					<tr
+						className={[style.row, style["row--body"], style["row--user"]].join(
+							" "
+						)}
+						onClick={({ target }) =>
+							(target as any).href === undefined &&
+							userSetter(user)
+						}
 
-            data.map((user) => {
-                result.set(
-                    user.id,
-                    user.subscriptionEndDate.split(" ")[0]
-                )
-            })
-            return result
-        }
-    }, [data])
-
-    useEffect(() => {
-        if (isSuccess && data) {
-            const usersWithDate = data.map(user => (
-                { ...user, subscriptionEndDate: new Date(user.subscriptionEndDate) }
-            ))
-            sessionStorage.setItem('table-rows', JSON.stringify(usersWithDate))
-            setLocalRows(usersWithDate);
-            setSort(INITIAL_SORT);
-        }
-    }, [isSuccess, data])
-
-    // ? Kludge for Chrome to remember scroll position after rerendering
-
-    useLayoutEffect(() => {
-        const scrollWrapper = document.querySelector('main')
-        if (scrollWrapper) {
-            scrollWrapper.scrollTop = scrollY;
-        }
-    }, [localRows])
-
-
-    return (
-        <>
-            <table
-                className="table table--user"
-            >
-                <thead className="table__head">
-                    <tr className="table__header">
-                        {USER_HEADER.keys.map((key: string, index: number) =>
-                        (<SortTableHeader
-                            key={key}
-                            name={key}
-                            text={USER_HEADER.titles[index]}
-                            sort={sort}
-                            localRows={localRows}
-                            setSort={setSort}
-                            setLocalRows={setLocalRows}
-                            className="user"
-                            rememberScroll={setScrollY}
-                        />))
-                        }
-                        <th className="table__headline table__headline--hidden">Actions</th>
-                    </tr>
-                </thead>
-                <tbody className="table__body">
-                    {localRows.map((user) => (
-                        <tr className="table__row" key={user.id}>
-                            <td className="table__cell">{user.firstName}</td>
-                            <td className="table__cell">{user.lastName}</td>
-                            <td className="table__cell">{user.email}</td>
-                            <td className="table__cell">
-                                {endDates?.get(user.id)}
-                            </td>
-                            <td className="table__cell">
-                                <ComaList list={adaptRoles(user.userRoles)} />
-                            </td>
-                            <td className="table__cell table__cell--actions">
-                                <button
-                                    type="button"
-                                    className="table__action"
-                                    onClick={() => {
-                                        setUser(user);
-                                        setShowModal(true);
-                                    }}
-                                >
-                                    <EditSVG role="img" aria-label="edit" fill="currentColor" />
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            {showModal && (
-                <EditProfile
-                    user={user as IUpdateUser}
-                    onClose={() => setShowModal(false)}
-                />
-            )}
-        </>
-    );
+						key={user.id}
+					>
+						<td className={style.cell}>{user.firstName}</td>
+						<td className={style.cell}>{user.lastName}</td>
+						<td className={style.cell}>
+							<a className="link" href={`mailto:${user.email}`}>
+								{user.email}
+							</a>
+						</td>
+						<td className={style.cell}>{dates.get(user.id)}</td>
+						<td className={style.cell}>
+							<ComaList list={adaptRoles(user.userRoles)} />
+						</td>
+						<td className={style.cell}>
+							<button
+								type="button"
+								className={style.action}
+								onClick={({ currentTarget }) => {
+									currentTarget.blur();
+								}}
+							>
+								<SpriteIcon icon='pen' label="Edit user" width={16} id={`edit-${user.id}`} />
+							</button>
+						</td>
+					</tr>
+				))}
+			</tbody>
+		</table>
+	);
 };

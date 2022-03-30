@@ -1,9 +1,18 @@
 @mixin hover-focus {
-    &:hover {
-        @content;
-    }
+	&:hover {
+		@content;
+	}
 
-    &:focus-visible {
-        @content;
-    }
+	&:focus-visible {
+		@content;
+	}
+}
+
+@mixin hide-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
 }

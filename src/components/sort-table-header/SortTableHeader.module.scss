@@ -1,0 +1,47 @@
+@use "../../sass/variables" as *;
+@use "../../sass/mixins.scss" as *;
+
+.arrow {
+	color: transparent;
+	margin-left: 5px;
+	position: relative;
+	top: 0.3em;
+	cursor: pointer;
+	transition-property: color, transform;
+	transition-duration: 0.3s;
+
+	&--up {
+		transform: rotate(180deg);
+		transform-origin: center;
+	}
+}
+
+.button {
+	all: unset;
+	font: inherit;
+	display: flex;
+	align-items: baseline;
+
+	@include hover-focus {
+		color: $accent;
+		cursor: pointer;
+	}
+
+	&:hover .arrow {
+		color: $inactive;
+	}
+}
+
+.root {
+	&[aria-sort="ascending"] .arrow {
+		color: #017aee;
+
+		:global #up {
+			display: none;
+		}
+	}
+
+	&[aria-sort="descending"] .arrow {
+		color: #017aee;
+	}
+}

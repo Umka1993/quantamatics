@@ -1,0 +1,152 @@
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
+@use "sass:math";
+
+.loader {
+	position: relative;
+	height: 60vh;
+}
+
+.root {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.head {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.row {
+	display: grid;
+	padding: 0 var(--side);
+	background-color: #fff;
+
+	&--organization {
+		grid-template-columns:
+			max(#{math.div(278 - 24, 1110) * 100%}, #{140 + 24}px)
+			max(#{math.div(202 - 24, 1110) * 100%}, #{131 + 24}px)
+			max(#{math.div(238 - 24, 1110) * 100%}, #{143 + 24}px)
+			1fr
+			64px;
+	}
+
+	&--user {
+		grid-template-columns:
+			max(#{math.div(120, 1108) * 100%}, #{90 + 24}px)
+			max(#{math.div(136 - 24, 1108) * 100%}, #{88 + 24}px)
+			max(#{math.div(258 - 24, 1108) * 100%}, #{112 + 24}px)
+			max(#{math.div(186 - 24, 1108) * 100%}, #{118 + 24}px)
+			1fr
+			64px;
+	}
+
+	&--body {
+		min-height: 65px;
+		align-items: center;
+
+		position: relative;
+		cursor: pointer;
+
+		&::before {
+			position: absolute;
+
+			border-radius: 0px 2px 2px 0px;
+			height: 100%;
+			height: calc(100% + 1px);
+			left: 0;
+			top: -1px;
+			width: 3px;
+			content: "";
+		}
+
+		&:hover {
+			box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05), inset 0px -1px 0px rgba(22, 34, 101, 0.07), 0px -1px 0px #eff0f4;
+			.cell {
+				border-color: transparent;
+				button{
+					opacity: 1;
+					transition: opacity 0.3s ease-out;
+				}
+			}
+
+			&::before {
+				background-color: $accent;
+			}
+		}
+
+
+		&:hover .action {
+			color: $accent;
+		}
+	}
+}
+
+.headline {
+	font-family: inherit;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 1.33;
+	letter-spacing: 0.04em;
+
+	color: $headlines;
+
+	border-bottom: 1px solid #eff0f4;
+	padding: 10px 24px 10px 0;
+	text-align: left;
+
+	&--action {
+		font-size: 0;
+	}
+}
+
+.cell {
+	height: 100%;
+	display: grid;
+	align-items: center;
+	border-bottom: 1px solid #eff0f4;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.357;
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	padding-right: 24px;
+	button{
+		opacity: 0;
+		transition: opacity 0.3s ease-out;
+
+	}
+
+	a {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: min-content;
+	}
+}
+
+.action {
+	all: unset;
+	color: $inactive;
+	cursor: pointer;
+	outline-color: currentColor;
+	outline-offset: 0.4em;
+	border-radius: 0.2em;
+
+	transition: color 0.2s;
+
+	&:focus-visible {
+		outline-width: 1px;
+		color: $accent;
+	}
+
+	&:disabled {
+		cursor: default;
+		color: transparentize($inactive, 0.6);
+	}
+}

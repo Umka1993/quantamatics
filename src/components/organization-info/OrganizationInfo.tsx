@@ -1,0 +1,69 @@
+import Headline from "../page-title";
+import { FunctionComponent, HTMLProps } from "react";
+import { Organization } from "../../types/organization/types";
+import style from "./organization-info.module.scss";
+import Button from "../button";
+import { ReactComponent as DocIcon } from "./assets/doc.svg";
+import classNames from "classnames";
+
+interface OrganizationInfoProps extends HTMLProps<HTMLDivElement> {
+	organization: Organization;
+	toggleAssetModal: () => void;
+	toggleOrganizationModal: () => void;
+}
+
+const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
+	organization,
+	toggleAssetModal,
+	toggleOrganizationModal,
+	className,
+}) => {
+	return (
+		<section className={classNames(style.root, className)}>
+			<Headline
+				className={style.title}
+				pageTitle={`Organization ${organization.name}`}
+			>
+				Organization <span className={style.name}>{organization.name}</span>
+			</Headline>
+			<Button className={style.cta} onClick={toggleOrganizationModal}>
+				Edit
+			</Button>
+			<Button className={style.cta} onClick={toggleAssetModal}>
+				<DocIcon width={21} height={21} fill="currentColor" aria-hidden />
+				Manage Assets
+			</Button>
+
+			<dl className={style.info}>
+				<dt>CRM Customer ID</dt>
+				<dd>{organization.customerCrmId}</dd>
+
+				<dt>CRM Customer Link</dt>
+				<dd>
+					{organization.customerCrmLink && (
+						<a
+							href={organization.customerCrmLink}
+							className="link"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{organization.customerCrmLink}
+						</a>
+					)}
+				</dd>
+
+				<dt>Assets</dt>
+				<dd>
+					{organization.organizationAssets
+						.map(({ asset }) => asset.name)
+						.join(", ")}
+				</dd>
+
+				<dt>Comments</dt>
+				<dd>{organization.comments}</dd>
+			</dl>
+		</section>
+	);
+};
+
+export default OrganizationInfo;

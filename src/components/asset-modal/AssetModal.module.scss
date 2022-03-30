@@ -1,0 +1,96 @@
+@use "../../sass/variables.scss" as *;
+
+.root {
+	padding: 40px 0 0;
+	display: grid;
+	grid-template-rows: auto auto 1fr;
+	height: 100vh;
+	scrollbar-width: thin;
+}
+
+.header {
+	padding: 0 40px;
+}
+
+.error {
+	color: $error;
+	margin: 0 40px 0;
+	outline: none;
+}
+
+.table {
+	width: 100%;
+	display: grid;
+	height: calc(100vh - #{40 * 3 + 30}px);
+	grid-template-rows: auto 1fr;
+
+	margin-top: 12px;
+	flex-grow: 1;
+
+	tbody {
+		display: block;
+		overflow: auto;
+		height: 100%;
+		scrollbar-width: thin;
+	}
+}
+
+.thead {
+	background-color: #fff;
+	border-bottom: 1px solid transparent;
+	transition: border-color 0.2s;
+
+	&--active {
+		border-color: $inactive;
+	}
+}
+
+.row {
+	padding: 8px 40px;
+	display: grid;
+	grid-template-columns: 1fr 45px 45px;
+	gap: 18px;
+}
+
+.action {
+	display: grid;
+	place-content: center;
+	font-style: 16px;
+
+	:global .pin-button::after {
+		left: auto;
+		right: -48px;
+		transform: none;
+	}
+}
+
+.headline {
+	text-align: left;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 1.33;
+	letter-spacing: 0.04em;
+	color: $headlines;
+}
+
+.asset {
+	padding: 14px 40px;
+	color: $main-text;
+	font-size: 14px;
+	line-height: 1.36;
+
+	&:nth-child(odd) {
+		background-color: rgba($inactive, 0.1);
+	}
+
+	&--selected {
+		color: $accent;
+	}
+
+	&:first-child :global {
+		.pin-button::after {
+			top: calc(100% + 5px);
+			bottom: auto;
+		}
+	}
+}
