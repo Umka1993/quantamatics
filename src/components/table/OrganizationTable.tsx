@@ -31,6 +31,17 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 
 	const navigate = useNavigate();
 
+	const handleOrgNameLength = (name:string)=>{
+
+
+		if(name && name.length>45){
+			return `${name.slice(0, 29)}...`
+
+		}else{
+			return name
+		}
+	}
+
 	return (
 		<table className={style.root}>
 			<thead className={style.head}>
@@ -67,7 +78,7 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 						}
 						key={index}
 					>
-						<td className={style.cell}>{organization.name}</td>
+						<td className={style.cell}>{handleOrgNameLength(organization.name)}</td>
 						<td className={style.cell}>{organization.customerCrmId}</td>
 						<td className={style.cell}>
 							{Boolean(organization.customerCrmLink.length) && (

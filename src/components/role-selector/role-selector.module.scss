@@ -6,14 +6,28 @@
 	border: none;
 	margin: 0;
 	padding: 0;
-	justify-content: space-between;
 	gap: 20px;
+	margin-top: 7px;
+	label {
+		span{
+			color: #003C71;
+			font-style: normal;
+			font-weight: 400;
+			font-size: 16px;
+			line-height: 22px;
+		}
+	}
 }
 
+
 .legend {
-	color: inherit;
 	margin: 0;
 	padding: 0;
 	float: left;
-	font-weight: inherit;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 22px;
+	color: #7182A6;
 }
+

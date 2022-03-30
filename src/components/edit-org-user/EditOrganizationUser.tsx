@@ -295,14 +295,14 @@ export default function EditOrganizationUser({
 					required
 					variant="squared"
 					className={style.input}
-					icon={<SpriteIcon icon="pen" width={16} />}
+					// icon={<SpriteIcon icon="pen" width={16} />}
 				/>
 
 				<Input
 					externalSetter={setSurname}
 					value={lastName}
 					name="lastName"
-					icon={<SpriteIcon icon="pen" width={16} />}
+					// icon={<SpriteIcon icon="pen" width={16} />}
 					label="Last Name"
 					maxLength={100}
 					required
@@ -315,21 +315,13 @@ export default function EditOrganizationUser({
 				externalSetter={setEmail}
 				value={email}
 				error={emailError}
-				icon={<SpriteIcon icon="pen" width={16} />}
+				// icon={<SpriteIcon icon="pen" width={16} />}
 				label="Email"
 				maxLength={100}
 				required
 				variant="squared"
 				className={style.input}
 			/>
-			{/*<DatePick*/}
-			{/*	minDate={new Date()}*/}
-			{/*	required*/}
-			{/*	label="Expiration Date"*/}
-			{/*	variant="squared"*/}
-			{/*	className={style.input}*/}
-			{/*/>*/}
-
 			<DatePickerComponent
 				minDate={new Date()}
 				required
@@ -342,7 +334,7 @@ export default function EditOrganizationUser({
 				externalSetter={setOrganization}
 				value={companyName}
 				name="companyName"
-				icon={<SpriteIcon icon="pen" width={16} />}
+				// icon={<SpriteIcon icon="pen" width={16} />}
 				label="Organization"
 				maxLength={100}
 				disabled
