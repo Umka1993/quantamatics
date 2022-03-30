@@ -1,7 +1,7 @@
 import useDialogPolyfill, {
 	HTMLDialogElement,
 } from "../../hooks/useDialogPolyfill";
-import React, { useEffect, useRef, HTMLProps } from "react";
+import React, { HTMLProps, SyntheticEvent, useEffect, useRef } from "react";
 
 import style from "./Dialog.module.scss";
 import classNames from "classnames";
@@ -50,7 +50,7 @@ export default function Dialog({
 				document.body.classList.add("scroll-lock");
 			} else {
 				dialogNode && dialogNode.close();
-				lastActiveElement.current && (lastActiveElement.current as any).focus();
+				lastActiveElement.current && (lastActiveElement.current as HTMLElement).focus();
 				document.body.classList.remove("scroll-lock");
 			}
 		}
@@ -58,7 +58,7 @@ export default function Dialog({
 
 	useEffect(() => {
 		const dialogNode = dialogRef.current;
-		const handleCancel = (event: any) => {
+		const handleCancel = (event: Event) => {
 			event.preventDefault();
 			onRequestClose();
 		};
@@ -68,8 +68,9 @@ export default function Dialog({
 		};
 	}, [onRequestClose]);
 
-	function handleOutsideClick(event: any) {
+	function handleOutsideClick(event: SyntheticEvent ) {
 		const dialogNode = dialogRef.current;
+
 		if (closeOnOutsideClick && event.target === dialogNode) {
 			onRequestClose();
 		}
