@@ -23,6 +23,7 @@
 		"react-datepicker": "^4.7.0",
 		"react-day-picker": "^7.4.10",
 		"react-dom": "^17.0.2",
+		"react-maskedinput": "^4.0.1",
 		"react-redux": "^7.2.6",
 		"react-router-dom": "^6.2.2"
 	},
@@ -32,6 +33,7 @@
 		"@types/react": "^17.0.33",
 		"@types/react-datepicker": "^4.3.4",
 		"@types/react-dom": "^17.0.10",
+		"@types/react-maskedinput": "^4.0.6",
 		"@typescript-eslint/eslint-plugin": "^5.16.0",
 		"@vitejs/plugin-legacy": "^1.7.1",
 		"@vitejs/plugin-react": "^1.0.7",
