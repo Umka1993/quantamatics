@@ -1,0 +1,18 @@
+.root {
+	background-color: #001c53;
+	margin: 0;
+
+	background-image: url("./assets/back.png");
+	background-size: cover;
+	background-position: center;
+
+	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+		background-image: url("./assets/back@2x.png");
+	}
+}
+
+.image {
+	width: 726px;
+	height: auto;
+	max-width: 100%;
+}

@@ -8,6 +8,7 @@ import IApiError from "../../types/api-error";
 import useLogin from "../../hooks/useLogin";
 import Input, { Password } from "../input";
 import style from "./login-form.module.scss";
+import styles from "./login-page.module.scss";
 import Headline from "../page-title";
 import expiredState from "./utils/expiredState";
 
@@ -46,18 +47,18 @@ export default function LoginPage() {
 			const { status, data } = error as IApiError;
 			if (status === 401) {
 				switch (data) {
-				case "User subscription has ended":
-					return navigate(AppRoute.Expired, {
-						state: expiredState,
-					});
+					case "User subscription has ended":
+						return navigate(AppRoute.Expired, {
+							state: expiredState,
+						});
 
-				case "User locked out":
-					setErrors(
-						"User account locked due to several failed login attempts. Please try again later."
-					);
-					break;
-				default:
-					setErrors("Incorrect email or password");
+					case "User locked out":
+						setErrors(
+							"User account locked due to several failed login attempts. Please try again later."
+						);
+						break;
+					default:
+						setErrors("Incorrect email or password");
 				}
 			}
 		}
@@ -77,58 +78,61 @@ export default function LoginPage() {
 	}, [isSuccess]);
 
 	return (
-		<form onSubmit={handleLogin} noValidate className={style.root}>
-			<header className={style.header}>
-				<Headline className={style.title}>Sign In</Headline>
-				<p className={style.subtitle}>Enter your email and password</p>
-			</header>
+		<main className={styles.root}>
 
-			<fieldset className={style.inputs}>
-				<Input
-					placeholder="Email"
-					name="email"
-					label="Email"
-					type="email"
-					defaultValue={email}
-					externalSetter={setEmail}
-					externalErrorID={errors ? "test" : undefined}
-					invalid={Boolean(errors)}
-					required
-				/>
+			<form onSubmit={handleLogin} noValidate className={style.root}>
+				<header className={style.header}>
+					<Headline className={style.title}>Sign In</Headline>
+					<p className={style.subtitle}>Enter your email and password</p>
+				</header>
 
-				<Password
-					placeholder="Password"
-					label="Password"
-					defaultValue={password}
-					externalSetter={setPassword}
-					name="password"
-					autoComplete="current-password"
-					customError={errors}
-				/>
-			</fieldset>
+				<fieldset className={style.inputs}>
+					<Input
+						placeholder="Email"
+						name="email"
+						label="Email"
+						type="email"
+						defaultValue={email}
+						externalSetter={setEmail}
+						externalErrorID={errors ? "test" : undefined}
+						invalid={Boolean(errors)}
+						required
+					/>
 
-			<Link to={AppRoute.ForgotPassword} className={style.forgot}>
-				Forgot Password?
-			</Link>
+					<Password
+						placeholder="Password"
+						label="Password"
+						defaultValue={password}
+						externalSetter={setPassword}
+						name="password"
+						autoComplete="current-password"
+						customError={errors}
+					/>
+				</fieldset>
 
-			<Button
-				className={style.submit}
-				disabled={!email || !password}
-				type="submit"
-			>
-				Sign In
-			</Button>
-			<p className={style.note}>
-				Interested in Quantamatics and want to{" "}
-				<a
-					className='link'
-					href="https://www.facteus.com/quantamatics"
-					target="_blank"
-					rel="noopener noreferrer"
+				<Link to={AppRoute.ForgotPassword} className={style.forgot}>
+					Forgot Password?
+				</Link>
+
+				<Button
+					className={style.submit}
+					disabled={!email || !password}
+					type="submit"
 				>
-					learn more?
-				</a>
-			</p>
-		</form>
+					Sign In
+				</Button>
+				<p className={style.note}>
+					Interested in Quantamatics and want to{" "}
+					<a
+						className='link'
+						href="https://www.facteus.com/quantamatics"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						learn more?
+					</a>
+				</p>
+			</form>
+		</main>
 	);
 }

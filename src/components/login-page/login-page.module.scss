@@ -1,0 +1,13 @@
+@use '../../sass/variables' as *;
+
+.root {
+	display: grid;
+	grid-template-columns: 1fr 41.67%;
+	width: 100%;
+	height: 100vh;
+}
+
+.side {
+	background-color: #001c53;
+	margin: 0;
+}

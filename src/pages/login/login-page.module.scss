@@ -1,0 +1,22 @@
+@use '../../sass/variables' as *;
+
+.root {
+	display: grid;
+
+	width: 100%;
+	height: 100vh;
+
+
+}
+
+
+
+@media (min-width: 800px) {
+	.root {
+		grid-template-columns: 1fr minmax(400px, 41.67%);
+	}
+
+	.side {
+		order: -1;
+	}
+}
