@@ -1,0 +1,76 @@
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
+
+.basic {
+	--bg-color: transparent;
+	display: flex;
+	font-family: inherit;
+	line-height: 1.125;
+
+	text-align: center;
+
+	align-items: center;
+	justify-content: center;
+
+	outline: none;
+	cursor: pointer;
+	border-radius: 2px;
+
+	text-decoration: none;
+
+	gap: 0.4375em;
+
+	border: 1px solid transparent;
+	background-color: var(--bg-color);
+	transition: 0.3s ease all;
+
+	&:focus-visible {
+		outline: 2px solid var(--bg-color);
+		outline-offset: 0.2em;
+	}
+}
+
+.bordered {
+	color: $accent;
+	border-color: $accent;
+
+	@include hover-focus {
+		--bg-color: #{$accent};
+		color: #ffffff;
+	}
+}
+
+.valid {
+	--bg-color: #00c04d;
+	color: #fff;
+
+	@include hover-focus {
+		--bg-color: #{darken(#00c04d, 5)};
+	}
+}
+
+.danger {
+	--bg-color: #dc3545;
+	color: #fff;
+	@include hover-focus {
+		--bg-color: #{darken(#dc3545, 10)};
+	}
+}
+
+.transparent-light {
+	--bg-color: #{rgba(#fff, 0.25)};
+	color: #fff;
+	border-radius: 0;
+
+	@include hover-focus {
+		--bg-color: #{rgba($accent, 0.7)};
+
+	}
+}
+
+.basic:disabled,
+.basic[disabled] {
+	cursor: default;
+	color: $inactive;
+	border-color: $inactive;
+}

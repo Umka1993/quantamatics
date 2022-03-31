@@ -1,12 +1,14 @@
-import { ButtonHTMLAttributes, FunctionComponent } from "react";
-import "./styles/button.scss";
+import { ButtonHTMLAttributes, CSSProperties, FunctionComponent } from "react";
+import s from "./styles/button.module.scss";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
 	href?: string;
-	mod?: string;
-	variant?: 'valid' | 'danger';
+	variant?: 'bordered' | "valid" | "danger" | "transparent-light";
+	padding?: string;
+	fontSize?: string;
+	fontWeight?: number;
 }
 
 const Button: FunctionComponent<IButton> = ({
@@ -14,17 +16,38 @@ const Button: FunctionComponent<IButton> = ({
 	className,
 	href,
 	children,
-	variant,
+	padding = "11px",
+	fontSize = '1rem',
+	fontWeight = 600,
+	variant = 'bordered',
+	style,
+	disabled,
 	...other
 }) => {
-	const buttonClasses = classNames(className, "button", variant && `button--${variant}`);
+	const preparedAttributes = {
+		className: classNames(s.basic, !disabled && s[variant], className),
+		style: { ...style, padding, fontSize, fontWeight } as CSSProperties,
+	};
 
-	return href ? (
-		<Link to={href} className={buttonClasses}>
-			{children}
-		</Link>
-	) : (
-		<button className={buttonClasses} type={type} {...other}>
+	if (!disabled && href) {
+		return href.startsWith("http") ? (
+			<a
+				{...preparedAttributes}
+				href={href}
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				{children}
+			</a>
+		) : (
+			<Link to={href} {...preparedAttributes}>
+				{children}
+			</Link>
+		);
+	}
+
+	return (
+		<button {...preparedAttributes} type={type} disabled={disabled} {...other} >
 			{children}
 		</button>
 	);
