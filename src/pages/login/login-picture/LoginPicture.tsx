@@ -5,7 +5,7 @@ import style from "./login-picture.module.scss";
 import Preview from "./assets/image@2x.png";
 import Button from "../../../components/button";
 
-interface Props extends HTMLProps<HTMLDivElement> { }
+type Props = HTMLProps<HTMLDivElement>
 
 export default function LoginPicture({ className }: Props) {
 	return (
@@ -18,9 +18,16 @@ export default function LoginPicture({ className }: Props) {
 				height={437}
 			/>
 
-			<figcaption>
-				Integrate out-of-the-box ideas into your research workflow with ease. Combine data, assess, and predict intelligently.
-				<Button>Learn More</Button>
+			<figcaption className={style.caption}>
+				Integrate out-of-the-box ideas into your research workflow with ease.
+				Combine data, assess, and predict intelligently.
+				<Button
+					variant="transparent-light"
+					href="https://www.facteus.com/quantamatics"
+					padding="9px 28px"
+				>
+					Learn More
+				</Button>
 			</figcaption>
 		</figure>
 	);

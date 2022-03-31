@@ -2,17 +2,40 @@
 	background-color: #001c53;
 	margin: 0;
 
+	padding: 11vh 48px;
+	display: grid;
+
+	justify-items: end;
+	justify-content: center;
+	align-items: end;
+	align-content: center;
+
+	gap: min(124px, 14vh);
+
 	background-image: url("./assets/back.png");
 	background-size: cover;
 	background-position: center;
 
+	color: #fff;
 	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 		background-image: url("./assets/back@2x.png");
 	}
 }
 
 .image {
-	width: 726px;
 	height: auto;
 	max-width: 100%;
+}
+
+.caption {
+	display: grid;
+	gap: 20px 68px;
+	align-content: center;
+	align-items: center;
+
+	font-size: 16px;
+	line-height: 1.57;
+	@media (min-width: 600px) {
+		grid-template-columns: 1fr auto;
+	}
 }
