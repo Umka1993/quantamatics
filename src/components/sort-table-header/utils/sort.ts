@@ -1,13 +1,31 @@
 import { SortDirection } from "../../../data/enum";
+import { Organization } from "../../../types/organization/types";
+import { IUser } from "../../../types/user";
+import { AssetInOrganization } from "../../../types/asset";
+import { Dispatch } from "@reduxjs/toolkit";
 
-const sortTable = (
-	name: string,
-	sort: any,
-	localRows: any,
-	setSort: any,
-	setLocalRows: any,
-	localKey: string
-) => {
+interface ISort {
+	name: string;
+	direction: "none" | "ascending" | "descending" | "other" | undefined;
+}
+
+export interface ISortTable {
+	name: string;
+	sort: ISort;
+	localRows: AssetInOrganization[] | Organization[] | IUser[];
+	setSort: (arg: Dispatch<any>) => void;
+	setLocalRows: (arg: Dispatch<any>) => void;
+	localKey?: string;
+}
+
+const sortTable = ({
+	name,
+	sort,
+	localRows,
+	setSort,
+	setLocalRows,
+	localKey,
+}: ISortTable): void => {
 	const newSort = { ...sort, name };
 
 	if (name === sort.name || "" === sort.name) {
@@ -20,7 +38,7 @@ const sortTable = (
 			break;
 
 		default:
-			sessionStorage.setItem(localKey, JSON.stringify(localRows));
+			sessionStorage.setItem(localKey as string, JSON.stringify(localRows));
 			newSort.direction = SortDirection.Up;
 			break;
 		}
@@ -28,13 +46,13 @@ const sortTable = (
 		newSort.direction = SortDirection.Up;
 	}
 
-	setSort(newSort);
+	setSort(newSort as unknown as Dispatch<any>);
 
 	let newRows = [...localRows];
 
 	switch (newSort.direction) {
 	case SortDirection.Up:
-		newRows.sort((a: any, b: any) => {
+		newRows.sort((a, b) => {
 			const first = normalizeCompare(a, name);
 			const second = normalizeCompare(b, name);
 
@@ -43,7 +61,7 @@ const sortTable = (
 		break;
 
 	case SortDirection.Down:
-		newRows.sort((a: any, b: any) => {
+		newRows.sort((a, b) => {
 			const first = normalizeCompare(a, name);
 			const second = normalizeCompare(b, name);
 
@@ -53,7 +71,7 @@ const sortTable = (
 
 	default:
 		{
-			const rowsFromStorage = sessionStorage.getItem(localKey);
+			const rowsFromStorage = sessionStorage.getItem(localKey as string);
 			if (rowsFromStorage) {
 				newRows = JSON.parse(rowsFromStorage);
 			} else {
@@ -63,7 +81,7 @@ const sortTable = (
 		break;
 	}
 
-	setLocalRows(newRows);
+	setLocalRows(newRows as unknown as Dispatch<any>);
 };
 
 function normalizeCompare(item: any, name: string) {
@@ -75,7 +93,7 @@ function normalizeCompare(item: any, name: string) {
 		return item[name];
 
 	case "name":
-		if (item.asset) {
+		if ("asset" in item && item.asset) {
 			return item.asset[name];
 		} else {
 			return item[name].toUpperCase();

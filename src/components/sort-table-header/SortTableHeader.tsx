@@ -1,25 +1,15 @@
 import { SortDirection } from "../../data/enum";
-import React, {
-	Dispatch,
-	FunctionComponent,
-	SetStateAction,
-} from "react";
-import sortTable from "./utils/sort";
+import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
+import sortTable, { ISortTable } from "./utils/sort";
 import { ReactComponent as SortIcon } from "./assets/sort-icon.svg";
 import s from "./SortTableHeader.module.scss";
 import { ReactComponent as DownArrow } from "./assets/down.svg";
 import classNames from "classnames";
 
-interface ISortTableHeader {
-	name: string;
-	sort: any;
-	localRows: any;
-	setSort: any;
-	setLocalRows: any;
+interface ISortTableHeader extends ISortTable {
 	text: string;
 	className?: string;
 	rememberScroll?: Dispatch<SetStateAction<number>>;
-	localKey?: string;
 }
 
 export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
@@ -46,7 +36,7 @@ export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
 						const scrollWrapper = document.querySelector("main");
 						scrollWrapper && rememberScroll(scrollWrapper.scrollTop);
 					}
-					sortTable(name, sort, localRows, setSort, setLocalRows, localKey);
+					sortTable({ name, sort, localRows, setSort, setLocalRows, localKey });
 				}}
 				type="button"
 				className={s.button}

@@ -13,7 +13,16 @@ import {
 } from "../../api/asset";
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
-import DatePickerComponent from "../app-input/new-datepick";
+
+export interface IInviteUserRequestBody {
+	companyName: string | undefined
+	email: string
+	firstName: string
+	organizationId: string | undefined
+	lastName: string
+	subscriptionEndDate: Date | undefined
+	userRoles: UserRole[];
+}
 
 export default function InviteUserForm() {
 	const { id: organizationId } = useParams();
@@ -79,7 +88,7 @@ export default function InviteUserForm() {
 			assignedAssets.forEach((assetId) => {
 				linkAsset({
 					assetId,
-					userId: registeredUser.id,
+					userId: String(registeredUser?.id),
 				});
 			});
 

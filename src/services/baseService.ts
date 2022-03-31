@@ -31,7 +31,7 @@ export function adaptRoles(array: string[]): string[] {
 	return formattedArray;
 }
 
-function replaceItemInArray(array: any[], oldValue: any, newValue: any) {
+function replaceItemInArray<Item>(array: Item[], oldValue: Item, newValue: Item) {
 	if (array.includes(oldValue)) {
 		const index = array.indexOf(oldValue);
 		array[index] = newValue;
