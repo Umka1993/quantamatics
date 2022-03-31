@@ -11,7 +11,6 @@ import "./styles/new-datepicker.scss";
 import classNames from "classnames";
 import { ReactComponent as CalendarIcon } from "./assets/calendar.svg";
 import { checkDateInputSupport } from "./utils/date-utils";
-import "react-day-picker/lib/style.css";
 import enGb from "date-fns/locale/en-GB";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from "react-datepicker";
