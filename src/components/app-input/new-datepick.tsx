@@ -21,6 +21,8 @@ interface IDatePick extends Omit<IInput, "externalSetter"> {
 	minDate?: Date;
 	maxDate?: Date;
 	variant?: "squared";
+	subscriptionDate: Date;
+	setSubscriptionDate: (arg: Date) => void;
 }
 
 export default function DatePickerComponent({
@@ -30,6 +32,8 @@ export default function DatePickerComponent({
 	label,
 	onChange,
 	externalSetter,
+	subscriptionDate,
+	setSubscriptionDate,
 	variant,
 }: IDatePick) {
 	const isSupport = checkDateInputSupport();
@@ -63,7 +67,7 @@ export default function DatePickerComponent({
 	// 	onChange && onChange(evt);
 	// };
 	// debugger
-	const [startDate, setStartDate] = useState<Date>(new Date());
+	const [startDate, setStartDate] = useState<Date>(subscriptionDate);
 
 	const [monthYear, setMonthYear] = useState<string>();
 
@@ -90,16 +94,6 @@ export default function DatePickerComponent({
 	useEffect(() => {
 		const maskItemCounter = inputValue.split("/").length;
 		const input = document.getElementById("DatePicker") as HTMLInputElement;
-		// console.log('inputValue',inputValue)
-		// console.log('selectedDate',selectedDate)
-		// console.log('isErrorValue',isErrorValue)
-
-		// if(inputValue.includes('_')){
-		// 		setInputValue(inputValue)
-		// }else if( String(moment(selectedDate).format("MM/DD/YYYY")) !== inputValue ){
-		// 		validateValue(inputValue)
-		// }
-
 		if (isErrorValue) {
 			setInputValue(inputValue);
 			if (maskItemCounter === 1) {
@@ -130,6 +124,7 @@ export default function DatePickerComponent({
 		const changedYear = e.toLocaleDateString("en-us", { year: "numeric" });
 		setMonthYear(changedMonth);
 		setYear(changedYear);
+		setSubscriptionDate(new Date(e));
 	};
 
 	const onClose = () => {
@@ -227,7 +222,7 @@ export default function DatePickerComponent({
 					? Number(arr[2])
 					: new Date().getFullYear();
 			const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
-			const errorValue:string[] = [...arr];
+			const errorValue: string[] = [...arr];
 
 			const setErrorValue = (
 				selectedValue: number,
@@ -250,14 +245,13 @@ export default function DatePickerComponent({
 						break;
 					}
 				}
-					return val.join("");
+				return val.join("");
 			};
 
 			if (
 				selectedMonth > 12 ||
 				(selectedMonth < monthToday && selectedYear == yearToday)
 			) {
-				debugger;
 				errorValue[0] = invalidValue;
 				errorValue[1] = invalidValue;
 				errorValue.splice(1, 2);
@@ -276,7 +270,7 @@ export default function DatePickerComponent({
 			}
 			if (selectedYear < yearToday) {
 				// errorValue[2] =setErrorValue(selectedYear, yearToday)
-				errorValue[2] =invalidValue
+				errorValue[2] = invalidValue;
 				setIsError(true);
 			}
 
@@ -285,7 +279,10 @@ export default function DatePickerComponent({
 				errorValue[0].includes("_") ||
 				errorValue[1].includes("_") ||
 				errorValue[2].includes("_");
-			!isValidValue && handleChange(new Date(errorValue.join("/"))) && setSelectedDate(new Date(errorValue.join("/")));
+			!isValidValue &&
+				handleChange(new Date(errorValue.join("/"))) &&
+				setSelectedDate(new Date(errorValue.join("/"))) &&
+			// setSubscriptionDate(new Date(errorValue.join("/")));
 			!isValidValue && onClose();
 		} else {
 			if (isCorrectedValue && !isErrorValue) {
@@ -296,13 +293,13 @@ export default function DatePickerComponent({
 				// 	: setInputValue(value);
 				setInputValue(fieldValue);
 				setSelectedDate(new Date(fieldValue));
+				// setSubscriptionDate(new Date(fieldValue))
 				onClose();
 			} else {
 				onOpen();
 			}
 		}
 	};
-		console.log(selectedDate)
 
 	return (
 		<div

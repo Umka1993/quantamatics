@@ -326,6 +326,8 @@ export default function EditOrganizationUser({
 				label="Expiration Date"
 				variant="squared"
 				className={style.input}
+				subscriptionDate={subscriptionEndDate}
+				setSubscriptionDate={setExpiration}
 			/>
 
 			<Input

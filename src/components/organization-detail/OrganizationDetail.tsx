@@ -52,7 +52,7 @@ export default function OrganizationDetail() {
 		organization && Boolean(organization.organizationAssets.length);
 
 	const endDates = useMemo(() => {
-		if (userList) {
+		if (isUsersLoaded && userList) {
 			const result = new Map<number, string>();
 
 			userList.map((user) => {
@@ -60,7 +60,7 @@ export default function OrganizationDetail() {
 			});
 			return result;
 		}
-	}, [isUsersLoaded]);
+	}, [isUsersLoaded,userList]);
 
 	const closeModal = () => setUser(null);
 	// ! Temp kludge
