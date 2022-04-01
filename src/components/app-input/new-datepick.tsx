@@ -183,23 +183,12 @@ export default function DatePickerComponent({
 	// };
 
 	const updateDate = (value: string) => {
-		// value && value.split("/").length > 1 && validateValue(value);
-		//
-
 		const manualChange = value && value.split("/").length > 1;
 		const yesterday = moment().subtract(1, "days").endOf("day").toString();
 		const yearToday = moment().year();
 		const monthToday = moment().month() + 1;
 		const today = moment().date();
 		const invalidValue = "_";
-		// const selectedMonth = Number(arr[0]);
-		// const selectedDay = Number(arr[1]);
-		// const selectedYear =
-		// 	Boolean(Number(arr[2])) || Number(arr[2]) == 0
-		// 		? Number(arr[2])
-		// 		: new Date().getFullYear();
-
-		// const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
 
 		const isCorrectedValue =
 			value !== undefined &&
@@ -208,11 +197,6 @@ export default function DatePickerComponent({
 
 		setIsCorrectedDate(isCorrectedValue);
 
-		// const errorValue = [...arr];
-
-		// const isCorrectedValue =
-		// 		moment(value).isValid() && moment(value).isAfter(yesterday);
-		// setIsCorrectedDate(isCorrectedValue);
 		if (manualChange) {
 			const arr = value.split("/");
 			const selectedMonth = Number(arr[0]);
@@ -275,25 +259,37 @@ export default function DatePickerComponent({
 			}
 
 			setInputValue(errorValue.join("/"));
+			const exactDate = new Date(
+				errorValue.join("/") +
+					" " +
+					new Date().getHours() +
+					":" +
+					new Date().getMinutes()
+			);
+
 			const isValidValue =
 				errorValue[0].includes("_") ||
 				errorValue[1].includes("_") ||
 				errorValue[2].includes("_");
 			!isValidValue &&
-				handleChange(new Date(errorValue.join("/"))) &&
+				handleChange(exactDate) &&
 				setSelectedDate(new Date(errorValue.join("/"))) &&
-			// setSubscriptionDate(new Date(errorValue.join("/")));
-			!isValidValue && onClose();
+				// setSubscriptionDate(new Date(errorValue.join("/")));
+				!isValidValue &&
+				onClose();
 		} else {
 			if (isCorrectedValue && !isErrorValue) {
 				const fieldValue = moment(value).format("MM/DD/YYYY");
-				handleChange(new Date(fieldValue));
-				// !inputValue.includes("_")
-				// 	? setInputValue(fieldValue)
-				// 	: setInputValue(value);
+				const exactDate = new Date(
+					fieldValue +
+						" " +
+						new Date().getHours() +
+						":" +
+						new Date().getMinutes()
+				);
+				handleChange(exactDate);
 				setInputValue(fieldValue);
 				setSelectedDate(new Date(fieldValue));
-				// setSubscriptionDate(new Date(fieldValue))
 				onClose();
 			} else {
 				onOpen();
