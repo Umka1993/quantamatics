@@ -26,6 +26,7 @@ import {
 } from "../../api/asset";
 import { useParams } from "react-router-dom";
 import RoleSelector from "../role-selector";
+import DatePickerComponent from "../app-input/new-datepick";
 
 interface Props {
 	onClose: () => void;
@@ -319,7 +320,7 @@ export default function EditOrganizationUser({
 				variant="squared"
 				className={style.input}
 			/>
-			<DatePick
+			<DatePickerComponent
 				minDate={new Date()}
 				required
 				label="Expiration Date"

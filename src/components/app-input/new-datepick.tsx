@@ -281,13 +281,11 @@ export default function DatePickerComponent({
 			}
 
 			setInputValue(errorValue.join("/"));
-			Boolean(moment(inputValue).toISOString()) &&
-				setSelectedDate(new Date(errorValue.join("/")));
 			const isValidValue =
 				errorValue[0].includes("_") ||
 				errorValue[1].includes("_") ||
 				errorValue[2].includes("_");
-			!isValidValue && handleChange(new Date(errorValue.join("/")));
+			!isValidValue && handleChange(new Date(errorValue.join("/"))) && setSelectedDate(new Date(errorValue.join("/")));
 			!isValidValue && onClose();
 		} else {
 			if (isCorrectedValue && !isErrorValue) {
@@ -304,6 +302,7 @@ export default function DatePickerComponent({
 			}
 		}
 	};
+		console.log(selectedDate)
 
 	return (
 		<div
