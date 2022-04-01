@@ -13,6 +13,7 @@ import {
 } from "../../api/asset";
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
+import DatePickerComponent from "../app-input/new-datepick";
 
 export interface IInviteUserRequestBody {
 	companyName: string | undefined
@@ -171,7 +172,7 @@ export default function InviteUserForm() {
 					variant="squared"
 				/>
 
-				<DatePick
+				<DatePickerComponent
 					minDate={new Date()}
 					required
 					label="Expiration Date"
