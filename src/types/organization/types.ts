@@ -9,6 +9,6 @@ export interface Organization {
 	[ OrganizationKey.Name ]: string,
 	[ OrganizationKey.IdCRM ]: string,
 	[ OrganizationKey.LinkCRM ]: string,
-	[ OrganizationKey.Comment ]: string,
+	[ OrganizationKey.Comment ]: string | undefined,
 	[ OrganizationKey.Assets ]: AssetInOrganization[],
 }
