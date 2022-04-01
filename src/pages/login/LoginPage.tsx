@@ -1,14 +1,12 @@
-import { LoginForm } from "../../components/form";
+import LoginForm from "./form/LoginForm";
 import style from "./login-page.module.scss";
 import LoginPicture from "./login-picture/LoginPicture";
 
-
 export default function LoginPage() {
-	return <main className={style.root}>
-
-
-		<LoginForm />
-
-		<LoginPicture  className={style.side}/>
-	</main>
+	return (
+		<main className={style.root}>
+			<LoginForm />
+			<LoginPicture className={style.side} />
+		</main>
+	);
 }

@@ -1,16 +1,17 @@
 .root {
 	background-color: #001c53;
 	margin: 0;
+	padding: 20px;
 
-	padding: 11vh 48px;
+	// padding: min(11vh, 100px) 48px;
 	display: grid;
 
-	justify-items: end;
-	justify-content: center;
-	align-items: end;
-	align-content: center;
+	place-items: center;
+	place-content: center;
 
-	gap: min(124px, 14vh);
+	gap: 10px;
+
+	gap: min(124px, 14vmin);
 
 	background-image: url("./assets/back.png");
 	background-size: cover;
@@ -23,8 +24,11 @@
 }
 
 .image {
-	height: auto;
+	max-height: 49vmin;
+	width: auto;
 	max-width: 100%;
+	height: auto;
+
 }
 
 .caption {
@@ -32,10 +36,12 @@
 	gap: 20px 68px;
 	align-content: center;
 	align-items: center;
+	// padding: 0 46px;
+	max-width: 635px;
 
 	font-size: 16px;
 	line-height: 1.57;
-	@media (min-width: 600px) {
+	@media (min-width: 900px) {
 		grid-template-columns: 1fr auto;
 	}
 }

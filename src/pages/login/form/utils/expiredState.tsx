@@ -1,4 +1,4 @@
-import { InfoMessage } from "../../info-message/info-message";
+import { InfoMessage } from "../../../../components/info-message/info-message";
 
 export default {
 	headline: "Your user account has reached its Expiration Date",
