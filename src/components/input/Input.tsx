@@ -1,12 +1,16 @@
 import classNames from "classnames";
-import { useEffect } from "react";
-import { useState, useRef } from "react";
+
+// @ts-expect-error Waiting update type package to React 18
+import { useId } from "react";
+
 import {
+	useState,
 	Dispatch,
 	FormEvent,
 	InputHTMLAttributes,
 	SetStateAction,
 } from "react";
+
 import styles from "./input.module.scss";
 import useSetCustomError from "./utils/useSetCustomError";
 
@@ -35,14 +39,16 @@ export default function Input({
 	resetErrorOnInput = true,
 	...otherProps
 }: AppInputProps) {
-	const errorID = id ? `error-${id}` : undefined;
+	const identifier = id || useId();
+	const errorID = `error-${identifier}`;
+
 	const inputRef = useSetCustomError(customError);
 
 	const [error, setError] = useState("");
 
 	function inputHandler(evt: FormEvent<HTMLInputElement>) {
 		externalSetter && externalSetter(evt.currentTarget.value);
-		resetErrorOnInput && error && setError("")
+		resetErrorOnInput && error && setError("");
 		onInput && onInput(evt);
 	}
 
@@ -67,11 +73,10 @@ export default function Input({
 				aria-label={label}
 				onInput={inputHandler}
 				onInvalid={invalidHandler}
-				id={id}
+				id={identifier}
 				ref={inputRef}
 				aria-describedby={externalErrorID ? externalErrorID : errorID}
 				aria-invalid={invalid}
-
 				{...otherProps}
 			/>
 			{error && (
