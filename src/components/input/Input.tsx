@@ -1,7 +1,7 @@
 import classNames from "classnames";
 
 // @ts-expect-error Waiting update type package to React 18
-import { useId } from "react";
+import { useEffect, useId } from "react";
 
 import {
 	useState,
@@ -39,16 +39,22 @@ export default function Input({
 	resetErrorOnInput = true,
 	...otherProps
 }: AppInputProps) {
+	const [error, setError] = useState("");
+
 	const identifier = id || useId();
 	const errorID = `error-${identifier}`;
 
+	function resetErrorMessage() {
+		error && setError("")
+	}
+
 	const inputRef = useSetCustomError(customError);
 
-	const [error, setError] = useState("");
+	useEffect(() => { !customError && resetErrorMessage() }, [customError])
 
 	function inputHandler(evt: FormEvent<HTMLInputElement>) {
 		externalSetter && externalSetter(evt.currentTarget.value);
-		resetErrorOnInput && error && setError("");
+		resetErrorOnInput && resetErrorMessage();
 		onInput && onInput(evt);
 	}
 
