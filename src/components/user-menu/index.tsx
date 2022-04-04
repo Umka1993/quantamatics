@@ -1,44 +1,38 @@
-import React, { Dispatch, ReactElement, SetStateAction } from "react";
+import { ReactElement } from "react";
 import { ReactComponent as ProfileIcon } from "./assets/profile.svg";
 import { ReactComponent as LogoutIcon } from "./assets/logout.svg";
 import { ReactComponent as PowerIcon } from "./assets/power.svg";
 import useLogout from "../../hooks/useLogout";
 import style from "./user-menu.module.scss";
-import useCloseModal from "../../hooks/useCloseModal";
 import { SideBarModalMode, SideBarModalOpen } from "../../types/sidebar-modal";
-import SpriteIcon from "../sprite-icon/SpriteIcon";
 
-interface Props {
+import Dialog from "../dialog";
+import { ModalProps } from "../dialog/types";
+
+interface Props extends Pick<ModalProps, "open" | "onRequestClose"> {
 	openModal: SideBarModalOpen;
-	openDropdown: boolean;
-	setOpenDropdown: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function UserMenu({
 	openModal,
-	openDropdown, setOpenDropdown
+	open,
+	onRequestClose,
 }: Props): ReactElement {
 	const logout = useLogout();
-	useCloseModal(openDropdown, setOpenDropdown);
 
 	return (
-		<div className={style.menu} onClick={(e) => e.stopPropagation()}>
-			<button
-				type="button"
-				onClick={() => setOpenDropdown(false)}
-				className={style.close}
-			>
-				<SpriteIcon
-					icon='cross-close'
-					width={16}
-					label='Close dropdown'
-				/>
-			</button>
+		<Dialog
+			open={open}
+			onRequestClose={onRequestClose}
+			modal={false}
+			variant="user"
+			closeOnOutsideClick
+		>
 			<button
 				type="button"
 				onClick={() => {
 					openModal(SideBarModalMode.Account);
-					setOpenDropdown(false);
+					onRequestClose();
 				}}
 				className={style.button}
 			>
@@ -54,7 +48,7 @@ export default function UserMenu({
 				type="button"
 				onClick={() => {
 					openModal(SideBarModalMode.Restart);
-					setOpenDropdown(false);
+					onRequestClose();
 				}}
 				className={style.button}
 			>
@@ -70,8 +64,6 @@ export default function UserMenu({
 				/>
 				Log Out
 			</button>
-		</div>
-
-
+		</Dialog>
 	);
 }

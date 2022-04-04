@@ -1,5 +1,5 @@
 import useDialogPolyfill from "./hooks/useDialogPolyfill";
-import { SyntheticEvent, useCallback, useEffect, useRef } from "react";
+import { SyntheticEvent, useEffect, useRef } from "react";
 
 import style from "./Dialog.module.scss";
 import classNames from "classnames";
@@ -48,15 +48,8 @@ export default function Dialog({
 				} else {
 					dialogNode?.show();
 
-					// setTimeout(
-					// 	() => document.addEventListener("click", closeDialogOnOutsideClick),
-					// 	1000
-					// );
-
-					// return () => { console.log('hello'); document.removeEventListener('click', closeDialogOnOutsideClick) }
 				}
 			} else {
-				// modal && document.removeEventListener('click', closeDialogOnOutsideClick)
 				dialogNode && dialogNode.close();
 				lastActiveElement.current &&
 					(lastActiveElement.current as HTMLElement).focus();
