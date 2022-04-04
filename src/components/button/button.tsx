@@ -5,7 +5,7 @@ import classNames from "classnames";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
 	href?: string;
-	variant?: 'bordered' | "valid" | "danger" | "transparent-light";
+	variant?: 'bordered' | "valid" | "danger" | "transparent-light" | 'accent';
 	padding?: string;
 	fontSize?: string;
 	fontWeight?: number;
@@ -25,7 +25,7 @@ const Button: FunctionComponent<IButton> = ({
 	...other
 }) => {
 	const preparedAttributes = {
-		className: classNames(s.basic, !disabled && s[variant], className),
+		className: classNames(s.basic, s[variant], className),
 		style: { ...style, padding, fontSize, fontWeight } as CSSProperties,
 	};
 

@@ -28,15 +28,24 @@
 		outline: 2px solid var(--bg-color);
 		outline-offset: 0.2em;
 	}
+
+	&:disabled {
+		cursor: default;
+	}
 }
 
 .bordered {
 	color: $accent;
 	border-color: $accent;
 
-	@include hover-focus {
+	&:hover:not(:disabled) {
 		--bg-color: #{$accent};
 		color: #ffffff;
+	}
+
+	&:disabled {
+		color: $inactive;
+		border-color: $inactive;
 	}
 }
 
@@ -64,13 +73,19 @@
 
 	@include hover-focus {
 		--bg-color: #{rgba($accent, 0.7)};
-
 	}
 }
 
-.basic:disabled,
-.basic[disabled] {
-	cursor: default;
-	color: $inactive;
-	border-color: $inactive;
+.accent {
+	--bg-color: #{$accent};
+	color: #fff;
+	@include hover-focus {
+		--bg-color: #{lighten($accent, 10)};
+	}
+}
+
+.accent:disabled,
+.danger:disabled,
+.valid:disabled {
+	--bg-color: #{$inactive};
 }
