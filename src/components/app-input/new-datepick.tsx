@@ -1,11 +1,4 @@
-import React, {
-	ChangeEventHandler,
-	CSSProperties,
-	FormEventHandler,
-	InputHTMLAttributes,
-	useRef,
-	useState,
-} from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import "./styles/input.scss";
 import "./styles/new-datepicker.scss";
 import classNames from "classnames";
@@ -13,9 +6,11 @@ import { ReactComponent as CalendarIcon } from "./assets/calendar.svg";
 import { checkDateInputSupport } from "./utils/date-utils";
 import enGb from "date-fns/locale/en-GB";
 import "react-datepicker/dist/react-datepicker.css";
-import DatePicker, { registerLocale } from "react-datepicker";
+import DatePicker, { ReactDatePicker, registerLocale } from "react-datepicker";
 import DatePickerHeader from "./date-picker-header";
 import { IInput } from "./input";
+import moment from "moment";
+import MaskedInput from "react-maskedinput";
 
 registerLocale("enGB", enGb);
 
@@ -26,7 +21,10 @@ interface IDatePick extends Omit<IInput, "externalSetter"> {
 	minDate?: Date;
 	maxDate?: Date;
 	variant?: "squared";
+	subscriptionDate: Date;
+	setSubscriptionDate: (arg: Date) => void;
 }
+
 export default function DatePickerComponent({
 	className,
 	itemRef,
@@ -34,51 +32,91 @@ export default function DatePickerComponent({
 	label,
 	onChange,
 	externalSetter,
+	subscriptionDate,
+	setSubscriptionDate,
 	variant,
 }: IDatePick) {
 	const isSupport = checkDateInputSupport();
 	const labelRef = useRef<HTMLSpanElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const datePickerRef = useRef(null);
+	const datePickerRef = useRef<HTMLInputElement>();
 
 	const [errorMessage, setErrorMessage] = useState<string | undefined>(
 		undefined
 	);
 
-	const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
-		evt.preventDefault();
-		setErrorMessage(inputRef.current?.validationMessage);
-	};
-
-	const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-		const { valueAsDate } = evt.target;
-
-		externalSetter && externalSetter(valueAsDate ? valueAsDate : new Date());
-		onChange && onChange(evt);
-	};
-
-	const changeFallbackHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-		const { value } = evt.currentTarget;
-
-		const formattedDate = new Date(value);
-
-		const isInvalidDate = isNaN(formattedDate.getTime());
-		!isInvalidDate && externalSetter && externalSetter(formattedDate);
-		onChange && onChange(evt);
-	};
-
-	const [startDate, setStartDate] = useState(new Date());
+	// const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
+	// 	evt.preventDefault();
+	// 	setErrorMessage(inputRef.current?.validationMessage);
+	// };
+	//
+	// const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
+	// 	const { valueAsDate } = evt.target;
+	//
+	// 	externalSetter && externalSetter(valueAsDate ? valueAsDate : new Date());
+	// 	onChange && onChange(evt);
+	// };
+	//
+	// const changeFallbackHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
+	// 	const { value } = evt.currentTarget;
+	//
+	// 	const formattedDate = new Date(value);
+	//
+	// 	const isInvalidDate = isNaN(formattedDate.getTime());
+	// 	!isInvalidDate && externalSetter && externalSetter(formattedDate);
+	// 	onChange && onChange(evt);
+	// };
+	// debugger
+	const [startDate, setStartDate] = useState<Date>(subscriptionDate);
 
 	const [monthYear, setMonthYear] = useState<string>();
 
 	const [year, setYear] = useState<string>();
 
 	const [defaultCalendar, setDefaultCalendar] = useState(true);
+
 	const [isOpacity, setOpacity] = useState(false);
 
 	const [closeIsSelected, setCloseIsSelected] = useState<boolean>();
 
-	const handelChange = (e: Date) => {
+	const [isCorrectDate, setIsCorrectedDate] = useState<boolean>(true);
+
+	const [inputValue, setInputValue] = useState<string>(
+		moment(startDate).format("MM/DD/YYYY").toString()
+	);
+
+	const [mask, setMask] = useState("11/11/1111");
+
+	const [isErrorValue, setIsError] = useState<boolean>();
+
+	const [selectedDate, setSelectedDate] = useState<Date>(startDate);
+
+	useEffect(() => {
+		const maskItemCounter = inputValue.split("/").length;
+		const input = document.getElementById("DatePicker") as HTMLInputElement;
+		if (isErrorValue) {
+			setInputValue(inputValue);
+			if (maskItemCounter === 1) {
+				setMask("11/");
+				setIsError(false);
+			}
+			if (maskItemCounter === 2) {
+				setMask("11/11");
+				input && input.setSelectionRange(3, 3);
+				setIsError(false);
+			}
+			if (maskItemCounter === 3) {
+				setMask("11/11/1111");
+				input && input.setSelectionRange(6, 6);
+				setIsError(false);
+			}
+		} else {
+			setMask("11/11/1111");
+			// setInputValue(String(moment(selectedDate).format("MM/DD/YYYY")))
+		}
+	}, [selectedDate, isErrorValue]);
+
+	const handleChange = (e: Date) => {
 		const changedMonth = e.toLocaleDateString("en-us", {
 			month: "long",
 			year: "numeric",
@@ -86,7 +124,7 @@ export default function DatePickerComponent({
 		const changedYear = e.toLocaleDateString("en-us", { year: "numeric" });
 		setMonthYear(changedMonth);
 		setYear(changedYear);
-		// setStartDate(e)
+		setSubscriptionDate(new Date(e));
 	};
 
 	const onClose = () => {
@@ -101,11 +139,169 @@ export default function DatePickerComponent({
 		setDefaultCalendar(true);
 	};
 
+	// const validateValue = (value: string) => {
+	// 	const arr = value.split("/");
+	// 	const yesterday = moment().subtract(1, "days").endOf("day").toString();
+	// 	const yearToday = moment().year();
+	// 	const monthToday = moment().month()+1
+	// 	const today= moment().date()
+	// 	const invalidValue = "__";
+	// 	const selectedMonth = Number(arr[0]);
+	// 	const selectedDay = Number(arr[1]);
+	// 	const selectedYear =
+	// 		Boolean(Number(arr[2])) || Number(arr[2]) == 0
+	// 			? Number(arr[2])
+	// 			: new Date().getFullYear();
+	//
+	// 	const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+	//
+	// 	const errorValue = [...arr];
+	//
+	// 	debugger;
+	// 	const isCorrectedValue =
+	// 		moment(value).isValid() && moment(value).isAfter(yesterday);
+	// 	setIsCorrectedDate(isCorrectedValue);
+	//
+	// 	if (selectedMonth > 12 || selectedMonth<monthToday && selectedYear == yearToday) {
+	// 		errorValue[0] = invalidValue;
+	// 		errorValue[1] = invalidValue;
+	// 		errorValue.splice(1, 2);
+	// 		setIsError(true);
+	// 	}
+	//
+	// 	if (selectedDay > lastDay || selectedDay<today && selectedYear == yearToday) {
+	// 		errorValue[1] = invalidValue;
+	// 		errorValue.splice(2, 1);
+	// 		setIsError(true);
+	// 	}
+	// 	if (selectedYear < yearToday) {
+	// 		errorValue[2] = invalidValue;
+	// 		setIsError(true);
+	// 	}
+	//
+	// 	setInputValue(errorValue.join("/"));
+	// };
+
+	const updateDate = (value: string) => {
+		const manualChange = value && value.split("/").length > 1;
+		const yesterday = moment().subtract(1, "days").endOf("day").toString();
+		const yearToday = moment().year();
+		const monthToday = moment().month() + 1;
+		const today = moment().date();
+		const invalidValue = "_";
+
+		const isCorrectedValue =
+			value !== undefined &&
+			moment(value).isValid() &&
+			moment(value).isAfter(yesterday);
+
+		setIsCorrectedDate(isCorrectedValue);
+
+		if (manualChange) {
+			const arr = value.split("/");
+			const selectedMonth = Number(arr[0]);
+			const selectedDay = Number(arr[1]);
+			const selectedYear =
+				Boolean(Number(arr[2])) || Number(arr[2]) == 0
+					? Number(arr[2])
+					: new Date().getFullYear();
+			const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+			const errorValue: string[] = [...arr];
+
+			const setErrorValue = (
+				selectedValue: number,
+				todayValue: number
+			): string => {
+				const selected = String(selectedValue).split("");
+				const yearToday = String(todayValue).split("");
+
+				const val: string[] = [];
+
+				for (let i = 0; i <= selected.length; i++) {
+					for (let i = 0; i <= yearToday.length; i++) {
+						if (selected[i] === yearToday[i]) {
+							val.push(selected[i]);
+						} else {
+							val.push(invalidValue);
+						}
+					}
+					if (val.length === 5) {
+						break;
+					}
+				}
+				return val.join("");
+			};
+
+			if (
+				selectedMonth > 12 ||
+				(selectedMonth < monthToday && selectedYear == yearToday)
+			) {
+				errorValue[0] = invalidValue;
+				errorValue[1] = invalidValue;
+				errorValue.splice(1, 2);
+				setIsError(true);
+			}
+
+			if (
+				selectedDay > lastDay ||
+				(selectedYear == yearToday &&
+					selectedDay < today &&
+					selectedMonth == monthToday)
+			) {
+				errorValue[1] = invalidValue;
+				errorValue.splice(2, 1);
+				setIsError(true);
+			}
+			if (selectedYear < yearToday) {
+				// errorValue[2] =setErrorValue(selectedYear, yearToday)
+				errorValue[2] = invalidValue;
+				setIsError(true);
+			}
+
+			setInputValue(errorValue.join("/"));
+			const exactDate = new Date(
+				errorValue.join("/") +
+					" " +
+					new Date().getHours() +
+					":" +
+					new Date().getMinutes()
+			);
+
+			const isValidValue =
+				errorValue[0].includes("_") ||
+				errorValue[1].includes("_") ||
+				errorValue[2].includes("_");
+			!isValidValue &&
+				handleChange(exactDate) &&
+				setSelectedDate(new Date(errorValue.join("/"))) &&
+				// setSubscriptionDate(new Date(errorValue.join("/")));
+				!isValidValue &&
+				onClose();
+		} else {
+			if (isCorrectedValue && !isErrorValue) {
+				const fieldValue = moment(value).format("MM/DD/YYYY");
+				const exactDate = new Date(
+					fieldValue +
+						" " +
+						new Date().getHours() +
+						":" +
+						new Date().getMinutes()
+				);
+				handleChange(exactDate);
+				setInputValue(fieldValue);
+				setSelectedDate(new Date(fieldValue));
+				onClose();
+			} else {
+				onOpen();
+			}
+		}
+	};
+
 	return (
 		<div
 			className={classNames("app-input", className, {
-				"app-input--validate": true,
 				"app-input--squared": variant === "squared",
+				wrongValue: !isCorrectDate,
 			})}
 			ref={itemRef}
 		>
@@ -121,8 +317,10 @@ export default function DatePickerComponent({
 			>
 				{defaultCalendar ? (
 					<DatePicker
-						selected={startDate}
-						onChange={(date: Date) => setStartDate(date)}
+						id={"DatePicker"}
+						selected={selectedDate}
+						value={inputValue}
+						onChange={(date: Date) => updateDate(String(date))}
 						className="app-input__field"
 						aria-invalid={!!errorMessage}
 						required={required}
@@ -130,20 +328,20 @@ export default function DatePickerComponent({
 						minDate={new Date()}
 						locale="enGB"
 						showDisabledMonthNavigation
-						onCalendarOpen={() => handelChange(startDate)}
-						onMonthChange={(e) => handelChange(e)}
+						onCalendarOpen={() => handleChange(startDate)}
 						dateFormat="MM/dd/yyyy"
+						placeholderText={"MM/dd/yyyy"}
 						popperClassName={`${
 							isOpacity ? "opacityBlock weeksCalendar" : "weeksCalendar"
 						}`}
+						onMonthChange={(e) => handleChange(e)}
 						shouldCloseOnSelect={false}
-						onSelect={() => onClose()}
+						onSelect={() => isCorrectDate && onClose()}
+						onClickOutside={() => isCorrectDate && onClose()}
 						open={closeIsSelected}
 						onInputClick={() => onOpen()}
-						onClickOutside={() => onClose()}
-						onKeyDown={(e) => {
-							e.preventDefault();
-						}}
+						onChangeRaw={(e) => updateDate(e.target.value)}
+						customInput={<MaskedInput mask={mask} />}
 						renderCustomHeader={({
 							prevMonthButtonDisabled,
 							nextMonthButtonDisabled,
@@ -163,7 +361,10 @@ export default function DatePickerComponent({
 					></DatePicker>
 				) : (
 					<DatePicker
-						selected={startDate}
+						selected={
+							Boolean(moment(inputValue).toISOString()) ? selectedDate : null
+						}
+						value={inputValue}
 						onChange={() => setDefaultCalendar(true)}
 						className="app-input__field"
 						aria-invalid={!!errorMessage}
@@ -174,21 +375,20 @@ export default function DatePickerComponent({
 						showDisabledMonthNavigation
 						showMonthYearPicker
 						focusSelectedMonth={true}
-						onCalendarClose={() => onClose()}
+						onCalendarClose={() => isCorrectDate && onClose()}
+						onClickOutside={() => isCorrectDate && onClose()}
 						showFourColumnMonthYearPicker={true}
-						onCalendarOpen={() => handelChange(startDate)}
-						onSelect={(e) => handelChange(e)}
-						onYearChange={(e) => handelChange(e)}
+						onCalendarOpen={() => handleChange(startDate)}
+						onSelect={(e) => handleChange(e)}
+						onYearChange={(e) => handleChange(e)}
 						shouldCloseOnSelect={false}
 						dateFormat="MM/dd/yyyy"
 						popperClassName={`${
 							isOpacity ? "opacityBlock montCalendar" : "montCalendar"
 						}`}
 						open={closeIsSelected}
-						onClickOutside={() => onClose()}
-						onKeyDown={(e) => {
-							e.preventDefault();
-						}}
+						placeholderText={"mm/dd/yyyy"}
+						customInput={<MaskedInput mask="11/11/1111" />}
 						renderCustomHeader={({
 							decreaseYear,
 							increaseYear,
@@ -215,8 +415,6 @@ export default function DatePickerComponent({
 					</span>
 				)}
 			</div>
-
-			{errorMessage && <p className="app-input__error">{errorMessage}</p>}
 		</div>
 	);
 }

@@ -93,7 +93,7 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 							)}
 						</td>
 						<td className={style.cell}>
-							{organization.comments.length ? organization.comments : "—"}
+							{organization.comments && organization.comments.length ? organization.comments : "—"}
 						</td>
 						<td className={style.cell}>
 							<button className={style.action} type="button">

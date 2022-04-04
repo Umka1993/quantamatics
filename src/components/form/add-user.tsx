@@ -13,14 +13,15 @@ import {
 } from "../../api/asset";
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
+import DatePickerComponent from "../app-input/new-datepick";
 
 export interface IInviteUserRequestBody {
-	companyName: string | undefined
-	email: string
-	firstName: string
-	organizationId: string | undefined
-	lastName: string
-	subscriptionEndDate: Date | undefined
+	companyName: string | undefined;
+	email: string;
+	firstName: string;
+	organizationId: string | undefined;
+	lastName: string;
+	subscriptionEndDate: Date | undefined;
 	userRoles: UserRole[];
 }
 
@@ -30,9 +31,7 @@ export default function InviteUserForm() {
 	const loggedUser = useUser();
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
-	const { data: company } = useGetOrganizationQuery(
-		organizationId as string
-	);
+	const { data: company } = useGetOrganizationQuery(organizationId as string);
 
 	const { data: assets } = useGetAllAssetsQuery(organizationId as string);
 	const [assetError, setAssetError] = useState(false);
@@ -134,7 +133,6 @@ export default function InviteUserForm() {
 			setAssetError(true);
 		}
 	};
-
 	return (
 		<Form
 			className="create-organization"
@@ -171,11 +169,13 @@ export default function InviteUserForm() {
 					variant="squared"
 				/>
 
-				<DatePick
+				<DatePickerComponent
 					minDate={new Date()}
 					required
 					label="Expiration Date"
 					variant="squared"
+					subscriptionDate={subscriptionEndDate}
+					setSubscriptionDate={setSubscriptionEndDate}
 				/>
 
 				{assetPrepared && assets && (
