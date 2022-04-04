@@ -1,11 +1,6 @@
 import { useLayoutEffect, RefObject } from "react";
+import { HTMLDialogElement } from "../types";
 
-export interface HTMLDialogElement extends HTMLDivElement {
-	open: boolean;
-	showModal: () => void;
-	close: () => void;
-	show: () => void;
-}
 
 export default function useDialogPolyfill(ref: RefObject<HTMLDialogElement>) {
 	let dialogPolyfill: any = null;
