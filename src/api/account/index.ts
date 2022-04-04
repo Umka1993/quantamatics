@@ -1,5 +1,7 @@
 import { LoginResponse } from "../../types/loginResponse";
 import baseApi from "../index";
+import { IInviteUserRequestBody } from "../../components/form/add-user";
+import { IUser } from "../../types/user";
 
 export const enum AccountEndpoint {
 	Login = "/api/Account/login",
@@ -20,8 +22,8 @@ export const enum AccountEndpoint {
 
 const accountApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
-		registerUser: build.mutation({
-			query: (body: any) => ({
+		registerUser: build.mutation<IUser, IInviteUserRequestBody>({
+			query: (body: IInviteUserRequestBody) => ({
 				url: AccountEndpoint.Register,
 				method: "POST",
 				body,

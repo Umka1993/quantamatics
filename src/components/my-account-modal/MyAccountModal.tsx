@@ -47,7 +47,7 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 
 	const [
 		updatePassword,
-		{ isSuccess, isError, error, isLoading: isPasswordUpdating },
+		{ isSuccess, isError, isLoading: isPasswordUpdating },
 	] = useChangePasswordMutation();
 
 	useEffect(() => {
