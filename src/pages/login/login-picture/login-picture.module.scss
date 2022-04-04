@@ -1,17 +1,11 @@
 .root {
 	background-color: #001c53;
 	margin: 0;
-	padding: 20px;
-
-	// padding: min(11vh, 100px) 48px;
+	padding: min(100px, 9vmin) 4vmin;
 	display: grid;
 
 	place-items: center;
-	place-content: center;
-
-	gap: 10px;
-
-	gap: min(124px, 14vmin);
+	place-content: space-between center;
 
 	background-image: url("./assets/back.png");
 	background-size: cover;
@@ -24,7 +18,7 @@
 }
 
 .image {
-	max-height: 49vmin;
+	// max-height: 49vmin;
 	width: auto;
 	max-width: 100%;
 	height: auto;
