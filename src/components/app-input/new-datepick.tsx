@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useRef, useState } from "react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 import "./styles/input.scss";
 import "./styles/new-datepicker.scss";
 import classNames from "classnames";
