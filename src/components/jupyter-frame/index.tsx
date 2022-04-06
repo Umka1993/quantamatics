@@ -42,7 +42,7 @@ export const JupyterFrame: FunctionComponent<JupyterFrameProps> = ({ type }) => 
 	return (
 		<div className={style.root}>
 			<header className={style.header}>
-				<Headline>{type === 'files' ? 'My Files' : type === 'coherence' ? 'Coherence' : 'Excel Library'}</Headline>
+				<Headline>{type === 'files' ? 'My Files for test' : type === 'coherence' ? 'Coherence' : 'Excel Library'}</Headline>
 				{type === 'files' && (<p>Manage and edit your files</p>)}
 			</header>
 
