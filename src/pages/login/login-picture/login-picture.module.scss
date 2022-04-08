@@ -12,17 +12,30 @@
 	background-position: center;
 
 	color: #fff;
+
+	position: relative;
 	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 		background-image: url("./assets/back@2x.png");
 	}
 }
 
+
+
+.result {
+	position: absolute;
+	top: 349px;
+	right: 67px;
+	font-size: 22px;
+
+	transition: transform 0.1s;
+	transform: translate3d(calc(var(--ratio-x) * 0.2em), calc(var(--ratio-y) * 0.4em), calc(var(--ratio-y) * 0.6em));
+	// transform: translate(-50%, -50%) translate(calc(3 * var(--ratio-x, 0) * 100%), calc(1 * var(--ratio-y, 0) * 100%)) rotate(calc(2 * var(--ratio-x, 0) * 1deg));
+}
+
+
 .image {
-	// max-height: 49vmin;
-	width: auto;
 	max-width: 100%;
 	height: auto;
-
 }
 
 .caption {
@@ -30,7 +43,6 @@
 	gap: 20px 68px;
 	align-content: center;
 	align-items: center;
-	// padding: 0 46px;
 	max-width: 635px;
 
 	font-size: 16px;
