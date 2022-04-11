@@ -1,15 +1,16 @@
 import classNames from "classnames";
 import s from "./mock-data.module.scss";
-import { animated, AnimatedComponent, Interpolation, SpringValue } from "@react-spring/web";
+import { animated, AnimatedComponent, config, Interpolation, SpringValue, useSpring } from "@react-spring/web";
+import { CSSProperties, HTMLProps, useState } from "react";
+import AnimatedNumber from "./AnimatedNumber";
 
-type Props = {
-	Δ: number;
-	className?: string;
-	// spring: SpringValue<number[]>;
-	style: { transform: Interpolation<number[], string> };
+type Props = HTMLProps<HTMLDListElement> & {
+
+	spring: { xys: SpringValue<number[]> }
+
 };
 
-export default function MockResult({ className, Δ, style }: Props) {
+export default function MockResult({ className, Δ, spring }: Props) {
 	const MOCK_DATA = [
 		{
 			key: "Spend YoY",
@@ -28,16 +29,23 @@ export default function MockResult({ className, Δ, style }: Props) {
 	const trans = (x: number, y: number, s: number) => {
 		return `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 	};
+
+
 	return (
 		<animated.dl
 			className={classNames(s.root, className)}
-			style={style}
-			aria-hidden
+			style={{
+				transform: spring.xys.to(trans),
+			}}
+
 		>
 			{MOCK_DATA.map((item) => (
 				<div key={item.key} className={s.group}>
 					<dt className={s.title}>{item.key}</dt>
-					<dd className={s.value}>{(item.value + Δ).toFixed(2)}%</dd>
+					<AnimatedNumber className={s.value} value={item.value} />
+
+					{/* <animated.dd className={s.value}>{number}</animated.dd> */}
+					{/* <dd className={s.value}>{(item.value + Δ).toFixed(2)}%</dd> */}
 				</div>
 			))}
 		</animated.dl>
