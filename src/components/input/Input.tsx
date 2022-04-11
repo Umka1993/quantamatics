@@ -1,6 +1,4 @@
 import classNames from "classnames";
-
-// @ts-expect-error Waiting update type package to React 18
 import { useEffect, useId } from "react";
 
 import {
