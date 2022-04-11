@@ -29,11 +29,12 @@
 		"react-router-dom": "^6.2.2"
 	},
 	"devDependencies": {
+		"@react-spring/types": "^9.4.4",
 		"@reduxjs/toolkit": "^1.8.0",
 		"@types/node": "^17.0.22",
-		"@types/react": "^17.0.43",
+		"@types/react": "^18.0.1",
 		"@types/react-datepicker": "^4.3.4",
-		"@types/react-dom": "^17.0.14",
+		"@types/react-dom": "^18.0.0",
 		"@types/react-maskedinput": "^4.0.6",
 		"@typescript-eslint/eslint-plugin": "^5.16.0",
 		"@typescript-eslint/parser": "^5.18.0",
