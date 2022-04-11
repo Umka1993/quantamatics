@@ -1,7 +1,8 @@
 import { useSpring } from "@react-spring/web";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import style from "./login-animated-picture.module.scss";
 import MockResult from "./mock-result/MockResult";
+import Graph from "./graph/Graph";
 
 export default function LoginAnimatedPicture() {
 
@@ -37,6 +38,7 @@ export default function LoginAnimatedPicture() {
 			className={style.wrap}
 			aria-label="Mock Example"
 		>
+			<Graph spring={props} />
 			<MockResult
 				spring={props}
 				aria-hidden

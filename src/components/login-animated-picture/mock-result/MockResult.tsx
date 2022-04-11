@@ -24,9 +24,7 @@ export default function MockResult({ className, spring }: Props) {
 		},
 	];
 
-	const trans = (x: number, y: number, s: number) => {
-		return `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
-	};
+	const trans = (x: number, y: number, s: number) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 
 
 	return (
