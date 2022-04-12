@@ -1,46 +1,45 @@
 import { useSpring } from "@react-spring/web";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "./login-animated-picture.module.scss";
 import MockResult from "./mock-result/MockResult";
 import Graph from "./graph/Graph";
+import gsap from "gsap";
+import useParallax from "../../hooks/useParallax";
+
 
 export default function LoginAnimatedPicture() {
 
-	const [props, animate] = useSpring(() => ({
-		xys: [0, 0, 1],
-		config: { mass: 5, tension: 350, friction: 40 },
-	}));
+	const rootRef = useRef<HTMLDivElement>(null)
 
+	useParallax(
+		(x: number, y: number) => {
+			if (rootRef.current) {
+				rootRef.current.style.setProperty(
+					"--range-x",
+					String(Math.floor(gsap.utils.clamp(-60, 60, x * 100)))
+				);
+				rootRef.current.style.setProperty(
+					"--range-y",
+					String(Math.floor(gsap.utils.clamp(-60, 60, y * 100)))
+				);
+			}
+		},
+		rootRef,
+		() => window.innerWidth * 0.5
+	);
 
-	function pointerHandler({ clientX, clientY }: MouseEvent) {
-		const verticalDistanceFromCenter = window.innerHeight / 2 - clientY;
-		const horizontalDistanceFromCenter = clientX - window.innerWidth / 2;
-		// console.log(verticalDistanceFromCenter, horizontalDistanceFromCenter);
-		animate({
-			xys: [
-				horizontalDistanceFromCenter / 50,
-				verticalDistanceFromCenter / 50,
-				1.02,
-			],
-			delay: 200,
-		});
-	}
-
-	useEffect(() => {
-		document.addEventListener("pointermove", pointerHandler);
-
-		return () => document.removeEventListener("pointermove", pointerHandler);
-	}, []);
 
 	return (
 		<div
 			role="img"
 			className={style.wrap}
 			aria-label="Mock Example"
+			ref={rootRef}
 		>
-			<Graph spring={props} />
+			{/* <Graph spring={props} />
+			*/}
 			<MockResult
-				spring={props}
+				className={style.result}
 				aria-hidden
 			/>
 

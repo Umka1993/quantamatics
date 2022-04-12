@@ -1,5 +1,13 @@
 .wrap {
 	transform-style: preserve-3d;
 	perspective: 400px;
-	will-change: transform;
+	// will-change: transform;
+}
+
+.result {
+	// transition: transform 0.2s;
+	transform: perspective(600px)
+			rotateX(calc(var(--range-x, 0) / 10 * 1deg))
+			rotateY(calc(var(--range-y, 0) / 10 * 1deg))
+			scale(1.2);
 }
