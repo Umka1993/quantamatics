@@ -16,6 +16,8 @@ export default function LoginAnimatedPicture() {
 		setRatioY(y);
 	});
 
+	const sum = ratioY + ratioX;
+
 	return (
 		<div role="img" className={style.wrap} aria-label="Mock Example">
 			<Screenshot
@@ -24,10 +26,16 @@ export default function LoginAnimatedPicture() {
 					transform: `rotateX(${ratioY * 20}deg) rotateY(${-ratioX * 20}deg)`,
 				}}
 				className={style.screen}
-				coefficient={clamp(Math.abs(ratioY + ratioX), 0.4, 1)}
+				coefficient={clamp(Math.abs(sum), 0.4, 1)}
 			/>
-			{/* <Graph className={style.graph} />
-			<MockResult className={style.result} aria-hidden /> */}
+			{/* <Graph className={style.graph} /> */}
+			<MockResult className={style.result} aria-hidden
+				style={{
+					transform: `rotateX(${ratioY * 40}deg) rotateY(${-ratioX * 10}deg)`,
+				}}
+
+				coefficient={sum}
+			/>
 		</div>
 	);
 }
