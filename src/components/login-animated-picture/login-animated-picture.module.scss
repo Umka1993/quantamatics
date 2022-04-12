@@ -5,9 +5,9 @@
 }
 
 .result {
-	// transition: transform 0.2s;
-	transform: perspective(600px)
-			rotateX(calc(var(--range-x, 0) / 10 * 1deg))
-			rotateY(calc(var(--range-y, 0) / 10 * 1deg))
-			scale(1.2);
+	transition: transform 0.6s ease-in-out;
+	// transform: perspective(600px)
+	// 		rotateX(calc(var(--range-x, 0) / 10 * 1deg))
+	// 		rotateY(calc(var(--range-y, 0) / 10 * 1deg))
+	// 		scale(1.2);
 }
