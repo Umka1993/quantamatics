@@ -4,7 +4,8 @@ import Graph from "./graph/Graph";
 import Screenshot from "./screen/Screenshot";
 import useWindowParallax from "../../hooks/useWindowParallax";
 import { useState } from "react";
-;
+import clamp from "../../services/clamp";
+
 
 export default function LoginAnimatedPicture() {
 	const [ratioX, setRatioX] = useState(0);
@@ -23,6 +24,7 @@ export default function LoginAnimatedPicture() {
 					transform: `rotateX(${ratioY * 20}deg) rotateY(${-ratioX * 20}deg)`,
 				}}
 				className={style.screen}
+				coefficient={clamp(Math.abs(ratioY + ratioX), 0.4, 1)}
 			/>
 			{/* <Graph className={style.graph} />
 			<MockResult className={style.result} aria-hidden /> */}
