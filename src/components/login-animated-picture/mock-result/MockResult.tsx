@@ -1,14 +1,13 @@
 import classNames from "classnames";
 import s from "./mock-data.module.scss";
-import { animated, SpringValue } from "@react-spring/web";
-import { HTMLProps } from "react";
+import { animated, useSpring } from "@react-spring/web";
+import { HTMLProps, useState } from "react";
 import AnimatedNumber from "./AnimatedNumber";
+import useWindowParallax from "../../../hooks/useWindowParallax";
 
-type Props = HTMLProps<HTMLDListElement> & {
-	spring: { xys: SpringValue<number[]> }
-};
+type Props = HTMLProps<HTMLDListElement>;
 
-export default function MockResult({ className, spring }: Props) {
+export default function MockResult({ className }: Props) {
 	const MOCK_DATA = [
 		{
 			key: "Spend YoY",
@@ -24,22 +23,37 @@ export default function MockResult({ className, spring }: Props) {
 		},
 	];
 
-	const trans = (x: number, y: number, s: number) => `perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
+	const [accuracy, setAccuracy] = useState(0);
 
+	const [{ xys }, animate] = useSpring(() => ({
+		xys: [0, 0, 1],
+		config: { mass: 5, tension: 350, friction: 40 },
+	}));
+
+	useWindowParallax((x, y) => {
+		animate({
+			xys: [x / 50, y / 50, 1.02],
+			delay: 200,
+		});
+		setAccuracy(Math.max(x, y) / 100);
+	});
+
+	const trans = (x: number, y: number, s: number) =>
+		`perspective(600px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`;
 
 	return (
 		<animated.dl
 			className={classNames(s.root, className)}
 			style={{
-				transform: spring.xys.to(trans),
+				transform: xys.to(trans),
 			}}
-
 		>
-			{MOCK_DATA.map((item) => (
-				<div key={item.key} className={s.group}>
-					<dt className={s.title}>{item.key}</dt>
-					<AnimatedNumber className={s.value} value={item.value}
-					// extra={spring.xys}
+			{MOCK_DATA.map(({ key, value }) => (
+				<div key={key} className={s.group}>
+					<dt className={s.title}>{key}</dt>
+					<AnimatedNumber
+						className={s.value}
+						value={value + accuracy}
 					/>
 				</div>
 			))}
