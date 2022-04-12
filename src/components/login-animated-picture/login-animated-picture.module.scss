@@ -17,6 +17,7 @@
 }
 
 .graph {
+	transition: transform 1s ease-in-out;
 	position: absolute;
 	top: -55px;
 	right: -72px;

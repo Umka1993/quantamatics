@@ -28,7 +28,14 @@ export default function LoginAnimatedPicture() {
 				className={style.screen}
 				coefficient={clamp(Math.abs(sum), 0.4, 1)}
 			/>
-			{/* <Graph className={style.graph} /> */}
+			<Graph className={style.graph}
+				width={392}
+				height={231}
+				style={{
+					transform: `rotateX(${-ratioY * 20}deg) rotateY(${ratioX * 10}deg)`,
+				}}
+				aria-hidden
+			/>
 			<MockResult className={style.result} aria-hidden
 				style={{
 					transform: `rotateX(${ratioY * 40}deg) rotateY(${-ratioX * 10}deg)`,
