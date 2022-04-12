@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, FormHTMLAttributes, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import Input, { Password } from "../../../components/input";
@@ -10,8 +10,9 @@ import { AppInfo, AppRoute } from "../../../data/enum";
 import Button from "../../../components/button";
 import Loader from "../../../components/loader";
 import useHandleLoginErrors from "./utils/useHandleLoginErrors";
+import classNames from "classnames";
 
-export default function LoginForm() {
+export default function LoginForm({ className }: FormHTMLAttributes<HTMLFormElement>) {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const formRef = useRef<HTMLFormElement>(null);
@@ -20,7 +21,7 @@ export default function LoginForm() {
 	const loginProcess = useLogin();
 	const { errors, resetError, handleResponseError } = useHandleLoginErrors(formRef);
 
-	const handleSubmit= (evt: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
 		evt.preventDefault();
 		sendLogin({ email, password })
 			.unwrap()
@@ -33,7 +34,7 @@ export default function LoginForm() {
 			onSubmit={handleSubmit}
 			onInput={resetError}
 			noValidate
-			className={style.root}
+			className={classNames(style.root, className)}
 			ref={formRef}
 		>
 			<header className={style.header}>

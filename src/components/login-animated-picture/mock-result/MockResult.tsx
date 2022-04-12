@@ -44,9 +44,9 @@ export default function MockResult({ className }: Props) {
 	return (
 		<animated.dl
 			className={classNames(s.root, className)}
-			style={{
-				transform: props.xys.to(trans),
-			}}
+			// style={{
+			// 	transform: props.xys.to(trans),
+			// }}
 		>
 			{MOCK_DATA.map(({ key, value }) => (
 				<div key={key} className={s.group}>

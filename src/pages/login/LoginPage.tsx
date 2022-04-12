@@ -5,7 +5,7 @@ import LoginPicture from "./login-picture/LoginPicture";
 export default function LoginPage() {
 	return (
 		<main className={style.root}>
-			<LoginForm />
+			<LoginForm className={style.form} />
 			<LoginPicture className={style.side} />
 		</main>
 	);

@@ -1,11 +1,35 @@
 @use '../../sass/variables' as *;
 
+@keyframes fadeFromBottom {
+	from {
+		opacity: 0;
+		transform: translateY(20%);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fromLeft {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
 .root {
 	display: grid;
 	width: 100%;
 	height: 100vh;
 }
 
+.form {
+	opacity: 0;
+	animation: fadeFromBottom 1.4s 0.4s forwards ;
+}
 
 
 @media (min-width: 800px) {
@@ -15,5 +39,6 @@
 
 	.side {
 		order: -1;
+		animation: fromLeft 1.4s ease-in-out;
 	}
 }
