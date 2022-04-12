@@ -1,9 +1,12 @@
 .wrap {
-	transform-style: preserve-3d;
-	perspective: 400px;
+	// transform-style: preserve-3d;
+	perspective: 100vmin;
 	// will-change: transform;
 	position: relative;
 	transform: translateX(calc(-4vmin - 40px));
+}
+.screen {
+	transition: transform 1s ease-in-out;
 }
 
 .result {

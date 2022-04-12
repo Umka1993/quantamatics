@@ -28,10 +28,7 @@ export default function Graph({ className }: Props) {
 			width={392}
 			height={231}
 			aria-hidden
-			style={{
-				// eslint-disable-next-line react/prop-types
-				transform: props.xys.to(trans),
-			}}
+			style={{ props }}
 			viewBox="0 0 392 231"
 			fill="none"
 			className={classNames(s.root, className)}

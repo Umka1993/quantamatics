@@ -7,10 +7,10 @@ export default function useWindowParallax(
 	useEffect(() => {
 
 		const pointerHandler = throttle(({ clientX, clientY }: MouseEvent) => {
-			const verticalDistanceFromCenter = window.innerHeight / 2 - clientY;
-			const horizontalDistanceFromCenter = clientX - window.innerWidth / 2;
+			const verticalDistanceFromCenter = (window.innerHeight / 2 - clientY) / window.innerHeight;
+			const horizontalDistanceFromCenter = (window.innerWidth / 2 - clientX) / window.innerWidth ;
 			update(horizontalDistanceFromCenter, verticalDistanceFromCenter);
-		});
+		}, 1000);
 
 		document.addEventListener("pointermove", pointerHandler);
 
