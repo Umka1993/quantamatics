@@ -12,7 +12,7 @@ export const enum AppRoute {
 	ExcelLibrary = '/excel-library',
 	Settings = '/settings',
 
-	Organizations = '/organizations/:id',
+	Organizations = '/organizations/:id/',
 	OrganizationList = '/organizations/list',
 	CreateOrganization = '/organizations/new-organization',
 	SignUp = '/sign-up',
@@ -24,7 +24,8 @@ export const enum AppRoute {
 	Expired = '/expired',
 	ExpiredPassword = '/expired-token',
 	SignUpExpired = '/expired-registration',
-	NoRoles = '/account-setting-up'
+	NoRoles = '/account-setting-up',
+	UserAccountDetail = 'user/:userId'
 }
 
 export const enum ApiRoute {
@@ -91,6 +92,7 @@ export const enum UserKey {
 	Avatar = 'avatar',
 	UserRoles = 'userRoles',
 	OrganizationId = 'organizationId',
+	OrganizationAssets = 'organizationAssets'
 }
 
 export const enum SortDirection {

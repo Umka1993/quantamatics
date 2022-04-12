@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Button from "../button";
 import { UserTable } from "../table/UserTable";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { RouteParams } from "../../types/route-params";
 import { useGetOrganizationQuery } from "../../api/organization";
 import IApiError from "../../types/api-error";
@@ -12,12 +12,12 @@ import SpriteIcon from "../sprite-icon/SpriteIcon";
 import { EMPTY_ORGANIZATION } from "./utils";
 import { useGetOrganizationUsersQuery } from "../../api/user";
 import { IUser } from "../../types/user";
-import Dialog from "../dialog";
 import Loader from "../loader";
 import OrganizationInfo from "../organization-info/OrganizationInfo";
 import OrganizationModal from "../organization-modal/OrganizationModal";
-import EditOrganizationUser from "../edit-org-user/EditOrganizationUser";
 import useBoolean from "../../hooks/useBoolean";
+import { UserKey } from "../../data/enum";
+import Dialog from "../dialog";
 
 export default function OrganizationDetail() {
 	const { id } = useParams<RouteParams>();
@@ -47,7 +47,8 @@ export default function OrganizationDetail() {
 
 	const [isAssetOpened, toggleAssetModal] = useToggle(false);
 	const [isOrganizationOpened, toggleOrganizationModal] = useToggle(false);
-
+	const navigate = useNavigate();
+	const { id: orgId } = useParams<RouteParams>();
 	const hasAssets =
 		organization && Boolean(organization.organizationAssets.length);
 
@@ -69,6 +70,10 @@ export default function OrganizationDetail() {
 		setTrue: requestUserClose,
 		setFalse: setUserToDefault,
 	} = useBoolean(false);
+
+	if (selectedUser) {
+		navigate(`/organizations/${orgId}/user/${selectedUser[UserKey.Id]}/view`);
+	}
 
 	if (isOrganizationLoading || isUsersLoading) {
 		return <Loader />;
@@ -142,14 +147,14 @@ export default function OrganizationDetail() {
 				variant="right-side"
 				hasCloseButton={false}
 			>
-				{selectedUser !== null && (
-					<EditOrganizationUser
-						user={selectedUser}
-						onClose={closeModal}
-						isUserCloseRequested={isUserCloseRequested}
-						setUserToDefault={setUserToDefault}
-					/>
-				)}
+				{/*{selectedUser !== null && (*/}
+				{/*	<EditOrganizationUser*/}
+				{/*		user={selectedUser}*/}
+				{/*		onClose={closeModal}*/}
+				{/*		isUserCloseRequested={isUserCloseRequested}*/}
+				{/*		setUserToDefault={setUserToDefault}*/}
+				{/*	/>*/}
+				{/*)}*/}
 			</Dialog>
 		</>
 	);
