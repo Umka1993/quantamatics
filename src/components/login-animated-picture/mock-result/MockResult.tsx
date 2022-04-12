@@ -23,18 +23,18 @@ export default function MockResult({ className }: Props) {
 		},
 	];
 
+	const [xys, setXYS] = useState([0, 0, 1])
+
 	const [accuracy, setAccuracy] = useState(0);
 
-	const [{ xys }, animate] = useSpring(() => ({
-		xys: [0, 0, 1],
+	const props = useSpring({
+		xys,
 		config: { mass: 5, tension: 350, friction: 40 },
-	}));
+		delay: 200
+	});
 
 	useWindowParallax((x, y) => {
-		animate({
-			xys: [x / 50, y / 50, 1.02],
-			delay: 200,
-		});
+		setXYS([x / 50, y / 50, 1.02])
 		setAccuracy(Math.max(x, y) / 100);
 	});
 
@@ -45,7 +45,7 @@ export default function MockResult({ className }: Props) {
 		<animated.dl
 			className={classNames(s.root, className)}
 			style={{
-				transform: xys.to(trans),
+				transform: props.xys.to(trans),
 			}}
 		>
 			{MOCK_DATA.map(({ key, value }) => (
