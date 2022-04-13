@@ -25,10 +25,11 @@ export const UserAccountHeader: FunctionComponent<IUserAccountHeader> = ({
 				{children}
 				<Headline
 					className={style.title}
-					pageTitle={`User ${selectedUser[UserKey.Name]}`}
+					pageTitle={`User Account ${selectedUser[UserKey.Name]}`}
 				>
-					<span className={style.name}>{`${selectedUser[UserKey.Name]}'s`}</span>{" "}
-								Account
+						User Account
+					<span className={style.name}>{` ${selectedUser[UserKey.Name]}`}</span>
+
 				</Headline>
 			</div>
 

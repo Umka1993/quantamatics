@@ -11,10 +11,15 @@ import useToggle from "../../../hooks/useToggle";
 import { UserAccountHeader } from "./user-account-header";
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../breadcrumb/Breadcrumb";
-import { useGetOrganizationQuery } from "../../../api/organization";
+import { useGetOrganizationQuery, useUpdateOrganizationMutation } from "../../../api/organization";
 import { Organization } from "../../../types/organization/types";
 import Loader from "../../loader";
 import AssetModalWithoutPin from "./modal-assets";
+import EditOrganizationUser from "../EditOrganizationUser";
+import useBoolean from "../../../hooks/useBoolean";
+import Dialog from "../../dialog";
+import EditOrganizationUserForm from "./user-account-detail-form";
+import EditOrganizationUserWithoutAssets from "./user-account-detail-form";
 
 interface IEditUserAccountDetail extends HTMLProps<HTMLDivElement> {
 	selectedUser: IUser | null;
@@ -37,6 +42,8 @@ export const ViewUserAccountDetail = () => {
 	const { data: user, isSuccess: isUserLoaded } = useGetUserQuery(
 		userId as string
 	);
+	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
+
 	const { data: assets } = useGetAllAssetsQuery(orgId as string);
 	// const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } =
 	// 	useGetUserAssetsQuery(userId as string);
@@ -62,19 +69,27 @@ export const ViewUserAccountDetail = () => {
 		}
 	}, [usersOrganization]);
 
-	if (isEditUserPage && selectedUser) {
-		navigate(`/organizations/${orgId}/user/${selectedUser[UserKey.Id]}/edit`);
-	}
+	// if (isEditUserPage && selectedUser) {
+	// 	navigate(`/organizations/${orgId}/user/${selectedUser[UserKey.Id]}/edit`);
+	// }
 
 	const closeFunction = () => {
 		toggleAssetsModal();
 	};
 
+	const closeModal = () => toggleEditUserPage();
+
+	const {
+		value: isUserCloseRequested,
+		setTrue: requestUserClose,
+		setFalse: setUserToDefault,
+	} = useBoolean(false);
+
 	if (!user) {
 		return <Loader />;
 	}
 
-	if (selectedUser && selectedAssets && !isEditUserPage && usersOrganization) {
+	if (selectedUser && selectedAssets && usersOrganization) {
 		const selectedAssetsString = selectedAssets.map((asset) => {
 			const arrAssets = [];
 			arrAssets.push(asset.asset.name);
@@ -96,7 +111,7 @@ export const ViewUserAccountDetail = () => {
 				href: `/organizations/${orgId}`,
 				text: usersOrganization[OrganizationKey.Name],
 			},
-			{ text: `${selectedUser[UserKey.Name]}'s Account` },
+			{ text: `${selectedUser[UserKey.Name]} ${selectedUser[UserKey.Surname]}` },
 		];
 
 		return (
@@ -152,6 +167,25 @@ export const ViewUserAccountDetail = () => {
 						</span>
 					</div>
 				</div>
+
+				<Dialog
+					open={isEditUserPage}
+					onRequestClose={requestUserClose}
+					closeOnOutsideClick
+					id="org-user-modal"
+					variant="right-side"
+					hasCloseButton={false}
+				>
+					{isEditUserPage && (
+						<EditOrganizationUserWithoutAssets
+							user={selectedUser}
+							onClose={closeModal}
+							isUserCloseRequested={isUserCloseRequested}
+							setUserToDefault={setUserToDefault}
+						/>
+					)}
+				</Dialog>
+
 
 				<AssetModalWithoutPin
 					open={isAssetsOpened}

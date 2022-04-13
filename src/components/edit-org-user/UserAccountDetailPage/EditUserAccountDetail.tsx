@@ -170,6 +170,7 @@ export const EditUserAccountDetail = () => {
 					selectedUser={selectedUser}
 				/>
 
+
 				<AssetModalWithoutPin
 					open={isAssetsOpened}
 					closeFunction={closeFunction}
