@@ -26,10 +26,10 @@ export default function LoginAnimatedPicture() {
 					}deg)`,
 				}}
 				className={style.screen}
-				coefficient={clamp(Math.abs(sum), 0.4, 1)}
+				coefficient={sum}
 			/>
 
-			<Graph
+			{/* <Graph
 				className={style.graph}
 				width={392}
 				height={231}
@@ -48,7 +48,7 @@ export default function LoginAnimatedPicture() {
 					}deg) rotateY(${-ratioX * 10}deg)`,
 				}}
 				coefficient={clamp(Math.abs(sum), 0.4, 1)}
-			/>
+			/> */}
 		</div>
 	);
 }
