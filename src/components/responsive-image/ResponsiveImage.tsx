@@ -18,11 +18,13 @@ export default function ResponsiveImage({
 				index === array.length - 1 ? (
 					<img
 						src={`${source}.${extension}`}
+						key={extension}
 						srcSet={`${source}@2x.${extension} 2x, ${source}@3x.${extension} 3x`}
 						{...other}
 					/>
 				) : (
 					<source
+						key={extension}
 						srcSet={`${source}.${extension} 1x, ${source}@2x.${extension} 2x, ${source}@3x.${extension} 3x`}
 						type={`image/${extension}`}
 					/>
