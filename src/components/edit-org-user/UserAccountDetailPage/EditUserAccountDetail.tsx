@@ -161,14 +161,12 @@ export const EditUserAccountDetail = () => {
 		];
 		return (
 			<section className={classNames(style.root)}>
-				<EditOrganizationUserForm
-					user={selectedUser}
-					isUserCloseRequested={isUserCloseRequested}
-					setUserToDefault={setUserToDefault}
-					isUpdating={isUpdating}
-					links={links}
-					selectedUser={selectedUser}
-				/>
+				{/*<EditOrganizationUserForm*/}
+				{/*	user={selectedUser}*/}
+				{/*	isUserCloseRequested={isUserCloseRequested}*/}
+				{/*	setUserToDefault={setUserToDefault}*/}
+				{/*	isUserCloseRequested={isUserCloseRequested}*/}
+				{/*/>*/}
 
 
 				<AssetModalWithoutPin
