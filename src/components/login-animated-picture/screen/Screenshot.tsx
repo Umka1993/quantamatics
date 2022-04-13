@@ -1,35 +1,27 @@
 import style from "./screenshot.module.scss";
-import { HTMLAttributes, useState } from "react";
+import { HTMLAttributes } from "react";
 import classNames from "classnames";
+import ResponsiveImage from "../../responsive-image/ResponsiveImage";
 
 type Props = HTMLAttributes<HTMLDivElement> & {
-	coefficient?: number
-}
-// public\img\login\screen.avif
+	coefficient?: number;
+};
 export default function Screenshot({
 	className,
 	coefficient = 1,
 	...other
 }: Props) {
-	const SCREEN_URL = "img/login/screen";
+
 	return (
 		<div className={classNames(style.root, className)} {...other}>
-			<picture>
-				<source
-					srcSet={`${SCREEN_URL}.avif 1x, ${SCREEN_URL}@2x.avif 2x, ${SCREEN_URL}@3x.avif 3x`}
-					type="image/avif"
-				/>
-				<source
-					srcSet={`${SCREEN_URL}.webp 1x, ${SCREEN_URL}@2x.webp 2x, ${SCREEN_URL}@3x.webp 3x`}
-					type="image/webp"
-				/>
-				<img
-					alt="Screenshot of App"
-					src={SCREEN_URL + ".png"}
-					srcSet={`${SCREEN_URL}@2x.png 2x,
-				${SCREEN_URL}@3x.png 3x`}
-				/>
-			</picture>
+			<ResponsiveImage
+				source="img/login/screen"
+				extensions={["avif", "webp", "png"]}
+				alt="Screenshot of App"
+				height={401}
+				width={712}
+				className={style.image}
+			/>
 
 			<svg className={style.graph} width={516} height={146} viewBox="0 0 516 146" fill="none" >
 				<g clipPath="url(#clip0_344_2210)">
@@ -123,9 +115,7 @@ export default function Screenshot({
 						<rect width="518.737" height="145" fill="white" transform="translate(0.263428 0.47052)" />
 					</clipPath>
 				</defs>
-			</svg>
-
-
+			</svg> 
 		</div>
 	);
 }

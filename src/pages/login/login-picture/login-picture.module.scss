@@ -6,10 +6,14 @@
 	padding: min(100px, 9vmin) 0;
 	display: grid;
 
-	grid-template-rows: math.div(5, 9) * 100vmin auto;
+	grid-template-rows: math.div(160, 3) * 1vmin auto;
+
+	gap: min(96px, #{math.div(32, 3) * 1}vmin)  0;
+
+
 
 	place-items: end stretch;
-	place-content: space-between stretch;
+	place-content: center stretch;
 
 	background-image: url("./assets/back.png");
 	background-size: cover;
@@ -34,7 +38,8 @@
 	justify-self: center;
 	align-content: center;
 	align-items: center;
-	max-width: 635px;
+	max-width: 635px + 20px * 2;
+	padding: 0 20px;
 
 	font-size: 16px;
 	line-height: 1.57;

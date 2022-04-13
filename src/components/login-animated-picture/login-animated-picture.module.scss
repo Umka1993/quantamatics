@@ -1,15 +1,22 @@
 .wrap {
+	// background-color: tomato;
 	transform-style: preserve-3d;
 	perspective: 100vmin;
 	// will-change: transform;
 	position: relative;
 	// transform: rotateY(-20deg);
-	left: -40px;
+	// left: -40px;
 	justify-self: start;
 	transition: transform 1s ease-in-out;
+
+	width: 100%;
+	height: 100%;
 }
+
 .screen {
 	transition: transform 1s ease-in-out;
+	top: 14%;
+	left: 1%;
 }
 
 .result {

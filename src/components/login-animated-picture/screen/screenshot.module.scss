@@ -1,16 +1,8 @@
 @use "sass:math";
 
 .root {
-	// background-color: #fff;
-	// font-size: 8px;
-
-	// width: math.div(712, 8) * 1em;
-	// height: math.div(400, 8) * 1em;
-
-	// display: grid;
-	// grid-template-columns: math.div(124, 712) * 100% 1fr;
-
 	position: relative;
+	display: inline-block;
 }
 
 .graph {
@@ -18,11 +10,15 @@
 	top: math.div(158.96, 400) * 100%;
 	right: math.div(26.94, 712) * 100%;
 
+	width: math.div(516, 712) * 100%;
+	height: math.div(146, 400) * 100%;
+
 	rect {
 		transition: height 1s;
 	}
 }
-// .side {
-// 	background-color: #f9f9f9;
-// 	border-right: 1px solid rgba(#162265, 0.25);
-// }
+
+.image {
+	height: 40vmin;
+	width: auto;;
+}
