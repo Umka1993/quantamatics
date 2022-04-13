@@ -1,9 +1,12 @@
 .wrap {
-	// transform-style: preserve-3d;
+	transform-style: preserve-3d;
 	perspective: 100vmin;
 	// will-change: transform;
 	position: relative;
-	transform: translateX(calc(-4vmin - 40px));
+	// transform: rotateY(-20deg);
+	left: -40px;
+	justify-self: start;
+	transition: transform 1s ease-in-out;
 }
 .screen {
 	transition: transform 1s ease-in-out;
@@ -12,13 +15,16 @@
 .result {
 	transition: transform 1s ease-in-out;
 	position: absolute;
-	bottom: -24px;
-	left: 26%;
+	bottom: 14.5vmin;
+	left: 22vmin;
+	// transform: translateZ(70vmin) scale(0.6);
 }
 
 .graph {
 	transition: transform 1s ease-in-out;
 	position: absolute;
-	top: -55px;
-	right: -72px;
+	top: -1vmin;
+	right: -2vmin;
+
+	// transform: translateZ(40vmin) scale(0.6);
 }

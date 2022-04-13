@@ -32,7 +32,7 @@ export default function MockResult({
 			{MOCK_DATA.map(({ key, value }) => (
 				<div key={key} className={s.group}>
 					<dt className={s.title}>{key}</dt>
-					<AnimatedNumber className={s.value} value={value * coefficient} />
+					<AnimatedNumber className={s.value} value={value} />
 				</div>
 			))}
 		</dl>

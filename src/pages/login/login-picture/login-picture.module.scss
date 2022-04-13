@@ -1,11 +1,15 @@
+@use "sass:math";
+
 .root {
 	background-color: #001c53;
 	margin: 0;
-	padding: min(100px, 9vmin) 4vmin;
+	padding: min(100px, 9vmin) 0;
 	display: grid;
 
-	place-items: center;
-	place-content: space-between center;
+	grid-template-rows: math.div(5, 9) * 100vmin auto;
+
+	place-items: end stretch;
+	place-content: space-between stretch;
 
 	background-image: url("./assets/back.png");
 	background-size: cover;
@@ -19,20 +23,6 @@
 	}
 }
 
-
-
-.result {
-	position: absolute;
-	top: 349px;
-	right: 67px;
-	font-size: 22px;
-
-	transition: transform 0.1s;
-	transform: translate3d(calc(var(--ratio-x) * 0.2em), calc(var(--ratio-y) * 0.4em), calc(var(--ratio-y) * 0.6em));
-	// transform: translate(-50%, -50%) translate(calc(3 * var(--ratio-x, 0) * 100%), calc(1 * var(--ratio-y, 0) * 100%)) rotate(calc(2 * var(--ratio-x, 0) * 1deg));
-}
-
-
 .image {
 	max-width: 100%;
 	height: auto;
@@ -41,6 +31,7 @@
 .caption {
 	display: grid;
 	gap: 20px 68px;
+	justify-self: center;
 	align-content: center;
 	align-items: center;
 	max-width: 635px;
