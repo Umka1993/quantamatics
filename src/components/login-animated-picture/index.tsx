@@ -22,7 +22,7 @@ export default function LoginAnimatedPicture() {
 			<Screenshot
 				aria-hidden
 				style={{
-					transform: `translateZ(10vmin) rotateX(${ratioY * 20}deg) rotateY(${ratioX * 20
+					transform: `translateZ(10vmin) rotateX(${-ratioY * 20}deg) rotateY(${-ratioX * 20
 					}deg)`,
 				}}
 				className={style.screen}
@@ -34,8 +34,8 @@ export default function LoginAnimatedPicture() {
 				width={392}
 				height={231}
 				style={{
-					transform: `translate3d(0, 0, 40vmin) scale(0.6) rotateX(${ratioY * 24
-					}deg) rotateY(${ratioX * 24}deg)`,
+					transform: `translate3d(0, 0, 40vmin) scale(0.6) rotateX(${-ratioY * 24
+					}deg) rotateY(${-ratioX * 24}deg)`,
 				}}
 				aria-hidden
 			/>
@@ -44,10 +44,10 @@ export default function LoginAnimatedPicture() {
 				className={style.result}
 				aria-hidden
 				style={{
-					transform: `translate3d(0, 0, 80vmin) scale(0.304) rotateX(${ratioY * 18
-					}deg) rotateY(${ratioX * 18}deg)`,
+					transform: `translate3d(0, 0, 80vmin) scale(0.304) rotateX(${-ratioY * 10
+					}deg) rotateY(${-ratioX * 10}deg)`,
 				}}
-				coefficient={sum}
+				coefficient={clamp(Math.abs(sum), 0.4, 1)}
 			/>
 		</div>
 	);
