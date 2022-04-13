@@ -8,7 +8,7 @@ import baseQuery from "./base/";
 const api = createApi({
 	reducerPath: "quantamaticsApi",
 	baseQuery,
-	tagTypes: ["Organizations", "Users", "Assets"],
+	tagTypes: ["Organizations", "Users", "Assets", "SelectedUser"],
 
 	endpoints: (_build) => ({
 	}),

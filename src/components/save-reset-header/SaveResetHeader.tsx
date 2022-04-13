@@ -4,6 +4,7 @@ import React, { FunctionComponent, HTMLProps, ReactNode } from "react";
 import { ReactComponent as CheckSVG } from "./assets/check.svg";
 import style from "./SaveResetHeader.module.scss";
 import classNames from "classnames";
+import { AssetInOrganization } from "../../types/asset";
 
 interface SaveResetHeaderProps extends HTMLProps<HTMLDivElement> {
 	headline: ReactNode;
@@ -11,6 +12,7 @@ interface SaveResetHeaderProps extends HTMLProps<HTMLDivElement> {
 	isSavedMessageActive?: boolean;
 	disableReset?: boolean;
 	headlineID?: string;
+		setCancel?:(arg:boolean)=>void
 }
 
 const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
@@ -21,6 +23,8 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
 	headlineID,
 	className,
 	title,
+	setCancel,
+
 	...other
 }) => {
 	return (
@@ -31,7 +35,7 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
 			<div className={style.buttons}>
 				<ResetButton
 					disabled={disableReset}
-					onClick={({ currentTarget }) => currentTarget.blur()}
+					onClick={({ currentTarget }) => setCancel && setCancel(true)}
 				>
 					Cancel
 				</ResetButton>

@@ -71,9 +71,7 @@ export default function PrivateRoutes(): ReactElement {
 			{isEditOrgAvailable && (
 				<>
 					<Route path={AppRoute.Organizations} element={<OrganizationDetail />} />
-					<Route
-						path={AppRoute.Organizations + "/add-user"}
-						element={<AddUserForm />}
+					<Route path={AppRoute.Organizations + "add-user"} element={<AddUserForm />}
 					/>
 					<Route path={AppRoute.Success} element={<SuccessMessage />} />
 					<Route path={AppRoute.Organizations+AppRoute.UserAccountDetail+'/view'} element={<ViewUserAccountDetail />} />

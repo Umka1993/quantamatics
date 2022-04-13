@@ -46,7 +46,7 @@ export const ViewUserAccountDetail = () => {
 	const navigate = useNavigate();
 
 	const expirationDate = moment(
-		selectedUser && selectedUser[UserKey.Expiration]
+		selectedUser && selectedUser[UserKey.SubscriptionEndDate]
 	).format("MM/DD/yyyy");
 
 	useEffect(() => {
@@ -80,10 +80,17 @@ export const ViewUserAccountDetail = () => {
 			arrAssets.push(asset.asset.name);
 			return arrAssets;
 		});
+
+		const roleString = selectedUser[UserKey.UserRoles].map((role) => {
+			const arrAssets = [];
+			arrAssets.push(role);
+			return arrAssets;
+		});
+
 		const links = [
 			{
 				href: AppRoute.OrganizationList,
-				text: "Organisations",
+				text: "Organizations",
 			},
 			{
 				href: `/organizations/${orgId}`,
@@ -111,14 +118,17 @@ export const ViewUserAccountDetail = () => {
 					<div className={style.item}>
 						<span className={style.itemName}>Last Name</span>
 						<span className={style.itemValue}>
-							{selectedUser[UserKey.Name]}
+							{selectedUser[UserKey.Surname]}
 						</span>
 					</div>
 					<div className={style.item}>
 						<span className={style.itemName}>Email</span>
-						<span className={style.itemValue}>
+						<a
+							className={style.itemValue}
+							href={`mailto:${selectedUser[UserKey.Email]}`}
+						>
 							{selectedUser[UserKey.Email]}
-						</span>
+						</a>
 					</div>
 					<div className={style.item}>
 						<span className={style.itemName}>Expiration Date</span>
@@ -132,9 +142,7 @@ export const ViewUserAccountDetail = () => {
 					</div>
 					<div className={style.item}>
 						<span className={style.itemName}>Organization Role</span>
-						<span className={style.itemValue}>
-							{selectedUser[UserKey.UserRoles]}
-						</span>
+						<span className={style.itemValue}>{roleString.join(", ")}</span>
 					</div>
 
 					<div className={style.item}>

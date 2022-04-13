@@ -23,6 +23,7 @@ interface IDatePick extends Omit<IInput, "externalSetter"> {
 	variant?: "squared";
 	subscriptionDate: Date;
 	setSubscriptionDate: (arg: Date) => void;
+	isCancel?: boolean;
 }
 
 export default function DatePickerComponent({
@@ -30,11 +31,10 @@ export default function DatePickerComponent({
 	itemRef,
 	required,
 	label,
-	onChange,
-	externalSetter,
 	subscriptionDate,
 	setSubscriptionDate,
 	variant,
+	isCancel,
 }: IDatePick) {
 	const isSupport = checkDateInputSupport();
 	const labelRef = useRef<HTMLSpanElement>(null);
@@ -45,28 +45,6 @@ export default function DatePickerComponent({
 		undefined
 	);
 
-	// const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
-	// 	evt.preventDefault();
-	// 	setErrorMessage(inputRef.current?.validationMessage);
-	// };
-	//
-	// const changeHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-	// 	const { valueAsDate } = evt.target;
-	//
-	// 	externalSetter && externalSetter(valueAsDate ? valueAsDate : new Date());
-	// 	onChange && onChange(evt);
-	// };
-	//
-	// const changeFallbackHandler: ChangeEventHandler<HTMLInputElement> = (evt) => {
-	// 	const { value } = evt.currentTarget;
-	//
-	// 	const formattedDate = new Date(value);
-	//
-	// 	const isInvalidDate = isNaN(formattedDate.getTime());
-	// 	!isInvalidDate && externalSetter && externalSetter(formattedDate);
-	// 	onChange && onChange(evt);
-	// };
-	// debugger
 	const [startDate, setStartDate] = useState<Date>(subscriptionDate);
 
 	const [monthYear, setMonthYear] = useState<string>();
@@ -82,7 +60,7 @@ export default function DatePickerComponent({
 	const [isCorrectDate, setIsCorrectedDate] = useState<boolean>(true);
 
 	const [inputValue, setInputValue] = useState<string>(
-		moment(startDate).format("MM/DD/YYYY").toString()
+		moment(subscriptionDate).format("MM/DD/YYYY").toString()
 	);
 
 	const [mask, setMask] = useState("11/11/1111");
@@ -90,6 +68,14 @@ export default function DatePickerComponent({
 	const [isErrorValue, setIsError] = useState<boolean>();
 
 	const [selectedDate, setSelectedDate] = useState<Date>(startDate);
+
+	useEffect(() => {
+
+		if (isCancel) {
+			setSelectedDate(subscriptionDate);
+			setInputValue(moment(subscriptionDate).format("MM/DD/YYYY").toString());
+		}
+	}, [isCancel]);
 
 	useEffect(() => {
 		const maskItemCounter = inputValue.split("/").length;

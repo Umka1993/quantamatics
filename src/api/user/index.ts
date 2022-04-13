@@ -20,6 +20,7 @@ const usersApi = baseApi.injectEndpoints({
 				method: "GET",
 				params: { id },
 			}),
+			providesTags: [{ type: "SelectedUser", id: "list" }],
 		}),
 
 		updateUser: build.mutation<void, IUpdateUser>({
@@ -28,16 +29,19 @@ const usersApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: [{ type: "Users", id: "list" }],
+			invalidatesTags: [{ type: "Users", id: "list" },{ type: "SelectedUser", id: "list" }],
 		}),
 
-		updateUserRoles: build.mutation<void, [id: string | number, userRoles: UserRole[]]>({
+		updateUserRoles: build.mutation<
+			void,
+			[id: string | number, userRoles: UserRole[]]
+		>({
 			query: ([id, userRoles]) => ({
 				url: `${ApiRoute.EditRoles}${id}`,
 				method: "POST",
 				body: { userRoles },
 			}),
-			invalidatesTags: [{ type: "Users", id: "list" }],
+			invalidatesTags: [{ type: "Users", id: "list" },{ type: "SelectedUser", id: "list" }],
 		}),
 	}),
 });
@@ -47,5 +51,5 @@ export const {
 	useGetUserQuery,
 	useLazyGetUserQuery,
 	useUpdateUserMutation,
-	useUpdateUserRolesMutation
+	useUpdateUserRolesMutation,
 } = usersApi;

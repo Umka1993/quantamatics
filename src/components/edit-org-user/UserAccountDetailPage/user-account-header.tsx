@@ -16,7 +16,7 @@ interface IUserAccountHeader {
 export const UserAccountHeader: FunctionComponent<IUserAccountHeader> = ({
 	selectedUser,
 	toggleEditUserPage,
-																																						 toggleAssetsModal,
+	toggleAssetsModal,
 	children
 }) => {
 	return (

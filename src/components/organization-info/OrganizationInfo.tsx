@@ -23,7 +23,7 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 	const links = [
 		{
 			href: AppRoute.OrganizationList,
-			text: "Organisations",
+			text: "Organizations",
 		},
 		{
 			// href: `/organizations/${organization[OrganizationKey.Id]}`,
