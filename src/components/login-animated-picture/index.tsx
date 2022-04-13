@@ -29,26 +29,27 @@ export default function LoginAnimatedPicture() {
 				coefficient={sum}
 			/>
 
-			{/* <Graph
+			<Graph
 				className={style.graph}
 				width={392}
 				height={231}
 				style={{
-					transform: `translate3d(0, 0, 40vmin) scale(0.6) rotateX(${-ratioY * 24
+					transform: `translate3d(0, 0, 40vmin) rotateX(${-ratioY * 24
 					}deg) rotateY(${-ratioX * 24}deg)`,
 				}}
 				aria-hidden
 			/>
 
+
 			<MockResult
 				className={style.result}
 				aria-hidden
 				style={{
-					transform: `translate3d(0, 0, 80vmin) scale(0.304) rotateX(${-ratioY * 10
+					transform: `translate3d(0, 0, 80vmin) scale(0.31) rotateX(${-ratioY * 10
 					}deg) rotateY(${-ratioX * 10}deg)`,
 				}}
 				coefficient={clamp(Math.abs(sum), 0.4, 1)}
-			/> */}
+			/>
 		</div>
 	);
 }

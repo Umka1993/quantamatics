@@ -10,6 +10,8 @@
 
 	gap: min(96px, #{math.div(32, 3) * 1}vmin)  0;
 
+	overflow: hidden;
+
 
 
 	place-items: end stretch;
