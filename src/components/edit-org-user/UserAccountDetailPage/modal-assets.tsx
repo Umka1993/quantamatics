@@ -219,7 +219,6 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 
 	useEffect(() => {
 		if (selected && selected.length) {
-			// debugger
 			setNoAssetError(false);
 			setError(false);
 		}
@@ -271,7 +270,6 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	}, [assignedAssets, serverSelectedAssets, isAssetChanged]);
 
 	useEffect(() => {
-		debugger
 		if (organization && selected && serverSelectedAssets) {
 			const isQuickChanged = serverSelectedAssets.length !== selected.length;
 
