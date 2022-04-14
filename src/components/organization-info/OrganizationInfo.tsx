@@ -34,7 +34,7 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 		<section className={classNames(style.root, className)}>
 			<div className={style.headlineWrap}>
 				<div className={style.orgTitle}>
-					<Breadcrumb links={links} />
+					{/*<Breadcrumb links={links} />*/}
 
 					<Headline
 						className={style.title}
