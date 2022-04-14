@@ -24,7 +24,6 @@ const AssetRowWithoutPin: FunctionComponent<MultiselectAssetOptionProps> = ({
 	value,
 	children,
 
-	disabled,
 }) => {
 
 	const [addToSelected, removeFromSelected] = useChangeSet(
@@ -44,7 +43,6 @@ const AssetRowWithoutPin: FunctionComponent<MultiselectAssetOptionProps> = ({
 				aria-label={'Is set as default'}>
 
 				<Checkbox
-					// className={className}
 					checked={selected}
 					labelCheckbox={isSetByDefault ? "Is set as default" : undefined}
 					disabled={isSetByDefault}

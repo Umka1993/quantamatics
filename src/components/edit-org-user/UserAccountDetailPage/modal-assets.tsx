@@ -219,6 +219,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 
 	useEffect(() => {
 		if (selected && selected.length) {
+			// debugger
 			setNoAssetError(false);
 			setError(false);
 		}
@@ -270,26 +271,27 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	}, [assignedAssets, serverSelectedAssets, isAssetChanged]);
 
 	useEffect(() => {
+		debugger
 		if (organization && selected && serverSelectedAssets) {
 			const isQuickChanged = serverSelectedAssets.length !== selected.length;
 
 			if (isQuickChanged) {
 				setHasChanges(true);
 			} else {
-				let isSharedChanged = false;
-				selected.forEach((asset) => {
-					const foundedInitialAsset = organization.organizationAssets.find(
-						(initialAsset) => initialAsset.assetId === asset.assetId
-					);
-
-					if (
-						foundedInitialAsset === undefined ||
-						foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
-					) {
-						isSharedChanged = true;
-					}
-				});
-				setHasChanges(isSharedChanged);
+				// let isSharedChanged = false;
+				// selected.forEach((asset) => {
+				// 	const foundedInitialAsset = organization.organizationAssets.find(
+				// 		(initialAsset) => initialAsset.assetId === asset.assetId
+				// 	);
+				//
+				// 	if (
+				// 		foundedInitialAsset === undefined ||
+				// 		foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
+				// 	) {
+				// 		isSharedChanged = true;
+				// 	}
+				// });
+				setHasChanges(checkIfAssetChanged());
 			}
 		}
 	}, [selected, organization]);
