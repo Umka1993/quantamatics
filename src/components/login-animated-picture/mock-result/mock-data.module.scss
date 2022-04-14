@@ -1,4 +1,5 @@
 @use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
 
 .root {
 	display: grid;
@@ -9,15 +10,14 @@
 	margin: 0;
 	gap: 1.2em;
 
-	background: linear-gradient(140.88deg, rgba(white, 0.75) 22.42%, rgba(white, 0.85) 121.97%);
+	background: rgba(white, 80%);
 	border: 1px solid #e2e9f6;
 
 	box-shadow: inset 0 0 1.5em rgba(white, 0.05);
-	backdrop-filter: blur(32px);
-
 	color: rgba(82, 82, 82, 1);
-
 	width: fit-content;
+
+	@include back-blur(3em);
 }
 
 .group {

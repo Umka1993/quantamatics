@@ -16,3 +16,11 @@
 		display: none;
 	}
 }
+
+@mixin back-blur($value: 1rem) {
+	@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+		@content;
+		backdrop-filter: blur($value);
+		-webkit-backdrop-filter: blur($value);
+	}
+}
