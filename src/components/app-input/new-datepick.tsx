@@ -143,7 +143,7 @@ export default function DatePickerComponent({
 	//
 	// 	const errorValue = [...arr];
 	//
-	// 	debugger;
+
 	// 	const isCorrectedValue =
 	// 		moment(value).isValid() && moment(value).isAfter(yesterday);
 	// 	setIsCorrectedDate(isCorrectedValue);
