@@ -2,18 +2,14 @@ import style from "./login-animated-picture.module.scss";
 import MockResult from "./mock-result/MockResult";
 import Graph from "./graph/Graph";
 import Screenshot from "./screen/Screenshot";
-import useWindowParallax from "../../hooks/useWindowParallax";
-import { useState } from "react";
+import usePercentFromCenter from "../../hooks/usePercentFromCenter";
 import clamp from "../../services/clamp";
 
 export default function LoginAnimatedPicture() {
-	const [ratioX, setRatioX] = useState(0);
-	const [ratioY, setRatioY] = useState(0);
 
-	useWindowParallax((x, y) => {
-		setRatioX(x);
-		setRatioY(y);
-	});
+	// const [ratioX, ratioY] = [0, 0] //Debug
+	const [ratioX, ratioY] = usePercentFromCenter()
+
 
 	const sum = ratioY + ratioX;
 
@@ -45,7 +41,7 @@ export default function LoginAnimatedPicture() {
 				className={style.result}
 				aria-hidden
 				style={{
-					transform: `translate3d(${ratioY * 2}vmin, ${ratioX * 2}vmin, 80vmin) scale(0.31) rotateX(${-ratioY * 10
+					transform: `translate3d(${ratioY * 2}vmin, ${ratioX * 2}vmin, 80vmin) rotateX(${-ratioY * 10
 					}deg) rotateY(${-ratioX * 10}deg)`,
 				}}
 				coefficient={clamp(Math.abs(sum), 0.4, 1)}
