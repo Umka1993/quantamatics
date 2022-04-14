@@ -34,7 +34,7 @@ export default function LoginAnimatedPicture() {
 				width={392}
 				height={231}
 				style={{
-					transform: `translate3d(0, 0, 40vmin) rotateX(${-ratioY * 24
+					transform: `translate3d(${-8 *ratioY}vmin, ${ratioX * -5}vmin, 40vmin) rotateX(${-ratioY * 24
 					}deg) rotateY(${-ratioX * 24}deg)`,
 				}}
 				aria-hidden
@@ -45,7 +45,7 @@ export default function LoginAnimatedPicture() {
 				className={style.result}
 				aria-hidden
 				style={{
-					transform: `translate3d(0, 0, 80vmin) scale(0.31) rotateX(${-ratioY * 10
+					transform: `translate3d(${ratioY * 2}vmin, ${ratioX * 2}vmin, 80vmin) scale(0.31) rotateX(${-ratioY * 10
 					}deg) rotateY(${-ratioX * 10}deg)`,
 				}}
 				coefficient={clamp(Math.abs(sum), 0.4, 1)}
