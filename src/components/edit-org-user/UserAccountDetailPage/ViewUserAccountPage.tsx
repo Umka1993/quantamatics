@@ -5,7 +5,7 @@ import { AppRoute, OrganizationKey, UserKey } from "../../../data/enum";
 import classNames from "classnames";
 import { useParams } from "react-router";
 import { useGetUserQuery } from "../../../api/user";
-import { useGetAllAssetsQuery } from "../../../api/asset";
+import { useGetAllAssetsQuery, useGetUserAssetsQuery } from "../../../api/asset";
 import moment from "moment";
 import useToggle from "../../../hooks/useToggle";
 import { UserAccountHeader } from "./user-account-header";
@@ -18,8 +18,8 @@ import AssetModalWithoutPin from "./modal-assets";
 import EditOrganizationUser from "../EditOrganizationUser";
 import useBoolean from "../../../hooks/useBoolean";
 import Dialog from "../../dialog";
-import EditOrganizationUserForm from "./user-account-detail-form";
-import EditOrganizationUserWithoutAssets from "./user-account-detail-form";
+import EditOrganizationUserForm from "./edit-organizationUser-without-assets";
+import EditOrganizationUserWithoutAssets from "./edit-organizationUser-without-assets";
 
 interface IEditUserAccountDetail extends HTMLProps<HTMLDivElement> {
 	selectedUser: IUser | null;
@@ -27,13 +27,14 @@ interface IEditUserAccountDetail extends HTMLProps<HTMLDivElement> {
 	toggleOrganizationModal: () => void;
 }
 
-export const ViewUserAccountDetail = () => {
+export const ViewUserAccountPage = () => {
 	const { id: orgId, userId } = useParams();
 
 	const [selectedUser, setSelectedUser] = useState<IUser>();
-	const [selectedAssets, setSelectedAssets] = useState<
-		IUser[UserKey.OrganizationAssets] | undefined
-	>();
+	const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } =
+				useGetUserAssetsQuery(userId as string);
+
+	const [selectedAssets, setSelectedAssets] = useState(serverSelectedAssets);
 	const [usersOrganization, setUsersOrganization] = useState<Organization>();
 
 	const [isEditUserPage, toggleEditUserPage] = useToggle(false);
@@ -45,12 +46,10 @@ export const ViewUserAccountDetail = () => {
 	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
 
 	const { data: assets } = useGetAllAssetsQuery(orgId as string);
-	// const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } =
-	// 	useGetUserAssetsQuery(userId as string);
+
 
 	const { data: company } = useGetOrganizationQuery(orgId as string);
 
-	const navigate = useNavigate();
 
 	const expirationDate = moment(
 		selectedUser && selectedUser[UserKey.SubscriptionEndDate]
@@ -64,20 +63,11 @@ export const ViewUserAccountDetail = () => {
 	}, [user, company]);
 
 	useEffect(() => {
-		if (usersOrganization) {
-			setSelectedAssets(usersOrganization[UserKey.OrganizationAssets]);
+		if (usersOrganization && serverSelectedAssets) {
+			setSelectedAssets(serverSelectedAssets);
 		}
-	}, [usersOrganization]);
+	}, [usersOrganization, serverSelectedAssets]);
 
-	// if (isEditUserPage && selectedUser) {
-	// 	navigate(`/organizations/${orgId}/user/${selectedUser[UserKey.Id]}/edit`);
-	// }
-
-	const closeFunction = () => {
-		toggleAssetsModal();
-	};
-
-	const closeModal = () => toggleEditUserPage();
 
 	const {
 		value: isUserCloseRequested,
@@ -92,7 +82,7 @@ export const ViewUserAccountDetail = () => {
 	if (selectedUser && selectedAssets && usersOrganization) {
 		const selectedAssetsString = selectedAssets.map((asset) => {
 			const arrAssets = [];
-			arrAssets.push(asset.asset.name);
+			arrAssets.push(asset.name);
 			return arrAssets;
 		});
 
@@ -121,7 +111,7 @@ export const ViewUserAccountDetail = () => {
 					toggleEditUserPage={toggleEditUserPage}
 					toggleAssetsModal={toggleAssetsModal}
 				>
-					<Breadcrumb links={links} />
+					{/*<Breadcrumb links={links} />*/}
 				</UserAccountHeader>
 				<div className={style.userData}>
 					<div className={style.item}>
@@ -179,9 +169,10 @@ export const ViewUserAccountDetail = () => {
 					{isEditUserPage && (
 						<EditOrganizationUserWithoutAssets
 							user={selectedUser}
-							onClose={closeModal}
 							isUserCloseRequested={isUserCloseRequested}
 							setUserToDefault={setUserToDefault}
+							toggleEditUserPage={toggleEditUserPage}
+
 						/>
 					)}
 				</Dialog>
@@ -189,8 +180,10 @@ export const ViewUserAccountDetail = () => {
 
 				<AssetModalWithoutPin
 					open={isAssetsOpened}
-					closeFunction={closeFunction}
+					toggleAssetsModal={toggleAssetsModal}
 					organization={usersOrganization}
+					user={selectedUser}
+
 				/>
 			</section>
 		);

@@ -1,78 +1,61 @@
-import { Dispatch, FunctionComponent, SetStateAction } from "react";
+import { Dispatch, FunctionComponent, HTMLProps, SetStateAction } from "react";
 
 import classNames from "classnames";
 // import PinButton from "../pin-button";
 import style from "./style/AssetModalWithoutPin.module.scss";
-import { Checkbox } from "../../app-checkbox";
+import Checkbox from "../../app-checkbox";
 import { AssetInOrganization } from "../../../types/asset";
+import useChangeSet from "../../../hooks/useChangeSet";
 
-export interface MultiselectAssetOptionProps {
-	selected: AssetInOrganization[];
-	setSelected: Dispatch<SetStateAction<AssetInOrganization[]>>;
+export interface MultiselectAssetOptionProps extends HTMLProps<HTMLOptionElement> {
+		selected: boolean;
+		setSelected: Dispatch<SetStateAction<Set<string | number>>>;
 	option: AssetInOrganization;
 	disabled?: boolean;
+		isSetByDefault?: boolean;
+
 }
 
 const AssetRowWithoutPin: FunctionComponent<MultiselectAssetOptionProps> = ({
 	selected,
 	option,
 	setSelected,
+	isSetByDefault,
+	value,
+	children,
+
 	disabled,
 }) => {
-	const selectedID = selected.findIndex(
-		({ assetId }) => assetId === option.assetId
+
+	const [addToSelected, removeFromSelected] = useChangeSet(
+				value as string | number,
+				setSelected
 	);
-	const isSelected = selectedID !== -1;
-	const isPinned = isSelected ? selected[selectedID].sharedByDefault : false;
-
-	const addToSelected = (sharedByDefault: boolean) =>
-		setSelected([...selected, { ...option, sharedByDefault }]);
-
-	const removeFromSelected = () =>
-		setSelected(
-			[...selected].filter(({ assetId }) => assetId !== option.assetId)
-		);
 
 	return (
 		<tr
 			className={classNames(style.row, style.asset, {
-				[style["asset--selected"]]: isSelected || isPinned,
+				[style["asset--selected"]]: selected || isSetByDefault,
 			})}
 		>
 			<td>{option.asset.name}</td>
 
-			<td className={style.action}>
+			<td className={style.action}
+				aria-label={'Is set as default'}>
+
 				<Checkbox
-					name={option.asset.name}
-					checked={isSelected}
-					disabled={disabled}
+					// className={className}
+					checked={selected}
+					labelCheckbox={isSetByDefault ? "Is set as default" : undefined}
+					disabled={isSetByDefault}
 					highlightOnChecked
-					onClick={
-						disabled
-							? undefined
-							: () => {isSelected ? removeFromSelected() : addToSelected(false)}
-					}
-				/>
+					onChange={({ currentTarget }) => currentTarget.checked ? addToSelected() : removeFromSelected()}
+					name={'asset' + value}
+				>
+					{children}
+				</Checkbox >
 			</td>
-			{/*<td className={style.action}>*/}
-			{/*	<PinButton*/}
-			{/*		checked={isPinned}*/}
-			{/*		size={21}*/}
-			{/*		onClick={() => {*/}
-			{/*			if (isSelected) {*/}
-			{/*				const copySelected = [...selected];*/}
-			{/*				copySelected[selectedID] = {*/}
-			{/*					...copySelected[selectedID],*/}
-			{/*					sharedByDefault: !isPinned,*/}
-			{/*				};*/}
-			{/*				setSelected(copySelected);*/}
-			{/*			} else {*/}
-			{/*				!isPinned && addToSelected(true);*/}
-			{/*			}*/}
-			{/*		}}*/}
-			{/*		aria-label="Set as default for all user accounts"*/}
-			{/*	/>*/}
-			{/*</td>*/}
+
 		</tr>
 	);
 };

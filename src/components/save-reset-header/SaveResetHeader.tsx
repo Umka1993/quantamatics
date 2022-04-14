@@ -12,7 +12,8 @@ interface SaveResetHeaderProps extends HTMLProps<HTMLDivElement> {
 	isSavedMessageActive?: boolean;
 	disableReset?: boolean;
 	headlineID?: string;
-		setCancel?:(arg:boolean)=>void
+	closeModal?:()=>void
+
 }
 
 const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
@@ -23,8 +24,7 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
 	headlineID,
 	className,
 	title,
-	setCancel,
-
+	closeModal,
 	...other
 }) => {
 	return (
@@ -35,7 +35,7 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
 			<div className={style.buttons}>
 				<ResetButton
 					disabled={disableReset}
-					onClick={({ currentTarget }) => setCancel && setCancel(true)}
+					onClick={({ currentTarget }) => closeModal && closeModal()}
 				>
 					Cancel
 				</ResetButton>

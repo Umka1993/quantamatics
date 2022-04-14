@@ -1,18 +1,18 @@
 import SaveResetHeader from "../../save-reset-header/SaveResetHeader";
 import {
-	FunctionComponent,
-	useEffect,
-	useState,
 	FormEvent,
-	useRef,
+	FunctionComponent,
+	HTMLProps,
 	useCallback,
+	useEffect,
+	useRef,
+	useState,
 } from "react";
-import { HTMLProps } from "react";
 import Dialog from "../../dialog";
 import style from "./style/AssetModalWithoutPin.module.scss";
 import { SortTableHeader } from "../../sort-table-header/SortTableHeader";
 
-import { SortDirection } from "../../../data/enum";
+import { SortDirection, UserKey } from "../../../data/enum";
 import ISort from "../../../types/sort-type";
 import {
 	useLazyGetOrganizationQuery,
@@ -22,21 +22,33 @@ import { Organization } from "../../../types/organization/types";
 import useUser from "../../../hooks/useUser";
 import { AssetInOrganization } from "../../../types/asset";
 import AssetRowWithoutPin from "./AssetRowWithoutPin";
+import { IUser } from "../../../types/user";
+import {
+	useGetAllAssetsQuery,
+	useGetUserAssetsQuery,
+	useLinkAssetToUserMutation,
+	useUnlinkAssetToUserMutation,
+} from "../../../api/asset";
+import { useParams } from "react-router";
+import Loader from "../../loader";
 
 export interface AssetModalProps
 	extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
 	open: boolean;
-	closeFunction: () => void;
+	toggleAssetsModal: () => void;
 	organization: Organization;
+	user: IUser;
 }
 
 const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
-	closeFunction,
+	toggleAssetsModal,
 	open,
 	organization,
+	user,
 	...other
 }) => {
-	const user = useUser();
+	// const user = useUser();
+	const { id: orgId } = useParams();
 	const [noAssetError, setNoAssetError] = useState(false);
 
 	const [hasChanges, setHasChanges] = useState(false);
@@ -44,15 +56,29 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	const [hasError, setError] = useState(false);
 
 	const errorRef = useRef<HTMLParagraphElement>(null);
+	const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } =
+		useGetUserAssetsQuery(user.id);
 
-	const [selected, setSelected] = useState(organization.organizationAssets);
+	const [selected, setSelected] = useState<AssetInOrganization[]>(
+		organization.organizationAssets
+	);
+
+	const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
+		new Set()
+	);
 
 	const INITIAL_SORT = { name: "name", direction: SortDirection.Default };
 	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 	const [options, setOptions] = useState<AssetInOrganization[]>([]);
+	const [linkAsset, { isLoading: isAssetLinking }] =
+		useLinkAssetToUserMutation();
+	const [unlinkAsset, { isLoading: isAssetUnLinking }] =
+		useUnlinkAssetToUserMutation();
+	const { data: assets } = useGetAllAssetsQuery(orgId as string);
 
 	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
 	const [getInfoOrg] = useLazyGetOrganizationQuery();
+	const [isAssetChanged, setAssetChanged] = useState(false);
 
 	const scrollRef = useRef<HTMLTableSectionElement>(null);
 
@@ -65,6 +91,15 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 				? thead.classList.add(activeClass)
 				: thead.classList.remove(activeClass));
 	}
+
+	useEffect(() => {
+		if (serverSelectedAssets && assets) {
+			const selectedAssets: Set<string | number> = new Set(
+				serverSelectedAssets.map(({ id }) => id)
+			);
+			setAssignedAssets(selectedAssets);
+		}
+	}, [serverSelectedAssets, assets]);
 
 	useEffect(() => {
 		if (scrollRef.current) {
@@ -81,18 +116,44 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 
 	const setInitialOrg = useCallback(() => {
 		if (organization) {
-			setSelected(organization.organizationAssets);
+			// setSelected(organization.organizationAssets);
 		}
 	}, [organization]);
 
 	useEffect(() => {
-		organization && setInitialOrg();
-	}, [organization]);
+		serverSelectedAssets && setInitialOrg();
+	}, [serverSelectedAssets]);
 
 	const assetsReset = useCallback(
 		() => organization && setSelected(organization.organizationAssets),
 		[organization]
 	);
+
+	function updateAssets() {
+		// ? Link new assets to user
+
+		assignedAssets.forEach((assetId) => {
+			const alreadySelectedAsset = serverSelectedAssets?.find(
+				(element) => element.id === assetId
+			);
+
+			if (alreadySelectedAsset === undefined) {
+				linkAsset({
+					assetId,
+					userId: user.id,
+				});
+			}
+		});
+
+		// ? Unlink old assets from user
+		serverSelectedAssets?.forEach((alreadySelectedAsset) => {
+			!assignedAssets.has(alreadySelectedAsset.id) &&
+				unlinkAsset({
+					assetId: alreadySelectedAsset.id,
+					userId: user.id,
+				});
+		});
+	}
 
 	function initOptions() {
 		if (organization && user) {
@@ -139,7 +200,10 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	function closeModal() {
 		hasError && setError(false);
 		hasChanges && assetsReset();
-		closeFunction();
+		setAssignedAssets(
+			new Set(serverSelectedAssets && serverSelectedAssets.map(({ id }) => id))
+		);
+		toggleAssetsModal();
 	}
 
 	function resetHandler(evt: FormEvent<HTMLFormElement>) {
@@ -154,16 +218,60 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	}, [hasError, errorRef.current]);
 
 	useEffect(() => {
-		if (selected.length) {
+		if (selected && selected.length) {
 			setNoAssetError(false);
 			setError(false);
 		}
 	}, [noAssetError, selected]);
 
 	useEffect(() => {
-		if (organization) {
-			const isQuickChanged =
-				organization.organizationAssets.length !== selected.length;
+		if (assets) {
+			const changedAssets: any[] = [];
+			const arrAssignedAssets = Array.from(assignedAssets);
+			assets.forEach((asset) => {
+				for (let i = 0; i <= arrAssignedAssets.length; i++) {
+					if (asset.assetId == arrAssignedAssets[i]) {
+						changedAssets.push(asset);
+					}
+				}
+			});
+			setSelected(changedAssets);
+		}
+	}, [assignedAssets]);
+
+	function checkIfAssetChanged() {
+		let changed = false;
+
+		serverSelectedAssets?.forEach((asset) => {
+			if (!assignedAssets.has(asset.id)) {
+				changed = true;
+			}
+		});
+
+		!changed &&
+			assignedAssets.forEach((assetId) => {
+				const hasAsset = serverSelectedAssets?.findIndex((serverAsset) => {
+					serverAsset.id === assetId;
+				});
+
+				if (hasAsset === -1) {
+					return true;
+				}
+			});
+
+		return changed;
+	}
+
+	useEffect(() => {
+		if (serverSelectedAssets) {
+			const isSameAmount = assignedAssets.size === serverSelectedAssets.length;
+			setAssetChanged(!isSameAmount || (isSameAmount && checkIfAssetChanged()));
+		}
+	}, [assignedAssets, serverSelectedAssets, isAssetChanged]);
+
+	useEffect(() => {
+		if (organization && selected && serverSelectedAssets) {
+			const isQuickChanged = serverSelectedAssets.length !== selected.length;
 
 			if (isQuickChanged) {
 				setHasChanges(true);
@@ -188,23 +296,17 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 
 	function submitHandler(evt: FormEvent<HTMLFormElement>) {
 		evt.preventDefault();
-		if (!selected.length) {
+		if (!selected?.length) {
 			setError(true);
 			return setNoAssetError(true);
 		}
 
-		update({
-			...organization,
-			organizationAssets: [...selected].map((asset) => ({
-				...asset,
-				asset: null,
-			})),
-		})
-			.unwrap()
-			.then(closeFunction);
+		updateAssets();
 	}
 
-	return (
+	return isAssetLinking || isAssetUnLinking ? (
+		<Loader />
+	) : (
 		<Dialog
 			id="asset-modal"
 			variant="right-side"
@@ -224,10 +326,11 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 					<SaveResetHeader
 						headline="Assets"
 						disableReset={isUpdating}
-						disableSave={!hasChanges || noAssetError || isUpdating}
+						disableSave={!isAssetChanged}
 						isSavedMessageActive={isUpdating}
 						headlineID="asset-modal-title"
 						className={style.header}
+						closeModal={closeModal}
 					/>
 				)}
 				{hasError && (
@@ -262,9 +365,11 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 								<AssetRowWithoutPin
 									key={option.assetId}
 									option={option}
-									selected={selected}
-									setSelected={setSelected}
-									disabled={isUserOrganization}
+									selected={assignedAssets.has(option.assetId)}
+									disabled={false}
+									isSetByDefault={option.sharedByDefault}
+									value={option.assetId}
+									setSelected={setAssignedAssets}
 								/>
 							))}
 					</tbody>

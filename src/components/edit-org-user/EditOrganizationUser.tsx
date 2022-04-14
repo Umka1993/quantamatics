@@ -88,6 +88,7 @@ export default function EditOrganizationUser({
 	const [isAssetChanged, setAssetChanged] = useState(false);
 	const [showError, setShowError] = useState(false);
 
+	console.log("assignedAssets", assignedAssets)
 	function validateHandler() {
 		let userChanged = isUserChanged;
 
@@ -204,6 +205,7 @@ export default function EditOrganizationUser({
 
 	function updateAssets() {
 		// ? Link new assets to user
+
 		assignedAssets.forEach((assetId) => {
 			const alreadySelectedAsset = serverSelectedAssets?.find(
 				(element) => element.id === assetId

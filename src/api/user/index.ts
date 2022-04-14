@@ -20,7 +20,7 @@ const usersApi = baseApi.injectEndpoints({
 				method: "GET",
 				params: { id },
 			}),
-			providesTags: [{ type: "SelectedUser", id: "list" }],
+			providesTags: [{ type: "Users", id: "list" },{ type: "SelectedUser", id: "list" }],
 		}),
 
 		updateUser: build.mutation<void, IUpdateUser>({

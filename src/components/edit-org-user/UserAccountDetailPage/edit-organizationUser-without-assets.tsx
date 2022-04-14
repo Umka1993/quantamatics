@@ -29,17 +29,17 @@ import RoleSelector from "../../role-selector";
 import DatePickerComponent from "../../app-input/new-datepick";
 
 interface Props {
-	onClose: () => void;
 	user: IUser;
 	setUserToDefault: () => void;
 	isUserCloseRequested: boolean;
+		toggleEditUserPage: ()=>void
 }
 
 export default function EditOrganizationUserWithoutAssets({
-	onClose,
 	user,
 	setUserToDefault,
 	isUserCloseRequested,
+	toggleEditUserPage,
 }: Props) {
 	const { id: organizationID } = useParams();
 	const [firstName, setName] = useState(user.firstName);
@@ -124,16 +124,16 @@ export default function EditOrganizationUserWithoutAssets({
 
 		isAssetChanged && updateAssets();
 
-		isAssetChanged && !userChanged && !isRoleChanged && onClose();
+		isAssetChanged && !userChanged && !isRoleChanged && toggleEditUserPage();
 
 		function updateRolesAndClose() {
-			updateRoles([user.id, rolesAsArray]).unwrap().then(onClose);
+			updateRoles([user.id, rolesAsArray]).unwrap().then(toggleEditUserPage);
 		}
 
 		userChanged
 			? update(newUserData)
 				.unwrap()
-				.then(!isRoleChanged ? onClose : updateRolesAndClose)
+				.then(!isRoleChanged ? toggleEditUserPage : updateRolesAndClose)
 			: isRoleChanged && updateRolesAndClose();
 	}
 
@@ -196,9 +196,9 @@ export default function EditOrganizationUserWithoutAssets({
 			if (isUserChanged || isRoleChanged || isAssetChanged) {
 				if (showError) {
 					setShowError(false);
-					return onClose();
+					return toggleEditUserPage();
 				} else setShowError(true);
-			} else onClose();
+			} else toggleEditUserPage();
 		}
 	}, [isUserCloseRequested, isUserChanged, isRoleChanged, isAssetChanged]);
 
@@ -264,6 +264,7 @@ export default function EditOrganizationUserWithoutAssets({
 		emailError && formRef.current?.reportValidity();
 	}, [emailError]);
 
+
 	return isLoading || secondLoading || isAssetLinking || isAssetUnLinking ? (
 		<Loader />
 	) : (
@@ -272,7 +273,7 @@ export default function EditOrganizationUserWithoutAssets({
 			action=""
 			className={style.root}
 			onSubmit={handlerSubmit}
-			onReset={onClose}
+			onReset={toggleEditUserPage}
 			noValidate={validate ? undefined : true}
 			ref={formRef}
 		>
@@ -340,24 +341,6 @@ export default function EditOrganizationUserWithoutAssets({
 				className={style.input}
 			/>
 
-			{/*{assets && assetPrepared && (*/}
-			{/*	<Multiselect*/}
-			{/*		className={style.input}*/}
-			{/*		options={assets}*/}
-			{/*		selected={assignedAssets}*/}
-			{/*		setSelected={setAssignedAssets}*/}
-			{/*		label="Account Assets"*/}
-			{/*		errorMessage="Select asset permissions to assign to the user account."*/}
-			{/*		showError={assetError}*/}
-			{/*		type="user"*/}
-			{/*		variant="squared"*/}
-			{/*		inputList={[*/}
-			{/*			...assets.filter(({ assetId }) => assignedAssets.has(assetId)),*/}
-			{/*		]*/}
-			{/*			.map(({ name }) => name)*/}
-			{/*			.join(", ")}*/}
-			{/*	/>*/}
-			{/*)}*/}
 
 			<RoleSelector
 				isSuperAdmin={isSuperAdmin}

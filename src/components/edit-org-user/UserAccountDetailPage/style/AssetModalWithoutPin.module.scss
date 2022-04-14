@@ -40,6 +40,10 @@
 	border-bottom: 1px solid transparent;
 	transition: border-color 0.2s;
 
+	.row {
+		max-width: 100%;
+	}
+
 	&--active {
 		border-color: $inactive;
 	}

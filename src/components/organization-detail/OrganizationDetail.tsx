@@ -18,6 +18,8 @@ import OrganizationModal from "../organization-modal/OrganizationModal";
 import useBoolean from "../../hooks/useBoolean";
 import { UserKey } from "../../data/enum";
 import Dialog from "../dialog";
+import EditOrganizationUser from "../edit-org-user/EditOrganizationUser";
+import { useGetUserAssetsQuery } from "../../api/asset";
 
 export default function OrganizationDetail() {
 	const { id } = useParams<RouteParams>();
@@ -147,14 +149,14 @@ export default function OrganizationDetail() {
 				variant="right-side"
 				hasCloseButton={false}
 			>
-				{/*{selectedUser !== null && (*/}
-				{/*	<EditOrganizationUser*/}
-				{/*		user={selectedUser}*/}
-				{/*		onClose={closeModal}*/}
-				{/*		isUserCloseRequested={isUserCloseRequested}*/}
-				{/*		setUserToDefault={setUserToDefault}*/}
-				{/*	/>*/}
-				{/*)}*/}
+				{selectedUser !== null && (
+					<EditOrganizationUser
+						user={selectedUser}
+						onClose={closeModal}
+						isUserCloseRequested={isUserCloseRequested}
+						setUserToDefault={setUserToDefault}
+					/>
+				)}
 			</Dialog>
 		</>
 	);
