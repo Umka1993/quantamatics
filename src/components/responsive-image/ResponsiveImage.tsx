@@ -5,13 +5,28 @@ type ImageExtension = "jpg" | "png" | "avif" | "webp";
 type Props = ImgHTMLAttributes<HTMLImageElement> & {
 	extensions: ImageExtension[];
 	source: string;
+	ratios?: number[];
 };
 
 export default function ResponsiveImage({
 	extensions,
 	source,
+	ratios,
 	...other
 }: Props) {
+
+
+
+	function markUpRatio(extension: ImageExtension, isForImg = false) {
+		if (ratios) {
+			const extraSizes = ratios.map(
+				(ratio) => `${source}@${ratio}x.${extension} ${ratio}x`
+			)
+			return isForImg ? [`${source}.${extension} 1x`, ...extraSizes].join(', ') : extraSizes.join(', ')
+		}
+
+		return undefined
+	}
 	return (
 		<picture style={{ display: "inline-flex" }}>
 			{extensions.map((extension, index, array) =>
@@ -19,13 +34,13 @@ export default function ResponsiveImage({
 					<img
 						src={`${source}.${extension}`}
 						key={extension}
-						srcSet={`${source}@2x.${extension} 2x, ${source}@3x.${extension} 3x`}
+						srcSet={markUpRatio(extension)}
 						{...other}
 					/>
 				) : (
 					<source
 						key={extension}
-						srcSet={`${source}.${extension} 1x, ${source}@2x.${extension} 2x, ${source}@3x.${extension} 3x`}
+						srcSet={markUpRatio(extension, true)}
 						type={`image/${extension}`}
 					/>
 				)

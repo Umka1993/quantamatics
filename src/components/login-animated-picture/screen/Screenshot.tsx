@@ -33,6 +33,7 @@ export default function Screenshot({
 			<ResponsiveImage
 				source="img/login/screen"
 				extensions={["avif", "webp", "png"]}
+				ratios={[2]}
 				alt="Screenshot of App"
 				height={401}
 				width={712}
