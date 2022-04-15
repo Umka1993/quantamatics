@@ -31,7 +31,7 @@
 	tbody {
 		display: block;
 		overflow: overlay;
-		height: 100%;
+		height: calc(100% + 35px);
 		scrollbar-width: thin;
 	}
 }

@@ -30,7 +30,7 @@
 	tbody {
 		display: block;
 		overflow: overlay;
-		height: 100%;
+		height: calc(100% + 40px);
 		scrollbar-width: thin;
 	}
 }
