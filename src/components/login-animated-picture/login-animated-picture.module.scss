@@ -38,7 +38,8 @@
 
 		transform: translate(calc(#{$increase} * var(--ratio-y, 0)), calc(#{$increase} * var(--ratio-x, 0)));
 
-		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+		@media (-webkit-min-device-pixel-ratio: 2),
+		(min-resolution: 192dpi) {
 			background-image: url("./assets/background@2x.jpg");
 		}
 
@@ -64,6 +65,8 @@
 	transition: transform 1s ease-in-out;
 	top: 14%;
 	left: 7%;
+
+	transform: translateZ(10vmin) rotateX(calc(var(--ratio-y, 0) * -20deg)) rotateY(calc(var(--ratio-x, 0) * -20deg));
 }
 
 .result {
@@ -72,6 +75,8 @@
 	bottom: 34%;
 	left: 30%;
 	font-size: 1.8vmin;
+
+	transform: scale(0.306) translate3d(calc(var(--ratio-y, 0) * 5vmin), calc(var(--ratio-y, 0) * 5vmin), 80vmin) rotateX(calc(var(--ratio-y, 0) * 10deg)) rotateY(calc(var(--ratio-x, 0) * 10deg));
 }
 
 .graph {
@@ -81,6 +86,8 @@
 	left: 40%;
 	height: 26vmin;
 	width: auto;
+
+	transform: scale(0.6) translate3d(calc(var(--ratio-y, 0) * -8vmin), calc(var(--ratio-y, 0) * -8vmin), 40vmin) rotateX(calc(var(--ratio-y, 0) * -24deg)) rotateY(calc(var(--ratio-x, 0) * -24deg));
 }
 
 .caption {
@@ -95,6 +102,7 @@
 
 	font-size: 16px;
 	line-height: 1.57;
+
 	@media (min-width: 900px) {
 		grid-template-columns: 1fr auto;
 	}
