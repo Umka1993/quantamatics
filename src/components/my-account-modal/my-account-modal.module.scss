@@ -19,8 +19,14 @@
 	position: relative;
 }
 
-.footer {
-	margin-top: auto;
+.headlineWrap {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.buttons {
+	//margin-top: auto;
 
 	display: grid;
 	grid-template-columns: auto 100px;

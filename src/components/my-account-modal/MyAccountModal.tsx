@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 
 import Button, { ResetButton } from "../button";
 import Password from "../app-input/password";
@@ -13,6 +13,9 @@ import style from "./my-account-modal.module.scss";
 import MyAccountInfo from "./my-account-info";
 import useBoolean from "../../hooks/useBoolean";
 import { ReactComponent as KeyIcon } from "./key.svg";
+import Headline from "../page-title";
+import SaveResetHeader from "../save-reset-header/SaveResetHeader";
+import { ReactComponent as CheckSVG } from "../save-reset-header/assets/check.svg";
 
 interface IEditProfile {
 	onRequestClose: () => void;
@@ -103,25 +106,63 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 			open={open}
 			onRequestClose={resetHandler}
 			closeOnOutsideClick
-			headline="My Account"
+			// headline="My Account"
 			id={SideBarModalMode.Account}
 			wrapperClass={style.root}
 			role="dialog"
 			variant="right-side"
 			hasCloseButton={false}
 		>
+			<div className={style.headlineWrap}>
+				<Headline className={style.title} id={SideBarModalMode.Account}>
+					My Account
+				</Headline>
+				<div className={style.buttons}>
+					<ResetButton onClick={resetHandler}>Cancel</ResetButton>
+
+					<Button
+						type="submit"
+						disabled={
+							!Boolean(currentPassword && newPassword && confirmPassword)
+						}
+						form="edit-pass-form"
+						variant={isPasswordUpdating ? "valid" : undefined}
+					>
+						{isPasswordUpdating ? (
+							<>
+								<CheckSVG
+									aria-hidden="true"
+									width={17}
+									height={17}
+									fill="currentColor"
+								/>
+								Saved
+							</>
+						) : (
+							"Save"
+						)}
+					</Button>
+				</div>
+			</div>
+
 			{user !== undefined && (
-				<MyAccountInfo
-					user={user}
-					className={style.info}
-					isPasswordClosed={!showEditForm}
-					openPassword={openPassword}
-				>
-					<button type="button" className={style.button} onClick={openPassword}>
-						change
-						<KeyIcon aria-hidden fill="currentColor" width={16} height={16} />
-					</button>
-				</MyAccountInfo>
+				<>
+					<MyAccountInfo
+						user={user}
+						className={style.info}
+						isPasswordClosed={!showEditForm}
+						openPassword={openPassword}
+					>
+						<button
+							type="button"
+							className={style.button}
+							onClick={openPassword}
+						>
+							change
+							<KeyIcon aria-hidden fill="currentColor" width={16} height={16} />
+						</button>
+					</MyAccountInfo>
+				</>
 			)}
 
 			{showEditForm && (
@@ -169,21 +210,7 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 				</form>
 			)}
 
-			<footer className={style.footer}>
-				<ResetButton onClick={resetHandler}>Cancel</ResetButton>
-
-				<Button
-					type="submit"
-					disabled={!Boolean(currentPassword && newPassword && confirmPassword)}
-					form="edit-pass-form"
-				>
-					Save
-				</Button>
-			</footer>
-
-			{(isPasswordUpdating || isLoadUser || user === undefined) && (
-				<Loader style={{ zIndex: 3 }} />
-			)}
+			{(isLoadUser || user === undefined) && <Loader style={{ zIndex: 3 }} />}
 		</Dialog>
 	);
 }

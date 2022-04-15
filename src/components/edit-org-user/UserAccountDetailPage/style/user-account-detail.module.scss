@@ -89,6 +89,10 @@
 	color: #003C71;
 	text-decoration: none;
 
+.emailField{
+	&:hover{
+		color: $accent;
+	}
 }
 
 .item:last-child {

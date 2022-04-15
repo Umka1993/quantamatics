@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 
 import Headline from "../../page-title";
 
@@ -27,12 +27,14 @@ import {
 import { useParams } from "react-router-dom";
 import RoleSelector from "../../role-selector";
 import DatePickerComponent from "../../app-input/new-datepick";
+import SaveResetHeader from "../../save-reset-header/SaveResetHeader";
+
 
 interface Props {
 	user: IUser;
 	setUserToDefault: () => void;
 	isUserCloseRequested: boolean;
-		toggleEditUserPage: ()=>void
+	toggleEditUserPage: () => void;
 }
 
 export default function EditOrganizationUserWithoutAssets({
@@ -264,10 +266,7 @@ export default function EditOrganizationUserWithoutAssets({
 		emailError && formRef.current?.reportValidity();
 	}, [emailError]);
 
-
-	return isLoading || secondLoading || isAssetLinking || isAssetUnLinking ? (
-		<Loader />
-	) : (
+	return (
 		<form
 			id="edit-account-form"
 			action=""
@@ -277,9 +276,21 @@ export default function EditOrganizationUserWithoutAssets({
 			noValidate={validate ? undefined : true}
 			ref={formRef}
 		>
-			<Headline className={style.title} id="org-user-modal-title">
-				Edit User Account
-			</Headline>
+			<SaveResetHeader
+				title={`Edit User Account`}
+				headline={
+					<>
+												Edit User Account <span className={style.title}></span>{" "}
+					</>
+				}
+				disableReset={isLoading}
+				disableSave={
+					!isUserChanged && !isRoleChanged && !isAssetChanged
+				}
+				isSavedMessageActive={isLoading}
+				headlineID="org-modal-title"
+				className={style.header}
+			/>
 
 			{showError && (
 				<p className={style.warning}>Changes have not been saved.</p>
@@ -341,7 +352,6 @@ export default function EditOrganizationUserWithoutAssets({
 				className={style.input}
 			/>
 
-
 			<RoleSelector
 				isSuperAdmin={isSuperAdmin}
 				defaultRoles={userRoles}
@@ -349,16 +359,6 @@ export default function EditOrganizationUserWithoutAssets({
 				variant="squared"
 				className={style.input}
 			/>
-
-			<footer className={style.footer}>
-				<ResetButton type="reset">Cancel</ResetButton>
-				<Button
-					type="submit"
-					disabled={!isUserChanged && !isRoleChanged && !isAssetChanged}
-				>
-					Save
-				</Button>
-			</footer>
 		</form>
 	);
 }

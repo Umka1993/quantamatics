@@ -129,7 +129,7 @@ export const ViewUserAccountPage = () => {
 					<div className={style.item}>
 						<span className={style.itemName}>Email</span>
 						<a
-							className={style.itemValue}
+							className={`${style.itemValue} ${style.emailField}`}
 							href={`mailto:${selectedUser[UserKey.Email]}`}
 						>
 							{selectedUser[UserKey.Email]}
@@ -172,18 +172,15 @@ export const ViewUserAccountPage = () => {
 							isUserCloseRequested={isUserCloseRequested}
 							setUserToDefault={setUserToDefault}
 							toggleEditUserPage={toggleEditUserPage}
-
 						/>
 					)}
 				</Dialog>
-
 
 				<AssetModalWithoutPin
 					open={isAssetsOpened}
 					toggleAssetsModal={toggleAssetsModal}
 					organization={usersOrganization}
 					user={selectedUser}
-
 				/>
 			</section>
 		);

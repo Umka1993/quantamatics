@@ -72,7 +72,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	const [options, setOptions] = useState<AssetInOrganization[]>([]);
 	const [linkAsset, { isLoading: isAssetLinking }] =
 		useLinkAssetToUserMutation();
-	const [unlinkAsset, { isLoading: isAssetUnLinking }] =
+	const [unlinkAsset, { isLoading: isAssetUnLinking  }] =
 		useUnlinkAssetToUserMutation();
 	const { data: assets } = useGetAllAssetsQuery(orgId as string);
 
@@ -114,20 +114,21 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 
 	const isUserOrganization = user?.organizationId === organization?.id;
 
-	const setInitialOrg = useCallback(() => {
-		if (organization) {
-			// setSelected(organization.organizationAssets);
-		}
-	}, [organization]);
+	// const setInitialOrg = useCallback(() => {
+	// 	if (organization) {
+	// 		// setSelected(organization.organizationAssets);
+	// 	}
+	// }, [organization]);
 
-	useEffect(() => {
-		serverSelectedAssets && setInitialOrg();
-	}, [serverSelectedAssets]);
+	// useEffect(() => {
+	// 	serverSelectedAssets && setInitialOrg();
+	// }, [serverSelectedAssets]);
 
-	const assetsReset = useCallback(
-		() => organization && setSelected(organization.organizationAssets),
-		[organization]
-	);
+	// const assetsReset = useCallback(() => {
+	// 	return(
+	// 		organization && setSelected(organization.organizationAssets)
+	// 	);
+	// }, [organization]);
 
 	function updateAssets() {
 		// ? Link new assets to user
@@ -199,7 +200,8 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 
 	function closeModal() {
 		hasError && setError(false);
-		hasChanges && assetsReset();
+		// hasChanges && assetsReset();
+		setAssetChanged(false)
 		setAssignedAssets(
 			new Set(serverSelectedAssets && serverSelectedAssets.map(({ id }) => id))
 		);
@@ -210,6 +212,12 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 		evt.preventDefault();
 		closeModal();
 	}
+
+	useEffect( ()=>{
+		if(isAssetUnLinking || isAssetLinking){
+			setTimeout( ()=>toggleAssetsModal(),500)
+		}
+	},[isAssetUnLinking || isAssetLinking])
 
 	useEffect(() => {
 		if (hasError && errorRef.current) {
@@ -304,9 +312,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 		updateAssets();
 	}
 
-	return isAssetLinking || isAssetUnLinking ? (
-		<Loader />
-	) : (
+	return (
 		<Dialog
 			id="asset-modal"
 			variant="right-side"
@@ -323,14 +329,19 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 				onSubmit={submitHandler}
 			>
 				{open && (
+
 					<SaveResetHeader
-						headline="Assets"
-						disableReset={isUpdating}
-						disableSave={!isAssetChanged}
-						isSavedMessageActive={isUpdating}
-						headlineID="asset-modal-title"
+						title={`Assets`}
+						headline={
+							<>
+								Assets <span className={style.title}></span>{" "}
+							</>
+						}
+						disableReset={isAssetUnLinking || isAssetLinking}
+						disableSave={!isAssetChanged || isAssetUnLinking || isAssetLinking}
+						isSavedMessageActive={isAssetUnLinking || isAssetLinking}
+						headlineID="asset-modal"
 						className={style.header}
-						closeModal={closeModal}
 					/>
 				)}
 				{hasError && (

@@ -34,10 +34,11 @@ const AssetRowWithoutPin: FunctionComponent<MultiselectAssetOptionProps> = ({
 	return (
 		<tr
 			className={classNames(style.row, style.asset, {
-				[style["asset--selected"]]: selected || isSetByDefault,
+				[style["asset--selected"]]: selected,
+				[style['asset--defaultAsset'] ]	: isSetByDefault,
 			})}
 		>
-			<td>{option.asset.name}</td>
+			<td className={`${isSetByDefault ? 'defaultAsset': ''} `}>{option.asset.name}</td>
 
 			<td className={style.action}
 				aria-label={'Is set as default'}>
