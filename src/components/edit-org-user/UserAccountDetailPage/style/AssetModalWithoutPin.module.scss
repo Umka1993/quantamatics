@@ -27,6 +27,7 @@
 	margin-top: 12px;
 	flex-grow: 1;
 
+
 	tbody {
 		display: block;
 		overflow: overlay;
@@ -59,7 +60,6 @@
 .action {
 	display: grid;
 	place-content: center;
-	font-style: 16px;
 
 	:global .pin-button::after {
 		left: auto;

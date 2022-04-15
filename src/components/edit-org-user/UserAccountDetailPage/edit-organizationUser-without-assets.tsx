@@ -280,7 +280,7 @@ export default function EditOrganizationUserWithoutAssets({
 				title={`Edit User Account`}
 				headline={
 					<>
-												Edit User Account <span className={style.title}></span>{" "}
+						Edit User Account <span className={style.title}></span>{" "}
 					</>
 				}
 				disableReset={isLoading}

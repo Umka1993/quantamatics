@@ -31,6 +31,7 @@ const AssetRowWithoutPin: FunctionComponent<MultiselectAssetOptionProps> = ({
 				setSelected
 	);
 
+
 	return (
 		<tr
 			className={classNames(style.row, style.asset, {

@@ -106,7 +106,6 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 			open={open}
 			onRequestClose={resetHandler}
 			closeOnOutsideClick
-			// headline="My Account"
 			id={SideBarModalMode.Account}
 			wrapperClass={style.root}
 			role="dialog"

@@ -334,7 +334,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 						title='Assets'
 						headline={
 							<>
-								Assets <span className={style.title}></span>{" "}
+								  Assets <span className={style.title}></span>{" "}
 							</>
 						}
 						disableReset={isAssetUnLinking || isAssetLinking}

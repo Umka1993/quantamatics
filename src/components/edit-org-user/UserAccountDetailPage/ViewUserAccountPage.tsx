@@ -69,6 +69,8 @@ export const ViewUserAccountPage = () => {
 	}, [usersOrganization, serverSelectedAssets]);
 
 
+
+
 	const {
 		value: isUserCloseRequested,
 		setTrue: requestUserClose,
