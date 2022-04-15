@@ -1,4 +1,4 @@
-@use '../../sass/variables' as *;
+@use "../../sass/variables" as *;
 
 @keyframes fadeFromBottom {
 	from {
@@ -30,11 +30,16 @@
 	}
 }
 
-.form {
-	opacity: 0;
-	animation: fadeFromBottom 1.4s 0.4s forwards;
-}
+@media (prefers-reduced-motion: no-preference) {
+	.side {
+		animation: fromLeft 1.4s ease-in-out;
+	}
 
+	.form {
+		opacity: 0;
+		animation: fadeFromBottom 1.4s 0.4s forwards;
+	}
+}
 
 @media (min-width: 800px) {
 	.root {
@@ -43,6 +48,5 @@
 
 	.side {
 		order: -1;
-		animation: fromLeft 1.4s ease-in-out;
 	}
 }
