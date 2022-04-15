@@ -13,6 +13,9 @@ export default function LoginAnimatedPicture({
 }: HTMLProps<HTMLElement>) {
 	const rootRef = useRef<HTMLElement>(null);
 
+	/**
+	 * Accessibility: Turn off animation animation if user has system setting to reduce animation
+	 */
 	const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 	const isAnimationDisable = mediaQuery.matches;
 
