@@ -1,24 +1,31 @@
-import { useEffect, useState } from "react";
+import { RefObject, useEffect, useState } from "react";
 import throttle from "../services/throttle";
 
-export default function usePercentFromCenter(): number[]  {
+export default function usePercentFromCenter(
+	wrapper: RefObject<HTMLElement>, timeToThrottle = 1000
+): number[] {
 	const [ratioX, setRatioX] = useState(0);
 	const [ratioY, setRatioY] = useState(0);
 
 	useEffect(() => {
-
 		const pointerHandler = throttle(({ clientX, clientY }: MouseEvent) => {
-			const verticalDistanceFromCenter = (window.innerHeight / 2 - clientY) / window.innerHeight;
-			const horizontalDistanceFromCenter = (window.innerWidth / 2 - clientX) / window.innerWidth;
+			const [height, width] = wrapper.current
+				? [wrapper.current.clientWidth, wrapper.current.clientHeight]
+				: [window.innerWidth, window.innerHeight];
+
+			const verticalDistanceFromCenter = (height / 2 - clientY) / height;
+			const horizontalDistanceFromCenter = (width / 2 - clientX) / width;
 
 			setRatioX(horizontalDistanceFromCenter);
 			setRatioY(verticalDistanceFromCenter);
-		}, 1000);
+		}, timeToThrottle);
 
-		document.addEventListener("pointermove", pointerHandler);
+		const target = wrapper.current || document
 
-		return () => document.removeEventListener("pointermove", pointerHandler);
-	}, []);
+		target.addEventListener("pointermove", pointerHandler);
 
-	return [ratioX, ratioY]
+		return () => target.removeEventListener("pointermove", pointerHandler);
+	}, [wrapper.current]);
+
+	return [ratioX, ratioY];
 }

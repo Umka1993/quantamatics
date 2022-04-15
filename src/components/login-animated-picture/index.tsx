@@ -5,14 +5,17 @@ import Screenshot from "./screen/Screenshot";
 import usePercentFromCenter from "../../hooks/usePercentFromCenter";
 import clamp from "../../services/clamp";
 import classNames from "classnames";
-import { CSSProperties, HTMLProps } from "react";
+import { CSSProperties, HTMLProps, useRef } from "react";
 import Button from "../button";
 
 export default function LoginAnimatedPicture({
 	className,
-}: HTMLProps<HTMLDivElement>) {
+}: HTMLProps<HTMLElement>) {
+
+	const rootRef = useRef<HTMLElement>(null)
+
 	// const [ratioX, ratioY] = [0, 0]; //Debug
-	const [ratioX, ratioY] = usePercentFromCenter()
+	const [ratioX, ratioY] = usePercentFromCenter(rootRef)
 
 	const sum = ratioY + ratioX;
 
@@ -20,6 +23,7 @@ export default function LoginAnimatedPicture({
 		<figure
 			className={classNames(className, style.root)}
 			style={{ "--ratio-x": ratioX, "--ratio-y": ratioY } as CSSProperties}
+			ref={rootRef}
 		>
 			<div role="img" className={style.wrap} aria-label="Mock Example">
 				<Screenshot
