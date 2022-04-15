@@ -331,7 +331,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 				{open && (
 
 					<SaveResetHeader
-						title={`Assets`}
+						title='Assets'
 						headline={
 							<>
 								Assets <span className={style.title}></span>{" "}
