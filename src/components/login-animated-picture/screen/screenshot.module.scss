@@ -12,8 +12,6 @@
 	width: math.div(516, 712) * 100%;
 	height: math.div(180, 401) * 100%;
 
-	// background-color: rgba(darkblue, 10%);
-
 	rect {
 		transition-property: height, y;
 		transition-duration: 1s;
@@ -21,6 +19,7 @@
 }
 
 .image {
-	height: 40vmin;
-	width: auto;;
+	height: auto;
+	width: math.div(712, 1440) * 100vw;
+	max-width: 100%;
 }

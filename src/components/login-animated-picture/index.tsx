@@ -14,8 +14,8 @@ export default function LoginAnimatedPicture({
 
 	const rootRef = useRef<HTMLElement>(null)
 
-	// const [ratioX, ratioY] = [0, 0]; //Debug
-	const [ratioX, ratioY] = usePercentFromCenter(rootRef)
+	// Uncomment for debugging
+	const [ratioX, ratioY] = /* [0, 0] || */ usePercentFromCenter(rootRef)
 
 	const sum = ratioY + ratioX;
 
@@ -31,7 +31,6 @@ export default function LoginAnimatedPicture({
 					className={style.screen}
 					coefficient={sum}
 				/>
-
 				<Graph
 					className={style.graph}
 					width={392}
