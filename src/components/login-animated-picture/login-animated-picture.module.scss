@@ -63,7 +63,7 @@
 	place-items: center;
 
 	/* For debugging */
-/* 	background-color: rgba(tomato, 50%);
+	/* background-color: rgba(tomato, 50%);
 	&::before,
 	&::after {
 		position: absolute;
@@ -91,20 +91,20 @@
 .result {
 	transition: transform 1s ease-in-out;
 	position: absolute;
-	bottom: 35%;
-	left: 35%;
-	font-size: 1.8vmin;
-	transform: scale(0.306) translate3d(calc(var(--ratio-y, 0) * 5vmin), calc(var(--ratio-y, 0) * 5vmin), 80vmin)
+	inset: auto;
+	font-size: 1.1vw;
+	transform: scale(0.306) translate3d(calc(var(--ratio-x, 0) * 5vmin - 5%), calc(var(--ratio-y, 0) * 5vmin + 154%), 80vmin)
 		rotateX(calc(var(--ratio-y, 0) * -10deg)) rotateY(calc(var(--ratio-x, 0) * -10deg));
 }
 
 .graph {
 	transition: transform 1s ease-in-out;
 	position: absolute;
-	top: 9%;
-	left: 40%;
-
-	transform: scale(0.6) translate3d(calc(var(--ratio-y, 0) * -8vmin), calc(var(--ratio-y, 0) * -8vmin), 40vmin)
+	inset: auto;
+	width: 25vw;
+	height: auto;
+	transform: scale(0.6)
+		translate3d(calc(var(--ratio-y, 0) * -8vmin + 60%), calc(var(--ratio-y, 0) * -8vmin - 68%), 40vmin)
 		rotateX(calc(var(--ratio-y, 0) * -24deg)) rotateY(calc(var(--ratio-x, 0) * -24deg));
 }
 

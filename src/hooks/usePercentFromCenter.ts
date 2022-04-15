@@ -13,10 +13,7 @@ export default function usePercentFromCenter(
 			const processMotion = throttle(
 				({ alpha, beta, gamma }: DeviceOrientationEvent) => {
 					if (alpha && beta && gamma) {
-
-
-
-						setRatioX((180 - alpha ) / 280);
+						setRatioX((180 - alpha) / 280);
 						setRatioY(beta / 100);
 					}
 				},
