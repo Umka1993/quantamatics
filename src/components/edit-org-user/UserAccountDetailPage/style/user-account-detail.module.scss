@@ -7,7 +7,7 @@
 
 .title {
 	margin: auto 0;
-	color:$headlines;
+	color: $headlines;
 	font-weight: 400;
 	font-size: 24px;
 	line-height: 33px;
@@ -30,14 +30,16 @@
 	align-items: center;
 	width: 100%;
 	grid-column-start: 1;
-		grid-column-end: 4;
-		grid-row-start: 1;
-		grid-row-end: 1;
+	grid-column-end: 4;
+	grid-row-start: 1;
+	grid-row-end: 1;
 	margin-bottom: 35px;
-	&__title{
+
+	&__title {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
+
 		h1 {
 			//margin-top: 16px;
 		}
@@ -53,6 +55,7 @@
 		}
 	}
 }
+
 .columns {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -89,38 +92,40 @@
 	color: #003C71;
 	text-decoration: none;
 
-.emailField{
-	&:hover{
-		color: $accent;
+	.emailField {
+		&:hover {
+			color: $accent;
+		}
 	}
-}
 
-.item:last-child {
-	grid-column-start: 1;
-	grid-column-end: 4;
-	grid-row-start: 3;
-	grid-row-end: 3;
+	.item:last-child {
+		grid-column-start: 1;
+		grid-column-end: 4;
+		grid-row-start: 3;
+		grid-row-end: 3;
 
-}
+	}
 
-.form {
-	min-height: 100vh;
-	padding: 40px;
-	display: flex;
-	flex-direction: column;
-}
+	.form {
+		min-height: 100vh;
+		padding: 40px;
+		display: flex;
+		flex-direction: column;
+	}
 
-.input {
-	margin-bottom: 16px;
+	.input {
+		margin-bottom: 16px;
 
-}
-.footer {
-	margin-top: auto;
-	display: grid;
-	grid-template-columns: auto 100px;
-	align-items: center;
-	justify-content: end;
-	gap: 32px;
+	}
+
+	.footer {
+		margin-top: auto;
+		display: grid;
+		grid-template-columns: auto 100px;
+		align-items: center;
+		justify-content: end;
+		gap: 32px;
+	}
 }
 
 
