@@ -94,7 +94,7 @@
 	inset: auto;
 	font-size: 1.1vw;
 	transform: scale(0.306) translate3d(calc(var(--ratio-x, 0) * 5vmin - 5%), calc(var(--ratio-y, 0) * 5vmin + 154%), 80vmin)
-		rotateX(calc(var(--ratio-y, 0) * -10deg)) rotateY(calc(var(--ratio-x, 0) * -10deg));
+		rotateX(calc(var(--ratio-y, 0) * -8deg)) rotateY(calc(var(--ratio-x, 0) * -8deg));
 }
 
 .graph {

@@ -33,7 +33,7 @@ export default function LoginAnimatedPicture({
 		>
 			<div role="img" className={style.wrap} aria-label="Mock Example">
 				<Screenshot aria-hidden className={style.screen} coefficient={sum} />
-				<Graph className={style.graph} width={392} height={231} aria-hidden />
+				<Graph className={style.graph}  aria-hidden />
 				<MockResult
 					className={style.result}
 					aria-hidden

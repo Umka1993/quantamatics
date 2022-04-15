@@ -1,12 +1,26 @@
+@use "sass:math";
+@use "../../../sass/variables" as *;
+@use "../../../sass/mixins" as *;
+
 .root {
 	background-color: rgba(white, 0.8);
 
-	// border: 1px solid #e2e9f6;
-	// box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.05), 0 0 1px 1px #e2e9f6;
-
-	@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-		background-color: rgba(white, 0.2);
-		backdrop-filter: blur(34px);
-		-webkit-backdrop-filter: blur(34px);
-	}
+	border: 1px solid rgba(#e2e9f6, 0.8);
+	box-shadow: inset 0px 0px 25px rgba(white, 0.05);
+	@include back-blur(20px);
 }
+
+.image {
+	height: auto;
+	width: math.div(392, 1440) * 100vw;
+	max-width: 100%;
+}
+
+.lines {
+	position: absolute;
+	top: math.div(47, 230.17) * 100%;
+	left: math.div(36, 391.71) * 100%;
+	width: math.div(333, 391.71) * 100%;
+	height: math.div(140, 230.17) * 100%;
+}
+
