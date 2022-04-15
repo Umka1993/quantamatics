@@ -98,7 +98,6 @@ export default function DatePickerComponent({
 			}
 		} else {
 			setMask("11/11/1111");
-			// setInputValue(String(moment(selectedDate).format("MM/DD/YYYY")))
 		}
 	}, [selectedDate, isErrorValue]);
 
@@ -124,50 +123,6 @@ export default function DatePickerComponent({
 		setCloseIsSelected(true);
 		setDefaultCalendar(true);
 	};
-
-	// const validateValue = (value: string) => {
-	// 	const arr = value.split("/");
-	// 	const yesterday = moment().subtract(1, "days").endOf("day").toString();
-	// 	const yearToday = moment().year();
-	// 	const monthToday = moment().month()+1
-	// 	const today= moment().date()
-	// 	const invalidValue = "__";
-	// 	const selectedMonth = Number(arr[0]);
-	// 	const selectedDay = Number(arr[1]);
-	// 	const selectedYear =
-	// 		Boolean(Number(arr[2])) || Number(arr[2]) == 0
-	// 			? Number(arr[2])
-	// 			: new Date().getFullYear();
-	//
-	// 	const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
-	//
-	// 	const errorValue = [...arr];
-	//
-
-	// 	const isCorrectedValue =
-	// 		moment(value).isValid() && moment(value).isAfter(yesterday);
-	// 	setIsCorrectedDate(isCorrectedValue);
-	//
-	// 	if (selectedMonth > 12 || selectedMonth<monthToday && selectedYear == yearToday) {
-	// 		errorValue[0] = invalidValue;
-	// 		errorValue[1] = invalidValue;
-	// 		errorValue.splice(1, 2);
-	// 		setIsError(true);
-	// 	}
-	//
-	// 	if (selectedDay > lastDay || selectedDay<today && selectedYear == yearToday) {
-	// 		errorValue[1] = invalidValue;
-	// 		errorValue.splice(2, 1);
-	// 		setIsError(true);
-	// 	}
-	// 	if (selectedYear < yearToday) {
-	// 		errorValue[2] = invalidValue;
-	// 		setIsError(true);
-	// 	}
-	//
-	// 	setInputValue(errorValue.join("/"));
-	// };
-
 	const updateDate = (value: string) => {
 		const manualChange = value && value.split("/").length > 1;
 		const yesterday = moment().subtract(1, "days").endOf("day").toString();

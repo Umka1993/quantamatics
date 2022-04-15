@@ -47,7 +47,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	user,
 	...other
 }) => {
-	// const user = useUser();
+
 	const { id: orgId } = useParams();
 	const [noAssetError, setNoAssetError] = useState(false);
 
@@ -114,21 +114,6 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 
 	const isUserOrganization = user?.organizationId === organization?.id;
 
-	// const setInitialOrg = useCallback(() => {
-	// 	if (organization) {
-	// 		// setSelected(organization.organizationAssets);
-	// 	}
-	// }, [organization]);
-
-	// useEffect(() => {
-	// 	serverSelectedAssets && setInitialOrg();
-	// }, [serverSelectedAssets]);
-
-	// const assetsReset = useCallback(() => {
-	// 	return(
-	// 		organization && setSelected(organization.organizationAssets)
-	// 	);
-	// }, [organization]);
 
 	function updateAssets() {
 		// ? Link new assets to user
@@ -334,7 +319,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 						title='Assets'
 						headline={
 							<>
-								  Assets <span className={style.title}></span>{" "}
+								Assets <span className={style.title}></span>{" "}
 							</>
 						}
 						disableReset={isAssetUnLinking || isAssetLinking}

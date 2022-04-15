@@ -1,7 +1,6 @@
 import { Dispatch, FunctionComponent, HTMLProps, SetStateAction } from "react";
 
 import classNames from "classnames";
-// import PinButton from "../pin-button";
 import style from "./style/AssetModalWithoutPin.module.scss";
 import Checkbox from "../../app-checkbox";
 import { AssetInOrganization } from "../../../types/asset";
