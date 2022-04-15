@@ -91,42 +91,44 @@
 	line-height: 22px;
 	color: #003C71;
 	text-decoration: none;
+}
 
-	.emailField {
-		&:hover {
-			color: $accent;
-		}
-	}
-
-	.item:last-child {
-		grid-column-start: 1;
-		grid-column-end: 4;
-		grid-row-start: 3;
-		grid-row-end: 3;
-
-	}
-
-
-	.form {
-		min-height: 100vh;
-		padding: 40px;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.input {
-		margin-bottom: 16px;
-
-	}
-
-	.footer {
-		margin-top: auto;
-		display: grid;
-		grid-template-columns: auto 100px;
-		align-items: center;
-		justify-content: end;
-		gap: 32px;
+.emailField {
+	&:hover {
+		color: $accent;
 	}
 }
+
+.item:last-child {
+	grid-column-start: 1;
+	grid-column-end: 4;
+	grid-row-start: 3;
+	grid-row-end: 3;
+
+}
+
+
+.form {
+	min-height: 100vh;
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+}
+
+.input {
+	margin-bottom: 16px;
+
+}
+
+.footer {
+	margin-top: auto;
+	display: grid;
+	grid-template-columns: auto 100px;
+	align-items: center;
+	justify-content: end;
+	gap: 32px;
+}
+
+
 
 

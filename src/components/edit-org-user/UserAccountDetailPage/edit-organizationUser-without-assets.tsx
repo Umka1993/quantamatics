@@ -283,11 +283,11 @@ export default function EditOrganizationUserWithoutAssets({
 						Edit User Account <span className={style.title}></span>{" "}
 					</>
 				}
-				disableReset={isLoading}
+				disableReset={isLoading || secondLoading}
 				disableSave={
-					!isUserChanged && !isRoleChanged && !isAssetChanged
+					!isUserChanged && !isRoleChanged && !isAssetChanged || isLoading || secondLoading
 				}
-				isSavedMessageActive={isLoading}
+				isSavedMessageActive={isLoading || secondLoading}
 				headlineID="org-modal-title"
 				className={style.header}
 			/>
