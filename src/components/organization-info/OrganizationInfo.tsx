@@ -55,8 +55,11 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 			</div>
 
 			<dl className={style.info}>
+
 				<dt>CRM Customer ID</dt>
 				<dd>{organization.customerCrmId}</dd>
+
+
 
 				<dt>CRM Customer Link</dt>
 				<dd>
@@ -72,12 +75,16 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 					)}
 				</dd>
 
-				<dt>Assets</dt>
+
+				<dt >Assets</dt>
 				<dd>
 					{organization.organizationAssets
 						.map(({ asset }) => asset.name)
 						.join(", ")}
 				</dd>
+
+
+
 
 				<dt>Comments</dt>
 				<dd>{organization.comments}</dd>
