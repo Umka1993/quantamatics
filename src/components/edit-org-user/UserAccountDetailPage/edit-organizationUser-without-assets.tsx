@@ -1,45 +1,47 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 
-import Headline from "../page-title";
+import Headline from "../../page-title";
 
-import Button, { ResetButton } from "../button";
-import Input, { DatePick, Email, Multiselect } from "../app-input";
+import Button, { ResetButton } from "../../button";
+import Input, { DatePick, Email, Multiselect } from "../../app-input";
 
-import { Error, UserRole } from "../../data/enum";
+import { Error, UserRole } from "../../../data/enum";
 import { useDispatch } from "react-redux";
-import { IUpdateUser, IUser } from "../../types/user";
+import { IUpdateUser, IUser } from "../../../types/user";
 import {
 	useUpdateUserMutation,
 	useUpdateUserRolesMutation,
-} from "../../api/user";
-import IApiError from "../../types/api-error";
-import useUser from "../../hooks/useUser";
-import { login } from "../../store/authorization";
-import Loader from "../loader";
+} from "../../../api/user";
+import IApiError from "../../../types/api-error";
+import useUser from "../../../hooks/useUser";
+import { login } from "../../../store/authorization";
+import Loader from "../../loader";
 
-import style from "./edit-org-user.module.scss";
+import style from ".././edit-org-user.module.scss";
 import {
 	useGetAllAssetsQuery,
 	useGetUserAssetsQuery,
 	useLinkAssetToUserMutation,
 	useUnlinkAssetToUserMutation,
-} from "../../api/asset";
+} from "../../../api/asset";
 import { useParams } from "react-router-dom";
-import RoleSelector from "../role-selector";
-import DatePickerComponent from "../app-input/new-datepick";
+import RoleSelector from "../../role-selector";
+import DatePickerComponent from "../../app-input/new-datepick";
+import SaveResetHeader from "../../save-reset-header/SaveResetHeader";
+
 
 interface Props {
-	onClose: () => void;
 	user: IUser;
 	setUserToDefault: () => void;
 	isUserCloseRequested: boolean;
+	toggleEditUserPage: () => void;
 }
 
-export default function EditOrganizationUser({
-	onClose,
+export default function EditOrganizationUserWithoutAssets({
 	user,
 	setUserToDefault,
 	isUserCloseRequested,
+	toggleEditUserPage,
 }: Props) {
 	const { id: organizationID } = useParams();
 	const [firstName, setName] = useState(user.firstName);
@@ -88,7 +90,6 @@ export default function EditOrganizationUser({
 	const [isAssetChanged, setAssetChanged] = useState(false);
 	const [showError, setShowError] = useState(false);
 
-	console.log("assignedAssets", assignedAssets)
 	function validateHandler() {
 		let userChanged = isUserChanged;
 
@@ -125,16 +126,16 @@ export default function EditOrganizationUser({
 
 		isAssetChanged && updateAssets();
 
-		isAssetChanged && !userChanged && !isRoleChanged && onClose();
+		isAssetChanged && !userChanged && !isRoleChanged && toggleEditUserPage();
 
 		function updateRolesAndClose() {
-			updateRoles([user.id, rolesAsArray]).unwrap().then(onClose);
+			updateRoles([user.id, rolesAsArray]).unwrap().then(toggleEditUserPage);
 		}
 
 		userChanged
 			? update(newUserData)
 				.unwrap()
-				.then(!isRoleChanged ? onClose : updateRolesAndClose)
+				.then(!isRoleChanged ? toggleEditUserPage : updateRolesAndClose)
 			: isRoleChanged && updateRolesAndClose();
 	}
 
@@ -197,15 +198,14 @@ export default function EditOrganizationUser({
 			if (isUserChanged || isRoleChanged || isAssetChanged) {
 				if (showError) {
 					setShowError(false);
-					return onClose();
+					return toggleEditUserPage();
 				} else setShowError(true);
-			} else onClose();
+			} else toggleEditUserPage();
 		}
 	}, [isUserCloseRequested, isUserChanged, isRoleChanged, isAssetChanged]);
 
 	function updateAssets() {
 		// ? Link new assets to user
-
 		assignedAssets.forEach((assetId) => {
 			const alreadySelectedAsset = serverSelectedAssets?.find(
 				(element) => element.id === assetId
@@ -266,21 +266,31 @@ export default function EditOrganizationUser({
 		emailError && formRef.current?.reportValidity();
 	}, [emailError]);
 
-	return isLoading || secondLoading || isAssetLinking || isAssetUnLinking ? (
-		<Loader />
-	) : (
+	return (
 		<form
 			id="edit-account-form"
 			action=""
 			className={style.root}
 			onSubmit={handlerSubmit}
-			onReset={onClose}
+			onReset={toggleEditUserPage}
 			noValidate={validate ? undefined : true}
 			ref={formRef}
 		>
-			<Headline className={style.title} id="org-user-modal-title">
-				Edit User Account
-			</Headline>
+			<SaveResetHeader
+				title={`Edit User Account`}
+				headline={
+					<>
+						Edit User Account <span className={style.title}></span>{" "}
+					</>
+				}
+				disableReset={isLoading || secondLoading}
+				disableSave={
+					!isUserChanged && !isRoleChanged && !isAssetChanged || isLoading || secondLoading
+				}
+				isSavedMessageActive={isLoading || secondLoading}
+				headlineID="org-modal-title"
+				className={style.header}
+			/>
 
 			{showError && (
 				<p className={style.warning}>Changes have not been saved.</p>
@@ -296,14 +306,12 @@ export default function EditOrganizationUser({
 					required
 					variant="squared"
 					className={style.input}
-					// icon={<SpriteIcon icon="pen" width={16} />}
 				/>
 
 				<Input
 					externalSetter={setSurname}
 					value={lastName}
 					name="lastName"
-					// icon={<SpriteIcon icon="pen" width={16} />}
 					label="Last Name"
 					maxLength={100}
 					required
@@ -344,25 +352,6 @@ export default function EditOrganizationUser({
 				className={style.input}
 			/>
 
-			{assets && assetPrepared && (
-				<Multiselect
-					className={style.input}
-					options={assets}
-					selected={assignedAssets}
-					setSelected={setAssignedAssets}
-					label="Account Assets"
-					errorMessage="Select asset permissions to assign to the user account."
-					showError={assetError}
-					type="user"
-					variant="squared"
-					inputList={[
-						...assets.filter(({ assetId }) => assignedAssets.has(assetId)),
-					]
-						.map(({ name }) => name)
-						.join(", ")}
-				/>
-			)}
-
 			<RoleSelector
 				isSuperAdmin={isSuperAdmin}
 				defaultRoles={userRoles}
@@ -370,16 +359,6 @@ export default function EditOrganizationUser({
 				variant="squared"
 				className={style.input}
 			/>
-
-			<footer className={style.footer}>
-				<ResetButton type="reset">Cancel</ResetButton>
-				<Button
-					type="submit"
-					disabled={!isUserChanged && !isRoleChanged && !isAssetChanged}
-				>
-					Save
-				</Button>
-			</footer>
 		</form>
 	);
 }

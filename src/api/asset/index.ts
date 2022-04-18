@@ -73,6 +73,7 @@ const assetApi = baseApi.injectEndpoints({
 
 		getAllUserAssets: build.query<AssetServerResponse[], void>({
 			query: () => AssetEndpoint.GetAllUser,
+			providesTags:[{ type: "Assets", id: "User" }]
 		}),
 
 		getAssetByID: build.mutation<AssetServerResponse, number>({

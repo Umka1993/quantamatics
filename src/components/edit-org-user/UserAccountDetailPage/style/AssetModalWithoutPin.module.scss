@@ -1,4 +1,4 @@
-@use "../../sass/variables.scss" as *;
+@use "../../../../sass/variables.scss" as *;
 
 .root {
 	padding: 40px 0 0;
@@ -27,6 +27,7 @@
 	margin-top: 12px;
 	flex-grow: 1;
 
+
 	tbody {
 		display: block;
 		overflow: overlay;
@@ -40,6 +41,10 @@
 	border-bottom: 1px solid transparent;
 	transition: border-color 0.2s;
 
+	.row {
+		max-width: 100%;
+	}
+
 	&--active {
 		border-color: $inactive;
 	}
@@ -48,14 +53,13 @@
 .row {
 	padding: 8px 40px;
 	display: grid;
-	grid-template-columns: 1fr 45px 45px;
+	grid-template-columns: 1fr 45px;
 	gap: 18px;
 }
 
 .action {
 	display: grid;
 	place-content: center;
-	font-style: 16px;
 
 	:global .pin-button::after {
 		left: auto;
@@ -79,6 +83,7 @@
 	font-size: 14px;
 	line-height: 1.36;
 
+
 	&:nth-child(odd) {
 		background-color: rgba($inactive, 0.1);
 	}
@@ -87,10 +92,35 @@
 		color: $accent;
 	}
 
+	&--defaultAsset {
+		color: #003C71;
+
+
+		&:first-child {
+			opacity: 1;
+			bottom: -60px;
+			.action{
+				label {
+					span{
+						bottom: -30px;
+					}
+					svg:hover ~ span{
+						bottom: -30px;
+					}
+				}
+			}
+
+
+		}
+	}
+
+
 	&:first-child :global {
 		.pin-button::after {
 			top: calc(100% + 5px);
 			bottom: auto;
 		}
 	}
+
 }
+

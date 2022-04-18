@@ -25,7 +25,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = ({
 				{ "check-block__check--highlight": highlightOnChecked },
 				className
 			)}
-			role="checkbox"
+			role='checkbox'
 			aria-checked={checked}
 			tabIndex={0}
 			aria-disabled={disabled}

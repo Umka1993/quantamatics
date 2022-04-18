@@ -1,5 +1,6 @@
 import { UserKey, UserRole } from "../data/enum";
 import { OrganizationID } from "./organization/types";
+import { AssetInOrganization } from "./asset";
 
 export interface IUser {
 	[UserKey.Id]: number,
@@ -16,6 +17,7 @@ export interface IUser {
 	[UserKey.Avatar]: string,
 	[UserKey.UserRoles]: Array<UserRole>,
 	[UserKey.OrganizationId]: OrganizationID,
+[UserKey.OrganizationAssets]: AssetInOrganization[],
 	allowResearch: boolean,
 	allowExcelLibrary: boolean,
 	allowCoherence: boolean,

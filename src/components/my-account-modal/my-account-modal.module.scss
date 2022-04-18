@@ -19,9 +19,18 @@
 	position: relative;
 }
 
-.footer {
-	margin-top: auto;
+.headlineWrap {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	h1{
+		margin-block-start: 0;
+		margin-block-end: 0;
+	}
+}
 
+.buttons {
+	//margin-top: auto;
 	display: grid;
 	grid-template-columns: auto 100px;
 	align-items: center;
