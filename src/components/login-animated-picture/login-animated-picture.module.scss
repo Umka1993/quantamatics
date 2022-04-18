@@ -1,7 +1,7 @@
 @use "sass:math";
 
 .root {
-	$increase: 2%;
+	$increase: 1%;
 	background-color: #001c53;
 	margin: 0;
 	padding: min(100px, 9vmin) 0;
@@ -34,7 +34,7 @@
 		background-position: center;
 		background-repeat: no-repeat;
 
-		transition: transform 2s ease-in-out;
+		transition: transform 1s 0.2s ease-in;
 
 		transform: translate(calc(#{$increase} * var(--ratio-y, 0)), calc(#{$increase} * var(--ratio-x, 0)));
 
@@ -59,8 +59,8 @@
 	width: 100%;
 	height: 100%;
 	display: grid;
-	place-content: center;
-	place-items: center;
+	place-content: center start;
+	place-items: center start;
 
 	/* For debugging */
 	/* background-color: rgba(tomato, 50%);
@@ -84,8 +84,9 @@
 
 .screen {
 	transition: transform 1s ease-in-out;
-	max-width: 89%;
-	transform: translateZ(10vmin) rotateX(calc(var(--ratio-y, 0) * -20deg)) rotateY(calc(var(--ratio-x, 0) * -20deg));
+	max-width: 100%;
+	position: relative;
+	left: -3.2vw;
 }
 
 .result {
@@ -93,8 +94,9 @@
 	position: absolute;
 	inset: auto;
 	font-size: 1.1vw;
-	transform: scale(0.306) translate3d(calc(var(--ratio-x, 0) * 5vmin - 5%), calc(var(--ratio-y, 0) * 5vmin + 154%), 80vmin)
-		rotateX(calc(var(--ratio-y, 0) * -8deg)) rotateY(calc(var(--ratio-x, 0) * -8deg));
+	transform: scale(0.306)
+		translate3d(calc(var(--ratio-x, 0) * 2vmin + 260%), calc(var(--ratio-y, 0) * 1vmin + 160%), 80vmin)
+		rotateX(calc(var(--ratio-y, 0) * -2deg)) rotateY(calc(var(--ratio-x, 0) * -1deg));
 }
 
 .graph {
@@ -103,9 +105,9 @@
 	inset: auto;
 	width: 25vw;
 	height: auto;
-	transform: scale(0.6)
-		translate3d(calc(var(--ratio-y, 0) * -8vmin + 60%), calc(var(--ratio-y, 0) * -8vmin - 68%), 40vmin)
-		rotateX(calc(var(--ratio-y, 0) * -24deg)) rotateY(calc(var(--ratio-x, 0) * -24deg));
+	transform: scale(0.65)
+		translate3d(calc(var(--ratio-y, 0) * -4vmin + 136%), calc(var(--ratio-y, 0) * -4vmin - 70%), 40vmin)
+		rotateX(calc(var(--ratio-y, 0) * -5deg)) rotateY(calc(var(--ratio-x, 0) * -5deg));
 }
 
 .caption {

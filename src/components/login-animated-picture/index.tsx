@@ -11,17 +11,16 @@ import Button from "../button";
 export default function LoginAnimatedPicture({
 	className,
 }: HTMLProps<HTMLElement>) {
-	const rootRef = useRef<HTMLElement>(null);
 
 	/**
 	 * Accessibility: Turn off animation animation if user has system setting to reduce animation
 	 */
 	const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-	const isAnimationDisable = mediaQuery.matches;
+	const isAnimationDisable = mediaQuery.matches; // || true;
 
 	const [ratioX, ratioY] = isAnimationDisable
 		? [0, 0]
-		: usePercentFromCenter(rootRef);
+		: usePercentFromCenter();
 
 	const sum = ratioY + ratioX;
 
@@ -29,11 +28,10 @@ export default function LoginAnimatedPicture({
 		<figure
 			className={classNames(className, style.root)}
 			style={{ "--ratio-x": ratioX, "--ratio-y": ratioY } as CSSProperties}
-			ref={rootRef}
 		>
 			<div role="img" className={style.wrap} aria-label="Mock Example">
 				<Screenshot aria-hidden className={style.screen} coefficient={sum} />
-				<Graph className={style.graph}  aria-hidden />
+				<Graph className={style.graph} aria-hidden />
 				<MockResult
 					className={style.result}
 					aria-hidden

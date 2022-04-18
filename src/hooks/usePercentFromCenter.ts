@@ -2,7 +2,7 @@ import { RefObject, useEffect, useState } from "react";
 import throttle from "../services/throttle";
 
 export default function usePercentFromCenter(
-	wrapper: RefObject<HTMLElement>,
+	wrapper?: RefObject<HTMLElement>,
 	timeToThrottle = 1000
 ): number[] {
 	const [ratioX, setRatioX] = useState(0);
@@ -25,8 +25,9 @@ export default function usePercentFromCenter(
 				window.removeEventListener("deviceorientation", processMotion);
 		} else {
 			const pointerHandler = throttle(({ clientX, clientY }: MouseEvent) => {
-				const [height, width] = wrapper.current
-					? [wrapper.current.clientWidth, wrapper.current.clientHeight]
+
+				const [height, width] = wrapper?.current
+					? [wrapper?.current.clientWidth, wrapper?.current.clientHeight]
 					: [window.innerWidth, window.innerHeight];
 
 				const verticalDistanceFromCenter = (height / 2 - clientY) / height;
@@ -34,15 +35,17 @@ export default function usePercentFromCenter(
 
 				setRatioX(horizontalDistanceFromCenter);
 				setRatioY(verticalDistanceFromCenter);
+
+
 			}, timeToThrottle);
 
-			const target = wrapper.current || document;
+			const target = wrapper?.current || document;
 
 			target.addEventListener("pointermove", pointerHandler);
 
 			return () => target.removeEventListener("pointermove", pointerHandler);
 		}
-	}, [wrapper.current]);
+	}, [wrapper]);
 
 	return [ratioX, ratioY];
 }
