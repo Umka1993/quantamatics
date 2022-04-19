@@ -52,7 +52,7 @@ export const ViewUserAccountPage = () => {
 
 
 	const expirationDate = moment(
-		selectedUser && selectedUser[UserKey.SubscriptionEndDate]
+		selectedUser && new Date(selectedUser[UserKey.SubscriptionEndDate])
 	).format("MM/DD/yyyy");
 
 	useEffect(() => {
