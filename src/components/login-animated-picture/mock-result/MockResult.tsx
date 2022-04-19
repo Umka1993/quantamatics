@@ -5,34 +5,24 @@ import AnimatedNumber from "./AnimatedNumber";
 
 type Props = HTMLProps<HTMLDListElement> & {
 	coefficient?: number;
+	titles: string[];
+	values: number[];
 };
 
 export default function MockResult({
 	className,
 	coefficient = 1,
+	titles,
+	values,
 	...other
 }: Props) {
-	const MOCK_DATA = [
-		{
-			key: "Spend YoY",
-			value: 22.57,
-		},
-		{
-			key: "Transactions YoY",
-			value: 27.43,
-		},
-		{
-			key: "Avg. Ticket Size YoY",
-			value: -3.9,
-		},
-	];
 
 	return (
 		<dl className={classNames(s.root, className)} {...other}>
-			{MOCK_DATA.map(({ key, value }) => (
-				<div key={key} className={s.group}>
-					<dt className={s.title}>{key}</dt>
-					<AnimatedNumber className={s.value} value={value * coefficient} />
+			{titles.map((title, index) => (
+				<div key={title} className={s.group}>
+					<dt className={s.title}>{title} YoY</dt>
+					<AnimatedNumber className={s.value} value={values[index] * coefficient} coefficient={coefficient} />
 				</div>
 			))}
 		</dl>
