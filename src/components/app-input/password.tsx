@@ -20,6 +20,7 @@ interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
 	externalSetter?: (value: string) => void;
 	hideError?: boolean;
 	variant?: "squared";
+	setAnyError?: (arg: boolean) => void;
 }
 
 const Password: FunctionComponent<IPassword> = ({
@@ -36,6 +37,7 @@ const Password: FunctionComponent<IPassword> = ({
 	hideError,
 	error,
 	variant,
+	setAnyError,
 	...other
 }) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -83,6 +85,14 @@ const Password: FunctionComponent<IPassword> = ({
 		setErrorMessage(evt.currentTarget.validationMessage);
 		onInvalid && onInvalid(evt);
 	};
+
+	useEffect(() => {
+		if (errorMessage) {
+			setAnyError && setAnyError(true);
+		} else {
+			setAnyError && setAnyError(false);
+		}
+	}, [errorMessage]);
 
 	return (
 		<div

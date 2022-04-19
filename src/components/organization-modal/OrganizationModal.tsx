@@ -194,6 +194,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 						error={duplicateOrgError}
 						disabled={isUpdating}
 						variant="squared"
+						setAnyError={setAnyError}
 					/>
 					<Input
 						externalSetter={setCustomerID}
@@ -204,6 +205,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 						error={duplicateIdError}
 						disabled={isUpdating}
 						variant="squared"
+						setAnyError={setAnyError}
 					/>
 
 					<InputURL
