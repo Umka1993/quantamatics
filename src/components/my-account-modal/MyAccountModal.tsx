@@ -45,6 +45,7 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 		undefined
 	);
 	const [compare, setCompare] = useState<string | undefined>(undefined);
+	const [isSuccessUpdating, setSuccessUpdating] = useState(false)
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -90,8 +91,14 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 	}, [wrongCurrent, formRef.current]);
 
 	useEffect(() => {
-		isSuccess && resetHandler();
+
+		if(isSuccess){
+			setSuccessUpdating(true)
+			setTimeout(()=>setSuccessUpdating(false),1000)
+			setTimeout(()=>isSuccess && resetHandler(),1000)
+		}
 	}, [isSuccess]);
+
 
 	function resetHandler() {
 		setCurrentPassword("");
@@ -122,12 +129,12 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 					<Button
 						type="submit"
 						disabled={
-							!Boolean(currentPassword && newPassword && confirmPassword)
+							!Boolean(currentPassword && newPassword && confirmPassword )|| isPasswordUpdating
 						}
 						form="edit-pass-form"
-						variant={isPasswordUpdating ? "valid" : undefined}
+						variant={isSuccessUpdating  ? "valid" : undefined}
 					>
-						{isPasswordUpdating ? (
+						{isSuccessUpdating ? (
 							<>
 								<CheckSVG
 									aria-hidden="true"
