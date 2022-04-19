@@ -65,20 +65,38 @@ const Password: FunctionComponent<IPassword> = ({
 		onChange && onChange(evt);
 	};
 
+	// useEffect(() => {
+	// 	if (inputRef.current) {
+	// 		if (error) {
+	// 			inputRef.current.setCustomValidity(error);
+	// 			setErrorMessage(error);
+	// 		} else {
+	// 			inputRef.current.setCustomValidity("");
+	// 			if (isNewPassword) {
+	// 				const message = getValidationMessage(inputRef.current.validity);
+	// 				inputRef.current.setCustomValidity(message);
+	// 			}
+	// 		}
+	// 		// errorMessage && setErrorMessage(undefined);
+	// 	}
+	// }, [value, inputRef.current?.validity, error]);
+
+
 	useEffect(() => {
 		if (inputRef.current) {
-			if (error) {
+			const message = getValidationMessage(inputRef.current.validity);
+
+			if (error && value) {
 				inputRef.current.setCustomValidity(error);
-			} else {
+				message ? setErrorMessage(message) : setErrorMessage(error);
+
+			}else if(!error && !message){
 				inputRef.current.setCustomValidity("");
-				if (isNewPassword) {
-					const message = getValidationMessage(inputRef.current.validity);
-					inputRef.current.setCustomValidity(message);
-				}
+				setErrorMessage(undefined)
 			}
-			errorMessage && setErrorMessage(undefined);
 		}
-	}, [value, inputRef.current?.validity, error]);
+	}, [error,inputRef.current?.validity,value]);
+
 
 	const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
 		evt.preventDefault();

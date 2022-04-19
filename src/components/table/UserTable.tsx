@@ -99,7 +99,7 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 									currentTarget.blur();
 								}}
 							>
-								<SpriteIcon icon='pen' label="Edit user" width={16} id={`edit-${user.id}`} />
+								<SpriteIcon icon='gears' label="Edit user" width={16} id={`edit-${user.id}`} />
 							</button>
 						</td>
 					</tr>

@@ -301,6 +301,8 @@ export default function EditOrganizationUserWithoutAssets({
 					required
 					variant="squared"
 					className={style.input}
+					setAnyError={setAnyError}
+
 				/>
 
 				<Input
@@ -312,6 +314,7 @@ export default function EditOrganizationUserWithoutAssets({
 					required
 					variant="squared"
 					className={style.input}
+					setAnyError={setAnyError}
 				/>
 			</div>
 

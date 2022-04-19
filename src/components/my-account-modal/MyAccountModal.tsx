@@ -106,11 +106,21 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 		setCurrentPassword("");
 		setNewPassword("");
 		setConfirmPassword("");
+		setCompare("");
+		setAnyError(false);
 		closePassword();
 		onRequestClose();
 	}
 
-
+	useEffect( ()=>{
+		if(!showEditForm){
+			setCurrentPassword("");
+			setNewPassword("");
+			setConfirmPassword("");
+			setCompare("");
+			setAnyError(false);
+		}
+	},[showEditForm])
 
 	return (
 		<Dialog
@@ -133,13 +143,14 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 					<Button
 						type="submit"
 						disabled={
-							!Boolean(currentPassword && newPassword && confirmPassword )|| isPasswordUpdating ||
-								Boolean(wrongCurrent) ||
-								Boolean(compare) ||
-								anyError
+							!Boolean(currentPassword && newPassword && confirmPassword) ||
+							isPasswordUpdating ||
+							Boolean(wrongCurrent) ||
+							Boolean(compare) ||
+							anyError
 						}
 						form="edit-pass-form"
-						variant={isSuccessUpdating  ? "valid" : undefined}
+						variant={isSuccessUpdating ? "valid" : undefined}
 					>
 						{isSuccessUpdating ? (
 							<>
@@ -220,7 +231,6 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 						error={compare}
 						variant="squared"
 						setAnyError={setAnyError}
-
 					/>
 				</form>
 			)}
