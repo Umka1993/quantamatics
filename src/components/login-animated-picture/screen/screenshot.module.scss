@@ -3,14 +3,18 @@
 .root {
 	position: relative;
 	display: inline-block;
+
+	::global .select {
+		position: absolute;
+	}
 }
 
 .graph {
 	position: absolute;
-	top: 34.6%;
+	top: 34.8%;
 	right: 4.5%;
-	width: math.div(516, 712) * 100%;
-	height: math.div(180, 401) * 100%;
+	width: 72%;
+	height: 45%;
 
 	rect {
 		transition-property: height, y;
@@ -21,4 +25,13 @@
 .image {
 	height: auto;
 	width: 100%;
+}
+
+.select {
+	position: absolute;
+	top: 54.8%;
+	right: 4.5%;
+
+	width: math.div(112, 712) * 100%;
+	height: math.div(69, 401) * 100%;
 }

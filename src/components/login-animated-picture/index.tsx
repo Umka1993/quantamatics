@@ -15,7 +15,7 @@ export default function LoginAnimatedPicture({
 	 * Accessibility: Turn off animation animation if user has system setting to reduce animation
 	 */
 	const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-	const isAnimationDisable = mediaQuery.matches // || true;
+	const isAnimationDisable = mediaQuery.matches;// || true;
 
 	const [ratioX, ratioY] = isAnimationDisable ? [0, 0] : usePercentFromCenter();
 

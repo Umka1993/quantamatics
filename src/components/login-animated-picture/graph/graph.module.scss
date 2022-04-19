@@ -24,3 +24,21 @@
 	height: math.div(140, 230.17) * 100%;
 }
 
+@keyframes fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.mark {
+	position: absolute;
+	width: math.div(92, 391.71) * 100%;
+	height: math.div(20, 230.17) * 100%;
+	right: 12%;
+	bottom: 25%;
+	opacity: 0;
+	animation: fade 0.5s 4s forwards;
+}
