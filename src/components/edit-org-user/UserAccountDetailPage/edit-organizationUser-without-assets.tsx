@@ -89,6 +89,7 @@ export default function EditOrganizationUserWithoutAssets({
 	const [isRoleChanged, setRoleChanged] = useState(false);
 	const [isAssetChanged, setAssetChanged] = useState(false);
 	const [showError, setShowError] = useState(false);
+	const [anyError, setAnyError]= useState(false)
 
 	function validateHandler() {
 		let userChanged = isUserChanged;
@@ -266,6 +267,7 @@ export default function EditOrganizationUserWithoutAssets({
 		emailError && formRef.current?.reportValidity();
 	}, [emailError]);
 
+	console.log('anyError',anyError)
 	return (
 		<form
 			id="edit-account-form"
@@ -285,7 +287,7 @@ export default function EditOrganizationUserWithoutAssets({
 				}
 				disableReset={isLoading || secondLoading}
 				disableSave={
-					!isUserChanged && !isRoleChanged && !isAssetChanged || isLoading || secondLoading
+					!isUserChanged && !isRoleChanged && !isAssetChanged || isLoading || secondLoading || anyError
 				}
 				isSavedMessageActive={isLoading || secondLoading}
 				headlineID="org-modal-title"
@@ -323,6 +325,7 @@ export default function EditOrganizationUserWithoutAssets({
 			<Email
 				externalSetter={setEmail}
 				value={email}
+				setAnyError={setAnyError}
 				error={emailError}
 				label="Email"
 				maxLength={100}

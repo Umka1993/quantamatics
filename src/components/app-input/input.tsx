@@ -20,6 +20,7 @@ export interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	invalid?: boolean;
 	variant?: "squared";
 	icon?: ReactElement;
+	setAnyError?: (arg: boolean) => void;
 }
 
 export default function Input({
@@ -39,6 +40,8 @@ export default function Input({
 	invalid,
 	onFocus,
 	variant,
+	setAnyError,
+
 	...other
 }: IInput) {
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -85,6 +88,14 @@ export default function Input({
 		onInvalid && onInvalid(evt);
 	};
 
+	useEffect(() => {
+		if (errorMessage) {
+			setAnyError && setAnyError(true);
+		} else {
+			setAnyError && setAnyError(false);
+		}
+	}, [errorMessage]);
+
 	const reCalcLabelWidth = () => {
 		if (labelRef.current) {
 			const { offsetWidth } = labelRef.current;
@@ -104,8 +115,7 @@ export default function Input({
 				style={
 					label
 						? ({
-							"--label-width": `${rightOffset}px`,
-						} as CSSProperties)
+							"--label-width": `${rightOffset}px`, } as CSSProperties)
 						: undefined
 				}
 			>
