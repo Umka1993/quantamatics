@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import Button, { ResetButton } from "../button";
 import Form from "./form";
 import { useAddOrganizationMutation } from "../../api/organization";
-import { AppRoute } from "../../data/enum";
+import { AppRoute, OrganizationKey } from "../../data/enum";
 
 import useDuplicatedOrgValues from "../../hooks/useDuplicatedOrgValues";
 import normalizeName from "../../services/normalize-name";
 import addHTTPtoURL from "../../services/addHTTPtoURL";
+import { Organization } from "../../types/organization/types";
 
 interface ICreateOrganization { }
 
@@ -22,12 +23,14 @@ export interface createOrganizationRequestBody {
 
 const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 	const navigate = useNavigate();
-	const [register, { isError, error }] = useAddOrganizationMutation();
+	const [register, { isError, error, data, isSuccess }] =
+		useAddOrganizationMutation();
 
 	const [name, setName] = useState<string>("");
 	const [customerCrmId, setCustomerCrmId] = useState<string>("");
 	const [customerCrmLink, setCustomerCrmLink] = useState<string>("");
 	const [comments, setComments] = useState<string | undefined>("");
+	const [newOrganization, setNewOrganization] = useState<Organization>();
 
 	const [stopLoading, setStopLoading] = useState<true | undefined>(undefined);
 
@@ -49,6 +52,18 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 	const returnBack = () => {
 		navigate(AppRoute.OrganizationList);
 	};
+
+	useEffect(() => {
+		if (data) {
+			setNewOrganization(data);
+		}
+	}, [data]);
+
+	useEffect(() => {
+		if (newOrganization) {
+			navigate(`/organizations/${newOrganization[OrganizationKey.Id]}`);
+		}
+	}, [newOrganization]);
 
 	useEffect(() => {
 		if (isError) {
@@ -97,7 +112,7 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 					value={name}
 					maxLength={64}
 					error={duplicateOrgError}
-					variant='squared'
+					variant="squared"
 				/>
 				<Input
 					externalSetter={setCustomerCrmId}
@@ -105,14 +120,14 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 					value={customerCrmId}
 					maxLength={32}
 					error={duplicateIdError}
-					variant='squared'
+					variant="squared"
 				/>
 				<InputURL
 					externalSetter={setCustomerCrmLink}
 					label="CRM Customer ID Link"
 					value={customerCrmLink}
 					maxLength={72}
-					variant='squared'
+					variant="squared"
 				/>
 				<Input
 					externalSetter={setComments}
@@ -120,11 +135,10 @@ const CreateOrganization: FunctionComponent<ICreateOrganization> = () => {
 					value={comments}
 					maxLength={200}
 					showLimit
-					variant='squared'
+					variant="squared"
 				/>
 			</div>
 			<Button
-
 				className={style.submit}
 				type="submit"
 				disabled={

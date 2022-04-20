@@ -113,7 +113,7 @@ export const ViewUserAccountPage = () => {
 					toggleEditUserPage={toggleEditUserPage}
 					toggleAssetsModal={toggleAssetsModal}
 				>
-					{/*<Breadcrumb links={links} />*/}
+					<Breadcrumb links={links} />
 				</UserAccountHeader>
 				<div className={style.userData}>
 					<div className={style.item}>
