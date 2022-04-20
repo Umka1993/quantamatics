@@ -1,9 +1,5 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
-
-import Headline from "../../page-title";
-
-import Button, { ResetButton } from "../../button";
-import Input, { DatePick, Email, Multiselect } from "../../app-input";
+import Input, { Email } from "../../app-input";
 
 import { Error, UserRole } from "../../../data/enum";
 import { useDispatch } from "react-redux";
@@ -15,7 +11,6 @@ import {
 import IApiError from "../../../types/api-error";
 import useUser from "../../../hooks/useUser";
 import { login } from "../../../store/authorization";
-import Loader from "../../loader";
 
 import style from ".././edit-org-user.module.scss";
 import {
@@ -28,7 +23,6 @@ import { useParams } from "react-router-dom";
 import RoleSelector from "../../role-selector";
 import DatePickerComponent from "../../app-input/new-datepick";
 import SaveResetHeader from "../../save-reset-header/SaveResetHeader";
-
 
 interface Props {
 	user: IUser;
@@ -89,6 +83,7 @@ export default function EditOrganizationUserWithoutAssets({
 	const [isRoleChanged, setRoleChanged] = useState(false);
 	const [isAssetChanged, setAssetChanged] = useState(false);
 	const [showError, setShowError] = useState(false);
+	const [anyError, setAnyError]= useState(false)
 
 	function validateHandler() {
 		let userChanged = isUserChanged;
@@ -285,7 +280,7 @@ export default function EditOrganizationUserWithoutAssets({
 				}
 				disableReset={isLoading || secondLoading}
 				disableSave={
-					!isUserChanged && !isRoleChanged && !isAssetChanged || isLoading || secondLoading
+					!isUserChanged && !isRoleChanged && !isAssetChanged || isLoading || secondLoading || anyError
 				}
 				isSavedMessageActive={isLoading || secondLoading}
 				headlineID="org-modal-title"
@@ -306,6 +301,8 @@ export default function EditOrganizationUserWithoutAssets({
 					required
 					variant="squared"
 					className={style.input}
+					setAnyError={setAnyError}
+
 				/>
 
 				<Input
@@ -317,12 +314,14 @@ export default function EditOrganizationUserWithoutAssets({
 					required
 					variant="squared"
 					className={style.input}
+					setAnyError={setAnyError}
 				/>
 			</div>
 
 			<Email
 				externalSetter={setEmail}
 				value={email}
+				setAnyError={setAnyError}
 				error={emailError}
 				label="Email"
 				maxLength={100}

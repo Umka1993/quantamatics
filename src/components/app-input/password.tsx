@@ -20,6 +20,7 @@ interface IPassword extends InputHTMLAttributes<HTMLInputElement> {
 	externalSetter?: (value: string) => void;
 	hideError?: boolean;
 	variant?: "squared";
+	setAnyError?: (arg: boolean) => void;
 }
 
 const Password: FunctionComponent<IPassword> = ({
@@ -36,6 +37,7 @@ const Password: FunctionComponent<IPassword> = ({
 	hideError,
 	error,
 	variant,
+	setAnyError,
 	...other
 }) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -63,26 +65,52 @@ const Password: FunctionComponent<IPassword> = ({
 		onChange && onChange(evt);
 	};
 
+	// useEffect(() => {
+	// 	if (inputRef.current) {
+	// 		if (error) {
+	// 			inputRef.current.setCustomValidity(error);
+	// 			setErrorMessage(error);
+	// 		} else {
+	// 			inputRef.current.setCustomValidity("");
+	// 			if (isNewPassword) {
+	// 				const message = getValidationMessage(inputRef.current.validity);
+	// 				inputRef.current.setCustomValidity(message);
+	// 			}
+	// 		}
+	// 		// errorMessage && setErrorMessage(undefined);
+	// 	}
+	// }, [value, inputRef.current?.validity, error]);
+
+
 	useEffect(() => {
 		if (inputRef.current) {
-			if (error) {
+			const message = getValidationMessage(inputRef.current.validity);
+
+			if (error && value) {
 				inputRef.current.setCustomValidity(error);
-			} else {
+				message ? setErrorMessage(message) : setErrorMessage(error);
+
+			}else if(!error && !message){
 				inputRef.current.setCustomValidity("");
-				if (isNewPassword) {
-					const message = getValidationMessage(inputRef.current.validity);
-					inputRef.current.setCustomValidity(message);
-				}
+				setErrorMessage(undefined)
 			}
-			errorMessage && setErrorMessage(undefined);
 		}
-	}, [value, inputRef.current?.validity, error]);
+	}, [error,inputRef.current?.validity,value]);
+
 
 	const invalidHandler: FormEventHandler<HTMLInputElement> = (evt) => {
 		evt.preventDefault();
 		setErrorMessage(evt.currentTarget.validationMessage);
 		onInvalid && onInvalid(evt);
 	};
+
+	useEffect(() => {
+		if (errorMessage) {
+			setAnyError && setAnyError(true);
+		} else {
+			setAnyError && setAnyError(false);
+		}
+	}, [errorMessage]);
 
 	return (
 		<div

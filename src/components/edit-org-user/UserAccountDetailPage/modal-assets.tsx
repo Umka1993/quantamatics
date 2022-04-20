@@ -323,7 +323,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 							</>
 						}
 						disableReset={isAssetUnLinking || isAssetLinking}
-						disableSave={!isAssetChanged || isAssetUnLinking || isAssetLinking}
+						disableSave={!isAssetChanged || isAssetUnLinking || isAssetLinking || hasError}
 						isSavedMessageActive={isAssetUnLinking || isAssetLinking}
 						headlineID="asset-modal"
 						className={style.header}
@@ -332,7 +332,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 				{hasError && (
 					<p className={style.error} role="alert" ref={errorRef} tabIndex={0}>
 						{noAssetError
-							? "Select asset permissions to assign to the organization."
+							? "Select asset permissions to assign to the user account."
 							: "Changes have not been saved."}
 					</p>
 				)}

@@ -65,6 +65,8 @@ const RoleMultiSelect: FunctionComponent<RoleMultiSelectProp> = ({
 	};
 	// useLayoutEffect(reCalcLabelWidth, [selected, labelRef.current])
 
+	const isSelectedRoles = Boolean(Array.from(selected).length);
+
 	useEffect(() => {
 		setHideError(Boolean(selected.size));
 
@@ -76,8 +78,7 @@ const RoleMultiSelect: FunctionComponent<RoleMultiSelectProp> = ({
 			? setList(
 				[...options.filter((option) => selected.has(option.value))]
 					.map((option) => option.label)
-					.join(", ")
-			)
+					.join(", "))
 			: setList("");
 	}, [selected]);
 
@@ -89,7 +90,11 @@ const RoleMultiSelect: FunctionComponent<RoleMultiSelectProp> = ({
 	useClickOutside(rootElement, () => setShowOptions(false), showOptions);
 	return (
 		<div
-			className={classNames("app-input multiselect", { "app-input--squared": variant === "squared" }, className)}
+			className={classNames(
+				"app-input multiselect",
+				{ "app-input--squared": variant === "squared" },
+				className
+			)}
 			ref={rootElement}
 			onClick={(e) => e.stopPropagation()}
 		>
@@ -100,8 +105,7 @@ const RoleMultiSelect: FunctionComponent<RoleMultiSelectProp> = ({
 				style={
 					label
 						? ({
-							"--label-width": `${rightOffset}px`,
-						} as CSSProperties)
+							"--label-width": `${rightOffset}px`, } as CSSProperties)
 						: undefined
 				}
 			>
@@ -123,7 +127,9 @@ const RoleMultiSelect: FunctionComponent<RoleMultiSelectProp> = ({
 
 				{label && (
 					<span
-						className={classNames("app-input__label app-input__label--icon")}
+						className={classNames("app-input__label app-input__label--icon",{
+							'app-input__fieldSelected' :isSelectedRoles
+						})}
 					>
 						<span ref={labelRef}>{label}</span>
 					</span>

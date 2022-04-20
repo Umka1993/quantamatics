@@ -26,7 +26,6 @@ const RoleSelector: FunctionComponent<RoleSelectorProps> = ({
 			{ label: "Org. Admin", value: UserRole.OrgAdmin },
 		]
 		: [{ label: "Organization Admin", value: UserRole.OrgAdmin }];
-
 	return isSuperAdmin ? (
 		<RoleMultiSelect
 			selected={defaultRoles}
