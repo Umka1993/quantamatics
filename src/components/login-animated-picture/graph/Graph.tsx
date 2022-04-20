@@ -4,16 +4,17 @@ import classNames from "classnames";
 import ResponsiveImage from "../../responsive-image/ResponsiveImage";
 import { animated, config, useSpring } from "@react-spring/web";
 import MarkPNG from './mark.png';
+import clamp from "../../../services/clamp";
 
 type Props = HTMLAttributes<HTMLDivElement> & {
-	coefficient?: number;
+	coefficient: number;
 };
 
 export default function Graph({ className, coefficient, ...other }: Props) {
 
 	const { x } = useSpring({
 		from: { x: 0 },
-		x: coefficient ? 2 - coefficient : 1,
+		x: clamp(coefficient, 0.6, 1),
 		delay: 3000,
 		config: config.molasses,
 	});
