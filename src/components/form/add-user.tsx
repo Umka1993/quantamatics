@@ -78,32 +78,34 @@ export default function InviteUserForm() {
 		}
 	}, [registeredUser]);
 
-	useEffect(() => {
-		if (newUser) {
-			console.log("newUser[UserKey.Company]", newUser[UserKey.Company]);
-
-			setTimeout( ()=>
-				navigate(AppRoute.Success, {
-					state: {
-						headline: "An invitation email has been sent to the user",
-						linkText: "Go Back",
-						link: backLink,
-					},
-				}),0)
-
-			setTimeout(
-				() =>
-					navigate(
-						`/organizations/${company?.id}/user/${
-							newUser[UserKey.Id]
-						}/view`
-					),
-				3000
-			);
-
-
-		}
-	}, [newUser]);
+	// useEffect(() => {
+	// 	if (newUser) {
+	// 		console.log("newUser[UserKey.Company]", newUser[UserKey.Company]);
+	//
+	// 		// setTimeout( ()=>
+	// 		// 	navigate(AppRoute.Success, {
+	// 		// 		state: {
+	// 		// 			headline: "An invitation email has been sent to the user",
+	// 		// 			linkText: "Go Back",
+	// 		// 			link: backLink,
+	// 		// 		},
+	// 		// 	}),0)
+	// 		//
+	// 		// setTimeout(
+	// 		// 	() =>
+	// 		// 		navigate(
+	// 		// 			`/organizations/${company?.id}/user/${
+	// 		// 				newUser[UserKey.Id]
+	// 		// 			}/view`
+	// 		// 		),
+	// 		// 	3000
+	// 		// );
+	//
+	// 		navigate(
+	// 			`/organizations/${company?.id}/user/${newUser[UserKey.Id]}/view`
+	// 		);
+	// 	}
+	// }, [newUser]);
 
 	useEffect(() => {
 		setLoading(false);
@@ -114,7 +116,11 @@ export default function InviteUserForm() {
 		}
 	}, [isError]);
 
-	const backLink = `/organizations/${company?.id}`;
+	// const backLink = `/organizations/${company?.id}`;
+	let backLink = "";
+	if (newUser) {
+		backLink = `/organizations/${company?.id}/user/${newUser[UserKey.Id]}/view`;
+	}
 
 	useEffect(() => {
 		if (isUserRegistered) {
@@ -126,15 +132,19 @@ export default function InviteUserForm() {
 				});
 			});
 
-			// navigate(AppRoute.Success, {
-			// 	state: {
-			// 		headline: "An invitation email has been sent to the user",
-			// 		linkText: "Go Back",
-			// 		link: backLink,
-			// 	},
-			// });
+			if (newUser) {
+				navigate(AppRoute.Success, {
+					state: {
+						headline: "An invitation email has been sent to the user",
+						linkText: "Got it",
+						link: `/organizations/${company?.id}/user/${
+							newUser[UserKey.Id]
+						}/view`,
+					},
+				});
+			}
 		}
-	}, [isUserRegistered]);
+	}, [isUserRegistered,newUser]);
 
 	useEffect(() => {
 		assignedAssets.size && setAssetError(false);
