@@ -29,20 +29,13 @@ export default function LoginAnimatedPicture({
 		>
 			<div role="img" className={style.wrap} aria-label="Mock Example">
 				<Screenshot aria-hidden className={style.screen} coefficient={sum} />
-				<Graph className={style.graph} aria-hidden />
+				<Graph className={style.graph} coefficient={sum} aria-hidden />
 				<MockResult
 					className={style.result}
 					aria-hidden
 					titles={["Spend", "Transactions", "Avg. Ticket Size"]}
 					coefficient={clampedSum}
 					values={[22.57, 27.43, -3.9]}
-					// style={{
-					// 	transform: `scale(0.306) translate3d(${ratioX * 4}vmin, ${
-					// 		ratioY * 2
-					// 	}vmin, 400px) rotateX(${-4 * ratioY}deg) rotateY(${
-					// 		-2 * ratioY
-					// 	}deg)`,
-					// }}
 				/>
 			</div>
 

@@ -5,13 +5,15 @@ import ResponsiveImage from "../../responsive-image/ResponsiveImage";
 import { animated, config, useSpring } from "@react-spring/web";
 import MarkPNG from './mark.png';
 
-type Props = HTMLAttributes<HTMLDivElement> & {};
+type Props = HTMLAttributes<HTMLDivElement> & {
+	coefficient?: number;
+};
 
-export default function Graph({ className, ...other }: Props) {
+export default function Graph({ className, coefficient, ...other }: Props) {
 
 	const { x } = useSpring({
 		from: { x: 0 },
-		x: 1,
+		x: coefficient ? 2 - coefficient : 1,
 		delay: 3000,
 		config: config.molasses,
 	});

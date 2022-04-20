@@ -3,11 +3,13 @@
 @use "../../../sass/mixins" as *;
 
 .root {
-	background-color: rgba(white, 0.8);
+	background-color: rgba(white, 0.95);
 
 	border: 1px solid rgba(#e2e9f6, 0.8);
 	box-shadow: inset 0px 0px 25px rgba(white, 0.05);
-	@include back-blur(20px);
+	@include back-blur(20px) {
+		background-color: rgba(white, 0.8);
+	};
 }
 
 .image {

@@ -49,8 +49,6 @@
 }
 
 .wrap {
-	transform-style: preserve-3d;
-	perspective: 500px;
 	position: relative;
 
 	justify-self: start;
@@ -93,22 +91,19 @@
 .result {
 	transition: transform 1s ease-in-out;
 	position: absolute;
-	inset: auto auto 32% 28%;
-	font-size: 1.1vw;
-	transform: scale(0.306)
-		translate3d(calc(var(--ratio-x, 0) * 2vmin), calc(var(--ratio-y, 0) * 1vmin), 400px)
-		rotateX(calc(var(--ratio-y, 0) * -2deg)) rotateY(calc(var(--ratio-x, 0) * -1deg));
+	inset: auto auto -6% 5%;
+	font-size: 2.5vmin;
+	// transform: translate(calc(var(--ratio-x, 0) * 2vmin), calc(var(--ratio-y, 0) * 1vmin));
 }
 
 .graph {
 	transition: transform 1s ease-in-out;
 	position: absolute;
-	inset: -3% auto auto 37%;
+	inset: -20% auto auto 42%;
 	width: 46.6%;
 	height: auto;
-	transform: scale(0.6)
-		translate3d(calc(var(--ratio-y, 0) * -4vmin), calc(var(--ratio-y, 0) * -4vmin), 200px)
-		rotateX(calc(var(--ratio-y, 0) * -5deg)) rotateY(calc(var(--ratio-x, 0) * -5deg));
+	max-width: 44vmin;
+	// transform: translate(calc(var(--ratio-y, 0) * -4vmin), calc(var(--ratio-y, 0) * -4vmin));
 }
 
 .caption {
