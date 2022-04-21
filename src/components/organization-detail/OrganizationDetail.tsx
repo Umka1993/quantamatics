@@ -73,9 +73,11 @@ export default function OrganizationDetail() {
 		setFalse: setUserToDefault,
 	} = useBoolean(false);
 
-	if (selectedUser) {
-		navigate(`/organizations/${orgId}/user/${selectedUser[UserKey.Id]}/view`);
-	}
+	useEffect(() => {
+		if (selectedUser) {
+			navigate(`/organizations/${orgId}/user/${selectedUser[UserKey.Id]}/view`);
+		}
+	}, [selectedUser]);
 
 	if (isOrganizationLoading || isUsersLoading) {
 		return <Loader />;
@@ -141,23 +143,23 @@ export default function OrganizationDetail() {
 				)}
 			</section>
 
-			<Dialog
-				open={selectedUser !== null}
-				onRequestClose={requestUserClose}
-				closeOnOutsideClick
-				id="org-user-modal"
-				variant="right-side"
-				hasCloseButton={false}
-			>
-				{selectedUser !== null && (
-					<EditOrganizationUser
-						user={selectedUser}
-						onClose={closeModal}
-						isUserCloseRequested={isUserCloseRequested}
-						setUserToDefault={setUserToDefault}
-					/>
-				)}
-			</Dialog>
+			{/*<Dialog*/}
+			{/*	open={selectedUser !== null}*/}
+			{/*	onRequestClose={requestUserClose}*/}
+			{/*	closeOnOutsideClick*/}
+			{/*	id="org-user-modal"*/}
+			{/*	variant="right-side"*/}
+			{/*	hasCloseButton={false}*/}
+			{/*>*/}
+			{/*{selectedUser !== null && (*/}
+			{/*	<EditOrganizationUser*/}
+			{/*		user={selectedUser}*/}
+			{/*		onClose={closeModal}*/}
+			{/*		isUserCloseRequested={isUserCloseRequested}*/}
+			{/*		setUserToDefault={setUserToDefault}*/}
+			{/*	/>*/}
+			{/*)}*/}
+			{/*</Dialog>*/}
 		</>
 	);
 }

@@ -44,7 +44,7 @@ $text: #bcc4d8;
 
 	&__label--shifted,
 	&__field:not(:placeholder-shown) ~ &__label,
-	&__field:focus ~ &__label {
+	&__fieldSelected ~ &__label {
 		width: 100%;
 		font-size: 14px;
 	}

@@ -20,6 +20,7 @@ import useBoolean from "../../../hooks/useBoolean";
 import Dialog from "../../dialog";
 import EditOrganizationUserForm from "./edit-organizationUser-without-assets";
 import EditOrganizationUserWithoutAssets from "./edit-organizationUser-without-assets";
+import useUser from "../../../hooks/useUser";
 
 interface IEditUserAccountDetail extends HTMLProps<HTMLDivElement> {
 	selectedUser: IUser | null;
@@ -29,10 +30,11 @@ interface IEditUserAccountDetail extends HTMLProps<HTMLDivElement> {
 
 export const ViewUserAccountPage = () => {
 	const { id: orgId, userId } = useParams();
+	const loggedInUser = useUser();
 
 	const [selectedUser, setSelectedUser] = useState<IUser>();
 	const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } =
-				useGetUserAssetsQuery(userId as string);
+		useGetUserAssetsQuery(userId as string);
 
 	const [selectedAssets, setSelectedAssets] = useState(serverSelectedAssets);
 	const [usersOrganization, setUsersOrganization] = useState<Organization>();
@@ -43,16 +45,17 @@ export const ViewUserAccountPage = () => {
 	const { data: user, isSuccess: isUserLoaded } = useGetUserQuery(
 		userId as string
 	);
+
 	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
 
 	const { data: assets } = useGetAllAssetsQuery(orgId as string);
 
-
 	const { data: company } = useGetOrganizationQuery(orgId as string);
 
+	const [organizationEmployee, setOrganizationEmployee] = useState(false);
 
 	const expirationDate = moment(
-		selectedUser && selectedUser[UserKey.SubscriptionEndDate]
+		selectedUser && new Date(selectedUser[UserKey.SubscriptionEndDate])
 	).format("MM/DD/yyyy");
 
 	useEffect(() => {
@@ -63,13 +66,24 @@ export const ViewUserAccountPage = () => {
 	}, [user, company]);
 
 	useEffect(() => {
+		if (selectedUser && usersOrganization) {
+			const organizationEmployee =
+				selectedUser[UserKey.OrganizationId] ===
+					usersOrganization[OrganizationKey.Id] &&
+					loggedInUser[UserKey.OrganizationId] ===
+					usersOrganization[OrganizationKey.Id];
+
+			setOrganizationEmployee(organizationEmployee);
+		}
+	}, [selectedUser, usersOrganization]);
+
+
+
+	useEffect(() => {
 		if (usersOrganization && serverSelectedAssets) {
 			setSelectedAssets(serverSelectedAssets);
 		}
 	}, [usersOrganization, serverSelectedAssets]);
-
-
-
 
 	const {
 		value: isUserCloseRequested,
@@ -103,7 +117,19 @@ export const ViewUserAccountPage = () => {
 				href: `/organizations/${orgId}`,
 				text: usersOrganization[OrganizationKey.Name],
 			},
-			{ text: `${selectedUser[UserKey.Name]} ${selectedUser[UserKey.Surname]}` },
+			{
+				text: `${selectedUser[UserKey.Name]} ${selectedUser[UserKey.Surname]}`,
+			},
+		];
+
+		const organizationEmployeeLinks = [
+			{
+				href: `/organizations/${orgId}`,
+				text: usersOrganization[OrganizationKey.Name],
+			},
+			{
+				text: `${selectedUser[UserKey.Name]} ${selectedUser[UserKey.Surname]}`,
+			},
 		];
 
 		return (
@@ -113,7 +139,11 @@ export const ViewUserAccountPage = () => {
 					toggleEditUserPage={toggleEditUserPage}
 					toggleAssetsModal={toggleAssetsModal}
 				>
-					{/*<Breadcrumb links={links} />*/}
+					{organizationEmployee ? (
+						<Breadcrumb links={organizationEmployeeLinks} />
+					) : (
+						<Breadcrumb links={links} />
+					)}
 				</UserAccountHeader>
 				<div className={style.userData}>
 					<div className={style.item}>

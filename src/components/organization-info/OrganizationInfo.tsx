@@ -7,6 +7,7 @@ import { ReactComponent as DocIcon } from "./assets/doc.svg";
 import classNames from "classnames";
 import Breadcrumb from "../breadcrumb/Breadcrumb";
 import { AppRoute, OrganizationKey, UserKey } from "../../data/enum";
+import useUser from "../../hooks/useUser";
 
 interface OrganizationInfoProps extends HTMLProps<HTMLDivElement> {
 	organization: Organization;
@@ -20,6 +21,11 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 	toggleOrganizationModal,
 	className,
 }) => {
+
+	const user = useUser();
+
+	const organizationEmployee = user?.[UserKey.OrganizationId] === organization[OrganizationKey.Id]
+
 	const links = [
 		{
 			href: AppRoute.OrganizationList,
@@ -34,7 +40,7 @@ const OrganizationInfo: FunctionComponent<OrganizationInfoProps> = ({
 		<section className={classNames(style.root, className)}>
 			<div className={style.headlineWrap}>
 				<div className={style.orgTitle}>
-					{/*<Breadcrumb links={links} />*/}
+					{!organizationEmployee && <Breadcrumb links={links} />}
 
 					<Headline
 						className={style.title}

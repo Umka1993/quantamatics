@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import "./styles/create-organization.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import Button, { ResetButton } from "../button";
-import Input, { Email, Multiselect, DatePick } from "../app-input/";
+import Input, { Email, Multiselect } from "../app-input/";
 import Form from "./form";
-import { AppRoute, Error, UserRole } from "../../data/enum";
+import { AppRoute, Error, UserKey, UserRole } from "../../data/enum";
 import { useRegisterUserMutation } from "../../api/account";
 import { useGetOrganizationQuery } from "../../api/organization";
 import {
@@ -14,6 +14,7 @@ import {
 import useUser from "../../hooks/useUser";
 import RoleSelector from "../role-selector";
 import DatePickerComponent from "../app-input/new-datepick";
+import { IUser } from "../../types/user";
 
 export interface IInviteUserRequestBody {
 	companyName: string | undefined;
@@ -49,6 +50,7 @@ export default function InviteUserForm() {
 		new Set()
 	);
 
+	const [newUser, setNewUser] = useState<IUser>();
 	useEffect(() => {
 		if (assets) {
 			const sharedAssets = assets.filter((asset) => asset.sharedByDefault);
@@ -71,6 +73,41 @@ export default function InviteUserForm() {
 	const [linkAsset] = useLinkAssetToUserMutation();
 
 	useEffect(() => {
+		if (registeredUser) {
+			setNewUser(registeredUser);
+		}
+	}, [registeredUser]);
+
+	// useEffect(() => {
+	// 	if (newUser) {
+	// 		console.log("newUser[UserKey.Company]", newUser[UserKey.Company]);
+	//
+	// 		// setTimeout( ()=>
+	// 		// 	navigate(AppRoute.Success, {
+	// 		// 		state: {
+	// 		// 			headline: "An invitation email has been sent to the user",
+	// 		// 			linkText: "Go Back",
+	// 		// 			link: backLink,
+	// 		// 		},
+	// 		// 	}),0)
+	// 		//
+	// 		// setTimeout(
+	// 		// 	() =>
+	// 		// 		navigate(
+	// 		// 			`/organizations/${company?.id}/user/${
+	// 		// 				newUser[UserKey.Id]
+	// 		// 			}/view`
+	// 		// 		),
+	// 		// 	3000
+	// 		// );
+	//
+	// 		navigate(
+	// 			`/organizations/${company?.id}/user/${newUser[UserKey.Id]}/view`
+	// 		);
+	// 	}
+	// }, [newUser]);
+
+	useEffect(() => {
 		setLoading(false);
 		if (isError) {
 			if ((error as any).data[0]?.code === "DuplicateUserName")
@@ -79,7 +116,11 @@ export default function InviteUserForm() {
 		}
 	}, [isError]);
 
-	const backLink = `/organizations/${company?.id}`;
+	// const backLink = `/organizations/${company?.id}`;
+	let backLink = "";
+	if (newUser) {
+		backLink = `/organizations/${company?.id}/user/${newUser[UserKey.Id]}/view`;
+	}
 
 	useEffect(() => {
 		if (isUserRegistered) {
@@ -91,15 +132,19 @@ export default function InviteUserForm() {
 				});
 			});
 
-			navigate(AppRoute.Success, {
-				state: {
-					headline: "An invitation email has been sent to the user",
-					linkText: "Go Back",
-					link: backLink,
-				},
-			});
+			if (newUser) {
+				navigate(AppRoute.Success, {
+					state: {
+						headline: "An invitation email has been sent to the user",
+						linkText: "Go to User Account",
+						link: `/organizations/${company?.id}/user/${
+							newUser[UserKey.Id]
+						}/view`,
+					},
+				});
+			}
 		}
-	}, [isUserRegistered]);
+	}, [isUserRegistered,newUser]);
 
 	useEffect(() => {
 		assignedAssets.size && setAssetError(false);

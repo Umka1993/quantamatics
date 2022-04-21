@@ -45,6 +45,9 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 		undefined
 	);
 	const [compare, setCompare] = useState<string | undefined>(undefined);
+	const [isSuccessUpdating, setSuccessUpdating] = useState(false)
+	const [anyError, setAnyError] = useState(false)
+
 
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -90,16 +93,34 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 	}, [wrongCurrent, formRef.current]);
 
 	useEffect(() => {
-		isSuccess && resetHandler();
+
+		if(isSuccess){
+			setSuccessUpdating(true)
+			setTimeout(()=>setSuccessUpdating(false),1000)
+			setTimeout(()=>isSuccess && resetHandler(),1000)
+		}
 	}, [isSuccess]);
+
 
 	function resetHandler() {
 		setCurrentPassword("");
 		setNewPassword("");
 		setConfirmPassword("");
+		setCompare("");
+		setAnyError(false);
 		closePassword();
 		onRequestClose();
 	}
+
+	useEffect( ()=>{
+		if(!showEditForm){
+			setCurrentPassword("");
+			setNewPassword("");
+			setConfirmPassword("");
+			setCompare("");
+			setAnyError(false);
+		}
+	},[showEditForm])
 
 	return (
 		<Dialog
@@ -122,12 +143,16 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 					<Button
 						type="submit"
 						disabled={
-							!Boolean(currentPassword && newPassword && confirmPassword)
+							!Boolean(currentPassword && newPassword && confirmPassword) ||
+							isPasswordUpdating ||
+							Boolean(wrongCurrent) ||
+							Boolean(compare) ||
+							anyError
 						}
 						form="edit-pass-form"
-						variant={isPasswordUpdating ? "valid" : undefined}
+						variant={isSuccessUpdating ? "valid" : undefined}
 					>
-						{isPasswordUpdating ? (
+						{isSuccessUpdating ? (
 							<>
 								<CheckSVG
 									aria-hidden="true"
@@ -205,6 +230,7 @@ export default function MyAccountModal({ onRequestClose, open }: IEditProfile) {
 						placeholder="Confirm New Password"
 						error={compare}
 						variant="squared"
+						setAnyError={setAnyError}
 					/>
 				</form>
 			)}

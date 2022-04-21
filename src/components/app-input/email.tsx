@@ -34,6 +34,7 @@ export default function Email({
 	variant,
 	showLimit,
 	maxLength,
+	setAnyError,
 	...other
 }: IEmail) {
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -71,6 +72,14 @@ export default function Email({
 		}
 	};
 
+	useEffect(() => {
+		if (errorMessage) {
+			setAnyError && setAnyError(true);
+		} else {
+			setAnyError && setAnyError(false);
+		}
+	}, [errorMessage]);
+
 	return (
 		<div
 			className={classNames("app-input", className, {
@@ -83,8 +92,7 @@ export default function Email({
 				style={
 					label
 						? ({
-							"--label-width": `${rightOffset}px`,
-						} as CSSProperties)
+							"--label-width": `${rightOffset}px`, } as CSSProperties)
 						: undefined
 				}
 			>

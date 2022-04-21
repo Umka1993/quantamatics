@@ -49,6 +49,8 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 
 	const [closeError, setCloseError] = useState("");
 
+	const [anyError, setAnyError] = useState(false)
+
 	const formRef = useRef<HTMLFormElement>(null);
 
 	const [
@@ -63,6 +65,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 		setName,
 		setCustomerID
 	);
+
 
 	const setInitialOrg = useCallback(() => {
 		setName(organization.name);
@@ -168,7 +171,8 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 							!isChanged ||
 							isUpdating ||
 							Boolean(duplicateOrgError) ||
-							Boolean(duplicateIdError)
+							Boolean(duplicateIdError) ||
+								anyError
 						}
 						isSavedMessageActive={isUpdating}
 						headlineID="org-modal-title"
@@ -190,6 +194,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 						error={duplicateOrgError}
 						disabled={isUpdating}
 						variant="squared"
+						setAnyError={setAnyError}
 					/>
 					<Input
 						externalSetter={setCustomerID}
@@ -200,6 +205,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 						error={duplicateIdError}
 						disabled={isUpdating}
 						variant="squared"
+						setAnyError={setAnyError}
 					/>
 
 					<InputURL
@@ -210,6 +216,7 @@ const OrganizationModal: FunctionComponent<OrganizationModalProps> = ({
 						className={style.input}
 						disabled={isUpdating}
 						variant="squared"
+						setAnyError={setAnyError}
 					/>
 
 					<Input

@@ -12,15 +12,20 @@
 	font-size: 16px;
 	line-height: 1.375;
 	color: $main-text;
+	margin-bottom: 20px;
 }
 
 .item {
 	display: flex;
 	align-items: center;
+	color: $main-text;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 22px;
 	&:not(:last-child)::after {
 		content: "/";
 		margin: 0 10px;
-		font-weight: 400;
+		font-weight: 500;
 		font-size: 22px;
 		line-height: 1.364;
 		color: rgba(188, 196, 216, 0.4)
@@ -30,6 +35,10 @@
 .link {
 	color: $inactive;
 	text-decoration: none;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 22px;
 
 	@include hover-focus {
 		color: $accent;

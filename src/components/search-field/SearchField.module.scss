@@ -24,6 +24,9 @@
 		color: $accent;
 		border-color: currentColor;
 	}
+	svg{
+		margin-bottom: 2px;
+	}
 }
 
 .input {
@@ -32,7 +35,7 @@
 	outline: none;
 	color: $headlines;
 	width: 100%;
-	padding: 5px 12px 5px 0;
+	padding: 5px 12px 7px 0;
 	min-height: 40px;
 	background-color: transparent;
 

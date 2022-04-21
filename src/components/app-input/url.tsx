@@ -28,6 +28,7 @@ const Input: FunctionComponent<IInput> = ({
 	showLimit,
 	variant,
 	invalid,
+	setAnyError,
 	...other
 }) => {
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -75,6 +76,14 @@ const Input: FunctionComponent<IInput> = ({
 		setErrorMessage(inputRef.current?.validationMessage);
 		onInvalid && onInvalid(evt);
 	};
+
+	useEffect(() => {
+		if (errorMessage) {
+			setAnyError && setAnyError(true);
+		} else {
+			setAnyError && setAnyError(false);
+		}
+	}, [errorMessage]);
 
 	const reCalcLabelWidth = () => {
 		if (labelRef.current) {
