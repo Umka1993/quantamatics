@@ -136,7 +136,7 @@ export default function InviteUserForm() {
 				navigate(AppRoute.Success, {
 					state: {
 						headline: "An invitation email has been sent to the user",
-						linkText: "Got it",
+						linkText: "Go to User Account",
 						link: `/organizations/${company?.id}/user/${
 							newUser[UserKey.Id]
 						}/view`,
