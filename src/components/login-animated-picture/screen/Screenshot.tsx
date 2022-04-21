@@ -38,19 +38,12 @@ export default function Screenshot({
 	coefficient = 1,
 	...other
 }: Props) {
-
-	const renderBars = useCallback((bars: number[], coefficient: number, start = 9) => bars.map(function (bar, index) {
-		const height = bar * coefficient;
-		return (
-			<rect
-				width={7}
-				height={Math.abs(height)}
-				x={start + index * (7 + 36)}
-				y={height > 0 ? (121 - height) : 122}
-				key={`${bar}-${index}`}
-			/>
-		)
-	}), [])
+	const title = {
+		font: {
+			family: '"Nunito", system-ui, sans-serif',
+		},
+		color: "#828282"
+	}
 
 	return (
 		<div className={classNames(style.root, className)} {...other}>
@@ -84,12 +77,7 @@ export default function Screenshot({
 							y: {
 								min: -4,
 								max: 8,
-								title: {
-									font: {
-										family: '"Nunito", system-ui, sans-serif',
-									},
-									color: "#828282"
-								},
+								title,
 								ticks: {
 									callback: (value) => `${value}%`
 								}
@@ -97,7 +85,8 @@ export default function Screenshot({
 							x: {
 								grid: {
 									display: false,
-								}
+								},
+								title,
 							}
 						}
 
@@ -107,7 +96,7 @@ export default function Screenshot({
 						datasets: [
 							{
 								label: 'KPI YoY %',
-								data: [4.2, 3, 3.5, 2.8, 3, 3.8, 4.1, 3.5, 3.4, 5.4, 3.9, 4.2].map(value => value * coefficient),
+								data: [4.2, 3, 3.5, 2.8, 3, 3.8, 4.1, 3.5, 3.4, 5.4, 3.9, 4.2].map(value => value * (0.8 - coefficient)),
 								backgroundColor: 'rgb(110, 192, 246)',
 							},
 							{
