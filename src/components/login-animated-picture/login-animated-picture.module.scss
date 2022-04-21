@@ -101,6 +101,8 @@
 	position: absolute;
 	inset: -20% auto auto 42%;
 	width: 46.6%;
+	aspect-ratio: 196 / 115;
+	
 	height: auto;
 	max-width: 44vmin;
 	// transform: translate(calc(var(--ratio-y, 0) * -4vmin), calc(var(--ratio-y, 0) * -4vmin));
