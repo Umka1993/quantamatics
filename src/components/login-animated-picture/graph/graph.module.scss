@@ -7,17 +7,63 @@
 
 	border: 1px solid rgba(#e2e9f6, 0.8);
 	box-shadow: inset 0px 0px 25px rgba(white, 0.05);
+
+	display: grid;
+	grid-auto-rows: auto 1fr;
+
 	@include back-blur(20px) {
 		background-color: rgba(white, 0.8);
-	};
+	}
+
+	:global {
+		.recharts-tooltip-wrapper {
+			position: relative;
+			&::before {
+				content: "";
+				position: absolute;
+				top: 35%;
+				width: 15%;
+				left: -8%;
+				height: 30%;
+				background-color: #739bff;
+
+				z-index: 1;
+
+				-webkit-mask-image: url(./tooltip-tail.svg);
+				mask-image: url(./tooltip-tail.svg);
+
+				-webkit-mask-repeat: no-repeat;
+				mask-repeat: no-repeat;
+
+
+			}
+
+			&-left::before {
+				transform: rotate(180deg);
+				left: 92%;
+			}
+		}
+	}
 }
 
+.tooltip {
+	background: #739bff;
+	border-radius: 3px;
+	color: white;
+	padding: 5px 10px;
 
-.lines {
-	position: absolute;
-	top: math.div(47, 230.17) * 100%;
-	left: math.div(36, 391.71) * 100%;
-	width: math.div(333, 391.71) * 100%;
-	height: math.div(140, 230.17) * 100%;
+	line-height: 1.4;
+
+	span {
+		margin-left: 2px;
+		font-weight: 800;
+	}
 }
 
+.title {
+	color: $headlines;
+	font-weight: 600;
+	font-size: 1.3vmin;
+	line-height: 120%;
+	margin: 0.8em 8%;
+}
