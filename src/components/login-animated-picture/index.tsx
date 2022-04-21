@@ -29,14 +29,14 @@ export default function LoginAnimatedPicture({
 		>
 			<div role="img" className={style.wrap} aria-label="Mock Example">
 				<Screenshot aria-hidden className={style.screen} coefficient={sum} />
-				<Graph className={style.graph} coefficient={sum} aria-hidden />
+				{/* <Graph className={style.graph} coefficient={sum} aria-hidden />
 				<MockResult
 					className={style.result}
 					aria-hidden
 					titles={["Spend", "Transactions", "Avg. Ticket Size"]}
 					coefficient={clampedSum}
 					values={[22.57, 27.43, -3.9]}
-				/>
+				/> */}
 			</div>
 
 			<figcaption className={style.caption}>
