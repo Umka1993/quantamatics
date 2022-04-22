@@ -16,3 +16,14 @@
 		display: none;
 	}
 }
+
+@mixin connect-font($name, $fille-name, $weight: 400, $style: "normal") {
+	@font-face {
+		font-family: $name;
+		font-style: $style;
+		font-display: swap;
+		font-weight: $weight;
+		src: url("../fonts/#{$fille-name}.woff2") format("woff2");
+		@content;
+	}
+}
