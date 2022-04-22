@@ -1,5 +1,4 @@
 import {
-	useState,
 	Dispatch,
 	SetStateAction,
 	FunctionComponent,
@@ -8,13 +7,12 @@ import {
 import SortTableHeader from "../sort-table-header/SortTableHeader";
 
 import { Organization } from "../../types/organization/types";
-import { SortDirection } from "../../data/enum";
-import ISort from "../../types/sort-type";
 
 import { ORG_HEADER } from "./utils/constants";
 import { useNavigate } from "react-router-dom";
 import style from "./styles/table.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
+import useSortingTable from "../../hooks/useSortingTable";
 
 interface ITable extends Omit<HTMLProps<HTMLTableElement>, "list"> {
 	list: Organization[];
@@ -25,9 +23,8 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 	list,
 	setter,
 }) => {
-	// ? Need to be in component to reset sort after update
-	const INITIAL_SORT = { name: "", direction: SortDirection.Default };
-	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
+
+	const { activeSort, activeDirection, updateSort } = useSortingTable({ rowSetter: setter })
 
 	const navigate = useNavigate();
 
@@ -47,11 +44,10 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 					{ORG_HEADER.keys.map((key, index) => (
 						<SortTableHeader
 							key={key}
-							isActive={sort.name === key}
+							isActive={activeSort === key}
 							name={key}
-							direction={sort.direction}
-							setSort={setSort}
-							rowSetter={setter}
+							direction={activeDirection}
+							onClick={() => updateSort(key)}
 							className={style.headline}
 						>
 							{ORG_HEADER.titles[index]}

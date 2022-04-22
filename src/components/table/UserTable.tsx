@@ -14,6 +14,7 @@ import { SortDirection } from "../../data/enum";
 import style from "./styles/table.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import SortTableHeader from "../sort-table-header/SortTableHeader";
+import useSortingTable from "../../hooks/useSortingTable";
 
 interface UserTableProps {
 	list: IUser[];
@@ -28,10 +29,8 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 	dates,
 	userSetter
 }) => {
-	// ? Need to be in component to reset sort after update
-	const INITIAL_SORT = { name: "", direction: SortDirection.Default };
 
-	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
+	const { activeSort, activeDirection, updateSort } = useSortingTable({ rowSetter: setter })
 
 	return (
 		<table className={style.root}>
@@ -40,11 +39,10 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 					{USER_HEADER.keys.map((key: string, index: number) => (
 						<SortTableHeader
 							key={key}
-							isActive={sort.name === key}
+							isActive={activeSort === key}
 							name={key}
-							direction={sort.direction}
-							setSort={setSort}
-							rowSetter={setter}
+							direction={activeDirection}
+							onClick={() => updateSort(key)}
 							className={style.headline}
 						>
 							{USER_HEADER.titles[index]}

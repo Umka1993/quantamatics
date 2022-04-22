@@ -12,9 +12,6 @@ import Dialog from "../dialog";
 import style from "./AssetModal.module.scss";
 
 import AssetRow from "./AssetRow";
-
-import { SortDirection } from "../../data/enum";
-import ISort from "../../types/sort-type";
 import {
 	useLazyGetOrganizationQuery,
 	useUpdateOrganizationMutation,
@@ -23,6 +20,8 @@ import { Organization } from "../../types/organization/types";
 import useUser from "../../hooks/useUser";
 import { AssetInOrganization } from "../../types/asset";
 import SortTableHeader from "../sort-table-header/SortTableHeader";
+import useSortingTable from "../../hooks/useSortingTable";
+import { SortDirection } from "../../data/enum";
 
 interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
 	open: boolean;
@@ -47,12 +46,18 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 
 	const [selected, setSelected] = useState(organization.organizationAssets);
 
-	const INITIAL_SORT = { name: "name", direction: SortDirection.Up };
-	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 	const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
 	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
 	const [getInfoOrg] = useLazyGetOrganizationQuery();
+
+	const { activeDirection, updateSort } = useSortingTable({
+		rowSetter: setOptions,
+		localKey: "asset-rows",
+		initialSort: "name",
+		initialDirection: SortDirection.Up,
+		availableDirections: [SortDirection.Up, SortDirection.Down],
+	});
 
 	const scrollRef = useRef<HTMLTableSectionElement>(null);
 
@@ -94,6 +99,14 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 		[organization]
 	);
 
+	function sortAssets(assets: AssetInOrganization[]) {
+		return [...assets].sort((a, b) => {
+			const first = a.asset.name.toUpperCase();
+			const second = b.asset.name.toUpperCase();
+			return first > second ? 1 : second > first ? -1 : 0;
+		});
+	}
+
 	function initOptions() {
 		if (organization && user) {
 			const prepareOptions = (allAssets: AssetInOrganization[]) => {
@@ -106,16 +119,16 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 						? { ...asset, organizationId: organization.id }
 						: alreadySelectedAsset;
 				});
-				sessionStorage.setItem(
-					"asset-rows",
-					JSON.stringify(transformedOptions)
-				);
 
-				setOptions(transformedOptions);
+				const sorted = sortAssets(transformedOptions);
+
+				sessionStorage.setItem("asset-rows", JSON.stringify(sorted));
+
+				setOptions(sorted);
 			};
 
 			if (isUserOrganization) {
-				setOptions(organization.organizationAssets);
+				setOptions(sortAssets(organization.organizationAssets));
 			} else {
 				getInfoOrg(user.organizationId as string)
 					.unwrap()
@@ -220,7 +233,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 				onReset={resetHandler}
 				onSubmit={submitHandler}
 			>
-				{open &&
+				{open && (
 					<SaveResetHeader
 						headline="Assets"
 						disableReset={isUpdating}
@@ -229,7 +242,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 						headlineID="asset-modal-title"
 						className={style.header}
 					/>
-				}
+				)}
 				{hasError && (
 					<p className={style.error} role="alert" ref={errorRef} tabIndex={0}>
 						{noAssetError
@@ -242,13 +255,11 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 					<thead className={style.thead}>
 						<tr className={style.row}>
 							<SortTableHeader
-								isActive={Boolean(options.length)}
+								isActive={true}
 								name="name"
-								direction={sort.direction}
-								setSort={setSort}
-								rowSetter={setOptions}
+								direction={activeDirection}
+								onClick={() => updateSort("name")}
 								className={style.headline}
-								localKey="asset-rows"
 							>
 								Name
 							</SortTableHeader>

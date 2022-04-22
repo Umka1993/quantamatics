@@ -11,7 +11,7 @@ import Dialog from "../../dialog";
 import style from "./style/AssetModalWithoutPin.module.scss";
 
 import { SortDirection, UserKey } from "../../../data/enum";
-import ISort from "../../../types/sort-type";
+
 import {
 	useLazyGetOrganizationQuery,
 	useUpdateOrganizationMutation,
@@ -29,6 +29,7 @@ import {
 import { useParams } from "react-router";
 import Loader from "../../loader";
 import SortTableHeader from "../../sort-table-header/SortTableHeader";
+import useSortingTable from "../../../hooks/useSortingTable";
 
 export interface AssetModalProps
 	extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
@@ -65,8 +66,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 		new Set()
 	);
 
-	const INITIAL_SORT = { name: "name", direction: SortDirection.Up };
-	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
+
 	const [options, setOptions] = useState<AssetInOrganization[]>([]);
 	const [linkAsset, { isLoading: isAssetLinking }] =
 		useLinkAssetToUserMutation();
@@ -79,6 +79,14 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	const [isAssetChanged, setAssetChanged] = useState(false);
 
 	const scrollRef = useRef<HTMLTableSectionElement>(null);
+
+	const { activeDirection, updateSort } = useSortingTable({
+		rowSetter: setOptions,
+		localKey: "asset-rows",
+		initialSort: "name",
+		initialDirection: SortDirection.Up,
+		availableDirections: [SortDirection.Up, SortDirection.Down]
+	});
 
 	function addBorderToTHeadOnScroll(this: HTMLTableSectionElement) {
 		const thead = this.previousElementSibling;
@@ -139,6 +147,14 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 		});
 	}
 
+	function sortAssets(assets: AssetInOrganization[]) {
+		return [...assets].sort((a, b) => {
+			const first = a.asset.name.toUpperCase();
+			const second = b.asset.name.toUpperCase();
+			return first > second ? 1 : second > first ? -1 : 0;
+		});
+	}
+
 	function initOptions() {
 		if (organization && user) {
 			const prepareOptions = (allAssets: AssetInOrganization[]) => {
@@ -151,15 +167,17 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 						? { ...asset, organizationId: organization.id }
 						: alreadySelectedAsset;
 				});
+				const sorted = sortAssets(transformedOptions);
+
 				sessionStorage.setItem(
 					"asset-rows",
-					JSON.stringify(transformedOptions)
+					JSON.stringify(sorted)
 				);
-				setOptions(transformedOptions);
+				setOptions(sorted);
 			};
 
 			if (isUserOrganization) {
-				setOptions(organization.organizationAssets);
+				setOptions(sortAssets(organization.organizationAssets));
 			} else {
 				getInfoOrg(user.organizationId as string)
 					.unwrap()
@@ -325,13 +343,11 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 					<thead className={style.thead}>
 						<tr className={style.row}>
 							<SortTableHeader
-								isActive={Boolean(options.length)}
+								isActive={true}
 								name="name"
-								direction={sort.direction}
-								setSort={setSort}
-								rowSetter={setOptions}
+								direction={activeDirection}
+								onClick={() => updateSort("name")}
 								className={style.headline}
-								localKey="asset-rows"
 							>
 								Name
 							</SortTableHeader>
