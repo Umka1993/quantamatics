@@ -2,7 +2,7 @@ import style from "./screenshot.module.scss";
 import { HTMLAttributes, useCallback, useMemo } from "react";
 import classNames from "classnames";
 import ResponsiveImage from "../../responsive-image/ResponsiveImage";
-import { ReactComponent as SelectIcon } from './assets/select.svg'
+import { ReactComponent as SelectIcon } from "./assets/select.svg";
 
 import ReactEChartsCore from "echarts-for-react/lib/core";
 import * as echarts from "echarts/core";
@@ -15,54 +15,53 @@ import {
 } from "echarts/components";
 import { SVGRenderer } from "echarts/renderers";
 
-echarts.use(
-	[TitleComponent, TooltipComponent, GridComponent, BarChart, SVGRenderer]
-);
+echarts.use([
+	TitleComponent,
+	TooltipComponent,
+	GridComponent,
+	BarChart,
+	SVGRenderer,
+]);
 
-echarts.registerTheme('quant-bars', {
-	color: [
-		"hsla(348,100%,93%,0.6)",
-		"#8fd3ff",
-		"#d9d5f3"
-	]
-})
-
+echarts.registerTheme("quant-bars", {
+	color: ["hsla(348,100%,93%,0.6)", "#8fd3ff", "#d9d5f3"],
+	backgroundColor: "transparent",
+	title: {
+		textStyle: {
+			color: "#003c71",
+		},
+		subtextStyle: {
+			color: "#93b7e3",
+		},
+	},
+});
 
 type Props = HTMLAttributes<HTMLDivElement> & {
 	coefficient?: number;
 };
-// const BLUE_BARS = [65, 46, 50, 42, 44, 50, 64, 50, 46, 77, 52, 67];
-// const PURPLE_BARS = [28, 38, 40, 46, 78, 53, 4, 102, 49, 72]
-// const RED_BARS = [-5, -2, -4, -1, 15, 3, -42, 25, -2, 5]
 
 export default function Screenshot({
 	className,
 	coefficient = 1,
 	...other
 }: Props) {
-	const title = {
-		font: {
-			family: '"Nunito", system-ui, sans-serif',
-		},
-		color: "#828282"
-	}
 
 	const xLabels = useMemo(() => {
 		const MAX_ELEMENTS = 11;
 		const START_YEAR = 2019;
 		const START_QUARTER = 2;
 
-		const labels: string[] = []
+		const labels: string[] = [];
 
 		for (let index = 0; index < MAX_ELEMENTS; index++) {
 			const quarters = START_QUARTER + index;
 			const quarter = quarters % 4;
-			const year = START_YEAR + Math.floor((quarters - 1) / 4)
+			const year = START_YEAR + Math.floor((quarters - 1) / 4);
 
-			labels.push(`${year}-${quarter ? quarter : 4}Q`)
+			labels.push(`${year}-${quarter ? quarter : 4}Q`);
 		}
 		return labels;
-	}, [])
+	}, []);
 
 	return (
 		<div className={classNames(style.root, className)} {...other}>
@@ -79,37 +78,52 @@ export default function Screenshot({
 				<ReactEChartsCore
 					echarts={echarts}
 					option={{
-						// xAxis: {
-						// 	data: xLabels
-						// },
-						yAxis: {},
-						xAxis: { type: 'category' },
-						series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }],
-						dataset: {
-							// Provide a set of data.
-							source: [
-								['product', '2015', '2016', '2017'],
-								['Matcha Latte', 43.3, 85.8, 93.7],
-								['Milk Tea', 83.1, 73.4, 55.1],
-								['Cheese Cocoa', 86.4, 65.2, 82.5],
-								['Walnut Brownie', 72.4, 53.9, 39.1]
-							]
+						title: {
+							text: "One Period out of Sample Linear Regression Forecast (YoY, %)",
 						},
-						// series: [
-						// 	{
-						// 		type: 'bar',
-						// 		data: [0, 0, -2, -1, -0.5, -0.7, -0.2, 1, -3, 1.5, -0.4, 0.4].map(value => value * coefficient)
-						// 	},
-						// 	{
-						// 		type: 'bar',
-						// 		name: 'KPI YoY %',
-						// 		data: [4.2, 3, 3.5, 2.8, 3, 3.8, 4.1, 3.5, 3.4, 5.4, 3.9, 4.2].map(value => value * (0.8 - coefficient))
-						// 	},
+						tooltip: {},
+						legend: {
+							// data: ["sales"],
 
-						// 	{
-						// 		data: [0, 0, 1.8, 2.4, 2.6, 3, 5, 3.5, 0.5, 6.5, 3.4, 4.4].map(value => value * coefficient)
-						// 	}
-						// ]
+							// orient: 'vertical',
+							right: 10,
+							icon: 'pin'
+							// top: 'center'
+
+						},
+						xAxis: {
+							data: xLabels,
+							type: 'category'
+						},
+						yAxis: {
+							axisLabel: {
+								formatter: '{value}%',
+								align: 'center'
+							},
+							min: -4,
+							max: 8
+						},
+						series: [
+							{
+								type: "bar",
+								data: [
+									0, 0, -2, -1, -0.5, -0.7, -0.2, 1, -3, 1.5, -0.4, 0.4,
+								].map((value) => (value * coefficient).toFixed(2)),
+							},
+							{
+								type: "bar",
+								name: "KPI YoY %",
+								data: [
+									4.2, 3, 3.5, 2.8, 3, 3.8, 4.1, 3.5, 3.4, 5.4, 3.9, 4.2,
+								].map((value) => (value * (0.8 - coefficient)).toFixed(2)),
+							},
+							{
+								type: "bar",
+								data: [0, 0, 1.8, 2.4, 2.6, 3, 5, 3.5, 0.5, 6.5, 3.4, 4.4].map(
+									(value) => (value * coefficient).toFixed(2)
+								),
+							},
+						],
 					}}
 					notMerge={true}
 					lazyUpdate={true}
@@ -118,7 +132,6 @@ export default function Screenshot({
 				// onEvents={EventsDict}
 				// opts={ }
 				/>
-
 			</div>
 			{/* <div className={style.graph}>
 				<Bar
