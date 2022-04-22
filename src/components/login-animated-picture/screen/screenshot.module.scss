@@ -11,10 +11,11 @@
 
 .graph {
 	position: absolute;
-	top: 34.8%;
-	right: 5%;
-	width: 75%;
-	height: 50%;
+	top: 26.8%;
+	right: 0;
+	width: 82.5%;
+	height: 71%;
+	background-color: rgba(red, 5%);
 	rect {
 		transition-property: height, y;
 		transition-duration: 1s;
