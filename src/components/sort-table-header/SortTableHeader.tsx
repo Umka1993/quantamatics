@@ -1,53 +1,59 @@
 import { SortDirection } from "../../data/enum";
-import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
-import sortTable, { ISortTable } from "./utils/sort";
+import { Dispatch, SetStateAction, ThHTMLAttributes, useEffect } from "react";
+import sortTable, { changeSortDirection } from "./utils/sort";
 import { ReactComponent as SortIcon } from "./assets/sort-icon.svg";
 import s from "./SortTableHeader.module.scss";
 import { ReactComponent as DownArrow } from "./assets/down.svg";
 import classNames from "classnames";
+import ISort from "../../types/sort-type";
 
-interface ISortTableHeader extends ISortTable {
-	text: string;
-	className?: string;
-	rememberScroll?: Dispatch<SetStateAction<number>>;
-}
+type Props<Row> = ThHTMLAttributes<HTMLTableHeaderCellElement> & {
+	isActive?: boolean;
+	name: string;
+	direction: SortDirection;
+	setSort: Dispatch<SetStateAction<ISort>>;
+	rowSetter: Dispatch<SetStateAction<Row[]>>;
+	localKey?: string;
+};
 
-export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
-	name,
-	sort,
-	localRows,
-	setSort,
-	setLocalRows,
-	text,
+export default function SortTableHeader<Row>({
 	className,
-	rememberScroll,
+	children,
+	isActive,
+	name,
+	direction,
+	setSort,
 	localKey = "table-rows",
-}) => {
-	const isActiveSort = sort.name === name;
+	rowSetter,
+	...other
+}: Props<Row>) {
+	const isDefault = direction === SortDirection.Default;
+
+	useEffect(() => {
+		if (isActive) {
+			// console.info(localKey, direction)
+			sortTable(direction, name, rowSetter, localKey);
+		}
+	}, [isActive, direction]);
+
+	function updateSort() {
+		setSort({ name, direction: changeSortDirection(direction) });
+	}
 
 	return (
 		<th
 			className={classNames(s.root, className)}
-			aria-sort={isActiveSort ? sort.direction : SortDirection.Default}
+			aria-sort={isActive ? direction : SortDirection.Default}
+			{...other}
 		>
-			<button
-				onClick={() => {
-					if (rememberScroll) {
-						const scrollWrapper = document.querySelector("main");
-						scrollWrapper && rememberScroll(scrollWrapper.scrollTop);
-					}
-					sortTable({ name, sort, localRows, setSort, setLocalRows, localKey });
-				}}
-				type="button"
-				className={s.button}
-			>
-				{text}
+			<button onClick={updateSort} type="button" className={s.button}>
+				{children}
 
-				{isActiveSort && sort.direction !== SortDirection.Default ? (
+				{isActive && !isDefault ? (
 					<DownArrow
 						aria-hidden
 						className={classNames(s.arrow, {
-							[s["arrow--up"]]: sort.direction === SortDirection.Up,
+							[s["arrow--up"]]: direction === SortDirection.Up,
 						})}
 					/>
 				) : (
@@ -56,4 +62,4 @@ export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
 			</button>
 		</th>
 	);
-};
+}

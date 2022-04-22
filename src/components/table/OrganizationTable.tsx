@@ -5,7 +5,7 @@ import {
 	FunctionComponent,
 	HTMLProps,
 } from "react";
-import { SortTableHeader } from "../sort-table-header/SortTableHeader";
+import SortTableHeader from "../sort-table-header/SortTableHeader";
 
 import { Organization } from "../../types/organization/types";
 import { SortDirection } from "../../data/enum";
@@ -31,13 +31,11 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 
 	const navigate = useNavigate();
 
-	const handleOrgNameLength = (name:string)=>{
-
-
-		if(name && name.length>45){
+	const handleOrgNameLength = (name: string) => {
+		if (name && name.length > 45) {
 			return `${name.slice(0, 29)}...`
 
-		}else{
+		} else {
 			return name
 		}
 	}
@@ -49,14 +47,15 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 					{ORG_HEADER.keys.map((key, index) => (
 						<SortTableHeader
 							key={key}
+							isActive={sort.name === key}
 							name={key}
-							text={ORG_HEADER.titles[index]}
-							sort={sort}
-							localRows={list}
+							direction={sort.direction}
 							setSort={setSort}
-							setLocalRows={setter}
+							rowSetter={setter}
 							className={style.headline}
-						/>
+						>
+							{ORG_HEADER.titles[index]}
+						</SortTableHeader>
 					))}
 
 					<th className={[style.headline, style["headline--action"]].join(" ")}>

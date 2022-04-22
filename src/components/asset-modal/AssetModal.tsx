@@ -10,7 +10,6 @@ import {
 import { HTMLProps } from "react";
 import Dialog from "../dialog";
 import style from "./AssetModal.module.scss";
-import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 
 import AssetRow from "./AssetRow";
 
@@ -23,6 +22,7 @@ import {
 import { Organization } from "../../types/organization/types";
 import useUser from "../../hooks/useUser";
 import { AssetInOrganization } from "../../types/asset";
+import SortTableHeader from "../sort-table-header/SortTableHeader";
 
 interface AssetModalProps extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
 	open: boolean;
@@ -47,7 +47,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 
 	const [selected, setSelected] = useState(organization.organizationAssets);
 
-	const INITIAL_SORT = { name: "name", direction: SortDirection.Default };
+	const INITIAL_SORT = { name: "name", direction: SortDirection.Up };
 	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 	const [options, setOptions] = useState<AssetInOrganization[]>([]);
 
@@ -242,15 +242,16 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 					<thead className={style.thead}>
 						<tr className={style.row}>
 							<SortTableHeader
+								isActive={Boolean(options.length)}
 								name="name"
-								text="Name"
-								sort={sort}
-								localRows={options}
+								direction={sort.direction}
 								setSort={setSort}
-								setLocalRows={setOptions}
+								rowSetter={setOptions}
 								className={style.headline}
 								localKey="asset-rows"
-							/>
+							>
+								Name
+							</SortTableHeader>
 							<th className={[style.headline, style.action].join(" ")}>
 								Assign
 							</th>

@@ -3,14 +3,12 @@ import {
 	FormEvent,
 	FunctionComponent,
 	HTMLProps,
-	useCallback,
 	useEffect,
 	useRef,
 	useState,
 } from "react";
 import Dialog from "../../dialog";
 import style from "./style/AssetModalWithoutPin.module.scss";
-import { SortTableHeader } from "../../sort-table-header/SortTableHeader";
 
 import { SortDirection, UserKey } from "../../../data/enum";
 import ISort from "../../../types/sort-type";
@@ -19,7 +17,6 @@ import {
 	useUpdateOrganizationMutation,
 } from "../../../api/organization";
 import { Organization } from "../../../types/organization/types";
-import useUser from "../../../hooks/useUser";
 import { AssetInOrganization } from "../../../types/asset";
 import AssetRowWithoutPin from "./AssetRowWithoutPin";
 import { IUser } from "../../../types/user";
@@ -31,6 +28,7 @@ import {
 } from "../../../api/asset";
 import { useParams } from "react-router";
 import Loader from "../../loader";
+import SortTableHeader from "../../sort-table-header/SortTableHeader";
 
 export interface AssetModalProps
 	extends Omit<HTMLProps<HTMLDivElement>, "selected"> {
@@ -67,12 +65,12 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 		new Set()
 	);
 
-	const INITIAL_SORT = { name: "name", direction: SortDirection.Default };
+	const INITIAL_SORT = { name: "name", direction: SortDirection.Up };
 	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
 	const [options, setOptions] = useState<AssetInOrganization[]>([]);
 	const [linkAsset, { isLoading: isAssetLinking }] =
 		useLinkAssetToUserMutation();
-	const [unlinkAsset, { isLoading: isAssetUnLinking  }] =
+	const [unlinkAsset, { isLoading: isAssetUnLinking }] =
 		useUnlinkAssetToUserMutation();
 	const { data: assets } = useGetAllAssetsQuery(orgId as string);
 
@@ -157,7 +155,6 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 					"asset-rows",
 					JSON.stringify(transformedOptions)
 				);
-
 				setOptions(transformedOptions);
 			};
 
@@ -198,11 +195,11 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 		closeModal();
 	}
 
-	useEffect( ()=>{
-		if(isAssetUnLinking || isAssetLinking){
-			setTimeout( ()=>toggleAssetsModal(),500)
+	useEffect(() => {
+		if (isAssetUnLinking || isAssetLinking) {
+			setTimeout(() => toggleAssetsModal(), 500)
 		}
-	},[isAssetUnLinking || isAssetLinking])
+	}, [isAssetUnLinking || isAssetLinking])
 
 	useEffect(() => {
 		if (hasError && errorRef.current) {
@@ -269,19 +266,6 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 			if (isQuickChanged) {
 				setHasChanges(true);
 			} else {
-				// let isSharedChanged = false;
-				// selected.forEach((asset) => {
-				// 	const foundedInitialAsset = organization.organizationAssets.find(
-				// 		(initialAsset) => initialAsset.assetId === asset.assetId
-				// 	);
-				//
-				// 	if (
-				// 		foundedInitialAsset === undefined ||
-				// 		foundedInitialAsset.sharedByDefault !== asset.sharedByDefault
-				// 	) {
-				// 		isSharedChanged = true;
-				// 	}
-				// });
 				setHasChanges(checkIfAssetChanged());
 			}
 		}
@@ -341,15 +325,16 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 					<thead className={style.thead}>
 						<tr className={style.row}>
 							<SortTableHeader
+								isActive={Boolean(options.length)}
 								name="name"
-								text="Name"
-								sort={sort}
-								localRows={options}
+								direction={sort.direction}
 								setSort={setSort}
-								setLocalRows={setOptions}
+								rowSetter={setOptions}
 								className={style.headline}
 								localKey="asset-rows"
-							/>
+							>
+								Name
+							</SortTableHeader>
 							<th className={[style.headline, style.action].join(" ")}>
 								Assign
 							</th>

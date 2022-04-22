@@ -26,9 +26,11 @@ export default function OrganizationList(): ReactElement {
 			const filteredOrgs = user?.userRoles.includes(UserRole.Admin)
 				? organizations
 				: organizations?.filter(
-						(organization) =>
-							organization.parentId === String(user?.organizationId)
-				  );
+					(organization) =>
+						organization.parentId === String(user?.organizationId)
+				);
+
+			sessionStorage.setItem("table-rows", JSON.stringify(filteredOrgs));
 			return filteredOrgs;
 		},
 		[user?.userRoles, data]
@@ -57,7 +59,7 @@ export default function OrganizationList(): ReactElement {
 					name.toLocaleLowerCase().includes(normalizedSearchQuery) ||
 					customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
 					customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
-						comments && comments.toLocaleLowerCase().includes(normalizedSearchQuery)
+					comments && comments.toLocaleLowerCase().includes(normalizedSearchQuery)
 			);
 
 			sessionStorage.setItem("table-rows", JSON.stringify(filteredOrgs));

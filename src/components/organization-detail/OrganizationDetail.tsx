@@ -15,11 +15,7 @@ import { IUser } from "../../types/user";
 import Loader from "../loader";
 import OrganizationInfo from "../organization-info/OrganizationInfo";
 import OrganizationModal from "../organization-modal/OrganizationModal";
-import useBoolean from "../../hooks/useBoolean";
 import { UserKey } from "../../data/enum";
-import Dialog from "../dialog";
-import EditOrganizationUser from "../edit-org-user/EditOrganizationUser";
-import { useGetUserAssetsQuery } from "../../api/asset";
 
 export default function OrganizationDetail() {
 	const { id } = useParams<RouteParams>();
@@ -65,13 +61,6 @@ export default function OrganizationDetail() {
 		}
 	}, [isUsersLoaded,userList]);
 
-	const closeModal = () => setUser(null);
-	// ! Temp kludge
-	const {
-		value: isUserCloseRequested,
-		setTrue: requestUserClose,
-		setFalse: setUserToDefault,
-	} = useBoolean(false);
 
 	useEffect(() => {
 		if (selectedUser) {
@@ -142,24 +131,6 @@ export default function OrganizationDetail() {
 					/>
 				)}
 			</section>
-
-			{/*<Dialog*/}
-			{/*	open={selectedUser !== null}*/}
-			{/*	onRequestClose={requestUserClose}*/}
-			{/*	closeOnOutsideClick*/}
-			{/*	id="org-user-modal"*/}
-			{/*	variant="right-side"*/}
-			{/*	hasCloseButton={false}*/}
-			{/*>*/}
-			{/*{selectedUser !== null && (*/}
-			{/*	<EditOrganizationUser*/}
-			{/*		user={selectedUser}*/}
-			{/*		onClose={closeModal}*/}
-			{/*		isUserCloseRequested={isUserCloseRequested}*/}
-			{/*		setUserToDefault={setUserToDefault}*/}
-			{/*	/>*/}
-			{/*)}*/}
-			{/*</Dialog>*/}
 		</>
 	);
 }
