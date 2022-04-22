@@ -1,12 +1,10 @@
 import {
 	FunctionComponent,
 	SetStateAction,
-	useLayoutEffect,
 	useState,
 	Dispatch,
 } from "react";
 
-import { SortTableHeader } from "../sort-table-header/SortTableHeader";
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
 import { IUser } from "../../types/user";
@@ -15,6 +13,8 @@ import { USER_HEADER } from "./utils/constants";
 import { SortDirection } from "../../data/enum";
 import style from "./styles/table.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
+import SortTableHeader from "../sort-table-header/SortTableHeader";
+import useSortingTable from "../../hooks/useSortingTable";
 
 interface UserTableProps {
 	list: IUser[];
@@ -29,21 +29,8 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 	dates,
 	userSetter
 }) => {
-	// ? Need to be in component to reset sort after update
-	const INITIAL_SORT = { name: "", direction: SortDirection.Default };
 
-	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
-
-	const [scrollY, setScrollY] = useState<number>(0);
-
-	// ? Kludge for Chrome to remember scroll position after rerendering
-
-	useLayoutEffect(() => {
-		const scrollWrapper = document.querySelector("main");
-		if (scrollWrapper) {
-			scrollWrapper.scrollTop = scrollY;
-		}
-	}, [list]);
+	const { activeSort, activeDirection, updateSort } = useSortingTable({ rowSetter: setter })
 
 	return (
 		<table className={style.root}>
@@ -52,15 +39,14 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 					{USER_HEADER.keys.map((key: string, index: number) => (
 						<SortTableHeader
 							key={key}
+							isActive={activeSort === key}
 							name={key}
-							text={USER_HEADER.titles[index]}
-							sort={sort}
-							localRows={list}
-							setSort={setSort}
-							setLocalRows={setter}
+							direction={activeDirection}
+							onClick={() => updateSort(key)}
 							className={style.headline}
-							rememberScroll={setScrollY}
-						/>
+						>
+							{USER_HEADER.titles[index]}
+						</SortTableHeader>
 					))}
 					<th className={[style.headline, style["headline--action"]].join(" ")}>
 						Actions

@@ -1,20 +1,18 @@
 import {
-	useState,
 	Dispatch,
 	SetStateAction,
 	FunctionComponent,
 	HTMLProps,
 } from "react";
-import { SortTableHeader } from "../sort-table-header/SortTableHeader";
+import SortTableHeader from "../sort-table-header/SortTableHeader";
 
 import { Organization } from "../../types/organization/types";
-import { SortDirection } from "../../data/enum";
-import ISort from "../../types/sort-type";
 
 import { ORG_HEADER } from "./utils/constants";
 import { useNavigate } from "react-router-dom";
 import style from "./styles/table.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
+import useSortingTable from "../../hooks/useSortingTable";
 
 interface ITable extends Omit<HTMLProps<HTMLTableElement>, "list"> {
 	list: Organization[];
@@ -25,19 +23,16 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 	list,
 	setter,
 }) => {
-	// ? Need to be in component to reset sort after update
-	const INITIAL_SORT = { name: "", direction: SortDirection.Default };
-	const [sort, setSort] = useState<ISort>(INITIAL_SORT);
+
+	const { activeSort, activeDirection, updateSort } = useSortingTable({ rowSetter: setter })
 
 	const navigate = useNavigate();
 
-	const handleOrgNameLength = (name:string)=>{
-
-
-		if(name && name.length>45){
+	const handleOrgNameLength = (name: string) => {
+		if (name && name.length > 45) {
 			return `${name.slice(0, 29)}...`
 
-		}else{
+		} else {
 			return name
 		}
 	}
@@ -49,14 +44,14 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 					{ORG_HEADER.keys.map((key, index) => (
 						<SortTableHeader
 							key={key}
+							isActive={activeSort === key}
 							name={key}
-							text={ORG_HEADER.titles[index]}
-							sort={sort}
-							localRows={list}
-							setSort={setSort}
-							setLocalRows={setter}
+							direction={activeDirection}
+							onClick={() => updateSort(key)}
 							className={style.headline}
-						/>
+						>
+							{ORG_HEADER.titles[index]}
+						</SortTableHeader>
 					))}
 
 					<th className={[style.headline, style["headline--action"]].join(" ")}>
