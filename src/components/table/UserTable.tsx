@@ -1,5 +1,4 @@
 import { SetStateAction, Dispatch } from "react";
-
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
 import { IUser } from "../../types/user";
@@ -11,7 +10,6 @@ import useSortingTable from "../../hooks/useSortingTable";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { RouteParams } from "../../types/route-params";
 import { UserListLocation } from "../../types/user-list-location";
-import { SortDirection } from "../../data/enum";
 
 interface UserTableProps {
 	list: IUser[];
@@ -21,17 +19,17 @@ interface UserTableProps {
 
 export default function UserTable({ list, setter, dates }: UserTableProps) {
 	const navigate = useNavigate();
-
 	const { state } = useLocation();
-
-
+	const initialSort = state ? (state as UserListLocation).initialSort : undefined;
 	const { activeSort, activeDirection, updateSort } = useSortingTable({
 		rowSetter: setter,
 		initialDirection: state ? (state as UserListLocation).initialDirection : undefined,
-		initialSort: state ? (state as UserListLocation).initialSort : undefined,
+		initialSort,
 	});
 
 	const { id: orgID } = useParams<RouteParams>();
+
+
 
 	return (
 		<table className={style.root}>

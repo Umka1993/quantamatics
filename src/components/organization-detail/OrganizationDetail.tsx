@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { RouteParams } from "../../types/route-params";
 import { useGetOrganizationQuery } from "../../api/organization";
 import IApiError from "../../types/api-error";

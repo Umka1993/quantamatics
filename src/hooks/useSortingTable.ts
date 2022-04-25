@@ -53,6 +53,8 @@ function sortTable<Row>(
 	localKey: string
 ) {
 	setLocalRows((oldRows) => {
+		// console.log(`sorting with ${direction}`);
+
 		let newRows = [...oldRows];
 
 		switch (direction) {

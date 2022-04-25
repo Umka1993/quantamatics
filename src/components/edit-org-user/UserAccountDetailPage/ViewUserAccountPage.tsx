@@ -1,9 +1,9 @@
-import { HTMLProps, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import style from "./style/user-account-detail.module.scss";
 import { IUser } from "../../../types/user";
-import { AppRoute, OrganizationKey, SortDirection, UserKey } from "../../../data/enum";
+import { AppRoute, OrganizationKey, UserKey } from "../../../data/enum";
 import classNames from "classnames";
-import { useParams, useLocation } from "react-router";
+import { useParams } from "react-router";
 import {
 	useGetOrganizationUsersQuery,
 	useGetUserQuery,
@@ -22,18 +22,10 @@ import Dialog from "../../dialog";
 import EditOrganizationUserWithoutAssets from "./edit-organizationUser-without-assets";
 import useUser from "../../../hooks/useUser";
 import { UsersList } from "../../users-list/users-list";
-import { UserListLocation } from "../../../types/user-list-location";
 
 export const ViewUserAccountPage = () => {
 	const { id: orgId, userId } = useParams();
 	const loggedInUser = useUser();
-
-	const { state } = useLocation();
-
-	const { initialDirection, initialSort }: UserListLocation = state ? state as UserListLocation : {
-		initialDirection: SortDirection.Default, initialSort: ""
-	}
-
 
 	const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
 
@@ -60,7 +52,6 @@ export const ViewUserAccountPage = () => {
 	const {
 		data: userList,
 		isSuccess: isUsersLoaded,
-		isLoading: isUsersLoading,
 	} = useGetOrganizationUsersQuery(orgId as string);
 
 	const endDates = useMemo(() => {
@@ -76,11 +67,16 @@ export const ViewUserAccountPage = () => {
 
 	useEffect(() => {
 		if (userList) {
+			// console.log(`Updating from ${userId}`)
+			// console.log(userList.length);
+
+			// console.table(userList)
+
 			const filtered = userList.filter((user) => user.id !== Number(userId))
 			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
 			setLocalRows(filtered);
 		}
-	}, [isUsersLoaded, userList, userId]);
+	}, [userList, userId]);
 
 	const expirationDate = moment(
 		selectedUser && new Date(selectedUser[UserKey.SubscriptionEndDate])
