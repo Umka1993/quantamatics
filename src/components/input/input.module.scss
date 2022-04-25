@@ -1,0 +1,82 @@
+@use "../../sass/variables" as *;
+@use "../../sass/mixins" as *;
+@use "sass:math";
+
+.root {
+	position: relative;
+	margin: 0;
+}
+
+.input {
+	height: 50px;
+	width: 100%;
+	background-color: #ffffff;
+
+	border: 1px solid rgba($inactive, 0.4);
+	border-radius: 2px;
+	padding: 12px;
+
+	color: $headlines;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: math.div(22, 16);
+	outline: none;
+
+	transition-property: color, border-color;
+	transition-duration: 0.3s;
+
+	&::placeholder {
+		color: $inactive;
+	}
+
+	&:focus {
+		border-color: $accent;
+	}
+
+	&:disabled {
+		background-color: rgba($inactive, 0.2);
+		color: $main-text;
+	}
+}
+
+.validate:not(:placeholder-shown):invalid,
+.invalid {
+	border-color: $error;
+}
+
+
+.withToggler {
+	padding-right: 12px * 2 + 16px;
+}
+
+.error {
+	display: block;
+	color: $error;
+	margin: 16px 0 0;
+}
+
+.toggle {
+	padding: 12px;
+	height: 50px;
+
+	display: grid;
+	align-content: center;
+	position: absolute;
+	top: 0;
+	right: 0;
+	cursor: pointer;
+	background-color: transparent;
+	color: $inactive;
+	border: 1px solid transparent;
+	outline: none;
+	border-radius: 2px;
+
+	&:hover {
+		color: $accent;
+	}
+
+	&:focus-visible {
+		color: $accent;
+		border-color: currentColor;
+	}
+}

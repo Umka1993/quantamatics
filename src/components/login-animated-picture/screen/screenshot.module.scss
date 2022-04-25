@@ -1,0 +1,36 @@
+@use "sass:math";
+
+.root {
+	position: relative;
+	display: inline-block;
+
+	::global .select {
+		position: absolute;
+	}
+}
+
+.graph {
+	position: absolute;
+	top: 26.8%;
+	right: 0;
+	width: 82.5%;
+	height: 71%;
+	rect {
+		transition-property: height, y;
+		transition-duration: 1s;
+	}
+}
+
+.image {
+	height: auto;
+	width: 100%;
+}
+
+.select {
+	position: absolute;
+	top: 54.8%;
+	right: 4.5%;
+
+	width: math.div(112, 712) * 100%;
+	height: math.div(69, 401) * 100%;
+}

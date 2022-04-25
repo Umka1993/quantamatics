@@ -1,7 +1,6 @@
 import { AppRoute } from "../data/enum";
 import { Route, Routes, Navigate } from "react-router-dom";
 import {
-	LoginForm,
 	ResetPasswordForm,
 	ForgotPasswordForm,
 	SignUpForm,
@@ -13,7 +12,6 @@ export default function UnLoggedRoutes() {
 	return (
 		<Routes>
 			<Route path="*" element={<Navigate to={AppRoute.Login} />} />
-			<Route path={AppRoute.Login} element={<LoginForm />} />
 			<Route
 				path={AppRoute.ForgotPassword}
 				element={<ForgotPasswordForm />}

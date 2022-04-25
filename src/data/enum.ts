@@ -1,5 +1,6 @@
 export const enum AppInfo {
 	Name = 'Quantamatics',
+	LogoPath = 'img/logo.svg'
 }
 
 export const enum AppRoute {

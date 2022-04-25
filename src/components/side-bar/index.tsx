@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useEffect } from "react";
 import style from "./styles/side-bar.module.scss";
 import NavBar from "../navbar";
 import { ReactComponent as LinesIcon } from "./assets/lines.svg";

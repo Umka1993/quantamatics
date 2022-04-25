@@ -1,10 +1,6 @@
 import { useLayoutEffect, RefObject } from "react";
+import { HTMLDialogElement } from "../types";
 
-export interface HTMLDialogElement extends HTMLDivElement {
-	open: boolean;
-	showModal: () => void;
-	close: () => void;
-}
 
 export default function useDialogPolyfill(ref: RefObject<HTMLDialogElement>) {
 	let dialogPolyfill: any = null;
@@ -14,10 +10,7 @@ export default function useDialogPolyfill(ref: RefObject<HTMLDialogElement>) {
 			if (dialogPolyfill) {
 				dialogPolyfill.registerDialog(ref.current);
 			} else {
-				import(
-					/* webpackChunkName: "dialog-polyfill" */
-					"dialog-polyfill"
-				).then((polyfill) => {
+				import("dialog-polyfill").then((polyfill) => {
 					polyfill.default.registerDialog(ref.current as any);
 					dialogPolyfill = polyfill.default;
 				});
