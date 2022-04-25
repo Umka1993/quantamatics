@@ -96,7 +96,7 @@ export default function OrganizationDetail() {
 				hasAssets={hasAssets}
 				localRows={localRows}
 				setLocalRows={setLocalRows}
-				headlineTitle={"User Accounts"}
+				headlineTitle="User Accounts"
 				organizationID={id}
 			/>
 		</>

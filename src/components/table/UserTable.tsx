@@ -8,8 +8,10 @@ import style from "./styles/table.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import SortTableHeader from "../sort-table-header/SortTableHeader";
 import useSortingTable from "../../hooks/useSortingTable";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { RouteParams } from "../../types/route-params";
+import { UserListLocation } from "../../types/user-list-location";
+import { SortDirection } from "../../data/enum";
 
 interface UserTableProps {
 	list: IUser[];
@@ -20,8 +22,13 @@ interface UserTableProps {
 export default function UserTable({ list, setter, dates }: UserTableProps) {
 	const navigate = useNavigate();
 
+	const { state } = useLocation();
+
+
 	const { activeSort, activeDirection, updateSort } = useSortingTable({
 		rowSetter: setter,
+		initialDirection: state ? (state as UserListLocation).initialDirection : undefined,
+		initialSort: state ? (state as UserListLocation).initialSort : undefined,
 	});
 
 	const { id: orgID } = useParams<RouteParams>();
