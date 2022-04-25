@@ -1,53 +1,41 @@
 import { SortDirection } from "../../data/enum";
-import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
-import sortTable, { ISortTable } from "./utils/sort";
+import { MouseEventHandler, ThHTMLAttributes } from "react";
 import { ReactComponent as SortIcon } from "./assets/sort-icon.svg";
 import s from "./SortTableHeader.module.scss";
 import { ReactComponent as DownArrow } from "./assets/down.svg";
 import classNames from "classnames";
 
-interface ISortTableHeader extends ISortTable {
-	text: string;
-	className?: string;
-	rememberScroll?: Dispatch<SetStateAction<number>>;
-}
+type Props = ThHTMLAttributes<HTMLTableHeaderCellElement> & {
+	isActive?: boolean;
+	name: string;
+	direction: SortDirection;
+	onClick?: MouseEventHandler<HTMLButtonElement>
+};
 
-export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
-	name,
-	sort,
-	localRows,
-	setSort,
-	setLocalRows,
-	text,
+export default function SortTableHeader({
 	className,
-	rememberScroll,
-	localKey = "table-rows",
-}) => {
-	const isActiveSort = sort.name === name;
+	children,
+	isActive,
+	name,
+	direction,
+	onClick,
+	...other
+}: Props) {
+	const isDefault = direction === SortDirection.Default;
 
 	return (
 		<th
 			className={classNames(s.root, className)}
-			aria-sort={isActiveSort ? sort.direction : SortDirection.Default}
+			aria-sort={isActive ? direction : SortDirection.Default}
+			{...other}
 		>
-			<button
-				onClick={() => {
-					if (rememberScroll) {
-						const scrollWrapper = document.querySelector("main");
-						scrollWrapper && rememberScroll(scrollWrapper.scrollTop);
-					}
-					sortTable({ name, sort, localRows, setSort, setLocalRows, localKey });
-				}}
-				type="button"
-				className={s.button}
-			>
-				{text}
-
-				{isActiveSort && sort.direction !== SortDirection.Default ? (
+			<button onClick={onClick} type="button" className={s.button}>
+				{children}
+				{isActive && !isDefault ? (
 					<DownArrow
 						aria-hidden
 						className={classNames(s.arrow, {
-							[s["arrow--up"]]: sort.direction === SortDirection.Up,
+							[s["arrow--up"]]: direction === SortDirection.Up,
 						})}
 					/>
 				) : (
@@ -56,4 +44,4 @@ export const SortTableHeader: FunctionComponent<ISortTableHeader> = ({
 			</button>
 		</th>
 	);
-};
+}
