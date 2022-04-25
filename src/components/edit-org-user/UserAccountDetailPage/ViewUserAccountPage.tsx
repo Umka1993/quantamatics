@@ -158,7 +158,7 @@ export const ViewUserAccountPage = () => {
 
 		return (
 			<section>
-				<div className={classNames(style.root)}>
+				<div className={style.root}>
 					<UserAccountHeader
 						selectedUser={selectedUser}
 						toggleEditUserPage={toggleEditUserPage}

@@ -10,12 +10,9 @@ import {
 import Dialog from "../../dialog";
 import style from "./style/AssetModalWithoutPin.module.scss";
 
-import { SortDirection, UserKey } from "../../../data/enum";
+import { SortDirection } from "../../../data/enum";
 
-import {
-	useLazyGetOrganizationQuery,
-	useUpdateOrganizationMutation,
-} from "../../../api/organization";
+import { useLazyGetOrganizationQuery } from "../../../api/organization";
 import { Organization } from "../../../types/organization/types";
 import { AssetInOrganization } from "../../../types/asset";
 import AssetRowWithoutPin from "./AssetRowWithoutPin";
@@ -27,7 +24,6 @@ import {
 	useUnlinkAssetToUserMutation,
 } from "../../../api/asset";
 import { useParams } from "react-router";
-import Loader from "../../loader";
 import SortTableHeader from "../../sort-table-header/SortTableHeader";
 import useSortingTable from "../../../hooks/useSortingTable";
 
@@ -46,7 +42,6 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	user,
 	...other
 }) => {
-
 	const { id: orgId } = useParams();
 	const [noAssetError, setNoAssetError] = useState(false);
 
@@ -66,7 +61,6 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 		new Set()
 	);
 
-
 	const [options, setOptions] = useState<AssetInOrganization[]>([]);
 	const [linkAsset, { isLoading: isAssetLinking }] =
 		useLinkAssetToUserMutation();
@@ -74,7 +68,6 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 		useUnlinkAssetToUserMutation();
 	const { data: assets } = useGetAllAssetsQuery(orgId as string);
 
-	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
 	const [getInfoOrg] = useLazyGetOrganizationQuery();
 	const [isAssetChanged, setAssetChanged] = useState(false);
 
@@ -85,7 +78,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 		localKey: "asset-rows",
 		initialSort: "name",
 		initialDirection: SortDirection.Up,
-		availableDirections: [SortDirection.Up, SortDirection.Down]
+		availableDirections: [SortDirection.Up, SortDirection.Down],
 	});
 
 	function addBorderToTHeadOnScroll(this: HTMLTableSectionElement) {
@@ -119,7 +112,6 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	}, [scrollRef.current]);
 
 	const isUserOrganization = user?.organizationId === organization?.id;
-
 
 	function updateAssets() {
 		// ? Link new assets to user
@@ -169,10 +161,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 				});
 				const sorted = sortAssets(transformedOptions);
 
-				sessionStorage.setItem(
-					"asset-rows",
-					JSON.stringify(sorted)
-				);
+				sessionStorage.setItem("asset-rows", JSON.stringify(sorted));
 				setOptions(sorted);
 			};
 
@@ -201,7 +190,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 	function closeModal() {
 		hasError && setError(false);
 		// hasChanges && assetsReset();
-		setAssetChanged(false)
+		setAssetChanged(false);
 		setAssignedAssets(
 			new Set(serverSelectedAssets && serverSelectedAssets.map(({ id }) => id))
 		);
@@ -215,9 +204,9 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 
 	useEffect(() => {
 		if (isAssetUnLinking || isAssetLinking) {
-			setTimeout(() => toggleAssetsModal(), 500)
+			setTimeout(() => toggleAssetsModal(), 500);
 		}
-	}, [isAssetUnLinking || isAssetLinking])
+	}, [isAssetUnLinking || isAssetLinking]);
 
 	useEffect(() => {
 		if (hasError && errorRef.current) {
@@ -316,16 +305,17 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 				onSubmit={submitHandler}
 			>
 				{open && (
-
 					<SaveResetHeader
-						title='Assets'
+						title="Assets"
 						headline={
 							<>
 								Assets <span className={style.title}></span>{" "}
 							</>
 						}
 						disableReset={isAssetUnLinking || isAssetLinking}
-						disableSave={!isAssetChanged || isAssetUnLinking || isAssetLinking || hasError}
+						disableSave={
+							!isAssetChanged || isAssetUnLinking || isAssetLinking || hasError
+						}
 						isSavedMessageActive={isAssetUnLinking || isAssetLinking}
 						headlineID="asset-modal"
 						className={style.header}

@@ -112,11 +112,6 @@ body {
 
 .scroll-lock {
 	overflow: hidden;
-
-	/* Not Firefox */
-	//@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-	//	padding-right: $webkit-scroll-width;
-	//}
 }
 
 .link {
