@@ -15,7 +15,12 @@ import { IUser } from "../../types/user";
 import Loader from "../loader";
 import OrganizationInfo from "../organization-info/OrganizationInfo";
 import OrganizationModal from "../organization-modal/OrganizationModal";
+import useBoolean from "../../hooks/useBoolean";
 import { UserKey } from "../../data/enum";
+import Dialog from "../dialog";
+import EditOrganizationUser from "../edit-org-user/EditOrganizationUser";
+import { useGetUserAssetsQuery } from "../../api/asset";
+import { UsersList } from "../users-list/users-list";
 
 export default function OrganizationDetail() {
 	const { id } = useParams<RouteParams>();
@@ -47,8 +52,16 @@ export default function OrganizationDetail() {
 	const [isOrganizationOpened, toggleOrganizationModal] = useToggle(false);
 	const navigate = useNavigate();
 	const { id: orgId } = useParams<RouteParams>();
+
+	const [addNewUser, setAddNewUser] = useState(false);
 	const hasAssets =
 		organization && Boolean(organization.organizationAssets.length);
+
+	useEffect(() => {
+		if (addNewUser) {
+			navigate(`/organizations/${orgId}/add-user`);
+		}
+	}, [addNewUser]);
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && userList) {
@@ -59,8 +72,15 @@ export default function OrganizationDetail() {
 			});
 			return result;
 		}
-	}, [isUsersLoaded,userList]);
+	}, [isUsersLoaded, userList]);
 
+	const closeModal = () => setUser(null);
+	// ! Temp kludge
+	const {
+		value: isUserCloseRequested,
+		setTrue: requestUserClose,
+		setFalse: setUserToDefault,
+	} = useBoolean(false);
 
 	useEffect(() => {
 		if (selectedUser) {
@@ -103,34 +123,15 @@ export default function OrganizationDetail() {
 				</>
 			)}
 
-			<section>
-				<div className={style.subheader}>
-					<h2>User Accounts</h2>
-					{!hasAssets && (
-						<p id="warning-asset" className={style.warning}>
-							Please assign assets to the organization to add user accounts
-						</p>
-					)}
-
-					<Button
-						className={style.add}
-						href={hasAssets ? "add-user" : undefined}
-						aria-describedby={hasAssets ? undefined : "warning-asset"}
-						disabled={!hasAssets}
-					>
-						<SpriteIcon icon="plus" width={10} />
-						Add
-					</Button>
-				</div>
-				{endDates && (
-					<UserTable
-						list={localRows}
-						setter={setLocalRows}
-						dates={endDates}
-						userSetter={setUser}
-					/>
-				)}
-			</section>
+			<UsersList
+				endDates={endDates}
+				hasAssets={hasAssets}
+				localRows={localRows}
+				setLocalRows={setLocalRows}
+				setUser={setUser}
+				headlineTitle={"User Accounts"}
+				setAddNewUser={setAddNewUser}
+			/>
 		</>
 	);
 }
