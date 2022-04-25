@@ -109,11 +109,17 @@ export default function Screenshot({
 				},
 				xAxis: {
 					data: xLabels,
+					axisLabel: {
+						fontFamily: '"Nunito", system-ui, sans-serif',
+						fontSize: 8,
+					}
 				},
 				yAxis: {
 					axisLabel: {
 						formatter: "{value}%",
 						align: "center",
+						fontFamily: '"Nunito", system-ui, sans-serif',
+						fontSize: 10,
 					},
 					min: -4,
 					max: 8,
@@ -185,43 +191,6 @@ export default function Screenshot({
 				className={style.image}
 			/>
 			<div className={style.graph} ref={graphRef} />
-			{/* <ReactEChartsCore
-					echarts={echarts}
-					option={{
-
-						tooltip: {},
-						legend: {
-							data: ['KPI YoY %', 'Forecast KPI %'],
-
-							// orient: 'vertical',
-							right: 10,
-							icon: 'pin'
-							// top: 'center'
-
-						},
-						xAxis: {
-							data: xLabels,
-							type: 'category'
-						},
-						yAxis: ,
-
-					}}
-					notMerge={true}
-					lazyUpdate={false}
-					theme={"quant-bars"}
-				// onChartReady={this.onChartReadyCallback}
-				// onEvents={EventsDict}
-				// opts={ }
-				/> */}
-			{/* <div className={style.graph}>
-				<Bar
-
-					width={500}
-					height={180}
-					options={{
-
-				/>
-			</div> */}
 		</div>
 	);
 }
