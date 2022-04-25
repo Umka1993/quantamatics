@@ -63,6 +63,7 @@ export default function UserTable({ list, setter, dates }: UserTableProps) {
 								(target as HTMLAnchorElement).href === undefined;
 
 							if (isNotLink) {
+								window.scrollTo(0, 0);
 								navigate(`/organizations/${orgID}/user/${user.id}/view`, {
 									state: {
 										initialSort: activeSort,
