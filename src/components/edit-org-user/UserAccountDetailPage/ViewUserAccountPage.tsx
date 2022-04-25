@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import style from "./style/user-account-detail.module.scss";
 import { IUser } from "../../../types/user";
 import { AppRoute, OrganizationKey, UserKey } from "../../../data/enum";
-import classNames from "classnames";
 import { useParams } from "react-router";
 import {
 	useGetOrganizationUsersQuery,
@@ -56,6 +55,7 @@ export const ViewUserAccountPage = () => {
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && userList) {
+			document.body.classList.remove('scroll-lock')
 			const result = new Map<number, string>();
 
 			userList.map((user) => {
@@ -253,5 +253,5 @@ export const ViewUserAccountPage = () => {
 				/>
 			</section>
 		);
-	} 
+	}
 };

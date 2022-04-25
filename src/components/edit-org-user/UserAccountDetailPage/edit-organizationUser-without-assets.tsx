@@ -13,12 +13,6 @@ import useUser from "../../../hooks/useUser";
 import { login } from "../../../store/authorization";
 
 import style from ".././edit-org-user.module.scss";
-import {
-	useGetAllAssetsQuery,
-	useGetUserAssetsQuery,
-	useLinkAssetToUserMutation,
-	useUnlinkAssetToUserMutation,
-} from "../../../api/asset";
 import { useParams } from "react-router-dom";
 import RoleSelector from "../../role-selector";
 import DatePickerComponent from "../../app-input/new-datepick";
@@ -58,21 +52,11 @@ export default function EditOrganizationUserWithoutAssets({
 	const loggedUser = useUser();
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
 
-	const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } =
-		useGetUserAssetsQuery(user.id);
 
-	const [update, { isSuccess, isError, error, isLoading }] =
+	const [update, { isError, error, isLoading }] =
 		useUpdateUserMutation();
-	const [updateRoles, { isSuccess: isFinish, isLoading: secondLoading }] =
+	const [updateRoles, { isLoading: secondLoading }] =
 		useUpdateUserRolesMutation();
-
-	const { data: assets } = useGetAllAssetsQuery(organizationID as string);
-	const [linkAsset, { isLoading: isAssetLinking }] =
-		useLinkAssetToUserMutation();
-	const [unlinkAsset, { isLoading: isAssetUnLinking }] =
-		useUnlinkAssetToUserMutation();
-
-
 
 	const [isUserChanged, setUserChanged] = useState(false);
 	const [isRoleChanged, setRoleChanged] = useState(false);
