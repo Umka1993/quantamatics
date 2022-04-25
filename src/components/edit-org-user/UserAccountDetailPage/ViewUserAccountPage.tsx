@@ -1,9 +1,9 @@
 import { HTMLProps, useEffect, useMemo, useState } from "react";
 import style from "./style/user-account-detail.module.scss";
 import { IUser } from "../../../types/user";
-import { AppRoute, OrganizationKey, UserKey } from "../../../data/enum";
+import { AppRoute, OrganizationKey, SortDirection, UserKey } from "../../../data/enum";
 import classNames from "classnames";
-import { useParams } from "react-router";
+import { useParams, useLocation } from "react-router";
 import {
 	useGetOrganizationUsersQuery,
 	useGetUserQuery,
@@ -12,7 +12,6 @@ import { useGetUserAssetsQuery } from "../../../api/asset";
 import moment from "moment";
 import useToggle from "../../../hooks/useToggle";
 import { UserAccountHeader } from "./user-account-header";
-import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../breadcrumb/Breadcrumb";
 import { useGetOrganizationQuery } from "../../../api/organization";
 import { Organization } from "../../../types/organization/types";
@@ -23,16 +22,18 @@ import Dialog from "../../dialog";
 import EditOrganizationUserWithoutAssets from "./edit-organizationUser-without-assets";
 import useUser from "../../../hooks/useUser";
 import { UsersList } from "../../users-list/users-list";
-
-interface IEditUserAccountDetail extends HTMLProps<HTMLDivElement> {
-	selectedUser: IUser | null;
-	toggleAssetModal: () => void;
-	toggleOrganizationModal: () => void;
-}
+import { UserListLocation } from "../../../types/user-list-location";
 
 export const ViewUserAccountPage = () => {
 	const { id: orgId, userId } = useParams();
 	const loggedInUser = useUser();
+
+	const { state } = useLocation();
+
+	const { initialDirection, initialSort }: UserListLocation = state ? state as UserListLocation : {
+		initialDirection: SortDirection.Default, initialSort: ""
+	}
+
 
 	const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
 
@@ -75,10 +76,11 @@ export const ViewUserAccountPage = () => {
 
 	useEffect(() => {
 		if (userList) {
-			sessionStorage.setItem("table-rows", JSON.stringify(userList));
-			setLocalRows(userList);
+			const filtered = userList.filter((user) => user.id !== Number(userId))
+			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
+			setLocalRows(filtered);
 		}
-	}, [isUsersLoaded, userList]);
+	}, [isUsersLoaded, userList, userId]);
 
 	const expirationDate = moment(
 		selectedUser && new Date(selectedUser[UserKey.SubscriptionEndDate])
@@ -95,9 +97,9 @@ export const ViewUserAccountPage = () => {
 		if (selectedUser && usersOrganization) {
 			const organizationEmployee =
 				selectedUser[UserKey.OrganizationId] ===
-					usersOrganization[OrganizationKey.Id] &&
+				usersOrganization[OrganizationKey.Id] &&
 				loggedInUser[UserKey.OrganizationId] ===
-					usersOrganization[OrganizationKey.Id];
+				usersOrganization[OrganizationKey.Id];
 
 			setOrganizationEmployee(organizationEmployee);
 		}
@@ -223,7 +225,7 @@ export const ViewUserAccountPage = () => {
 					hasAssets={hasAssets}
 					localRows={localRows}
 					setLocalRows={setLocalRows}
-					headlineTitle={"More User Accounts"}
+					headlineTitle="More User Accounts"
 					organizationID={orgId}
 				/>
 
