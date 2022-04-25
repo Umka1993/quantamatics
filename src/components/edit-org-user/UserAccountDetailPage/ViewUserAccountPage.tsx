@@ -1,4 +1,4 @@
-import React, { HTMLProps, useEffect, useMemo, useState } from "react";
+import { HTMLProps, useEffect, useMemo, useState } from "react";
 import style from "./style/user-account-detail.module.scss";
 import { IUser } from "../../../types/user";
 import { AppRoute, OrganizationKey, UserKey } from "../../../data/enum";
@@ -8,26 +8,18 @@ import {
 	useGetOrganizationUsersQuery,
 	useGetUserQuery,
 } from "../../../api/user";
-import {
-	useGetAllAssetsQuery,
-	useGetUserAssetsQuery,
-} from "../../../api/asset";
+import { useGetUserAssetsQuery } from "../../../api/asset";
 import moment from "moment";
 import useToggle from "../../../hooks/useToggle";
 import { UserAccountHeader } from "./user-account-header";
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../breadcrumb/Breadcrumb";
-import {
-	useGetOrganizationQuery,
-	useUpdateOrganizationMutation,
-} from "../../../api/organization";
+import { useGetOrganizationQuery } from "../../../api/organization";
 import { Organization } from "../../../types/organization/types";
 import Loader from "../../loader";
 import AssetModalWithoutPin from "./modal-assets";
-import EditOrganizationUser from "../EditOrganizationUser";
 import useBoolean from "../../../hooks/useBoolean";
 import Dialog from "../../dialog";
-import EditOrganizationUserForm from "./edit-organizationUser-without-assets";
 import EditOrganizationUserWithoutAssets from "./edit-organizationUser-without-assets";
 import useUser from "../../../hooks/useUser";
 import { UsersList } from "../../users-list/users-list";
@@ -41,10 +33,8 @@ interface IEditUserAccountDetail extends HTMLProps<HTMLDivElement> {
 export const ViewUserAccountPage = () => {
 	const { id: orgId, userId } = useParams();
 	const loggedInUser = useUser();
-	const navigate = useNavigate();
 
 	const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
-	const [newSelectedUser, setNewSelectedUser] = useState<IUser | null>(null);
 
 	const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } =
 		useGetUserAssetsQuery(userId as string);
@@ -55,13 +45,7 @@ export const ViewUserAccountPage = () => {
 	const [isEditUserPage, toggleEditUserPage] = useToggle(false);
 	const [isAssetsOpened, toggleAssetsModal] = useToggle(false);
 
-	const { data: user, isFetching, isSuccess: isUserLoaded } = useGetUserQuery(
-		userId as string
-	);
-
-	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
-
-	const { data: assets } = useGetAllAssetsQuery(orgId as string);
+	const { data: user, isFetching } = useGetUserQuery(userId as string);
 
 	const { data: company } = useGetOrganizationQuery(orgId as string);
 
@@ -69,33 +53,14 @@ export const ViewUserAccountPage = () => {
 
 	const [localRows, setLocalRows] = useState<IUser[]>([]);
 
-	const [addNewUser, setAddNewUser] = useState(false)
-
-
-	useEffect( ()=>{
-		if(addNewUser){
-			navigate(`/organizations/${orgId}/add-user`)
-		}
-	},[addNewUser])
-
 	const hasAssets =
 		usersOrganization && Boolean(usersOrganization.organizationAssets.length);
-
-	useEffect(() => {
-		if (newSelectedUser) {
-			navigate(`/organizations/${orgId}/user/${newSelectedUser[UserKey.Id]}/view`);
-		}
-	}, [newSelectedUser]);
-
 
 	const {
 		data: userList,
 		isSuccess: isUsersLoaded,
 		isLoading: isUsersLoading,
 	} = useGetOrganizationUsersQuery(orgId as string);
-
-
-
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && userList) {
@@ -154,9 +119,9 @@ export const ViewUserAccountPage = () => {
 		return <Loader />;
 	}
 
-	if(isFetching){
-		return <Loader/>
-	}else	if (selectedUser && selectedAssets && usersOrganization) {
+	if (isFetching) {
+		return <Loader />;
+	} else if (selectedUser && selectedAssets && usersOrganization) {
 		const selectedAssetsString = selectedAssets.map((asset) => {
 			const arrAssets = [];
 			arrAssets.push(asset.name);
@@ -193,9 +158,8 @@ export const ViewUserAccountPage = () => {
 			},
 		];
 
-
 		return (
-			<section >
+			<section>
 				<div className={classNames(style.root)}>
 					<UserAccountHeader
 						selectedUser={selectedUser}
@@ -254,15 +218,13 @@ export const ViewUserAccountPage = () => {
 					</div>
 				</div>
 
-
 				<UsersList
 					endDates={endDates}
 					hasAssets={hasAssets}
 					localRows={localRows}
 					setLocalRows={setLocalRows}
-					setUser={setNewSelectedUser}
-					headlineTitle={'More User Accounts'}
-					setAddNewUser={setAddNewUser}
+					headlineTitle={"More User Accounts"}
+					organizationID={orgId}
 				/>
 
 				<Dialog

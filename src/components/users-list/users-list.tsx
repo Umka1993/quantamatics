@@ -12,7 +12,7 @@ interface IUsersList {
 	setLocalRows: Dispatch<SetStateAction<IUser[]>>;
 	headlineTitle: string;
 	className?: string;
-	setAddNewUser: (arg: boolean)=>void;
+	organizationID?: string;
 }
 
 export const UsersList: FunctionComponent<IUsersList> = ({
@@ -21,7 +21,7 @@ export const UsersList: FunctionComponent<IUsersList> = ({
 	localRows,
 	setLocalRows,
 	headlineTitle,
-	setAddNewUser,
+	organizationID
 }) => {
 	return (
 		<section>
@@ -35,10 +35,9 @@ export const UsersList: FunctionComponent<IUsersList> = ({
 
 				<Button
 					className={style.add}
-					// href={hasAssets ? "add-user" : undefined}
+					href={hasAssets ? `/organizations/${organizationID}/add-user` : undefined}
 					aria-describedby={hasAssets ? undefined : "warning-asset"}
 					disabled={!hasAssets}
-					onClick={() =>setAddNewUser(true) }
 				>
 					<SpriteIcon icon="plus" width={10} />
 					Add

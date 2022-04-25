@@ -40,18 +40,9 @@ export default function OrganizationDetail() {
 
 	const [isAssetOpened, toggleAssetModal] = useToggle(false);
 	const [isOrganizationOpened, toggleOrganizationModal] = useToggle(false);
-	const navigate = useNavigate();
-	const { id: orgId } = useParams<RouteParams>();
 
-	const [addNewUser, setAddNewUser] = useState(false);
 	const hasAssets =
 		organization && Boolean(organization.organizationAssets.length);
-
-	useEffect(() => {
-		if (addNewUser) {
-			navigate(`/organizations/${orgId}/add-user`);
-		}
-	}, [addNewUser]);
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && userList) {
@@ -106,7 +97,7 @@ export default function OrganizationDetail() {
 				localRows={localRows}
 				setLocalRows={setLocalRows}
 				headlineTitle={"User Accounts"}
-				setAddNewUser={setAddNewUser}
+				organizationID={id}
 			/>
 		</>
 	);
