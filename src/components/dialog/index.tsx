@@ -47,9 +47,9 @@ export default function Dialog({
 					document.body.classList.add("scroll-lock");
 				} else {
 					dialogNode?.show();
-
 				}
 			} else {
+				document.body.classList.remove("scroll-lock");
 				dialogNode && dialogNode.close();
 				lastActiveElement.current &&
 					(lastActiveElement.current as HTMLElement).focus();

@@ -72,18 +72,12 @@ export default function EditOrganizationUserWithoutAssets({
 	const [unlinkAsset, { isLoading: isAssetUnLinking }] =
 		useUnlinkAssetToUserMutation();
 
-	const [assignedAssets, setAssignedAssets] = useState<Set<string | number>>(
-		new Set()
-	);
 
-	const [assetError, setAssetError] = useState(false);
-	const [assetPrepared, setAssetPrepared] = useState(false);
 
 	const [isUserChanged, setUserChanged] = useState(false);
 	const [isRoleChanged, setRoleChanged] = useState(false);
-	const [isAssetChanged, setAssetChanged] = useState(false);
 	const [showError, setShowError] = useState(false);
-	const [anyError, setAnyError]= useState(false)
+	const [anyError, setAnyError] = useState(false)
 
 	function validateHandler() {
 		let userChanged = isUserChanged;
@@ -119,9 +113,6 @@ export default function EditOrganizationUserWithoutAssets({
 			localStorage.setItem("user", JSON.stringify(normalizedNewData));
 		}
 
-		isAssetChanged && updateAssets();
-
-		isAssetChanged && !userChanged && !isRoleChanged && toggleEditUserPage();
 
 		function updateRolesAndClose() {
 			updateRoles([user.id, rolesAsArray]).unwrap().then(toggleEditUserPage);
@@ -148,36 +139,6 @@ export default function EditOrganizationUserWithoutAssets({
 		setUserChanged(isMainDataChanged || inSubScriptionDateChanged);
 	}, [firstName, lastName, companyName, userRoles, subscriptionEndDate, email]);
 
-	function checkIfAssetChanged() {
-		let changed = false;
-
-		serverSelectedAssets?.forEach((asset) => {
-			if (!assignedAssets.has(asset.id)) {
-				changed = true;
-			}
-		});
-
-		!changed &&
-			assignedAssets.forEach((assetId) => {
-				const hasAsset = serverSelectedAssets?.findIndex((serverAsset) => {
-					serverAsset.id === assetId;
-				});
-
-				if (hasAsset === -1) {
-					return true;
-				}
-			});
-
-		return changed;
-	}
-
-	useEffect(() => {
-		if (serverSelectedAssets) {
-			const isSameAmount = assignedAssets.size === serverSelectedAssets.length;
-			setAssetChanged(!isSameAmount || (isSameAmount && checkIfAssetChanged()));
-		}
-	}, [assignedAssets, serverSelectedAssets, isAssetChanged]);
-
 	useEffect(() => {
 		const rolesIsSame =
 			userRoles.size === user.userRoles.length &&
@@ -190,59 +151,23 @@ export default function EditOrganizationUserWithoutAssets({
 		if (isUserCloseRequested) {
 			setUserToDefault();
 
-			if (isUserChanged || isRoleChanged || isAssetChanged) {
+			if (isUserChanged || isRoleChanged) {
 				if (showError) {
 					setShowError(false);
 					return toggleEditUserPage();
 				} else setShowError(true);
 			} else toggleEditUserPage();
 		}
-	}, [isUserCloseRequested, isUserChanged, isRoleChanged, isAssetChanged]);
+	}, [isUserCloseRequested, isUserChanged, isRoleChanged]);
 
-	function updateAssets() {
-		// ? Link new assets to user
-		assignedAssets.forEach((assetId) => {
-			const alreadySelectedAsset = serverSelectedAssets?.find(
-				(element) => element.id === assetId
-			);
-
-			if (alreadySelectedAsset === undefined) {
-				linkAsset({
-					assetId,
-					userId: user.id,
-				});
-			}
-		});
-
-		// ? Unlink old assets from user
-		serverSelectedAssets?.forEach((alreadySelectedAsset) => {
-			!assignedAssets.has(alreadySelectedAsset.id) &&
-				unlinkAsset({
-					assetId: alreadySelectedAsset.id,
-					userId: user.id,
-				});
-		});
-	}
-
-	useEffect(() => {
-		if (serverSelectedAssets && assets) {
-			const selectedAssets: Set<string | number> = new Set(
-				serverSelectedAssets.map(({ id }) => id)
-			);
-			setAssignedAssets(selectedAssets);
-			setAssetPrepared(true);
-		}
-	}, [serverSelectedAssets, assets]);
 
 	const handlerSubmit = (evt: FormEvent<HTMLFormElement>) => {
 		evt.preventDefault();
-		if (assignedAssets.size) {
-			setValidate(true);
-			const isValid = formRef.current?.reportValidity();
-			isValid && validateHandler();
-		} else {
-			setAssetError(true);
-		}
+
+		setValidate(true);
+		const isValid = formRef.current?.reportValidity();
+		isValid && validateHandler();
+
 	};
 
 	useEffect(() => {
@@ -280,7 +205,7 @@ export default function EditOrganizationUserWithoutAssets({
 				}
 				disableReset={isLoading || secondLoading}
 				disableSave={
-					!isUserChanged && !isRoleChanged && !isAssetChanged || isLoading || secondLoading || anyError
+					!isUserChanged && !isRoleChanged || isLoading || secondLoading || anyError
 				}
 				isSavedMessageActive={isLoading || secondLoading}
 				headlineID="org-modal-title"

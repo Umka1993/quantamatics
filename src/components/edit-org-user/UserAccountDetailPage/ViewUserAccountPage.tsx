@@ -119,7 +119,9 @@ export const ViewUserAccountPage = () => {
 
 	if (isFetching) {
 		return <Loader />;
-	} else if (selectedUser && selectedAssets && usersOrganization) {
+	}
+
+	if (selectedUser && selectedAssets && usersOrganization) {
 		const selectedAssetsString = selectedAssets.map((asset) => {
 			const arrAssets = [];
 			arrAssets.push(asset.name);
@@ -251,7 +253,5 @@ export const ViewUserAccountPage = () => {
 				/>
 			</section>
 		);
-	} else {
-		return null;
-	}
+	} 
 };
