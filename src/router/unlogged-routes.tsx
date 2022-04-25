@@ -7,11 +7,13 @@ import {
 } from "../components/form";
 import SuccessMessage from "../components/success-message";
 import InfoMessage from "../components/info-message/info-message";
+import LoginForm from "../components/form/login-form";
 
 export default function UnLoggedRoutes() {
 	return (
 		<Routes>
 			<Route path="*" element={<Navigate to={AppRoute.Login} />} />
+			<Route path={AppRoute.Login} element={<LoginForm />} />
 			<Route
 				path={AppRoute.ForgotPassword}
 				element={<ForgotPasswordForm />}

@@ -31,7 +31,7 @@ export default function UnLoggedLayout() {
 				</>
 			} />
 
-			<Route path={AppRoute.Login} element={<LoginPage />} />
+			{/* <Route path={AppRoute.Login} element={<LoginPage />} /> */}
 
 		</Routes>
 	);
