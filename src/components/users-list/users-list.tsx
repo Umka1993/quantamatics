@@ -1,21 +1,18 @@
-import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
+import { Dispatch, FunctionComponent, SetStateAction } from "react";
 import style from "../organization-detail/edit-organizations.module.scss";
 import Button from "../button";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
-import { UserTable } from "../table/UserTable";
+import UserTable from "../table/UserTable";
 import { IUser } from "../../types/user";
-import { login } from "../../store/authorization";
-import { useNavigate } from "react-router-dom";
 
 interface IUsersList {
 	hasAssets: boolean | undefined;
 	endDates: Map<number, string> | undefined;
 	localRows: IUser[];
 	setLocalRows: Dispatch<SetStateAction<IUser[]>>;
-	setUser: Dispatch<SetStateAction<IUser | null>>;
 	headlineTitle: string;
 	className?: string;
-		setAddNewUser: (arg: boolean)=>void;
+	setAddNewUser: (arg: boolean)=>void;
 }
 
 export const UsersList: FunctionComponent<IUsersList> = ({
@@ -23,12 +20,9 @@ export const UsersList: FunctionComponent<IUsersList> = ({
 	endDates,
 	localRows,
 	setLocalRows,
-	setUser,
 	headlineTitle,
 	setAddNewUser,
 }) => {
-	const navigate = useNavigate();
-
 	return (
 		<section>
 			<div className={style.subheader}>
@@ -55,7 +49,6 @@ export const UsersList: FunctionComponent<IUsersList> = ({
 					list={localRows}
 					setter={setLocalRows}
 					dates={endDates}
-					userSetter={setUser}
 				/>
 			)}
 		</section>
