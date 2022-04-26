@@ -33,7 +33,7 @@ export const ViewUserAccountPage = () => {
 		isFetching,
 		isSuccess: isLoaded,
 	} = useGetUserQuery(userId as string);
-	
+
 	const { data: company } = useGetOrganizationQuery(orgId as string);
 
 	const [localRows, setLocalRows] = useState<IUser[]>([]);
@@ -117,25 +117,27 @@ export const ViewUserAccountPage = () => {
 					</UserAccountHeader>
 					<UserInfo user={user} />
 
-					<Dialog
-						open={isEditUserPage}
-						onRequestClose={requestUserClose}
-						closeOnOutsideClick
-						id="org-user-modal"
-						variant="right-side"
-						hasCloseButton={false}
-					>
-						{user && (
-							<EditOrganizationUserWithoutAssets
-								user={user}
-								isUserCloseRequested={isUserCloseRequested}
-								setUserToDefault={setUserToDefault}
-								toggleEditUserPage={toggleEditUserPage}
-							/>
-						)}
-					</Dialog>
+
 				</section>
 			)}
+
+			<Dialog
+				open={isEditUserPage}
+				onRequestClose={requestUserClose}
+				closeOnOutsideClick
+				id="org-user-modal"
+				variant="right-side"
+				hasCloseButton={false}
+			>
+				{!isFetching && user && (
+					<EditOrganizationUserWithoutAssets
+						user={user}
+						isUserCloseRequested={isUserCloseRequested}
+						setUserToDefault={setUserToDefault}
+						toggleEditUserPage={toggleEditUserPage}
+					/>
+				)}
+			</Dialog>
 			{Boolean(localRows.length) &&
 				<UsersList
 					endDates={endDates}
