@@ -15,7 +15,7 @@ export default function useSortingTable<Row>({
 	availableDirections = [
 		SortDirection.Default,
 		SortDirection.Down,
-		SortDirection.Up
+		SortDirection.Up,
 	],
 	rowSetter,
 	localKey = "table-rows",
@@ -53,18 +53,20 @@ function sortTable<Row>(
 	localKey: string
 ) {
 	setLocalRows((oldRows) => {
-
-		switch (direction) {
-		case SortDirection.Down:
-			return [...oldRows].sort((a, b) => {
+		const sortingDown = () =>
+			[...oldRows].sort((a, b) => {
 				const first = normalizeCompare(a, name);
 				const second = normalizeCompare(b, name);
 
 				return first > second ? 1 : second > first ? -1 : 0;
 			});
 
+		switch (direction) {
+		case SortDirection.Down:
+			return sortingDown();
+
 		case SortDirection.Up:
-			return [...oldRows].reverse();
+			return sortingDown().reverse();
 
 		default:
 			{
@@ -76,13 +78,11 @@ function sortTable<Row>(
 			break;
 		}
 
-		return oldRows
-
+		return oldRows;
 	});
 }
 
 function normalizeCompare(item: any, name: string) {
-
 	switch (name) {
 	case "subscriptionEndDate":
 		return new Date(item[name]);
