@@ -55,10 +55,16 @@ export const ViewUserAccountPage = () => {
 	}, [isUsersLoaded, userList]);
 
 	useEffect(() => {
+		// Reseting
+		setLocalRows([]);
+
 		if (userList) {
 			const filtered = userList.filter((user) => user.id !== Number(userId));
 			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
-			setLocalRows(filtered);
+			const timeOut = setTimeout(() => setLocalRows(filtered), 200)
+
+			return () => clearTimeout(timeOut);
+
 		}
 	}, [userList, userId]);
 
@@ -112,15 +118,16 @@ export const ViewUserAccountPage = () => {
 					<UserInfo user={user} />
 				</section>
 			)}
-
-			<UsersList
-				endDates={endDates}
-				hasAssets={hasAssets}
-				localRows={localRows}
-				setLocalRows={setLocalRows}
-				headlineTitle="More User Accounts"
-				organizationID={orgId}
-			/>
+			{Boolean(localRows.length) &&
+				<UsersList
+					endDates={endDates}
+					hasAssets={hasAssets}
+					localRows={localRows}
+					setLocalRows={setLocalRows}
+					headlineTitle="More User Accounts"
+					organizationID={orgId}
+				/>
+			}
 
 			<Dialog
 				open={isEditUserPage}

@@ -1,4 +1,4 @@
-import { SetStateAction, Dispatch } from "react";
+import { SetStateAction, Dispatch, useEffect } from "react";
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
 import { IUser } from "../../types/user";
@@ -20,16 +20,16 @@ interface UserTableProps {
 export default function UserTable({ list, setter, dates }: UserTableProps) {
 	const navigate = useNavigate();
 	const { state } = useLocation();
-	const initialSort = state ? (state as UserListLocation).initialSort : undefined;
+
+	const { initialDirection, initialSort } = (state as UserListLocation) || { initialDirection: undefined, initialSort: undefined }
+
 	const { activeSort, activeDirection, updateSort } = useSortingTable({
 		rowSetter: setter,
-		initialDirection: state ? (state as UserListLocation).initialDirection : undefined,
 		initialSort,
+		initialDirection
 	});
 
 	const { id: orgID } = useParams<RouteParams>();
-
-
 
 	return (
 		<table className={style.root}>

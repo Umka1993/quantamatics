@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { SortDirection } from "../data/enum";
 
-interface Props<Row, Element> {
+interface Props<Row> {
 	initialSort?: string;
 	initialDirection?: SortDirection;
 	availableDirections?: SortDirection[];
@@ -9,7 +9,7 @@ interface Props<Row, Element> {
 	localKey?: string;
 }
 
-export default function useSortingTable<Row, Element = string>({
+export default function useSortingTable<Row>({
 	initialSort = "",
 	initialDirection = SortDirection.Default,
 	availableDirections = [
@@ -19,7 +19,7 @@ export default function useSortingTable<Row, Element = string>({
 	],
 	rowSetter,
 	localKey = "table-rows",
-}: Props<Row, Element>) {
+}: Props<Row>) {
 	const [activeSort, setActiveSort] = useState(initialSort);
 	const [activeDirection, setActiveDirection] = useState(initialDirection);
 
@@ -37,7 +37,7 @@ export default function useSortingTable<Row, Element = string>({
 
 	useEffect(() => {
 		if (activeSort.length) {
-			// console.log(activeSort, activeDirection);
+			// console.info(`Sort with ${activeSort} ${activeDirection} for ${localKey}`);
 
 			sortTable(activeDirection, activeSort, rowSetter, localKey);
 		}
