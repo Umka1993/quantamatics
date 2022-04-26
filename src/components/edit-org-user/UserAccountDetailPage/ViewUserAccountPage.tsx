@@ -61,10 +61,9 @@ export const ViewUserAccountPage = () => {
 		if (userList) {
 			const filtered = userList.filter((user) => user.id !== Number(userId));
 			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
-			const timeOut = setTimeout(() => setLocalRows(filtered), 200)
+			const timeOut = setTimeout(() => setLocalRows(filtered), 200);
 
 			return () => clearTimeout(timeOut);
-
 		}
 	}, [userList, userId]);
 
@@ -103,9 +102,7 @@ export const ViewUserAccountPage = () => {
 	return (
 		<>
 			{isFetching || !user ? (
-				<div className={style.loader}>
-					<Loader />
-				</div>
+				<Loader style={{ zIndex: 2, height: '100vh', position: 'sticky' }} />
 			) : (
 				<section className={style.root}>
 					<UserAccountHeader
@@ -116,8 +113,6 @@ export const ViewUserAccountPage = () => {
 						<Breadcrumb links={breadcrumbLinks} />
 					</UserAccountHeader>
 					<UserInfo user={user} />
-
-
 				</section>
 			)}
 
@@ -138,7 +133,7 @@ export const ViewUserAccountPage = () => {
 					/>
 				)}
 			</Dialog>
-			{Boolean(localRows.length) &&
+			{localRows.length ? (
 				<UsersList
 					endDates={endDates}
 					hasAssets={hasAssets}
@@ -147,9 +142,9 @@ export const ViewUserAccountPage = () => {
 					headlineTitle="More User Accounts"
 					organizationID={orgId}
 				/>
-			}
-
-
+			) : (
+				<Loader />
+			)}
 
 			{isLoaded && company && (
 				<AssetModalWithoutPin
