@@ -40,8 +40,9 @@ export const ViewUserAccountPage = () => {
 
 	const hasAssets = company && Boolean(company.organizationAssets.length);
 
-
 	const [fetchOrganizationUsers, { data: userList, isSuccess: isUsersLoaded }] = useLazyGetOrganizationUsersQuery();
+
+	const [isUsersFiltered, setUsersFiltered] = useState(false)
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && userList) {
@@ -55,15 +56,13 @@ export const ViewUserAccountPage = () => {
 	}, [isUsersLoaded, userList]);
 
 	useEffect(() => {
-		// Reseting
-		setLocalRows([]);
+		setUsersFiltered(false)
 
 		fetchOrganizationUsers(orgId as string).unwrap().then(users => {
 			const filtered = users.filter((user) => user.id !== Number(userId));
 			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
-			const timeOut = setTimeout(() => setLocalRows(filtered), 200);
-
-			return () => clearTimeout(timeOut);
+			setLocalRows(filtered)
+			setUsersFiltered(true);
 		})
 
 	}, [userId]);
@@ -100,9 +99,7 @@ export const ViewUserAccountPage = () => {
 
 	return (
 		<>
-			{isFetching || !user ? (
-				<Loader style={{ zIndex: 2, height: "100vh", position: "sticky" }} />
-			) : (
+			{!isFetching && isUsersFiltered && user ?
 				<>
 					<section className={style.root}>
 						<UserAccountHeader
@@ -123,7 +120,9 @@ export const ViewUserAccountPage = () => {
 						organizationID={orgId}
 					/>
 				</>
-			)}
+				:
+				<Loader />
+			}
 			<Dialog
 				open={isEditUserPage}
 				onRequestClose={requestUserClose}
