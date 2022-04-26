@@ -79,14 +79,12 @@ export const ViewUserAccountPage = () => {
 		setFalse: setUserToDefault,
 	} = useBoolean(false);
 
-	const breadcrumbLinks: BreadcrumbLink[] = organizationEmployee
-		? []
-		: [
-			{
-				href: AppRoute.OrganizationList,
-				text: "Organizations",
-			},
-		];
+	const breadcrumbLinks: BreadcrumbLink[] = [];
+
+	organizationEmployee && breadcrumbLinks.push({
+		href: AppRoute.OrganizationList,
+		text: "Organizations",
+	})
 
 	if (user) {
 		breadcrumbLinks.push({
@@ -102,20 +100,29 @@ export const ViewUserAccountPage = () => {
 	return (
 		<>
 			{isFetching || !user ? (
-				<Loader style={{ zIndex: 2, height: '100vh', position: 'sticky' }} />
+				<Loader style={{ zIndex: 2, height: "100vh", position: "sticky" }} />
 			) : (
-				<section className={style.root}>
-					<UserAccountHeader
-						selectedUser={user}
-						toggleEditUserPage={toggleEditUserPage}
-						toggleAssetsModal={toggleAssetsModal}
-					>
-						<Breadcrumb links={breadcrumbLinks} />
-					</UserAccountHeader>
-					<UserInfo user={user} />
-				</section>
+				<>
+					<section className={style.root}>
+						<UserAccountHeader
+							selectedUser={user}
+							toggleEditUserPage={toggleEditUserPage}
+							toggleAssetsModal={toggleAssetsModal}
+						>
+							<Breadcrumb links={breadcrumbLinks} />
+						</UserAccountHeader>
+						<UserInfo user={user} />
+					</section>
+					<UsersList
+						endDates={endDates}
+						hasAssets={hasAssets}
+						localRows={localRows}
+						setLocalRows={setLocalRows}
+						headlineTitle="More User Accounts"
+						organizationID={orgId}
+					/>
+				</>
 			)}
-
 			<Dialog
 				open={isEditUserPage}
 				onRequestClose={requestUserClose}
@@ -124,27 +131,17 @@ export const ViewUserAccountPage = () => {
 				variant="right-side"
 				hasCloseButton={false}
 			>
-				{!isFetching && user && (
+				{isEditUserPage && user ? (
 					<EditOrganizationUserWithoutAssets
 						user={user}
 						isUserCloseRequested={isUserCloseRequested}
 						setUserToDefault={setUserToDefault}
 						toggleEditUserPage={toggleEditUserPage}
 					/>
+				) : (
+					<Loader />
 				)}
 			</Dialog>
-			{localRows.length ? (
-				<UsersList
-					endDates={endDates}
-					hasAssets={hasAssets}
-					localRows={localRows}
-					setLocalRows={setLocalRows}
-					headlineTitle="More User Accounts"
-					organizationID={orgId}
-				/>
-			) : (
-				<Loader />
-			)}
 
 			{isLoaded && company && (
 				<AssetModalWithoutPin

@@ -43,7 +43,7 @@ export const UsersList: FunctionComponent<IUsersList> = ({
 					Add
 				</Button>
 			</div>
-			{endDates && (
+			{endDates && Boolean(localRows.length) && (
 				<UserTable
 					list={localRows}
 					setter={setLocalRows}
