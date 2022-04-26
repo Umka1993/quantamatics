@@ -40,12 +40,12 @@ export default function LoginForm({ className }: FormHTMLAttributes<HTMLFormElem
 			<header className={style.header}>
 				<Headline className={style.title} pageTitle={`Sign in ${AppInfo.Name}`}>
 					Sign In
-					<img
+					{/* <img
 						src={AppInfo.LogoPath}
 						alt={AppInfo.Name}
 						width={211}
 						height={40}
-					/>
+					/> */}
 				</Headline>
 				<p className={style.subtitle}>
 					Please. Enter your email and password to get start
