@@ -45,7 +45,6 @@ export const ViewUserAccountPage = () => {
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && userList) {
-			document.body.classList.remove("scroll-lock");
 			const result = new Map<number, string>();
 
 			userList.map((user) => {
@@ -75,44 +74,44 @@ export const ViewUserAccountPage = () => {
 		setFalse: setUserToDefault,
 	} = useBoolean(false);
 
-	if (!user) {
-		return <Loader />;
+	const breadcrumbLinks: BreadcrumbLink[] = organizationEmployee
+		? []
+		: [
+			{
+				href: AppRoute.OrganizationList,
+				text: "Organizations",
+			},
+		];
+
+	if (user) {
+		breadcrumbLinks.push({
+			href: `/organizations/${orgId}`,
+			text: user.companyName,
+		});
+
+		breadcrumbLinks.push({
+			text: `${user[UserKey.Name]} ${user[UserKey.Surname]}`,
+		});
 	}
-
-	if (isFetching) {
-		return <Loader />;
-	}
-
-	const breadcrumbLinks: BreadcrumbLink[] = organizationEmployee ? [] : [
-		{
-			href: AppRoute.OrganizationList as string,
-			text: "Organizations",
-		}
-	]
-
-	breadcrumbLinks.push({
-		href: `/organizations/${orgId}`,
-		text: user.companyName,
-	})
-
-	breadcrumbLinks.push({
-		text: `${user[UserKey.Name]} ${user[UserKey.Surname]}`
-	})
 
 	return (
-		<section>
-			<div className={style.root}>
-				<UserAccountHeader
-					selectedUser={user}
-					toggleEditUserPage={toggleEditUserPage}
-					toggleAssetsModal={toggleAssetsModal}
-				>
-					<Breadcrumb
-						links={breadcrumbLinks}
-					/>
-				</UserAccountHeader>
-				<UserInfo user={user} />
-			</div>
+		<>
+			{isFetching || !user ? (
+				<div className={style.loader}>
+					<Loader />
+				</div>
+			) : (
+				<section className={style.root}>
+					<UserAccountHeader
+						selectedUser={user}
+						toggleEditUserPage={toggleEditUserPage}
+						toggleAssetsModal={toggleAssetsModal}
+					>
+						<Breadcrumb links={breadcrumbLinks} />
+					</UserAccountHeader>
+					<UserInfo user={user} />
+				</section>
+			)}
 
 			<UsersList
 				endDates={endDates}
@@ -131,7 +130,7 @@ export const ViewUserAccountPage = () => {
 				variant="right-side"
 				hasCloseButton={false}
 			>
-				{isEditUserPage && (
+				{user && (
 					<EditOrganizationUserWithoutAssets
 						user={user}
 						isUserCloseRequested={isUserCloseRequested}
@@ -149,6 +148,6 @@ export const ViewUserAccountPage = () => {
 					user={user}
 				/>
 			)}
-		</section>
+		</>
 	);
 };

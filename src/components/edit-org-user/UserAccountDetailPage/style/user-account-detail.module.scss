@@ -5,6 +5,11 @@
 	padding: 40px var(--side);
 }
 
+.loader {
+	min-height: 300px;
+	position: relative;
+}
+
 .title {
 	margin: auto 0;
 	color: $headlines;
