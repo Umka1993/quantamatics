@@ -38,7 +38,7 @@ export default function UserInfo({ user }: Props) {
 		</div>
 		<div className={classes.item}>
 			<dt className={classes.key}>Expiration Date</dt>
-			<dd className={classes.value}>{moment(new Date(user.expirationDate)).format("MM/DD/yyyy")}</dd>
+			<dd className={classes.value}>{moment(new Date(user.subscriptionEndDate)).format("MM/DD/yyyy")}</dd>
 		</div>
 		<div className={classes.item}>
 			<dt className={classes.key}>Organization</dt>
