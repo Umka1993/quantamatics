@@ -26,6 +26,18 @@
 			background-color: #f2f8fe;
 			font-weight: 600;
 			color: $accent;
+			position: relative;
+			&::after {
+				content: "";
+				width: 2px;
+				height: 100%;
+				background-color: $accent;
+				border-radius: 0px 5px 5px 0px;
+				position: absolute;
+				left: 0;
+				top: 0;
+				//visibility: hidden;
+			}
 		}
 
 		&::before {

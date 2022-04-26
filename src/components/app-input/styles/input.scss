@@ -37,6 +37,7 @@ $text: #bcc4d8;
 		pointer-events: none;
 		width: 0;
 		transition: width 0.8s ease;
+		z-index: -1;
 		&--icon {
 			padding-right: 23px;
 		}
@@ -69,6 +70,7 @@ $text: #bcc4d8;
 		outline: none;
 		caret-color: $accent;
 		text-overflow: ellipsis;
+		background: transparent;
 
 		&::placeholder {
 			font-size: 16px;
