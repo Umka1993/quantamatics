@@ -74,7 +74,7 @@ const Multiselect: FunctionComponent<Props> = ({
 				]
 					.map(({ name }) => name)
 					.join(", ")
-			)
+			  )
 			: setList("");
 	}, [selected]);
 
@@ -105,7 +105,7 @@ const Multiselect: FunctionComponent<Props> = ({
 					label
 						? ({
 							"--label-width": `${rightOffset}px`,
-						} as CSSProperties)
+						  } as CSSProperties)
 						: undefined
 				}
 			>
@@ -138,7 +138,11 @@ const Multiselect: FunctionComponent<Props> = ({
 				<p className="app-input__error">{errorMessage}</p>
 			)}
 
-			<div className={style.options} hidden={!showOptions}>
+			<div
+				className={style.options}
+				hidden={!showOptions}
+				style={options.length <= 4 ? { height: "auto" } : { height: "" }}
+			>
 				{options.map((option) => (
 					<AssetOption
 						key={option.assetId}
