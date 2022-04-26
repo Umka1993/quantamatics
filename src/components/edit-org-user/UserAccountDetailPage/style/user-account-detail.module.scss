@@ -63,51 +63,6 @@
 	margin-top: 16px;
 }
 
-.userData {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	gap: 30px 28px;
-	margin-top: 46px;
-	margin-bottom: 7px;
-
-	.item {
-
-	}
-}
-
-.itemName {
-	margin-right: 24px;
-	font-style: normal;
-	font-weight: 500;
-	font-size: 16px;
-	line-height: 22px;
-	color: #BCC4D8;
-}
-
-.itemValue {
-	font-style: normal;
-	font-weight: 400;
-	font-size: 16px;
-	line-height: 22px;
-	color: #003C71;
-	text-decoration: none;
-}
-
-.emailField {
-	&:hover {
-		color: $accent;
-	}
-}
-
-.item:last-child {
-	grid-column-start: 1;
-	grid-column-end: 4;
-	grid-row-start: 3;
-	grid-row-end: 3;
-
-}
-
-
 .form {
 	min-height: 100vh;
 	padding: 40px;

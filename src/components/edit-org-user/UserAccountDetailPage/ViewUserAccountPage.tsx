@@ -7,8 +7,7 @@ import {
 	useGetOrganizationUsersQuery,
 	useGetUserQuery,
 } from "../../../api/user";
-import { useGetUserAssetsQuery } from "../../../api/asset";
-import moment from "moment";
+
 import useToggle from "../../../hooks/useToggle";
 import { UserAccountHeader } from "./user-account-header";
 import Breadcrumb from "../../breadcrumb/Breadcrumb";
@@ -21,6 +20,7 @@ import Dialog from "../../dialog";
 import EditOrganizationUserWithoutAssets from "./edit-organizationUser-without-assets";
 import useUser from "../../../hooks/useUser";
 import { UsersList } from "../../users-list/users-list";
+import UserInfo from "../../user-info/UserInfo";
 
 export const ViewUserAccountPage = () => {
 	const { id: orgId, userId } = useParams();
@@ -28,10 +28,7 @@ export const ViewUserAccountPage = () => {
 
 	const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
 
-	const { data: serverSelectedAssets, isSuccess: isAssetsLoaded } =
-		useGetUserAssetsQuery(userId as string);
 
-	const [selectedAssets, setSelectedAssets] = useState(serverSelectedAssets);
 	const [usersOrganization, setUsersOrganization] = useState<Organization>();
 
 	const [isEditUserPage, toggleEditUserPage] = useToggle(false);
@@ -67,20 +64,12 @@ export const ViewUserAccountPage = () => {
 
 	useEffect(() => {
 		if (userList) {
-			// console.log(`Updating from ${userId}`)
-			// console.log(userList.length);
-
-			// console.table(userList)
 
 			const filtered = userList.filter((user) => user.id !== Number(userId))
 			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
 			setLocalRows(filtered);
 		}
 	}, [userList, userId]);
-
-	const expirationDate = moment(
-		selectedUser && new Date(selectedUser[UserKey.SubscriptionEndDate])
-	).format("MM/DD/yyyy");
 
 	useEffect(() => {
 		if (user && company) {
@@ -101,11 +90,6 @@ export const ViewUserAccountPage = () => {
 		}
 	}, [selectedUser, usersOrganization]);
 
-	useEffect(() => {
-		if (usersOrganization && serverSelectedAssets) {
-			setSelectedAssets(serverSelectedAssets);
-		}
-	}, [usersOrganization, serverSelectedAssets]);
 
 	const {
 		value: isUserCloseRequested,
@@ -121,18 +105,7 @@ export const ViewUserAccountPage = () => {
 		return <Loader />;
 	}
 
-	if (selectedUser && selectedAssets && usersOrganization) {
-		const selectedAssetsString = selectedAssets.map((asset) => {
-			const arrAssets = [];
-			arrAssets.push(asset.name);
-			return arrAssets;
-		});
-
-		const roleString = selectedUser[UserKey.UserRoles].map((role) => {
-			const arrAssets = [];
-			arrAssets.push(role);
-			return arrAssets;
-		});
+	if (selectedUser && usersOrganization) {
 
 		const links = [
 			{
@@ -172,50 +145,7 @@ export const ViewUserAccountPage = () => {
 							<Breadcrumb links={links} />
 						)}
 					</UserAccountHeader>
-					<div className={style.userData}>
-						<div className={style.item}>
-							<span className={style.itemName}>First Name</span>
-							<span className={style.itemValue}>
-								{selectedUser[UserKey.Name]}
-							</span>
-						</div>
-						<div className={style.item}>
-							<span className={style.itemName}>Last Name</span>
-							<span className={style.itemValue}>
-								{selectedUser[UserKey.Surname]}
-							</span>
-						</div>
-						<div className={style.item}>
-							<span className={style.itemName}>Email</span>
-							<a
-								className={`${style.itemValue} ${style.emailField}`}
-								href={`mailto:${selectedUser[UserKey.Email]}`}
-							>
-								{selectedUser[UserKey.Email]}
-							</a>
-						</div>
-						<div className={style.item}>
-							<span className={style.itemName}>Expiration Date</span>
-							<span className={style.itemValue}>{expirationDate}</span>
-						</div>
-						<div className={style.item}>
-							<span className={style.itemName}>Organization</span>
-							<span className={style.itemValue}>
-								{selectedUser[UserKey.Company]}
-							</span>
-						</div>
-						<div className={style.item}>
-							<span className={style.itemName}>Organization Role</span>
-							<span className={style.itemValue}>{roleString.join(", ")}</span>
-						</div>
-
-						<div className={style.item}>
-							<span className={style.itemName}>Account Assets</span>
-							<span className={style.itemValue}>
-								{selectedAssetsString.join(", ")}
-							</span>
-						</div>
-					</div>
+					<UserInfo user={selectedUser} />
 				</div>
 
 				<UsersList
