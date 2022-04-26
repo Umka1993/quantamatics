@@ -103,7 +103,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 		return [...assets].sort((a, b) => {
 			const first = a.asset.name.toUpperCase();
 			const second = b.asset.name.toUpperCase();
-			return first > second ? 1 : second > first ? -1 : 0;
+			return first < second ? 1 : second < first ? -1 : 0;
 		});
 	}
 

@@ -14,8 +14,8 @@ export default function useSortingTable<Row>({
 	initialDirection = SortDirection.Default,
 	availableDirections = [
 		SortDirection.Default,
-		SortDirection.Up,
 		SortDirection.Down,
+		SortDirection.Up
 	],
 	rowSetter,
 	localKey = "table-rows",
@@ -53,35 +53,31 @@ function sortTable<Row>(
 	localKey: string
 ) {
 	setLocalRows((oldRows) => {
-		// console.log(`sorting with ${direction}`);
-
-		let newRows = [...oldRows];
 
 		switch (direction) {
-		case SortDirection.Up:
-			newRows.sort((a, b) => {
+		case SortDirection.Down:
+			return [...oldRows].sort((a, b) => {
 				const first = normalizeCompare(a, name);
 				const second = normalizeCompare(b, name);
 
 				return first > second ? 1 : second > first ? -1 : 0;
 			});
-			break;
 
-		case SortDirection.Down:
-			newRows.reverse();
-			break;
+		case SortDirection.Up:
+			return [...oldRows].reverse();
 
 		default:
 			{
 				const rowsFromStorage = sessionStorage.getItem(localKey as string);
 				if (rowsFromStorage) {
-					newRows = JSON.parse(rowsFromStorage) as Row[];
+					return JSON.parse(rowsFromStorage) as Row[];
 				}
 			}
 			break;
 		}
 
-		return newRows;
+		return oldRows
+
 	});
 }
 
