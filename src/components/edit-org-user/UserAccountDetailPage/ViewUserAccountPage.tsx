@@ -4,7 +4,7 @@ import { IUser } from "../../../types/user";
 import { AppRoute, UserKey } from "../../../data/enum";
 import { useParams } from "react-router";
 import {
-	useGetOrganizationUsersQuery,
+	useLazyGetOrganizationUsersQuery,
 	useGetUserQuery,
 } from "../../../api/user";
 
@@ -40,8 +40,8 @@ export const ViewUserAccountPage = () => {
 
 	const hasAssets = company && Boolean(company.organizationAssets.length);
 
-	const { data: userList, isSuccess: isUsersLoaded } =
-		useGetOrganizationUsersQuery(orgId as string);
+
+	const [fetchOrganizationUsers, { data: userList, isSuccess: isUsersLoaded }] = useLazyGetOrganizationUsersQuery();
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && userList) {
@@ -58,14 +58,15 @@ export const ViewUserAccountPage = () => {
 		// Reseting
 		setLocalRows([]);
 
-		if (userList) {
-			const filtered = userList.filter((user) => user.id !== Number(userId));
+		fetchOrganizationUsers(orgId as string).unwrap().then(users => {
+			const filtered = users.filter((user) => user.id !== Number(userId));
 			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
 			const timeOut = setTimeout(() => setLocalRows(filtered), 200);
 
 			return () => clearTimeout(timeOut);
-		}
-	}, [userList, userId]);
+		})
+
+	}, [userId]);
 
 	const organizationEmployee =
 		user &&
