@@ -3,6 +3,7 @@ import classes from './user-info.module.scss';
 import { IUser } from '../../types/user';
 import moment from 'moment';
 import { useGetUserAssetsQuery } from '../../api/asset';
+import Loader from '../loader';
 
 type Props = HTMLAttributes<HTMLDListElement> & {
 	user: IUser
@@ -12,7 +13,7 @@ export default function UserInfo({ user }: Props) {
 	const { data: assets, isSuccess: isAssetsLoaded } =
 		useGetUserAssetsQuery(user.id);
 
-	return <dl className={classes.list}>
+	return isAssetsLoaded ? <dl className={classes.list}>
 		<div className={classes.item}>
 			<dt className={classes.key}>First Name</dt>
 			<dd className={classes.value}>
@@ -56,8 +57,9 @@ export default function UserInfo({ user }: Props) {
 		<div className={classes.item}>
 			<dt className={classes.key}>Account Assets</dt>
 			<dd className={classes.value}>
-				{isAssetsLoaded && assets.map(asset => asset.name).join(', ')}
+				{assets.map(asset => asset.name).join(', ')}
 			</dd>
 		</div>
-	</dl>
+	</dl> : <Loader />
 }
+
