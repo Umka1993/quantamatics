@@ -31,7 +31,6 @@ export default function EditOrganizationUserWithoutAssets({
 	isUserCloseRequested,
 	toggleEditUserPage,
 }: Props) {
-	const { id: organizationID } = useParams();
 	const [firstName, setName] = useState(user.firstName);
 	const [lastName, setSurname] = useState(user.lastName);
 	const [companyName, setOrganization] = useState(user.companyName);
@@ -51,7 +50,6 @@ export default function EditOrganizationUserWithoutAssets({
 
 	const loggedUser = useUser();
 	const isSuperAdmin = loggedUser?.userRoles.includes(UserRole.Admin);
-
 
 	const [update, { isError, error, isLoading }] =
 		useUpdateUserMutation();
