@@ -2,6 +2,7 @@ import { ApiRoute } from "../../data/enum";
 import { Organization } from "../../types/organization/types";
 import baseApi from "../index";
 import { createOrganizationRequestBody } from "../../components/form/create-organization";
+import filterOrganizationsToUserRole from "../../services/filterOrganizationsToUserRole";
 
 const organizationsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
@@ -22,6 +23,7 @@ const organizationsApi = baseApi.injectEndpoints({
 
 				return tags;
 			},
+			transformResponse: filterOrganizationsToUserRole
 		}),
 
 		addOrganization: build.mutation<

@@ -3,14 +3,13 @@ import {
 	useCallback,
 	useDeferredValue,
 	useEffect,
-	useMemo,
 	useState,
 } from "react";
 import style from "./organization-list.module.scss";
 import { OrganizationTable } from "../table/OrganizationTable";
 import Button from "../button";
 import Headline from "../page-title/index";
-import { AppRoute, UserRole } from "../../data/enum";
+import { AppRoute } from "../../data/enum";
 import SearchField from "../search-field/SearchField";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import useUser from "../../hooks/useUser";
@@ -33,23 +32,10 @@ export default function OrganizationList(): ReactElement {
 
 	const [localRows, setLocalRows] = useState<Organization[]>([]);
 
-	const filteredOrganizationToUserRole = useMemo(
-		() =>
-			isSuccess &&
-			user &&
-			(user.userRoles.includes(UserRole.Admin)
-				? organizations
-				: organizations.filter(
-					(organization) =>
-						organization.parentId === String(user?.organizationId)
-				)),
-		[user?.userRoles, isSuccess]
-	);
-
 	const filterOrganizationsToQuery = useCallback(
 		(query: string) => {
 			const normalizedSearchQuery = query.toLocaleLowerCase();
-			return (filteredOrganizationToUserRole as Organization[]).filter(
+			return (organizations as Organization[]).filter(
 				({ name, customerCrmId, customerCrmLink, comments }) =>
 					name.toLocaleLowerCase().includes(normalizedSearchQuery) ||
 					customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
@@ -58,21 +44,20 @@ export default function OrganizationList(): ReactElement {
 						comments.toLocaleLowerCase().includes(normalizedSearchQuery))
 			);
 		},
-		[filteredOrganizationToUserRole]
+		[organizations]
 	);
 
 	const listIsReady = localRows && isSuccess;
 
 	useEffect(() => {
-		if (filteredOrganizationToUserRole) {
+		if (organizations) {
 			const filtered = deferredSearch.length
 				? filterOrganizationsToQuery(deferredSearch)
-				: filteredOrganizationToUserRole;
+				: organizations;
 			setLocalRows(filtered);
 			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
 		}
-	}, [deferredSearch, filteredOrganizationToUserRole]);
-
+	}, [deferredSearch, organizations]);
 
 	return (
 		<>
@@ -106,8 +91,8 @@ export default function OrganizationList(): ReactElement {
 				) : deferredSearch.length ? (
 					<samp className={style.output}>
 						No results for “
-						{deferredSearch.length > 32 ? `${search.slice(0, 32)}…` : search}” were
-						found.
+						{deferredSearch.length > 32 ? `${search.slice(0, 32)}…` : search}”
+						were found.
 					</samp>
 				) : (
 					<samp className={style.output}>No organizations found</samp>
