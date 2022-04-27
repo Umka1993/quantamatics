@@ -31,7 +31,8 @@ export default function UserMenu({
 			id="user-menu"
 			style={{
 				display: 'grid',
-				width: '100%'
+				width: '100%',
+				gridAutoRows: '44px'
 			}}
 		>
 			<button
