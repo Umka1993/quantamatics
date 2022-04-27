@@ -1,0 +1,82 @@
+@use "../../sass/variables" as *;
+@use "../../sass/mixins" as *;
+
+.link {
+	appearance: none;
+	height: 56px;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 1.125;
+	color: $main-text;
+	text-decoration: none;
+	padding: 18px var(--side);
+	display: flex;
+	align-items: center;
+	position: relative;
+	cursor: pointer;
+	transition: font-size 0.4s 0.2s;
+	letter-spacing: 0.01em;
+
+	&::-webkit-details-marker {
+		display: none;
+	}
+
+	&::before {
+		content: "";
+		width: 2px;
+		height: 100%;
+		background-color: $accent;
+		border-radius: 0px 5px 5px 0px;
+		position: absolute;
+		left: 0;
+		top: 0;
+		opacity: 0;
+		transition: opacity 0.2s;
+	}
+
+	&:global {
+		&.active {
+			background-color: #f2f8fe;
+			font-weight: 600;
+			color: $accent;
+			position: relative;
+
+			svg {
+				fill: currentColor;
+			}
+
+			&::before {
+				opacity: 1;
+			}
+		}
+	}
+
+	@include hover-focus() {
+		svg {
+			fill: $accent;
+		}
+
+		&::before {
+			opacity: 1;
+		}
+	}
+}
+
+.icon {
+	margin-right: 1.5em;
+}
+
+.collapsed {
+	.link {
+		justify-content: center;
+		text-align: center;
+		font-size: 0;
+		padding-right: 0;
+		padding-left: 0;
+		transition: none;
+	}
+
+	.icon {
+		margin-right: 0;
+	}
+}
