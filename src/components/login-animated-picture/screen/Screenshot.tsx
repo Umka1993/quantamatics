@@ -84,6 +84,11 @@ export default function Screenshot({
 							fontSize: 8,
 						}
 					},
+					categoryAxis: {
+						axisTick: {
+							show: false
+						}
+					}
 				},
 				{
 					renderer: "svg",
