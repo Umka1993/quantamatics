@@ -33,6 +33,8 @@ export default function PrivateRoutes(): ReactElement {
 						? `/apps/organizations/${user?.organizationId}`
 						: "/demo";
 
+	const isSuperAdmin = user.userRoles.includes(UserRole.Admin)
+
 	return (
 		<Routes>
 			<Route path="*" element={<Navigate to={HomePath} />} />
@@ -67,6 +69,8 @@ export default function PrivateRoutes(): ReactElement {
 					/>
 				</>
 			)}
+
+			{isSuperAdmin && <Route path={AppRoute.Users} element={<p>Test</p>}/>}
 
 			{isEditOrgAvailable && (
 				<>

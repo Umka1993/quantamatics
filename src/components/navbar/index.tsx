@@ -1,5 +1,5 @@
 import React, { FunctionComponent, SVGProps } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { AppRoute, UserRole } from "../../data/enum";
 
 import { ReactComponent as ZoomIcon } from "./assets/zoom.svg";
@@ -7,13 +7,11 @@ import { ReactComponent as CoherenceIcon } from "./assets/coherence.svg";
 import { ReactComponent as ExcelIcon } from "./assets/excel.svg";
 import { ReactComponent as OrganizationsIcon } from "./assets/org.svg";
 import { ReactComponent as CogsIcon } from "./assets/cogs.svg";
-import { ReactComponent as FilesIcon } from "./assets/files.svg";
-import { ReactComponent as ShareIcon } from "./assets/share.svg";
+import { ReactComponent as UsersIcon } from "./assets/users.svg";
 
 import "./style/navbar.scss";
 import classNames from "classnames";
 import useUser from "../../hooks/useUser";
-import Accordion from "../accordion";
 
 interface NavBarProps {
 	collapsed: boolean;
@@ -34,11 +32,6 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 		user?.userRoles.includes(UserRole.Admin) ||
 		user?.userRoles.includes(UserRole.OrgOwner);
 
-	/*  const subItems: NavLinkContent[] = [
-		{ href: AppRoute.Files, text: "My Files", icon: FilesIcon },
-		{ href: AppRoute.Shared, text: "Shared With Me", icon: ShareIcon },
-	];
-	*/
 
 	return (
 		<nav
@@ -46,46 +39,6 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 				"navigation--collapsed": collapsed,
 			})}
 		>
-			{/* {user?.userRoles.includes(UserRole.Research) && (
-				<Accordion
-					isOpened={pathname.includes("/research")}
-					summaryClass="navigation__item"
-					summary={
-						<>
-							<ZoomIcon
-								aria-hidden="true"
-								className="navigation__icon"
-								width="16"
-								height="16"
-							/>
-							Research
-						</>
-					}
-					wrapperClass='navigation__sublist'
-				>
-					{subItems.map((item) => (
-						<NavLink
-							to={item.href}
-							className={({ isActive }) => {
-								const classes = ["navigation__item", "navigation__item--sub"];
-								isActive && classes.push("navigation__item--active");
-								return classes.join(" ");
-							}}
-							key={item.href}
-						>
-							<item.icon
-								aria-hidden="true"
-								className="navigation__icon"
-								width={16}
-								height={16}
-							/>
-							{item.text}
-						</NavLink>
-					))}
-				</Accordion>
-			)} */}
-
-			{/* Research with no sub-nav*/}
 			{user?.allowResearch && (
 				<NavLink
 					to={AppRoute.Files}
@@ -115,7 +68,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 					}
 				>
 					<CoherenceIcon
-						aria-hidden={true}
+						aria-hidden
 						className="navigation__icon"
 						width={16}
 						height={16}
@@ -134,7 +87,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 					}
 				>
 					<ExcelIcon
-						aria-hidden={true}
+						aria-hidden
 						className="navigation__icon"
 						width={16}
 						height={16}
@@ -157,7 +110,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 					}
 				>
 					<OrganizationsIcon
-						aria-hidden={true}
+						aria-hidden
 						className="navigation__icon"
 						width={16}
 						height={16}
@@ -165,6 +118,23 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 					Organizations
 				</NavLink>
 			)}
+
+			<NavLink
+				to={AppRoute.Users}
+				className={({ isActive }) =>
+					isActive
+						? "navigation__item navigation__item--active"
+						: "navigation__item"
+				}
+			>
+				<UsersIcon
+					aria-hidden
+					className="navigation__icon"
+					width={16}
+					height={16}
+				/>
+				User Accounts
+			</NavLink>
 
 			{user?.userRoles.includes(UserRole.OrgAdmin) && (
 				<NavLink
@@ -176,7 +146,7 @@ const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
 					}
 				>
 					<CogsIcon
-						aria-hidden={true}
+						aria-hidden
 						className="navigation__icon"
 						width={16}
 						height={16}
