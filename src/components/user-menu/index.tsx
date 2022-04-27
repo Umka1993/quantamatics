@@ -27,6 +27,12 @@ export default function UserMenu({
 			modal={false}
 			variant="user"
 			closeOnOutsideClick
+			wrapperClass={style.wrapper}
+			id="user-menu"
+			style={{
+				display: 'grid',
+				width: '100%'
+			}}
 		>
 			<button
 				type="button"

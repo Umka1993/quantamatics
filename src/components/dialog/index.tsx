@@ -19,6 +19,7 @@ export default function Dialog({
 	hasCloseButton = true,
 	hasWrapper = true,
 	modal = true,
+	className,
 	...other
 }: ModalProps) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -88,12 +89,12 @@ export default function Dialog({
 		>
 			{hasWrapper ? (
 				<div
-					{...other}
 					className={classNames(
 						style.wrapper,
 						style[`wrapper--${variant}`],
 						wrapperClass
 					)}
+					{...other}
 				>
 					{headline && (
 						<h2 id={`${id}-title`} className={style.title}>

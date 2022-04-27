@@ -1,4 +1,5 @@
 @use "../../sass/variables" as *;
+@use "../../sass/mixins" as *;
 
 .button,
 .close,
@@ -39,32 +40,6 @@
 	}
 }
 
-// .menu {
-// 	position: fixed;
-// 	left: 0;
-// 	z-index: 1;
-// 	bottom: 52px;
-// 	width: 248px;
-// 	background-color: #fff;
-// 	box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.15);
-// 	display: grid;
-
-// 	transition: all 0.3s ease-in-out;
-// 	padding: 22px 0 20px;
-// 	// opacity: 0;
-
-// 	@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-// 		background-color: transparent;
-// 		background-image: linear-gradient(149.05deg, rgba(255, 255, 255, 0.8) 3.23%, rgba(255, 255, 255, 0.7) 98.66%);
-// 		backdrop-filter: blur(10px);
-// 		-webkit-backdrop-filter: blur(10px);
-// 	}
-
-// 	&[open] {
-// 		opacity: 1;
-// 	}
-// }
-
 .close {
 	position: absolute;
 	top: 16px;
@@ -75,6 +50,7 @@
 
 .button {
 	text-align: left;
+	margin: 0;
 	padding: 12px 26px;
 	display: flex;
 	align-items: center;
