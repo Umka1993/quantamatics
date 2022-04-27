@@ -1,4 +1,11 @@
-import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import {
+	ReactElement,
+	useCallback,
+	useDeferredValue,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import style from "./organization-list.module.scss";
 import { OrganizationTable } from "../table/OrganizationTable";
 import Button from "../button";
@@ -13,65 +20,66 @@ import Loader from "../loader";
 
 export default function OrganizationList(): ReactElement {
 	const [search, setSearch] = useState("");
+
+	const deferredSearch = useDeferredValue(search);
+
 	const user = useUser();
 
-	const { data, isError, isSuccess } = useGetAllOrganizationsQuery(
-		user?.id as number
-	);
+	const {
+		data: organizations,
+		isError,
+		isSuccess,
+	} = useGetAllOrganizationsQuery(user?.id as number);
 
 	const [localRows, setLocalRows] = useState<Organization[]>([]);
 
-	const filterOrganizationToOrgAdmin = useCallback(
-		(organizations: Organization[]): Organization[] => {
-			const filteredOrgs = user?.userRoles.includes(UserRole.Admin)
+	const filteredOrganizationToUserRole = useMemo(
+		() =>
+			isSuccess &&
+			user &&
+			(user.userRoles.includes(UserRole.Admin)
 				? organizations
-				: organizations?.filter(
+				: organizations.filter(
 					(organization) =>
 						organization.parentId === String(user?.organizationId)
-				);
-
-			sessionStorage.setItem("table-rows", JSON.stringify(filteredOrgs));
-			return filteredOrgs;
-		},
-		[user?.userRoles, data]
+				)),
+		[user?.userRoles, isSuccess]
 	);
 
-	useEffect(() => {
-		if (data && isSuccess) {
-			setLocalRows(filterOrganizationToOrgAdmin(data));
-		}
-	}, [data, isSuccess]);
-
-	useEffect(() => {
-		if (data && search.length) {
-			filterOrganizationsToQuery(search, filterOrganizationToOrgAdmin(data));
-		} else {
-			setLocalRows(filterOrganizationToOrgAdmin(data as Organization[]));
-		}
-	}, [search, data]);
-
 	const filterOrganizationsToQuery = useCallback(
-		(query: string, initialOrgs: Organization[]) => {
+		(query: string) => {
 			const normalizedSearchQuery = query.toLocaleLowerCase();
-
-			const filteredOrgs = initialOrgs.filter(
+			return (filteredOrganizationToUserRole as Organization[]).filter(
 				({ name, customerCrmId, customerCrmLink, comments }) =>
 					name.toLocaleLowerCase().includes(normalizedSearchQuery) ||
 					customerCrmLink.toLocaleLowerCase().includes(normalizedSearchQuery) ||
 					customerCrmId.toLocaleLowerCase().includes(normalizedSearchQuery) ||
-					comments && comments.toLocaleLowerCase().includes(normalizedSearchQuery)
+					(comments &&
+						comments.toLocaleLowerCase().includes(normalizedSearchQuery))
 			);
-
-			sessionStorage.setItem("table-rows", JSON.stringify(filteredOrgs));
-			setLocalRows(filteredOrgs);
 		},
-		[search, setLocalRows]
+		[filteredOrganizationToUserRole]
 	);
 
 	const listIsReady = localRows && isSuccess;
+
+	useEffect(() => {
+		if (filteredOrganizationToUserRole) {
+			const filtered = deferredSearch.length
+				? filterOrganizationsToQuery(deferredSearch)
+				: filteredOrganizationToUserRole;
+			setLocalRows(filtered);
+			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
+		}
+	}, [deferredSearch, filteredOrganizationToUserRole]);
+
+
 	return (
 		<>
-			<header className={style.header}>
+			<header
+				className={style.header}
+				onInput={(evt) => console.log(evt.target)}
+			>
 				<Headline>Organizations</Headline>
 				<SearchField search={search} setSearch={setSearch} />
 				<Button className={style.button} href={AppRoute.CreateOrganization}>
@@ -95,10 +103,10 @@ export default function OrganizationList(): ReactElement {
 			{listIsReady &&
 				(localRows.length ? (
 					<OrganizationTable list={localRows} setter={setLocalRows} />
-				) : search.length ? (
+				) : deferredSearch.length ? (
 					<samp className={style.output}>
 						No results for “
-						{search.length > 32 ? `${search.slice(0, 32)}…` : search}” were
+						{deferredSearch.length > 32 ? `${search.slice(0, 32)}…` : search}” were
 						found.
 					</samp>
 				) : (

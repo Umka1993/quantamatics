@@ -22,7 +22,7 @@ export default function SearchField({ search, setSearch, ...other }: SearchField
 			name="search"
 			className={style.input}
 			placeholder="Search organizations"
-			value={search}
+			defaultValue={search}
 			onInput={({ currentTarget: { value } }) => setSearch(value)}
 		/>
 	</label>
