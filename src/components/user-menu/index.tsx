@@ -5,6 +5,7 @@ import { ReactComponent as PowerIcon } from "./assets/power.svg";
 import useLogout from "../../hooks/useLogout";
 import style from "./user-menu.module.scss";
 import { SideBarModalMode, SideBarModalOpen } from "../../types/sidebar-modal";
+import SVGPath from "./icons.svg";
 
 import Dialog from "../dialog";
 import { ModalProps } from "../dialog/types";
@@ -20,6 +21,30 @@ export default function UserMenu({
 }: Props): ReactElement {
 	const logout = useLogout();
 
+	const ITEMS = [
+		{
+			action: () => {
+				openModal(SideBarModalMode.Account);
+				onRequestClose();
+			},
+			icon: ProfileIcon,
+			text: "My Account",
+		},
+		{
+			action: () => {
+				openModal(SideBarModalMode.Restart);
+				onRequestClose();
+			},
+			icon: PowerIcon,
+			text: "Restart Server",
+		},
+		{
+			action: logout,
+			icon: LogoutIcon,
+			text: "Log Out",
+		},
+	];
+
 	return (
 		<Dialog
 			open={open}
@@ -30,47 +55,22 @@ export default function UserMenu({
 			wrapperClass={style.wrapper}
 			id="user-menu"
 			style={{
-				display: 'grid',
-				width: '100%',
-				gridAutoRows: '44px'
+				display: "grid",
+				width: "100%",
+				gridAutoRows: "44px",
 			}}
 		>
-			<button
-				type="button"
-				onClick={() => {
-					openModal(SideBarModalMode.Account);
-					onRequestClose();
-				}}
-				className={style.button}
-			>
-				<ProfileIcon
-					aria-hidden={true}
-					width={20}
-					height={20}
-					fill="currentColor"
-				/>
-				My Account
-			</button>
-			<button
-				type="button"
-				onClick={() => {
-					openModal(SideBarModalMode.Restart);
-					onRequestClose();
-				}}
-				className={style.button}
-			>
-				<PowerIcon aria-hidden width={16} height={16} fill="currentColor" />
-				Restart Server
-			</button>
-			<button onClick={logout} type="button" className={style.button}>
-				<LogoutIcon
-					aria-hidden={true}
-					width={16}
-					height={16}
-					fill="currentColor"
-				/>
-				Log Out
-			</button>
+			{ITEMS.map((item) => (
+				<button
+					className={style.button}
+					onClick={item.action}
+					key={item.text}
+					type="button"
+				>
+					<item.icon aria-hidden width={17} height={16} fill="currentColor" />
+					{item.text}
+				</button>
+			))}
 		</Dialog>
 	);
 }
