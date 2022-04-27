@@ -1,36 +1,35 @@
-import {
-	FunctionComponent,
-	SetStateAction,
-	useState,
-	Dispatch,
-} from "react";
-
+import { SetStateAction, Dispatch, useEffect } from "react";
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
 import { IUser } from "../../types/user";
-import ISort from "../../types/sort-type";
 import { USER_HEADER } from "./utils/constants";
-import { SortDirection } from "../../data/enum";
 import style from "./styles/table.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import SortTableHeader from "../sort-table-header/SortTableHeader";
 import useSortingTable from "../../hooks/useSortingTable";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { RouteParams } from "../../types/route-params";
+import { UserListLocation } from "../../types/user-list-location";
 
 interface UserTableProps {
 	list: IUser[];
 	setter: Dispatch<SetStateAction<IUser[]>>;
 	dates: Map<number, string>;
-	userSetter: Dispatch<SetStateAction<IUser | null>>;
 }
 
-export const UserTable: FunctionComponent<UserTableProps> = ({
-	list,
-	setter,
-	dates,
-	userSetter
-}) => {
+export default function UserTable({ list, setter, dates }: UserTableProps) {
+	const navigate = useNavigate();
+	const { state } = useLocation();
 
-	const { activeSort, activeDirection, updateSort } = useSortingTable({ rowSetter: setter })
+	const { initialDirection, initialSort } = (state as UserListLocation) || { initialDirection: undefined, initialSort: undefined }
+
+	const { activeSort, activeDirection, updateSort } = useSortingTable({
+		rowSetter: setter,
+		initialSort,
+		initialDirection
+	});
+
+	const { id: orgID } = useParams<RouteParams>();
 
 	return (
 		<table className={style.root}>
@@ -59,11 +58,20 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 						className={[style.row, style["row--body"], style["row--user"]].join(
 							" "
 						)}
-						onClick={({ target }) =>
-							(target as any).href === undefined &&
-							userSetter(user)
-						}
+						onClick={({ target }) => {
+							const isNotLink =
+								(target as HTMLAnchorElement).href === undefined;
 
+							if (isNotLink) {
+								window.scrollTo(0, 0);
+								navigate(`/organizations/${orgID}/user/${user.id}/view`, {
+									state: {
+										initialSort: activeSort,
+										initialDirection: activeDirection,
+									},
+								});
+							}
+						}}
 						key={user.id}
 					>
 						<td className={style.cell}>{user.firstName}</td>
@@ -85,7 +93,12 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 									currentTarget.blur();
 								}}
 							>
-								<SpriteIcon icon='gears' label="Edit user" width={16} id={`edit-${user.id}`} />
+								<SpriteIcon
+									icon="gears"
+									label="Edit user"
+									width={16}
+									id={`edit-${user.id}`}
+								/>
 							</button>
 						</td>
 					</tr>
@@ -93,4 +106,4 @@ export const UserTable: FunctionComponent<UserTableProps> = ({
 			</tbody>
 		</table>
 	);
-};
+}

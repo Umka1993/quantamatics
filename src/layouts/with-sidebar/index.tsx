@@ -1,4 +1,4 @@
-import React, { useEffect, ReactElement, useState } from "react";
+import { useEffect, ReactElement, useState } from "react";
 import { getCookie } from "../../services/cookies";
 import useLogout from "../../hooks/useLogout";
 import { SideBar } from "../../components/side-bar";
@@ -15,6 +15,7 @@ import { login } from "../../store/authorization";
 import { useCallback } from "react";
 import { SideBarModalModeType } from "../../types/sidebar-modal";
 import UserMenu from "../../components/user-menu";
+import useBoolean from "../../hooks/useBoolean";
 
 export default function WithSideBarLayout(): ReactElement {
 	const logout = useLogout();
@@ -46,27 +47,27 @@ export default function WithSideBarLayout(): ReactElement {
 		[setActiveModal]
 	);
 
-	const [isUserMenuOpened, setUserMenuOpened] = useState(false);
+	const {
+		value: isUserMenuOpened,
+		setTrue: openUserMenu,
+		setFalse: closeUserMenu,
+	} = useBoolean(false);
 
 	return (
 		<>
-			<SideBar toggleUserMenu={() => setUserMenuOpened(true)} />
+			<SideBar toggleUserMenu={openUserMenu} />
 			<main className={style.main}>
 				<PrivateRoutes />
 			</main>
-			{isUserMenuOpened && (
-				<UserMenu
-					setOpenDropdown={setUserMenuOpened}
-					openDropdown={isUserMenuOpened}
-					openModal={setActiveModal}
-				/>
-			)}
-
+			<UserMenu
+				open={isUserMenuOpened}
+				onRequestClose={closeUserMenu}
+				openModal={setActiveModal}
+			/>
 			<RestartServer
 				open={isRestartServerModalShowed}
 				onRequestClose={closeModal}
 			/>
-
 			<MyAccountModal open={isProfileModalShowed} onRequestClose={closeModal} />
 		</>
 	);

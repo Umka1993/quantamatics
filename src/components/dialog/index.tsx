@@ -1,22 +1,11 @@
-import useDialogPolyfill, {
-	HTMLDialogElement,
-} from "../../hooks/useDialogPolyfill";
-import React, { HTMLProps, SyntheticEvent, useEffect, useRef } from "react";
+import useDialogPolyfill from "./hooks/useDialogPolyfill";
+import { SyntheticEvent, useEffect, useRef } from "react";
 
 import style from "./Dialog.module.scss";
 import classNames from "classnames";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
-
-export interface ModalProps extends HTMLProps<HTMLDivElement> {
-	closeOnOutsideClick?: boolean;
-	onRequestClose: () => void;
-	open?: boolean;
-	headline?: string;
-	wrapperClass?: string;
-	variant?: "default" | "right-side";
-	hasCloseButton?: boolean;
-	hasWrapper?: boolean;
-}
+import { HTMLDialogElement, ModalProps } from "./types";
+import useCloseOutsideDialog from "./hooks/useCloseOutsideDialog";
 
 export default function Dialog({
 	closeOnOutsideClick,
@@ -29,6 +18,8 @@ export default function Dialog({
 	variant = "default",
 	hasCloseButton = true,
 	hasWrapper = true,
+	modal = true,
+	className,
 	...other
 }: ModalProps) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -36,6 +27,13 @@ export default function Dialog({
 	const firstRender = useRef(true);
 
 	useDialogPolyfill(dialogRef);
+
+	useCloseOutsideDialog(
+		dialogRef,
+		Boolean(modal === false && closeOnOutsideClick),
+		open,
+		onRequestClose
+	);
 
 	useEffect(() => {
 		// prevents calling imperative methods on mount since the polyfill will throw an error since we are not using the `open` attribute
@@ -45,12 +43,17 @@ export default function Dialog({
 			const dialogNode = dialogRef.current;
 			if (open) {
 				lastActiveElement.current = document.activeElement;
-				dialogNode && dialogNode.showModal();
-
-				document.body.classList.add("scroll-lock");
+				if (modal) {
+					dialogNode?.showModal();
+					document.body.classList.add("scroll-lock");
+				} else {
+					dialogNode?.show();
+				}
 			} else {
+				document.body.classList.remove("scroll-lock");
 				dialogNode && dialogNode.close();
-				lastActiveElement.current && (lastActiveElement.current as HTMLElement).focus();
+				lastActiveElement.current &&
+					(lastActiveElement.current as HTMLElement).focus();
 				document.body.classList.remove("scroll-lock");
 			}
 		}
@@ -68,10 +71,10 @@ export default function Dialog({
 		};
 	}, [onRequestClose]);
 
-	function handleOutsideClick(event: SyntheticEvent ) {
+	function handleOutsideClick(event: SyntheticEvent) {
 		const dialogNode = dialogRef.current;
 
-		if (closeOnOutsideClick && event.target === dialogNode) {
+		if (closeOnOutsideClick && event.target === dialogNode && modal) {
 			onRequestClose();
 		}
 	}
@@ -84,14 +87,14 @@ export default function Dialog({
 			className={[style.root, style[`root--${variant}`]].join(" ")}
 			aria-labelledby={`${id}-title`}
 		>
-			{hasWrapper ?
+			{hasWrapper ? (
 				<div
-					{...other}
 					className={classNames(
 						style.wrapper,
 						style[`wrapper--${variant}`],
 						wrapperClass
 					)}
+					{...other}
 				>
 					{headline && (
 						<h2 id={`${id}-title`} className={style.title}>
@@ -100,8 +103,10 @@ export default function Dialog({
 					)}
 
 					{children}
-				</div> : children
-			}
+				</div>
+			) : (
+				children
+			)}
 
 			{hasCloseButton && (
 				<button className={style.close} onClick={onRequestClose}>
@@ -113,7 +118,6 @@ export default function Dialog({
 					/>
 				</button>
 			)}
-
 		</dialog>
 	);
 }

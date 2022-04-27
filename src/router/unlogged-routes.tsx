@@ -1,13 +1,13 @@
 import { AppRoute } from "../data/enum";
 import { Route, Routes, Navigate } from "react-router-dom";
 import {
-	LoginForm,
 	ResetPasswordForm,
 	ForgotPasswordForm,
 	SignUpForm,
 } from "../components/form";
 import SuccessMessage from "../components/success-message";
 import InfoMessage from "../components/info-message/info-message";
+import LoginForm from "../components/form/login-form";
 
 export default function UnLoggedRoutes() {
 	return (

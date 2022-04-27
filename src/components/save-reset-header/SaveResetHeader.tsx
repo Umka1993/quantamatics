@@ -44,7 +44,7 @@ const SaveResetHeader: FunctionComponent<SaveResetHeaderProps> = ({
 					type="submit"
 					className={style.save}
 					disabled={disableSave}
-					variant={isSavedMessageActive ? "valid" : undefined}
+					variant={isSavedMessageActive ? 'valid' : undefined}
 				>
 					{isSavedMessageActive ? (
 						<>

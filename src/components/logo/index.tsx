@@ -1,19 +1,17 @@
 import { AppRoute, AppInfo } from "../../data/enum";
-import { ReactComponent as LogoSVG } from './assets/logo.svg';
-
 import { Link } from "react-router-dom";
-
+import Image from './logo.svg';
 interface LogoProps {
-	width: number,
-	height: number
+	width: number;
+	height: number;
 }
 
 export default function Logo({ width, height }: LogoProps) {
 	return (
 		<Link to={AppRoute.Home}>
-			<LogoSVG
-				aria-label={`Logotype of ${AppInfo.Name}`}
-				role='img'
+			<img
+				src={Image}
+				alt={AppInfo.Name}
 				width={width}
 				height={height}
 			/>

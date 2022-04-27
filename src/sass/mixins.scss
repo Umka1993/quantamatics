@@ -16,3 +16,22 @@
 		display: none;
 	}
 }
+
+@mixin back-blur($value: 1rem) {
+	@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+		@content;
+		backdrop-filter: blur($value);
+		-webkit-backdrop-filter: blur($value);
+	}
+}
+
+@mixin connect-font($name, $fille-name, $weight: 400, $style: "normal") {
+	@font-face {
+		font-family: $name;
+		font-style: $style;
+		font-display: swap;
+		font-weight: $weight;
+		src: url("../fonts/#{$fille-name}.woff2") format("woff2");
+		@content;
+	}
+}

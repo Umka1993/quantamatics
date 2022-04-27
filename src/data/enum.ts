@@ -1,5 +1,5 @@
 export const enum AppInfo {
-	Name = 'Quantamatics',
+	Name = 'Quantamatics'
 }
 
 export const enum AppRoute {

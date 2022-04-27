@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { SortDirection } from "../data/enum";
 
-interface Props<Row, Element> {
+interface Props<Row> {
 	initialSort?: string;
 	initialDirection?: SortDirection;
 	availableDirections?: SortDirection[];
@@ -9,17 +9,17 @@ interface Props<Row, Element> {
 	localKey?: string;
 }
 
-export default function useSortingTable<Row, Element = string>({
+export default function useSortingTable<Row>({
 	initialSort = "",
 	initialDirection = SortDirection.Default,
 	availableDirections = [
 		SortDirection.Default,
-		SortDirection.Up,
 		SortDirection.Down,
+		SortDirection.Up,
 	],
 	rowSetter,
 	localKey = "table-rows",
-}: Props<Row, Element>) {
+}: Props<Row>) {
 	const [activeSort, setActiveSort] = useState(initialSort);
 	const [activeDirection, setActiveDirection] = useState(initialDirection);
 
@@ -37,7 +37,7 @@ export default function useSortingTable<Row, Element = string>({
 
 	useEffect(() => {
 		if (activeSort.length) {
-			// console.log(activeSort, activeDirection);
+			// console.info(`Sort with ${activeSort} ${activeDirection} for ${localKey}`);
 
 			sortTable(activeDirection, activeSort, rowSetter, localKey);
 		}
@@ -53,38 +53,36 @@ function sortTable<Row>(
 	localKey: string
 ) {
 	setLocalRows((oldRows) => {
-		let newRows = [...oldRows];
-
-		switch (direction) {
-		case SortDirection.Up:
-			newRows.sort((a, b) => {
+		const sortingDown = () =>
+			[...oldRows].sort((a, b) => {
 				const first = normalizeCompare(a, name);
 				const second = normalizeCompare(b, name);
 
 				return first > second ? 1 : second > first ? -1 : 0;
 			});
-			break;
 
+		switch (direction) {
 		case SortDirection.Down:
-			newRows.reverse();
-			break;
+			return sortingDown();
+
+		case SortDirection.Up:
+			return sortingDown().reverse();
 
 		default:
 			{
 				const rowsFromStorage = sessionStorage.getItem(localKey as string);
 				if (rowsFromStorage) {
-					newRows = JSON.parse(rowsFromStorage) as Row[];
+					return JSON.parse(rowsFromStorage) as Row[];
 				}
 			}
 			break;
 		}
 
-		return newRows;
+		return oldRows;
 	});
 }
 
 function normalizeCompare(item: any, name: string) {
-
 	switch (name) {
 	case "subscriptionEndDate":
 		return new Date(item[name]);
