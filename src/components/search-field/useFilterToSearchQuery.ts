@@ -1,11 +1,17 @@
-import { FormEvent, useCallback, useDeferredValue, useEffect, useState } from "react";
+import {
+	FormEvent,
+	useCallback,
+	useEffect,
+	useState,
+	useTransition,
+} from "react";
 
 export default function useFilterToSearchQuery<Item>(
 	initialItems: Item[],
 	getFilterFunction: (query: string) => (item: Item) => boolean
 ) {
-	const [search, setSearch] = useState("");
-	const deferredSearch = useDeferredValue(search);
+	const [query, setSearchQuery] = useState("");
+	const [isFiltering, startFiltering] = useTransition();
 	const [filteredItems, setFilteredItems] = useState<Item[]>(initialItems);
 
 	const filterOrganizationsToQuery = useCallback(
@@ -18,20 +24,28 @@ export default function useFilterToSearchQuery<Item>(
 
 	useEffect(() => {
 		if (initialItems) {
-			const filtered = deferredSearch.length
-				? filterOrganizationsToQuery(deferredSearch)
+			const filtered = query.length
+				? filterOrganizationsToQuery(query)
 				: initialItems;
 			setFilteredItems(filtered);
 			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
 		}
-	}, [deferredSearch, initialItems]);
+	}, [query, initialItems]);
 
 	function inputHandler(evt: FormEvent<HTMLLabelElement>) {
 		const input = evt.target;
 		const { value } = input as HTMLInputElement;
 
-		setSearch(value);
+		startFiltering(() => {
+			setSearchQuery(value);
+		});
 	}
 
-	return { deferredSearch, setSearch, filteredItems, setFilteredItems, inputHandler };
+	return {
+		searchQuery: query,
+		filteredItems,
+		setFilteredItems,
+		inputHandler,
+		isFiltering,
+	};
 }

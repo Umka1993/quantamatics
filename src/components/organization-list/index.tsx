@@ -22,7 +22,7 @@ export default function OrganizationList(): ReactElement {
 		error,
 	} = useGetAllOrganizationsQuery({ id, organizationId, isSuperAdmin });
 
-	const { deferredSearch, filteredItems, setFilteredItems, inputHandler } =
+	const { searchQuery, filteredItems, setFilteredItems, inputHandler } =
 		useFilterToSearchQuery(organizations || [], getFilter);
 
 	const listIsReady = filteredItems && isSuccess;
@@ -57,12 +57,12 @@ export default function OrganizationList(): ReactElement {
 			{listIsReady &&
 				(filteredItems.length ? (
 					<OrganizationTable list={filteredItems} setter={setFilteredItems} />
-				) : deferredSearch.length ? (
+				) : searchQuery.length ? (
 					<samp className={style.output}>
 						No results for “
-						{deferredSearch.length > 32
-							? `${deferredSearch.slice(0, 32)}…`
-							: deferredSearch}
+						{searchQuery.length > 32
+							? `${searchQuery.slice(0, 32)}…`
+							: searchQuery}
 						” were found.
 					</samp>
 				) : (
