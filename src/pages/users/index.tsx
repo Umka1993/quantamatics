@@ -29,11 +29,9 @@ export default function UsersPage() {
 
 	useEffect(() => { isUsersLoaded && setLocalRows(users) }, [isUsersLoaded])
 
-
-
 	return <>
 		<Headline>User Accounts</Headline>
-		<SearchField search={search} setSearch={setSearch} />
+		<SearchField />
 
 		{endDates && <UserTable list={localRows} setter={setLocalRows} dates={endDates} />}
 	</>
