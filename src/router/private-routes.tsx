@@ -8,7 +8,7 @@ import { CreateOrganizationForm, AddUserForm } from "../components/form/";
 import OrganizationDetail from "../components/organization-detail/OrganizationDetail";
 import SuccessMessage from "../components/success-message";
 import { ViewUserAccountPage } from "../components/edit-org-user/UserAccountDetailPage/ViewUserAccountPage";
-
+import UsersPage from "../pages/users";
 
 export default function PrivateRoutes(): ReactElement {
 	const user = useUser();
@@ -70,7 +70,7 @@ export default function PrivateRoutes(): ReactElement {
 				</>
 			)}
 
-			{isSuperAdmin && <Route path={AppRoute.Users} element={<p>Test</p>}/>}
+			{isSuperAdmin && <Route path={AppRoute.Users} element={<UsersPage />}/>}
 
 			{isEditOrgAvailable && (
 				<>
