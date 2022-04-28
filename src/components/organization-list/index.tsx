@@ -1,6 +1,6 @@
 import { ReactElement, useEffect } from "react";
 import style from "./organization-list.module.scss";
-import { OrganizationTable } from "../table/OrganizationTable";
+import OrganizationTable from "../table/OrganizationTable";
 import Button from "../button";
 import Headline from "../page-title/index";
 import { AppRoute, UserRole } from "../../data/enum";

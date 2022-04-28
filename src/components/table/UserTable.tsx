@@ -1,4 +1,3 @@
-import { SetStateAction, Dispatch, useEffect } from "react";
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
 import { IUser } from "../../types/user";
@@ -10,24 +9,29 @@ import useSortingTable from "../../hooks/useSortingTable";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { RouteParams } from "../../types/route-params";
 import { UserListLocation } from "../../types/user-list-location";
+import normalizer from "./utils/normalizeUserValuesForCompare";
 
 interface UserTableProps {
 	list: IUser[];
-	setter: Dispatch<SetStateAction<IUser[]>>;
 	dates: Map<number, string>;
 }
 
-export default function UserTable({ list, setter, dates }: UserTableProps) {
+export default function UserTable({ list, dates }: UserTableProps) {
 	const navigate = useNavigate();
 	const { state } = useLocation();
 
-	const { initialDirection, initialSort } = (state as UserListLocation) || { initialDirection: undefined, initialSort: undefined }
+	const { initialDirection, initialSort } = (state as UserListLocation) || {
+		initialDirection: undefined,
+		initialSort: undefined,
+	};
 
-	const { activeSort, activeDirection, updateSort } = useSortingTable({
-		rowSetter: setter,
-		initialSort,
-		initialDirection
-	});
+	const { activeSort, activeDirection, updateSort, sortedRows } =
+		useSortingTable({
+			initialRows: list,
+			initialSort,
+			initialDirection,
+			normalizer,
+		});
 
 	const { id: orgID } = useParams<RouteParams>();
 
@@ -35,7 +39,7 @@ export default function UserTable({ list, setter, dates }: UserTableProps) {
 		<table className={style.root}>
 			<thead className={style.head}>
 				<tr className={[style.row, style["row--user"]].join(" ")}>
-					{USER_HEADER.keys.map((key: string, index: number) => (
+					{USER_HEADER.keys.map((key, index: number) => (
 						<SortTableHeader
 							key={key}
 							isActive={activeSort === key}
@@ -53,7 +57,7 @@ export default function UserTable({ list, setter, dates }: UserTableProps) {
 				</tr>
 			</thead>
 			<tbody>
-				{list.map((user) => (
+				{sortedRows.map((user) => (
 					<tr
 						className={[style.row, style["row--body"], style["row--user"]].join(
 							" "

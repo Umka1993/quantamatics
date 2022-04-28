@@ -5,8 +5,8 @@ interface Props<Row> {
 	initialSort?: keyof Row | "";
 	initialDirection?: SortDirection;
 	availableDirections?: SortDirection[];
-	initialRows: Row[],
-	normalizer?: (item: any, key: keyof Row) => any
+	initialRows: Row[];
+	normalizer?: (item: any, key: keyof Row) => any;
 }
 
 export default function useSortingTable<Row>({
@@ -18,11 +18,41 @@ export default function useSortingTable<Row>({
 		SortDirection.Up,
 	],
 	initialRows,
-	normalizer = defaultNormalizer
+	normalizer = defaultNormalizer,
 }: Props<Row>) {
 	const [activeSort, setActiveSort] = useState(initialSort);
 	const [activeDirection, setActiveDirection] = useState(initialDirection);
-	const [sortedRows, setSortedRows] = useState<Row[]>(initialRows)
+	const [sortedRows, setSortedRows] = useState<Row[]>(initialRows);
+
+	useEffect(() => {
+		if ((activeSort as string).length) {
+			setSortedRows(sortByDirection);
+		}
+	}, [activeSort, activeDirection, initialRows]);
+
+	function sortByDirection() {
+		switch (activeDirection) {
+		case initialDirection:
+			return initialRows;
+		case SortDirection.Down:
+			return sortingDown();
+
+		default:
+			return sortingDown().reverse();
+		}
+	}
+
+	function sortingDown() {
+		return [...initialRows].sort((a, b) => {
+			const first = normalizer((a as any)[activeSort], activeSort as keyof Row);
+			const second = normalizer(
+				(b as any)[activeSort],
+				activeSort as keyof Row
+			);
+
+			return first > second ? 1 : second > first ? -1 : 0;
+		});
+	}
 
 	function updateSort(name?: keyof Row) {
 		const currentIndex =
@@ -36,52 +66,18 @@ export default function useSortingTable<Row>({
 		name && setActiveSort(name);
 	}
 
-	const sortingDown = () =>
-		[...initialRows].sort((a, b) => {
-			const first = normalizer((a as any)[activeSort], activeSort as keyof Row );
-			const second = normalizer((b as any)[activeSort], activeSort  as keyof Row );
-
-			return first > second ? 1 : second > first ? -1 : 0;
-		});
-
-	useEffect(() => {
-		if ((activeSort as string).length) {
-			switch (activeDirection) {
-			case initialDirection:
-				return setSortedRows(initialRows)
-			case SortDirection.Down:
-				return setSortedRows(sortingDown());
-
-			default:
-				return setSortedRows(sortingDown().reverse());
-
-			}
-		}
-	}, [activeSort, activeDirection, initialRows]);
-
 	return { activeSort, activeDirection, updateSort, sortedRows };
 }
 
 function defaultNormalizer(value: string) {
-	return value.toUpperCase()
+	return value.toUpperCase();
 }
 
-function normalizeCompare(item: any, name: string) {
-	switch (name) {
-	case "subscriptionEndDate":
-		return new Date(item[name]);
+// function normalizeCompare(item: any, name: string) {
 
-	case "userRoles":
-		return item[name];
+// 	case "name":
+// 		if ("asset" in item && item.asset) {
+// 			return item.asset[name];
+// 		}
 
-	case "name":
-		if ("asset" in item && item.asset) {
-			return item.asset[name];
-		} else {
-			return item[name].toUpperCase();
-		}
-
-	default:
-		return item[name].toUpperCase();
-	}
-}
+// }

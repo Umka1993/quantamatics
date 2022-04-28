@@ -17,7 +17,7 @@ export interface IUser {
 	[UserKey.Avatar]: string,
 	[UserKey.UserRoles]: Array<UserRole>,
 	[UserKey.OrganizationId]: OrganizationID,
-[UserKey.OrganizationAssets]: AssetInOrganization[],
+	[UserKey.OrganizationAssets]: AssetInOrganization[],
 	allowResearch: boolean,
 	allowExcelLibrary: boolean,
 	allowCoherence: boolean,
