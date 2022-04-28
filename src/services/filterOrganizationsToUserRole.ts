@@ -1,13 +1,17 @@
-import { UserRole } from "../data/enum";
-import useUser from "../hooks/useUser";
+import { FetchBaseQueryMeta } from "@reduxjs/toolkit/dist/query";
+import { UserKey } from "../data/enum";
 import { Organization } from "../types/organization/types";
+import { IUser } from "../types/user";
+
+export type GetOrganizationProps = Pick<IUser, UserKey.Id | UserKey.OrganizationId> & {
+	isSuperAdmin: boolean;
+};
 
 export default function filterOrganizationsToUserRole(
-	allOrganizations: Organization[]
+	allOrganizations: Organization[],
+	_meta: FetchBaseQueryMeta | undefined,
+	{ isSuperAdmin, organizationId }: GetOrganizationProps
 ) {
-	const { userRoles, organizationId } = useUser();
-	const isSuperAdmin = userRoles.includes(UserRole.Admin);
-
 	return isSuperAdmin
 		? allOrganizations
 		: allOrganizations.filter(checkIsUserOrganization);

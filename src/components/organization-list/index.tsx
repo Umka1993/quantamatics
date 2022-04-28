@@ -9,7 +9,7 @@ import style from "./organization-list.module.scss";
 import { OrganizationTable } from "../table/OrganizationTable";
 import Button from "../button";
 import Headline from "../page-title/index";
-import { AppRoute } from "../../data/enum";
+import { AppRoute, UserRole } from "../../data/enum";
 import SearchField from "../search-field/SearchField";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import useUser from "../../hooks/useUser";
@@ -22,13 +22,15 @@ export default function OrganizationList(): ReactElement {
 
 	const deferredSearch = useDeferredValue(search);
 
-	const user = useUser();
+	const { userRoles, organizationId, id } = useUser();
+	const isSuperAdmin = userRoles.includes(UserRole.Admin);
 
 	const {
 		data: organizations,
 		isError,
 		isSuccess,
-	} = useGetAllOrganizationsQuery(user?.id as number);
+		error,
+	} = useGetAllOrganizationsQuery({ id, organizationId, isSuperAdmin });
 
 	const [localRows, setLocalRows] = useState<Organization[]>([]);
 
@@ -48,6 +50,10 @@ export default function OrganizationList(): ReactElement {
 	);
 
 	const listIsReady = localRows && isSuccess;
+
+	useEffect(() => {
+		isError && console.debug(error);
+	}, [error, isError]);
 
 	useEffect(() => {
 		if (organizations) {
