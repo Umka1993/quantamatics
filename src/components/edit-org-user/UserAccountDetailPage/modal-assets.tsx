@@ -73,12 +73,12 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 
 	const scrollRef = useRef<HTMLTableSectionElement>(null);
 
-	const { activeDirection, updateSort } = useSortingTable({
-		rowSetter: setOptions,
-		localKey: "asset-rows",
-		initialSort: "name",
+	const { activeDirection, updateSort, sortedRows } = useSortingTable({
+		initialRows: options,
+		initialSort: "asset",
 		initialDirection: SortDirection.Up,
 		availableDirections: [SortDirection.Up, SortDirection.Down],
+		normalizer: ({ name }: { name: string }) => name.toUpperCase(),
 	});
 
 	function addBorderToTHeadOnScroll(this: HTMLTableSectionElement) {
@@ -336,7 +336,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 								isActive={true}
 								name="name"
 								direction={activeDirection}
-								onClick={() => updateSort("name")}
+								onClick={() => updateSort("asset")}
 								className={style.headline}
 							>
 								Name
@@ -348,7 +348,7 @@ const AssetModalWithoutPin: FunctionComponent<AssetModalProps> = ({
 					</thead>
 					<tbody ref={scrollRef}>
 						{Boolean(options.length) &&
-							options.map((option) => (
+							sortedRows.map((option) => (
 								<AssetRowWithoutPin
 									key={option.assetId}
 									option={option}

@@ -72,12 +72,3 @@ export default function useSortingTable<Row>({
 function defaultNormalizer(value: string) {
 	return value.toUpperCase();
 }
-
-// function normalizeCompare(item: any, name: string) {
-
-// 	case "name":
-// 		if ("asset" in item && item.asset) {
-// 			return item.asset[name];
-// 		}
-
-// }
