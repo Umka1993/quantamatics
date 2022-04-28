@@ -16,15 +16,13 @@ import useSortingTable from "../../hooks/useSortingTable";
 
 interface ITable extends Omit<HTMLProps<HTMLTableElement>, "list"> {
 	list: Organization[];
-	setter: Dispatch<SetStateAction<Organization[]>>;
 }
 
 export const OrganizationTable: FunctionComponent<ITable> = ({
-	list,
-	setter,
+	list
 }) => {
 
-	const { activeSort, activeDirection, updateSort } = useSortingTable({ rowSetter: setter })
+	const { activeSort, activeDirection, updateSort, sortedRows } = useSortingTable({ initialRows: list })
 
 	const navigate = useNavigate();
 
@@ -60,7 +58,7 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 				</tr>
 			</thead>
 			<tbody>
-				{list.map((organization, index) => (
+				{sortedRows.map((organization, index) => (
 					<tr
 						className={[
 							style.row,

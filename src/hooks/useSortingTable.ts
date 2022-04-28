@@ -1,12 +1,12 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import { SortDirection } from "../data/enum";
-
 interface Props<Row> {
-	initialSort?: string;
+	initialSort?: keyof Row | "";
 	initialDirection?: SortDirection;
 	availableDirections?: SortDirection[];
-	rowSetter: Dispatch<SetStateAction<Row[]>>;
-	localKey?: string;
+	initialRows: Row[],
+	normalizer?: (item: any, key: keyof Row) => any
 }
 
 export default function useSortingTable<Row>({
@@ -17,13 +17,14 @@ export default function useSortingTable<Row>({
 		SortDirection.Down,
 		SortDirection.Up,
 	],
-	rowSetter,
-	localKey = "table-rows",
+	initialRows,
+	normalizer = defaultNormalizer
 }: Props<Row>) {
 	const [activeSort, setActiveSort] = useState(initialSort);
 	const [activeDirection, setActiveDirection] = useState(initialDirection);
+	const [sortedRows, setSortedRows] = useState<Row[]>(initialRows)
 
-	function updateSort(name?: string) {
+	function updateSort(name?: keyof Row) {
 		const currentIndex =
 			availableDirections.findIndex(
 				(direction) => direction === activeDirection
@@ -35,51 +36,34 @@ export default function useSortingTable<Row>({
 		name && setActiveSort(name);
 	}
 
+	const sortingDown = () =>
+		[...initialRows].sort((a, b) => {
+			const first = normalizer((a as any)[activeSort], activeSort as keyof Row );
+			const second = normalizer((b as any)[activeSort], activeSort  as keyof Row );
+
+			return first > second ? 1 : second > first ? -1 : 0;
+		});
+
 	useEffect(() => {
-		if (activeSort.length) {
-			// console.info(`Sort with ${activeSort} ${activeDirection} for ${localKey}`);
+		if ((activeSort as string).length) {
+			switch (activeDirection) {
+			case initialDirection:
+				return setSortedRows(initialRows)
+			case SortDirection.Down:
+				return setSortedRows(sortingDown());
 
-			sortTable(activeDirection, activeSort, rowSetter, localKey);
+			default:
+				return setSortedRows(sortingDown().reverse());
+
+			}
 		}
-	}, [activeSort, activeDirection]);
+	}, [activeSort, activeDirection, initialRows]);
 
-	return { activeSort, activeDirection, updateSort };
+	return { activeSort, activeDirection, updateSort, sortedRows };
 }
 
-function sortTable<Row>(
-	direction: SortDirection,
-	name: string,
-	setLocalRows: Dispatch<SetStateAction<Row[]>>,
-	localKey: string
-) {
-	setLocalRows((oldRows) => {
-		const sortingDown = () =>
-			[...oldRows].sort((a, b) => {
-				const first = normalizeCompare(a, name);
-				const second = normalizeCompare(b, name);
-
-				return first > second ? 1 : second > first ? -1 : 0;
-			});
-
-		switch (direction) {
-		case SortDirection.Down:
-			return sortingDown();
-
-		case SortDirection.Up:
-			return sortingDown().reverse();
-
-		default:
-			{
-				const rowsFromStorage = sessionStorage.getItem(localKey as string);
-				if (rowsFromStorage) {
-					return JSON.parse(rowsFromStorage) as Row[];
-				}
-			}
-			break;
-		}
-
-		return oldRows;
-	});
+function defaultNormalizer(value: string) {
+	return value.toUpperCase()
 }
 
 function normalizeCompare(item: any, name: string) {

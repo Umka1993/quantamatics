@@ -22,7 +22,7 @@ export default function OrganizationList(): ReactElement {
 		error,
 	} = useGetAllOrganizationsQuery({ id, organizationId, isSuperAdmin });
 
-	const { searchQuery, filteredItems, setFilteredItems, inputHandler } =
+	const { searchQuery, filteredItems, inputHandler } =
 		useFilterToSearchQuery(organizations || [], getFilter);
 
 	const listIsReady = filteredItems && isSuccess;
@@ -56,7 +56,7 @@ export default function OrganizationList(): ReactElement {
 
 			{listIsReady &&
 				(filteredItems.length ? (
-					<OrganizationTable list={filteredItems} setter={setFilteredItems} />
+					<OrganizationTable list={filteredItems} />
 				) : searchQuery.length ? (
 					<samp className={style.output}>
 						No results for “

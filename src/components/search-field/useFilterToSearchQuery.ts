@@ -28,7 +28,6 @@ export default function useFilterToSearchQuery<Item>(
 				? filterOrganizationsToQuery(query)
 				: initialItems;
 			setFilteredItems(filtered);
-			sessionStorage.setItem("table-rows", JSON.stringify(filtered));
 		}
 	}, [query, initialItems]);
 
@@ -44,7 +43,6 @@ export default function useFilterToSearchQuery<Item>(
 	return {
 		searchQuery: query,
 		filteredItems,
-		setFilteredItems,
 		inputHandler,
 		isFiltering,
 	};
