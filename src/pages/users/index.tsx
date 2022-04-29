@@ -1,17 +1,19 @@
-import { useMemo } from 'react';
-import { useFetchAllUsersQuery } from '../../api/admin';
-import Headline from '../../components/page-title'
-import { useFilterToSearchQuery } from '../../components/search-field';
-import SearchField from '../../components/search-field/SearchField'
-import AllUserTable from '../../components/table/AllUserTables';
-import scss from './users.module.scss'
-import getFilter from './utils/getFilter';
+import { useMemo } from "react";
+import { useFetchAllUsersQuery } from "../../api/admin";
+import Headline from "../../components/page-title";
+import { useFilterToSearchQuery } from "../../components/search-field";
+import SearchField from "../../components/search-field/SearchField";
+import AllUserTable from "../../components/table/AllUserTables";
+import scss from "./users.module.scss";
+import getFilter from "./utils/getFilter";
 
 export default function UsersPage() {
-	const { data: users, isSuccess: isUsersLoaded } = useFetchAllUsersQuery()
+	const { data: users, isSuccess: isUsersLoaded } = useFetchAllUsersQuery();
 
-	const { searchQuery, filteredItems: filteredUsers, inputHandler } =
-	useFilterToSearchQuery(users || [], getFilter);
+	const {
+		filteredItems: filteredUsers,
+		inputHandler,
+	} = useFilterToSearchQuery(users || [], getFilter);
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && users) {
@@ -24,13 +26,17 @@ export default function UsersPage() {
 		}
 	}, [isUsersLoaded, users]);
 
-
-	return <>
-		<div className={scss.header}>
-			<Headline className={scss.title}>User Accounts</Headline>
-			<SearchField onInput={inputHandler} />
-		</div>
-
-		{endDates && <AllUserTable list={filteredUsers} dates={endDates} />}
-	</>
+	return (
+		<>
+			<div className={scss.header}>
+				<Headline className={scss.title}>User Accounts</Headline>
+				<SearchField onInput={inputHandler} />
+			</div>
+			{filteredUsers.length ? (
+				endDates && <AllUserTable list={filteredUsers} dates={endDates} />
+			) : (
+				<samp>No User found</samp>
+			)}
+		</>
+	);
 }

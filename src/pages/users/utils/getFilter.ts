@@ -1,3 +1,4 @@
+import { adaptRoles } from "../../../services/baseService";
 import { UserWithRoles } from "../../../types/user";
 
 export default function getFilter(query: string) {
@@ -12,6 +13,6 @@ export default function getFilter(query: string) {
 		lastName.toLocaleLowerCase().includes(query) ||
 		userName.toLocaleLowerCase().includes(query) ||
 		subscriptionEndDate.toLocaleLowerCase().includes(query) ||
-		roles.findIndex((role) => role.toLocaleLowerCase().includes(query)) >
+		adaptRoles(roles).findIndex((role) => role.toLocaleLowerCase().includes(query)) >
 			-1;
 }
