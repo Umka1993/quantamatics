@@ -3,12 +3,12 @@ import { ReactElement } from "react";
 import { Route, Navigate, Routes } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { JupyterFrame } from "../components/jupyter-frame";
-import OrganizationList from "../components/organization-list";
 import { CreateOrganizationForm, AddUserForm } from "../components/form/";
 import OrganizationDetail from "../components/organization-detail/OrganizationDetail";
 import SuccessMessage from "../components/success-message";
 import { ViewUserAccountPage } from "../components/edit-org-user/UserAccountDetailPage/ViewUserAccountPage";
 import UsersPage from "../pages/users";
+import OrganizationList from "../pages/organization-list";
 
 export default function PrivateRoutes(): ReactElement {
 	const user = useUser();

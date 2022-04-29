@@ -1,20 +1,19 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useGetOrganizationUsersQuery } from '../../api/user';
 import Headline from '../../components/page-title'
+import { useFilterToSearchQuery } from '../../components/search-field';
 import SearchField from '../../components/search-field/SearchField'
 import UserTable from '../../components/table/UserTable';
 import useUser from '../../hooks/useUser';
-import { IUser } from '../../types/user';
 import scss from './users.module.scss'
+import getFilter from './utils/getFilter';
 
 export default function UsersPage() {
 	const { organizationId } = useUser()
-	const [search, setSearch] = useState("");
-
 	const { data: users, isSuccess: isUsersLoaded } = useGetOrganizationUsersQuery(organizationId)
 
-	const [localRows, setLocalRows] = useState<IUser[]>([])
-
+	const { searchQuery, filteredItems: filteredUsers, inputHandler } =
+		useFilterToSearchQuery(users || [], getFilter);
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && users) {
@@ -27,12 +26,10 @@ export default function UsersPage() {
 		}
 	}, [isUsersLoaded, users]);
 
-	useEffect(() => { isUsersLoaded && setLocalRows(users) }, [isUsersLoaded])
 
 	return <>
 		<Headline>User Accounts</Headline>
-		<SearchField />
-
-		{endDates && <UserTable list={localRows} setter={setLocalRows} dates={endDates} />}
+		<SearchField onInput={inputHandler} />
+		{endDates && <UserTable list={filteredUsers} dates={endDates} />}
 	</>
 }

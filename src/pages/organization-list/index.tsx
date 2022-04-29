@@ -1,17 +1,17 @@
 import { ReactElement, useEffect } from "react";
 import style from "./organization-list.module.scss";
-import OrganizationTable from "../table/OrganizationTable";
-import Button from "../button";
-import Headline from "../page-title/index";
+import OrganizationTable from "../../components/table/OrganizationTable";
+import Button from "../../components/button";
+import Headline from "../../components/page-title";
 import { AppRoute, UserRole } from "../../data/enum";
-import SearchField, { useFilterToSearchQuery } from "../search-field";
-import SpriteIcon from "../sprite-icon/SpriteIcon";
+import SearchField, { useFilterToSearchQuery } from "../../components/search-field";
+import SpriteIcon from "../../components/sprite-icon/SpriteIcon";
 import useUser from "../../hooks/useUser";
 import { useGetAllOrganizationsQuery } from "../../api/organization";
-import Loader from "../loader";
+import Loader from "../../components/loader";
 import getFilter from "./utils/getFilter";
 
-export default function OrganizationList(): ReactElement {
+export default function OrganizationList() {
 	const { userRoles, organizationId, id } = useUser();
 	const isSuperAdmin = userRoles.includes(UserRole.Admin);
 
