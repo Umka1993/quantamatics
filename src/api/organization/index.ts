@@ -9,7 +9,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 
 const organizationsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
-		getAllOrganizations: build.query<Organization[], GetOrganizationProps>({
+		getAllOrganizations: build.query<Organization[], GetOrganizationProps | void>({
 			query: () => ApiRoute.GetAllOrganization,
 			providesTags: tagAllOrganizations,
 			transformResponse: filterOrganizationsToUserRole,
@@ -71,7 +71,7 @@ const organizationsApi = baseApi.injectEndpoints({
 function tagAllOrganizations(
 	result: Organization[] | undefined,
 	_err: FetchBaseQueryError | undefined,
-	{ id: userID }: GetOrganizationProps
+	arg?: GetOrganizationProps | void
 ) {
 	const tags = result
 		? [
@@ -83,8 +83,8 @@ function tagAllOrganizations(
 		: [];
 
 	tags.push({ type: "Organizations", id: "list" });
-	userID !== undefined &&
-		tags.push({ type: "Organizations", id: String(userID) });
+	arg?.id &&
+		tags.push({ type: "Organizations", id: String(arg.id) });
 
 	return tags;
 }

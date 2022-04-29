@@ -1,4 +1,4 @@
-import { Dispatch, FunctionComponent, SetStateAction } from "react";
+import { FunctionComponent } from "react";
 import style from "../organization-detail/edit-organizations.module.scss";
 import Button from "../button";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
@@ -9,7 +9,6 @@ interface IUsersList {
 	hasAssets: boolean | undefined;
 	endDates: Map<number, string> | undefined;
 	localRows: IUser[];
-	setLocalRows: Dispatch<SetStateAction<IUser[]>>;
 	headlineTitle: string;
 	className?: string;
 	organizationID?: string;
@@ -19,7 +18,6 @@ export const UsersList: FunctionComponent<IUsersList> = ({
 	hasAssets,
 	endDates,
 	localRows,
-	setLocalRows,
 	headlineTitle,
 	organizationID
 }) => {
@@ -46,7 +44,6 @@ export const UsersList: FunctionComponent<IUsersList> = ({
 			{endDates && Boolean(localRows.length) && (
 				<UserTable
 					list={localRows}
-					setter={setLocalRows}
 					dates={endDates}
 				/>
 			)}
