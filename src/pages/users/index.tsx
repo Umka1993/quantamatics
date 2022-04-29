@@ -32,13 +32,13 @@ export default function UsersPage() {
 		}
 	}, [isUsersLoaded, users]);
 
-	const listIsPreparing = isFetching && !endDates && !filteredUsers;
+	const listIsPreparing = isFetching || !(endDates && filteredUsers);
 
 	return (
 		<>
 			<div className={scss.header}>
 				<Headline className={scss.title}>User Accounts</Headline>
-				{listIsPreparing && <SearchField onInput={inputHandler} />}
+				{!listIsPreparing && <SearchField onInput={inputHandler} />}
 			</div>
 
 			{listIsPreparing ? (

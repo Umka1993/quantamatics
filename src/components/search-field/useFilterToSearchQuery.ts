@@ -23,13 +23,13 @@ export default function useFilterToSearchQuery<Item>(
 	);
 
 	useEffect(() => {
-		if (initialItems) {
+		if (initialItems.length) {
 			const filtered = query.length
 				? filterOrganizationsToQuery(query)
 				: initialItems;
 			setFilteredItems(filtered);
 		}
-	}, [query, initialItems]);
+	}, [query]);
 
 	function inputHandler(evt: FormEvent<HTMLLabelElement>) {
 		const input = evt.target;
@@ -42,7 +42,7 @@ export default function useFilterToSearchQuery<Item>(
 
 	return {
 		searchQuery: query,
-		filteredItems,
+		filteredItems: query.length ? filteredItems: initialItems,
 		inputHandler,
 		isFiltering,
 	};
