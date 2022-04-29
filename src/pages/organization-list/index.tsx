@@ -40,7 +40,7 @@ export default function OrganizationList() {
 		<>
 			<header className={scss.header}>
 				<Headline className={scss.title}>Organizations</Headline>
-				<SearchField onInput={inputHandler} />
+				{listIsReady && <SearchField onInput={inputHandler} /> }
 				<Button className={scss.button} href={AppRoute.CreateOrganization}>
 					<SpriteIcon icon="plus" width={10} />
 					Create

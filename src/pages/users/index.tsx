@@ -10,12 +10,16 @@ import scss from "../../sass/modules/list-page.module.scss";
 import getFilter from "./utils/getFilter";
 
 export default function UsersPage() {
-	const { data: users, isSuccess: isUsersLoaded, isFetching } = useFetchAllUsersQuery();
-
 	const {
-		filteredItems: filteredUsers,
-		inputHandler,
-	} = useFilterToSearchQuery(users || [], getFilter);
+		data: users,
+		isSuccess: isUsersLoaded,
+		isFetching,
+	} = useFetchAllUsersQuery();
+
+	const { filteredItems: filteredUsers, inputHandler } = useFilterToSearchQuery(
+		users || [],
+		getFilter
+	);
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && users) {
@@ -28,21 +32,21 @@ export default function UsersPage() {
 		}
 	}, [isUsersLoaded, users]);
 
+	const listIsPreparing = isFetching && !endDates && !filteredUsers;
+
 	return (
 		<>
 			<div className={scss.header}>
 				<Headline className={scss.title}>User Accounts</Headline>
-				<SearchField onInput={inputHandler} />
+				{listIsPreparing && <SearchField onInput={inputHandler} />}
 			</div>
 
-			{isFetching && (
+			{listIsPreparing ? (
 				<div className={scss.loader}>
 					<Loader />
 				</div>
-			)}
-
-			{filteredUsers.length ? (
-				endDates && <AllUserTable list={filteredUsers} dates={endDates} />
+			) : filteredUsers.length ? (
+				<AllUserTable list={filteredUsers} dates={endDates || new Map()} />
 			) : (
 				<samp className={scss.output}>No User found</samp>
 			)}
