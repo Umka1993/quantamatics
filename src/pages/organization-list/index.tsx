@@ -1,10 +1,12 @@
-import { ReactElement, useEffect } from "react";
-import style from "./organization-list.module.scss";
+import { useEffect } from "react";
+import scss from "../../sass/modules/list-page.module.scss";
 import OrganizationTable from "../../components/table/OrganizationTable";
 import Button from "../../components/button";
 import Headline from "../../components/page-title";
 import { AppRoute, UserRole } from "../../data/enum";
-import SearchField, { useFilterToSearchQuery } from "../../components/search-field";
+import SearchField, {
+	useFilterToSearchQuery,
+} from "../../components/search-field";
 import SpriteIcon from "../../components/sprite-icon/SpriteIcon";
 import useUser from "../../hooks/useUser";
 import { useGetAllOrganizationsQuery } from "../../api/organization";
@@ -22,8 +24,10 @@ export default function OrganizationList() {
 		error,
 	} = useGetAllOrganizationsQuery({ id, organizationId, isSuperAdmin });
 
-	const { searchQuery, filteredItems, inputHandler } =
-		useFilterToSearchQuery(organizations || [], getFilter);
+	const { searchQuery, filteredItems, inputHandler } = useFilterToSearchQuery(
+		organizations || [],
+		getFilter
+	);
 
 	const listIsReady = filteredItems && isSuccess;
 
@@ -33,32 +37,27 @@ export default function OrganizationList() {
 
 	return (
 		<>
-			<header className={style.header}>
-				<Headline>Organizations</Headline>
+			<header className={scss.header}>
+				<Headline className={scss.title}>Organizations</Headline>
 				<SearchField onInput={inputHandler} />
-				<Button className={style.button} href={AppRoute.CreateOrganization}>
+				<Button className={scss.button} href={AppRoute.CreateOrganization}>
 					<SpriteIcon icon="plus" width={10} />
 					Create
 				</Button>
 			</header>
 
 			{!isError && !listIsReady && (
-				<div
-					style={{
-						position: "relative",
-						height: "60vh",
-					}}
-				>
+				<div className={scss.loader}>
 					<Loader />
 				</div>
 			)}
-			{isError && <samp className={style.output}>Something went wrong</samp>}
+			{isError && <samp className={scss.output}>Something went wrong</samp>}
 
 			{listIsReady &&
 				(filteredItems.length ? (
 					<OrganizationTable list={filteredItems} />
 				) : searchQuery.length ? (
-					<samp className={style.output}>
+					<samp className={scss.output}>
 						No results for “
 						{searchQuery.length > 32
 							? `${searchQuery.slice(0, 32)}…`
@@ -66,7 +65,7 @@ export default function OrganizationList() {
 						” were found.
 					</samp>
 				) : (
-					<samp className={style.output}>No organizations found</samp>
+					<samp className={scss.output}>No organizations found</samp>
 				))}
 		</>
 	);

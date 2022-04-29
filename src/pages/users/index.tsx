@@ -1,14 +1,16 @@
 import { useMemo } from "react";
 import { useFetchAllUsersQuery } from "../../api/admin";
+import Loader from "../../components/loader";
 import Headline from "../../components/page-title";
 import { useFilterToSearchQuery } from "../../components/search-field";
 import SearchField from "../../components/search-field/SearchField";
 import AllUserTable from "../../components/table/AllUserTables";
-import scss from "./users.module.scss";
+import scss from "../../sass/modules/list-page.module.scss";
+
 import getFilter from "./utils/getFilter";
 
 export default function UsersPage() {
-	const { data: users, isSuccess: isUsersLoaded } = useFetchAllUsersQuery();
+	const { data: users, isSuccess: isUsersLoaded, isFetching } = useFetchAllUsersQuery();
 
 	const {
 		filteredItems: filteredUsers,
@@ -32,10 +34,17 @@ export default function UsersPage() {
 				<Headline className={scss.title}>User Accounts</Headline>
 				<SearchField onInput={inputHandler} />
 			</div>
+
+			{isFetching && (
+				<div className={scss.loader}>
+					<Loader />
+				</div>
+			)}
+
 			{filteredUsers.length ? (
 				endDates && <AllUserTable list={filteredUsers} dates={endDates} />
 			) : (
-				<samp>No User found</samp>
+				<samp className={scss.output}>No User found</samp>
 			)}
 		</>
 	);
