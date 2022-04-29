@@ -28,8 +28,11 @@ export default function UsersPage() {
 
 
 	return <>
-		<Headline>User Accounts</Headline>
-		<SearchField onInput={inputHandler} />
+		<div className={scss.header}>
+			<Headline className={scss.title}>User Accounts</Headline>
+			<SearchField onInput={inputHandler} />
+		</div>
+
 		{endDates && <UserTable list={filteredUsers} dates={endDates} />}
 	</>
 }
