@@ -9,6 +9,10 @@ interface Props<Row> {
 	normalizer?: (item: any, key: keyof Row) => any;
 }
 
+function defaultNormalizer(value: string) {
+	return value.toUpperCase();
+}
+
 export default function useSortingTable<Row>({
 	initialSort = "",
 	initialDirection = SortDirection.Default,
@@ -25,9 +29,7 @@ export default function useSortingTable<Row>({
 	const [sortedRows, setSortedRows] = useState<Row[]>(initialRows);
 
 	useEffect(() => {
-		if ((activeSort as string).length) {
-			setSortedRows(sortByDirection);
-		}
+		setSortedRows(sortByDirection);
 	}, [activeSort, activeDirection, initialRows]);
 
 	function sortByDirection() {
@@ -67,8 +69,4 @@ export default function useSortingTable<Row>({
 	}
 
 	return { activeSort, activeDirection, updateSort, sortedRows };
-}
-
-function defaultNormalizer(value: string) {
-	return value.toUpperCase();
 }
