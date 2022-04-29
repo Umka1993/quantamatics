@@ -1,17 +1,17 @@
-import { IUser } from "../../../types/user";
+import { UserWithRoles } from "../../../types/user";
 
 export default function getFilter(query: string) {
 	return ({
 		firstName,
 		lastName,
-		email,
+		userName,
 		subscriptionEndDate,
-		userRoles,
-	}: IUser) =>
+		roles,
+	}: UserWithRoles) =>
 		firstName.toLocaleLowerCase().includes(query) ||
 		lastName.toLocaleLowerCase().includes(query) ||
-		email.toLocaleLowerCase().includes(query) ||
+		userName.toLocaleLowerCase().includes(query) ||
 		subscriptionEndDate.toLocaleLowerCase().includes(query) ||
-		userRoles.findIndex((role) => role.toLocaleLowerCase().includes(query)) >
+		roles.findIndex((role) => role.toLocaleLowerCase().includes(query)) >
 			-1;
 }

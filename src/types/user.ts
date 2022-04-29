@@ -27,3 +27,16 @@ export interface IUpdateUser extends Omit<IUser, UserKey.SubscriptionEndDate>  {
 	newEmail?: string,
 	[UserKey.SubscriptionEndDate]: Date,
 }
+
+
+export interface UserWithRoles {
+	id:                  number;
+	userName:            string;
+	firstName:           string;
+	lastName:            string;
+	companyName:         null | string;
+	reports:             null;
+	subscriptionEndDate: string;
+	roles:               UserRole[];
+}
+

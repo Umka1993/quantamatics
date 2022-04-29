@@ -42,6 +42,17 @@
 			64px;
 	}
 
+	&--all-user {
+		grid-template-columns:
+		max(#{math.div(122 - 24, 1108) * 100%}, #{90 + 24}px)
+		max(#{math.div(104 - 24, 1108) * 100%}, #{90 + 24}px)
+		max(#{math.div(240 - 24, 1108) * 100%}, #{112 + 24}px)
+		max(#{math.div(145 - 24, 1108) * 100%}, #{118 + 24}px)
+		max(#{math.div(250 - 24, 1108) * 100%}, #{118 + 24}px)
+		1fr
+		64px;
+	}
+
 	&--body {
 		min-height: 65px;
 		align-items: center;
