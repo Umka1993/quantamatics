@@ -24,12 +24,12 @@ export default function OrganizationList() {
 		error,
 	} = useGetAllOrganizationsQuery({ id, organizationId, isSuperAdmin });
 
-	const { searchQuery, filteredItems, inputHandler } = useFilterToSearchQuery(
-		organizations || [],
-		getFilter
-	);
+	// const { searchQuery, filteredItems, inputHandler } = useFilterToSearchQuery(
+	// 	organizations || [],
+	// 	getFilter
+	// );
 
-	const listIsReady = filteredItems && isSuccess;
+	// const listIsReady = filteredItems && isSuccess;
 
 	useEffect(() => {
 		isError && console.debug(error);
@@ -39,14 +39,18 @@ export default function OrganizationList() {
 		<>
 			<header className={scss.header}>
 				<Headline className={scss.title}>Organizations</Headline>
-				<SearchField onInput={inputHandler} />
+				{/* <SearchField onInput={inputHandler} /> */}
 				<Button className={scss.button} href={AppRoute.CreateOrganization}>
 					<SpriteIcon icon="plus" width={10} />
 					Create
 				</Button>
 			</header>
 
-			{!isError && !listIsReady && (
+			{isSuccess && organizations.map(organization => <p key={organization.id}>
+				{Object.keys(organization).map(key => `${key}: ${(organization as any)[key]}; `)}
+			</p>)}
+
+			{/* {!isError && !listIsReady && (
 				<div className={scss.loader}>
 					<Loader />
 				</div>
@@ -66,7 +70,7 @@ export default function OrganizationList() {
 					</samp>
 				) : (
 					<samp className={scss.output}>No organizations found</samp>
-				))}
+				))} */}
 		</>
 	);
 }
