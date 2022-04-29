@@ -28,7 +28,7 @@ export const ViewUserAccountPage = () => {
 		isSuccess: isLoaded,
 	} = useGetUserQuery(userId as string);
 
-	const { data: company } = useGetOrganizationQuery(orgId as string);
+	const { data: company } = useGetOrganizationQuery(user?.organizationId as string);
 
 	const organizationEmployee =
 		user &&
@@ -44,11 +44,19 @@ export const ViewUserAccountPage = () => {
 
 	const breadcrumbLinks: BreadcrumbLink[] = [];
 
-	organizationEmployee &&
+	if (orgId === 'users' ) {
+		breadcrumbLinks.push({
+			href: AppRoute.Users,
+			text: 'User Accounts'
+		})
+	} else {
+		organizationEmployee &&
 		breadcrumbLinks.push({
 			href: AppRoute.OrganizationList,
 			text: "Organizations",
 		});
+
+	}
 
 	if (user) {
 		breadcrumbLinks.push({

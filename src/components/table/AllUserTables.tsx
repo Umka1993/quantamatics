@@ -37,8 +37,6 @@ export default function AllUserTable({ list, dates }: UserTableProps) {
 			normalizer,
 		});
 
-	const { id: orgID } = useParams<RouteParams>();
-
 	const KEYS: Array<keyof UserWithRoles> = ['firstName', 'lastName', 'userName', 'subscriptionEndDate', 'companyName', 'roles']
 
 	const TITLES = ['First Name', 'First Name', 'Email Address', 'Expiration Date', 'Organization', 'Organization Role ']
@@ -76,10 +74,11 @@ export default function AllUserTable({ list, dates }: UserTableProps) {
 
 							if (isNotLink) {
 								window.scrollTo(0, 0);
-								navigate(`/organizations/${orgID}/user/${user.id}/view`, {
+								navigate(`/organizations/users/user/${user.id}/view`, {
 									state: {
 										initialSort: activeSort,
 										initialDirection: activeDirection,
+										fromAllUser: true
 									},
 								});
 							}

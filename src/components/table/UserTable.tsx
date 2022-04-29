@@ -72,6 +72,7 @@ export default function UserTable({ list, dates }: UserTableProps) {
 									state: {
 										initialSort: activeSort,
 										initialDirection: activeDirection,
+										fromAllUser: false,
 									},
 								});
 							}
