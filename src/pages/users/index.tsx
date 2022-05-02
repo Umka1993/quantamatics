@@ -28,8 +28,8 @@ export default function UsersPage() {
 			const result = new Map<number, string>();
 
 			users.map((user) => {
+				// fix for safari
 				const formattedDate = format(new Date(user.subscriptionEndDate.split(" ")[0]), "MM/dd/yyyy")
-				console.log(formattedDate)
 				result.set(
 					user.id,
 					formattedDate
