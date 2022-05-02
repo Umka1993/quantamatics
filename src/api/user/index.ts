@@ -4,7 +4,6 @@ import { IUser, IUpdateUser } from "../../types/user";
 
 const usersApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
-
 		getOrganizationUsers: build.query<IUser[], string>({
 			query: (orgId) => ({
 				url: ApiRoute.GetUsersByOrgID,
@@ -20,7 +19,10 @@ const usersApi = baseApi.injectEndpoints({
 				method: "GET",
 				params: { id },
 			}),
-			providesTags: [{ type: "Users", id: "list" },{ type: "SelectedUser", id: "list" }],
+			providesTags: [
+				{ type: "Users", id: "list" },
+				{ type: "SelectedUser", id: "list" },
+			],
 		}),
 
 		updateUser: build.mutation<void, IUpdateUser>({
@@ -29,7 +31,11 @@ const usersApi = baseApi.injectEndpoints({
 				method: "POST",
 				body,
 			}),
-			invalidatesTags: [{ type: "Users", id: "list" },{ type: "SelectedUser", id: "list" }],
+			invalidatesTags: [
+				{ type: "Users", id: "list" },
+				{ type: "SelectedUser", id: "list" },
+				{ type: "Users", id: "all" },
+			],
 		}),
 
 		updateUserRoles: build.mutation<
@@ -41,7 +47,11 @@ const usersApi = baseApi.injectEndpoints({
 				method: "POST",
 				body: { userRoles },
 			}),
-			invalidatesTags: [{ type: "Users", id: "list" },{ type: "SelectedUser", id: "list" }],
+			invalidatesTags: [
+				{ type: "Users", id: "list" },
+				{ type: "SelectedUser", id: "list" },
+				{ type: "Users", id: "all" },
+			],
 		}),
 	}),
 });

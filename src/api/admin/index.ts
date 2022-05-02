@@ -12,6 +12,7 @@ const adminHooks = baseApi.injectEndpoints({
 	endpoints: (build) => ({
 		fetchAllUsers: build.query<UserWithRoles[], void>({
 			query: () => AdminEndpoint.AllUser,
+			providesTags: [{ type: "Users", id: "all" }],
 		}),
 	}),
 });
