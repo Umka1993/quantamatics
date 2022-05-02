@@ -34,9 +34,9 @@ export interface UserWithRoles {
 	userName:            string;
 	firstName:           string;
 	lastName:            string;
+	organizationId:      string;
 	companyName:         null | string;
 	reports:             null;
 	subscriptionEndDate: string;
 	roles:               UserRole[];
 }
-

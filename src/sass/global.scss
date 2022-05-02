@@ -118,6 +118,10 @@ body {
 	color: $accent;
 	text-decoration: none;
 
+	&--inherit {
+		color: inherit;
+	}
+
 	@include hover-focus {
 		color: darken($accent, 10);
 	}

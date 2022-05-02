@@ -92,7 +92,9 @@ export default function AllUserTable({ list, dates }: UserTableProps) {
 							</a>
 						</td>
 						<td className={style.cell}>{dates.get(user.id)}</td>
-						<td className={style.cell}>{user.companyName}</td>
+						<td className={style.cell}>
+							<a className="link link--inherit" href={`/organizations/${user.organizationId}`}>{user.companyName}</a>
+						</td>
 						<td className={style.cell}>
 							<ComaList list={adaptRoles(user.roles)} />
 						</td>
