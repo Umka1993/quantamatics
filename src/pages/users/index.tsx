@@ -1,4 +1,4 @@
-import { format } from "date-fns/esm";
+import { format } from "date-fns";
 import { useMemo } from "react";
 import { useFetchAllUsersQuery } from "../../api/admin";
 import Loader from "../../components/loader";
@@ -37,7 +37,7 @@ export default function UsersPage() {
 		}
 	}, [isUsersLoaded, users]);
 
-	const listIsPreparing = isFetching || !(endDates && filteredUsers);
+	const listIsPreparing = isFetching || !(endDates && endDates.size && filteredUsers);
 
 	return (
 		<>
