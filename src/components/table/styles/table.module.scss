@@ -52,10 +52,15 @@
 			1fr
 			64px;
 
-		td {
+		// align-content: center;
+
+		.cell {
+			display: inline;
+			padding: 22px 24px 12px 0;
 			text-overflow: ellipsis;
 			overflow: hidden;
 			white-space: nowrap;
+			min-height: auto;
 		}
 	}
 

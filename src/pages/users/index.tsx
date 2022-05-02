@@ -28,9 +28,11 @@ export default function UsersPage() {
 			const result = new Map<number, string>();
 
 			users.map((user) => {
+				const formattedDate = format(new Date(user.subscriptionEndDate), "MM/dd/yyyy")
+				console.log(formattedDate)
 				result.set(
 					user.id,
-					format(new Date(user.subscriptionEndDate), "MM/dd/yyyy")
+					formattedDate
 				);
 			});
 			return result;
