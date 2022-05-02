@@ -1,3 +1,4 @@
+import { format } from "date-fns/esm";
 import { useMemo } from "react";
 import { useFetchAllUsersQuery } from "../../api/admin";
 import Loader from "../../components/loader";
@@ -26,7 +27,7 @@ export default function UsersPage() {
 			const result = new Map<number, string>();
 
 			users.map((user) => {
-				result.set(user.id, user.subscriptionEndDate.split(" ")[0]);
+				result.set(user.id, format(new Date(user.subscriptionEndDate), 'MM/dd/yyyy'));
 			});
 			return result;
 		}

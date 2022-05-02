@@ -8,7 +8,6 @@ import useSortingTable from "../../hooks/useSortingTable";
 import { useLocation, useNavigate } from "react-router-dom";
 import normalizer from "./utils/normalizeUserWithRoles";
 import { AppRoute, SortDirection } from "../../data/enum";
-
 interface UserTableProps {
 	list: UserWithRoles[];
 	dates: Map<number, string>;
