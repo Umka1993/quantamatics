@@ -83,7 +83,8 @@ export default function Dialog({
 	return (
 		<dialog
 			ref={dialogRef}
-			onClick={handleOutsideClick}
+			// onClick={handleOutsideClick}
+			onMouseDown={handleOutsideClick}
 			className={[style.root, style[`root--${variant}`]].join(" ")}
 			aria-labelledby={`${id}-title`}
 		>
