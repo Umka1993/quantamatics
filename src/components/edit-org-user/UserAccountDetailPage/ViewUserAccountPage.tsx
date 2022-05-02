@@ -53,7 +53,7 @@ export const ViewUserAccountPage = () => {
 
 	} else {
 		breadcrumbLinks.push({
-			href: AppRoute.Users,
+			href: `/${AppRoute.Users}`,
 			text: 'User Accounts'
 		})
 	}
