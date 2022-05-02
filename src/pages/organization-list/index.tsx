@@ -40,17 +40,23 @@ export default function OrganizationList() {
 		<>
 			<header className={scss.header}>
 				<Headline className={scss.title}>Organizations</Headline>
-				{listIsReady && <SearchField onInput={inputHandler} /> }
+				{listIsReady && (
+					<SearchField
+						onInput={inputHandler}
+						placeholder="Search organizations"
+					/>
+				)}
 				<Button className={scss.button} href={AppRoute.CreateOrganization}>
 					<SpriteIcon icon="plus" width={10} />
 					Create
 				</Button>
 			</header>
 
-			{isFetching && <div className={scss.loader}>
-				<Loader />
-			</div>}
-
+			{isFetching && (
+				<div className={scss.loader}>
+					<Loader />
+				</div>
+			)}
 
 			{isError && <samp className={scss.output}>Something went wrong</samp>}
 
