@@ -5,7 +5,7 @@ import Loader from "../../components/loader";
 import Headline from "../../components/page-title";
 import { useFilterToSearchQuery } from "../../components/search-field";
 import SearchField from "../../components/search-field/SearchField";
-import AllUserTable from "../../components/table/AllUserTables";
+import AllUserTable from "../../components/table/AllUserTable";
 import scss from "../../sass/modules/list-page.module.scss";
 
 import getFilter from "./utils/getFilter";
