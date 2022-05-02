@@ -83,9 +83,8 @@ export default function Dialog({
 	return (
 		<dialog
 			ref={dialogRef}
-			// onClick={handleOutsideClick}
 			onMouseDown={handleOutsideClick}
-			className={[style.root, style[`root--${variant}`]].join(" ")}
+			className={classNames(style.root, style[`root--${variant}`], className)}
 			aria-labelledby={`${id}-title`}
 		>
 			{hasWrapper ? (
