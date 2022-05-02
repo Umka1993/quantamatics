@@ -21,7 +21,7 @@ export default function NavBar({ className, collapsed, ...other }: Props) {
 	const { pathname } = useLocation();
 	const user = useUser();
 
-	const isSuperAdmin = user?.userRoles.includes(UserRole.OrgAdmin);
+	const isSuperAdmin = user?.userRoles.includes(UserRole.Admin);
 
 	const isHaveAccessToOrgList =
 		isSuperAdmin || user?.userRoles.includes(UserRole.OrgOwner);
