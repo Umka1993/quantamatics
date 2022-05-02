@@ -44,23 +44,23 @@ export const ViewUserAccountPage = () => {
 
 	const breadcrumbLinks: BreadcrumbLink[] = [];
 
-	if (orgId === 'users' ) {
-		breadcrumbLinks.push({
-			href: AppRoute.Users,
-			text: 'User Accounts'
-		})
-	} else {
+	if (orgId) {
 		organizationEmployee &&
 		breadcrumbLinks.push({
 			href: AppRoute.OrganizationList,
 			text: "Organizations",
 		});
 
+	} else {
+		breadcrumbLinks.push({
+			href: AppRoute.Users,
+			text: 'User Accounts'
+		})
 	}
 
 	if (user) {
 		breadcrumbLinks.push({
-			href: `/organizations/${orgId}`,
+			href: `/organizations/${user.organizationId}`,
 			text: user.companyName,
 		});
 

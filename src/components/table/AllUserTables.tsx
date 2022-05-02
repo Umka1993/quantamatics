@@ -5,10 +5,9 @@ import style from "./styles/table.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import SortTableHeader from "../sort-table-header/SortTableHeader";
 import useSortingTable from "../../hooks/useSortingTable";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { RouteParams } from "../../types/route-params";
+import { useLocation, useNavigate } from "react-router-dom";
 import normalizer from "./utils/normalizeUserWithRoles";
-import { SortDirection } from "../../data/enum";
+import { AppRoute, SortDirection } from "../../data/enum";
 
 interface UserTableProps {
 	list: UserWithRoles[];
@@ -74,7 +73,7 @@ export default function AllUserTable({ list, dates }: UserTableProps) {
 
 							if (isNotLink) {
 								window.scrollTo(0, 0);
-								navigate(`/organizations/users/user/${user.id}/view`, {
+								navigate(`/${AppRoute.Users}/${user.id}`, {
 									state: {
 										initialSort: activeSort,
 										initialDirection: activeDirection,

@@ -70,7 +70,12 @@ export default function PrivateRoutes(): ReactElement {
 				</>
 			)}
 
-			{isSuperAdmin && <Route path={AppRoute.Users} element={<UsersPage />}/>}
+			{isSuperAdmin &&
+				<>
+					<Route path={AppRoute.Users} element={<UsersPage />} />
+					<Route path={AppRoute.User} element={<ViewUserAccountPage />} />
+				</>
+			}
 
 			{isEditOrgAvailable && (
 				<>
@@ -78,7 +83,7 @@ export default function PrivateRoutes(): ReactElement {
 					<Route path={AppRoute.Organizations + "add-user"} element={<AddUserForm />}
 					/>
 					<Route path={AppRoute.Success} element={<SuccessMessage />} />
-					<Route path={AppRoute.Organizations+AppRoute.UserAccountDetail+'/view'} element={<ViewUserAccountPage />} />
+					<Route path={AppRoute.Organizations + AppRoute.UserAccountDetail + '/view'} element={<ViewUserAccountPage />} />
 				</>
 			)}
 		</Routes>

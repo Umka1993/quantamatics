@@ -27,7 +27,8 @@ export const enum AppRoute {
 	NoRoles = '/account-setting-up',
 	UserAccountDetail = 'user/:userId',
 
-	Users = 'users'
+	Users = 'users',
+	User = 'users/:userId'
 }
 
 export const enum ApiRoute {
