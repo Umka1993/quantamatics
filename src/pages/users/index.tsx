@@ -17,17 +17,21 @@ export default function UsersPage() {
 		isFetching,
 	} = useFetchAllUsersQuery();
 
-	const { filteredItems: filteredUsers, inputHandler } = useFilterToSearchQuery(
-		users || [],
-		getFilter
-	);
+	const {
+		filteredItems: filteredUsers,
+		inputHandler,
+		searchQuery,
+	} = useFilterToSearchQuery(users || [], getFilter);
 
 	const endDates = useMemo(() => {
 		if (isUsersLoaded && users) {
 			const result = new Map<number, string>();
 
 			users.map((user) => {
-				result.set(user.id, format(new Date(user.subscriptionEndDate), 'MM/dd/yyyy'));
+				result.set(
+					user.id,
+					format(new Date(user.subscriptionEndDate), "MM/dd/yyyy")
+				);
 			});
 			return result;
 		}
@@ -54,7 +58,13 @@ export default function UsersPage() {
 			) : filteredUsers.length ? (
 				<AllUserTable list={filteredUsers} dates={endDates || new Map()} />
 			) : (
-				<samp className={scss.output}>No User found</samp>
+				<samp className={scss.output}>
+					No results for “
+					{searchQuery.length > 32
+						? `${searchQuery.slice(0, 32)}…`
+						: searchQuery}
+					” were found.
+				</samp>
 			)}
 		</>
 	);

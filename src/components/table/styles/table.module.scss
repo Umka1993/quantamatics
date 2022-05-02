@@ -44,13 +44,19 @@
 
 	&--all-user {
 		grid-template-columns:
-		max(#{math.div(122 - 24, 1108) * 100%}, #{90 + 24}px)
-		max(#{math.div(104 - 24, 1108) * 100%}, #{90 + 24}px)
-		max(#{math.div(240 - 24, 1108) * 100%}, #{112 + 24}px)
-		max(#{math.div(145 - 24, 1108) * 100%}, #{118 + 24}px)
-		max(#{math.div(250 - 24, 1108) * 100%}, #{118 + 24}px)
-		1fr
-		64px;
+			max(#{math.div(122 - 24, 1108) * 100%}, #{90 + 24}px)
+			max(#{math.div(104 - 24, 1108) * 100%}, #{95 + 24}px)
+			max(#{math.div(240 - 24, 1108) * 100%}, #{112 + 24}px)
+			max(#{math.div(145 - 24, 1108) * 100%}, #{118 + 24}px)
+			max(#{math.div(250 - 24, 1108) * 100%}, #{110 + 24}px)
+			1fr
+			64px;
+
+		td {
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+		}
 	}
 
 	&--body {
@@ -76,7 +82,7 @@
 			box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05), inset 0px -1px 0px rgba(22, 34, 101, 0.07), 0px -1px 0px #eff0f4;
 			.cell {
 				border-color: transparent;
-				button{
+				button {
 					opacity: 1;
 					transition: opacity 0.3s ease-out;
 				}
@@ -86,7 +92,6 @@
 				background-color: $accent;
 			}
 		}
-
 
 		&:hover .action {
 			color: $accent;
@@ -127,10 +132,9 @@
 	text-overflow: ellipsis;
 
 	padding-right: 24px;
-	button{
+	button {
 		opacity: 0;
 		transition: opacity 0.3s ease-out;
-
 	}
 
 	a {
