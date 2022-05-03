@@ -1,22 +1,24 @@
 import { adaptRoles } from "../../services/baseService";
 import ComaList from "../coma-list";
-import { IUser } from "../../types/user";
-import { USER_HEADER } from "./utils/constants";
+import { UserWithRoles } from "../../types/user";
 import style from "./styles/table.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import SortTableHeader from "../sort-table-header/SortTableHeader";
 import useSortingTable from "../../hooks/useSortingTable";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { RouteParams } from "../../types/route-params";
-import { UserListLocation } from "../../types/user-list-location";
-import normalizer from "./utils/normalizeUserValuesForCompare";
-
+import { useLocation, useNavigate } from "react-router-dom";
+import normalizer from "./utils/normalizeUserWithRoles";
+import { AppRoute, SortDirection } from "../../data/enum";
 interface UserTableProps {
-	list: IUser[];
+	list: UserWithRoles[];
 	dates: Map<number, string>;
 }
 
-export default function UserTable({ list, dates }: UserTableProps) {
+export interface UserListLocation {
+	initialSort: keyof UserWithRoles | "",
+	initialDirection: SortDirection
+}
+
+export default function AllUserTable({ list, dates }: UserTableProps) {
 	const navigate = useNavigate();
 	const { state } = useLocation();
 
@@ -33,13 +35,15 @@ export default function UserTable({ list, dates }: UserTableProps) {
 			normalizer,
 		});
 
-	const { id: orgID } = useParams<RouteParams>();
+	const KEYS: Array<keyof UserWithRoles> = ['firstName', 'lastName', 'userName', 'subscriptionEndDate', 'companyName', 'roles']
+
+	const TITLES = ['First Name', 'First Name', 'Email Address', 'Expiration Date', 'Organization', 'Organization Role ']
 
 	return (
 		<table className={style.root}>
 			<thead className={style.head}>
-				<tr className={[style.row, style["row--user"]].join(" ")}>
-					{USER_HEADER.keys.map((key, index: number) => (
+				<tr className={[style.row, style["row--all-user"]].join(" ")}>
+					{KEYS.map((key, index: number) => (
 						<SortTableHeader
 							key={key}
 							isActive={activeSort === key}
@@ -48,7 +52,7 @@ export default function UserTable({ list, dates }: UserTableProps) {
 							onClick={() => updateSort(key)}
 							className={style.headline}
 						>
-							{USER_HEADER.titles[index]}
+							{TITLES[index]}
 						</SortTableHeader>
 					))}
 					<th className={[style.headline, style["headline--action"]].join(" ")}>
@@ -59,7 +63,7 @@ export default function UserTable({ list, dates }: UserTableProps) {
 			<tbody>
 				{sortedRows.map((user) => (
 					<tr
-						className={[style.row, style["row--body"], style["row--user"]].join(
+						className={[style.row, style["row--body"], style["row--all-user"]].join(
 							" "
 						)}
 						onClick={({ target }) => {
@@ -68,11 +72,11 @@ export default function UserTable({ list, dates }: UserTableProps) {
 
 							if (isNotLink) {
 								window.scrollTo(0, 0);
-								navigate(`/organizations/${orgID}/user/${user.id}/view`, {
+								navigate(`/${AppRoute.Users}/${user.id}`, {
 									state: {
 										initialSort: activeSort,
 										initialDirection: activeDirection,
-										fromAllUser: false,
+										fromAllUser: true
 									},
 								});
 							}
@@ -82,13 +86,16 @@ export default function UserTable({ list, dates }: UserTableProps) {
 						<td className={style.cell}>{user.firstName}</td>
 						<td className={style.cell}>{user.lastName}</td>
 						<td className={style.cell}>
-							<a className="link" href={`mailto:${user.email}`}>
-								{user.email}
+							<a className="link" href={`mailto:${user.userName}`}>
+								{user.userName}
 							</a>
 						</td>
 						<td className={style.cell}>{dates.get(user.id)}</td>
 						<td className={style.cell}>
-							<ComaList list={adaptRoles(user.userRoles)} />
+							<a className="link link--inherit" href={`/organizations/${user.organizationId}`}>{user.companyName}</a>
+						</td>
+						<td className={style.cell}>
+							<ComaList list={adaptRoles(user.roles)} />
 						</td>
 						<td className={style.cell}>
 							<button

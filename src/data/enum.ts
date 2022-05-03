@@ -25,7 +25,10 @@ export const enum AppRoute {
 	ExpiredPassword = '/expired-token',
 	SignUpExpired = '/expired-registration',
 	NoRoles = '/account-setting-up',
-	UserAccountDetail = 'user/:userId'
+	UserAccountDetail = 'user/:userId',
+
+	Users = 'users',
+	User = 'users/:userId'
 }
 
 export const enum ApiRoute {

@@ -30,14 +30,6 @@ export default function OrganizationDetail() {
 		isLoading: isUsersLoading,
 	} = useGetOrganizationUsersQuery(id as string);
 
-	const [localRows, setLocalRows] = useState<IUser[]>([]);
-	useEffect(() => {
-		if (userList) {
-			sessionStorage.setItem("table-rows", JSON.stringify(userList));
-			setLocalRows(userList);
-		}
-	}, [isUsersLoaded, userList]);
-
 	const [isAssetOpened, toggleAssetModal] = useToggle(false);
 	const [isOrganizationOpened, toggleOrganizationModal] = useToggle(false);
 
@@ -90,12 +82,10 @@ export default function OrganizationDetail() {
 					/>
 				</>
 			)}
-
 			<UsersList
 				endDates={endDates}
 				hasAssets={hasAssets}
-				localRows={localRows}
-				setLocalRows={setLocalRows}
+				localRows={userList || []}
 				headlineTitle="User Accounts"
 				organizationID={id}
 			/>

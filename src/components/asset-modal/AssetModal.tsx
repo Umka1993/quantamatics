@@ -6,6 +6,7 @@ import {
 	FormEvent,
 	useRef,
 	useCallback,
+	useMemo,
 } from "react";
 import { HTMLProps } from "react";
 import Dialog from "../dialog";
@@ -51,12 +52,12 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 	const [update, { isLoading: isUpdating }] = useUpdateOrganizationMutation();
 	const [getInfoOrg] = useLazyGetOrganizationQuery();
 
-	const { activeDirection, updateSort } = useSortingTable({
-		rowSetter: setOptions,
-		localKey: "asset-rows",
-		initialSort: "name",
+	const { activeDirection, updateSort, sortedRows } = useSortingTable({
+		initialRows: options,
+		initialSort: "asset",
 		initialDirection: SortDirection.Up,
 		availableDirections: [SortDirection.Up, SortDirection.Down],
+		normalizer: ({ name }: { name: string }) => name.toUpperCase(),
 	});
 
 	const scrollRef = useRef<HTMLTableSectionElement>(null);
@@ -121,8 +122,6 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 				});
 
 				const sorted = sortAssets(transformedOptions);
-
-				sessionStorage.setItem("asset-rows", JSON.stringify(sorted));
 
 				setOptions(sorted);
 			};
@@ -258,7 +257,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 								isActive={true}
 								name="name"
 								direction={activeDirection}
-								onClick={() => updateSort("name")}
+								onClick={() => updateSort("asset")}
 								className={style.headline}
 							>
 								Name
@@ -273,7 +272,7 @@ const AssetModal: FunctionComponent<AssetModalProps> = ({
 					</thead>
 					<tbody ref={scrollRef}>
 						{Boolean(options.length) &&
-							options.map((option) => (
+							sortedRows.map((option) => (
 								<AssetRow
 									key={option.assetId}
 									option={option}

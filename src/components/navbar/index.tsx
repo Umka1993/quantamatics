@@ -1,5 +1,4 @@
-import React, { FunctionComponent, SVGProps } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { AppRoute, UserRole } from "../../data/enum";
 
 import { ReactComponent as ZoomIcon } from "./assets/zoom.svg";
@@ -7,185 +6,101 @@ import { ReactComponent as CoherenceIcon } from "./assets/coherence.svg";
 import { ReactComponent as ExcelIcon } from "./assets/excel.svg";
 import { ReactComponent as OrganizationsIcon } from "./assets/org.svg";
 import { ReactComponent as CogsIcon } from "./assets/cogs.svg";
-import { ReactComponent as FilesIcon } from "./assets/files.svg";
-import { ReactComponent as ShareIcon } from "./assets/share.svg";
+import { ReactComponent as UsersIcon } from "./assets/users.svg";
 
-import "./style/navbar.scss";
+import scss from "./navbar.module.scss";
 import classNames from "classnames";
 import useUser from "../../hooks/useUser";
-import Accordion from "../accordion";
+import { HTMLAttributes } from "react";
 
-interface NavBarProps {
+type Props = HTMLAttributes<HTMLElement> & {
 	collapsed: boolean;
-	className?: string,
 }
 
-interface NavLinkContent {
-	href: string;
-	text: string;
-	icon: FunctionComponent<SVGProps<SVGSVGElement>>;
-}
-
-const NavBar: FunctionComponent<NavBarProps> = ({ className, collapsed }) => {
+export default function NavBar({ className, collapsed, ...other }: Props) {
 	const { pathname } = useLocation();
 	const user = useUser();
 
-	const isHaveAccessToOrgList =
-		user?.userRoles.includes(UserRole.Admin) ||
-		user?.userRoles.includes(UserRole.OrgOwner);
+	const isSuperAdmin = user?.userRoles.includes(UserRole.Admin);
 
-	/*  const subItems: NavLinkContent[] = [
-		{ href: AppRoute.Files, text: "My Files", icon: FilesIcon },
-		{ href: AppRoute.Shared, text: "Shared With Me", icon: ShareIcon },
+	const isHaveAccessToOrgList =
+		isSuperAdmin || user?.userRoles.includes(UserRole.OrgOwner);
+
+	const LINKS = [
+		{
+			isShown: user?.allowResearch,
+			href: AppRoute.Files,
+			icon: ZoomIcon,
+			text: "Research",
+		},
+		{
+			isShown: user?.allowCoherence,
+			href: AppRoute.Coherence,
+			icon: CoherenceIcon,
+			text: "Coherence",
+		},
+		{
+			isShown: user?.allowExcelLibrary,
+			href: AppRoute.ExcelLibrary,
+			icon: ExcelIcon,
+			text: "Excel Library",
+		},
+		{
+			isShown: isHaveAccessToOrgList,
+			href: AppRoute.OrganizationList,
+			icon: OrganizationsIcon,
+			text: "Organizations",
+			className: classNames(scss.link, {
+				active:
+					pathname.includes("organizations") &&
+					!pathname.includes(user?.organizationId),
+			}),
+		},
+
+		{
+			isShown: isSuperAdmin,
+			href: AppRoute.Users,
+			icon: UsersIcon,
+			text: "User Accounts",
+		},
+
+		{
+			isShown: user?.userRoles.includes(UserRole.OrgAdmin),
+			href: `/organizations/${user?.organizationId}`,
+			icon: CogsIcon,
+			text: "Settings",
+		},
 	];
-	*/
 
 	return (
 		<nav
-			className={classNames("navigation", className, {
-				"navigation--collapsed": collapsed,
-			})}
+			className={classNames(
+				{
+					[scss.collapsed]: collapsed,
+				},
+				className
+			)}
+			{...other}
 		>
-			{/* {user?.userRoles.includes(UserRole.Research) && (
-				<Accordion
-					isOpened={pathname.includes("/research")}
-					summaryClass="navigation__item"
-					summary={
-						<>
-							<ZoomIcon
-								aria-hidden="true"
-								className="navigation__icon"
-								width="16"
-								height="16"
-							/>
-							Research
-						</>
-					}
-					wrapperClass='navigation__sublist'
-				>
-					{subItems.map((item) => (
+			{LINKS.map(
+				(link) =>
+					link.isShown && (
 						<NavLink
-							to={item.href}
-							className={({ isActive }) => {
-								const classes = ["navigation__item", "navigation__item--sub"];
-								isActive && classes.push("navigation__item--active");
-								return classes.join(" ");
-							}}
-							key={item.href}
+							to={link.href}
+							className={link.className || scss.link}
+							key={link.href}
 						>
-							<item.icon
-								aria-hidden="true"
-								className="navigation__icon"
+							<link.icon
+								aria-hidden
+								className={scss.icon}
 								width={16}
 								height={16}
+								fill="#bcc4d8"
 							/>
-							{item.text}
+							{link.text}
 						</NavLink>
-					))}
-				</Accordion>
-			)} */}
-
-			{/* Research with no sub-nav*/}
-			{user?.allowResearch && (
-				<NavLink
-					to={AppRoute.Files}
-					className={({ isActive }) =>
-						isActive
-							? "navigation__item navigation__item--active"
-							: "navigation__item"
-					}
-				>
-					<ZoomIcon
-						aria-hidden="true"
-						className="navigation__icon"
-						width="16"
-						height="16"
-					/>
-					Research
-				</NavLink>
-			)}
-
-			{user?.allowCoherence && (
-				<NavLink
-					to={AppRoute.Coherence}
-					className={({ isActive }) =>
-						isActive
-							? "navigation__item navigation__item--active"
-							: "navigation__item"
-					}
-				>
-					<CoherenceIcon
-						aria-hidden={true}
-						className="navigation__icon"
-						width={16}
-						height={16}
-					/>
-					Coherence
-				</NavLink>
-			)}
-
-			{user?.allowExcelLibrary && (
-				<NavLink
-					to={AppRoute.ExcelLibrary}
-					className={({ isActive }) =>
-						isActive
-							? "navigation__item navigation__item--active"
-							: "navigation__item"
-					}
-				>
-					<ExcelIcon
-						aria-hidden={true}
-						className="navigation__icon"
-						width={16}
-						height={16}
-					/>
-					Excel Library
-				</NavLink>
-			)}
-
-			{isHaveAccessToOrgList && (
-				<NavLink
-					to={AppRoute.OrganizationList}
-					className={
-						classNames("navigation__item", {
-							"navigation__item--active":
-								pathname.includes("organizations") &&
-								!pathname.includes(
-									user?.organizationId
-								),
-						})
-					}
-				>
-					<OrganizationsIcon
-						aria-hidden={true}
-						className="navigation__icon"
-						width={16}
-						height={16}
-					/>
-					Organizations
-				</NavLink>
-			)}
-
-			{user?.userRoles.includes(UserRole.OrgAdmin) && (
-				<NavLink
-					to={`/organizations/${user?.organizationId}`}
-					className={({ isActive }) =>
-						isActive
-							? "navigation__item navigation__item--active"
-							: "navigation__item"
-					}
-				>
-					<CogsIcon
-						aria-hidden={true}
-						className="navigation__icon"
-						width={16}
-						height={16}
-					/>
-					Settings
-				</NavLink>
+					)
 			)}
 		</nav>
 	);
-};
-
-export default NavBar;
+}

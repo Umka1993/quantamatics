@@ -3,12 +3,12 @@ import { ReactElement } from "react";
 import { Route, Navigate, Routes } from "react-router-dom";
 import useUser from "../hooks/useUser";
 import { JupyterFrame } from "../components/jupyter-frame";
-import OrganizationList from "../components/organization-list";
 import { CreateOrganizationForm, AddUserForm } from "../components/form/";
 import OrganizationDetail from "../components/organization-detail/OrganizationDetail";
 import SuccessMessage from "../components/success-message";
 import { ViewUserAccountPage } from "../components/edit-org-user/UserAccountDetailPage/ViewUserAccountPage";
-
+import UsersPage from "../pages/users";
+import OrganizationList from "../pages/organization-list";
 
 export default function PrivateRoutes(): ReactElement {
 	const user = useUser();
@@ -32,6 +32,8 @@ export default function PrivateRoutes(): ReactElement {
 					: isEditOrgAvailable
 						? `/apps/organizations/${user?.organizationId}`
 						: "/demo";
+
+	const isSuperAdmin = user.userRoles.includes(UserRole.Admin)
 
 	return (
 		<Routes>
@@ -68,13 +70,20 @@ export default function PrivateRoutes(): ReactElement {
 				</>
 			)}
 
+			{isSuperAdmin &&
+				<>
+					<Route path={AppRoute.Users} element={<UsersPage />} />
+					<Route path={AppRoute.User} element={<ViewUserAccountPage />} />
+				</>
+			}
+
 			{isEditOrgAvailable && (
 				<>
 					<Route path={AppRoute.Organizations} element={<OrganizationDetail />} />
 					<Route path={AppRoute.Organizations + "add-user"} element={<AddUserForm />}
 					/>
 					<Route path={AppRoute.Success} element={<SuccessMessage />} />
-					<Route path={AppRoute.Organizations+AppRoute.UserAccountDetail+'/view'} element={<ViewUserAccountPage />} />
+					<Route path={AppRoute.Organizations + AppRoute.UserAccountDetail + '/view'} element={<ViewUserAccountPage />} />
 				</>
 			)}
 		</Routes>

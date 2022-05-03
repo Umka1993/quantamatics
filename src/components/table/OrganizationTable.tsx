@@ -1,41 +1,22 @@
-import {
-	Dispatch,
-	SetStateAction,
-	FunctionComponent,
-	HTMLProps,
-} from "react";
+import { HTMLProps } from "react";
 import SortTableHeader from "../sort-table-header/SortTableHeader";
-
 import { Organization } from "../../types/organization/types";
-
 import { ORG_HEADER } from "./utils/constants";
 import { useNavigate } from "react-router-dom";
 import style from "./styles/table.module.scss";
 import SpriteIcon from "../sprite-icon/SpriteIcon";
 import useSortingTable from "../../hooks/useSortingTable";
+import handleOrgNameLength from "./utils/handleOrgNameLength";
 
 interface ITable extends Omit<HTMLProps<HTMLTableElement>, "list"> {
 	list: Organization[];
-	setter: Dispatch<SetStateAction<Organization[]>>;
 }
 
-export const OrganizationTable: FunctionComponent<ITable> = ({
-	list,
-	setter,
-}) => {
-
-	const { activeSort, activeDirection, updateSort } = useSortingTable({ rowSetter: setter })
+export default function name({ list }: ITable) {
+	const { activeSort, activeDirection, updateSort, sortedRows } =
+		useSortingTable({ initialRows: list });
 
 	const navigate = useNavigate();
-
-	const handleOrgNameLength = (name: string) => {
-		if (name && name.length > 45) {
-			return `${name.slice(0, 29)}...`
-
-		} else {
-			return name
-		}
-	}
 
 	return (
 		<table className={style.root}>
@@ -60,7 +41,7 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 				</tr>
 			</thead>
 			<tbody>
-				{list.map((organization, index) => (
+				{sortedRows.map((organization, index) => (
 					<tr
 						className={[
 							style.row,
@@ -73,7 +54,9 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 						}
 						key={index}
 					>
-						<td className={style.cell}>{handleOrgNameLength(organization.name)}</td>
+						<td className={style.cell}>
+							{handleOrgNameLength(organization.name)}
+						</td>
 						<td className={style.cell}>{organization.customerCrmId}</td>
 						<td className={style.cell}>
 							{Boolean(organization.customerCrmLink.length) && (
@@ -88,7 +71,9 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 							)}
 						</td>
 						<td className={style.cell}>
-							{organization.comments && organization.comments.length ? organization.comments : "—"}
+							{organization.comments && organization.comments.length
+								? organization.comments
+								: "—"}
 						</td>
 						<td className={style.cell}>
 							<button className={style.action} type="button">
@@ -100,4 +85,4 @@ export const OrganizationTable: FunctionComponent<ITable> = ({
 			</tbody>
 		</table>
 	);
-};
+}

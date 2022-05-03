@@ -2,26 +2,17 @@ import { ApiRoute } from "../../data/enum";
 import { Organization } from "../../types/organization/types";
 import baseApi from "../index";
 import { createOrganizationRequestBody } from "../../components/form/create-organization";
+import filterOrganizationsToUserRole, {
+	GetOrganizationProps,
+} from "../../services/filterOrganizationsToUserRole";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 
 const organizationsApi = baseApi.injectEndpoints({
 	endpoints: (build) => ({
-		getAllOrganizations: build.query<Organization[], number | undefined>({
+		getAllOrganizations: build.query<Organization[], GetOrganizationProps | void>({
 			query: () => ApiRoute.GetAllOrganization,
-			providesTags: (result, _err, userID) => {
-				const tags = result
-					? [
-						...result.map(({ id }) => ({
-							type: "Organizations" as const,
-							id,
-						}))]
-					: [];
-
-				tags.push({ type: "Organizations", id: "list" });
-				userID !== undefined &&
-					tags.push({ type: "Organizations", id: String(userID) });
-
-				return tags;
-			},
+			providesTags: tagAllOrganizations,
+			transformResponse: filterOrganizationsToUserRole,
 		}),
 
 		addOrganization: build.mutation<
@@ -68,12 +59,35 @@ const organizationsApi = baseApi.injectEndpoints({
 			}),
 			providesTags: (result, _err, id) =>
 				result
-					? [{ type: "Organizations", id: `org-${id}` },
-						{ type: "Organizations", id: "selected" }]
+					? [
+						{ type: "Organizations", id: `org-${id}` },
+						{ type: "Organizations", id: "selected" },
+					]
 					: [{ type: "Organizations", id: "selected" }],
 		}),
 	}),
 });
+
+function tagAllOrganizations(
+	result: Organization[] | undefined,
+	_err: FetchBaseQueryError | undefined,
+	arg?: GetOrganizationProps | void
+) {
+	const tags = result
+		? [
+			...result.map(({ id }) => ({
+				type: "Organizations" as const,
+				id,
+			})),
+		]
+		: [];
+
+	tags.push({ type: "Organizations", id: "list" });
+	arg?.id &&
+		tags.push({ type: "Organizations", id: String(arg.id) });
+
+	return tags;
+}
 
 export const {
 	useGetAllOrganizationsQuery,

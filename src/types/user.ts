@@ -17,7 +17,7 @@ export interface IUser {
 	[UserKey.Avatar]: string,
 	[UserKey.UserRoles]: Array<UserRole>,
 	[UserKey.OrganizationId]: OrganizationID,
-[UserKey.OrganizationAssets]: AssetInOrganization[],
+	[UserKey.OrganizationAssets]: AssetInOrganization[],
 	allowResearch: boolean,
 	allowExcelLibrary: boolean,
 	allowCoherence: boolean,
@@ -26,4 +26,17 @@ export interface IUser {
 export interface IUpdateUser extends Omit<IUser, UserKey.SubscriptionEndDate>  {
 	newEmail?: string,
 	[UserKey.SubscriptionEndDate]: Date,
+}
+
+
+export interface UserWithRoles {
+	id:                  number;
+	userName:            string;
+	firstName:           string;
+	lastName:            string;
+	organizationId:      string;
+	companyName:         null | string;
+	reports:             null;
+	subscriptionEndDate: string;
+	roles:               UserRole[];
 }

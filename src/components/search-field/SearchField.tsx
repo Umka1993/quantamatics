@@ -1,31 +1,32 @@
-import { HTMLProps, Dispatch, SetStateAction } from "react";
+import { HTMLProps } from "react";
 
-import { ReactComponent as SearchIcon } from "./assets/search.svg";
-import style from './SearchField.module.scss'
+import { ReactComponent as SearchIcon } from "./search.svg";
+import style from "./SearchField.module.scss";
 
-interface SearchFieldProps extends HTMLProps<HTMLLabelElement> {
-	search: string;
-	setSearch: Dispatch<SetStateAction<string>>
-}
+type SearchFieldProps = HTMLProps<HTMLLabelElement> &
+	Pick<HTMLProps<HTMLInputElement>, "defaultValue" | "placeholder">;
 
-export default function SearchField({ search, setSearch, ...other }: SearchFieldProps) {
-	return (<label className={style.search} {...other}>
-		<SearchIcon
-			width={16}
-			height={16}
-			role="img"
-			aria-label="Search organizations"
-			fill='currentColor'
-		/>
-		<input
-			type="search"
-			name="search"
-			className={style.input}
-			placeholder="Search organizations"
-			value={search}
-			onInput={({ currentTarget: { value } }) => setSearch(value)}
-		/>
-	</label>
+export default function SearchField({
+	defaultValue,
+	placeholder,
+	...other
+}: SearchFieldProps) {
+	return (
+		<label className={style.search} {...other}>
+			<SearchIcon
+				width={16}
+				height={16}
+				role="img"
+				aria-label={placeholder}
+				fill="currentColor"
+			/>
+			<input
+				type="search"
+				name="search"
+				className={style.input}
+				placeholder={placeholder}
+				defaultValue={defaultValue}
+			/>
+		</label>
 	);
 }
-
